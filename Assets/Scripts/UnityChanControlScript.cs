@@ -10,7 +10,7 @@ using static System.Math;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider))]
 
-public class UnityChanControlScript : MonoBehaviour
+public class UnityChanControlScript : MobControl
 {
     public struct Params
     {
@@ -85,13 +85,17 @@ public class UnityChanControlScript : MonoBehaviour
     }
 
     // 初期化
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         LoadAnimeState();
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         SetCurrentState();
         currentState.UpdateKeyInput();
     }
@@ -208,8 +212,8 @@ public class UnityChanControlScript : MonoBehaviour
         {
             colliderHandler.ResetCollider();
 
-            tf.Rotate(0, h * p.rotateSpeed, 0);
-            tf.position += velocity * deltaTime;
+            // tf.Rotate(0, h * p.rotateSpeed, 0);
+            // tf.position += velocity * deltaTime;
         }
 
         virtual public void UpdateKeyInput()
