@@ -3,9 +3,12 @@ using DG.Tweening;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MobControl))]
+[RequireComponent(typeof(Animator))]
 public class Commander : MonoBehaviour
 {
     protected MobControl character;
+    protected Animator anim;
+
     protected Vector3 dir = Vector3.forward;
 
     protected bool isCommandValid = true;
@@ -20,6 +23,7 @@ public class Commander : MonoBehaviour
     protected void Start()
     {
         character = GetComponent<MobControl>();
+        anim = GetComponent<Animator>();
 
         tf = character.transform;
 
@@ -36,8 +40,6 @@ public class Commander : MonoBehaviour
         }
 
         Command cmd = GetCommand();
-
-        Debug.Log("Cmd: " + cmd);
 
         if (cmd != null)
         {
@@ -66,6 +68,8 @@ public class Commander : MonoBehaviour
 
     private Command GetCommand()
     {
+        if (Input.GetButtonDown("Jump")) return Command.jump;
+
         float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
 
@@ -76,6 +80,13 @@ public class Commander : MonoBehaviour
         if (h < 0) return Command.left;
 
         return null;
+    }
+
+    public float GetSpeed()
+    {
+        if (IsIdling) return 0.0f;
+
+        return currentCommand.Speed;
     }
 
     protected abstract class Command
@@ -90,15 +101,17 @@ public class Commander : MonoBehaviour
         public static Command back;
         public static Command right;
         public static Command left;
+        public static Command jump;
 
-        public static void Init(Commander commander, float baseDuration = 0.8f)
+        public static void Init(Commander commander, float baseDuration = 0.6f)
         {
             Command.commander = commander;
 
             forward = new ForwardCommand(baseDuration);
-            back = new BackCommand(baseDuration);
-            right = new RightCommand(baseDuration);
-            left = new LeftCommand(baseDuration);
+            back = new BackCommand(baseDuration * 1.2f);
+            right = new RightCommand(baseDuration * 1.2f);
+            left = new LeftCommand(baseDuration * 1.2f);
+            jump = new JumpCommand(baseDuration * 2);
         }
 
         public Command(float duration)
@@ -107,6 +120,7 @@ public class Commander : MonoBehaviour
         }
 
         public abstract void Execute();
+        public virtual float Speed => TILE_UNIT / duration;
 
         protected Tween GetLinearMove(Vector3 moveVector)
         {
@@ -115,7 +129,27 @@ public class Commander : MonoBehaviour
                 .SetEase(Ease.Linear);
         }
 
+        protected Sequence GetJumpSequence(Vector3 moveVector, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
+        {
+            float middleTime = duration - 2 * edgeTime;
+            float flyingRate = 1.0f - takeoffRate;
+
+            return DOTween.Sequence()
+                .Append(
+                    commander.tf.DOMove(moveVector * takeoffRate, edgeTime).SetEase(Ease.OutExpo).SetRelative()
+                )
+                .Append(
+                    commander.tf.DOJump(moveVector * flyingRate, jumpPower, 1, middleTime).SetRelative()
+                )
+                .AppendInterval(edgeTime);
+        }
+
         protected void PlayTweenMove(Tween move)
+        {
+            move.OnComplete(() => commander.DispatchCommand()).Play();
+        }
+
+        protected void PlaySequenceMove(Sequence move)
         {
             move.OnComplete(() => commander.DispatchCommand()).Play();
         }
@@ -149,6 +183,8 @@ public class Commander : MonoBehaviour
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
+
+        public override float Speed => -TILE_UNIT / duration;
     }
 
     protected class RightCommand : Command
@@ -176,6 +212,22 @@ public class Commander : MonoBehaviour
 
             Vector3 left = Quaternion.Euler(0, -90, 0) * commander.dir * TILE_UNIT;
             PlayTweenMove(GetLinearMove(left));
+
+            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+        }
+    }
+
+    protected class JumpCommand : Command
+    {
+        public JumpCommand(float duration) : base(duration) { }
+
+        public override void Execute()
+        {
+            Debug.Log("Jump");
+
+            Vector3 jump = commander.dir * TILE_UNIT * 2;
+            PlaySequenceMove(GetJumpSequence(jump));
+            commander.anim.SetTrigger("Jump");
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
