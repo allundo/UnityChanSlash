@@ -17,10 +17,11 @@ public class MobControl : MonoBehaviour
         }
     }
 
-    private float GetSpeed(float deltaTime)
+    public float GetSpeed()
     {
-        float speed = (transform.position - prevPosition).magnitude / deltaTime;
+        float speed = (transform.position - prevPosition).magnitude / Time.deltaTime;
         prevPosition = transform.position;
+
         return speed;
     }
 
