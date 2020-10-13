@@ -91,6 +91,13 @@ public class Commander : MonoBehaviour
         return currentCommand.Speed;
     }
 
+    public float GetRSpeed()
+    {
+        if (IsIdling) return 0.0f;
+
+        return currentCommand.RSpeed;
+    }
+
     public void TurnLeft()
     {
         dir = Quaternion.Euler(0, -90.0f, 0) * dir;
@@ -137,6 +144,7 @@ public class Commander : MonoBehaviour
 
         public abstract void Execute();
         public virtual float Speed => 0.0f;
+        public virtual float RSpeed => 0.0f;
 
         protected Tween GetLinearMove(Vector3 moveVector)
         {
@@ -242,7 +250,7 @@ public class Commander : MonoBehaviour
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
-        public override float Speed => TILE_UNIT / duration;
+        public override float RSpeed => -TILE_UNIT / duration;
     }
 
     protected class JumpCommand : Command

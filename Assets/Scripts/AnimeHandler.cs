@@ -39,6 +39,7 @@ public class AnimeHandler : MonoBehaviour
     private void Update()
     {
         anim.SetFloat("Speed", commander.GetSpeed());
+        anim.SetFloat("RSpeed", commander.GetRSpeed());
         state.UpdateState();
     }
 
