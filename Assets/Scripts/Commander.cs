@@ -69,6 +69,8 @@ public class Commander : MonoBehaviour
     private Command GetCommand()
     {
         if (Input.GetButtonDown("Jump")) return Command.jump;
+        if (Input.GetButtonDown("Fire2")) return Command.turnL;
+        if (Input.GetButtonDown("Fire3")) return Command.turnR;
 
         float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
@@ -89,6 +91,16 @@ public class Commander : MonoBehaviour
         return currentCommand.Speed;
     }
 
+    public void TurnLeft()
+    {
+        dir = Quaternion.Euler(0, -90.0f, 0) * dir;
+    }
+
+    public void TurnRight()
+    {
+        dir = Quaternion.Euler(0, 90.0f, 0) * dir;
+    }
+
     protected abstract class Command
     {
         protected const float TILE_UNIT = 2.5f;
@@ -102,6 +114,8 @@ public class Commander : MonoBehaviour
         public static Command right;
         public static Command left;
         public static Command jump;
+        public static Command turnL;
+        public static Command turnR;
 
         public static void Init(Commander commander, float baseDuration = 0.6f)
         {
@@ -112,6 +126,8 @@ public class Commander : MonoBehaviour
             right = new RightCommand(baseDuration * 1.2f);
             left = new LeftCommand(baseDuration * 1.2f);
             jump = new JumpCommand(baseDuration * 2);
+            turnL = new TurnLCommand(baseDuration);
+            turnR = new TurnRCommand(baseDuration);
         }
 
         public Command(float duration)
@@ -120,13 +136,20 @@ public class Commander : MonoBehaviour
         }
 
         public abstract void Execute();
-        public virtual float Speed => TILE_UNIT / duration;
+        public virtual float Speed => 0.0f;
 
         protected Tween GetLinearMove(Vector3 moveVector)
         {
             return commander.tf.DOMove(moveVector, duration)
                 .SetRelative()
                 .SetEase(Ease.Linear);
+        }
+
+        protected Tween GetRotate(int angle = 90)
+        {
+            return commander.tf.DORotate(new Vector3(0, angle, 0), duration)
+                .SetRelative()
+                .SetEase(Ease.InOutQuad);
         }
 
         protected Sequence GetJumpSequence(Vector3 moveVector, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
@@ -168,6 +191,8 @@ public class Commander : MonoBehaviour
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
+
+        public override float Speed => TILE_UNIT / duration;
     }
 
     protected class BackCommand : Command
@@ -200,6 +225,8 @@ public class Commander : MonoBehaviour
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
+
+        public override float Speed => TILE_UNIT / duration;
     }
 
     protected class LeftCommand : Command
@@ -215,6 +242,7 @@ public class Commander : MonoBehaviour
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
+        public override float Speed => TILE_UNIT / duration;
     }
 
     protected class JumpCommand : Command
@@ -228,6 +256,38 @@ public class Commander : MonoBehaviour
             Vector3 jump = commander.dir * TILE_UNIT * 2;
             PlaySequenceMove(GetJumpSequence(jump));
             commander.anim.SetTrigger("Jump");
+
+            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+        }
+    }
+
+    protected class TurnLCommand : Command
+    {
+        public TurnLCommand(float duration) : base(duration) { }
+
+        public override void Execute()
+        {
+            Debug.Log("TurnL");
+
+            PlayTweenMove(GetRotate(-90));
+            commander.TurnLeft();
+            commander.anim.SetTrigger("TurnL");
+
+            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+        }
+    }
+
+    protected class TurnRCommand : Command
+    {
+        public TurnRCommand(float duration) : base(duration) { }
+
+        public override void Execute()
+        {
+            Debug.Log("TurnR");
+
+            PlayTweenMove(GetRotate(90));
+            commander.TurnRight();
+            commander.anim.SetTrigger("TurnR");
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
