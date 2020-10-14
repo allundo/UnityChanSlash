@@ -234,7 +234,7 @@ public class Commander : MonoBehaviour
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
 
-        public override float Speed => TILE_UNIT / duration;
+        public override float RSpeed => TILE_UNIT / duration;
     }
 
     protected class LeftCommand : Command
