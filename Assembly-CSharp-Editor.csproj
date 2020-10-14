@@ -623,9 +623,6 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
- <Reference Include="Cinemachine">
- <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
- </Reference>
  <Reference Include="Unity.VSCode.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
@@ -643,9 +640,6 @@
  </Reference>
  <Reference Include="Unity.Rider.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
- </Reference>
- <Reference Include="com.unity.cinemachine.editor">
- <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
