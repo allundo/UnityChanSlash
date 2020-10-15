@@ -20,6 +20,8 @@ public class Commander : MonoBehaviour
     protected Queue<Command> cmdQueue = new Queue<Command>();
     protected Command currentCommand = null;
 
+    [SerializeField] protected ThirdPersonCamera mainCamera = default;
+
     protected void Start()
     {
         character = GetComponent<MobControl>();
@@ -100,11 +102,13 @@ public class Commander : MonoBehaviour
 
     public void TurnLeft()
     {
+        mainCamera.TurnLeft();
         dir = Quaternion.Euler(0, -90.0f, 0) * dir;
     }
 
     public void TurnRight()
     {
+        mainCamera.TurnRight();
         dir = Quaternion.Euler(0, 90.0f, 0) * dir;
     }
 
