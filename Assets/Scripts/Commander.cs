@@ -143,8 +143,8 @@ public class Commander : MonoBehaviour
             right = new RightCommand(baseDuration * 1.2f);
             left = new LeftCommand(baseDuration * 1.2f);
             jump = new JumpCommand(baseDuration * 2);
-            turnL = new TurnLCommand(baseDuration);
-            turnR = new TurnRCommand(baseDuration);
+            turnL = new TurnLCommand(baseDuration * 0.5f);
+            turnR = new TurnRCommand(baseDuration * 0.5f);
         }
 
         public Command(float duration)
@@ -167,7 +167,7 @@ public class Commander : MonoBehaviour
         {
             return commander.tf.DORotate(new Vector3(0, angle, 0), duration)
                 .SetRelative()
-                .SetEase(Ease.InOutQuad);
+                .SetEase(Ease.InOutCubic);
         }
 
         protected Sequence GetJumpSequence(Vector3 moveVector, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
