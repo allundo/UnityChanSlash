@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MobControl))]
@@ -100,16 +101,21 @@ public class Commander : MonoBehaviour
         return currentCommand.RSpeed;
     }
 
-    public void TurnLeft()
+    protected void TurnLeft()
     {
         mainCamera.TurnLeft();
         dir = Quaternion.Euler(0, -90.0f, 0) * dir;
     }
 
-    public void TurnRight()
+    protected void TurnRight()
     {
         mainCamera.TurnRight();
         dir = Quaternion.Euler(0, 90.0f, 0) * dir;
+    }
+
+    protected void ResetCamera()
+    {
+        mainCamera.ResetCamera();
     }
 
     protected abstract class Command
@@ -179,14 +185,15 @@ public class Commander : MonoBehaviour
                 .AppendInterval(edgeTime);
         }
 
-        protected void PlayTweenMove(Tween move)
+        protected void PlayTweenMove(Tween move, Action OnComplete = null)
         {
-            move.OnComplete(() => commander.DispatchCommand()).Play();
-        }
+            OnComplete = OnComplete ?? (() => { });
 
-        protected void PlaySequenceMove(Sequence move)
-        {
-            move.OnComplete(() => commander.DispatchCommand()).Play();
+            move.OnComplete(() =>
+            {
+                OnComplete();
+                commander.DispatchCommand();
+            }).Play();
         }
     }
 
@@ -266,7 +273,7 @@ public class Commander : MonoBehaviour
             Debug.Log("Jump");
 
             Vector3 jump = commander.dir * TILE_UNIT * 2;
-            PlaySequenceMove(GetJumpSequence(jump));
+            PlayTweenMove(GetJumpSequence(jump));
             commander.anim.SetTrigger("Jump");
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
@@ -281,7 +288,7 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("TurnL");
 
-            PlayTweenMove(GetRotate(-90));
+            PlayTweenMove(GetRotate(-90), () => commander.ResetCamera());
             commander.TurnLeft();
             commander.anim.SetTrigger("TurnL");
 
@@ -297,7 +304,7 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("TurnR");
 
-            PlayTweenMove(GetRotate(90));
+            PlayTweenMove(GetRotate(90), () => commander.ResetCamera());
             commander.TurnRight();
             commander.anim.SetTrigger("TurnR");
 

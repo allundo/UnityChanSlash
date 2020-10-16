@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using DG.Tweening;
 
 public class ThirdPersonCamera : MonoBehaviour
@@ -35,38 +36,42 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void TurnRight()
     {
-        crossFade.enabled = true;
-        cam.targetTexture = renderTexture;
+        SetTurnCamera();
         sideCamera.SetRightSide(transform);
-        DOVirtual.Float(1.0f, 0.0f, 0.3f, value =>
-        {
-            Color temp = crossFade.color;
-            crossFade.color = new Color(temp.r, temp.g, temp.b, value);
-            Debug.Log(crossFade.color);
-        });
-        DOVirtual.DelayedCall(0.6f, () => ResetCamera());
     }
 
     public void TurnLeft()
     {
-        crossFade.enabled = true;
-        cam.targetTexture = renderTexture;
+        SetTurnCamera();
         sideCamera.SetLeftSide(transform);
-        DOVirtual.Float(1.0f, 0.0f, 0.3f, value =>
-        {
-            Color temp = crossFade.color;
-            crossFade.color = new Color(temp.r, temp.g, temp.b, value);
-            Debug.Log(crossFade.color);
-        });
-        DOVirtual.DelayedCall(0.6f, () => ResetCamera());
+    }
 
+    private void SetFadeOut()
+    {
+        DOVirtual.Float(1.0f, 0.0f, 0.3f, value => SetFadeAlpha(value));
+    }
+
+    private void SetFadeAlpha(float value)
+    {
+        Color temp = crossFade.color;
+        crossFade.color = new Color(temp.r, temp.g, temp.b, value);
+    }
+
+    private void SetTurnCamera()
+    {
+        cam.targetTexture = renderTexture;
+        crossFade.enabled = true;
+        SetFadeOut();
+
+        sideCamera.Enable();
     }
 
     public void ResetCamera()
     {
         cam.targetTexture = null;
         crossFade.enabled = false;
+        SetFadeAlpha(1.0f);
 
-        sideCamera.enabled = false;
+        sideCamera.Disable();
     }
 }
