@@ -42,6 +42,7 @@
      <Compile Include="Assets\Scripts\ColliderState.cs" />
      <Compile Include="Assets\Scripts\CollisionDetector.cs" />
      <Compile Include="Assets\Scripts\Commander.cs" />
+     <Compile Include="Assets\Scripts\DungeonGenerator.cs" />
      <Compile Include="Assets\Scripts\EnemyBehavior.cs" />
      <Compile Include="Assets\Scripts\EnemyStatus.cs" />
      <Compile Include="Assets\Scripts\Item.cs" />
