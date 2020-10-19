@@ -1,17 +1,16 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
+using Random = System.Random;
 
-public class DungeonGenerator
+public class Dungeon : MonoBehaviour
 {
-    public static void Main()
-    {
-        new Dungeon();
-    }
-}
+    private static readonly float TILE_UNIT = 2.5f;
 
-public class Dungeon
-{
+    [SerializeField] private GameObject wallPrefab = default;
+    [SerializeField] private GameObject player = default;
+
     public enum Terrain
     {
         None,
@@ -94,10 +93,8 @@ public class Dungeon
             return DecX();
         }
 
-        public bool IsNull()
-        {
-            return this.x == 0 && this.y == 0;
-        }
+        public bool IsNull => this.x == 0 && this.y == 0;
+
 
         public static Pos operator +(Pos a, Pos b)
         {
@@ -109,20 +106,18 @@ public class Dungeon
             return new Pos(a.x - b.x, a.y - b.y);
         }
 
+
     }
 
     private Queue<Pos> branchCandidate = new Queue<Pos>();
 
-    private Terrain[,] matrix;
+    public Terrain[,] Matrix { get; protected set; }
+    [SerializeField] private int width = 50;
+    [SerializeField] private int height = 50;
 
-    private int width;
-    private int height;
-
-    public Dungeon(int w = 50, int h = 50)
+    void Start()
     {
-        width = w;
-        height = h;
-        matrix = new Terrain[w, h];
+        Matrix = new Terrain[width, height];
 
         Clear();
 
@@ -142,8 +137,18 @@ public class Dungeon
 
         new DiggingPathGenerator(this);
         Fix();
+    }
 
-        PrintDungeon();
+    public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - width / 2) * TILE_UNIT, (-0.5f - y + height / 2) * TILE_UNIT);
+
+    private void SetPlayerPos((float x, float z) pos)
+    {
+        player.transform.position = new Vector3(pos.x, 0.0f, pos.z);
+        Debug.Log(player.transform.position);
+    }
+    private void CreateWall((float x, float z) pos)
+    {
+        Instantiate(wallPrefab, new Vector3(pos.x, TILE_UNIT / 2, pos.z), Quaternion.identity);
     }
 
     private void Clear(Terrain type = Terrain.None, Terrain outer = Terrain.Wall)
@@ -152,7 +157,7 @@ public class Dungeon
         {
             for (int j = 1; j < height - 1; j++)
             {
-                matrix[i, j] = type;
+                Matrix[i, j] = type;
             }
         }
 
@@ -163,12 +168,12 @@ public class Dungeon
     {
         for (int i = 0; i < width; i++)
         {
-            matrix[i, 0] = matrix[i, height - 1] = type;
+            Matrix[i, 0] = Matrix[i, height - 1] = type;
         }
 
         for (int j = 1; j < height - 1; j++)
         {
-            matrix[0, j] = matrix[width - 1, j] = type;
+            Matrix[0, j] = Matrix[width - 1, j] = type;
         }
     }
 
@@ -237,28 +242,28 @@ public class Dungeon
         {
             for (int j = pos.y + 1; j < pos.y + h - 1; j++)
             {
-                matrix[i, j] = Terrain.Ground;
+                Matrix[i, j] = Terrain.Ground;
             }
         }
     }
 
     private void SetCornerWall(int x, int y)
     {
-        switch (matrix[x, y])
+        switch (Matrix[x, y])
         {
             case Terrain.Ground:
             case Terrain.Wall:
                 return;
 
             default:
-                matrix[x, y] = Terrain.TmpWall;
+                Matrix[x, y] = Terrain.TmpWall;
                 return;
         }
     }
 
     private void SetBranch(int x, int y)
     {
-        switch (matrix[x, y])
+        switch (Matrix[x, y])
         {
             case Terrain.Ground:
             case Terrain.Wall:
@@ -266,7 +271,7 @@ public class Dungeon
                 return;
 
             default:
-                matrix[x, y] = Terrain.Branch;
+                Matrix[x, y] = Terrain.Branch;
                 branchCandidate.Enqueue(new Pos(x, y));
                 return;
         }
@@ -279,48 +284,64 @@ public class Dungeon
 
     private void Fix()
     {
+        bool isPlayerSet = false;
+
         for (int j = 0; j < height; j++)
         {
             for (int i = 0; i < width; i++)
             {
-                switch (matrix[i, j])
+                switch (Matrix[i, j])
                 {
+                    case Terrain.Ground:
+                        if (!isPlayerSet)
+                        {
+                            SetPlayerPos(WorldPos(i, j));
+                            isPlayerSet = true;
+                        }
+                        break;
+
+                    case Terrain.Wall:
+                        CreateWall(WorldPos(i, j));
+                        break;
+
                     case Terrain.TmpWall:
-                        matrix[i, j] = Terrain.Wall;
+                        Matrix[i, j] = Terrain.Wall;
+                        CreateWall(WorldPos(i, j));
                         break;
 
                     case Terrain.None:
-                        matrix[i, j] = Terrain.Ground;
+                        // matrix[i, j] = Terrain.Ground;
+                        Matrix[i, j] = Terrain.Wall;
+                        CreateWall(WorldPos(i, j));
                         break;
 
                     case Terrain.VDoor:
                         if (
-                            matrix[i, j - 1] == Terrain.Wall
-                            || matrix[i, j - 1] == Terrain.Wall
-                            || matrix[i - 1, j] == Terrain.Ground
-                            || matrix[i + 1, j] == Terrain.Ground
+                            Matrix[i, j - 1] == Terrain.Wall
+                            || Matrix[i, j - 1] == Terrain.Wall
+                            || Matrix[i - 1, j] == Terrain.Ground
+                            || Matrix[i + 1, j] == Terrain.Ground
                         )
                         {
-                            matrix[i, j] = Terrain.Ground;
+                            Matrix[i, j] = Terrain.Ground;
                         }
 
                         break;
 
                     case Terrain.HDoor:
                         if (
-                            matrix[i, j - 1] == Terrain.Ground
-                            || matrix[i, j - 1] == Terrain.Ground
-                            || matrix[i - 1, j] == Terrain.Wall
-                            || matrix[i + 1, j] == Terrain.Wall
+                            Matrix[i, j - 1] == Terrain.Ground
+                            || Matrix[i, j - 1] == Terrain.Ground
+                            || Matrix[i - 1, j] == Terrain.Wall
+                            || Matrix[i + 1, j] == Terrain.Wall
                         )
                         {
-                            matrix[i, j] = Terrain.Ground;
+                            Matrix[i, j] = Terrain.Ground;
                         }
                         break;
                 }
             }
         }
-
     }
 
     private void PrintDungeon()
@@ -329,7 +350,7 @@ public class Dungeon
         {
             for (int i = 0; i < width; i++)
             {
-                switch (matrix[i, j])
+                switch (Matrix[i, j])
                 {
                     case Terrain.Wall:
                         Console.Write("*");
@@ -375,7 +396,7 @@ public class Dungeon
         {
             this.dungeon = branchSetDungeon;
 
-            for (Pos branchPos = GetNewBranchPos(); !branchPos.IsNull(); branchPos = GetNewBranchPos())
+            for (Pos branchPos = GetNewBranchPos(); !branchPos.IsNull; branchPos = GetNewBranchPos())
             {
                 DrawPath(branchPos);
             }
@@ -564,12 +585,12 @@ public class Dungeon
         {
             if (IsOutWall(pos)) return Terrain.Wall;
 
-            return dungeon.matrix[pos.x, pos.y];
+            return dungeon.Matrix[pos.x, pos.y];
         }
 
         private void SetTerrain(Pos pos, Terrain terrain)
         {
-            dungeon.matrix[pos.x, pos.y] = terrain;
+            dungeon.Matrix[pos.x, pos.y] = terrain;
         }
 
         private bool IsOutWall(Pos pos)
