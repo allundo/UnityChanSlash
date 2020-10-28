@@ -8,108 +8,15 @@ public class Dungeon : MonoBehaviour
 {
     private static readonly float TILE_UNIT = 2.5f;
 
-    [SerializeField] private GameObject wallPrefab = default;
+    [SerializeField] private GameObject wallParent = default;
+    [SerializeField] private GameObject doorPrefab = default;
     [SerializeField] private GameObject player = default;
 
-    public enum Terrain
-    {
-        None,
-        Ground,
-        Wall,
-        Branch,
-        VDoor,
-        HDoor,
-        TmpWall
-    }
-
-    private struct Pos
-    {
-        public int x;
-        public int y;
-
-        public Pos(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public Pos IncX()
-        {
-            return AddX(1);
-        }
-
-        public Pos IncY()
-        {
-            return AddY(1);
-        }
-
-        public Pos DecX()
-        {
-            return SubX(1);
-        }
-
-        public Pos DecY()
-        {
-            return SubY(1);
-        }
-
-        public Pos AddX(int x)
-        {
-            return new Pos(this.x + x, y);
-        }
-
-        public Pos AddY(int y)
-        {
-            return new Pos(x, this.y + y);
-        }
-
-        public Pos SubX(int x)
-        {
-            return new Pos(this.x - x, y);
-        }
-
-        public Pos SubY(int y)
-        {
-            return new Pos(x, this.y - y);
-        }
-
-        public Pos North()
-        {
-            return DecY();
-        }
-
-        public Pos East()
-        {
-            return IncX();
-        }
-
-        public Pos South()
-        {
-            return IncY();
-        }
-
-        public Pos West()
-        {
-            return DecX();
-        }
-
-        public bool IsNull => this.x == 0 && this.y == 0;
-
-
-        public static Pos operator +(Pos a, Pos b)
-        {
-            return new Pos(a.x + b.x, a.y + b.y);
-        }
-
-        public static Pos operator -(Pos a, Pos b)
-        {
-            return new Pos(a.x - b.x, a.y - b.y);
-        }
-
-
-    }
-
     private Queue<Pos> branchCandidate = new Queue<Pos>();
+    private Stack<Pos> wallPos = new Stack<Pos>();
+
+    public Direction InitDir { get; private set; }
+    public Pos InitPos { get; private set; }
 
     public Terrain[,] Matrix { get; protected set; }
     [SerializeField] private int width = 50;
@@ -137,18 +44,58 @@ public class Dungeon : MonoBehaviour
 
         new DiggingPathGenerator(this);
         Fix();
+        GenerateWall();
     }
 
-    public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - width / 2) * TILE_UNIT, (-0.5f - y + height / 2) * TILE_UNIT);
+    public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
+    public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - width * 0.5f) * TILE_UNIT, (-0.5f - y + height * 0.5f) * TILE_UNIT);
 
-    private void SetPlayerPos((float x, float z) pos)
+    public Pos MapPos(Vector3 pos) =>
+        new Pos(
+            (int)Math.Round((width - 1) * 0.5f + pos.x / TILE_UNIT, MidpointRounding.AwayFromZero),
+            (int)Math.Round((height - 1) * 0.5f - pos.z / TILE_UNIT, MidpointRounding.AwayFromZero)
+        );
+
+    private void SetPlayerPos(int x, int y)
     {
-        player.transform.position = new Vector3(pos.x, 0.0f, pos.z);
-        Debug.Log(player.transform.position);
+        InitPos = new Pos(x, y);
+        InitDir = new South();
+        Debug.Log("InitPosX: " + InitPos.x);
     }
-    private void CreateWall((float x, float z) pos)
+    private void SetTerrain((float x, float z) pos, GameObject prefab)
     {
-        Instantiate(wallPrefab, new Vector3(pos.x, TILE_UNIT / 2, pos.z), Quaternion.identity);
+        Instantiate(prefab, new Vector3(pos.x, TILE_UNIT * 0.5f, pos.z), Quaternion.identity);
+    }
+
+    private void StoreWallPos(int x, int y)
+    {
+        wallPos.Push(new Pos(x, y));
+    }
+
+    private void GenerateWall()
+    {
+        Mesh wallMesh = wallParent.GetComponent<MeshFilter>().sharedMesh;
+
+        int count = wallPos.Count;
+        CombineInstance[] combineInstances = new CombineInstance[count];
+        for (int i = 0; i < count; i++)
+        {
+            combineInstances[i].mesh = wallMesh;
+            (float x, float z) pos = WorldPos(wallPos.Pop());
+
+            // FIXME: localScale of wallParent is already TILE_UNIT
+            // FIXME: position.y of wallParent is already set by TILE_UNIT / 2
+            Matrix4x4 mat = Matrix4x4.Translate(new Vector3(pos.x / TILE_UNIT, 0.0f, pos.z / TILE_UNIT));
+
+            combineInstances[i].transform = mat;
+        }
+
+        Mesh combinedMesh = new Mesh();
+        combinedMesh.name = "Wall";
+        combinedMesh.CombineMeshes(combineInstances, true);
+
+        wallParent.GetComponent<MeshFilter>().mesh = combinedMesh;
+        wallParent.SetActive(true);
     }
 
     private void Clear(Terrain type = Terrain.None, Terrain outer = Terrain.Wall)
@@ -282,6 +229,13 @@ public class Dungeon : MonoBehaviour
         return x == 0 || y == 0 || x == width - 1 || y == height - 1;
     }
 
+    public Terrain GetTerrain(Pos pos)
+    {
+        if (IsOutWall(pos.x, pos.y)) return Terrain.Wall;
+
+        return Matrix[pos.x, pos.y];
+    }
+
     private void Fix()
     {
         bool isPlayerSet = false;
@@ -295,24 +249,24 @@ public class Dungeon : MonoBehaviour
                     case Terrain.Ground:
                         if (!isPlayerSet)
                         {
-                            SetPlayerPos(WorldPos(i, j));
+                            SetPlayerPos(i, j);
                             isPlayerSet = true;
                         }
                         break;
 
                     case Terrain.Wall:
-                        CreateWall(WorldPos(i, j));
+                        StoreWallPos(i, j);
                         break;
 
                     case Terrain.TmpWall:
                         Matrix[i, j] = Terrain.Wall;
-                        CreateWall(WorldPos(i, j));
+                        StoreWallPos(i, j);
                         break;
 
                     case Terrain.None:
                         // matrix[i, j] = Terrain.Ground;
                         Matrix[i, j] = Terrain.Wall;
-                        CreateWall(WorldPos(i, j));
+                        StoreWallPos(i, j);
                         break;
 
                     case Terrain.VDoor:
@@ -324,7 +278,9 @@ public class Dungeon : MonoBehaviour
                         )
                         {
                             Matrix[i, j] = Terrain.Ground;
+                            break;
                         }
+                        SetTerrain(WorldPos(i, j), doorPrefab);
 
                         break;
 
@@ -337,7 +293,10 @@ public class Dungeon : MonoBehaviour
                         )
                         {
                             Matrix[i, j] = Terrain.Ground;
+                            break;
                         }
+                        SetTerrain(WorldPos(i, j), doorPrefab);
+
                         break;
                 }
             }
@@ -388,9 +347,9 @@ public class Dungeon : MonoBehaviour
         private Direction south = new South();
         private Direction west = new West();
 
-        public bool IsTunnel => Probability(50);
+        public bool IsTunnel => Probability(60);
         public bool IsTurn => Probability(10);
-        public bool IsBranch => Probability(50);
+        public bool IsBranch => Probability(40);
 
         public DiggingPathGenerator(Dungeon branchSetDungeon)
         {
@@ -583,133 +542,13 @@ public class Dungeon : MonoBehaviour
 
         private Terrain GetTerrain(Pos pos)
         {
-            if (IsOutWall(pos)) return Terrain.Wall;
-
-            return dungeon.Matrix[pos.x, pos.y];
+            return dungeon.GetTerrain(pos);
         }
 
         private void SetTerrain(Pos pos, Terrain terrain)
         {
             dungeon.Matrix[pos.x, pos.y] = terrain;
         }
-
-        private bool IsOutWall(Pos pos)
-        {
-            return pos.x <= 0 || pos.y <= 0 || pos.x >= dungeon.width - 1 || pos.y >= dungeon.height - 1;
-        }
-
-        public interface Direction
-        {
-            Pos GetForward(Pos pos);
-            Pos GetLeft(Pos pos);
-            Pos GetRight(Pos pos);
-            Pos GetBackward(Pos pos);
-
-            Terrain Door { get; }
-            Direction Left { get; }
-            Direction Right { get; }
-            Direction Backward { get; }
-        }
-
-        public class North : Direction
-        {
-            public Pos GetForward(Pos pos)
-            {
-                return pos.DecY();
-            }
-            public Pos GetLeft(Pos pos)
-            {
-                return pos.DecX();
-            }
-            public Pos GetRight(Pos pos)
-            {
-                return pos.IncX();
-            }
-            public Pos GetBackward(Pos pos)
-            {
-                return pos.IncY();
-            }
-
-            public Terrain Door => Terrain.VDoor;
-            public Direction Left => new West();
-            public Direction Right => new East();
-            public Direction Backward => new South();
-        }
-
-        public class East : Direction
-        {
-            public Pos GetForward(Pos pos)
-            {
-                return pos.IncX();
-            }
-            public Pos GetLeft(Pos pos)
-            {
-                return pos.DecY();
-            }
-            public Pos GetRight(Pos pos)
-            {
-                return pos.IncY();
-            }
-            public Pos GetBackward(Pos pos)
-            {
-                return pos.DecX();
-            }
-
-            public Terrain Door => Terrain.HDoor;
-            public Direction Left => new South();
-            public Direction Right => new North();
-            public Direction Backward => new West();
-        }
-
-        public class South : Direction
-        {
-            public Pos GetForward(Pos pos)
-            {
-                return pos.IncY();
-            }
-            public Pos GetLeft(Pos pos)
-            {
-                return pos.IncX();
-            }
-            public Pos GetRight(Pos pos)
-            {
-                return pos.DecX();
-            }
-            public Pos GetBackward(Pos pos)
-            {
-                return pos.DecY();
-            }
-
-            public Terrain Door => Terrain.VDoor;
-            public Direction Left => new East();
-            public Direction Right => new West();
-            public Direction Backward => new North();
-        }
-
-        public class West : Direction
-        {
-            public Pos GetForward(Pos pos)
-            {
-                return pos.DecX();
-            }
-            public Pos GetLeft(Pos pos)
-            {
-                return pos.IncY();
-            }
-            public Pos GetRight(Pos pos)
-            {
-                return pos.DecY();
-            }
-            public Pos GetBackward(Pos pos)
-            {
-                return pos.IncX();
-            }
-
-            public Terrain Door => Terrain.HDoor;
-            public Direction Left => new South();
-            public Direction Right => new North();
-            public Direction Backward => new East();
-
-        }
     }
 }
+

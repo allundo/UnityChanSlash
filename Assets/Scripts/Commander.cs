@@ -8,13 +8,15 @@ using System.Collections.Generic;
 public class Commander : MonoBehaviour
 {
     protected MobControl character;
+    protected Pos CurrentPos => dungeon.MapPos(tf.position);
     protected Animator anim;
 
-    protected Vector3 dir = Vector3.forward;
+    protected Direction dir;
 
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;
 
+    protected bool IsMovable(Func<Pos, Pos> desc) => dungeon.GetTerrain(desc(CurrentPos)) != Terrain.Wall;
 
     protected Transform tf;
 
@@ -22,6 +24,7 @@ public class Commander : MonoBehaviour
     protected Command currentCommand = null;
 
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
+    [SerializeField] protected Dungeon dungeon = default;
 
     protected void Start()
     {
@@ -29,6 +32,12 @@ public class Commander : MonoBehaviour
         anim = GetComponent<Animator>();
 
         tf = character.transform;
+
+        (float x, float z) pos = dungeon.WorldPos(dungeon.InitPos);
+        tf.position = new Vector3(pos.x, 0, pos.z);
+
+        dir = dungeon.InitDir;
+        tf.LookAt(tf.position + dir.LookAt);
 
         Debug.Log("Position: " + tf.position);
 
@@ -104,13 +113,15 @@ public class Commander : MonoBehaviour
     protected void TurnLeft()
     {
         mainCamera.TurnLeft();
-        dir = Quaternion.Euler(0, -90.0f, 0) * dir;
+        dir = dir.Left;
+        Debug.Log("Dir: " + dir);
     }
 
     protected void TurnRight()
     {
         mainCamera.TurnRight();
-        dir = Quaternion.Euler(0, 90.0f, 0) * dir;
+        dir = dir.Right;
+        Debug.Log("Dir: " + dir);
     }
 
     protected void ResetCamera()
@@ -155,6 +166,15 @@ public class Commander : MonoBehaviour
         public abstract void Execute();
         public virtual float Speed => 0.0f;
         public virtual float RSpeed => 0.0f;
+
+        protected bool IsMovable(Func<Pos, Pos> desc)
+        {
+            if (commander.IsMovable(desc)) return true;
+
+            commander.isCommandValid = true;
+            commander.DispatchCommand();
+            return false;
+        }
 
         protected Tween GetLinearMove(Vector3 moveVector)
         {
@@ -205,7 +225,9 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Forward");
 
-            Vector3 forward = commander.dir * TILE_UNIT;
+            if (!IsMovable(commander.dir.GetForward)) return;
+
+            Vector3 forward = commander.dir.LookAt * TILE_UNIT;
             PlayTweenMove(GetLinearMove(forward));
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
@@ -222,7 +244,9 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Backward");
 
-            Vector3 back = -commander.dir * TILE_UNIT;
+            if (!IsMovable(commander.dir.GetBackward)) return;
+
+            Vector3 back = -commander.dir.LookAt * TILE_UNIT;
             PlayTweenMove(GetLinearMove(back));
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
@@ -239,7 +263,9 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Right");
 
-            Vector3 right = Quaternion.Euler(0, 90, 0) * commander.dir * TILE_UNIT;
+            if (!IsMovable(commander.dir.GetRight)) return;
+
+            Vector3 right = Quaternion.Euler(0, 90, 0) * commander.dir.LookAt * TILE_UNIT;
             PlayTweenMove(GetLinearMove(right));
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
@@ -256,7 +282,9 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Left");
 
-            Vector3 left = Quaternion.Euler(0, -90, 0) * commander.dir * TILE_UNIT;
+            if (!IsMovable(commander.dir.GetLeft)) return;
+
+            Vector3 left = Quaternion.Euler(0, -90, 0) * commander.dir.LookAt * TILE_UNIT;
             PlayTweenMove(GetLinearMove(left));
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
@@ -272,7 +300,9 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Jump");
 
-            Vector3 jump = commander.dir * TILE_UNIT * 2;
+            if (!IsMovable(commander.dir.GetForward)) return;
+
+            Vector3 jump = commander.dir.LookAt * TILE_UNIT * 2;
             PlayTweenMove(GetJumpSequence(jump));
             commander.anim.SetTrigger("Jump");
 
