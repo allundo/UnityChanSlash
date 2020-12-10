@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class Commander : MonoBehaviour
 {
     protected MobControl character;
-    protected Pos CurrentPos => dungeon.MapPos(tf.position);
+    protected Pos CurrentPos => map.MapPos(tf.position);
     protected Animator anim;
 
     protected Direction dir;
@@ -16,7 +16,12 @@ public class Commander : MonoBehaviour
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;
 
-    protected bool IsMovable(Func<Pos, Pos> desc) => dungeon.GetTerrain(desc(CurrentPos)) != Terrain.Wall;
+    protected bool IsMovable(Pos descPos) => map.GetTerrain(descPos) != Terrain.Wall;
+    protected bool IsForwardMovable => IsMovable(dir.GetForward(CurrentPos));
+    protected bool IsBackwardMovable => IsMovable(dir.GetBackward(CurrentPos));
+    protected bool IsLeftMovable => IsMovable(dir.GetLeft(CurrentPos));
+    protected bool IsRightMovable => IsMovable(dir.GetRight(CurrentPos));
+    protected bool IsJumpable => IsForwardMovable && IsMovable(dir.GetForward(dir.GetForward(CurrentPos)));
 
     protected Transform tf;
 
@@ -24,19 +29,21 @@ public class Commander : MonoBehaviour
     protected Command currentCommand = null;
 
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
-    [SerializeField] protected Dungeon dungeon = default;
+    protected WorldMap map = default;
 
     protected void Start()
     {
         character = GetComponent<MobControl>();
         anim = GetComponent<Animator>();
 
+        map = GameManager.Instance.worldMap;
+
         tf = character.transform;
 
-        (float x, float z) pos = dungeon.WorldPos(dungeon.InitPos);
+        (float x, float z) pos = map.InitPos;
         tf.position = new Vector3(pos.x, 0, pos.z);
 
-        dir = dungeon.InitDir;
+        dir = map.InitDir;
         tf.LookAt(tf.position + dir.LookAt);
 
         Debug.Log("Position: " + tf.position);
@@ -167,15 +174,6 @@ public class Commander : MonoBehaviour
         public virtual float Speed => 0.0f;
         public virtual float RSpeed => 0.0f;
 
-        protected bool IsMovable(Func<Pos, Pos> desc)
-        {
-            if (commander.IsMovable(desc)) return true;
-
-            commander.isCommandValid = true;
-            commander.DispatchCommand();
-            return false;
-        }
-
         protected Tween GetLinearMove(Vector3 moveVector)
         {
             return commander.tf.DOMove(moveVector, duration)
@@ -217,78 +215,63 @@ public class Commander : MonoBehaviour
         }
     }
 
-    protected class ForwardCommand : Command
+    protected abstract class MoveCommand : Command
+    {
+        public MoveCommand(float duration) : base(duration) { }
+
+        abstract protected bool IsMovable { get; }
+        abstract protected Vector3 Dest { get; }
+
+        public override void Execute()
+        {
+            Debug.Log("IsMovable: " + IsMovable);
+
+            if (!IsMovable)
+            {
+                commander.isCommandValid = true;
+                commander.DispatchCommand();
+                return;
+            }
+
+            PlayTweenMove(GetLinearMove(Dest));
+
+            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+        }
+    }
+
+    protected class ForwardCommand : MoveCommand
     {
         public ForwardCommand(float duration) : base(duration) { }
 
-        public override void Execute()
-        {
-            Debug.Log("Forward");
-
-            if (!IsMovable(commander.dir.GetForward)) return;
-
-            Vector3 forward = commander.dir.LookAt * TILE_UNIT;
-            PlayTweenMove(GetLinearMove(forward));
-
-            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
-        }
-
+        protected override bool IsMovable => commander.IsForwardMovable;
+        protected override Vector3 Dest => commander.dir.LookAt * TILE_UNIT;
         public override float Speed => TILE_UNIT / duration;
     }
 
-    protected class BackCommand : Command
+    protected class BackCommand : MoveCommand
     {
         public BackCommand(float duration) : base(duration) { }
 
-        public override void Execute()
-        {
-            Debug.Log("Backward");
-
-            if (!IsMovable(commander.dir.GetBackward)) return;
-
-            Vector3 back = -commander.dir.LookAt * TILE_UNIT;
-            PlayTweenMove(GetLinearMove(back));
-
-            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
-        }
-
+        protected override bool IsMovable => commander.IsBackwardMovable;
+        protected override Vector3 Dest => -commander.dir.LookAt * TILE_UNIT;
         public override float Speed => -TILE_UNIT / duration;
     }
 
-    protected class RightCommand : Command
+    protected class RightCommand : MoveCommand
     {
         public RightCommand(float duration) : base(duration) { }
 
-        public override void Execute()
-        {
-            Debug.Log("Right");
-
-            if (!IsMovable(commander.dir.GetRight)) return;
-
-            Vector3 right = Quaternion.Euler(0, 90, 0) * commander.dir.LookAt * TILE_UNIT;
-            PlayTweenMove(GetLinearMove(right));
-
-            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
-        }
-
+        protected override bool IsMovable => commander.IsRightMovable;
+        protected override Vector3 Dest => Quaternion.Euler(0, 90, 0) * commander.dir.LookAt * TILE_UNIT;
         public override float RSpeed => TILE_UNIT / duration;
     }
 
-    protected class LeftCommand : Command
+    protected class LeftCommand : MoveCommand
     {
         public LeftCommand(float duration) : base(duration) { }
 
-        public override void Execute()
-        {
-            Debug.Log("Left");
-
-            if (!IsMovable(commander.dir.GetLeft)) return;
-
-            Vector3 left = Quaternion.Euler(0, -90, 0) * commander.dir.LookAt * TILE_UNIT;
-            PlayTweenMove(GetLinearMove(left));
-
-            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
-        }
+        protected override bool IsMovable => commander.IsLeftMovable;
+        protected override Vector3 Dest => Quaternion.Euler(0, -90, 0) * commander.dir.LookAt * TILE_UNIT;
         public override float RSpeed => -TILE_UNIT / duration;
     }
 
@@ -300,9 +283,8 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Jump");
 
-            if (!IsMovable(commander.dir.GetForward)) return;
-
-            Vector3 jump = commander.dir.LookAt * TILE_UNIT * 2;
+            Vector3 jump = commander.dir.LookAt * TILE_UNIT *
+                (commander.IsJumpable ? 2 : commander.IsForwardMovable ? 1 : 0);
             PlayTweenMove(GetJumpSequence(jump));
             commander.anim.SetTrigger("Jump");
 

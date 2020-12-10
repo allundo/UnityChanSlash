@@ -28,6 +28,7 @@ public class EnemyBehavior : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             Vector3 positionDiff = collider.transform.position - transform.position;
+
             // y 成分は考えない
             positionDiff.y = 0.0f;
             float distance = positionDiff.magnitude;
