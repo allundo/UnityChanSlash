@@ -26,7 +26,7 @@ public class WorldMap
     public WorldMap(Dungeon dungeon) : this(dungeon.Width, dungeon.Height, dungeon.Matrix) { }
 
     public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
-    public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - Width / 2) * TILE_UNIT, (-0.5f - y + Height / 2) * TILE_UNIT);
+    public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - Width * 0.5f) * TILE_UNIT, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
 
     public Pos MapPos(Vector3 pos) =>
         new Pos(
