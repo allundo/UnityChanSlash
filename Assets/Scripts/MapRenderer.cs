@@ -152,32 +152,4 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         wallParent.SetActive(true);
     }
 
-    private void GenerateWall(Stack<Pos> wallPos)
-    {
-        Mesh wallMesh = wallParent.GetComponent<MeshFilter>().sharedMesh;
-
-        int count = wallPos.Count;
-        CombineInstance[] combineInstances = new CombineInstance[count];
-
-        for (int i = 0; i < count; i++)
-        {
-            combineInstances[i].mesh = wallMesh;
-            (float x, float z) pos = WorldPos(wallPos.Pop());
-
-            // FIXME: localScale of wallParent is already TILE_UNIT
-            // FIXME: position.y of wallParent is already set by TILE_UNIT / 2
-            Matrix4x4 mat = Matrix4x4.Translate(new Vector3(pos.x, 0.0f, pos.z));
-
-            combineInstances[i].transform = mat;
-        }
-
-        Mesh combinedMesh = new Mesh();
-        combinedMesh.name = "Wall";
-        combinedMesh.CombineMeshes(combineInstances, true);
-
-        // ProBuilder managed Mesh needs MeshUtility.CopyTo() to apply another Mesh object
-        MeshUtility.CopyTo(combinedMesh, wallParent.GetComponent<MeshFilter>().sharedMesh);
-
-        wallParent.SetActive(true);
-    }
 }
