@@ -12,8 +12,8 @@ public class WorldMap
 
     public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
 
-    public int Width { get; protected set; } = 50;
-    public int Height { get; protected set; } = 50;
+    public int Width { get; protected set; } = 49;
+    public int Height { get; protected set; } = 49;
 
     public WorldMap(int width, int height, Terrain[,] matrix = null)
     {
@@ -23,7 +23,7 @@ public class WorldMap
         Matrix = matrix == null ? new Terrain[width, height] : (Terrain[,])matrix.Clone();
     }
 
-    public WorldMap(Dungeon dungeon) : this(dungeon.Width, dungeon.Height, dungeon.Matrix) { }
+    public WorldMap(MazeCreator maze) : this(maze.Width, maze.Height, maze.Matrix) { }
 
     public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
     public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - Width * 0.5f) * TILE_UNIT, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
@@ -54,15 +54,4 @@ public class WorldMap
 
     // FIXME
     public Direction InitDir => new South();
-}
-
-public enum Terrain
-{
-    None,
-    Ground,
-    Wall,
-    Branch,
-    VDoor,
-    HDoor,
-    TmpWall
 }

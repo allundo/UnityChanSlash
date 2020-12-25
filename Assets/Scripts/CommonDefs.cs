@@ -1,5 +1,14 @@
 using UnityEngine;
 
+public enum Terrain
+{
+    Path,
+    Ground,
+    Wall,
+    Pall,
+    Door,
+}
+
 public struct Pos
 {
     public int x;
@@ -83,7 +92,13 @@ public struct Pos
     {
         return new Pos(a.x - b.x, a.y - b.y);
     }
+
+    public static Pos operator *(Pos a, int n)
+    {
+        return new Pos(a.x * n, a.y * n);
+    }
 }
+
 public interface Direction
 {
     Pos GetForward(Pos pos);
@@ -120,7 +135,7 @@ public class North : Direction
 
     public Vector3 LookAt => new Vector3(0, 0, 1.0f);
 
-    public Terrain Door => Terrain.VDoor;
+    public Terrain Door => Terrain.Door;
     public Direction Left => new West();
     public Direction Right => new East();
     public Direction Backward => new South();
@@ -147,7 +162,7 @@ public class East : Direction
 
     public Vector3 LookAt => new Vector3(1.0f, 0, 0);
 
-    public Terrain Door => Terrain.HDoor;
+    public Terrain Door => Terrain.Door;
     public Direction Left => new North();
     public Direction Right => new South();
     public Direction Backward => new West();
@@ -174,7 +189,7 @@ public class South : Direction
 
     public Vector3 LookAt => new Vector3(0, 0, -1.0f);
 
-    public Terrain Door => Terrain.VDoor;
+    public Terrain Door => Terrain.Door;
     public Direction Left => new East();
     public Direction Right => new West();
     public Direction Backward => new North();
@@ -201,9 +216,28 @@ public class West : Direction
 
     public Vector3 LookAt => new Vector3(-1.0f, 0, 0);
 
-    public Terrain Door => Terrain.HDoor;
+    public Terrain Door => Terrain.Door;
     public Direction Left => new South();
     public Direction Right => new North();
     public Direction Backward => new East();
 
+}
+public enum Dir
+{
+    NONE = 0b0000,
+    N = 0b0001,
+    E = 0b0010,
+    S = 0b0100,
+    W = 0b1000,
+    NE = 0b0011,
+    ES = 0b0110,
+    SW = 0b1100,
+    WN = 0b1001,
+    NS = 0b0101,
+    EW = 0b1010,
+    WNE = 0b1011,
+    NES = 0b0111,
+    ESW = 0b1110,
+    SWN = 0b1101,
+    NESW = 0b1111,
 }

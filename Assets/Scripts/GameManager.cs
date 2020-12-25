@@ -1,8 +1,3 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-
-
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     public WorldMap worldMap { get; protected set; }
@@ -10,9 +5,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
+        var maze = new MazeCreator();
+        maze.CreateMaze();
 
-        worldMap = new WorldMap(new Dungeon());
-        MapRenderer.Instance.Fix(worldMap);
+        worldMap = new WorldMap(maze);
+        MapRenderer.Instance.Init(worldMap);
+        MapRenderer.Instance.Fix(maze);
 
     }
 }
