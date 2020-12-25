@@ -108,7 +108,6 @@ public interface Direction
 
     Vector3 LookAt { get; }
 
-    Terrain Door { get; }
     Direction Left { get; }
     Direction Right { get; }
     Direction Backward { get; }
@@ -135,7 +134,6 @@ public class North : Direction
 
     public Vector3 LookAt => new Vector3(0, 0, 1.0f);
 
-    public Terrain Door => Terrain.Door;
     public Direction Left => new West();
     public Direction Right => new East();
     public Direction Backward => new South();
@@ -162,7 +160,6 @@ public class East : Direction
 
     public Vector3 LookAt => new Vector3(1.0f, 0, 0);
 
-    public Terrain Door => Terrain.Door;
     public Direction Left => new North();
     public Direction Right => new South();
     public Direction Backward => new West();
@@ -189,7 +186,6 @@ public class South : Direction
 
     public Vector3 LookAt => new Vector3(0, 0, -1.0f);
 
-    public Terrain Door => Terrain.Door;
     public Direction Left => new East();
     public Direction Right => new West();
     public Direction Backward => new North();
@@ -216,7 +212,6 @@ public class West : Direction
 
     public Vector3 LookAt => new Vector3(-1.0f, 0, 0);
 
-    public Terrain Door => Terrain.Door;
     public Direction Left => new South();
     public Direction Right => new North();
     public Direction Backward => new East();
