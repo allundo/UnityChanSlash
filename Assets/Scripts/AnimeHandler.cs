@@ -21,6 +21,7 @@ public abstract class AnimeHandler : MonoBehaviour
         public AnimeState jumpState;
         public AnimeState attackState;
         public AnimeState restState;
+        public AnimeState handleState;
     }
 
     protected Commander commander;
@@ -57,7 +58,8 @@ public abstract class AnimeHandler : MonoBehaviour
             { "WalkBack", types.backState },
             { "Jump", types.jumpState },
             { "Attack", types.attackState },
-            { "Rest", types.restState }
+            { "Rest", types.restState },
+            { "Handle", types.handleState }
         };
 
         foreach (KeyValuePair<string, AnimeState> map in bufMap)
@@ -77,7 +79,8 @@ public abstract class AnimeHandler : MonoBehaviour
             backState = standardState,
             jumpState = standardState,
             attackState = standardState,
-            restState = standardState
+            restState = standardState,
+            handleState = standardState
         };
     }
 

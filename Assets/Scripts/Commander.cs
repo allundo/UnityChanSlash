@@ -59,6 +59,7 @@ public class Commander : MonoBehaviour
         }
 
         Command cmd = GetCommand();
+        Debug.Log("Command: " + cmd);
 
         if (cmd != null)
         {
@@ -90,6 +91,8 @@ public class Commander : MonoBehaviour
         if (Input.GetButtonDown("Jump")) return Command.jump;
         if (Input.GetButtonDown("Fire2")) return Command.turnL;
         if (Input.GetButtonDown("Fire3")) return Command.turnR;
+        if (Input.GetButtonDown("Fire1")) return Command.attack;
+        if (Input.GetButtonDown("Submit")) return Command.handle;
 
         float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
@@ -151,6 +154,8 @@ public class Commander : MonoBehaviour
         public static Command jump;
         public static Command turnL;
         public static Command turnR;
+        public static Command attack;
+        public static Command handle;
 
         public static void Init(Commander commander, float baseDuration = 0.6f)
         {
@@ -163,6 +168,8 @@ public class Commander : MonoBehaviour
             jump = new JumpCommand(baseDuration * 2);
             turnL = new TurnLCommand(baseDuration * 0.5f);
             turnR = new TurnRCommand(baseDuration * 0.5f);
+            attack = new AttackCommand(baseDuration * 2);
+            handle = new HandleCommand(baseDuration);
         }
 
         public Command(float duration)
@@ -322,5 +329,33 @@ public class Commander : MonoBehaviour
 
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
+    }
+
+    protected abstract class ActionCommand : Command
+    {
+        public ActionCommand(float duration, string animName) : base(duration)
+        {
+            this.animName = animName;
+        }
+
+        protected string animName;
+
+        public override void Execute()
+        {
+            Debug.Log(animName);
+            commander.anim.SetTrigger(animName);
+
+            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+            DOVirtual.DelayedCall(duration, () => { commander.DispatchCommand(); });
+        }
+    }
+
+    protected class AttackCommand : ActionCommand
+    {
+        public AttackCommand(float duration) : base(duration, "Attack") { }
+    }
+    protected class HandleCommand : ActionCommand
+    {
+        public HandleCommand(float duration) : base(duration, "Handle") { }
     }
 }

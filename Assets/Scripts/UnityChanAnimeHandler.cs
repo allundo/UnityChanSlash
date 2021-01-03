@@ -14,7 +14,8 @@ public class UnityChanAnimeHandler : AnimeHandler
             backState = standardState,
             jumpState = new JumpState(anim, new JumpCollider(col)),
             attackState = standardState,
-            restState = standardState
+            restState = standardState,
+            handleState = standardState
         };
     }
 
