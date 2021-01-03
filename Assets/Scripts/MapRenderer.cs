@@ -42,38 +42,39 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
     private Mesh wallVMesh;
     private Mesh wallHMesh;
 
+    private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
     public void Init(WorldMap map)
     {
         this.map = map;
-        wallVMesh = wallV.GetComponent<MeshFilter>().sharedMesh;
-        wallHMesh = wallH.GetComponent<MeshFilter>().sharedMesh;
+        wallVMesh = GetMeshFromObject(wallV);
+        wallHMesh = GetMeshFromObject(wallH);
 
-        doorVMesh = doorV.GetComponent<MeshFilter>().sharedMesh;
-        doorHMesh = doorH.GetComponent<MeshFilter>().sharedMesh;
+        doorVMesh = GetMeshFromObject(doorV);
+        doorHMesh = GetMeshFromObject(doorH);
 
-        wallMesh[(int)Dir.N] = pallNextWallN.GetComponent<MeshFilter>().sharedMesh;
-        wallMesh[(int)Dir.E] = pallNextWallE.GetComponent<MeshFilter>().sharedMesh;
-        wallMesh[(int)Dir.S] = pallNextWallS.GetComponent<MeshFilter>().sharedMesh;
-        wallMesh[(int)Dir.W] = pallNextWallW.GetComponent<MeshFilter>().sharedMesh;
-        wallMesh[(int)Dir.NS] = pallNextWallV.GetComponent<MeshFilter>().sharedMesh;
-        wallMesh[(int)Dir.EW] = pallNextWallH.GetComponent<MeshFilter>().sharedMesh;
+        wallMesh[(int)Dir.N] = GetMeshFromObject(pallNextWallN);
+        wallMesh[(int)Dir.E] = GetMeshFromObject(pallNextWallE);
+        wallMesh[(int)Dir.S] = GetMeshFromObject(pallNextWallS);
+        wallMesh[(int)Dir.W] = GetMeshFromObject(pallNextWallW);
+        wallMesh[(int)Dir.NS] = GetMeshFromObject(pallNextWallV);
+        wallMesh[(int)Dir.EW] = GetMeshFromObject(pallNextWallH);
 
-        gateMesh[(int)Dir.NONE] = pall.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.N] = gateN.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.E] = gateE.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.S] = gateS.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.W] = gateW.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.NE] = gateNE.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.ES] = gateES.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.SW] = gateSW.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.WN] = gateWN.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.NS] = gateV.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.EW] = gateH.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.NES] = gateVE.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.ESW] = gateHS.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.SWN] = gateVW.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.WNE] = gateHN.GetComponent<MeshFilter>().sharedMesh;
-        gateMesh[(int)Dir.NESW] = gateCross.GetComponent<MeshFilter>().sharedMesh;
+        gateMesh[(int)Dir.NONE] = GetMeshFromObject(pall);
+        gateMesh[(int)Dir.N] = GetMeshFromObject(gateN);
+        gateMesh[(int)Dir.E] = GetMeshFromObject(gateE);
+        gateMesh[(int)Dir.S] = GetMeshFromObject(gateS);
+        gateMesh[(int)Dir.W] = GetMeshFromObject(gateW);
+        gateMesh[(int)Dir.NE] = GetMeshFromObject(gateNE);
+        gateMesh[(int)Dir.ES] = GetMeshFromObject(gateES);
+        gateMesh[(int)Dir.SW] = GetMeshFromObject(gateSW);
+        gateMesh[(int)Dir.WN] = GetMeshFromObject(gateWN);
+        gateMesh[(int)Dir.NS] = GetMeshFromObject(gateV);
+        gateMesh[(int)Dir.EW] = GetMeshFromObject(gateH);
+        gateMesh[(int)Dir.NES] = GetMeshFromObject(gateVE);
+        gateMesh[(int)Dir.ESW] = GetMeshFromObject(gateHS);
+        gateMesh[(int)Dir.SWN] = GetMeshFromObject(gateVW);
+        gateMesh[(int)Dir.WNE] = GetMeshFromObject(gateHN);
+        gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
     }
 
     private void SetTerrain((float x, float z) pos, GameObject prefab)
