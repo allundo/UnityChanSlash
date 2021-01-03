@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Commander))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider))]
-public class AnimeHandler : MonoBehaviour
+public abstract class AnimeHandler : MonoBehaviour
 {
     protected Animator anim;
     protected CapsuleCollider col;
@@ -38,6 +38,8 @@ public class AnimeHandler : MonoBehaviour
 
     private void Update()
     {
+        SetCurrentState();
+
         anim.SetFloat("Speed", commander.GetSpeed());
         anim.SetFloat("RSpeed", commander.GetRSpeed());
         state.UpdateState();
