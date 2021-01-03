@@ -43,6 +43,8 @@
      <Compile Include="Assets\Scripts\CollisionDetector.cs" />
      <Compile Include="Assets\Scripts\Commander.cs" />
      <Compile Include="Assets\Scripts\CommonDefs.cs" />
+     <Compile Include="Assets\Scripts\DoorControl.cs" />
+     <Compile Include="Assets\Scripts\DoorHControl.cs" />
      <Compile Include="Assets\Scripts\EnemyBehavior.cs" />
      <Compile Include="Assets\Scripts\EnemyStatus.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
