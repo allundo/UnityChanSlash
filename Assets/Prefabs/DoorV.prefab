@@ -12,11 +12,10 @@ GameObject:
   - component: {fileID: 7630895998581611989}
   - component: {fileID: 7630895998581611988}
   - component: {fileID: 7630895998581611995}
-  - component: {fileID: 7630895998581611994}
   - component: {fileID: 7630895998581611991}
   - component: {fileID: 7630895998581611990}
   m_Layer: 0
-  m_Name: DoorV 1
+  m_Name: DoorV
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,20 +984,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7630895998581611993}
   m_Mesh: {fileID: 0}
---- !u!64 &7630895998581611994
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630895998581611993}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!65 &7630895998581611991
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1011,7 +996,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.75, y: 2, z: 2}
-  m_Center: {x: 0, y: 1.2509975, z: 0}
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!114 &7630895998581611990
 MonoBehaviour:
   m_ObjectHideFlags: 0

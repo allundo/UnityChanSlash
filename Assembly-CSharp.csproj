@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\Menu.cs" />
      <Compile Include="Assets\Scripts\MobAttack.cs" />
      <Compile Include="Assets\Scripts\MobControl.cs" />
+     <Compile Include="Assets\Scripts\MobHandle.cs" />
      <Compile Include="Assets\Scripts\MobItemDropper.cs" />
      <Compile Include="Assets\Scripts\MobKnockBack.cs" />
      <Compile Include="Assets\Scripts\MobStatus.cs" />
