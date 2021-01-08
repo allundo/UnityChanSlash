@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(Item))]

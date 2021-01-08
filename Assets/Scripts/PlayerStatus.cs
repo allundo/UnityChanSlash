@@ -1,3 +1,3 @@
-﻿public class PlayerStatus : MobStatus
+public class PlayerStatus : MobStatus
 {
 }
