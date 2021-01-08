@@ -16,8 +16,7 @@ public abstract class AnimeHandler : MonoBehaviour
     protected struct AnimeStateTypes
     {
         public AnimeState idleState;
-        public AnimeState forwardState;
-        public AnimeState backState;
+        public AnimeState moveState;
         public AnimeState jumpState;
         public AnimeState turnState;
         public AnimeState attackState;
@@ -55,10 +54,13 @@ public abstract class AnimeHandler : MonoBehaviour
 
         Dictionary<string, AnimeState> bufMap = new Dictionary<string, AnimeState> {
             { "Idle", types.idleState },
-            { "Locomotion", types.forwardState },
-            { "WalkBack", types.backState },
+            { "Move.Locomotion", types.moveState },
+            { "Move.WalkBack", types.moveState },
+            { "Move.WalkL", types.moveState },
+            { "Move.WalkR", types.moveState },
             { "Jump", types.jumpState },
-            { "Turn", types.turnState },
+            { "Turn.TurnL", types.turnState },
+            { "Turn.TurnR", types.turnState },
             { "Attack", types.attackState },
             { "Rest", types.restState },
             { "Handle", types.handleState }
@@ -77,8 +79,7 @@ public abstract class AnimeHandler : MonoBehaviour
         return new AnimeStateTypes
         {
             idleState = standardState,
-            forwardState = standardState,
-            backState = standardState,
+            moveState = standardState,
             jumpState = standardState,
             turnState = standardState,
             attackState = standardState,
