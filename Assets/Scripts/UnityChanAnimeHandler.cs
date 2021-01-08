@@ -7,16 +7,10 @@ public class UnityChanAnimeHandler : AnimeHandler
 
     protected override AnimeStateTypes GetAnimeStateTypes()
     {
-        return new AnimeStateTypes
-        {
-            idleState = standardState,
-            forwardState = standardState,
-            backState = standardState,
-            jumpState = new JumpState(anim, new JumpCollider(col)),
-            attackState = standardState,
-            restState = standardState,
-            handleState = standardState
-        };
+        AnimeStateTypes types = base.GetAnimeStateTypes();
+        types.jumpState = new JumpState(anim, new JumpCollider(col));
+
+        return types;
     }
 
     protected class JumpState : AnimeState

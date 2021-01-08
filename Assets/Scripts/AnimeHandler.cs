@@ -19,6 +19,7 @@ public abstract class AnimeHandler : MonoBehaviour
         public AnimeState forwardState;
         public AnimeState backState;
         public AnimeState jumpState;
+        public AnimeState turnState;
         public AnimeState attackState;
         public AnimeState restState;
         public AnimeState handleState;
@@ -57,6 +58,7 @@ public abstract class AnimeHandler : MonoBehaviour
             { "Locomotion", types.forwardState },
             { "WalkBack", types.backState },
             { "Jump", types.jumpState },
+            { "Turn", types.turnState },
             { "Attack", types.attackState },
             { "Rest", types.restState },
             { "Handle", types.handleState }
@@ -78,6 +80,7 @@ public abstract class AnimeHandler : MonoBehaviour
             forwardState = standardState,
             backState = standardState,
             jumpState = standardState,
+            turnState = standardState,
             attackState = standardState,
             restState = standardState,
             handleState = standardState
