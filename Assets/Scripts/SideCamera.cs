@@ -46,7 +46,7 @@ public class SideCamera : MonoBehaviour
 
     public void SetSideCamera(Transform cameraTf, bool isRight)
     {
-        Vector3 cameraLocalPos = Quaternion.Euler(0, (isRight ? 90 : -90), 0) * (cameraTf.position - lookAt.position);
+        Vector3 cameraLocalPos = lookAt.rotation * Quaternion.Euler(0, (isRight ? 90 : -90), 0) * new Vector3(0, 8, -8);
         Vector3 localOffset = -new Vector3(cameraLocalPos.x, 0, cameraLocalPos.z).normalized * followOffset.magnitude;
 
         transform.position = lookAt.position + cameraLocalPos;

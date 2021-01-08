@@ -60,7 +60,6 @@ public class Commander : MonoBehaviour
         }
 
         Command cmd = GetCommand();
-        Debug.Log("Command: " + cmd);
 
         if (cmd != null)
         {
@@ -125,14 +124,12 @@ public class Commander : MonoBehaviour
     {
         mainCamera.TurnLeft();
         dir = dir.Left;
-        Debug.Log("Dir: " + dir);
     }
 
     protected void TurnRight()
     {
         mainCamera.TurnRight();
         dir = dir.Right;
-        Debug.Log("Dir: " + dir);
     }
 
     protected void ResetCamera()
@@ -193,7 +190,7 @@ public class Commander : MonoBehaviour
         {
             return commander.tf.DORotate(new Vector3(0, angle, 0), duration)
                 .SetRelative()
-                .SetEase(Ease.InOutCubic);
+                .SetEase(Ease.InCubic);
         }
 
         protected Sequence GetJumpSequence(Vector3 moveVector, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
@@ -306,8 +303,6 @@ public class Commander : MonoBehaviour
 
         public override void Execute()
         {
-            Debug.Log("TurnL");
-
             PlayTweenMove(GetRotate(-90), () => commander.ResetCamera());
             commander.TurnLeft();
             commander.anim.SetTrigger("TurnL");
@@ -322,8 +317,6 @@ public class Commander : MonoBehaviour
 
         public override void Execute()
         {
-            Debug.Log("TurnR");
-
             PlayTweenMove(GetRotate(90), () => commander.ResetCamera());
             commander.TurnRight();
             commander.anim.SetTrigger("TurnR");
