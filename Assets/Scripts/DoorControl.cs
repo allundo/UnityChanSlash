@@ -14,7 +14,7 @@ public class DoorControl : MonoBehaviour
     protected StateEnum state;
     protected bool isLocked;
 
-    public bool isOpen = false;
+    public bool IsOpen { get; protected set; } = false;
 
     protected bool IsControllable;
     protected Transform doorL;
@@ -26,7 +26,7 @@ public class DoorControl : MonoBehaviour
     void Start()
     {
         isLocked = false;
-        isOpen = false;
+        IsOpen = false;
         state = StateEnum.CLOSE;
 
         doorR = this.transform.GetChild(0);
@@ -35,13 +35,13 @@ public class DoorControl : MonoBehaviour
 
     void Update()
     {
-        if (isOpen && state == StateEnum.CLOSE) Open();
-        if (!isOpen && state == StateEnum.OPEN) Close();
+        if (IsOpen && state == StateEnum.CLOSE) Open();
+        if (!IsOpen && state == StateEnum.OPEN) Close();
     }
 
     public void Handle()
     {
-        if (isOpen)
+        if (IsOpen)
         {
             Close();
         }
@@ -70,7 +70,7 @@ public class DoorControl : MonoBehaviour
                 .OnComplete(() => { state = StateEnum.OPEN; });
 
         state = StateEnum.OPENING;
-        isOpen = true;
+        IsOpen = true;
         open.Play();
     }
 
@@ -92,7 +92,7 @@ public class DoorControl : MonoBehaviour
                 .OnComplete(() => { state = StateEnum.CLOSE; });
 
         state = StateEnum.CLOSING;
-        isOpen = false;
+        IsOpen = false;
         open.Play();
     }
 }
