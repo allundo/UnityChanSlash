@@ -16,12 +16,14 @@ public class Commander : MonoBehaviour
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;
 
-    protected bool IsMovable(Pos descPos) => map.GetTerrain(descPos) != Terrain.Wall;
+    protected bool IsMovable(Pos descPos) => map.GetTile(descPos).IsEnterable();
+    protected bool IsLeapable(Pos descPos) => map.GetTile(descPos).IsLeapable();
     protected bool IsForwardMovable => IsMovable(dir.GetForward(CurrentPos));
+    protected bool IsForwardLeapable => IsLeapable(dir.GetForward(CurrentPos));
     protected bool IsBackwardMovable => IsMovable(dir.GetBackward(CurrentPos));
     protected bool IsLeftMovable => IsMovable(dir.GetLeft(CurrentPos));
     protected bool IsRightMovable => IsMovable(dir.GetRight(CurrentPos));
-    protected bool IsJumpable => IsForwardMovable && IsMovable(dir.GetForward(dir.GetForward(CurrentPos)));
+    protected bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(CurrentPos)));
 
     protected Transform tf;
 

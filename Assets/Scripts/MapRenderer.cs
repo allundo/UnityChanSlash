@@ -37,8 +37,6 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
     [SerializeField] private GameObject doorH = default;
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
-    private Mesh doorVMesh;
-    private Mesh doorHMesh;
     private Mesh wallVMesh;
     private Mesh wallHMesh;
 
@@ -48,9 +46,6 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         this.map = map;
         wallVMesh = GetMeshFromObject(wallV);
         wallHMesh = GetMeshFromObject(wallH);
-
-        doorVMesh = GetMeshFromObject(doorV);
-        doorHMesh = GetMeshFromObject(doorH);
 
         wallMesh[(int)Dir.N] = GetMeshFromObject(pallNextWallN);
         wallMesh[(int)Dir.E] = GetMeshFromObject(pallNextWallE);
@@ -77,9 +72,13 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
     }
 
-    private void SetTerrain((float x, float z) pos, GameObject prefab)
+    private void SetDoor(Pos pos, GameObject doorPrefab)
     {
-        Instantiate(prefab, new Vector3(pos.x, 0.0f, pos.z), Quaternion.identity);
+        (float x, float z) worldPos = WorldPos(pos);
+        GameObject door = Instantiate(doorPrefab, new Vector3(worldPos.x, 0.0f, worldPos.z), Quaternion.identity);
+
+        Door tileDoor = (Door)GameManager.Instance.worldMap.GetTile(pos);
+        tileDoor.dc = door.GetComponent<DoorControl>();
     }
     public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
     public (float x, float z) WorldPos(int x, int y) => map.WorldPos(x, y);
@@ -111,8 +110,8 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
                     case Terrain.Door:
                         // if (dirMap[i, j] == Dir.NS) terrainMeshes.Push(GetMeshInstance(doorVMesh, new Pos(i, j)));
                         // if (dirMap[i, j] == Dir.EW) terrainMeshes.Push(GetMeshInstance(doorHMesh, new Pos(i, j)));
-                        if (dirMap[i, j] == Dir.NS) SetTerrain(WorldPos(i, j), doorV);
-                        if (dirMap[i, j] == Dir.EW) SetTerrain(WorldPos(i, j), doorH);
+                        if (dirMap[i, j] == Dir.NS) SetDoor(new Pos(i, j), doorV);
+                        if (dirMap[i, j] == Dir.EW) SetDoor(new Pos(i, j), doorH);
                         break;
 
                     case Terrain.Wall:

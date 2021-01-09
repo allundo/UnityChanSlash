@@ -9,6 +9,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         maze.CreateMaze();
 
         worldMap = new WorldMap(maze);
+
         MapRenderer.Instance.Init(worldMap);
         MapRenderer.Instance.Fix(maze);
 
