@@ -242,7 +242,7 @@ public class Commander : MonoBehaviour
 
             PlayTweenMove(GetLinearMove(Dest));
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+            DOVirtual.DelayedCall(duration * 0.95f, () => { commander.isCommandValid = true; });
         }
     }
 
