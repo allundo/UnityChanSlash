@@ -12,6 +12,7 @@ public class DoorControl : MonoBehaviour
     }
 
     protected StateEnum state;
+    protected float alpha;
     protected bool isLocked;
 
     public bool IsOpen { get; protected set; } = false;
@@ -31,6 +32,8 @@ public class DoorControl : MonoBehaviour
 
         doorR = this.transform.GetChild(0);
         doorL = this.transform.GetChild(1);
+
+        ResetAlpha();
     }
 
     void Update()
@@ -38,6 +41,28 @@ public class DoorControl : MonoBehaviour
         if (IsOpen && state == StateEnum.CLOSE) Open();
         if (!IsOpen && state == StateEnum.OPEN) Close();
     }
+
+    public void SetAlpha(float distance)
+    {
+        // Debug.Log("SetAlpha: " + distance);
+        float alpha = Mathf.Clamp01(0.3f + 0.4f * distance);
+        SetColorToMaterial(new Color(1, 1, 1, alpha));
+    }
+
+    public void ResetAlpha()
+    {
+        Debug.Log("ResetAlpha");
+        SetColorToMaterial(new Color(1, 1, 1, 1));
+    }
+
+    protected void SetColorToMaterial(Color color)
+    {
+        GetComponent<Renderer>().material.SetColor("_Color", color);
+        doorR.GetComponent<Renderer>().material.SetColor("_Color", color);
+        doorL.GetComponent<Renderer>().material.SetColor("_Color", color);
+    }
+
+
 
     public void Handle()
     {

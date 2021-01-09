@@ -22,7 +22,8 @@ public class Wall : Tile
 
 public class Door : Tile
 {
+    public bool IsCharactorOn { protected get; set; } = false;
     public DoorControl dc { protected get; set; }
-    public bool IsEnterable() => dc.IsOpen;
+    public bool IsEnterable() => dc.IsOpen && !IsCharactorOn;
     public bool IsLeapable() => false;
 }

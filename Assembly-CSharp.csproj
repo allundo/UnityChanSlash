@@ -45,6 +45,7 @@
      <Compile Include="Assets\Scripts\CommonDefs.cs" />
      <Compile Include="Assets\Scripts\DoorControl.cs" />
      <Compile Include="Assets\Scripts\DoorHControl.cs" />
+     <Compile Include="Assets\Scripts\DoorTransparent.cs" />
      <Compile Include="Assets\Scripts\EnemyBehavior.cs" />
      <Compile Include="Assets\Scripts\EnemyStatus.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -118,6 +119,7 @@
      <Compile Include="Assets\UnityChan\SplashScreen\Scripts\SplashScreen.cs" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_akarami_blend.shader" />
+     <None Include="Assets\Materials\GateTransparent.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
@@ -129,6 +131,7 @@
      <None Include="Assets\UnityChan\Stage\Shader\AlphaMask.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hair.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
+     <None Include="Assets\Materials\DoorTransparent.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_eye_blend.shader" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/2019.4.11f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
