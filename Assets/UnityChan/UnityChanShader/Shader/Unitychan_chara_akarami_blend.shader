@@ -12,7 +12,7 @@ Shader "UnityChan/Blush - Transparent"
 
 	SubShader
 	{
-		Blend SrcAlpha OneMinusSrcAlpha, One One 
+		Blend SrcAlpha OneMinusSrcAlpha, One One
 		ZWrite Off
 		Tags
 		{
@@ -21,7 +21,7 @@ Shader "UnityChan/Blush - Transparent"
 			"RenderType"="Overlay"
 			"LightMode"="ForwardBase"
 		}
-		
+
 		Pass
 		{
 			Cull Back
@@ -33,7 +33,7 @@ CGPROGRAM
 #pragma fragment frag
 #include "UnityCG.cginc"
 #include "AutoLight.cginc"
-#include "CharaSkin.cg"
+#include "CharaSkin.cginc"
 ENDCG
 		}
 	}

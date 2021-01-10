@@ -12,7 +12,7 @@ Shader "UnityChan/Skin - Transparent"
 
 	SubShader
 	{
-		Blend SrcAlpha OneMinusSrcAlpha, One One 
+		Blend SrcAlpha OneMinusSrcAlpha, One One
 		Tags
 		{
 			"Queue"="Transparent+1"
@@ -20,7 +20,7 @@ Shader "UnityChan/Skin - Transparent"
 			"RenderType"="Overlay"
 			"LightMode"="ForwardBase"
 		}
-		
+
 		Pass
 		{
 			Cull Back
@@ -32,7 +32,7 @@ CGPROGRAM
 #pragma fragment frag
 #include "UnityCG.cginc"
 #include "AutoLight.cginc"
-#include "CharaSkin.cg"
+#include "CharaSkin.cginc"
 ENDCG
 		}
 	}

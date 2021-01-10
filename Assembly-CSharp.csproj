@@ -121,7 +121,10 @@
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_akarami_blend.shader" />
      <None Include="Assets\Materials\GateTransparent.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />
+     <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaMain.cginc" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
+     <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaSkin.cginc" />
+     <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaOutline.cginc" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />
      <None Include="Assets\UnityChan\Audio\Voice\unity-chan_voice_list.txt" />
