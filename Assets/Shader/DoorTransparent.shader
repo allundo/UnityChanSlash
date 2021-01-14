@@ -4,7 +4,7 @@ Shader "Custom/DoorTransparent" {
     }
 
     SubShader {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent+1" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         LOD 150
 
         // Pass 1

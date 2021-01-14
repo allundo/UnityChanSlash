@@ -4,7 +4,7 @@ Shader "Custom/GateTransparent" {
     }
 
     SubShader {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent-1" }
         LOD 150
 
         // Pass 1

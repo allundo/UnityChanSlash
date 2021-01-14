@@ -50,6 +50,8 @@ public class Commander : MonoBehaviour
         tf.LookAt(tf.position + dir.LookAt);
 
         Command.Init(this);
+
+        MapRenderer.Instance.RedrawHidePlates(transform.position);
     }
 
     public void InputCommand()
@@ -236,7 +238,7 @@ public class Commander : MonoBehaviour
                 return;
             }
 
-            PlayTweenMove(GetLinearMove(Dest));
+            PlayTweenMove(GetLinearMove(Dest), () => { MapRenderer.Instance.MoveHidePlates(commander.transform.position); });
 
             DOVirtual.DelayedCall(duration * 0.95f, () => { commander.isCommandValid = true; });
         }

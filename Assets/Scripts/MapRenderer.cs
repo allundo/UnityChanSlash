@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
@@ -35,10 +36,18 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
     [SerializeField] private GameObject pall = default;
     [SerializeField] private GameObject doorV = default;
     [SerializeField] private GameObject doorH = default;
+    [SerializeField] private GameObject plate5 = default;
+    [SerializeField] private GameObject plate4 = default;
+    [SerializeField] private GameObject plate3 = default;
+    [SerializeField] private GameObject plate2 = default;
+    [SerializeField] private GameObject plate1 = default;
+
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
     private Mesh wallVMesh;
     private Mesh wallHMesh;
+    private GameObject[] plate = new GameObject[0b10000];
+    private HidePool hidePool;
 
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
     public void Init(WorldMap map)
@@ -70,16 +79,24 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         gateMesh[(int)Dir.SWN] = GetMeshFromObject(gateVW);
         gateMesh[(int)Dir.WNE] = GetMeshFromObject(gateHN);
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
+
+        hidePool = new HidePool(map, plate5, plate4, plate3, plate2, plate1);
     }
 
     private void SetDoor(Pos pos, GameObject doorPrefab)
     {
-        (float x, float z) worldPos = WorldPos(pos);
-        GameObject door = Instantiate(doorPrefab, new Vector3(worldPos.x, 0.0f, worldPos.z), Quaternion.identity);
+        GameObject door = PlacePrefab(pos, doorPrefab);
 
         Door tileDoor = (Door)GameManager.Instance.worldMap.GetTile(pos);
         tileDoor.dc = door.GetComponent<DoorControl>();
     }
+
+    private GameObject PlacePrefab(Pos pos, GameObject prefab)
+    {
+        (float x, float z) worldPos = WorldPos(pos);
+        return Instantiate(prefab, new Vector3(worldPos.x, 0.0f, worldPos.z), Quaternion.identity);
+    }
+
     public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
     public (float x, float z) WorldPos(int x, int y) => map.WorldPos(x, y);
 
@@ -151,5 +168,8 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         MeshUtility.CopyTo(combinedMesh, wallParent.GetComponent<MeshFilter>().sharedMesh);
         wallParent.SetActive(true);
     }
+
+    public void RedrawHidePlates(Vector3 playerPos) => hidePool.RedrawHidePlates(playerPos);
+    public void MoveHidePlates(Vector3 playerPos) => hidePool.MoveHidePlates(playerPos);
 
 }

@@ -236,3 +236,23 @@ public enum Dir
     SWN = 0b1101,
     NESW = 0b1111,
 }
+
+public enum Plate
+{
+    NONE = 0b0000,
+    A = 0b0001,
+    B = 0b0010,
+    C = 0b0100,
+    D = 0b1000,
+    AB = 0b0011,
+    BC = 0b0110,
+    CD = 0b1100,
+    AD = 0b1001,
+    AC = 0b0101,
+    BD = 0b1010,
+    ABD = 0b1011,
+    ABC = 0b0111,
+    BCD = 0b1110,
+    ACD = 0b1101,
+    ABCD = 0b1111,
+}

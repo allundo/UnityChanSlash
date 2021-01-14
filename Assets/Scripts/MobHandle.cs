@@ -24,6 +24,7 @@ public class MobHandle : MonoBehaviour
         if (null == targetDoor) return;
 
         targetDoor.Handle();
+        MapRenderer.Instance.RedrawHidePlates(transform.position);
     }
 
     public void OnHandleFinished()

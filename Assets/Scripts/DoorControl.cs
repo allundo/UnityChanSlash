@@ -44,14 +44,12 @@ public class DoorControl : MonoBehaviour
 
     public void SetAlpha(float distance)
     {
-        // Debug.Log("SetAlpha: " + distance);
         float alpha = Mathf.Clamp01(0.3f + 0.4f * distance);
         SetColorToMaterial(new Color(1, 1, 1, alpha));
     }
 
     public void ResetAlpha()
     {
-        Debug.Log("ResetAlpha");
         SetColorToMaterial(new Color(1, 1, 1, 1));
     }
 
