@@ -49,8 +49,6 @@ public class Commander : MonoBehaviour
         dir = map.InitDir;
         tf.LookAt(tf.position + dir.LookAt);
 
-        Debug.Log("Position: " + tf.position);
-
         Command.Init(this);
     }
 
@@ -231,8 +229,6 @@ public class Commander : MonoBehaviour
 
         public override void Execute()
         {
-            Debug.Log("IsMovable: " + IsMovable);
-
             if (!IsMovable)
             {
                 commander.isCommandValid = true;

@@ -21,7 +21,6 @@ public class CollisionDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Exit");
         onTriggerExit.Invoke(other);
     }
 
