@@ -287,11 +287,27 @@ public class Commander : MonoBehaviour
         {
             Debug.Log("Jump");
 
-            Vector3 jump = commander.dir.LookAt * TILE_UNIT *
-                (commander.IsJumpable ? 2 : commander.IsForwardMovable ? 1 : 0);
-            PlayTweenMove(GetJumpSequence(jump));
+            int distance = (commander.IsJumpable ? 2 : commander.IsForwardMovable ? 1 : 0);
+
+            Vector3 jump = commander.dir.LookAt * TILE_UNIT * distance;
+
+            PlayTweenMove(GetJumpSequence(jump), () =>
+            {
+                if (distance > 0)
+                {
+                    MapRenderer.Instance.MoveHidePlates(commander.transform.position);
+                }
+            });
+
             commander.anim.SetTrigger("Jump");
 
+            if (distance == 2)
+            {
+                DOVirtual.DelayedCall(duration * 0.4f, () =>
+                {
+                    MapRenderer.Instance.MoveHidePlates(commander.transform.position);
+                });
+            }
             DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
         }
     }
