@@ -43,9 +43,7 @@ public class HidePool
 
         int id = (int)plate;
 
-
-        (float x, float z) tmp = map.WorldPos(pos);
-        Vector3 worldPos = new Vector3(tmp.x, 0, tmp.z);
+        Vector3 worldPos = map.WorldPos(pos);
 
         foreach (Transform t in pool[id])
         {
@@ -57,7 +55,6 @@ public class HidePool
                 hp.plate = plate;
                 return hp.FadeIn(duration);
             }
-
         }
 
         return HidePlate.GetInstance(prefab[id], worldPos, rotate[id], pool[id], plate);

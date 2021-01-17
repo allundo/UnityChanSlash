@@ -47,8 +47,8 @@ public class WorldMap
         Matrix = new Tile[width, height];
     }
 
-    public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
-    public (float x, float z) WorldPos(int x, int y) => ((0.5f + x - Width * 0.5f) * TILE_UNIT, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
+    public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
+    public Vector3 WorldPos(int x, int y) => new Vector3((0.5f + x - Width * 0.5f) * TILE_UNIT, 0.0f, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
 
     public Pos MapPos(Vector3 pos) =>
         new Pos(
@@ -59,7 +59,7 @@ public class WorldMap
     public bool IsTileLeapable(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsLeapable();
 
     // FIXME
-    public (float x, float z) InitPos
+    public Vector3 InitPos
     {
         get
         {
@@ -72,7 +72,7 @@ public class WorldMap
                     if (Matrix[i, j] is Ground) return WorldPos(i, j);
                 }
             }
-            return (0, 0);
+            return Vector3.zero;
         }
     }
 

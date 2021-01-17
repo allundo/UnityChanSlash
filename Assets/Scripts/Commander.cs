@@ -43,8 +43,7 @@ public class Commander : MonoBehaviour
         tf = character.transform;
 
         // TODO: Charactor position should be set by GameManager
-        (float x, float z) pos = map.InitPos;
-        tf.position = new Vector3(pos.x, 0, pos.z);
+        tf.position = map.InitPos;
 
         dir = map.InitDir;
         tf.LookAt(tf.position + dir.LookAt);

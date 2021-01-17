@@ -93,12 +93,11 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
     {
-        (float x, float z) worldPos = WorldPos(pos);
-        return Instantiate(prefab, new Vector3(worldPos.x, 0.0f, worldPos.z), Quaternion.identity);
+        return Instantiate(prefab, WorldPos(pos), Quaternion.identity);
     }
 
-    public (float x, float z) WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
-    public (float x, float z) WorldPos(int x, int y) => map.WorldPos(x, y);
+    public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
+    public Vector3 WorldPos(int x, int y) => map.WorldPos(x, y);
 
     public void Fix(MazeCreator maze)
     {
@@ -149,12 +148,10 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
 
     private CombineInstance GetMeshInstance(Mesh src, Pos pos)
     {
-        (float x, float z) worldPos = WorldPos(pos);
-
         return new CombineInstance()
         {
             mesh = src,
-            transform = Matrix4x4.Translate(new Vector3(worldPos.x, 0.0f, worldPos.z))
+            transform = Matrix4x4.Translate(WorldPos(pos))
         };
     }
 
