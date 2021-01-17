@@ -5,6 +5,8 @@ public class SideCamera : MonoBehaviour
     private Transform lookAt = default;
     private Vector3 followOffset = default;
 
+    private Vector3 cameraPosition = default;
+
     public Material shader = default;
 
     private Camera cam;
@@ -32,6 +34,7 @@ public class SideCamera : MonoBehaviour
 
         lookAt = camera.lookAt;
         followOffset = camera.followOffset;
+        cameraPosition = camera.cameraPosition;
     }
 
     public void SetRightSide(Transform cameraTf)
@@ -46,7 +49,7 @@ public class SideCamera : MonoBehaviour
 
     public void SetSideCamera(Transform cameraTf, bool isRight)
     {
-        Vector3 cameraLocalPos = lookAt.rotation * Quaternion.Euler(0, (isRight ? 90 : -90), 0) * new Vector3(0, 8, -8);
+        Vector3 cameraLocalPos = lookAt.rotation * Quaternion.Euler(0, (isRight ? 90 : -90), 0) * cameraPosition;
         Vector3 localOffset = -new Vector3(cameraLocalPos.x, 0, cameraLocalPos.z).normalized * followOffset.magnitude;
 
         transform.position = lookAt.position + cameraLocalPos;
