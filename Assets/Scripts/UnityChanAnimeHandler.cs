@@ -4,13 +4,19 @@ using System.Collections.Generic;
 
 public class UnityChanAnimeHandler : AnimeHandler
 {
-
-    protected override AnimeStateTypes GetAnimeStateTypes()
+    protected override Dictionary<string, AnimeState> GetStateNameMap()
     {
-        AnimeStateTypes types = base.GetAnimeStateTypes();
-        types.jumpState = new JumpState(anim, new JumpCollider(col));
+        var map = base.GetStateNameMap();
 
-        return types;
+        map["Move.Locomotion"] = map["Move.WalkBack"] = map["Move.WalkL"] = map["Move.WalkR"]
+            = map["Turn.TurnL"] = map["Turn.TurnR"]
+            = map["Rest"]
+            = map["Handle"]
+            = standardState;
+
+        map["Jump"] = new JumpState(anim, new JumpCollider(col));
+
+        return map;
     }
 
     protected class JumpState : AnimeState

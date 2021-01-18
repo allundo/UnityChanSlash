@@ -9,20 +9,8 @@ public abstract class AnimeHandler : MonoBehaviour
 {
     protected Animator anim;
     protected CapsuleCollider col;
-    protected AnimeState state;
-
+    protected AnimeState currentState;
     protected AnimeState standardState;
-
-    protected struct AnimeStateTypes
-    {
-        public AnimeState idleState;
-        public AnimeState moveState;
-        public AnimeState jumpState;
-        public AnimeState turnState;
-        public AnimeState attackState;
-        public AnimeState restState;
-        public AnimeState handleState;
-    }
 
     protected Commander commander;
 
@@ -40,48 +28,28 @@ public abstract class AnimeHandler : MonoBehaviour
     private void Update()
     {
         SetCurrentState();
-        state.UpdateState();
+        currentState.UpdateState();
     }
 
     private void LoadAnimeState()
     {
-        standardState = new AnimeState(anim, new ColliderState(col));
+        var stateNameMap = GetStateNameMap();
 
-        AnimeStateTypes types = GetAnimeStateTypes();
-
-        Dictionary<string, AnimeState> bufMap = new Dictionary<string, AnimeState> {
-            { "Idle", types.idleState },
-            { "Move.Locomotion", types.moveState },
-            { "Move.WalkBack", types.moveState },
-            { "Move.WalkL", types.moveState },
-            { "Move.WalkR", types.moveState },
-            { "Jump", types.jumpState },
-            { "Turn.TurnL", types.turnState },
-            { "Turn.TurnR", types.turnState },
-            { "Attack", types.attackState },
-            { "Rest", types.restState },
-            { "Handle", types.handleState }
-        };
-
-        foreach (KeyValuePair<string, AnimeState> map in bufMap)
+        foreach (KeyValuePair<string, AnimeState> map in stateNameMap)
         {
             stateMap[Animator.StringToHash("Base Layer." + map.Key)] = map.Value;
         }
 
-        state = standardState;
+        currentState = stateNameMap["Idle"];
     }
 
-    protected virtual AnimeStateTypes GetAnimeStateTypes()
+    protected virtual Dictionary<string, AnimeState> GetStateNameMap()
     {
-        return new AnimeStateTypes
-        {
-            idleState = standardState,
-            moveState = standardState,
-            jumpState = standardState,
-            turnState = standardState,
-            attackState = standardState,
-            restState = standardState,
-            handleState = standardState
+        standardState = new AnimeState(anim, new ColliderState(col));
+
+        return new Dictionary<string, AnimeState> {
+            { "Idle", standardState },
+            { "Attack", standardState },
         };
     }
 
@@ -96,10 +64,10 @@ public abstract class AnimeHandler : MonoBehaviour
         {
             AnimeState nextState = stateMap[GetCurrentStateID()];
 
-            if (state != nextState)
+            if (currentState != nextState)
             {
-                state = nextState;
-                state.ResetCollider();
+                currentState = nextState;
+                currentState.ResetCollider();
             }
         }
         catch (Exception e)
