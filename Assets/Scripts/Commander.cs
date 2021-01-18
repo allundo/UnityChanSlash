@@ -107,18 +107,10 @@ public class Commander : MonoBehaviour
         return null;
     }
 
-    public float GetSpeed()
+    public void SetSpeed()
     {
-        if (IsIdling) return 0.0f;
-
-        return currentCommand.Speed;
-    }
-
-    public float GetRSpeed()
-    {
-        if (IsIdling) return 0.0f;
-
-        return currentCommand.RSpeed;
+        anim.SetFloat("Speed", IsIdling ? 0.0f : currentCommand.Speed);
+        anim.SetFloat("RSpeed", IsIdling ? 0.0f : currentCommand.RSpeed);
     }
 
     protected void TurnLeft()

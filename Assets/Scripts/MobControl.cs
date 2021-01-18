@@ -15,6 +15,6 @@ public class MobControl : MonoBehaviour
     protected virtual void Update()
     {
         commander.InputCommand();
+        commander.SetSpeed();
     }
-
 }
