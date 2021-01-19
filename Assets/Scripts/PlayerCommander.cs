@@ -25,6 +25,7 @@ public class PlayerCommander : MobCommander
         dir = map.InitDir;
         tf.LookAt(tf.position + dir.LookAt);
 
+        SetOnCharactor(tf.position);
         MapRenderer.Instance.RedrawHidePlates(tf.position);
     }
 
@@ -111,8 +112,12 @@ public class PlayerCommander : MobCommander
                 return;
             }
 
-            PlayTweenMove(GetLinearMove(Dest), () => { MapRenderer.Instance.MoveHidePlates(playerCommander.transform.position); });
+            Vector3 startPos = playerCommander.tf.position;
+            playerCommander.SetOnCharactor(startPos + Dest);
 
+            PlayTweenMove(GetLinearMove(Dest), () => { MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position); });
+
+            DOVirtual.DelayedCall(duration * 0.25f, () => { playerCommander.ResetOnCharactor(startPos); });
             DOVirtual.DelayedCall(duration * 0.95f, () => { playerCommander.isCommandValid = true; });
         }
     }
@@ -161,27 +166,39 @@ public class PlayerCommander : MobCommander
         {
             Debug.Log("Jump");
 
-            int distance = (playerCommander.IsJumpable ? 2 : playerCommander.IsForwardMovable ? 1 : 0);
+            Vector3 startPos = playerCommander.tf.position;
 
+            int distance = (playerCommander.IsJumpable ? 2 : playerCommander.IsForwardMovable ? 1 : 0);
             Vector3 jump = playerCommander.dir.LookAt * TILE_UNIT * distance;
+
+            playerCommander.SetOnCharactor(startPos + jump);
 
             PlayTweenMove(GetJumpSequence(jump), () =>
             {
                 if (distance > 0)
                 {
-                    MapRenderer.Instance.MoveHidePlates(playerCommander.transform.position);
+                    MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position);
                 }
             });
 
             playerCommander.anim.SetTrigger("Jump");
 
+            if (distance > 0)
+            {
+                DOVirtual.DelayedCall(duration * 0.25f, () =>
+                {
+                    playerCommander.ResetOnCharactor(startPos);
+                });
+            }
+
             if (distance == 2)
             {
                 DOVirtual.DelayedCall(duration * 0.4f, () =>
                 {
-                    MapRenderer.Instance.MoveHidePlates(playerCommander.transform.position);
+                    MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position);
                 });
             }
+
             DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
         }
     }

@@ -48,10 +48,20 @@ public abstract class MobCommander : MonoBehaviour
 
         dir = new East();
         tf.LookAt(tf.position + dir.LookAt);
+
+        SetOnCharactor(tf.position);
     }
 
     protected abstract void SetCommands();
 
+    protected void SetOnCharactor(Vector3 pos)
+    {
+        map.GetTile(pos).IsCharactorOn = true;
+    }
+    protected void ResetOnCharactor(Vector3 pos)
+    {
+        map.GetTile(pos).IsCharactorOn = false;
+    }
 
     public void InputCommand()
     {

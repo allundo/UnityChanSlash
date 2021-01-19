@@ -60,8 +60,12 @@ public class EnemyCommander : MobCommander
                 return;
             }
 
+            Vector3 startPos = enemyCommander.tf.position;
+            enemyCommander.SetOnCharactor(startPos + Dest);
+
             PlayTweenMove(GetLinearMove(Dest));
 
+            DOVirtual.DelayedCall(duration * 0.25f, () => { enemyCommander.ResetOnCharactor(startPos); });
             DOVirtual.DelayedCall(duration * 0.95f, () => { enemyCommander.isCommandValid = true; });
         }
     }

@@ -6,6 +6,7 @@ public class WorldMap
     public static readonly float TILE_UNIT = 2.5f;
 
     public Tile[,] Matrix { get; protected set; }
+    public Tile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public Tile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public Tile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : Matrix[x, y];
 
