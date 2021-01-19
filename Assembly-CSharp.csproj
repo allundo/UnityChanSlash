@@ -64,10 +64,8 @@
      <Compile Include="Assets\Scripts\DoorControl.cs" />
      <Compile Include="Assets\Scripts\DoorHControl.cs" />
      <Compile Include="Assets\Scripts\DoorTransparent.cs" />
-     <Compile Include="Assets\Scripts\EnemyBehavior.cs" />
      <Compile Include="Assets\Scripts\EnemyCommander.cs" />
      <Compile Include="Assets\Scripts\EnemyControl.cs" />
-     <Compile Include="Assets\Scripts\EnemyStatus.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\HidePlate.cs" />
      <Compile Include="Assets\Scripts\HidePool.cs" />
@@ -84,7 +82,6 @@
      <Compile Include="Assets\Scripts\MobControl.cs" />
      <Compile Include="Assets\Scripts\MobHandle.cs" />
      <Compile Include="Assets\Scripts\MobItemDropper.cs" />
-     <Compile Include="Assets\Scripts\MobKnockBack.cs" />
      <Compile Include="Assets\Scripts\MobStatus.cs" />
      <Compile Include="Assets\Scripts\OwnedItemsData.cs" />
      <Compile Include="Assets\Scripts\PlayerCommander.cs" />
