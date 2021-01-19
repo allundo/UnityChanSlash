@@ -104,7 +104,9 @@ public abstract class MobCommander : MonoBehaviour
     public virtual void SetDie()
     {
         cmdQueue.Clear();
+        currentCommand?.KillTween();
         cmdQueue.Enqueue(die ?? new DieCommand(this, 1.0f));
+        isCommandValid = false;
         DispatchCommand();
     }
 
@@ -139,6 +141,7 @@ public abstract class MobCommander : MonoBehaviour
 
     protected virtual void Destory()
     {
+        currentCommand = null;
         ResetOnCharactor(tf.position);
 
         tf.gameObject.SetActive(false);
@@ -159,6 +162,14 @@ public abstract class MobCommander : MonoBehaviour
         {
             this.duration = duration * DURATION_UNIT;
             this.commander = commander;
+        }
+
+        protected Tween playingTween = null;
+        protected Tween validateTween = null;
+        public void KillTween()
+        {
+            playingTween?.Kill();
+            validateTween?.Kill();
         }
 
         public abstract void Execute();
@@ -196,6 +207,8 @@ public abstract class MobCommander : MonoBehaviour
 
         protected void PlayTweenMove(Tween move, Action OnComplete = null)
         {
+            playingTween = move;
+
             OnComplete = OnComplete ?? (() => { });
 
             move.OnComplete(() =>
@@ -219,7 +232,7 @@ public abstract class MobCommander : MonoBehaviour
         {
             commander.anim.SetTrigger(animName);
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
             DOVirtual.DelayedCall(duration, () => { commander.DispatchCommand(); });
         }
     }

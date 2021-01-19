@@ -67,7 +67,7 @@ public class EnemyCommander : MobCommander
             PlayTweenMove(GetLinearMove(Dest));
 
             DOVirtual.DelayedCall(duration * 0.25f, () => { enemyCommander.ResetOnCharactor(startPos); });
-            DOVirtual.DelayedCall(duration * 0.95f, () => { enemyCommander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.95f, () => { enemyCommander.isCommandValid = true; });
         }
     }
 
@@ -90,7 +90,7 @@ public class EnemyCommander : MobCommander
             PlayTweenMove(GetRotate(-90));
             enemyCommander.TurnLeft();
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
         }
     }
 
@@ -103,7 +103,7 @@ public class EnemyCommander : MobCommander
             PlayTweenMove(GetRotate(90));
             enemyCommander.TurnRight();
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
         }
     }
 
