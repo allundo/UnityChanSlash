@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyCommander))]
 public class EnemyControl : MonoBehaviour
 {
 
-    protected EnemyCommander commander;
+    [SerializeField] public MobCommander commander;
 
     protected virtual void Start()
     {

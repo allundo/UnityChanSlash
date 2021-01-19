@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(Commander))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider))]
 public abstract class AnimeHandler : MonoBehaviour
@@ -12,14 +11,11 @@ public abstract class AnimeHandler : MonoBehaviour
     protected AnimeState currentState;
     protected AnimeState standardState;
 
-    protected Commander commander;
-
     private Dictionary<int, AnimeState> stateMap = new Dictionary<int, AnimeState>();
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        commander = GetComponent<Commander>();
         col = GetComponent<CapsuleCollider>();
 
         LoadAnimeState();
