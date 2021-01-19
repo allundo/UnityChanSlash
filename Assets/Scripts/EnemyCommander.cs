@@ -17,6 +17,7 @@ public class EnemyCommander : MobCommander
         turnL = new TurnLCommand(this, 0.1f);
         turnR = new TurnRCommand(this, 0.1f);
         attack = new AttackCommand(this, 2.0f);
+        die = new DieCommand(this, 3.0f);
     }
 
     protected override Command GetCommand()
@@ -105,4 +106,5 @@ public class EnemyCommander : MobCommander
             DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
         }
     }
+
 }

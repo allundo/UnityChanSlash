@@ -27,6 +27,7 @@ public abstract class MobCommander : MonoBehaviour
 
     protected Queue<Command> cmdQueue = new Queue<Command>();
     protected Command currentCommand = null;
+    protected Command die = null;
 
     protected WorldMap map = default;
 
@@ -84,7 +85,7 @@ public abstract class MobCommander : MonoBehaviour
         }
     }
 
-    public bool DispatchCommand()
+    protected bool DispatchCommand()
     {
         if (cmdQueue.Count > 0)
         {
@@ -100,6 +101,13 @@ public abstract class MobCommander : MonoBehaviour
 
     protected abstract Command GetCommand();
 
+    public virtual void SetDie()
+    {
+        cmdQueue.Clear();
+        cmdQueue.Enqueue(die ?? new DieCommand(this, 1.0f));
+        DispatchCommand();
+    }
+
     public virtual void SetSpeed()
     {
         anim.SetFloat("Speed", (IsIdling ? 0.0f : currentCommand.Speed));
@@ -113,6 +121,29 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void TurnRight()
     {
         dir = dir.Right;
+    }
+
+    protected virtual void Respown(Vector3 pos, Direction dir)
+    {
+        tf.gameObject.SetActive(true);
+        isCommandValid = true;
+
+        tf.LookAt(pos + dir.LookAt);
+        SetOnCharactor(pos);
+
+        tf.position = pos;
+        this.dir = dir;
+
+        // TODO: Fade-in with custom shader
+    }
+
+    protected virtual void Destory()
+    {
+        ResetOnCharactor(tf.position);
+
+        tf.gameObject.SetActive(false);
+
+        // TODO: Fade-out with custom shader
     }
 
     protected abstract class Command
@@ -196,5 +227,15 @@ public abstract class MobCommander : MonoBehaviour
     protected class AttackCommand : ActionCommand
     {
         public AttackCommand(MobCommander commander, float duration) : base(commander, duration, "Attack") { }
+    }
+    protected class DieCommand : ActionCommand
+    {
+        public DieCommand(MobCommander commander, float duration) : base(commander, duration, "Die") { }
+
+        public override void Execute()
+        {
+            commander.anim.SetTrigger(animName);
+            DOVirtual.DelayedCall(duration, () => { commander.Destory(); });
+        }
     }
 }

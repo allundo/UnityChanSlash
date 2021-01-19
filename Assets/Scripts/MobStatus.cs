@@ -1,73 +1,41 @@
 using UnityEngine;
-public abstract class MobStatus : MonoBehaviour
+public class MobStatus : MonoBehaviour
 {
+    protected MobCommander commander = default;
 
-    protected enum StateEnum
-    {
-        Normal,
-        Attack,
-        Damage,
-        Die
-    }
-
-    protected StateEnum state = StateEnum.Normal;
-    protected Animator anim;
     public float Life { get; protected set; } = 0.0f;
 
-    [SerializeField] public float LifeMax { get; } = 10;
+    [SerializeField] public float LifeMax = 10;
 
-    public bool IsMovable => StateEnum.Normal == state;
-    public bool IsAttackable => StateEnum.Normal == state;
+    public virtual int Attack { get; protected set; } = 1;
 
     protected virtual void Start()
     {
+        commander = GetComponent<MobCommander>();
         Life = LifeMax;
-        anim = GetComponentInChildren<Animator>();
-
     }
 
     protected virtual void OnDie()
     {
+        commander.SetDie();
     }
+
     protected virtual void OnDamage() { }
 
     public void Damage(int damage)
     {
-        if (state == StateEnum.Die) return;
-
         Life -= damage;
 
         if (Life > 0.0f)
         {
-            GoToKnockBackStateIfPossible();
+            DamageEffect(damage);
             return;
         }
-
-        state = StateEnum.Die;
-        anim.SetTrigger("Die");
 
         OnDie();
     }
 
-    public void GoToKnockBackStateIfPossible()
+    protected virtual void DamageEffect(int damage)
     {
-        state = StateEnum.Damage;
-        anim.SetTrigger("Damage");
-        OnDamage();
-    }
-
-    public void GoToAttackStateIfPossible()
-    {
-        if (!IsAttackable) return;
-
-        state = StateEnum.Attack;
-        anim.SetTrigger("Attack");
-    }
-
-    public void GoToNormalStateIfPossible()
-    {
-        if (state == StateEnum.Die) return;
-
-        state = StateEnum.Normal;
     }
 }
