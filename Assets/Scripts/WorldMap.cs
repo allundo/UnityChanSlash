@@ -56,7 +56,7 @@ public class WorldMap
             (int)Math.Round((Height - 1) * 0.5f - pos.z / TILE_UNIT, MidpointRounding.AwayFromZero)
         );
 
-    public bool IsTileLeapable(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsLeapable();
+    public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsViewOpen();
 
     // FIXME
     public Vector3 InitPos

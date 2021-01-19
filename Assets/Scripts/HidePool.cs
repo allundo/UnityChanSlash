@@ -197,7 +197,7 @@ public class HidePool
                 int matX = x - tileRange / 2 + i;
                 int matY = y - tileRange / 2 + j;
 
-                region[i, j] = map.IsTileLeapable(matX, matY);
+                region[i, j] = map.IsTileViewOpen(matX, matY);
             }
         }
 
