@@ -41,6 +41,7 @@ public class PlayerCommander : MobCommander
         left = new LeftCommand(this, 1.2f);
         jump = new JumpCommand(this, 2.0f);
         handle = new HandleCommand(this, 1.0f);
+        die = new DieCommand(this, 10.0f);
     }
 
     protected override Command GetCommand()
@@ -102,6 +103,12 @@ public class PlayerCommander : MobCommander
 
         protected abstract bool IsMovable { get; }
         protected abstract Vector3 Dest { get; }
+        protected Vector3 startPos = default;
+        public override void Cancel()
+        {
+            base.Cancel();
+            playerCommander.ResetOnCharactor(startPos + Dest);
+        }
 
         public override void Execute()
         {
@@ -112,12 +119,17 @@ public class PlayerCommander : MobCommander
                 return;
             }
 
-            Vector3 startPos = playerCommander.tf.position;
+            startPos = playerCommander.tf.position;
             playerCommander.SetOnCharactor(startPos + Dest);
 
-            PlayTweenMove(GetLinearMove(Dest), () => { MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position); });
+            PlayTweenMove(
+                JoinTweens(
+                    GetLinearMove(Dest),
+                    DOVirtual.DelayedCall(duration * 0.25f, () => { playerCommander.ResetOnCharactor(startPos); })
+                ),
+                () => { MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position); }
+            );
 
-            DOVirtual.DelayedCall(duration * 0.25f, () => { playerCommander.ResetOnCharactor(startPos); });
             DOVirtual.DelayedCall(duration * 0.95f, () => { playerCommander.isCommandValid = true; });
         }
     }
@@ -162,33 +174,40 @@ public class PlayerCommander : MobCommander
     {
         public JumpCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
+        protected Vector3 dest = default;
+        protected Vector3 startPos = default;
+
+        public override void Cancel()
+        {
+            base.Cancel();
+            playerCommander.ResetOnCharactor(startPos + dest);
+        }
+
         public override void Execute()
         {
             Debug.Log("Jump");
 
-            Vector3 startPos = playerCommander.tf.position;
+            startPos = playerCommander.tf.position;
 
             int distance = (playerCommander.IsJumpable ? 2 : playerCommander.IsForwardMovable ? 1 : 0);
-            Vector3 jump = playerCommander.dir.LookAt * TILE_UNIT * distance;
+            dest = playerCommander.dir.LookAt * TILE_UNIT * distance;
 
-            playerCommander.SetOnCharactor(startPos + jump);
-
-            PlayTweenMove(GetJumpSequence(jump), () =>
-            {
-                if (distance > 0)
-                {
-                    MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position);
-                }
-            });
-
+            playerCommander.SetOnCharactor(startPos + dest);
             playerCommander.anim.SetTrigger("Jump");
 
             if (distance > 0)
             {
-                DOVirtual.DelayedCall(duration * 0.25f, () =>
-                {
-                    playerCommander.ResetOnCharactor(startPos);
-                });
+                PlayTweenMove(
+                    JoinTweens(
+                        GetJumpSequence(dest),
+                        DOVirtual.DelayedCall(duration * 0.25f, () => { playerCommander.ResetOnCharactor(startPos); })
+                    ),
+                    () => MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position)
+                );
+            }
+            else
+            {
+                PlayTweenMove(GetJumpSequence(dest));
             }
 
             if (distance == 2)
@@ -199,7 +218,7 @@ public class PlayerCommander : MobCommander
                 });
             }
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
         }
     }
 
@@ -213,7 +232,7 @@ public class PlayerCommander : MobCommander
             playerCommander.TurnLeft();
             playerCommander.anim.SetTrigger("TurnL");
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
         }
     }
 
@@ -227,7 +246,7 @@ public class PlayerCommander : MobCommander
             playerCommander.TurnRight();
             playerCommander.anim.SetTrigger("TurnR");
 
-            DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
+            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
         }
     }
 

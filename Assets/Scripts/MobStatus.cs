@@ -5,6 +5,8 @@ public class MobStatus : MonoBehaviour
 
     public float Life { get; protected set; } = 0.0f;
 
+    protected bool IsAlive => Life > 0.0f;
+
     [SerializeField] public float LifeMax = 10;
 
     public virtual int Attack { get; protected set; } = 1;
@@ -24,9 +26,11 @@ public class MobStatus : MonoBehaviour
 
     public void Damage(int damage)
     {
+        if (!IsAlive) return;
+
         Life -= damage;
 
-        if (Life > 0.0f)
+        if (IsAlive)
         {
             DamageEffect(damage);
             return;

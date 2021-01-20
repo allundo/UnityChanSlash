@@ -39,6 +39,7 @@ public class EnemyCommander : MobCommander
     protected abstract class EnemyCommand : Command
     {
         protected EnemyCommander enemyCommander;
+
         public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
         {
             enemyCommander = commander;
@@ -51,6 +52,13 @@ public class EnemyCommander : MobCommander
 
         protected abstract bool IsMovable { get; }
         protected abstract Vector3 Dest { get; }
+        protected Vector3 startPos = default;
+
+        public override void Cancel()
+        {
+            base.Cancel();
+            enemyCommander.ResetOnCharactor(startPos + Dest);
+        }
 
         public override void Execute()
         {
@@ -61,12 +69,16 @@ public class EnemyCommander : MobCommander
                 return;
             }
 
-            Vector3 startPos = enemyCommander.tf.position;
+            startPos = enemyCommander.tf.position;
             enemyCommander.SetOnCharactor(startPos + Dest);
 
-            PlayTweenMove(GetLinearMove(Dest));
+            PlayTweenMove(
+                JoinTweens(
+                    GetLinearMove(Dest),
+                    DOVirtual.DelayedCall(duration * 0.25f, () => { enemyCommander.ResetOnCharactor(startPos); })
+                )
+            );
 
-            DOVirtual.DelayedCall(duration * 0.25f, () => { enemyCommander.ResetOnCharactor(startPos); });
             validateTween = DOVirtual.DelayedCall(duration * 0.95f, () => { enemyCommander.isCommandValid = true; });
         }
     }

@@ -103,8 +103,10 @@ public abstract class MobCommander : MonoBehaviour
 
     public virtual void SetDie()
     {
+        ResetOnCharactor(tf.position);
+
         cmdQueue.Clear();
-        currentCommand?.KillTween();
+        currentCommand?.Cancel();
         cmdQueue.Enqueue(die ?? new DieCommand(this, 1.0f));
         isCommandValid = false;
         DispatchCommand();
@@ -142,7 +144,6 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void Destory()
     {
         currentCommand = null;
-        ResetOnCharactor(tf.position);
 
         tf.gameObject.SetActive(false);
 
@@ -166,7 +167,7 @@ public abstract class MobCommander : MonoBehaviour
 
         protected Tween playingTween = null;
         protected Tween validateTween = null;
-        public void KillTween()
+        public virtual void Cancel()
         {
             playingTween?.Kill();
             validateTween?.Kill();
@@ -175,6 +176,18 @@ public abstract class MobCommander : MonoBehaviour
         public abstract void Execute();
         public virtual float Speed => 0.0f;
         public virtual float RSpeed => 0.0f;
+
+        protected Sequence JoinTweens(params Tween[] tweens)
+        {
+            Sequence seq = DOTween.Sequence();
+
+            for (int i = 0; i < tweens.Length; i++)
+            {
+                seq.Join(tweens[i]);
+            }
+
+            return seq;
+        }
 
         protected Tween GetLinearMove(Vector3 moveVector)
         {
