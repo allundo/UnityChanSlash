@@ -2,7 +2,6 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using DG.Tweening;
 
-[RequireComponent(typeof(MobControl))]
 [RequireComponent(typeof(Animator))]
 public class EnemyCommander : MobCommander
 {

@@ -1,7 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
 
-[RequireComponent(typeof(MobControl))]
 [RequireComponent(typeof(Animator))]
 public class PlayerCommander : MobCommander
 {

@@ -42,6 +42,12 @@ public abstract class MobCommander : MonoBehaviour
         SetCommands();
     }
 
+    protected virtual void Update()
+    {
+        InputCommand();
+        SetSpeed();
+    }
+
     protected virtual void SetPosition(Transform tf)
     {
         // TODO: Charactor position should be set by GameManager
