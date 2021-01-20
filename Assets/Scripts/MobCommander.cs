@@ -14,8 +14,8 @@ public abstract class MobCommander : MonoBehaviour
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;
 
-    protected bool IsMovable(Pos descPos) => map.GetTile(descPos).IsEnterable();
-    protected bool IsLeapable(Pos descPos) => map.GetTile(descPos).IsLeapable();
+    protected bool IsMovable(Pos destPos) => map.GetTile(destPos).IsEnterable();
+    protected bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable();
     protected bool IsForwardMovable => IsMovable(dir.GetForward(CurrentPos));
     protected bool IsForwardLeapable => IsLeapable(dir.GetForward(CurrentPos));
     protected bool IsBackwardMovable => IsMovable(dir.GetBackward(CurrentPos));
