@@ -5,14 +5,25 @@ using DG.Tweening;
 [RequireComponent(typeof(Animator))]
 public class EnemyCommander : MobCommander
 {
-    protected Command forward;
+    protected Command moveForward;
     protected Command turnL;
     protected Command turnR;
     protected Command attack;
 
+    protected bool IsPlayerFound(Pos pos)
+    {
+        Pos forward = dir.GetForward(pos);
+
+        return IsOnPlayer(forward)
+            ? true
+            : !IsMovable(forward)
+                ? false
+                : IsPlayerFound(forward);
+    }
+
     protected override void SetCommands()
     {
-        forward = new ForwardCommand(this, 2.0f);
+        moveForward = new ForwardCommand(this, 2.0f);
         turnL = new TurnLCommand(this, 0.1f);
         turnR = new TurnRCommand(this, 0.1f);
         attack = new AttackCommand(this, 2.0f);
@@ -21,18 +32,70 @@ public class EnemyCommander : MobCommander
 
     protected override Command GetCommand()
     {
-        switch (Random.Range(0, 4))
+        Pos pos = CurrentPos;
+
+        // Turn if player found at left, right or backward
+        Pos left = dir.GetLeft(pos);
+        Pos right = dir.GetRight(pos);
+
+        if (IsOnPlayer(left)) return turnL;
+        if (IsOnPlayer(right)) return turnR;
+
+        Pos backward = dir.GetBackward(pos);
+
+        if (IsOnPlayer(backward))
         {
-            case 0:
-                return forward;
-            case 1:
-                return turnL;
-            case 2:
-                return turnR;
-            case 3:
-                return attack;
+            return Random.Range(0, 2) == 0 ? turnL : turnR;
         }
-        return forward;
+
+        // Attack if player found at forward
+        Pos forward = dir.GetForward(pos);
+        if (IsOnPlayer(forward)) return attack;
+
+        // Move forward if player found in front
+        if (IsPlayerFound(forward)) return moveForward;
+
+        bool isForwardMovable = IsMovable(forward);
+        bool isLeftMovable = IsMovable(left);
+        bool isRightMovable = IsMovable(right);
+
+        if (isForwardMovable)
+        {
+            // Turn 50% if left or right movable
+            if (Random.Range(0, 2) == 0)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    if (currentCommand == turnR) return moveForward;
+                    if (isLeftMovable) return turnL;
+                    if (isRightMovable) return turnR;
+                }
+                else
+                {
+                    if (currentCommand == turnL) return moveForward;
+                    if (isRightMovable) return turnR;
+                    if (isLeftMovable) return turnL;
+                }
+            }
+
+            // Move forward if not turned and forward movable
+            return moveForward;
+        }
+        else
+        {
+            // Turn if forward unmovable and left or right movable
+            if (isLeftMovable) return turnL;
+            if (isRightMovable) return turnR;
+
+            // Turn if backward movable
+            if (IsMovable(backward))
+            {
+                return Random.Range(0, 2) == 0 ? turnL : turnR;
+            }
+        }
+
+        // Idle if unmovable
+        return null;
     }
 
     protected abstract class EnemyCommand : Command

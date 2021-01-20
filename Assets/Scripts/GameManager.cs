@@ -1,6 +1,11 @@
+using UnityEngine;
+
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
+    [SerializeField] private Transform playerTransform = default;
+
     public WorldMap worldMap { get; protected set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -14,4 +19,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         MapRenderer.Instance.Fix(maze);
 
     }
+
+    public Pos PlayerPos => worldMap.MapPos(playerTransform.position);
+    public bool IsOnPlayer(Pos pos) => PlayerPos == pos;
+    public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
 }

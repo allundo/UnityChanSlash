@@ -22,6 +22,7 @@ public abstract class MobCommander : MonoBehaviour
     protected bool IsLeftMovable => IsMovable(dir.GetLeft(CurrentPos));
     protected bool IsRightMovable => IsMovable(dir.GetRight(CurrentPos));
     protected bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(CurrentPos)));
+    protected bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
 
     protected Transform tf;
 
@@ -51,9 +52,9 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void SetPosition(Transform tf)
     {
         // TODO: Charactor position should be set by GameManager
-        tf.position = map.InitPos + new Vector3(2.5f, 0, 0);
+        tf.position = map.GetRespawnPos();
 
-        dir = new East();
+        dir = new North();
         tf.LookAt(tf.position + dir.LookAt);
 
         SetOnCharactor(tf.position);
@@ -104,7 +105,6 @@ public abstract class MobCommander : MonoBehaviour
         return false;
     }
 
-
     protected abstract Command GetCommand();
 
     public virtual void SetDie()
@@ -133,16 +133,12 @@ public abstract class MobCommander : MonoBehaviour
         dir = dir.Right;
     }
 
-    protected virtual void Respown(Vector3 pos, Direction dir)
+    public virtual void Respawn()
     {
         tf.gameObject.SetActive(true);
         isCommandValid = true;
 
-        tf.LookAt(pos + dir.LookAt);
-        SetOnCharactor(pos);
-
-        tf.position = pos;
-        this.dir = dir;
+        SetPosition(tf);
 
         // TODO: Fade-in with custom shader
     }

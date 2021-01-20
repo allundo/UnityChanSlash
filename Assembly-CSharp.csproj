@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\DoorTransparent.cs" />
      <Compile Include="Assets\Scripts\EnemyCommander.cs" />
      <Compile Include="Assets\Scripts\EnemyControl.cs" />
+     <Compile Include="Assets\Scripts\EnemyGenerator.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\HidePlate.cs" />
      <Compile Include="Assets\Scripts\HidePool.cs" />
