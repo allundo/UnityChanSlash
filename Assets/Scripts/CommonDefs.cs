@@ -82,6 +82,17 @@ public struct Pos
 
     public bool IsNull => this.x == 0 && this.y == 0;
 
+    public override int GetHashCode()
+    {
+        return x.GetHashCode() ^ y.GetHashCode();
+    }
+    public override bool Equals(object obj)
+    {
+        if (!(obj is Pos)) return false;
+
+        Pos compare = (Pos)obj;
+        return this.x == compare.x && this.y == compare.y;
+    }
 
     public static Pos operator +(Pos a, Pos b)
     {
@@ -96,6 +107,16 @@ public struct Pos
     public static Pos operator *(Pos a, int n)
     {
         return new Pos(a.x * n, a.y * n);
+    }
+
+    public static bool operator ==(Pos a, Pos b)
+    {
+        return a.x == b.x && a.y == b.y;
+    }
+
+    public static bool operator !=(Pos a, Pos b)
+    {
+        return !(a == b);
     }
 }
 
