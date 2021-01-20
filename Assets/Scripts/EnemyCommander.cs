@@ -70,13 +70,9 @@ public class EnemyCommander : MobCommander
 
             startPos = enemyCommander.tf.position;
             enemyCommander.SetOnCharactor(startPos + Dest);
+            enemyCommander.ResetOnCharactor(startPos);
 
-            PlayTweenMove(
-                JoinTweens(
-                    GetLinearMove(Dest),
-                    DOVirtual.DelayedCall(duration * 0.25f, () => { enemyCommander.ResetOnCharactor(startPos); })
-                )
-            );
+            PlayTweenMove(GetLinearMove(Dest));
 
             SetValidateTimer(0.95f);
         }

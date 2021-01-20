@@ -120,14 +120,9 @@ public class PlayerCommander : MobCommander
 
             startPos = playerCommander.tf.position;
             playerCommander.SetOnCharactor(startPos + Dest);
+            playerCommander.ResetOnCharactor(startPos);
 
-            PlayTweenMove(
-                JoinTweens(
-                    GetLinearMove(Dest),
-                    DOVirtual.DelayedCall(duration * 0.25f, () => { playerCommander.ResetOnCharactor(startPos); })
-                ),
-                () => { MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position); }
-            );
+            PlayTweenMove(GetLinearMove(Dest), () => MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position));
 
             SetValidateTimer(0.95f);
         }
@@ -192,22 +187,17 @@ public class PlayerCommander : MobCommander
             dest = playerCommander.dir.LookAt * TILE_UNIT * distance;
 
             playerCommander.SetOnCharactor(startPos + dest);
+            playerCommander.ResetOnCharactor(startPos);
+
             playerCommander.anim.SetTrigger("Jump");
 
-            if (distance > 0)
+            PlayTweenMove(GetJumpSequence(dest), () =>
             {
-                PlayTweenMove(
-                    JoinTweens(
-                        GetJumpSequence(dest),
-                        DOVirtual.DelayedCall(duration * 0.25f, () => { playerCommander.ResetOnCharactor(startPos); })
-                    ),
-                    () => MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position)
-                );
-            }
-            else
-            {
-                PlayTweenMove(GetJumpSequence(dest));
-            }
+                if (distance > 0)
+                {
+                    MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position);
+                }
+            });
 
             if (distance == 2)
             {
