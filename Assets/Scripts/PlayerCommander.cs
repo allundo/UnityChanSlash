@@ -130,7 +130,7 @@ public class PlayerCommander : MobCommander
                 () => { MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position); }
             );
 
-            DOVirtual.DelayedCall(duration * 0.95f, () => { playerCommander.isCommandValid = true; });
+            SetValidateTimer(0.95f);
         }
     }
 
@@ -218,7 +218,7 @@ public class PlayerCommander : MobCommander
                 });
             }
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
+            SetValidateTimer();
         }
     }
 
@@ -232,7 +232,7 @@ public class PlayerCommander : MobCommander
             playerCommander.TurnLeft();
             playerCommander.anim.SetTrigger("TurnL");
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
+            SetValidateTimer();
         }
     }
 
@@ -246,7 +246,7 @@ public class PlayerCommander : MobCommander
             playerCommander.TurnRight();
             playerCommander.anim.SetTrigger("TurnR");
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { playerCommander.isCommandValid = true; });
+            SetValidateTimer();
         }
     }
 

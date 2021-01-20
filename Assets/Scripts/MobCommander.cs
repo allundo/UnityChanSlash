@@ -230,6 +230,11 @@ public abstract class MobCommander : MonoBehaviour
                 commander.DispatchCommand();
             }).Play();
         }
+
+        protected void SetValidateTimer(float timing = 0.5f)
+        {
+            validateTween = DOVirtual.DelayedCall(duration * timing, () => { commander.isCommandValid = true; });
+        }
     }
 
     protected abstract class ActionCommand : Command
@@ -245,7 +250,7 @@ public abstract class MobCommander : MonoBehaviour
         {
             commander.anim.SetTrigger(animName);
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { commander.isCommandValid = true; });
+            SetValidateTimer();
             DOVirtual.DelayedCall(duration, () => { commander.DispatchCommand(); });
         }
     }

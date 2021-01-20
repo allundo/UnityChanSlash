@@ -79,7 +79,7 @@ public class EnemyCommander : MobCommander
                 )
             );
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.95f, () => { enemyCommander.isCommandValid = true; });
+            SetValidateTimer(0.95f);
         }
     }
 
@@ -102,7 +102,7 @@ public class EnemyCommander : MobCommander
             PlayTweenMove(GetRotate(-90));
             enemyCommander.TurnLeft();
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
+            SetValidateTimer();
         }
     }
 
@@ -115,8 +115,7 @@ public class EnemyCommander : MobCommander
             PlayTweenMove(GetRotate(90));
             enemyCommander.TurnRight();
 
-            validateTween = DOVirtual.DelayedCall(duration * 0.5f, () => { enemyCommander.isCommandValid = true; });
+            SetValidateTimer();
         }
     }
-
 }
