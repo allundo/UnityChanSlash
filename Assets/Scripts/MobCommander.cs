@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public abstract class MobCommander : MonoBehaviour
 {
     protected Animator anim;
+    protected MobStatus status;
     protected Pos CurrentPos => map.MapPos(tf.position);
 
     protected Direction dir;
@@ -35,6 +36,7 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void Start()
     {
         anim = GetComponent<Animator>();
+        status = GetComponent<MobStatus>();
 
         map = GameManager.Instance.worldMap;
 
@@ -135,6 +137,8 @@ public abstract class MobCommander : MonoBehaviour
 
     public virtual void Respawn()
     {
+        status.ResetStatus();
+
         tf.gameObject.SetActive(true);
         isCommandValid = true;
 

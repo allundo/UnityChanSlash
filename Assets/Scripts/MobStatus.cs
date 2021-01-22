@@ -2,6 +2,7 @@ using UnityEngine;
 public class MobStatus : MonoBehaviour
 {
     protected MobCommander commander = default;
+    [SerializeField] private AudioSource dieSound = default;
 
     public float Life { get; protected set; } = 0.0f;
 
@@ -19,6 +20,11 @@ public class MobStatus : MonoBehaviour
 
     protected virtual void OnDie()
     {
+        if (dieSound != null)
+        {
+            dieSound.Play();
+        }
+
         commander.SetDie();
     }
 
@@ -41,5 +47,10 @@ public class MobStatus : MonoBehaviour
 
     protected virtual void DamageEffect(int damage)
     {
+    }
+
+    public virtual void ResetStatus()
+    {
+        Life = LifeMax;
     }
 }

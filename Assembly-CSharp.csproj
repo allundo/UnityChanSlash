@@ -70,6 +70,7 @@
      <Compile Include="Assets\Scripts\SceneInitializer.cs" />
      <Compile Include="Assets\Scripts\SideCamera.cs" />
      <Compile Include="Assets\Scripts\SingletonMonoBehaviour.cs" />
+     <Compile Include="Assets\Scripts\SlimeAttack.cs" />
      <Compile Include="Assets\Scripts\StartButton.cs" />
      <Compile Include="Assets\Scripts\ThirdPersonCamera.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />

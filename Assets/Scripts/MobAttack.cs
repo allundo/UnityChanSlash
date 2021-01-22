@@ -7,19 +7,21 @@ public class MobAttack : MonoBehaviour
     [SerializeField] private Collider attackCollider = default;
     [SerializeField] private AudioSource swingSound = default;
 
+    protected virtual float Pitch => Random.Range(0.7f, 1.3f);
+
     protected MobStatus status = default;
-    private void Start()
+    protected virtual void Start()
     {
         status = GetComponent<MobStatus>();
         attackCollider.enabled = false;
     }
 
-    public void OnAttackStart()
+    public virtual void OnAttackStart()
     {
         attackCollider.enabled = true;
         if (swingSound != null)
         {
-            swingSound.pitch = Random.Range(0.7f, 1.3f);
+            swingSound.pitch = Pitch;
             swingSound.Play();
         }
     }
