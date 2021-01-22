@@ -12,6 +12,7 @@ public class UnityChanAnimeHandler : AnimeHandler
             = map["Turn.TurnL"] = map["Turn.TurnR"]
             = map["Rest"]
             = map["Handle"]
+            = map["Die"]
             = standardState;
 
         map["Jump"] = new JumpState(anim, new JumpCollider(col));
