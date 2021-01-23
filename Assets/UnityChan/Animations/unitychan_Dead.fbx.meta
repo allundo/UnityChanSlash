@@ -41,7 +41,7 @@ ModelImporter:
       name: DEAD
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
-      firstFrame: 0
+      firstFrame: 10
       lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
