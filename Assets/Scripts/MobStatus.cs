@@ -73,12 +73,9 @@ public class MobStatus : MonoBehaviour
         if (!IsAlive) return;
 
         Life -= damage;
+        DamageEffect(damage);
 
-        if (IsAlive)
-        {
-            DamageEffect(damage);
-            return;
-        }
+        if (IsAlive) return;
 
         OnDie();
     }
