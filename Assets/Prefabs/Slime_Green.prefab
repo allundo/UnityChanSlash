@@ -1010,6 +1010,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_Bite
       objectReference: {fileID: 0}
+    - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7475880768222081575, guid: 0a8881eb2164d4a4a9c41614d8691865,
         type: 3}
       propertyPath: m_LocalPosition.x
