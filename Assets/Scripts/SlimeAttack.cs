@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class SlimeAttack : MobAttack {
+public class SlimeAttack : MobAttack
+{
 
-    [SerializeField ]protected ParticleSystem vfx = default;
+    [SerializeField] protected ParticleSystem vfx = default;
 
     protected override float Pitch => 1.2f;
 
@@ -10,9 +11,6 @@ public class SlimeAttack : MobAttack {
     {
         base.OnAttackStart();
 
-        if (vfx != null)
-        {
-            vfx.Play();
-        }
+        vfx?.Play();
     }
 }
