@@ -2,7 +2,8 @@ Shader "UnityChan/Clothing"
 {
 	Properties
 	{
-		_Color ("Main Color", Color) = (1, 1, 1, 1)
+		_Color ("Base Color", Color) = (1, 1, 1, 1)
+		[MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 0)
 		_ShadowColor ("Shadow Color", Color) = (0.8, 0.8, 1, 1)
 		_SpecularPower ("Specular Power", Float) = 20
 		_EdgeThickness ("Outline Thickness", Float) = 1
@@ -36,7 +37,7 @@ CGPROGRAM
 #include "UnityCG.cginc"
 #include "AutoLight.cginc"
 #define ENABLE_NORMAL_MAP
-#include "CharaMain.cginc"
+#include "CharaMainAdditive.cginc"
 ENDCG
 		}
 

@@ -132,8 +132,10 @@
      <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaMain.cginc" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+     <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaSkinAdditive.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaSkin.cginc" />
+     <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaMainAdditive.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\CharaOutline.cginc" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
@@ -150,6 +152,7 @@
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
      <None Include="Assets\UnityChan\UnityChanShader\Shader\Unitychan_chara_eye.shader" />
+     <None Include="Assets\Shader\Mobile-Diffuse-Additive.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\Materials\material_authority.txt" />
      <None Include="Assets\UnityChan\Stage\Shader\AlphaMask.shader" />
