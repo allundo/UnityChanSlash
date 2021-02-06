@@ -5051,6 +5051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae62acf7506d4cf6968df116271d612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dieSound: {fileID: 0}
   LifeMax: 10
 --- !u!114 &7476530261382612516
 MonoBehaviour:

@@ -58,7 +58,10 @@ public class MobStatus : MonoBehaviour
 
     protected virtual void OnDie()
     {
-        dieSound?.Play();
+        if (dieSound != null)
+        {
+            dieSound.Play();
+        }
 
         commander.SetDie();
     }
