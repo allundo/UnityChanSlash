@@ -709,6 +709,9 @@
     <Reference Include="Unity.ProBuilder">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InputSystem">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.InputSystem.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ProBuilder.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
     </Reference>

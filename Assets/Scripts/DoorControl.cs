@@ -66,7 +66,10 @@ public class DoorControl : MonoBehaviour
     {
         if (IsOpen)
         {
-            Close();
+            if(!GameManager.Instance.worldMap.GetTile(this.transform.position).IsCharactorOn)
+            {
+                Close();
+            }
         }
         else
         {

@@ -1,20 +1,26 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerCommander : MobCommander
 {
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
 
-    protected Command forward;
-    protected Command turnL;
-    protected Command turnR;
-    protected Command attack;
-    protected Command back;
-    protected Command right;
-    protected Command left;
-    protected Command jump;
-    protected Command handle;
+    protected InputManager currentInput = new InputManager(null);
+    protected InputManager forward;
+    protected InputManager turnL;
+    protected InputManager turnR;
+    protected InputManager attack;
+    protected InputManager back;
+    protected InputManager right;
+    protected InputManager left;
+    protected InputManager jump;
+    protected InputManager handle;
 
     protected override void SetPosition(Transform tf)
     {
@@ -30,37 +36,135 @@ public class PlayerCommander : MobCommander
 
     protected override void SetCommands()
     {
-        forward = new ForwardCommand(this, 1.0f);
-        turnL = new TurnLCommand(this, 0.5f);
-        turnR = new TurnRCommand(this, 0.5f);
-        attack = new AttackCommand(this, 2.0f);
+        forward = new FrontInput(new ForwardCommand(this, 1.0f), new AttackCommand(this, 2.0f), new HandleCommand(this, 1.0f));
+        turnL = new TriggerInput(new TurnLCommand(this, 0.5f));
+        turnR = new TriggerInput(new TurnRCommand(this, 0.5f));
+        attack = new TriggerInput(new AttackCommand(this, 2.0f));
 
-        back = new BackCommand(this, 1.2f);
-        right = new RightCommand(this, 1.2f);
-        left = new LeftCommand(this, 1.2f);
-        jump = new JumpCommand(this, 2.0f);
-        handle = new HandleCommand(this, 1.0f);
+        back = new InputManager(new BackCommand(this, 1.2f));
+        right = new InputManager(new RightCommand(this, 1.2f));
+        left = new InputManager(new LeftCommand(this, 1.2f));
+        jump = new TriggerInput(new JumpCommand(this, 2.0f));
+        handle = new InputManager(new HandleCommand(this, 1.0f));
+
         die = new DieCommand(this, 10.0f);
+    }
+
+    private void OnEnable()
+    {
+        TouchSimulation.Enable();
+        EnhancedTouchSupport.Enable();
+    }
+
+    private void OnDisable()
+    {
+        TouchSimulation.Disable();
+        EnhancedTouchSupport.Disable();
     }
 
     protected override Command GetCommand()
     {
-        if (Input.GetButtonDown("Jump")) return jump;
-        if (Input.GetButtonDown("Fire2")) return turnL;
-        if (Input.GetButtonDown("Fire3")) return turnR;
-        if (Input.GetButtonDown("Fire1")) return attack;
-        if (Input.GetButtonDown("Submit")) return handle;
+        ReadOnlyArray<Touch> activeTouches = Touch.activeTouches;
+        if (activeTouches.Count == 0) return null;
 
-        float v = Input.GetAxis("Vertical");
-        float h = Input.GetAxis("Horizontal");
+        Touch latestTouch = default;
 
-        if (v > 0) return forward;
-        if (v < 0) return back;
+        foreach (Touch touch in Touch.activeTouches)
+        {
+            if (latestTouch.finger == null || touch.startTime > latestTouch.startTime)
+            {
+                latestTouch = touch;
+            }
+        }
 
-        if (h > 0) return right;
-        if (h < 0) return left;
+        switch (latestTouch.phase)
+        {
+            case TouchPhase.Began:
+                currentInput = GetNewInput(latestTouch.screenPosition);
 
-        return null;
+                return currentInput.FingerDown();
+
+            case TouchPhase.Moved:
+            case TouchPhase.Stationary:
+                if (currentInput == forward && currentInput.isPressed)
+                {
+                    return currentInput.FingerMove(latestTouch.delta);
+                }
+                if (currentInput == attack && currentInput.isPressed)
+                {
+                    return currentInput.FingerMove(latestTouch.delta);
+                }
+
+                currentInput = GetNewInput(latestTouch.screenPosition);
+                return currentInput.FingerMove(Vector2.zero);
+
+            case TouchPhase.Ended:
+                return currentInput.FingerUp();
+
+            default:
+                return null;
+
+        }
+    }
+
+    private InputManager GetNewInput(Vector2 screenPos)
+    {
+        InputManager ret = null;
+
+        if (IsInRect(screenPos, -0.18f, 0.6f, 0.18f, 0.9f))
+        {
+            ret = jump;
+        }
+        if (IsInRect(screenPos, -0.7f, 0.16f, -0.18f, 0.6f))
+        {
+            ret = turnL;
+        }
+        if (IsInRect(screenPos, 0.18f, 0.16f, 0.7f, 0.6f))
+        {
+            ret = turnR;
+        }
+
+        if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.34f))
+        {
+            ret = attack;
+        }
+        if (IsInRect(screenPos, -0.18f, 0.34f, 0.18f, 0.6f))
+        {
+            ret = forward;
+        }
+        if (IsInRect(screenPos, -0.7f, 0, -0.18f, 0.16f))
+        {
+            ret = left;
+        }
+        if (IsInRect(screenPos, 0.18f, 0, 0.9f, 0.16f))
+        {
+            ret = right;
+        }
+        if (IsInRect(screenPos, -0.18f, 0, 0.18f, 0.16f))
+        {
+            ret = back;
+        }
+
+        if (ret != null)
+        {
+            currentInput.Reset();
+            return ret;
+        }
+
+        return currentInput;
+    }
+
+    private bool IsInRect(Vector2 pos, Vector2 lowerLeft, Vector2 upperRight)
+    {
+        return IsInRect(pos, lowerLeft.x, lowerLeft.y, upperRight.x, upperRight.y);
+    }
+
+    private bool IsInRect(Vector2 pos, float left, float bottom, float right, float top)
+    {
+        float centerX = Screen.width / 2.0f / Screen.height;
+        float scaledPosX = pos.x / Screen.height;
+        float scaledPosY = pos.y / Screen.height;
+        return scaledPosX >= left + centerX && scaledPosX < right + centerX && scaledPosY >= bottom && scaledPosY < top;
     }
 
     public override void SetSpeed()
@@ -84,6 +188,218 @@ public class PlayerCommander : MobCommander
     protected void ResetCamera()
     {
         mainCamera.ResetCamera();
+    }
+
+    public override void InputCommand()
+    {
+        Command cmd = GetCommand();
+
+        if (!isCommandValid)
+        {
+            return;
+        }
+
+        if (cmd != null)
+        {
+            cmdQueue.Enqueue(cmd);
+            isCommandValid = false;
+
+            if (IsIdling)
+            {
+                DispatchCommand();
+            }
+        }
+    }
+    protected class InputManager
+    {
+        public bool isPressed { get; protected set; } = false;
+        protected Command mainCommand;
+
+        public InputManager(Command mainCommand)
+        {
+            this.mainCommand = mainCommand;
+        }
+
+        public virtual Command FingerDown()
+        {
+            isPressed = true;
+            return mainCommand;
+        }
+
+        public virtual Command FingerMove(Vector2 moveVec)
+        {
+            return mainCommand;
+        }
+        public virtual Command FingerUp()
+        {
+            isPressed = false;
+            return mainCommand;
+        }
+
+        public virtual void Reset()
+        {
+            isPressed = false;
+        }
+    }
+
+    protected class TriggerInput : InputManager
+    {
+        public TriggerInput(Command mainCommand) : base(mainCommand) { }
+        public override Command FingerMove(Vector2 moveVec)
+        {
+            return null;
+        }
+        public override Command FingerUp()
+        {
+            isPressed = false;
+            return null;
+        }
+    }
+
+    protected class FrontInput : InputManager
+    {
+        protected bool isStationary = false;
+        protected bool isPulling = false;
+        protected bool isPushing = false;
+        protected bool isRight = false;
+        protected bool isLeft = false;
+        protected bool isExecuted = false;
+
+        protected AttackCommand attack;
+        protected HandleCommand handle;
+
+        public FrontInput(Command mainCommand, AttackCommand attack, HandleCommand handle) : base(mainCommand)
+        {
+            this.attack = attack;
+            this.handle = handle;
+        }
+
+        public override Command FingerDown()
+        {
+            isPressed = true;
+            return null;
+        }
+
+        public override Command FingerMove(Vector2 moveVec)
+        {
+            if (!isPressed) return mainCommand;
+
+            float absX = Mathf.Abs(moveVec.x);
+            float absY = Mathf.Abs(moveVec.y);
+
+            if (absX < 0.00001f && absY < 0.00001f)
+            {
+                // Tap command
+                if (isStationary)
+                {
+                    isExecuted = true;
+                    isPressed = false;
+                    return mainCommand;
+                }
+                else
+                {
+                    isStationary = true;
+                    return null;
+                }
+            }
+
+            if (absX < absY)
+            {
+                // Vertical command
+                if (moveVec.y < 0)
+                {
+                    // Pulling command
+                    if (absX * 2 < absY)
+                    {
+                        if (isPulling)
+                        {
+                            isPressed = false;
+                            return handle;
+                        }
+                        else
+                        {
+                            isStationary = false;
+                            isPulling = true;
+                            return null;
+                        }
+                    }
+                }
+                else
+                {
+                    // Pushing command
+                    if (absX * 2 < absY)
+                    {
+                        if (isPushing)
+                        {
+                            isPressed = false;
+                            return attack;
+                        }
+                        else
+                        {
+                            isStationary = false;
+                            isPushing = true;
+                            return null;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Horizontal command
+                if (moveVec.x < 0)
+                {
+                    if (absY * 2 < absX)
+                    {
+                        // Door opening command
+                        if (isLeft)
+                        {
+                            isPressed = false;
+                            return handle;
+                        }
+                        else
+                        {
+                            isStationary = false;
+                            isLeft = true;
+                            return null;
+                        }
+                    }
+                }
+                else
+                {
+                    if (absY * 2 < absX)
+                    {
+                        // Door opening command
+                        if (isRight)
+                        {
+                            isPressed = false;
+                            return handle;
+                        }
+                        else
+                        {
+                            isStationary = false;
+                            isRight = true;
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public override Command FingerUp()
+        {
+            if (isPressed)
+            {
+                Reset();
+                return mainCommand;
+            }
+            return null;
+        }
+
+        public override void Reset()
+        {
+            isPressed = isStationary = isPulling = isPushing = isRight = isLeft = false;
+        }
     }
 
     protected abstract class PlayerCommand : Command

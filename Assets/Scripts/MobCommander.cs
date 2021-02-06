@@ -54,7 +54,8 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void SetPosition(Transform tf)
     {
         // TODO: Charactor position should be set by GameManager
-        tf.position = map.GetRespawnPos();
+        // tf.position = map.GetRespawnPos();
+        tf.position = new Vector3(-50, 0, 50);
 
         dir = new North();
         tf.LookAt(tf.position + dir.LookAt);
@@ -73,7 +74,7 @@ public abstract class MobCommander : MonoBehaviour
         map.GetTile(pos).IsCharactorOn = false;
     }
 
-    public void InputCommand()
+    public virtual void InputCommand()
     {
         if (!isCommandValid)
         {
