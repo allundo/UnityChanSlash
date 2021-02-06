@@ -2,4 +2,6 @@ Library/
 Logs/
 Temp/
 obj/
+*.app
+*.apk
 
