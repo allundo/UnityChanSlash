@@ -132,6 +132,11 @@ public interface Direction
     Direction Left { get; }
     Direction Right { get; }
     Direction Backward { get; }
+
+    bool IsSame(Direction dir);
+    bool IsLeft(Direction dir);
+    bool IsRight(Direction dir);
+    bool IsInverse(Direction dir);
 }
 
 public class North : Direction
@@ -158,6 +163,11 @@ public class North : Direction
     public Direction Left => new West();
     public Direction Right => new East();
     public Direction Backward => new South();
+
+    public bool IsSame(Direction dir) => dir is North;
+    public bool IsLeft(Direction dir) => dir is West;
+    public bool IsRight(Direction dir) => dir is East;
+    public bool IsInverse(Direction dir) => dir is South;
 }
 
 public class East : Direction
@@ -184,6 +194,11 @@ public class East : Direction
     public Direction Left => new North();
     public Direction Right => new South();
     public Direction Backward => new West();
+
+    public bool IsSame(Direction dir) => dir is East;
+    public bool IsLeft(Direction dir) => dir is North;
+    public bool IsRight(Direction dir) => dir is South;
+    public bool IsInverse(Direction dir) => dir is West;
 }
 
 public class South : Direction
@@ -210,6 +225,11 @@ public class South : Direction
     public Direction Left => new East();
     public Direction Right => new West();
     public Direction Backward => new North();
+
+    public bool IsSame(Direction dir) => dir is South;
+    public bool IsLeft(Direction dir) => dir is East;
+    public bool IsRight(Direction dir) => dir is West;
+    public bool IsInverse(Direction dir) => dir is North;
 }
 
 public class West : Direction
@@ -236,6 +256,11 @@ public class West : Direction
     public Direction Left => new South();
     public Direction Right => new North();
     public Direction Backward => new East();
+
+    public bool IsSame(Direction dir) => dir is West;
+    public bool IsLeft(Direction dir) => dir is South;
+    public bool IsRight(Direction dir) => dir is North;
+    public bool IsInverse(Direction dir) => dir is East;
 
 }
 public enum Dir

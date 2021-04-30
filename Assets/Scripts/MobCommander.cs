@@ -6,11 +6,11 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Animator))]
 public abstract class MobCommander : MonoBehaviour
 {
-    protected Animator anim;
+    public Animator anim { get; protected set; }
     protected MobStatus status;
     protected Pos CurrentPos => map.MapPos(tf.position);
 
-    protected Direction dir;
+    public Direction dir { get; protected set; }
 
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;

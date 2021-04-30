@@ -2,13 +2,16 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(MobStatus))]
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(MobCommander))]
 public class MobAttack : MonoBehaviour
 {
     [SerializeField] private Collider attackCollider = default;
     [SerializeField] private AudioSource swingSound = default;
 
-    protected Animator anim;
+    protected MobCommander commander;
+
+    protected Direction dir => commander.dir;
+    protected Animator anim => commander.anim;
 
     protected virtual float Pitch => Random.Range(0.7f, 1.3f);
 
@@ -16,7 +19,8 @@ public class MobAttack : MonoBehaviour
     protected virtual void Start()
     {
         status = GetComponent<MobStatus>();
-        anim = GetComponent<Animator>();
+        commander = GetComponent<MobCommander>();
+
         attackCollider.enabled = false;
     }
 
@@ -28,6 +32,7 @@ public class MobAttack : MonoBehaviour
 
         anim.SetBool("Guard", true);
     }
+
     public void OnLeaveEnemy(Collider collider)
     {
         anim.SetBool("Guard", false);
@@ -49,7 +54,7 @@ public class MobAttack : MonoBehaviour
 
         if (null == targetMob) return;
 
-        targetMob.Damage(status.Attack);
+        targetMob.Damage(status.Attack, dir);
     }
 
     public void OnAttackFinished()
