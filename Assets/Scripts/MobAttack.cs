@@ -2,10 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(MobStatus))]
+[RequireComponent(typeof(Animator))]
 public class MobAttack : MonoBehaviour
 {
     [SerializeField] private Collider attackCollider = default;
     [SerializeField] private AudioSource swingSound = default;
+
+    protected Animator anim;
 
     protected virtual float Pitch => Random.Range(0.7f, 1.3f);
 
@@ -13,7 +16,21 @@ public class MobAttack : MonoBehaviour
     protected virtual void Start()
     {
         status = GetComponent<MobStatus>();
+        anim = GetComponent<Animator>();
         attackCollider.enabled = false;
+    }
+
+    public void OnDetectEnemy(Collider collider)
+    {
+        MobStatus targetMob = collider.GetComponent<MobStatus>();
+
+        if (null == targetMob) return;
+
+        anim.SetBool("Guard", true);
+    }
+    public void OnLeaveEnemy(Collider collider)
+    {
+        anim.SetBool("Guard", false);
     }
 
     public virtual void OnAttackStart()

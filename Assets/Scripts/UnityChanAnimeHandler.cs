@@ -10,6 +10,7 @@ public class UnityChanAnimeHandler : AnimeHandler
 
         map["Move.Locomotion"] = map["Move.WalkBack"] = map["Move.WalkL"] = map["Move.WalkR"]
             = map["Turn.TurnL"] = map["Turn.TurnR"]
+            = map["Guard"]
             = map["Rest"]
             = map["Handle"]
             = map["Die"]

@@ -65,6 +65,7 @@
      <Compile Include="Assets\Scripts\MobItemDropper.cs" />
      <Compile Include="Assets\Scripts\MobStatus.cs" />
      <Compile Include="Assets\Scripts\OwnedItemsData.cs" />
+     <Compile Include="Assets\Scripts\PlayerAttack.cs" />
      <Compile Include="Assets\Scripts\PlayerCommander.cs" />
      <Compile Include="Assets\Scripts\PlayerStatus.cs" />
      <Compile Include="Assets\Scripts\SceneInitializer.cs" />
@@ -718,6 +719,9 @@
     <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -733,14 +737,11 @@
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.TextMeshPro">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

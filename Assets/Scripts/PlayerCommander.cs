@@ -16,6 +16,7 @@ public class PlayerCommander : MobCommander
     protected InputManager turnL;
     protected InputManager turnR;
     protected InputManager attack;
+    protected InputManager guard;
     protected InputManager back;
     protected InputManager right;
     protected InputManager left;
@@ -39,13 +40,14 @@ public class PlayerCommander : MobCommander
         forward = new FrontInput(new ForwardCommand(this, 1.0f), new AttackCommand(this, 2.0f), new HandleCommand(this, 1.0f));
         turnL = new TriggerInput(new TurnLCommand(this, 0.5f));
         turnR = new TriggerInput(new TurnRCommand(this, 0.5f));
-        attack = new TriggerInput(new AttackCommand(this, 2.0f));
+        attack = new TriggerInput(new AttackCommand(this, 0.6f));
 
         back = new InputManager(new BackCommand(this, 1.2f));
         right = new InputManager(new RightCommand(this, 1.2f));
         left = new InputManager(new LeftCommand(this, 1.2f));
         jump = new TriggerInput(new JumpCommand(this, 2.0f));
         handle = new InputManager(new HandleCommand(this, 1.0f));
+        guard = new InputManager(new GuardCommand(this, 1.2f));
 
         die = new DieCommand(this, 10.0f);
     }
@@ -124,6 +126,10 @@ public class PlayerCommander : MobCommander
             ret = turnR;
         }
 
+        // if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.6f))
+        // {
+        // ret = guard;
+        // }
         if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.34f))
         {
             ret = attack;
@@ -206,6 +212,7 @@ public class PlayerCommander : MobCommander
 
             if (IsIdling)
             {
+                anim.SetBool("Guard", false);
                 DispatchCommand();
             }
         }
@@ -558,5 +565,11 @@ public class PlayerCommander : MobCommander
     protected class HandleCommand : ActionCommand
     {
         public HandleCommand(PlayerCommander commander, float duration) : base(commander, duration, "Handle") { }
+    }
+
+    protected class GuardCommand : ActionCommand
+    {
+        public GuardCommand(PlayerCommander commander, float duration) : base(commander, duration, "Guard") { }
+
     }
 }
