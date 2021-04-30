@@ -132,7 +132,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.15
+    scalar: 0.1
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -299,7 +299,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 0.41960788, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -13852,7 +13852,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 0.41960785, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -18496,7 +18496,7 @@ PrefabInstance:
     - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
         type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
         type: 3}
@@ -18771,7 +18771,7 @@ PrefabInstance:
     - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
         type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
         type: 3}
@@ -18907,6 +18907,16 @@ PrefabInstance:
         type: 3}
       propertyPath: SubModule.subEmitters.Array.data[1].emitter
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835126154480044029, guid: 0a8881eb2164d4a4a9c41614d8691865,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7475880768222081575, guid: 0a8881eb2164d4a4a9c41614d8691865,
         type: 3}
