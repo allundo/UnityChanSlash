@@ -30,7 +30,7 @@ public class MobAttack : MonoBehaviour
 
         if (null == targetMob) return;
 
-        anim.SetBool("Guard", true);
+        anim.SetBool("Guard", targetMob.IsAlive);
     }
 
     public void OnLeaveEnemy(Collider collider)

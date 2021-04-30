@@ -18,7 +18,7 @@ public class MobStatus : MonoBehaviour
 
     public float Life { get; protected set; } = 0.0f;
 
-    protected bool IsAlive => Life > 0.0f;
+    public bool IsAlive => Life > 0.0f;
 
     [SerializeField] public float LifeMax = 10;
 
