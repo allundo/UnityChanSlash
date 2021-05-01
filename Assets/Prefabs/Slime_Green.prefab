@@ -792,8 +792,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c50a0e85150543a0ae77ca69f894b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FaceDamageMultiplier: 1
+  SideDamageMultiplier: 1.5
+  BackDamageMultiplier: 2
   dieSound: {fileID: 428805006476128215}
-  LifeMax: 2
+  LifeMax: 10
 --- !u!114 &2131489890423304314
 MonoBehaviour:
   m_ObjectHideFlags: 0

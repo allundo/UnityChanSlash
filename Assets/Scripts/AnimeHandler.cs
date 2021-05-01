@@ -6,9 +6,10 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CapsuleCollider))]
 public abstract class AnimeHandler : MonoBehaviour
 {
+    public AnimeState currentState { get; protected set; }
+
     protected Animator anim;
     protected CapsuleCollider col;
-    protected AnimeState currentState;
     protected AnimeState standardState;
 
     private Dictionary<int, AnimeState> stateMap = new Dictionary<int, AnimeState>();

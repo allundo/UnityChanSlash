@@ -24,20 +24,6 @@ public class MobAttack : MonoBehaviour
         attackCollider.enabled = false;
     }
 
-    public void OnDetectEnemy(Collider collider)
-    {
-        MobStatus targetMob = collider.GetComponent<MobStatus>();
-
-        if (null == targetMob || !targetMob.IsAlive) return;
-
-        commander.SetEnemyDetected(targetMob.IsAlive);
-    }
-
-    public void OnLeaveEnemy(Collider collider)
-    {
-        commander.SetEnemyDetected(false);
-    }
-
     public virtual void OnAttackStart()
     {
         attackCollider.enabled = true;

@@ -7084,12 +7084,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!65 &940625589 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 3320937026605591273, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5189892436850581060}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &948678908
 Mesh:
   m_ObjectHideFlags: 0
@@ -15600,6 +15594,11 @@ PrefabInstance:
       propertyPath: bodyCollider
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 974097492613650505, guid: 5edb2c3a0fa004778b542b5eae5349a0,
+        type: 3}
+      propertyPath: LifeMax
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 974814930939844399, guid: 5edb2c3a0fa004778b542b5eae5349a0,
         type: 3}
       propertyPath: m_Name
@@ -16264,7 +16263,7 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyDetector
       value: 
-      objectReference: {fileID: 940625589}
+      objectReference: {fileID: 0}
     - target: {fileID: 7476530261382612515, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: bodyCollider

@@ -11,6 +11,8 @@ public class PlayerCommander : MobCommander
 {
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
 
+    protected bool IsFaceToEnemy => IsCharactorOn(dir.GetForward(CurrentPos));
+
     protected InputManager currentInput = new InputManager(null);
     protected InputManager forward;
     protected InputManager turnL;
@@ -211,12 +213,11 @@ public class PlayerCommander : MobCommander
                 DispatchCommand();
             }
         }
-    }
+        else if (IsIdling)
+        {
 
-    protected override bool DispatchCommand()
-    {
-        SetEnemyDetected(false);
-        return base.DispatchCommand();
+            SetEnemyDetected(IsFaceToEnemy);
+        }
     }
 
     protected class InputManager
@@ -568,5 +569,4 @@ public class PlayerCommander : MobCommander
     {
         public HandleCommand(PlayerCommander commander, float duration) : base(commander, duration, "Handle") { }
     }
-
 }
