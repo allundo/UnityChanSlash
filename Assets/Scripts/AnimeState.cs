@@ -19,7 +19,7 @@ public class AnimeState
         colState.UpdateCollider();
     }
 
-    public void ResetCollider()
+    public virtual void ResetCollider()
     {
         colState.ResetCollider();
     }

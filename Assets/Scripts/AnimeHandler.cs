@@ -13,7 +13,7 @@ public abstract class AnimeHandler : MonoBehaviour
 
     private Dictionary<int, AnimeState> stateMap = new Dictionary<int, AnimeState>();
 
-    private void Start()
+    protected virtual void Start()
     {
         anim = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider>();

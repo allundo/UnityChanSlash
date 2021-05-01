@@ -28,14 +28,14 @@ public class MobAttack : MonoBehaviour
     {
         MobStatus targetMob = collider.GetComponent<MobStatus>();
 
-        if (null == targetMob) return;
+        if (null == targetMob || !targetMob.IsAlive) return;
 
-        anim.SetBool("Guard", targetMob.IsAlive);
+        commander.SetEnemyDetected(targetMob.IsAlive);
     }
 
     public void OnLeaveEnemy(Collider collider)
     {
-        anim.SetBool("Guard", false);
+        commander.SetEnemyDetected(false);
     }
 
     public virtual void OnAttackStart()

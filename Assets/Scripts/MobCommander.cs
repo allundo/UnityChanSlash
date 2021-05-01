@@ -11,6 +11,8 @@ public abstract class MobCommander : MonoBehaviour
     protected Pos CurrentPos => map.MapPos(tf.position);
 
     public Direction dir { get; protected set; }
+    public bool IsAutoGuard { get; protected set; } = false;
+    public bool IsManualGuard { get; protected set; } = false;
 
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;
@@ -95,7 +97,7 @@ public abstract class MobCommander : MonoBehaviour
         }
     }
 
-    protected bool DispatchCommand()
+    protected virtual bool DispatchCommand()
     {
         if (cmdQueue.Count > 0)
         {
@@ -134,6 +136,17 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void TurnRight()
     {
         dir = dir.Right;
+    }
+
+    public virtual void SetEnemyDetected(bool isDetected)
+    {
+        IsAutoGuard = isDetected;
+        anim.SetBool("Guard", IsManualGuard || IsAutoGuard);
+    }
+    public virtual void SetManualGuard(bool isGuard)
+    {
+        IsManualGuard = isGuard;
+        anim.SetBool("Guard", IsManualGuard || IsAutoGuard);
     }
 
     public virtual void Respawn()
@@ -274,6 +287,30 @@ public abstract class MobCommander : MonoBehaviour
         {
             commander.anim.SetTrigger(animName);
             DOVirtual.DelayedCall(duration, () => { commander.Destory(); });
+        }
+    }
+
+    protected class ShieldCommand : ActionCommand
+    {
+        public ShieldCommand(PlayerCommander commander, float duration) : base(commander, duration, "Shield") { }
+    }
+
+    protected class GuardCommand : Command
+    {
+        public GuardCommand(MobCommander commander, float duration) : base(commander, duration)
+        {
+        }
+
+        public override void Execute()
+        {
+            commander.SetManualGuard(true);
+
+            SetValidateTimer();
+            DOVirtual.DelayedCall(duration, () =>
+            {
+                commander.SetManualGuard(false);
+                commander.DispatchCommand();
+            });
         }
     }
 }

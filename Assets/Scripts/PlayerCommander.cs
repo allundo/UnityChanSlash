@@ -47,7 +47,7 @@ public class PlayerCommander : MobCommander
         left = new InputManager(new LeftCommand(this, 1.2f));
         jump = new TriggerInput(new JumpCommand(this, 2.0f));
         handle = new InputManager(new HandleCommand(this, 1.0f));
-        guard = new InputManager(new GuardCommand(this, 1.2f));
+        guard = new InputManager(new GuardCommand(this, 0.2f));
 
         die = new DieCommand(this, 10.0f);
     }
@@ -126,13 +126,9 @@ public class PlayerCommander : MobCommander
             ret = turnR;
         }
 
-        // if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.6f))
-        // {
-        // ret = guard;
-        // }
         if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.34f))
         {
-            ret = attack;
+            ret = IsAutoGuard ? attack : guard;
         }
         if (IsInRect(screenPos, -0.18f, 0.34f, 0.18f, 0.6f))
         {
@@ -212,11 +208,17 @@ public class PlayerCommander : MobCommander
 
             if (IsIdling)
             {
-                anim.SetBool("Guard", false);
                 DispatchCommand();
             }
         }
     }
+
+    protected override bool DispatchCommand()
+    {
+        SetEnemyDetected(false);
+        return base.DispatchCommand();
+    }
+
     protected class InputManager
     {
         public bool isPressed { get; protected set; } = false;
@@ -567,9 +569,4 @@ public class PlayerCommander : MobCommander
         public HandleCommand(PlayerCommander commander, float duration) : base(commander, duration, "Handle") { }
     }
 
-    protected class GuardCommand : ActionCommand
-    {
-        public GuardCommand(PlayerCommander commander, float duration) : base(commander, duration, "Guard") { }
-
-    }
 }

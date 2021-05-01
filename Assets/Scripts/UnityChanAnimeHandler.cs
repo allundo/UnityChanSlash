@@ -4,19 +4,27 @@ using System.Collections.Generic;
 
 public class UnityChanAnimeHandler : AnimeHandler
 {
+    [SerializeField] protected Collider enemyDetector = default;
+    protected override void Start()
+    {
+        base.Start();
+        enemyDetector.enabled = false;
+    }
+
     protected override Dictionary<string, AnimeState> GetStateNameMap()
     {
         var map = base.GetStateNameMap();
 
         map["Move.Locomotion"] = map["Move.WalkBack"] = map["Move.WalkL"] = map["Move.WalkR"]
             = map["Turn.TurnL"] = map["Turn.TurnR"]
-            = map["Guard"] = map["Shield"]
-            = map["Stand.Idle"] = map["Stand.Rest"]
             = map["Handle"]
             = map["Die"]
             = standardState;
 
         map["Jump"] = new JumpState(anim, new JumpCollider(col));
+
+        map["Stand.Idle"] = map["Stand.Rest"] = map["Guard"] = map["Shield"]
+            = new GuardableState(anim, new ColliderState(col), enemyDetector);
 
         return map;
     }
@@ -49,4 +57,24 @@ public class UnityChanAnimeHandler : AnimeHandler
         }
     }
 
+    protected class GuardableState : AnimeState
+    {
+        protected Collider enemyDetector;
+
+        public GuardableState(Animator anim, ColliderState colState, Collider enemyDetector) : base(anim, colState)
+        {
+            this.enemyDetector = enemyDetector;
+        }
+
+        public override void UpdateState()
+        {
+            enemyDetector.enabled = true;
+        }
+
+        public override void ResetCollider()
+        {
+            base.ResetCollider();
+            enemyDetector.enabled = false;
+        }
+    }
 }
