@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\DoorControl.cs" />
      <Compile Include="Assets\Scripts\DoorHControl.cs" />
      <Compile Include="Assets\Scripts\DoorTransparent.cs" />
+     <Compile Include="Assets\Scripts\EnemyAnimator.cs" />
      <Compile Include="Assets\Scripts\EnemyCommander.cs" />
      <Compile Include="Assets\Scripts\EnemyGenerator.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -60,6 +61,7 @@
      <Compile Include="Assets\Scripts\MapRenderer.cs" />
      <Compile Include="Assets\Scripts\MazeCreator.cs" />
      <Compile Include="Assets\Scripts\Menu.cs" />
+     <Compile Include="Assets\Scripts\MobAnimator.cs" />
      <Compile Include="Assets\Scripts\MobAttack.cs" />
      <Compile Include="Assets\Scripts\MobCommander.cs" />
      <Compile Include="Assets\Scripts\MobHandle.cs" />
@@ -70,6 +72,8 @@
      <Compile Include="Assets\Scripts\PlayerCommander.cs" />
      <Compile Include="Assets\Scripts\PlayerStatus.cs" />
      <Compile Include="Assets\Scripts\SceneInitializer.cs" />
+     <Compile Include="Assets\Scripts\ShieldAnimator.cs" />
+     <Compile Include="Assets\Scripts\ShieldCommander.cs" />
      <Compile Include="Assets\Scripts\SideCamera.cs" />
      <Compile Include="Assets\Scripts\SingletonMonoBehaviour.cs" />
      <Compile Include="Assets\Scripts\SlimeAttack.cs" />

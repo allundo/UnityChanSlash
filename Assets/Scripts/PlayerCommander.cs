@@ -6,13 +6,17 @@ using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
-[RequireComponent(typeof(Animator))]
-public class PlayerCommander : MobCommander
+[RequireComponent(typeof(UnityChanAnimeHandler))]
+public class PlayerCommander : ShieldCommander
 {
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
 
+    public UnityChanAnimeHandler playerAnim { get; protected set; }
+
     protected bool IsFaceToEnemy => IsCharactorOn(dir.GetForward(CurrentPos));
 
+    // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.
+    // TODO: InputManager might be replaced with uGUI controllers.
     protected InputManager currentInput = new InputManager(null);
     protected InputManager forward;
     protected InputManager turnL;
@@ -24,6 +28,12 @@ public class PlayerCommander : MobCommander
     protected InputManager left;
     protected InputManager jump;
     protected InputManager handle;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        playerAnim = GetComponent<UnityChanAnimeHandler>();
+    }
 
     protected override void SetPosition(Transform tf)
     {
@@ -39,16 +49,16 @@ public class PlayerCommander : MobCommander
 
     protected override void SetCommands()
     {
-        forward = new FrontInput(new ForwardCommand(this, 1.0f), new AttackCommand(this, 2.0f), new HandleCommand(this, 1.0f));
+        forward = new FrontInput(new ForwardCommand(this, 1.0f), new PlayerAttack(this, 2.0f), new PlayerHandle(this, 1.0f));
         turnL = new TriggerInput(new TurnLCommand(this, 0.5f));
         turnR = new TriggerInput(new TurnRCommand(this, 0.5f));
-        attack = new TriggerInput(new AttackCommand(this, 0.6f));
+        attack = new TriggerInput(new PlayerAttack(this, 0.6f));
 
         back = new InputManager(new BackCommand(this, 1.2f));
         right = new InputManager(new RightCommand(this, 1.2f));
         left = new InputManager(new LeftCommand(this, 1.2f));
         jump = new TriggerInput(new JumpCommand(this, 2.0f));
-        handle = new InputManager(new HandleCommand(this, 1.0f));
+        handle = new InputManager(new PlayerHandle(this, 1.0f));
         guard = new InputManager(new GuardCommand(this, 0.2f));
 
         die = new DieCommand(this, 10.0f);
@@ -173,8 +183,8 @@ public class PlayerCommander : MobCommander
 
     public override void SetSpeed()
     {
-        anim.SetFloat("Speed", IsIdling ? 0.0f : currentCommand.Speed);
-        anim.SetFloat("RSpeed", IsIdling ? 0.0f : currentCommand.RSpeed);
+        playerAnim.speed.Float = IsIdling ? 0.0f : currentCommand.Speed;
+        playerAnim.rSpeed.Float = IsIdling ? 0.0f : currentCommand.RSpeed;
     }
 
     protected override void TurnLeft()
@@ -194,7 +204,7 @@ public class PlayerCommander : MobCommander
         mainCamera.ResetCamera();
     }
 
-    public override void InputCommand()
+    protected override void InputCommand()
     {
         Command cmd = GetCommand();
 
@@ -205,20 +215,15 @@ public class PlayerCommander : MobCommander
 
         if (cmd != null)
         {
-            cmdQueue.Enqueue(cmd);
-            isCommandValid = false;
-
-            if (IsIdling)
-            {
-                DispatchCommand();
-            }
+            EnqueueCommand(cmd, IsIdling);
         }
         else if (IsIdling)
         {
-
             SetEnemyDetected(IsFaceToEnemy);
         }
     }
+
+
 
     protected class InputManager
     {
@@ -275,10 +280,10 @@ public class PlayerCommander : MobCommander
         protected bool isLeft = false;
         protected bool isExecuted = false;
 
-        protected AttackCommand attack;
-        protected HandleCommand handle;
+        protected PlayerAttack attack;
+        protected PlayerHandle handle;
 
-        public FrontInput(Command mainCommand, AttackCommand attack, HandleCommand handle) : base(mainCommand)
+        public FrontInput(Command mainCommand, PlayerAttack attack, PlayerHandle handle) : base(mainCommand)
         {
             this.attack = attack;
             this.handle = handle;
@@ -412,7 +417,7 @@ public class PlayerCommander : MobCommander
         }
     }
 
-    protected abstract class PlayerCommand : Command
+    protected abstract class PlayerCommand : ShieldCommand
     {
         protected PlayerCommander playerCommander;
 
@@ -515,7 +520,7 @@ public class PlayerCommander : MobCommander
             playerCommander.SetOnCharactor(startPos + dest);
             playerCommander.ResetOnCharactor(startPos);
 
-            playerCommander.anim.SetTrigger("Jump");
+            playerCommander.playerAnim.jump.Fire();
 
             PlayTweenMove(GetJumpSequence(dest), () =>
             {
@@ -545,7 +550,7 @@ public class PlayerCommander : MobCommander
         {
             PlayTweenMove(GetRotate(-90), () => playerCommander.ResetCamera());
             playerCommander.TurnLeft();
-            playerCommander.anim.SetTrigger("TurnL");
+            playerCommander.playerAnim.turnL.Fire();
 
             SetValidateTimer();
         }
@@ -559,14 +564,46 @@ public class PlayerCommander : MobCommander
         {
             PlayTweenMove(GetRotate(90), () => playerCommander.ResetCamera());
             playerCommander.TurnRight();
-            playerCommander.anim.SetTrigger("TurnR");
+            playerCommander.playerAnim.turnR.Fire();
 
             SetValidateTimer();
         }
     }
-
-    protected class HandleCommand : ActionCommand
+    protected class PlayerAction : PlayerCommand
     {
-        public HandleCommand(PlayerCommander commander, float duration) : base(commander, duration, "Handle") { }
+        protected ShieldAnimator.TriggerEx trigger;
+
+        public PlayerAction(PlayerCommander commander, float duration, ShieldAnimator.TriggerEx trigger) : base(commander, duration)
+        {
+            this.trigger = trigger;
+        }
+
+        public override void Execute()
+        {
+            trigger.Fire();
+
+            SetValidateTimer();
+            DOVirtual.DelayedCall(duration, () => { playerCommander.DispatchCommand(); });
+        }
+    }
+
+    protected class PlayerHandle : PlayerAction
+    {
+        public PlayerHandle(PlayerCommander commander, float duration) : base(commander, duration, commander.playerAnim.handle) { }
+    }
+
+    protected class PlayerAttack : PlayerAction
+    {
+        public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration, commander.playerAnim.attack) { }
+    }
+    protected class PlayerDie : PlayerAction
+    {
+        public PlayerDie(PlayerCommander commander, float duration) : base(commander, duration, commander.playerAnim.dieEx) { }
+
+        public override void Execute()
+        {
+            trigger.Fire();
+            DOVirtual.DelayedCall(duration, () => { playerCommander.Destory(); });
+        }
     }
 }

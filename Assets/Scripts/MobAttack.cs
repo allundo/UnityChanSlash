@@ -11,7 +11,6 @@ public class MobAttack : MonoBehaviour
     protected MobCommander commander;
 
     protected Direction dir => commander.dir;
-    protected Animator anim => commander.anim;
 
     protected virtual float Pitch => Random.Range(0.7f, 1.3f);
 

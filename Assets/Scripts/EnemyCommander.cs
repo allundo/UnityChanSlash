@@ -2,13 +2,22 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using DG.Tweening;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(EnemyAnimator))]
 public class EnemyCommander : MobCommander
 {
+
+    public EnemyAnimator enemyAnim { get; protected set; }
+
     protected Command moveForward;
     protected Command turnL;
     protected Command turnR;
     protected Command attack;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        enemyAnim = GetComponent<EnemyAnimator>();
+    }
 
     protected bool IsPlayerFound(Pos pos)
     {
@@ -23,11 +32,12 @@ public class EnemyCommander : MobCommander
 
     protected override void SetCommands()
     {
+        die = new DieCommand(this, 3.0f);
+
         moveForward = new ForwardCommand(this, 2.0f);
         turnL = new TurnLCommand(this, 0.1f);
         turnR = new TurnRCommand(this, 0.1f);
-        attack = new AttackCommand(this, 2.0f);
-        die = new DieCommand(this, 3.0f);
+        attack = new EnemyAttack(this, 2.0f);
     }
 
     protected override Command GetCommand()
@@ -175,5 +185,25 @@ public class EnemyCommander : MobCommander
 
             SetValidateTimer();
         }
+    }
+    protected abstract class EnemyAction : EnemyCommand
+    {
+        protected MobAnimator.AnimatorTrigger trigger;
+        public EnemyAction(EnemyCommander commander, float duration, MobAnimator.AnimatorTrigger trigger) : base(commander, duration)
+        {
+            this.trigger = trigger;
+        }
+
+        public override void Execute()
+        {
+            trigger.Fire();
+
+            SetValidateTimer();
+            DOVirtual.DelayedCall(duration, () => { enemyCommander.DispatchCommand(); });
+        }
+    }
+    protected class EnemyAttack : EnemyAction
+    {
+        public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration, commander.enemyAnim.attack) { }
     }
 }

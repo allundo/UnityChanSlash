@@ -2,8 +2,33 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class UnityChanAnimeHandler : AnimeHandler
+public class UnityChanAnimeHandler : ShieldAnimator
 {
+    public TriggerEx jump { get; protected set; }
+    public TriggerEx turnL { get; protected set; }
+    public TriggerEx turnR { get; protected set; }
+    public TriggerEx handle { get; protected set; }
+    public TriggerEx attack { get; protected set; }
+    public TriggerEx dieEx { get; protected set; }
+    public AnimatorBool rest { get; protected set; }
+    public AnimatorFloat jumpHeight { get; protected set; }
+    public AnimatorFloat rSpeed { get; protected set; }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        jump = new TriggerEx(anim, "Jump");
+        turnL = new TriggerEx(anim, "TurnL");
+        turnR = new TriggerEx(anim, "TurnR");
+        handle = new TriggerEx(anim, "Handle");
+        attack = new TriggerEx(anim, "Attack", 5);
+        dieEx = new TriggerEx(anim, "Die", 0);
+        rest = new AnimatorBool(anim, "Rest");
+        jumpHeight = new AnimatorFloat(anim, "JumpHeight");
+        rSpeed = new AnimatorFloat(anim, "RSpeed");
+    }
+
     protected override Dictionary<string, AnimeState> GetStateNameMap()
     {
         var map = base.GetStateNameMap();
@@ -15,10 +40,10 @@ public class UnityChanAnimeHandler : AnimeHandler
             = map["Die"]
             = standardState;
 
-        map["Jump"] = new JumpState(anim, new JumpCollider(col));
+        map["Jump"] = new JumpState(anim, new JumpCollider(bodyCollider));
 
         map["Stand.Idle"] = map["Stand.Rest"] = map["Guard"] = map["Shield"]
-            = new GuardableState(anim, new ColliderState(col));
+            = new GuardableState(anim, new ColliderState(bodyCollider));
 
         return map;
     }
@@ -69,6 +94,7 @@ public class UnityChanAnimeHandler : AnimeHandler
 
         public override void ResetCollider()
         {
+            base.ResetCollider();
             shieldCount = 0;
         }
     }

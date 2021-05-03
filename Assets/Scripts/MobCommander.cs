@@ -3,10 +3,10 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(MobAnimator))]
 public abstract class MobCommander : MonoBehaviour
 {
-    public Animator anim { get; protected set; }
+    public MobAnimator anim { get; protected set; }
     protected MobStatus status;
     protected Pos CurrentPos => map.MapPos(tf.position);
 
@@ -15,7 +15,7 @@ public abstract class MobCommander : MonoBehaviour
     public bool IsManualGuard { get; protected set; } = false;
 
     protected bool isCommandValid = true;
-    protected bool IsIdling => currentCommand == null;
+    public bool IsIdling => currentCommand == null;
 
     protected bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
     protected bool IsMovable(Pos destPos) => map.GetTile(destPos).IsEnterable();
@@ -36,24 +36,27 @@ public abstract class MobCommander : MonoBehaviour
 
     protected WorldMap map = default;
 
+    protected virtual void Awake()
+    {
+        anim = GetComponent<MobAnimator>();
+    }
+
     protected virtual void Start()
     {
-        anim = GetComponent<Animator>();
         status = GetComponent<MobStatus>();
 
         map = GameManager.Instance.worldMap;
 
         tf = transform;
         SetPosition(tf);
+
         SetCommands();
     }
 
-    protected virtual void Update()
-    {
-        InputCommand();
-        SetSpeed();
-    }
-
+    /// <summary>
+    /// This method is called in Start(). By overriding it, you can change start position.
+    /// </summary>
+    /// <param name="tf"></param>
     protected virtual void SetPosition(Transform tf)
     {
         // TODO: Charactor position should be set by GameManager
@@ -66,7 +69,22 @@ public abstract class MobCommander : MonoBehaviour
         SetOnCharactor(tf.position);
     }
 
-    protected abstract void SetCommands();
+    /// <summary>
+    /// This method is called in Start(). By overriding it, you can change commands' behavior.
+    /// </summary>
+    protected virtual void SetCommands()
+    {
+        die = new DieCommand(this, 0.1f);
+    }
+
+
+    protected virtual void Update()
+    {
+        InputCommand();
+        SetSpeed();
+    }
+
+
 
     protected void SetOnCharactor(Vector3 pos)
     {
@@ -77,7 +95,7 @@ public abstract class MobCommander : MonoBehaviour
         map.GetTile(pos).IsCharactorOn = false;
     }
 
-    public virtual void InputCommand()
+    protected virtual void InputCommand()
     {
         if (!isCommandValid)
         {
@@ -88,14 +106,24 @@ public abstract class MobCommander : MonoBehaviour
 
         if (cmd != null)
         {
-            cmdQueue.Enqueue(cmd);
-            isCommandValid = false;
-
-            if (IsIdling)
-            {
-                DispatchCommand();
-            }
+            EnqueueCommand(cmd, IsIdling);
         }
+    }
+
+    protected virtual void EnqueueCommand(Command cmd, bool dispatch = false)
+    {
+        cmdQueue.Enqueue(cmd);
+        isCommandValid = false;
+
+        if (dispatch)
+        {
+            DispatchCommand();
+        }
+    }
+
+    protected virtual void EnqueueDie()
+    {
+        EnqueueCommand(die, true);
     }
 
     protected virtual bool DispatchCommand()
@@ -119,14 +147,12 @@ public abstract class MobCommander : MonoBehaviour
 
         cmdQueue.Clear();
         currentCommand?.Cancel();
-        cmdQueue.Enqueue(die ?? new DieCommand(this, 1.0f));
-        isCommandValid = false;
-        DispatchCommand();
+        EnqueueDie();
     }
 
     public virtual void SetSpeed()
     {
-        anim.SetFloat("Speed", (IsIdling ? 0.0f : currentCommand.Speed));
+        anim.speed.Float = IsIdling ? 0.0f : currentCommand.Speed;
     }
 
     protected virtual void TurnLeft()
@@ -137,17 +163,6 @@ public abstract class MobCommander : MonoBehaviour
     protected virtual void TurnRight()
     {
         dir = dir.Right;
-    }
-
-    public virtual void SetEnemyDetected(bool isDetected)
-    {
-        IsAutoGuard = isDetected;
-        anim.SetBool("Guard", IsManualGuard || IsAutoGuard);
-    }
-    public virtual void SetManualGuard(bool isGuard)
-    {
-        IsManualGuard = isGuard;
-        anim.SetBool("Guard", IsManualGuard || IsAutoGuard);
     }
 
     public virtual void Respawn()
@@ -260,58 +275,28 @@ public abstract class MobCommander : MonoBehaviour
 
     protected abstract class ActionCommand : Command
     {
-        public ActionCommand(MobCommander commander, float duration, string animName) : base(commander, duration)
+        protected MobAnimator.AnimatorTrigger trigger;
+        public ActionCommand(MobCommander commander, float duration, MobAnimator.AnimatorTrigger trigger) : base(commander, duration)
         {
-            this.animName = animName;
+            this.trigger = trigger;
         }
-
-        protected string animName;
 
         public override void Execute()
         {
-            commander.anim.SetTrigger(animName);
+            trigger.Fire();
 
             SetValidateTimer();
             DOVirtual.DelayedCall(duration, () => { commander.DispatchCommand(); });
         }
     }
-
-    protected class AttackCommand : ActionCommand
-    {
-        public AttackCommand(MobCommander commander, float duration) : base(commander, duration, "Attack") { }
-    }
     protected class DieCommand : ActionCommand
     {
-        public DieCommand(MobCommander commander, float duration) : base(commander, duration, "Die") { }
+        public DieCommand(MobCommander commander, float duration) : base(commander, duration, commander.anim.die) { }
 
         public override void Execute()
         {
-            commander.anim.SetTrigger(animName);
+            trigger.Fire();
             DOVirtual.DelayedCall(duration, () => { commander.Destory(); });
-        }
-    }
-
-    protected class ShieldCommand : ActionCommand
-    {
-        public ShieldCommand(PlayerCommander commander, float duration) : base(commander, duration, "Shield") { }
-    }
-
-    protected class GuardCommand : Command
-    {
-        public GuardCommand(MobCommander commander, float duration) : base(commander, duration)
-        {
-        }
-
-        public override void Execute()
-        {
-            commander.SetManualGuard(true);
-
-            SetValidateTimer();
-            DOVirtual.DelayedCall(duration, () =>
-            {
-                commander.SetManualGuard(false);
-                commander.DispatchCommand();
-            });
         }
     }
 }
