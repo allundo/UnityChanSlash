@@ -15,7 +15,7 @@ public abstract class MobCommander : MonoBehaviour
     public bool IsManualGuard { get; protected set; } = false;
 
     protected bool isCommandValid = true;
-    public bool IsIdling => currentCommand == null;
+    protected bool IsIdling => currentCommand == null;
 
     protected bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
     protected bool IsMovable(Pos destPos) => map.GetTile(destPos).IsEnterable();

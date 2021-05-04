@@ -11,12 +11,13 @@ public class PlayerStatus : MobStatus
     protected bool IsShieldReady => animeHandler.LoadCurrentState().IsShieldReady;
 
     protected override float Shield(Direction attackDir) => IsShieldOn(attackDir) ? 1 : 0;
-    protected override bool IsShieldOn(Direction attackDir) => commander.IsIdling && IsShieldReady && attackDir.IsInverse(dir);
+    protected override bool IsShieldOn(Direction attackDir) => playerCommander.IsShieldEnable && IsShieldReady && attackDir.IsInverse(dir);
 
     protected override void Start()
     {
         base.Start();
         animeHandler = GetComponent<UnityChanAnimeHandler>();
+        playerCommander = GetComponent<PlayerCommander>();
     }
 
     protected override void OnDamage(float damage, float shield)

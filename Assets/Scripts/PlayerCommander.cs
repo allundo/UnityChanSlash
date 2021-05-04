@@ -13,6 +13,7 @@ public class PlayerCommander : ShieldCommander
 
     public UnityChanAnimeHandler playerAnim { get; protected set; }
 
+    public bool IsShieldEnable => IsIdling || currentInput == guard;
     protected bool IsFaceToEnemy => IsCharactorOn(dir.GetForward(CurrentPos));
 
     // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.
