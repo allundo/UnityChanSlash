@@ -6362,12 +6362,12 @@ GameObject:
   - component: {fileID: 900718191}
   - component: {fileID: 900718190}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: UICircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &900718189
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11409,7 +11409,7 @@ GameObject:
   - component: {fileID: 1529953211}
   - component: {fileID: 1529953210}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: FightUICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13682,12 +13682,12 @@ GameObject:
   - component: {fileID: 1810547333}
   - component: {fileID: 1810547332}
   m_Layer: 5
-  m_Name: Button
+  m_Name: JabButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1810547331
 RectTransform:
   m_ObjectHideFlags: 0

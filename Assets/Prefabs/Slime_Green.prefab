@@ -709,6 +709,8 @@ GameObject:
   - component: {fileID: 974097492613650517}
   - component: {fileID: 974097492613650505}
   - component: {fileID: 2131489890423304314}
+  - component: {fileID: 2358680982793544022}
+  - component: {fileID: 7398270834105222207}
   m_Layer: 0
   m_Name: Slime_Green
   m_TagString: Untagged
@@ -796,7 +798,7 @@ MonoBehaviour:
   SideDamageMultiplier: 1.5
   BackDamageMultiplier: 2
   dieSound: {fileID: 428805006476128215}
-  LifeMax: 10
+  LifeMax: 20
 --- !u!114 &2131489890423304314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -812,6 +814,32 @@ MonoBehaviour:
   attackCollider: {fileID: 974097492102823895}
   swingSound: {fileID: 6824201734768431157}
   vfx: {fileID: 4783212867615437276}
+--- !u!136 &2358680982793544022
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974814930939844399}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7398270834105222207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974814930939844399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ddf8f300671a4a8aa7c5e48370c2aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &974814931172710863
 GameObject:
   m_ObjectHideFlags: 0
