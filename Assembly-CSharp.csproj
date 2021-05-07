@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\Item.cs" />
      <Compile Include="Assets\Scripts\ItemButton.cs" />
      <Compile Include="Assets\Scripts\ItemsDialog.cs" />
+     <Compile Include="Assets\Scripts\JabButton.cs" />
      <Compile Include="Assets\Scripts\LifeGauge.cs" />
      <Compile Include="Assets\Scripts\LifeGaugeContainer.cs" />
      <Compile Include="Assets\Scripts\MapRenderer.cs" />
@@ -712,6 +713,12 @@
     <Reference Include="Unity.Timeline.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.CacheServer">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.CacheServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -730,11 +737,17 @@
     <Reference Include="Unity.TextMeshPro.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ResourceManager">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Addressables.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
@@ -742,29 +755,11 @@
     <Reference Include="Unity.Rider.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.ProBuilder.AddOns.Editor">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.CacheServer">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.CacheServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ResourceManager">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ResourceManager.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Addressables.Editor">
-        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Addressables.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.AddressableImporter.Editor">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.AddressableImporter.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Addressables">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Addressables.dll</HintPath>
@@ -774,6 +769,12 @@
     </Reference>
     <Reference Include="Coffee.UIParticle">
         <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Coffee.UIParticle.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+        <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
