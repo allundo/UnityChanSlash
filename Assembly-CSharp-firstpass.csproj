@@ -62,6 +62,7 @@
      <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUI.cs" />
      <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
      <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUtils.cs" />
+     <None Include="Assets\Plugins\UniRx\ReadMe.txt" />
      <None Include="Assets\Plugins\Demigiant\DOTween\readme.txt" />
  <Reference Include="UnityEngine">
  <HintPath>/Applications/2019.4.11f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -600,6 +601,12 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="UnityEditor.CacheServer">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEditor.CacheServer.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.VSCode.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
@@ -618,11 +625,17 @@
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.ResourceManager">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ResourceManager.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Addressables.Editor">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Addressables.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.CollabProxy.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
@@ -630,8 +643,20 @@
  <Reference Include="Unity.Rider.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.AddressableImporter.Editor">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.AddressableImporter.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.ProBuilder.AddOns.Editor">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Addressables">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.Addressables.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.ScriptableBuildPipeline">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.dll</HintPath>
+ </Reference>
+ <Reference Include="Coffee.UIParticle">
+ <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Coffee.UIParticle.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>/Users/yutookada/Documents/workspace/Unity/UnityChanSlash/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
@@ -641,6 +666,10 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="UniRx.csproj">
+      <Project>{4B6BA210-CBDD-EF50-E514-E78447F9EEB5}</Project>
+      <Name>UniRx</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
