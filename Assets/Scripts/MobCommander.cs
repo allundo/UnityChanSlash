@@ -11,8 +11,6 @@ public abstract class MobCommander : MonoBehaviour
     protected Pos CurrentPos => map.MapPos(tf.position);
 
     public Direction dir { get; protected set; }
-    public bool IsAutoGuard { get; protected set; } = false;
-    public bool IsManualGuard { get; protected set; } = false;
 
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;

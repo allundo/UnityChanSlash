@@ -5,6 +5,8 @@ using DG.Tweening;
 public abstract class ShieldCommander : MobCommander
 {
     public ShieldAnimator shieldAnim { get; protected set; }
+    protected bool IsAutoGuard = false;
+    protected bool IsManualGuard = false;
 
     protected override void Awake()
     {
