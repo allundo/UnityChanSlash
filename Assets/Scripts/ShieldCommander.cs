@@ -43,11 +43,7 @@ public abstract class ShieldCommander : MobCommander
             shieldCommander.SetManualGuard(true);
 
             SetValidateTimer();
-            DOVirtual.DelayedCall(duration, () =>
-            {
-                shieldCommander.SetManualGuard(false);
-                shieldCommander.DispatchCommand();
-            });
+            SetDispatchFinal(() => shieldCommander.SetManualGuard(false));
         }
     }
 }

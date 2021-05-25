@@ -584,7 +584,7 @@ public class PlayerCommander : ShieldCommander
             trigger.Fire();
 
             SetValidateTimer();
-            DOVirtual.DelayedCall(duration, () => { playerCommander.DispatchCommand(); });
+            SetDispatchFinal();
         }
     }
 
@@ -604,7 +604,7 @@ public class PlayerCommander : ShieldCommander
         public override void Execute()
         {
             trigger.Fire();
-            DOVirtual.DelayedCall(duration, () => { playerCommander.Destory(); });
+            SetDestoryFinal();
         }
     }
 }

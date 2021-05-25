@@ -254,22 +254,61 @@ public abstract class MobCommander : MonoBehaviour
                 .AppendInterval(edgeTime);
         }
 
+        /// <summary>
+        /// Play tween and next command dispatching on complete
+        /// </summary>
+        /// <param name="move">Tween (or Sequence) to play</param>
+        /// <param name="OnComplete">Additional process on complete</param>
         protected void PlayTweenMove(Tween move, Action OnComplete = null)
         {
             playingTween = move;
 
-            OnComplete = OnComplete ?? (() => { });
-
-            move.OnComplete(() =>
-            {
-                OnComplete();
-                commander.DispatchCommand();
-            }).Play();
+            move.OnComplete(DispatchFinally(OnComplete)).Play();
         }
 
+        /// <summary>
+        /// Reserve validating of next command input
+        /// </summary>
+        /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
         protected void SetValidateTimer(float timing = 0.5f)
         {
             validateTween = DOVirtual.DelayedCall(duration * timing, () => { commander.isCommandValid = true; });
+        }
+
+        /// <summary>
+        /// Reserve next command dispatching after command duration.
+        /// </summary>
+        /// <param name="OnComplete">Additional process on complete</param>
+        protected void SetDispatchFinal(Action OnComplete = null)
+        {
+            SetFinallyCall(DispatchFinally(OnComplete));
+        }
+
+        /// <summary>
+        /// Reserve processing after command duration
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        protected Tween SetFinallyCall(TweenCallback callback)
+        {
+            return DOVirtual.DelayedCall(duration, callback);
+        }
+
+        /// <summary>
+        /// Reserve destory commander object after command duration
+        /// </summary>
+        protected void SetDestoryFinal()
+        {
+            SetFinallyCall(() => commander.Destory());
+        }
+
+        private TweenCallback DispatchFinally(Action OnComplete = null)
+        {
+            return () =>
+            {
+                if (OnComplete != null) OnComplete();
+                commander.DispatchCommand();
+            };
         }
     }
 
@@ -286,7 +325,7 @@ public abstract class MobCommander : MonoBehaviour
             trigger.Fire();
 
             SetValidateTimer();
-            DOVirtual.DelayedCall(duration, () => { commander.DispatchCommand(); });
+            SetDispatchFinal();
         }
     }
     protected class DieCommand : ActionCommand
@@ -296,7 +335,7 @@ public abstract class MobCommander : MonoBehaviour
         public override void Execute()
         {
             trigger.Fire();
-            DOVirtual.DelayedCall(duration, () => { commander.Destory(); });
+            SetDestoryFinal();
         }
     }
 }
