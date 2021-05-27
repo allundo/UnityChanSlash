@@ -9612,6 +9612,7 @@ GameObject:
   - component: {fileID: 5189892437611810426}
   - component: {fileID: 5189892437265779398}
   - component: {fileID: 5189892437265779399}
+  - component: {fileID: 1523880010270308965}
   m_Layer: 0
   m_Name: unitychan_dynamic_v2
   m_TagString: Player
@@ -9896,6 +9897,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c6d00454f84e49c29eb4edd1b11c229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1523880010270308965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476530261813138296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e838c34f9b1284399abac08ccf257321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
 --- !u!1 &7476530261813138298
 GameObject:
   m_ObjectHideFlags: 0

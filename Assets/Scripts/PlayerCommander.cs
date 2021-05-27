@@ -9,12 +9,10 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 [RequireComponent(typeof(UnityChanAnimeHandler))]
 public class PlayerCommander : ShieldCommander
 {
-    [SerializeField] protected ThirdPersonCamera mainCamera = default;
-
     public UnityChanAnimeHandler playerAnim { get; protected set; }
 
     public bool IsShieldEnable => IsIdling || currentInput == guard;
-    protected bool IsFaceToEnemy => IsCharactorOn(dir.GetForward(CurrentPos));
+    protected bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
 
     // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.
     // TODO: InputManager might be replaced with uGUI controllers.
@@ -36,16 +34,10 @@ public class PlayerCommander : ShieldCommander
         playerAnim = GetComponent<UnityChanAnimeHandler>();
     }
 
-    protected override void SetPosition(Transform tf)
+    protected override void SetPosition()
     {
-        // TODO: Charactor position should be set by GameManager
-        tf.position = map.InitPos;
-
-        dir = map.InitDir;
-        tf.LookAt(tf.position + dir.LookAt);
-
-        SetOnCharactor(tf.position);
-        MapRenderer.Instance.RedrawHidePlates(tf.position);
+        map.SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
+        ((PlayerMapUtil)map).RedrawHidePlates();
     }
 
     protected override void SetCommands()
@@ -186,23 +178,6 @@ public class PlayerCommander : ShieldCommander
     {
         playerAnim.speed.Float = IsIdling ? 0.0f : currentCommand.Speed;
         playerAnim.rSpeed.Float = IsIdling ? 0.0f : currentCommand.RSpeed;
-    }
-
-    protected override void TurnLeft()
-    {
-        mainCamera.TurnLeft();
-        dir = dir.Left;
-    }
-
-    protected override void TurnRight()
-    {
-        mainCamera.TurnRight();
-        dir = dir.Right;
-    }
-
-    protected void ResetCamera()
-    {
-        mainCamera.ResetCamera();
     }
 
     protected override void InputCommand()
@@ -421,10 +396,12 @@ public class PlayerCommander : ShieldCommander
     protected abstract class PlayerCommand : ShieldCommand
     {
         protected PlayerCommander playerCommander;
+        protected PlayerMapUtil map;
 
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
             playerCommander = commander;
+            map = playerCommander.map as PlayerMapUtil;
         }
     }
 
@@ -438,7 +415,7 @@ public class PlayerCommander : ShieldCommander
         public override void Cancel()
         {
             base.Cancel();
-            playerCommander.ResetOnCharactor(startPos + Dest);
+            map.ResetOnCharactor(startPos + Dest);
         }
 
         public override void Execute()
@@ -450,11 +427,11 @@ public class PlayerCommander : ShieldCommander
                 return;
             }
 
-            startPos = playerCommander.tf.position;
-            playerCommander.SetOnCharactor(startPos + Dest);
-            playerCommander.ResetOnCharactor(startPos);
+            startPos = map.CurrentVec3Pos;
+            map.SetOnCharactor(startPos + Dest);
+            map.ResetOnCharactor(startPos);
 
-            PlayTweenMove(GetLinearMove(Dest), () => MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position));
+            PlayTweenMove(GetLinearMove(Dest), () => map.MoveHidePlates());
 
             SetValidateTimer(0.95f);
         }
@@ -464,8 +441,8 @@ public class PlayerCommander : ShieldCommander
     {
         public ForwardCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-        protected override bool IsMovable => playerCommander.IsForwardMovable;
-        protected override Vector3 Dest => playerCommander.dir.LookAt * TILE_UNIT;
+        protected override bool IsMovable => map.IsForwardMovable;
+        protected override Vector3 Dest => map.GetForwardVector();
         public override float Speed => TILE_UNIT / duration;
     }
 
@@ -473,8 +450,8 @@ public class PlayerCommander : ShieldCommander
     {
         public BackCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-        protected override bool IsMovable => playerCommander.IsBackwardMovable;
-        protected override Vector3 Dest => -playerCommander.dir.LookAt * TILE_UNIT;
+        protected override bool IsMovable => map.IsBackwardMovable;
+        protected override Vector3 Dest => map.GetBackwardVector();
         public override float Speed => -TILE_UNIT / duration;
     }
 
@@ -482,8 +459,8 @@ public class PlayerCommander : ShieldCommander
     {
         public RightCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-        protected override bool IsMovable => playerCommander.IsRightMovable;
-        protected override Vector3 Dest => Quaternion.Euler(0, 90, 0) * playerCommander.dir.LookAt * TILE_UNIT;
+        protected override bool IsMovable => map.IsRightMovable;
+        protected override Vector3 Dest => map.GetRightVector();
         public override float RSpeed => TILE_UNIT / duration;
     }
 
@@ -491,8 +468,8 @@ public class PlayerCommander : ShieldCommander
     {
         public LeftCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-        protected override bool IsMovable => playerCommander.IsLeftMovable;
-        protected override Vector3 Dest => Quaternion.Euler(0, -90, 0) * playerCommander.dir.LookAt * TILE_UNIT;
+        protected override bool IsMovable => map.IsLeftMovable;
+        protected override Vector3 Dest => map.GetLeftVector();
         public override float RSpeed => -TILE_UNIT / duration;
     }
 
@@ -506,40 +483,35 @@ public class PlayerCommander : ShieldCommander
         public override void Cancel()
         {
             base.Cancel();
-            playerCommander.ResetOnCharactor(startPos + dest);
+            map.ResetOnCharactor(startPos + dest);
         }
 
         public override void Execute()
         {
             Debug.Log("Jump");
 
-            startPos = playerCommander.tf.position;
+            startPos = map.CurrentVec3Pos;
 
-            int distance = (playerCommander.IsJumpable ? 2 : playerCommander.IsForwardMovable ? 1 : 0);
-            dest = playerCommander.dir.LookAt * TILE_UNIT * distance;
+            int distance = map.IsJumpable ? 2 : map.IsForwardMovable ? 1 : 0;
+            dest = map.GetForwardVector(distance);
 
-            playerCommander.SetOnCharactor(startPos + dest);
-            playerCommander.ResetOnCharactor(startPos);
+            map.SetOnCharactor(startPos + dest);
+            map.ResetOnCharactor(startPos);
 
             playerCommander.playerAnim.jump.Fire();
 
-            PlayTweenMove(GetJumpSequence(dest), () =>
-            {
-                if (distance > 0)
-                {
-                    MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position);
-                }
-            });
-
+            // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
             {
-                DOVirtual.DelayedCall(duration * 0.4f, () =>
-                {
-                    MapRenderer.Instance.MoveHidePlates(playerCommander.tf.position);
-                });
+                SetDelayedCall(0.4f, () => map.MoveHidePlates());
             }
 
             SetValidateTimer();
+
+            PlayTweenMove(GetJumpSequence(dest), () =>
+            {
+                if (distance > 0) map.MoveHidePlates();
+            });
         }
     }
 
@@ -549,11 +521,11 @@ public class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
-            PlayTweenMove(GetRotate(-90), () => playerCommander.ResetCamera());
-            playerCommander.TurnLeft();
+            map.TurnLeft();
             playerCommander.playerAnim.turnL.Fire();
 
             SetValidateTimer();
+            PlayTweenMove(GetRotate(-90), () => map.ResetCamera());
         }
     }
 
@@ -563,11 +535,11 @@ public class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
-            PlayTweenMove(GetRotate(90), () => playerCommander.ResetCamera());
-            playerCommander.TurnRight();
+            map.TurnRight();
             playerCommander.playerAnim.turnR.Fire();
 
             SetValidateTimer();
+            PlayTweenMove(GetRotate(90), () => map.ResetCamera());
         }
     }
     protected class PlayerAction : PlayerCommand

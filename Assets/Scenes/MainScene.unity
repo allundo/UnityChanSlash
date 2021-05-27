@@ -24267,6 +24267,19 @@ MonoBehaviour:
   attackCollider: {fileID: 1304773824}
   swingSound: {fileID: 0}
   vfx: {fileID: 326009122}
+--- !u!114 &1911836440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911836427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e838c34f9b1284399abac08ccf257321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 963194229}
 --- !u!43 &1914662123
 Mesh:
   m_ObjectHideFlags: 0
@@ -26307,6 +26320,11 @@ PrefabInstance:
       propertyPath: onTriggerExit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1523880010270308965, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 963194229}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: mainCamera

@@ -6,7 +6,7 @@ using DG.Tweening;
 public class MobStatus : MonoBehaviour
 {
     protected MobCommander commander = default;
-    protected Direction dir => commander.dir;
+    protected Direction dir => commander.map.dir;
 
     [SerializeField] public float FaceDamageMultiplier = 1.0f;
     [SerializeField] public float SideDamageMultiplier = 1.5f;

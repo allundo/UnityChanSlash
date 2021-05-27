@@ -711,6 +711,7 @@ GameObject:
   - component: {fileID: 2131489890423304314}
   - component: {fileID: 2358680982793544022}
   - component: {fileID: 7398270834105222207}
+  - component: {fileID: 3026849044793458053}
   m_Layer: 0
   m_Name: Slime_Green
   m_TagString: Untagged
@@ -838,6 +839,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ddf8f300671a4a8aa7c5e48370c2aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3026849044793458053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974814930939844399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &974814931172710863

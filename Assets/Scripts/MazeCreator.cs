@@ -213,6 +213,17 @@ public class MazeCreator
         Random rnd = this.Random;
         return new Pos(offset.x + rnd.Next(0, w - trim), offset.y + rnd.Next(0, h - trim));
     }
+
+    /// <summary>
+    /// 特定の広さの領域を4分割して、それぞれの分割領域からランダム座標を取得
+    /// numOfDivide で分割回数を指定し、再帰的に分割を行った領域から座標を取得する
+    /// </summary>
+    /// <param name="w"></param>
+    /// <param name="h"></param>
+    /// <param name="offset"></param>
+    /// <param name="numOfDivide"></param>
+    /// <param name="trim"></param>
+    /// <returns></returns>
     private List<Pos> GetDividingRandomPos(int w, int h, Pos offset, int numOfDivide = 1, int trim = 0)
     {
 

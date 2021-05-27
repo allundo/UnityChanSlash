@@ -4,50 +4,33 @@ using System;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MobAnimator))]
+[RequireComponent(typeof(MapUtil))]
 public abstract class MobCommander : MonoBehaviour
 {
     public MobAnimator anim { get; protected set; }
     protected MobStatus status;
-    protected Pos CurrentPos => map.MapPos(tf.position);
-
-    public Direction dir { get; protected set; }
 
     protected bool isCommandValid = true;
     protected bool IsIdling => currentCommand == null;
 
-    protected bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
-    protected bool IsMovable(Pos destPos) => map.GetTile(destPos).IsEnterable();
-    protected bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable();
-    protected bool IsForwardMovable => IsMovable(dir.GetForward(CurrentPos));
-    protected bool IsForwardLeapable => IsLeapable(dir.GetForward(CurrentPos));
-    protected bool IsBackwardMovable => IsMovable(dir.GetBackward(CurrentPos));
-    protected bool IsLeftMovable => IsMovable(dir.GetLeft(CurrentPos));
-    protected bool IsRightMovable => IsMovable(dir.GetRight(CurrentPos));
-    protected bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(CurrentPos)));
-    protected bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
-
-    protected Transform tf;
 
     protected Queue<Command> cmdQueue = new Queue<Command>();
-    protected Command currentCommand = null;
+    public Command currentCommand { get; protected set; } = null;
     protected Command die = null;
 
-    protected WorldMap map = default;
+    public MapUtil map { get; protected set; } = default;
 
     protected virtual void Awake()
     {
         anim = GetComponent<MobAnimator>();
+        map = GetComponent<MapUtil>();
     }
 
     protected virtual void Start()
     {
         status = GetComponent<MobStatus>();
 
-        map = GameManager.Instance.worldMap;
-
-        tf = transform;
-        SetPosition(tf);
-
+        SetPosition();
         SetCommands();
     }
 
@@ -55,20 +38,14 @@ public abstract class MobCommander : MonoBehaviour
     /// This method is called in Start(). By overriding it, you can change start position.
     /// </summary>
     /// <param name="tf"></param>
-    protected virtual void SetPosition(Transform tf)
+    protected virtual void SetPosition()
     {
         // TODO: Charactor position should be set by GameManager
-        // tf.position = map.GetRespawnPos();
-        tf.position = new Vector3(-50, 0, 50);
-
-        dir = new North();
-        tf.LookAt(tf.position + dir.LookAt);
-
-        SetOnCharactor(tf.position);
+        map.SetPosition();
     }
 
     /// <summary>
-    /// This method is called in Start(). By overriding it, you can change commands' behavior.
+    /// This method is called by Start(). Override it to customize commands' behavior.
     /// </summary>
     protected virtual void SetCommands()
     {
@@ -80,17 +57,6 @@ public abstract class MobCommander : MonoBehaviour
     {
         InputCommand();
         SetSpeed();
-    }
-
-
-
-    protected void SetOnCharactor(Vector3 pos)
-    {
-        map.GetTile(pos).IsCharactorOn = true;
-    }
-    protected void ResetOnCharactor(Vector3 pos)
-    {
-        map.GetTile(pos).IsCharactorOn = false;
     }
 
     protected virtual void InputCommand()
@@ -141,7 +107,7 @@ public abstract class MobCommander : MonoBehaviour
 
     public virtual void SetDie()
     {
-        ResetOnCharactor(tf.position);
+        map.ResetOnCharactor();
 
         cmdQueue.Clear();
         currentCommand?.Cancel();
@@ -153,24 +119,14 @@ public abstract class MobCommander : MonoBehaviour
         anim.speed.Float = IsIdling ? 0.0f : currentCommand.Speed;
     }
 
-    protected virtual void TurnLeft()
-    {
-        dir = dir.Left;
-    }
-
-    protected virtual void TurnRight()
-    {
-        dir = dir.Right;
-    }
-
     public virtual void Respawn()
     {
         status.ResetStatus();
 
-        tf.gameObject.SetActive(true);
+        transform.gameObject.SetActive(true);
         isCommandValid = true;
 
-        SetPosition(tf);
+        SetPosition();
 
         // TODO: Fade-in with custom shader
     }
@@ -179,12 +135,12 @@ public abstract class MobCommander : MonoBehaviour
     {
         currentCommand = null;
 
-        tf.gameObject.SetActive(false);
+        transform.gameObject.SetActive(false);
 
         // TODO: Fade-out with custom shader
     }
 
-    protected abstract class Command
+    public abstract class Command
     {
         public static float DURATION_UNIT = 0.6f;
         protected const float TILE_UNIT = 2.5f;
@@ -225,14 +181,14 @@ public abstract class MobCommander : MonoBehaviour
 
         protected Tween GetLinearMove(Vector3 moveVector)
         {
-            return commander.tf.DOMove(moveVector, duration)
+            return commander.transform.DOMove(moveVector, duration)
                 .SetRelative()
                 .SetEase(Ease.Linear);
         }
 
         protected Tween GetRotate(int angle = 90)
         {
-            return commander.tf.DORotate(new Vector3(0, angle, 0), duration)
+            return commander.transform.DORotate(new Vector3(0, angle, 0), duration)
                 .SetRelative()
                 .SetEase(Ease.InCubic);
         }
@@ -244,10 +200,10 @@ public abstract class MobCommander : MonoBehaviour
 
             return DOTween.Sequence()
                 .Append(
-                    commander.tf.DOMove(moveVector * takeoffRate, edgeTime).SetEase(Ease.OutExpo).SetRelative()
+                    commander.transform.DOMove(moveVector * takeoffRate, edgeTime).SetEase(Ease.OutExpo).SetRelative()
                 )
                 .Append(
-                    commander.tf.DOJump(moveVector * flyingRate, jumpPower, 1, middleTime).SetRelative()
+                    commander.transform.DOJump(moveVector * flyingRate, jumpPower, 1, middleTime).SetRelative()
                 )
                 .AppendInterval(edgeTime);
         }
@@ -270,7 +226,17 @@ public abstract class MobCommander : MonoBehaviour
         /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
         protected void SetValidateTimer(float timing = 0.5f)
         {
-            validateTween = DOVirtual.DelayedCall(duration * timing, () => { commander.isCommandValid = true; });
+            validateTween = SetDelayedCall(timing, () => { commander.isCommandValid = true; });
+        }
+
+        /// <summary>
+        /// Reserve processing at specified timing
+        /// </summary>
+        /// <param name="timing">Process start timing specified by normalized (0.0f,1.0f) command duration</param>
+        /// <param name="callback"></param>
+        protected Tween SetDelayedCall(float timing, TweenCallback callback)
+        {
+            return DOVirtual.DelayedCall(duration * timing, callback);
         }
 
         /// <summary>
@@ -310,7 +276,7 @@ public abstract class MobCommander : MonoBehaviour
         }
     }
 
-    protected abstract class ActionCommand : Command
+    public abstract class ActionCommand : Command
     {
         protected MobAnimator.AnimatorTrigger trigger;
         public ActionCommand(MobCommander commander, float duration, MobAnimator.AnimatorTrigger trigger) : base(commander, duration)
@@ -326,7 +292,7 @@ public abstract class MobCommander : MonoBehaviour
             SetDispatchFinal();
         }
     }
-    protected class DieCommand : ActionCommand
+    public class DieCommand : ActionCommand
     {
         public DieCommand(MobCommander commander, float duration) : base(commander, duration, commander.anim.die) { }
 
