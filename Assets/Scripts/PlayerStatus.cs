@@ -8,10 +8,8 @@ public class PlayerStatus : MobStatus
 
     protected PlayerCommander playerCommander = default;
     protected UnityChanAnimeHandler animeHandler = default;
-    protected bool IsShieldReady => animeHandler.LoadCurrentState().IsShieldReady;
 
-    protected override float Shield(Direction attackDir) => IsShieldOn(attackDir) ? 1 : 0;
-    protected override bool IsShieldOn(Direction attackDir) => playerCommander.IsShieldEnable && IsShieldReady && attackDir.IsInverse(dir);
+    protected override float Shield(Direction attackDir) => playerCommander.IsShieldOn(attackDir) ? 1 : 0;
 
     protected override void Start()
     {

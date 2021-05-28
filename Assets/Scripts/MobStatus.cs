@@ -24,7 +24,6 @@ public class MobStatus : MonoBehaviour
     public virtual int Attack => 1;
 
     protected virtual float Shield(Direction attackDir) => 0.0f;
-    protected virtual bool IsShieldOn(Direction attackDir) => false;
 
     protected virtual float ArmorMultiplier => 1.0f;
 

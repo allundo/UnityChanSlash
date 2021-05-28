@@ -9,7 +9,7 @@ public class PlayerCommander : ShieldCommander
 {
     public UnityChanAnimeHandler playerAnim { get; protected set; }
 
-    public bool IsShieldEnable => IsIdling || currentInput == guard;
+    public override bool IsShieldEnable => IsIdling || currentInput == guard;
     protected bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
 
     // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.

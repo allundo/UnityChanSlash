@@ -38,12 +38,10 @@ public class UnityChanAnimeHandler : ShieldAnimator
             = map["Handle"]
             = map["Attack"]
             = map["Die"]
+            = map["Stand.Idle"] = map["Stand.Rest"] = map["Guard"] = map["Shield"]
             = standardState;
 
         map["Jump"] = new JumpState(anim, new JumpCollider(bodyCollider));
-
-        map["Stand.Idle"] = map["Stand.Rest"] = map["Guard"] = map["Shield"]
-            = new GuardableState(anim, new ColliderState(bodyCollider));
 
         return map;
     }
@@ -73,29 +71,6 @@ public class UnityChanAnimeHandler : ShieldAnimator
             col.height = orgColHeight - jumpHeight;
             float adjCenterY = orgColCenter.y + jumpHeight;
             col.center = new Vector3(0, adjCenterY, 0);
-        }
-    }
-
-    protected class GuardableState : AnimeState
-    {
-        protected int shieldCount = 0;
-        protected int SHIELD_READY = 10;
-
-        public override bool IsShieldReady => shieldCount == SHIELD_READY;
-
-        public GuardableState(Animator anim, ColliderState colState) : base(anim, colState)
-        { }
-
-        public override void UpdateState()
-        {
-            base.UpdateState();
-            if (shieldCount < SHIELD_READY) shieldCount++;
-        }
-
-        public override void ResetCollider()
-        {
-            base.ResetCollider();
-            shieldCount = 0;
         }
     }
 }
