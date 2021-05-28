@@ -11,7 +11,7 @@ public abstract class MobCommander : MonoBehaviour
     protected MobStatus status;
 
     protected bool isCommandValid = true;
-    protected bool IsIdling => currentCommand == null;
+    public bool IsIdling => currentCommand == null;
 
 
     protected Queue<Command> cmdQueue = new Queue<Command>();

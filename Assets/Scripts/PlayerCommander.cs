@@ -7,8 +7,7 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 [RequireComponent(typeof(UnityChanAnimeHandler))]
 public class PlayerCommander : ShieldCommander
 {
-    public override bool IsShieldEnable => IsIdling || currentInput == guard;
-    protected bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
+    private bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
 
     // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.
     // TODO: InputManager might be replaced with uGUI controllers.
@@ -117,7 +116,7 @@ public class PlayerCommander : ShieldCommander
 
         if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.34f))
         {
-            ret = IsAutoGuard ? attack : guard;
+            ret = guardState.IsAutoGuard ? attack : guard;
         }
         if (IsInRect(screenPos, -0.18f, 0.34f, 0.18f, 0.6f))
         {
@@ -173,7 +172,7 @@ public class PlayerCommander : ShieldCommander
         }
         else if (IsIdling)
         {
-            SetEnemyDetected(IsFaceToEnemy);
+            guardState.SetEnemyDetected(IsFaceToEnemy);
         }
     }
 
