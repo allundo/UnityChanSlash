@@ -11,7 +11,7 @@ public abstract class ShieldCommander : MobCommander
     protected override void Awake()
     {
         base.Awake();
-        shieldAnim = GetComponent<ShieldAnimator>();
+        shieldAnim = anim as ShieldAnimator;
     }
 
     public virtual void SetEnemyDetected(bool isDetected)

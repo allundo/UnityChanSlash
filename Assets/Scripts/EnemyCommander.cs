@@ -10,7 +10,7 @@ public class EnemyCommander : MobCommander
     protected override void Awake()
     {
         base.Awake();
-        enemyAnim = GetComponent<EnemyAnimator>();
+        enemyAnim = anim as EnemyAnimator;
     }
 
     protected override void SetCommands()

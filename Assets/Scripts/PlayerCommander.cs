@@ -29,7 +29,7 @@ public class PlayerCommander : ShieldCommander
     protected override void Awake()
     {
         base.Awake();
-        playerAnim = GetComponent<UnityChanAnimeHandler>();
+        playerAnim = anim as UnityChanAnimeHandler;
     }
 
     protected override void SetPosition()
