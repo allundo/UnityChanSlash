@@ -148,11 +148,13 @@ public abstract class MobCommander : MonoBehaviour
         protected float duration;
 
         protected MobCommander commander;
+        protected TweenMove tweenMove;
 
         public Command(MobCommander commander, float duration)
         {
             this.duration = duration * DURATION_UNIT;
             this.commander = commander;
+            this.tweenMove = new TweenMove(commander.transform, this.duration);
         }
 
         protected Tween playingTween = null;
@@ -179,45 +181,16 @@ public abstract class MobCommander : MonoBehaviour
             return seq;
         }
 
-        protected Tween GetLinearMove(Vector3 moveVector)
-        {
-            return commander.transform.DOMove(moveVector, duration)
-                .SetRelative()
-                .SetEase(Ease.Linear);
-        }
-
-        protected Tween GetRotate(int angle = 90)
-        {
-            return commander.transform.DORotate(new Vector3(0, angle, 0), duration)
-                .SetRelative()
-                .SetEase(Ease.InCubic);
-        }
-
-        protected Sequence GetJumpSequence(Vector3 moveVector, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
-        {
-            float middleTime = duration - 2 * edgeTime;
-            float flyingRate = 1.0f - takeoffRate;
-
-            return DOTween.Sequence()
-                .Append(
-                    commander.transform.DOMove(moveVector * takeoffRate, edgeTime).SetEase(Ease.OutExpo).SetRelative()
-                )
-                .Append(
-                    commander.transform.DOJump(moveVector * flyingRate, jumpPower, 1, middleTime).SetRelative()
-                )
-                .AppendInterval(edgeTime);
-        }
-
         /// <summary>
         /// Play tween and next command dispatching on complete
         /// </summary>
-        /// <param name="move">Tween (or Sequence) to play</param>
+        /// <param name="tween">Tween (or Sequence) to play</param>
         /// <param name="OnComplete">Additional process on complete</param>
-        protected void PlayTweenMove(Tween move, Action OnComplete = null)
+        protected void PlayTween(Tween tween, Action OnComplete = null)
         {
-            playingTween = move;
+            playingTween = tween;
 
-            move.OnComplete(DispatchFinally(OnComplete)).Play();
+            tween.OnComplete(DispatchFinally(OnComplete)).Play();
         }
 
         /// <summary>
@@ -226,17 +199,7 @@ public abstract class MobCommander : MonoBehaviour
         /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
         protected void SetValidateTimer(float timing = 0.5f)
         {
-            validateTween = SetDelayedCall(timing, () => { commander.isCommandValid = true; });
-        }
-
-        /// <summary>
-        /// Reserve processing at specified timing
-        /// </summary>
-        /// <param name="timing">Process start timing specified by normalized (0.0f,1.0f) command duration</param>
-        /// <param name="callback"></param>
-        protected Tween SetDelayedCall(float timing, TweenCallback callback)
-        {
-            return DOVirtual.DelayedCall(duration * timing, callback);
+            validateTween = tweenMove.SetDelayedCall(timing, () => { commander.isCommandValid = true; });
         }
 
         /// <summary>
@@ -245,17 +208,7 @@ public abstract class MobCommander : MonoBehaviour
         /// <param name="OnComplete">Additional process on complete</param>
         protected void SetDispatchFinal(Action OnComplete = null)
         {
-            SetFinallyCall(DispatchFinally(OnComplete));
-        }
-
-        /// <summary>
-        /// Reserve processing after command duration
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        protected Tween SetFinallyCall(TweenCallback callback)
-        {
-            return DOVirtual.DelayedCall(duration, callback);
+            tweenMove.SetFinallyCall(DispatchFinally(OnComplete));
         }
 
         /// <summary>
@@ -263,7 +216,7 @@ public abstract class MobCommander : MonoBehaviour
         /// </summary>
         protected void SetDestoryFinal()
         {
-            SetFinallyCall(() => commander.Destory());
+            tweenMove.SetFinallyCall(() => commander.Destory());
         }
 
         private TweenCallback DispatchFinally(Action OnComplete = null)

@@ -1,6 +1,4 @@
 using UnityEngine;
-using Random = UnityEngine.Random;
-using DG.Tweening;
 
 [RequireComponent(typeof(EnemyAnimator))]
 public class EnemyCommander : MobCommander
@@ -65,7 +63,7 @@ public class EnemyCommander : MobCommander
             map.SetOnCharactor(startPos + Dest);
             map.ResetOnCharactor(startPos);
 
-            PlayTweenMove(GetLinearMove(Dest));
+            PlayTween(tweenMove.GetLinearMove(Dest));
 
             SetValidateTimer(0.95f);
         }
@@ -87,7 +85,7 @@ public class EnemyCommander : MobCommander
 
         public override void Execute()
         {
-            PlayTweenMove(GetRotate(-90));
+            PlayTween(tweenMove.GetRotate(-90));
             map.TurnLeft();
 
             SetValidateTimer();
@@ -100,7 +98,7 @@ public class EnemyCommander : MobCommander
 
         public override void Execute()
         {
-            PlayTweenMove(GetRotate(90));
+            PlayTween(tweenMove.GetRotate(90));
             map.TurnRight();
 
             SetValidateTimer();

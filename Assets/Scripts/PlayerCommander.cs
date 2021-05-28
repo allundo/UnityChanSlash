@@ -1,6 +1,4 @@
 using UnityEngine;
-using DG.Tweening;
-using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
@@ -431,7 +429,7 @@ public class PlayerCommander : ShieldCommander
             map.SetOnCharactor(startPos + Dest);
             map.ResetOnCharactor(startPos);
 
-            PlayTweenMove(GetLinearMove(Dest), () => map.MoveHidePlates());
+            PlayTween(tweenMove.GetLinearMove(Dest), () => map.MoveHidePlates());
 
             SetValidateTimer(0.95f);
         }
@@ -503,12 +501,12 @@ public class PlayerCommander : ShieldCommander
             // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
             {
-                SetDelayedCall(0.4f, () => map.MoveHidePlates());
+                tweenMove.SetDelayedCall(0.4f, () => map.MoveHidePlates());
             }
 
             SetValidateTimer();
 
-            PlayTweenMove(GetJumpSequence(dest), () =>
+            PlayTween(tweenMove.GetJumpSequence(dest), () =>
             {
                 if (distance > 0) map.MoveHidePlates();
             });
@@ -525,7 +523,7 @@ public class PlayerCommander : ShieldCommander
             playerCommander.playerAnim.turnL.Fire();
 
             SetValidateTimer();
-            PlayTweenMove(GetRotate(-90), () => map.ResetCamera());
+            PlayTween(tweenMove.GetRotate(-90), () => map.ResetCamera());
         }
     }
 
@@ -539,7 +537,7 @@ public class PlayerCommander : ShieldCommander
             playerCommander.playerAnim.turnR.Fire();
 
             SetValidateTimer();
-            PlayTweenMove(GetRotate(90), () => map.ResetCamera());
+            PlayTween(tweenMove.GetRotate(90), () => map.ResetCamera());
         }
     }
     protected class PlayerAction : PlayerCommand
