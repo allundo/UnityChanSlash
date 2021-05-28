@@ -14,6 +14,12 @@ public class PlayerMapUtil : MapUtil
         MapRenderer.Instance.MoveHidePlates(CurrentVec3Pos);
     }
 
+    public override void SetPosition(bool IsOnCharactor = true)
+    {
+        SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
+        RedrawHidePlates();
+    }
+
     public override void TurnLeft()
     {
         base.TurnLeft();

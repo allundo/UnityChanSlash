@@ -12,10 +12,10 @@ public class EnemyAI : IEnemyAI
 
     private bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
-    public EnemyAI(MapUtil map, EnemyCommander commander)
+    public EnemyAI(EnemyCommander commander)
     {
-        this.map = map;
         this.commander = commander;
+        this.map = commander.map;
 
         SetCommands();
     }

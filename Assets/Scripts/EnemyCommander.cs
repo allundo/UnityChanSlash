@@ -7,16 +7,10 @@ public class EnemyCommander : MobCommander
     public EnemyAnimator enemyAnim { get; protected set; }
     protected IEnemyAI enemyAI;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        enemyAnim = anim as EnemyAnimator;
-    }
-
     protected override void SetCommands()
     {
         die = new DieCommand(this, 3.0f);
-        enemyAI = new EnemyAI(map, this);
+        enemyAI = new EnemyAI(this);
     }
 
     protected override Command GetCommand()
@@ -28,11 +22,13 @@ public class EnemyCommander : MobCommander
     {
         protected EnemyCommander enemyCommander;
         protected MapUtil map;
+        protected EnemyAnimator anim;
 
         public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
         {
             enemyCommander = commander;
             map = commander.map;
+            anim = commander.anim as EnemyAnimator;
         }
     }
 
@@ -43,6 +39,15 @@ public class EnemyCommander : MobCommander
         protected abstract bool IsMovable { get; }
         protected abstract Vector3 Dest { get; }
         protected Vector3 startPos = default;
+        protected void SetSpeed()
+        {
+            anim.speed.Float = Speed;
+        }
+
+        protected void ResetSpeed()
+        {
+            anim.speed.Float = 0.0f;
+        }
 
         public override void Cancel()
         {
@@ -63,7 +68,8 @@ public class EnemyCommander : MobCommander
             map.SetOnCharactor(startPos + Dest);
             map.ResetOnCharactor(startPos);
 
-            PlayTween(tweenMove.GetLinearMove(Dest));
+            SetSpeed();
+            PlayTween(tweenMove.GetLinearMove(Dest), () => ResetSpeed());
 
             SetValidateTimer(0.95f);
         }
@@ -77,7 +83,6 @@ public class EnemyCommander : MobCommander
         protected override Vector3 Dest => map.GetForwardVector();
         public override float Speed => TILE_UNIT / duration;
     }
-
 
     public class TurnLCommand : EnemyCommand
     {
@@ -104,24 +109,15 @@ public class EnemyCommander : MobCommander
             SetValidateTimer();
         }
     }
-    public abstract class EnemyAction : EnemyCommand
+    public class EnemyAttack : EnemyCommand
     {
-        protected MobAnimator.AnimatorTrigger trigger;
-        public EnemyAction(EnemyCommander commander, float duration, MobAnimator.AnimatorTrigger trigger) : base(commander, duration)
-        {
-            this.trigger = trigger;
-        }
+        public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration) { }
 
         public override void Execute()
         {
-            trigger.Fire();
-
+            anim.attack.Fire();
             SetValidateTimer();
             SetDispatchFinal();
         }
-    }
-    public class EnemyAttack : EnemyAction
-    {
-        public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration, commander.enemyAnim.attack) { }
     }
 }

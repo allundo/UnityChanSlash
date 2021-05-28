@@ -22,7 +22,7 @@ public class MapUtil : MonoBehaviour
         SetPosition();
     }
 
-    public void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }
+    public virtual void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }
     public void SetPosition(Vector3 pos, Direction dir = null, bool IsOnCharactor = true)
     {
         this.tf.position = pos;

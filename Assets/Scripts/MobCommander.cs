@@ -30,18 +30,7 @@ public abstract class MobCommander : MonoBehaviour
     {
         status = GetComponent<MobStatus>();
 
-        SetPosition();
         SetCommands();
-    }
-
-    /// <summary>
-    /// This method is called in Start(). By overriding it, you can change start position.
-    /// </summary>
-    /// <param name="tf"></param>
-    protected virtual void SetPosition()
-    {
-        // TODO: Charactor position should be set by GameManager
-        map.SetPosition();
     }
 
     /// <summary>
@@ -52,11 +41,9 @@ public abstract class MobCommander : MonoBehaviour
         die = new DieCommand(this, 0.1f);
     }
 
-
     protected virtual void Update()
     {
         InputCommand();
-        SetSpeed();
     }
 
     protected virtual void InputCommand()
@@ -114,11 +101,6 @@ public abstract class MobCommander : MonoBehaviour
         EnqueueDie();
     }
 
-    public virtual void SetSpeed()
-    {
-        anim.speed.Float = IsIdling ? 0.0f : currentCommand.Speed;
-    }
-
     public virtual void Respawn()
     {
         status.ResetStatus();
@@ -126,7 +108,7 @@ public abstract class MobCommander : MonoBehaviour
         transform.gameObject.SetActive(true);
         isCommandValid = true;
 
-        SetPosition();
+        map.SetPosition();
 
         // TODO: Fade-in with custom shader
     }
@@ -229,29 +211,13 @@ public abstract class MobCommander : MonoBehaviour
         }
     }
 
-    public abstract class ActionCommand : Command
+    public class DieCommand : Command
     {
-        protected MobAnimator.AnimatorTrigger trigger;
-        public ActionCommand(MobCommander commander, float duration, MobAnimator.AnimatorTrigger trigger) : base(commander, duration)
-        {
-            this.trigger = trigger;
-        }
+        public DieCommand(MobCommander commander, float duration) : base(commander, duration) { }
 
         public override void Execute()
         {
-            trigger.Fire();
-
-            SetValidateTimer();
-            SetDispatchFinal();
-        }
-    }
-    public class DieCommand : ActionCommand
-    {
-        public DieCommand(MobCommander commander, float duration) : base(commander, duration, commander.anim.die) { }
-
-        public override void Execute()
-        {
-            trigger.Fire();
+            commander.anim.die.Fire();
             SetDestoryFinal();
         }
     }

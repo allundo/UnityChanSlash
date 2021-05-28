@@ -7,8 +7,6 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 [RequireComponent(typeof(UnityChanAnimeHandler))]
 public class PlayerCommander : ShieldCommander
 {
-    public UnityChanAnimeHandler playerAnim { get; protected set; }
-
     public override bool IsShieldEnable => IsIdling || currentInput == guard;
     protected bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
 
@@ -25,18 +23,6 @@ public class PlayerCommander : ShieldCommander
     protected InputManager left;
     protected InputManager jump;
     protected InputManager handle;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        playerAnim = anim as UnityChanAnimeHandler;
-    }
-
-    protected override void SetPosition()
-    {
-        map.SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
-        ((PlayerMapUtil)map).RedrawHidePlates();
-    }
 
     protected override void SetCommands()
     {
@@ -172,12 +158,6 @@ public class PlayerCommander : ShieldCommander
         return scaledPosX >= left + centerX && scaledPosX < right + centerX && scaledPosY >= bottom && scaledPosY < top;
     }
 
-    public override void SetSpeed()
-    {
-        playerAnim.speed.Float = IsIdling ? 0.0f : currentCommand.Speed;
-        playerAnim.rSpeed.Float = IsIdling ? 0.0f : currentCommand.RSpeed;
-    }
-
     protected override void InputCommand()
     {
         Command cmd = GetCommand();
@@ -196,8 +176,6 @@ public class PlayerCommander : ShieldCommander
             SetEnemyDetected(IsFaceToEnemy);
         }
     }
-
-
 
     protected class InputManager
     {
@@ -395,11 +373,13 @@ public class PlayerCommander : ShieldCommander
     {
         protected PlayerCommander playerCommander;
         protected PlayerMapUtil map;
+        protected UnityChanAnimeHandler anim;
 
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
             playerCommander = commander;
             map = playerCommander.map as PlayerMapUtil;
+            anim = playerCommander.anim as UnityChanAnimeHandler;
         }
     }
 
@@ -410,6 +390,19 @@ public class PlayerCommander : ShieldCommander
         protected abstract bool IsMovable { get; }
         protected abstract Vector3 Dest { get; }
         protected Vector3 startPos = default;
+
+        protected void SetSpeed()
+        {
+            anim.speed.Float = Speed;
+            anim.rSpeed.Float = RSpeed;
+        }
+
+        protected void ResetSpeed()
+        {
+            anim.speed.Float = 0.0f;
+            anim.rSpeed.Float = 0.0f;
+        }
+
         public override void Cancel()
         {
             base.Cancel();
@@ -429,7 +422,12 @@ public class PlayerCommander : ShieldCommander
             map.SetOnCharactor(startPos + Dest);
             map.ResetOnCharactor(startPos);
 
-            PlayTween(tweenMove.GetLinearMove(Dest), () => map.MoveHidePlates());
+            SetSpeed();
+            PlayTween(tweenMove.GetLinearMove(Dest), () =>
+            {
+                map.MoveHidePlates();
+                ResetSpeed();
+            });
 
             SetValidateTimer(0.95f);
         }
@@ -496,7 +494,7 @@ public class PlayerCommander : ShieldCommander
             map.SetOnCharactor(startPos + dest);
             map.ResetOnCharactor(startPos);
 
-            playerCommander.playerAnim.jump.Fire();
+            anim.jump.Fire();
 
             // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
@@ -520,7 +518,7 @@ public class PlayerCommander : ShieldCommander
         public override void Execute()
         {
             map.TurnLeft();
-            playerCommander.playerAnim.turnL.Fire();
+            anim.turnL.Fire();
 
             SetValidateTimer();
             PlayTween(tweenMove.GetRotate(-90), () => map.ResetCamera());
@@ -534,7 +532,7 @@ public class PlayerCommander : ShieldCommander
         public override void Execute()
         {
             map.TurnRight();
-            playerCommander.playerAnim.turnR.Fire();
+            anim.turnR.Fire();
 
             SetValidateTimer();
             PlayTween(tweenMove.GetRotate(90), () => map.ResetCamera());
@@ -558,22 +556,37 @@ public class PlayerCommander : ShieldCommander
         }
     }
 
-    protected class PlayerHandle : PlayerAction
+    protected class PlayerHandle : PlayerCommand
     {
-        public PlayerHandle(PlayerCommander commander, float duration) : base(commander, duration, commander.playerAnim.handle) { }
+        public PlayerHandle(PlayerCommander commander, float duration) : base(commander, duration) { }
+        public override void Execute()
+        {
+            anim.handle.Fire();
+
+            SetValidateTimer();
+            SetDispatchFinal();
+        }
     }
 
-    protected class PlayerAttack : PlayerAction
+    protected class PlayerAttack : PlayerCommand
     {
-        public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration, commander.playerAnim.attack) { }
+        public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration) { }
+        public override void Execute()
+        {
+            anim.attack.Fire();
+
+            SetValidateTimer();
+            SetDispatchFinal();
+        }
     }
-    protected class PlayerDie : PlayerAction
+
+    protected class PlayerDie : PlayerCommand
     {
-        public PlayerDie(PlayerCommander commander, float duration) : base(commander, duration, commander.playerAnim.dieEx) { }
+        public PlayerDie(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         public override void Execute()
         {
-            trigger.Fire();
+            anim.dieEx.Fire();
             SetDestoryFinal();
         }
     }
