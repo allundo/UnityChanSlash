@@ -66,7 +66,7 @@ public class DoorControl : MonoBehaviour
     {
         if (IsOpen)
         {
-            if(!GameManager.Instance.worldMap.GetTile(this.transform.position).IsCharactorOn)
+            if (!GameManager.Instance.worldMap.GetTile(this.transform.position).IsCharactorOn)
             {
                 Close();
             }
@@ -112,14 +112,14 @@ public class DoorControl : MonoBehaviour
                 .SetRelative()
                 .SetEase(Ease.InOutQuad);
 
-        Sequence open = DOTween.Sequence()
+        Sequence close = DOTween.Sequence()
                 .Append(moveL)
                 .Join(moveR)
                 .OnComplete(() => { state = StateEnum.CLOSE; });
 
         state = StateEnum.CLOSING;
         IsOpen = false;
-        open.Play();
+        close.Play();
     }
 }
 
