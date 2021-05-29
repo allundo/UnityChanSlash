@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using UniRx;
 using System;
 using System.Collections.Generic;
 
@@ -10,9 +11,21 @@ public abstract class MobCommander : MonoBehaviour
     public MobAnimator anim { get; protected set; }
     protected MobStatus status;
 
-    protected bool isCommandValid = true;
-    public bool IsIdling => currentCommand == null;
+    protected bool isCommandValid
+    {
+        get
+        {
+            return IsCommandValid.Value;
+        }
+        set
+        {
+            IsCommandValid.Value = value;
+        }
+    }
+    protected IReactiveProperty<bool> IsCommandValid;
+    protected ReactiveCommand<Command> InputReactive;
 
+    public bool IsIdling => currentCommand == null;
 
     protected Queue<Command> cmdQueue = new Queue<Command>();
     public Command currentCommand { get; protected set; } = null;
@@ -24,6 +37,9 @@ public abstract class MobCommander : MonoBehaviour
     {
         anim = GetComponent<MobAnimator>();
         map = GetComponent<MapUtil>();
+
+        IsCommandValid = new ReactiveProperty<bool>(true);
+        InputReactive = new ReactiveCommand<Command>(IsCommandValid);
     }
 
     protected virtual void Start()
@@ -31,6 +47,8 @@ public abstract class MobCommander : MonoBehaviour
         status = GetComponent<MobStatus>();
 
         SetCommands();
+
+        InputReactive.Subscribe(com => EnqueueCommand(com, IsIdling));
     }
 
     /// <summary>
@@ -43,26 +61,13 @@ public abstract class MobCommander : MonoBehaviour
 
     protected virtual void Update()
     {
-        InputCommand();
-    }
-
-    protected virtual void InputCommand()
-    {
-        if (!isCommandValid)
-        {
-            return;
-        }
-
-        Command cmd = GetCommand();
-
-        if (cmd != null)
-        {
-            EnqueueCommand(cmd, IsIdling);
-        }
+        InputReactive.Execute(GetCommand());
     }
 
     protected virtual void EnqueueCommand(Command cmd, bool dispatch = false)
     {
+        if (cmd == null) return;
+
         cmdQueue.Enqueue(cmd);
         isCommandValid = false;
 
@@ -70,11 +75,6 @@ public abstract class MobCommander : MonoBehaviour
         {
             DispatchCommand();
         }
-    }
-
-    protected virtual void EnqueueDie()
-    {
-        EnqueueCommand(die, true);
     }
 
     protected virtual bool DispatchCommand()
@@ -99,6 +99,11 @@ public abstract class MobCommander : MonoBehaviour
         cmdQueue.Clear();
         currentCommand?.Cancel();
         EnqueueDie();
+    }
+
+    protected virtual void EnqueueDie()
+    {
+        EnqueueCommand(die, true);
     }
 
     public virtual void Respawn()

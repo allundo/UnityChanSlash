@@ -157,23 +157,10 @@ public class PlayerCommander : ShieldCommander
         return scaledPosX >= left + centerX && scaledPosX < right + centerX && scaledPosY >= bottom && scaledPosY < top;
     }
 
-    protected override void InputCommand()
+    protected override void Update()
     {
-        Command cmd = GetCommand();
-
-        if (!isCommandValid)
-        {
-            return;
-        }
-
-        if (cmd != null)
-        {
-            EnqueueCommand(cmd, IsIdling);
-        }
-        else if (IsIdling)
-        {
-            guardState.SetEnemyDetected(IsFaceToEnemy);
-        }
+        InputReactive.Execute(GetCommand());
+        if (IsIdling) guardState.SetEnemyDetected(IsFaceToEnemy);
     }
 
     protected class InputManager
