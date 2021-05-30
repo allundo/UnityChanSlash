@@ -17,37 +17,50 @@ public abstract class ShieldAnimator : MobAnimator
     protected override void Update()
     {
         base.Update();
-        TriggerEx.SetPrioritizedTriggers();
+        TriggerEx.SetOrderedTriggers();
     }
 
     public class TriggerEx : AnimatorTrigger, IComparable<TriggerEx>
     {
         protected static List<TriggerEx> triggers = new List<TriggerEx>();
-        public static void SetPrioritizedTriggers()
+
+        /// <summary>
+        /// Fires stocked triggers having the minimum order(highest priority)
+        /// </summary>
+        public static void SetOrderedTriggers()
         {
             if (triggers.Count == 0) return;
 
             triggers.Sort();
 
-            int minPriority = triggers.First().priority;
+            int minOrder = triggers.First().order;
 
             foreach (TriggerEx trigger in triggers)
             {
-                if (trigger.priority > minPriority) break;
+                if (trigger.order > minOrder) break;
 
                 trigger.Execute();
             }
 
-            triggers.RemoveAll(trigger => trigger.priority == minPriority);
+            triggers.RemoveAll(trigger => trigger.order == minOrder);
 
         }
 
-        public int priority;
-        public TriggerEx(Animator anim, string varName, int priority = 10) : base(anim, varName)
+        public int order;
+
+        /// <summary>
+        /// Set trigger firing order to avoid the same time firing
+        /// </summary>
+        /// <param name="order">Sort order; lower order has higher priority</param>
+        /// <returns></returns>
+        public TriggerEx(Animator anim, string varName, int order = 10) : base(anim, varName)
         {
-            this.priority = priority;
+            this.order = order;
         }
 
+        /// <summary>
+        /// Just stocks and reserves this trigger
+        /// </summary>
         public override void Fire()
         {
             triggers.Add(this);
@@ -60,8 +73,8 @@ public abstract class ShieldAnimator : MobAnimator
 
         public int CompareTo(TriggerEx other)
         {
-            if (priority == other.priority) return 0;
-            return priority > other.priority ? 1 : -1;
+            if (order == other.order) return 0;
+            return order > other.order ? 1 : -1;
         }
     }
 }
