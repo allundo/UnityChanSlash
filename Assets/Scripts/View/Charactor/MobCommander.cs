@@ -146,10 +146,13 @@ public abstract class MobCommander : MonoBehaviour
 
         protected Tween playingTween = null;
         protected Tween validateTween = null;
+        protected Tween finallyCall = null;
+
         public virtual void Cancel()
         {
             playingTween?.Kill();
             validateTween?.Kill();
+            finallyCall?.Kill();
         }
 
         public abstract void Execute();
@@ -195,7 +198,7 @@ public abstract class MobCommander : MonoBehaviour
         /// <param name="OnComplete">Additional process on complete</param>
         protected void SetDispatchFinal(Action OnComplete = null)
         {
-            tweenMove.SetFinallyCall(DispatchFinally(OnComplete));
+            finallyCall = tweenMove.SetFinallyCall(DispatchFinally(OnComplete));
         }
 
         /// <summary>
