@@ -58,6 +58,9 @@ public class WorldMap
             (int)Math.Round((Height - 1) * 0.5f - pos.z / TILE_UNIT, MidpointRounding.AwayFromZero)
         );
 
+    /// <summary>
+    /// The tile can be seen through
+    /// </summary>
     public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsViewOpen();
     public bool IsPlayerRange(int x, int y)
     {

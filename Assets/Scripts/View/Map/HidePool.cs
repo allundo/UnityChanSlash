@@ -175,6 +175,9 @@ public class HidePool
     private Pos OffsetPos(Pos pos, int offsetX, int offsetY)
         => new Pos(pos.x - RANGE / 2 + offsetX, pos.y - RANGE / 2 + offsetY);
 
+    /// <summary>
+    /// Get tiles inside player view range with see through info
+    /// </summary>
     private bool[,] GetTileRegion(int x, int y)
     {
         int tileRange = RANGE + 2;
@@ -204,12 +207,19 @@ public class HidePool
         return region;
     }
 
+    /// <summary>
+    /// Hide plate placing data
+    /// </summary>
+    /// <param name="playerPos"></param>
+    /// <returns></returns>
     public Plate[,] GetPlateMap(Pos playerPos)
     {
+        // Get 13x13 player view range
         bool[,] region = GetTileRegion(playerPos.x, playerPos.y);
 
         var plateMap = new Plate[RANGE, RANGE];
 
+        // Fill 11x11 tile with hide plates nearby player
         for (int j = 0; j < RANGE; j++)
         {
             for (int i = 0; i < RANGE; i++)
@@ -220,18 +230,21 @@ public class HidePool
 
         var openStack = new Stack<(int x, int y)>();
 
+        // Start from player tile
         for (openStack.Push((RANGE / 2, RANGE / 2)); openStack.Count > 0;)
         {
             var pos = openStack.Pop();
 
+            // Delete focused hide plate
             plateMap[pos.x, pos.y] = Plate.NONE;
 
+            // plateMap index[x, y] = region index[x+1, y+1]
             int ptX = pos.x + 1;
             int ptY = pos.y + 1;
 
             region[ptX, ptY] = false;
 
-            // Corner
+            // Delete corner of hide plates nearby focusing tile
             if (pos.x - 1 >= 0 && pos.y - 1 >= 0)
             {
                 plateMap[pos.x - 1, pos.y - 1] &= ~Plate.D;
@@ -252,7 +265,8 @@ public class HidePool
                 plateMap[pos.x + 1, pos.y + 1] &= ~Plate.A;
             }
 
-            // Neighbor
+            // Push neighbor tile as hide plate deleting candidate
+            // If not a delete candidate, delete only a half of the plate
             if (region[ptX - 1, ptY])
             {
                 openStack.Push((pos.x - 1, pos.y));

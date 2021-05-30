@@ -283,6 +283,14 @@ public enum Dir
     NESW = 0b1111,
 }
 
+/// <summary>
+/// A, B, C, D means existence of quater(1/4) plates <br>
+/// A = North:West, B = North:East, C = South:West, D = South:East <br>
+/// This is like a 2x2 matrix: <br>
+/// | A B |<br>
+/// | C D |<br>
+/// So ABCD means full of one plate.
+/// </summary>
 public enum Plate
 {
     NONE = 0b0000,
