@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 
 public abstract class ShieldAnimator : MobAnimator
 {
@@ -16,7 +17,9 @@ public abstract class ShieldAnimator : MobAnimator
     }
     protected override void Update()
     {
-        base.Update();
+        // Don't update current AnimeState
+        // base.Update();
+
         TriggerEx.SetOrderedTriggers();
     }
 
@@ -75,6 +78,35 @@ public abstract class ShieldAnimator : MobAnimator
         {
             if (order == other.order) return 0;
             return order > other.order ? 1 : -1;
+        }
+
+        public virtual IDisposable FireWithPolling(float dueTimeSec, Action<Unit> UpdateInterval, Action OnComplete)
+        {
+            Fire();
+            return PollingObservable(dueTimeSec).Subscribe(UpdateInterval, error => Debug.Log(error.Message), OnComplete);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="dueTimeSec">Due time of polling [sec]</param>
+        /// <param name="intervalFrameCount">Observe per specified frame</param>
+        protected IObservable<Unit> PollingObservable(float dueTimeSec, int intervalFrameCount = 1)
+        {
+            return
+                Observable.Create<Unit>(_observer =>
+                {
+                    var disposable = Observable.IntervalFrame(intervalFrameCount)
+                        .Subscribe(_ => _observer.OnNext(new Unit()));
+
+                    Observable.Timer(TimeSpan.FromSeconds(dueTimeSec)).Subscribe(
+                        _ => disposable.Dispose(),
+                        error => _observer.OnError(error),
+                        () => _observer.OnCompleted()
+                    );
+
+                    return disposable;
+                });
         }
     }
 }

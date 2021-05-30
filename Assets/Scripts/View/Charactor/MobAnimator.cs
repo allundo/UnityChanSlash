@@ -3,33 +3,27 @@ using System;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(CapsuleCollider))]
 public abstract class MobAnimator : MonoBehaviour
 {
     protected AnimeState prevState = null;
     protected AnimeState currentState = null;
 
     protected Animator anim;
-    protected CapsuleCollider bodyCollider;
     protected AnimeState standardState;
 
     private Dictionary<int, AnimeState> stateMap = new Dictionary<int, AnimeState>();
+
     public AnimatorFloat speed { get; protected set; }
     public AnimatorTrigger die { get; protected set; }
 
     protected virtual void Awake()
     {
         anim = GetComponent<Animator>();
+        LoadAnimeState();
 
         speed = new AnimatorFloat(anim, "Speed");
         die = new AnimatorTrigger(anim, "Die");
-    }
 
-    protected virtual void Start()
-    {
-        bodyCollider = GetComponent<CapsuleCollider>();
-
-        LoadAnimeState();
     }
 
     protected virtual void Update()
@@ -39,7 +33,6 @@ public abstract class MobAnimator : MonoBehaviour
         if (currentState != prevState)
         {
             prevState = currentState;
-            currentState.ResetCollider();
         }
 
         currentState.UpdateState();
@@ -59,7 +52,7 @@ public abstract class MobAnimator : MonoBehaviour
 
     protected virtual Dictionary<string, AnimeState> GetStateNameMap()
     {
-        standardState = new AnimeState(anim, new ColliderState(bodyCollider));
+        standardState = new AnimeState(anim);
 
         return new Dictionary<string, AnimeState> {
             { "Idle", standardState },

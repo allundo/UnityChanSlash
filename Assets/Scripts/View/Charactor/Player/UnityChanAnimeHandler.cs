@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class UnityChanAnimeHandler : ShieldAnimator
 {
-    public TriggerEx jump { get; protected set; }
+    public TriggerJump jump { get; protected set; }
+
     public TriggerEx turnL { get; protected set; }
     public TriggerEx turnR { get; protected set; }
     public TriggerEx handle { get; protected set; }
@@ -14,11 +15,12 @@ public class UnityChanAnimeHandler : ShieldAnimator
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
 
+    private PlayerBodyCollider bodyCollider;
+
     protected override void Awake()
     {
         base.Awake();
 
-        jump = new TriggerEx(anim, "Jump");
         turnL = new TriggerEx(anim, "TurnL");
         turnR = new TriggerEx(anim, "TurnR");
         handle = new TriggerEx(anim, "Handle");
@@ -27,6 +29,10 @@ public class UnityChanAnimeHandler : ShieldAnimator
         rest = new AnimatorBool(anim, "Rest");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
+
+        bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
+
+        jump = new TriggerJump(anim, jumpHeight, bodyCollider);
     }
 
     protected override Dictionary<string, AnimeState> GetStateNameMap()
@@ -39,38 +45,36 @@ public class UnityChanAnimeHandler : ShieldAnimator
             = map["Attack"]
             = map["Die"]
             = map["Stand.Idle"] = map["Stand.Rest"] = map["Guard"] = map["Shield"]
+            = map["Jump"]
             = standardState;
-
-        map["Jump"] = new JumpState(anim, new JumpCollider(bodyCollider));
 
         return map;
     }
 
-    protected class JumpState : AnimeState
+    public class TriggerJump : TriggerEx
     {
-        public JumpState(Animator anim, ColliderState colState) : base(anim, colState) { }
+        PlayerBodyCollider bodyCollider;
+        AnimatorFloat jumpHeight;
 
-        public override void UpdateState()
+        public TriggerJump(Animator anim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider) : base(anim, "Jump")
         {
-            colState.UpdateCollider(anim.GetFloat("JumpHeight"));
+            this.bodyCollider = bodyCollider;
+            this.jumpHeight = jumpHeight;
         }
-    }
 
-    protected class JumpCollider : ColliderState
-    {
-        public JumpCollider(CapsuleCollider col, float threshold = 0.001f) : base(col, threshold) { }
-
-        public override void UpdateCollider(float jumpHeight)
+        /// <summary>
+        /// Fires 'Jump' trigger with updating BodyCollider shape <br>
+        /// The shape changes according to 'JumpHeight' Animator paramator<br>
+        /// </summary>
+        /// <param name="duration">Due time of 'JumpHeight' observation and update collider</param>
+        /// <returns>Disposable of polling observer</returns>
+        public IDisposable Fire(float duration)
         {
-            if (jumpHeight < threshold)
-            {
-                ResetCollider();
-                return;
-            }
-
-            col.height = orgColHeight - jumpHeight;
-            float adjCenterY = orgColCenter.y + jumpHeight;
-            col.center = new Vector3(0, adjCenterY, 0);
+            return FireWithPolling(
+                duration,
+                _ => bodyCollider.JumpCollider(jumpHeight.Float),
+                () => bodyCollider.ResetCollider()
+            );
         }
     }
 }

@@ -480,7 +480,7 @@ public class PlayerCommander : ShieldCommander
             map.SetOnCharactor(startPos + dest);
             map.ResetOnCharactor(startPos);
 
-            anim.jump.Fire();
+            anim.jump.Fire(duration);
 
             // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
