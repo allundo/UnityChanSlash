@@ -48,7 +48,7 @@ public abstract class MobCommander : MonoBehaviour
 
         SetCommands();
 
-        InputReactive.Subscribe(com => EnqueueCommand(com, IsIdling));
+        InputReactive.Subscribe(com => EnqueueCommand(com, IsIdling)).AddTo(this);
     }
 
     /// <summary>
