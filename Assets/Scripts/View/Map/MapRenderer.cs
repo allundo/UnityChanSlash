@@ -93,11 +93,8 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
     {
-        return Instantiate(prefab, WorldPos(pos), Quaternion.identity);
+        return Instantiate(prefab, map.WorldPos(pos), Quaternion.identity);
     }
-
-    public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
-    public Vector3 WorldPos(int x, int y) => map.WorldPos(x, y);
 
     public void Fix(MazeCreator maze)
     {
@@ -151,7 +148,7 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         return new CombineInstance()
         {
             mesh = src,
-            transform = Matrix4x4.Translate(WorldPos(pos))
+            transform = Matrix4x4.Translate(map.WorldPos(pos))
         };
     }
 
