@@ -4,7 +4,7 @@ using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
-[RequireComponent(typeof(UnityChanAnimeHandler))]
+[RequireComponent(typeof(PlayerAnimator))]
 public class PlayerCommander : ShieldCommander
 {
     private bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
@@ -359,13 +359,13 @@ public class PlayerCommander : ShieldCommander
     {
         protected PlayerCommander playerCommander;
         protected PlayerMapUtil map;
-        protected UnityChanAnimeHandler anim;
+        protected PlayerAnimator anim;
 
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
             playerCommander = commander;
             map = playerCommander.map as PlayerMapUtil;
-            anim = playerCommander.anim as UnityChanAnimeHandler;
+            anim = playerCommander.anim as PlayerAnimator;
         }
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class UnityChanAnimeHandler : ShieldAnimator
+public class PlayerAnimator : ShieldAnimator
 {
     public TriggerJump jump { get; protected set; }
 

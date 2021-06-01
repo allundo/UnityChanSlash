@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerCommander))]
-[RequireComponent(typeof(UnityChanAnimeHandler))]
+[RequireComponent(typeof(PlayerAnimator))]
 public class PlayerStatus : MobStatus
 {
 
