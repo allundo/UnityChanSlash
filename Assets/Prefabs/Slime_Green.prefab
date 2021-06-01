@@ -711,6 +711,7 @@ GameObject:
   - component: {fileID: 7398270834105222207}
   - component: {fileID: 3026849044793458053}
   - component: {fileID: 4616176849496568750}
+  - component: {fileID: 6883324137953325015}
   m_Layer: 0
   m_Name: Slime_Green
   m_TagString: Untagged
@@ -838,6 +839,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.01
   m_Center: {x: 0, y: 0.01, z: 0}
+--- !u!114 &6883324137953325015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974814930939844399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 486a8e43da56544a6aa8263baf6c61ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dieSound: {fileID: 428805006476128215}
 --- !u!1 &974814931172710863
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public abstract class MobCommander : MonoBehaviour
 {
     public MobAnimator anim { get; protected set; }
-    protected MobStatus status;
+    protected MobReactor reactor;
 
     protected bool isCommandValid
     {
@@ -35,17 +35,17 @@ public abstract class MobCommander : MonoBehaviour
 
     protected virtual void Awake()
     {
+        reactor = GetComponent<MobReactor>();
         anim = GetComponent<MobAnimator>();
         map = GetComponent<MapUtil>();
 
         IsCommandValid = new ReactiveProperty<bool>(true);
         InputReactive = new ReactiveCommand<Command>(IsCommandValid);
+
     }
 
     protected virtual void Start()
     {
-        status = GetComponent<MobStatus>();
-
         SetCommands();
 
         InputReactive.Subscribe(com => EnqueueCommand(com, IsIdling)).AddTo(this);
@@ -106,25 +106,14 @@ public abstract class MobCommander : MonoBehaviour
         EnqueueCommand(die, true);
     }
 
-    public virtual void Respawn()
+    public virtual void Activate()
     {
-        status.ResetStatus();
-
-        transform.gameObject.SetActive(true);
         isCommandValid = true;
-
-        map.SetPosition();
-
-        // TODO: Fade-in with custom shader
     }
 
-    protected virtual void Destory()
+    public virtual void Inactivate()
     {
         currentCommand = null;
-
-        transform.gameObject.SetActive(false);
-
-        // TODO: Fade-out with custom shader
     }
 
     public abstract class Command
@@ -206,7 +195,7 @@ public abstract class MobCommander : MonoBehaviour
         /// </summary>
         protected void SetDestoryFinal()
         {
-            tweenMove.SetFinallyCall(() => commander.Destory());
+            tweenMove.SetFinallyCall(() => commander.reactor.Inactivate());
         }
 
         private TweenCallback DispatchFinally(Action OnComplete = null)

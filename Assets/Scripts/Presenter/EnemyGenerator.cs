@@ -18,7 +18,7 @@ public class EnemyGenerator : MonoBehaviour
         {
             if (!t.gameObject.activeSelf)
             {
-                t.GetComponent<EnemyCommander>().Respawn();
+                t.GetComponent<MobReactor>().Activate();
                 return;
             }
         }

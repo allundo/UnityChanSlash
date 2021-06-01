@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 using System.Collections.Generic;
 using DG.Tweening;
 
@@ -8,16 +9,29 @@ public class MobStatus : MonoBehaviour
     protected MobCommander commander = default;
     protected Direction dir => commander.map.dir;
 
+    protected MapUtil map;
+
     [SerializeField] public float FaceDamageMultiplier = 1.0f;
     [SerializeField] public float SideDamageMultiplier = 1.5f;
     [SerializeField] public float BackDamageMultiplier = 2.0f;
 
-    [SerializeField] private AudioSource dieSound = default;
     protected List<Material> flashMaterials = new List<Material>();
 
-    public float Life { get; protected set; } = 0.0f;
+    protected float life
+    {
+        get
+        {
+            return Life.Value;
+        }
+        set
+        {
+            Life.Value = value;
+        }
+    }
 
-    public bool IsAlive => Life > 0.0f;
+    public IReactiveProperty<float> Life = new ReactiveProperty<float>(0.0f);
+
+    public bool IsAlive => life > 0.0f;
 
     [SerializeField] public float LifeMax = 10;
 
@@ -26,6 +40,11 @@ public class MobStatus : MonoBehaviour
     protected virtual float Shield(Direction attackDir) => 0.0f;
 
     protected virtual float ArmorMultiplier => 1.0f;
+
+    protected virtual void Awake()
+    {
+        map = GetComponent<MapUtil>();
+    }
 
     protected virtual void Start()
     {
@@ -67,16 +86,6 @@ public class MobStatus : MonoBehaviour
         }
     }
 
-    protected virtual void OnDie()
-    {
-        if (dieSound != null)
-        {
-            dieSound.Play();
-        }
-
-        commander.SetDie();
-    }
-
     protected virtual void OnDamage(float damage, float shield)
     {
         if (damage > 0)
@@ -93,10 +102,7 @@ public class MobStatus : MonoBehaviour
         float damage = Mathf.Max(attack * ArmorMultiplier * GetDirMultiplier(attackDir) - shield, 0.0f);
 
         OnDamage(damage, shield);
-        Life -= damage;
-
-        if (IsAlive) return;
-        OnDie();
+        life -= damage;
     }
 
     protected float GetDirMultiplier(Direction attackerDir)
@@ -121,6 +127,23 @@ public class MobStatus : MonoBehaviour
 
     public virtual void ResetStatus()
     {
-        Life = LifeMax;
+        life = LifeMax;
+    }
+
+    public virtual void Activate()
+    {
+        map.SetPosition();
+        ResetStatus();
+        transform.gameObject.SetActive(true);
+
+        // TODO: Fade-in with custom shader
+    }
+
+    public virtual void Inactivate()
+    {
+        transform.gameObject.SetActive(false);
+
+        // TODO: Fade-out with custom shader
     }
 }
+
