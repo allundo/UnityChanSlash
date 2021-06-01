@@ -2123,11 +2123,11 @@ MonoBehaviour:
   pall: {fileID: 322688804}
   doorV: {fileID: 7630895998581611993, guid: 752f66cf1eab8491485d085e1fcd90e2, type: 3}
   doorH: {fileID: 5376730180583771968, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb, type: 3}
-  plate5: {fileID: 2093906786}
-  plate4: {fileID: 590273571}
-  plate3: {fileID: 2145541454}
-  plate2: {fileID: 1974277267}
-  plate1: {fileID: 2042216425}
+  plate5: {fileID: 4410350399330937260, guid: ba50e267e17c748778aef850f3b3f4ea, type: 3}
+  plate4: {fileID: 6562320423494379851, guid: 23623f2e6ee5b4588b1ec073d2b3c510, type: 3}
+  plate3: {fileID: 1084713294861358102, guid: 0904dcac99c1449149490f9cf6799316, type: 3}
+  plate2: {fileID: 6217421790537502201, guid: 1c19d8e66c71c45d3ae5ba5777e9db73, type: 3}
+  plate1: {fileID: 2216583042054745137, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b, type: 3}
 --- !u!4 &294644015 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4410350399330937261, guid: ba50e267e17c748778aef850f3b3f4ea,
@@ -9640,12 +9640,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &590273571 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6562320423494379851, guid: 23623f2e6ee5b4588b1ec073d2b3c510,
-    type: 3}
-  m_PrefabInstance: {fileID: 7670979420737970705}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &613658812
 GameObject:
   m_ObjectHideFlags: 0
@@ -25133,12 +25127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24072e8797f3c4ec199b9284780dd702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1974277267 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6217421790537502201, guid: 1c19d8e66c71c45d3ae5ba5777e9db73,
-    type: 3}
-  m_PrefabInstance: {fileID: 2526880845912470065}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2022153800
 GameObject:
   m_ObjectHideFlags: 0
@@ -25216,7 +25204,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1454
+  m_Name: pb_Mesh21256
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25536,12 +25524,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &2042216425 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2216583042054745137, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b,
-    type: 3}
-  m_PrefabInstance: {fileID: 4569632039444769331}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &2061550912
 Mesh:
   m_ObjectHideFlags: 0
@@ -26016,12 +25998,6 @@ Transform:
   m_Father: {fileID: 170570285}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &2093906786 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4410350399330937260, guid: ba50e267e17c748778aef850f3b3f4ea,
-    type: 3}
-  m_PrefabInstance: {fileID: 4410350399053136002}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &2101958177
 Mesh:
   m_ObjectHideFlags: 0
@@ -26348,12 +26324,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &2145541454 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1084713294861358102, guid: 0904dcac99c1449149490f9cf6799316,
-    type: 3}
-  m_PrefabInstance: {fileID: 8544525502025599661}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2313251513572095602
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26461,6 +26431,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 170570285}
     m_Modifications:
+    - target: {fileID: 482070691524542797, guid: 1c19d8e66c71c45d3ae5ba5777e9db73,
+        type: 3}
+      propertyPath: plate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6217421790537502180, guid: 1c19d8e66c71c45d3ae5ba5777e9db73,
         type: 3}
       propertyPath: m_Mesh
@@ -26682,6 +26657,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 170570285}
     m_Modifications:
+    - target: {fileID: 3084628842095967068, guid: ba50e267e17c748778aef850f3b3f4ea,
+        type: 3}
+      propertyPath: plate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4410350399330937260, guid: ba50e267e17c748778aef850f3b3f4ea,
         type: 3}
       propertyPath: m_Name
@@ -26980,6 +26960,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Tangents.Array.data[11].z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210750108050612101, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b,
+        type: 3}
+      propertyPath: plate
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b, type: 3}
@@ -29844,6 +29829,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 170570285}
     m_Modifications:
+    - target: {fileID: 5009967773260314603, guid: 23623f2e6ee5b4588b1ec073d2b3c510,
+        type: 3}
+      propertyPath: plate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6562320423494379848, guid: 23623f2e6ee5b4588b1ec073d2b3c510,
         type: 3}
       propertyPath: m_LocalPosition.x
