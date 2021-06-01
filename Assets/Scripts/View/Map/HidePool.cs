@@ -37,7 +37,7 @@ public class HidePool
         rotate[(int)Plate.C] = rotate[(int)Plate.AC] = rotate[(int)Plate.ACD] = Quaternion.Euler(0, 270, 0);
     }
 
-    public HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f)
+    private HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f)
     {
         if (plate == Plate.NONE) return null;
 
@@ -60,7 +60,7 @@ public class HidePool
         return HidePlate.GetInstance(prefab[id], worldPos, rotate[id], pool[id], plate);
     }
 
-    public void UpdateHidePlates(Vector3 playerPos, Action<Pos, Plate[,]> drawAction)
+    private void UpdateHidePlates(Vector3 playerPos, Action<Pos, Plate[,]> drawAction)
     {
         Pos mapPos = map.MapPos(playerPos);
         Plate[,] plateMap = GetPlateMap(mapPos);
@@ -212,7 +212,7 @@ public class HidePool
     /// </summary>
     /// <param name="playerPos"></param>
     /// <returns></returns>
-    public Plate[,] GetPlateMap(Pos playerPos)
+    private Plate[,] GetPlateMap(Pos playerPos)
     {
         // Get 13x13 player view range
         bool[,] region = GetTileRegion(playerPos.x, playerPos.y);
