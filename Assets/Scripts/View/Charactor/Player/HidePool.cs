@@ -73,42 +73,73 @@ public class HidePool : MonoBehaviour
         return HidePlate.GetInstance(prefab[id], worldPos, rotate[id], pool[id], plate);
     }
 
+    private void UpdateRange(Action<Pos, Plate[,]> DrawAction)
+    {
+        Pos playerPos = CurrentPos;
+        Plate[,] plateMap = GetPlateMap(playerPos);
+
+        DrawAction(playerPos, plateMap);
+
+        prevPos = playerPos;
+    }
+
     public void Init()
     {
-        Pos mapPos = CurrentPos;
-        Plate[,] plateMap = GetPlateMap(mapPos);
-
-        InitRange(mapPos, plateMap);
-
-        prevPos = mapPos;
+        UpdateRange((playerPos, plateMap) => InitRange(playerPos, plateMap));
     }
 
     public void Redraw()
     {
-        Pos mapPos = CurrentPos;
-        Plate[,] plateMap = GetPlateMap(mapPos);
-
-        RedrawRange(mapPos, plateMap);
-
-        prevPos = mapPos;
+        UpdateRange((playerPos, plateMap) => RedrawRange(playerPos, plateMap));
     }
 
     public void Move()
     {
-        Pos mapPos = CurrentPos;
-        Plate[,] plateMap = GetPlateMap(mapPos);
+        UpdateRange((playerPos, plateMap) => MoveRange(playerPos, plateMap));
+    }
 
-        if (!prevPos.IsNull)
+    private void InitRange(Pos playerPos, Plate[,] plateMap)
+    {
+        for (int j = 0; j < RANGE; j++)
         {
-            Pos moveVec = mapPos - prevPos;
-
-            if (moveVec.y < 0) MoveRangeNorth(mapPos, plateMap);
-            if (moveVec.y > 0) MoveRangeSouth(mapPos, plateMap);
-            if (moveVec.x < 0) MoveRangeWest(mapPos, plateMap);
-            if (moveVec.x > 0) MoveRangeEast(mapPos, plateMap);
+            for (int i = 0; i < RANGE; i++)
+            {
+                int x = playerPos.x + i;
+                int y = playerPos.y + j;
+                plateData[x, y] = GetInstance(plateMap[i, j], OffsetPos(playerPos, i, j));
+            }
         }
+    }
 
-        prevPos = mapPos;
+    private void RedrawRange(Pos playerPos, Plate[,] plateMap, bool isXShrink = false, bool isYShrink = false)
+    {
+        int xShrink = isXShrink ? 1 : 0;
+        int yShrink = isYShrink ? 1 : 0;
+
+        for (int j = yShrink; j < RANGE - yShrink; j++)
+        {
+            for (int i = xShrink; i < RANGE - xShrink; i++)
+            {
+                int x = playerPos.x + i;
+                int y = playerPos.y + j;
+
+                if (plateMap[i, j] != (plateData[x, y] == null ? Plate.NONE : plateData[x, y].plate))
+                {
+                    plateData[x, y]?.Remove(0.25f);
+                    plateData[x, y] = GetInstance(plateMap[i, j], OffsetPos(playerPos, i, j), 0.25f);
+                }
+            }
+        }
+    }
+
+    private void MoveRange(Pos playerPos, Plate[,] plateMap)
+    {
+        Pos moveVec = playerPos - prevPos;
+
+        if (moveVec.y < 0) MoveRangeNorth(playerPos, plateMap);
+        if (moveVec.y > 0) MoveRangeSouth(playerPos, plateMap);
+        if (moveVec.x < 0) MoveRangeWest(playerPos, plateMap);
+        if (moveVec.x > 0) MoveRangeEast(playerPos, plateMap);
     }
 
     private void MoveRangeNorth(Pos playerPos, Plate[,] plateMap)
@@ -146,40 +177,6 @@ public class HidePool : MonoBehaviour
             plateData[playerPos.x + RANGE - 1, playerPos.y + j] = GetInstance(plateMap[RANGE - 1, j], OffsetPos(playerPos, RANGE - 1, j));
         }
         RedrawRange(playerPos, plateMap, true, false);
-    }
-
-    private void InitRange(Pos playerPos, Plate[,] plateMap)
-    {
-        for (int j = 0; j < RANGE; j++)
-        {
-            for (int i = 0; i < RANGE; i++)
-            {
-                int x = playerPos.x + i;
-                int y = playerPos.y + j;
-                plateData[x, y] = GetInstance(plateMap[i, j], OffsetPos(playerPos, i, j));
-            }
-        }
-    }
-
-    private void RedrawRange(Pos playerPos, Plate[,] plateMap, bool isXShrink = false, bool isYShrink = false)
-    {
-        int xShrink = isXShrink ? 1 : 0;
-        int yShrink = isYShrink ? 1 : 0;
-
-        for (int j = yShrink; j < RANGE - yShrink; j++)
-        {
-            for (int i = xShrink; i < RANGE - xShrink; i++)
-            {
-                int x = playerPos.x + i;
-                int y = playerPos.y + j;
-
-                if (plateMap[i, j] != (plateData[x, y] == null ? Plate.NONE : plateData[x, y].plate))
-                {
-                    plateData[x, y]?.Remove(0.25f);
-                    plateData[x, y] = GetInstance(plateMap[i, j], OffsetPos(playerPos, i, j), 0.25f);
-                }
-            }
-        }
     }
 
     private Pos OffsetPos(Pos pos, int offsetX, int offsetY)
