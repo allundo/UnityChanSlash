@@ -4795,6 +4795,7 @@ GameObject:
   - component: {fileID: 5806368653819958459}
   - component: {fileID: 1377127690765788874}
   - component: {fileID: 8872633765712071989}
+  - component: {fileID: 1035482312927549619}
   m_Layer: 0
   m_Name: unitychan_dynamic_v2
   m_TagString: Player
@@ -5039,6 +5040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30cef1b1e12d74f039f42b70441c124b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
 --- !u!114 &5189892437611810426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5089,10 +5091,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7476530261813138296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e838c34f9b1284399abac08ccf257321, type: 3}
+  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
 --- !u!114 &5806368653819958459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5130,6 +5131,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
+--- !u!114 &1035482312927549619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476530261813138296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a319785b142c643ea9f11114227d1958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plate5: {fileID: 4410350399330937260, guid: ba50e267e17c748778aef850f3b3f4ea, type: 3}
+  plate4: {fileID: 6562320423494379851, guid: 23623f2e6ee5b4588b1ec073d2b3c510, type: 3}
+  plate3: {fileID: 1084713294861358102, guid: 0904dcac99c1449149490f9cf6799316, type: 3}
+  plate2: {fileID: 6217421790537502201, guid: 1c19d8e66c71c45d3ae5ba5777e9db73, type: 3}
+  plate1: {fileID: 2216583042054745137, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b, type: 3}
 --- !u!1 &7476530261813138298
 GameObject:
   m_ObjectHideFlags: 0

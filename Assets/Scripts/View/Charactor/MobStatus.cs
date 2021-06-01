@@ -44,14 +44,13 @@ public class MobStatus : MonoBehaviour
     protected virtual void Awake()
     {
         map = GetComponent<MapUtil>();
+        commander = GetComponent<MobCommander>();
     }
 
     protected virtual void Start()
     {
-        commander = GetComponent<MobCommander>();
-
         StoreMaterialColors();
-        ResetStatus();
+        Activate();
     }
 
     protected void StoreMaterialColors()
@@ -146,4 +145,3 @@ public class MobStatus : MonoBehaviour
         // TODO: Fade-out with custom shader
     }
 }
-

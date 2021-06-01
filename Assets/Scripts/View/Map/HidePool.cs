@@ -2,21 +2,34 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class HidePool
+public class HidePool : MonoBehaviour
 {
+    [SerializeField] private GameObject plate5 = default;
+    [SerializeField] private GameObject plate4 = default;
+    [SerializeField] private GameObject plate3 = default;
+    [SerializeField] private GameObject plate2 = default;
+    [SerializeField] private GameObject plate1 = default;
+
     protected Transform[] pool = new Transform[0b10000];
     protected GameObject[] prefab = new GameObject[0b10000];
     protected Quaternion[] rotate = new Quaternion[0b10000];
 
-    protected WorldMap map;
+    private WorldMap map;
 
     protected const int RANGE = 11;
     protected HidePlate[,] plateData;
-    protected Pos prevPos = new Pos();
 
-    public HidePool(WorldMap map, GameObject plate5, GameObject plate4, GameObject plate3, GameObject plate2, GameObject plate1)
+    private Pos prevPos = new Pos();
+    private Pos CurrentPos => map.MapPos(transform.position);
+
+    void Awake()
     {
-        this.map = map;
+        map = GameManager.Instance.worldMap;
+        InitHidePlates();
+    }
+
+    private void InitHidePlates()
+    {
         this.plateData = new HidePlate[RANGE + map.Width, RANGE + map.Height];
 
         pool[(int)Plate.A] = pool[(int)Plate.B] = pool[(int)Plate.D] = pool[(int)Plate.C] = new GameObject("Plate1").transform;
@@ -60,48 +73,45 @@ public class HidePool
         return HidePlate.GetInstance(prefab[id], worldPos, rotate[id], pool[id], plate);
     }
 
-    private void UpdateHidePlates(Vector3 playerPos, Action<Pos, Plate[,]> drawAction)
+    public void Init()
     {
-        Pos mapPos = map.MapPos(playerPos);
+        Pos mapPos = CurrentPos;
         Plate[,] plateMap = GetPlateMap(mapPos);
 
-        drawAction(mapPos, plateMap);
+        InitRange(mapPos, plateMap);
 
         prevPos = mapPos;
     }
 
-    public void RedrawHidePlates(Vector3 playerPos)
+    public void Redraw()
     {
-        UpdateHidePlates(playerPos, (mapPos, plateMap) =>
-        {
-            if (!prevPos.IsNull)
-            {
-                RedrawRange(mapPos, plateMap);
-            }
-            else
-            {
-                InitRange(mapPos, plateMap);
-            }
-        });
+        Pos mapPos = CurrentPos;
+        Plate[,] plateMap = GetPlateMap(mapPos);
+
+        RedrawRange(mapPos, plateMap);
+
+        prevPos = mapPos;
     }
 
-    public void MoveHidePlates(Vector3 playerPos)
+    public void Move()
     {
-        UpdateHidePlates(playerPos, (mapPos, plateMap) =>
-        {
-            if (!prevPos.IsNull)
-            {
-                Pos moveVec = mapPos - prevPos;
+        Pos mapPos = CurrentPos;
+        Plate[,] plateMap = GetPlateMap(mapPos);
 
-                if (moveVec.y < 0) MoveRangeNorth(plateMap, mapPos);
-                if (moveVec.y > 0) MoveRangeSouth(plateMap, mapPos);
-                if (moveVec.x < 0) MoveRangeWest(plateMap, mapPos);
-                if (moveVec.x > 0) MoveRangeEast(plateMap, mapPos);
-            }
-        });
+        if (!prevPos.IsNull)
+        {
+            Pos moveVec = mapPos - prevPos;
+
+            if (moveVec.y < 0) MoveRangeNorth(mapPos, plateMap);
+            if (moveVec.y > 0) MoveRangeSouth(mapPos, plateMap);
+            if (moveVec.x < 0) MoveRangeWest(mapPos, plateMap);
+            if (moveVec.x > 0) MoveRangeEast(mapPos, plateMap);
+        }
+
+        prevPos = mapPos;
     }
 
-    private void MoveRangeNorth(Plate[,] plateMap, Pos playerPos)
+    private void MoveRangeNorth(Pos playerPos, Plate[,] plateMap)
     {
         for (int i = 0; i < RANGE; i++)
         {
@@ -110,7 +120,7 @@ public class HidePool
         }
         RedrawRange(playerPos, plateMap, false, true);
     }
-    private void MoveRangeSouth(Plate[,] plateMap, Pos playerPos)
+    private void MoveRangeSouth(Pos playerPos, Plate[,] plateMap)
     {
         for (int i = 0; i < RANGE; i++)
         {
@@ -119,7 +129,7 @@ public class HidePool
         }
         RedrawRange(playerPos, plateMap, false, true);
     }
-    private void MoveRangeWest(Plate[,] plateMap, Pos playerPos)
+    private void MoveRangeWest(Pos playerPos, Plate[,] plateMap)
     {
         for (int j = 0; j < RANGE; j++)
         {
@@ -128,7 +138,7 @@ public class HidePool
         }
         RedrawRange(playerPos, plateMap, true, false);
     }
-    private void MoveRangeEast(Plate[,] plateMap, Pos playerPos)
+    private void MoveRangeEast(Pos playerPos, Plate[,] plateMap)
     {
         for (int j = 0; j < RANGE; j++)
         {

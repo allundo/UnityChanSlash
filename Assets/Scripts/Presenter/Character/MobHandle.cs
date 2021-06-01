@@ -1,14 +1,15 @@
 using UnityEngine;
-using System.Collections;
 
-[RequireComponent(typeof(MobStatus))]
+[RequireComponent(typeof(HidePool))]
 public class MobHandle : MonoBehaviour
 {
     [SerializeField] private Collider handleCollider = default;
+    private HidePool hidePool;
 
 
     private void Start()
     {
+        hidePool = GetComponent<HidePool>();
         handleCollider.enabled = false;
     }
 
@@ -24,7 +25,7 @@ public class MobHandle : MonoBehaviour
         if (null == targetDoor) return;
 
         targetDoor.Handle();
-        MapRenderer.Instance.RedrawHidePlates(transform.position);
+        hidePool.Redraw();
     }
 
     public void OnHandleFinished()

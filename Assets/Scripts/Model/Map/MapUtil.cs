@@ -18,8 +18,6 @@ public class MapUtil : MonoBehaviour
     {
         this.map = GameManager.Instance.worldMap;
         this.tf = transform;
-
-        SetPosition();
     }
 
     public virtual void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }

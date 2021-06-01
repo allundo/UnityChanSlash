@@ -5,8 +5,13 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(HidePool))]
 public class PlayerCommander : ShieldCommander
 {
+    [SerializeField] ThirdPersonCamera mainCamera = default;
+    protected HidePool hidePool;
+
     private bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
 
     // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.
@@ -22,6 +27,12 @@ public class PlayerCommander : ShieldCommander
     protected InputManager left;
     protected InputManager jump;
     protected InputManager handle;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        hidePool = GetComponent<HidePool>();
+    }
 
     protected override void SetCommands()
     {
@@ -358,14 +369,18 @@ public class PlayerCommander : ShieldCommander
     protected abstract class PlayerCommand : ShieldCommand
     {
         protected PlayerCommander playerCommander;
-        protected PlayerMapUtil map;
+        protected MapUtil map;
         protected PlayerAnimator anim;
+        protected ThirdPersonCamera mainCamera;
+        protected HidePool hidePool;
 
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
             playerCommander = commander;
-            map = playerCommander.map as PlayerMapUtil;
-            anim = playerCommander.anim as PlayerAnimator;
+            map = commander.map;
+            anim = commander.anim as PlayerAnimator;
+            mainCamera = commander.mainCamera;
+            hidePool = commander.hidePool;
         }
     }
 
@@ -411,7 +426,7 @@ public class PlayerCommander : ShieldCommander
             SetSpeed();
             PlayTween(tweenMove.GetLinearMove(Dest), () =>
             {
-                map.MoveHidePlates();
+                hidePool.Move();
                 ResetSpeed();
             });
 
@@ -485,14 +500,14 @@ public class PlayerCommander : ShieldCommander
             // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
             {
-                tweenMove.SetDelayedCall(0.4f, () => map.MoveHidePlates());
+                tweenMove.SetDelayedCall(0.4f, () => hidePool.Move());
             }
 
             SetValidateTimer();
 
             PlayTween(tweenMove.GetJumpSequence(dest), () =>
             {
-                if (distance > 0) map.MoveHidePlates();
+                if (distance > 0) hidePool.Move();
             });
         }
     }
@@ -504,10 +519,11 @@ public class PlayerCommander : ShieldCommander
         public override void Execute()
         {
             map.TurnLeft();
+            mainCamera.TurnLeft();
             anim.turnL.Fire();
 
             SetValidateTimer();
-            PlayTween(tweenMove.GetRotate(-90), () => map.ResetCamera());
+            PlayTween(tweenMove.GetRotate(-90), () => mainCamera.ResetCamera());
         }
     }
 
@@ -518,10 +534,11 @@ public class PlayerCommander : ShieldCommander
         public override void Execute()
         {
             map.TurnRight();
+            mainCamera.TurnRight();
             anim.turnR.Fire();
 
             SetValidateTimer();
-            PlayTween(tweenMove.GetRotate(90), () => map.ResetCamera());
+            PlayTween(tweenMove.GetRotate(90), () => mainCamera.ResetCamera());
         }
     }
     protected class PlayerAction : PlayerCommand
