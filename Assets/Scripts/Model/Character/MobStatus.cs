@@ -13,21 +13,10 @@ public class MobStatus : MonoBehaviour
 
     protected List<Material> flashMaterials = new List<Material>();
 
-    protected float life
-    {
-        get
-        {
-            return Life.Value;
-        }
-        set
-        {
-            Life.Value = value;
-        }
-    }
+    protected IReactiveProperty<float> life = new ReactiveProperty<float>(0.0f);
+    public IReadOnlyReactiveProperty<float> Life => life;
 
-    public IReactiveProperty<float> Life = new ReactiveProperty<float>(0.0f);
-
-    public bool IsAlive => life > 0.0f;
+    public bool IsAlive => Life.Value > 0.0f;
 
     [SerializeField] public float LifeMax { get; protected set; } = 10;
 
@@ -48,7 +37,7 @@ public class MobStatus : MonoBehaviour
 
     public void Damage(float damage)
     {
-        life -= damage;
+        life.Value -= damage;
     }
 
     public virtual float CalcAttack(float attack, Direction attackDir)
@@ -73,7 +62,7 @@ public class MobStatus : MonoBehaviour
 
     public virtual void ResetStatus()
     {
-        life = LifeMax;
+        life.Value = LifeMax;
     }
 
     public virtual void Activate()

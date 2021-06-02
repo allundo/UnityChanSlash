@@ -11,27 +11,16 @@ public class DoorState : MonoBehaviour
         CLOSING,
     }
 
-    private StateEnum state
-    {
-        get
-        {
-            return State.Value;
-        }
-        set
-        {
-            State.Value = value;
-        }
-    }
-
-    public IReactiveProperty<StateEnum> State = new ReactiveProperty<StateEnum>(StateEnum.CLOSE);
+    protected IReactiveProperty<StateEnum> state = new ReactiveProperty<StateEnum>(StateEnum.CLOSE);
+    public IReadOnlyReactiveProperty<StateEnum> State => state;
     private bool isLocked = false;
 
-    public bool IsOpen => state == StateEnum.OPEN || state == StateEnum.OPENING;
-    private bool IsControllable => state == StateEnum.OPEN || state == StateEnum.CLOSE;
+    public bool IsOpen => State.Value == StateEnum.OPEN || State.Value == StateEnum.OPENING;
+    private bool IsControllable => State.Value == StateEnum.OPEN || State.Value == StateEnum.CLOSE;
 
     public void TransitionNext()
     {
-        state = GetNextState();
+        state.Value = GetNextState();
     }
 
     public void Handle()
@@ -41,7 +30,7 @@ public class DoorState : MonoBehaviour
 
     private StateEnum GetNextState()
     {
-        switch (state)
+        switch (State.Value)
         {
             case StateEnum.CLOSE:
                 return isLocked ? StateEnum.CLOSE : StateEnum.OPENING;
