@@ -81,7 +81,7 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         GameObject door = PlacePrefab(pos, doorPrefab);
 
         Door tileDoor = map.GetTile(pos) as Door;
-        tileDoor.dc = door.GetComponent<DoorControl>();
+        tileDoor.state = door.GetComponent<DoorState>();
     }
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)

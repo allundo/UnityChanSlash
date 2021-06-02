@@ -20,7 +20,7 @@ public class MobHandle : MonoBehaviour
 
     public void OnHitHand(Collider collider)
     {
-        DoorControl targetDoor = collider.GetComponent<DoorControl>();
+        DoorState targetDoor = collider.GetComponent<DoorState>();
 
         if (null == targetDoor) return;
 
