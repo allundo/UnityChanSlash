@@ -1,9 +1,13 @@
 using UnityEngine;
 using UniRx;
 
+[RequireComponent(typeof(MobStatus))]
+[RequireComponent(typeof(MobVisual))]
+[RequireComponent(typeof(MobCommander))]
 public class MobReactor : MonoBehaviour
 {
     protected MobStatus status;
+    protected MobVisual visual;
     protected MobCommander commander;
 
     [SerializeField] private AudioSource dieSound = null;
@@ -13,6 +17,7 @@ public class MobReactor : MonoBehaviour
     protected virtual void Awake()
     {
         status = GetComponent<MobStatus>();
+        visual = GetComponent<MobVisual>();
         commander = GetComponent<MobCommander>();
     }
 
@@ -26,6 +31,14 @@ public class MobReactor : MonoBehaviour
     protected void OnLifeChange(float life)
     {
         if (life <= 0.0f) OnDie();
+    }
+
+    public virtual void OnDamage(float attack, Direction dir)
+    {
+        if (!status.IsAlive) return;
+
+        float damage = status.CalcAttack(attack, dir);
+        visual.DamageFlash(damage, status.LifeMax);
     }
 
     protected void OnDie()

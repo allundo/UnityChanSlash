@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(MobCommander))]
@@ -8,13 +7,11 @@ public class MobAttack : MonoBehaviour
     [SerializeField] private Collider attackCollider = default;
     [SerializeField] private AudioSource swingSound = default;
 
+    protected MobStatus status;
     protected MobCommander commander;
-
-    protected Direction dir => commander.map.dir;
 
     protected virtual float Pitch => Random.Range(0.7f, 1.3f);
 
-    protected MobStatus status = default;
     protected virtual void Start()
     {
         status = GetComponent<MobStatus>();
@@ -35,11 +32,11 @@ public class MobAttack : MonoBehaviour
 
     public void OnHitAttack(Collider collider)
     {
-        MobStatus targetMob = collider.GetComponent<MobStatus>();
+        MobReactor targetMob = collider.GetComponent<MobReactor>();
 
         if (null == targetMob) return;
 
-        targetMob.Damage(status.Attack, dir);
+        targetMob.OnDamage(status.Attack, status.dir);
     }
 
     public void OnAttackFinished()

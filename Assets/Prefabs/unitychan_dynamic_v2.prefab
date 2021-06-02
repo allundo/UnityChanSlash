@@ -4787,14 +4787,15 @@ GameObject:
   - component: {fileID: 7476530261382612521}
   - component: {fileID: 7476530261382612523}
   - component: {fileID: 7476530261382612515}
+  - component: {fileID: 8840803588784978536}
   - component: {fileID: 5189892437611810425}
   - component: {fileID: 5189892437611810426}
   - component: {fileID: 5189892437265779398}
-  - component: {fileID: 2275338065153999959}
-  - component: {fileID: 1523880010270308965}
   - component: {fileID: 5806368653819958459}
+  - component: {fileID: 1523880010270308965}
   - component: {fileID: 1377127690765788874}
-  - component: {fileID: 8872633765712071989}
+  - component: {fileID: 8687934050453272554}
+  - component: {fileID: 2275338065153999959}
   - component: {fileID: 1035482312927549619}
   m_Layer: 0
   m_Name: unitychan_dynamic_v2
@@ -5027,7 +5028,18 @@ MonoBehaviour:
   FaceDamageMultiplier: 1
   SideDamageMultiplier: 1.5
   BackDamageMultiplier: 2
-  LifeMax: 10
+--- !u!114 &8840803588784978536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476530261813138296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2bc79407ddf420fb10b5634bd76856, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5189892437611810425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5069,31 +5081,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handleCollider: {fileID: 5189892437651167573}
---- !u!114 &2275338065153999959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7476530261813138296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a1e710b21b84033b002370f3313c09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SHIELD_READY: 10
---- !u!114 &1523880010270308965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7476530261813138296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5806368653819958459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5104,6 +5091,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07becdd976f26404e8995c0a3c57dd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1523880010270308965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476530261813138296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1377127690765788874
@@ -5118,7 +5117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24072e8797f3c4ec199b9284780dd702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8872633765712071989
+--- !u!114 &8687934050453272554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5127,10 +5126,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7476530261813138296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 486a8e43da56544a6aa8263baf6c61ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 3eabb119b9c7040bab757525a56e21bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
+--- !u!114 &2275338065153999959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476530261813138296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a1e710b21b84033b002370f3313c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SHIELD_READY: 10
 --- !u!114 &1035482312927549619
 MonoBehaviour:
   m_ObjectHideFlags: 0

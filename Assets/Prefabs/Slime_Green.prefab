@@ -707,6 +707,7 @@ GameObject:
   - component: {fileID: 924700823997298557}
   - component: {fileID: 974097492613650517}
   - component: {fileID: 974097492613650505}
+  - component: {fileID: 8870454713836784831}
   - component: {fileID: 2131489890423304314}
   - component: {fileID: 7398270834105222207}
   - component: {fileID: 3026849044793458053}
@@ -785,8 +786,18 @@ MonoBehaviour:
   FaceDamageMultiplier: 1
   SideDamageMultiplier: 1.5
   BackDamageMultiplier: 2
-  dieSound: {fileID: 428805006476128215}
-  LifeMax: 20
+--- !u!114 &8870454713836784831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974814930939844399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2bc79407ddf420fb10b5634bd76856, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2131489890423304314
 MonoBehaviour:
   m_ObjectHideFlags: 0
