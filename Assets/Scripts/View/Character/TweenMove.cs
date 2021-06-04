@@ -62,7 +62,7 @@ public class TweenMove
     /// <returns></returns>
     public Tween SetFinallyCall(TweenCallback callback)
     {
-        return DOVirtual.DelayedCall(duration, callback);
+        return DOVirtual.DelayedCall(duration, callback).Play();
     }
 
     /// <summary>
@@ -72,6 +72,6 @@ public class TweenMove
     /// <param name="callback"></param>
     public Tween SetDelayedCall(float timing, TweenCallback callback)
     {
-        return DOVirtual.DelayedCall(duration * timing, callback);
+        return DOVirtual.DelayedCall(duration * timing, callback).Play();
     }
 }

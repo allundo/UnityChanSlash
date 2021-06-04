@@ -48,7 +48,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void SetFadeOut()
     {
-        DOVirtual.Float(1.0f, 0.0f, 0.2f, value => SetFadeAlpha(value));
+        DOVirtual.Float(1.0f, 0.0f, 0.2f, value => SetFadeAlpha(value)).Play();
     }
 
     private void SetFadeAlpha(float value)
