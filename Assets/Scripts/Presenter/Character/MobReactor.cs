@@ -38,7 +38,10 @@ public class MobReactor : MonoBehaviour
         if (!status.IsAlive) return;
 
         float damage = status.CalcAttack(attack, dir);
+
         visual.DamageFlash(damage, status.LifeMax);
+
+        status.Damage(damage);
     }
 
     protected void OnDie()
