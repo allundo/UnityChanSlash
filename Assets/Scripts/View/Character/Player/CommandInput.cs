@@ -46,10 +46,10 @@ public partial class PlayerCommander : ShieldCommander
 
         public void SetInputManagers(PlayerCommander commander)
         {
-            forward = new FrontInput(new ForwardCommand(commander, 1.0f), new PlayerAttack(commander, 2.0f), new PlayerHandle(commander, 1.0f));
+            forward = new FrontInput(new ForwardCommand(commander, 1.0f), new PlayerJab(commander, 2.0f), new PlayerHandle(commander, 1.0f));
             turnL = new TriggerInput(new TurnLCommand(commander, 0.5f));
             turnR = new TriggerInput(new TurnRCommand(commander, 0.5f));
-            attack = new EmptyInput(new PlayerAttack(commander, 0.6f));
+            attack = new EmptyInput(new PlayerJab(commander, 0.6f));
 
             back = new InputManager(new BackCommand(commander, 1.2f));
             right = new InputManager(new RightCommand(commander, 1.2f));

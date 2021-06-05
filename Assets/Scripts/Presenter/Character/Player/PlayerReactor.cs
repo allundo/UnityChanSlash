@@ -24,7 +24,6 @@ public class PlayerReactor : MobReactor
         }
 
         float damage = Mathf.Max(status.CalcAttack(attack, attackDir) - shield, 0.0f);
-        Debug.Log("damage: " + damage);
 
         visual.DamageFlash(damage, status.LifeMax);
 

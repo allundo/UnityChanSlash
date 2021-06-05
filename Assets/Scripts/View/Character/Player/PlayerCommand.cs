@@ -2,6 +2,9 @@ using UnityEngine;
 
 public partial class PlayerCommander : ShieldCommander
 {
+    [SerializeField] protected MobAttack jab = default;
+    [SerializeField] protected MobAttack straight = default;
+
     protected abstract class PlayerCommand : ShieldCommand
     {
         protected PlayerCommander playerCommander;
@@ -177,45 +180,62 @@ public partial class PlayerCommander : ShieldCommander
             PlayTween(tweenMove.GetRotate(90), () => mainCamera.ResetCamera());
         }
     }
-    protected class PlayerAction : PlayerCommand
+    protected abstract class PlayerAction : PlayerCommand
     {
-        protected ShieldAnimator.TriggerEx trigger;
-
-        public PlayerAction(PlayerCommander commander, float duration, ShieldAnimator.TriggerEx trigger) : base(commander, duration)
-        {
-            this.trigger = trigger;
-        }
+        public PlayerAction(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         public override void Execute()
         {
-            trigger.Fire();
+            Action();
 
             SetValidateTimer();
             SetDispatchFinal();
         }
+
+        protected abstract void Action();
     }
 
-    protected class PlayerHandle : PlayerCommand
+    protected class PlayerHandle : PlayerAction
     {
         public PlayerHandle(PlayerCommander commander, float duration) : base(commander, duration) { }
-        public override void Execute()
+
+        protected override void Action()
         {
             anim.handle.Fire();
-
-            SetValidateTimer();
-            SetDispatchFinal();
         }
     }
 
-    protected class PlayerAttack : PlayerCommand
+    protected abstract class PlayerAttack : PlayerAction
     {
-        public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration) { }
-        public override void Execute()
+        protected MobAttack jab;
+        protected MobAttack straight;
+
+        public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration)
+        {
+            jab = commander.jab;
+            straight = commander.straight;
+        }
+    }
+
+    protected class PlayerJab : PlayerAttack
+    {
+        public PlayerJab(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        protected override void Action()
         {
             anim.attack.Fire();
+            jab.SetAttack();
+        }
+    }
 
-            SetValidateTimer();
-            SetDispatchFinal();
+    protected class PlayerStraight : PlayerAttack
+    {
+        public PlayerStraight(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        protected override void Action()
+        {
+            anim.straight.Fire();
+            straight.SetAttack();
         }
     }
 

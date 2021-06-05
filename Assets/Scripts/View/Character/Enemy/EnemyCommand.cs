@@ -2,6 +2,8 @@ using UnityEngine;
 
 public partial class EnemyCommander : MobCommander
 {
+    [SerializeField] protected MobAttack enemyAttack = default;
+
     public abstract class EnemyCommand : Command
     {
         protected EnemyCommander enemyCommander;
@@ -95,11 +97,17 @@ public partial class EnemyCommander : MobCommander
     }
     public class EnemyAttack : EnemyCommand
     {
-        public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration) { }
+        private MobAttack enemyAttack;
+        public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration)
+        {
+            enemyAttack = commander.enemyAttack;
+        }
 
         public override void Execute()
         {
             anim.attack.Fire();
+            playingTween = enemyAttack.SetAttack();
+
             SetValidateTimer();
             SetDispatchFinal();
         }

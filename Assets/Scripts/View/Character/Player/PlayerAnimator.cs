@@ -10,6 +10,7 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerEx turnR { get; protected set; }
     public TriggerEx handle { get; protected set; }
     public TriggerEx attack { get; protected set; }
+    public TriggerEx straight { get; protected set; }
     public TriggerEx dieEx { get; protected set; }
     public AnimatorBool rest { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
@@ -25,6 +26,7 @@ public class PlayerAnimator : ShieldAnimator
         turnR = new TriggerEx(anim, "TurnR");
         handle = new TriggerEx(anim, "Handle");
         attack = new TriggerEx(anim, "Attack", 5);
+        straight = new TriggerEx(anim, "Straight", 5);
         dieEx = new TriggerEx(anim, "Die", 0);
         rest = new AnimatorBool(anim, "Rest");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");

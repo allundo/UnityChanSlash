@@ -13,9 +13,10 @@ public partial class PlayerCommander : ShieldCommander
     protected CommandInput input;
 
     protected Command attack;
+    protected Command attackStraight;
 
     private bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
-    private bool IsAttack => currentCommand == attack;
+    private bool IsAttack => currentCommand == attackStraight;
 
     protected override void Awake()
     {
@@ -26,10 +27,11 @@ public partial class PlayerCommander : ShieldCommander
     protected override void SetCommands()
     {
         die = new DieCommand(this, 10.0f);
-        attack = new PlayerAttack(this, 0.6f);
+        attack = new PlayerJab(this, 0.6f);
+        attackStraight = new PlayerStraight(this, 0.8f);
         input = new CommandInput(this);
 
-        fightCircle.AttackSubject.Subscribe(_ => InputReactive.Execute(attack)).AddTo(this);
+        fightCircle.AttackSubject.Subscribe(_ => InputReactive.Execute(attackStraight)).AddTo(this);
     }
 
     protected override Command GetCommand()
