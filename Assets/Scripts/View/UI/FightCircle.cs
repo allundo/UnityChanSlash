@@ -1,25 +1,35 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UniRx;
+using System.Collections.Generic;
 
-public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
+    [SerializeField] private AttackButton jabButton = default;
+    [SerializeField] private AttackButton straightButton = default;
+    [SerializeField] private float maxAlpha = 0.8f;
+    [SerializeField] private float attackCancelThreshold = 2.0f;
 
-    [SerializeField] private JabButton childButton = default;
-    [SerializeField] private readonly float maxAlpha = 0.8f;
+    public AttackButton JabButton => jabButton;
+    public AttackButton StraightButton => straightButton;
 
     private RectTransform rectTransform;
     private RawImage rawImage;
 
     private float alpha = 0.0f;
-    private bool isActive = true;
+    private bool isActive = false;
+    private bool isFingerDown = false;
 
     private Vector2 UICenter;
     private Vector2 screenCenter;
-    private float radius;
 
-    public ISubject<Unit> AttackSubject { get; protected set; } = new Subject<Unit>();
+    private AttackButton currentButton = null;
+    private Vector2 pressPos = Vector2.zero;
+
+    private bool IsPressed => currentButton != null;
+
+    private float DrawComponent(Vector2 delta) => IsPressed ? Vector2.Dot(pressPos.normalized, delta) : 0.0f;
+    private float radius;
 
     private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
@@ -71,20 +81,72 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!isFingerDown) return;
+
+        isFingerDown = false;
+
+        if (!IsPressed && !InCircle(eventData.position))
+        {
+            RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+            return;
+        }
+        else
+        {
+            Debug.Log("position UP: " + eventData.position);
+        }
+
         if (!isActive) return;
 
-        AttackSubject.OnNext(Unit.Default);
-        childButton.Inactivate();
-        if (InCircle(eventData.position)) Debug.Log("position UP: " + eventData.position);
+        currentButton.Release();
+        currentButton = null;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        isFingerDown = true;
+
+        if (!InCircle(eventData.position))
+        {
+            RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
+            return;
+        }
+        else
+        {
+            Debug.Log("position DOWN: " + eventData.position);
+        }
+
         if (!isActive) return;
 
-        childButton.Activate();
-        childButton.SetPos(UIPos(eventData.position));
-        if (InCircle(eventData.position)) Debug.Log("position DOWN: " + eventData.position);
+        pressPos = UIPos(eventData.position);
+        currentButton = GetAttack(pressPos);
+
+        currentButton.Activate(pressPos);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!isFingerDown) return;
+
+        if (DrawComponent(eventData.delta) < -attackCancelThreshold)
+        {
+            ButtonCancel();
+            return;
+        }
+
+        if (!IsPressed)
+        {
+            RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
+            return;
+        }
+
+        if (!isActive) return;
+
+        Debug.Log("Drag delta: " + eventData.delta);
+    }
+
+    private AttackButton GetAttack(Vector2 uiPos)
+    {
+        return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
 
     public void Activate()
@@ -95,7 +157,24 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Inactivate()
     {
+        ButtonCancel(true);
         isActive = false;
+    }
+
+    private void ButtonCancel(bool isFadeOnly = false)
+    {
+        if (isFadeOnly)
+        {
+            currentButton?.Inactivate();
+        }
+        else
+        {
+            currentButton?.Cancel();
+        }
+
+        isFingerDown = false;
+        currentButton = null;
+        pressPos = Vector2.zero;
     }
 
     public void SetActive(bool value)
@@ -107,6 +186,28 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         else
         {
             Inactivate();
+        }
+    }
+    private void RaycastEvent<T>(PointerEventData eventData, ExecuteEvents.EventFunction<T> eventFunc) where T : IEventSystemHandler
+    {
+        var objectsHit = new List<RaycastResult>();
+
+        // Exclude this UI object from raycast target
+        rawImage.raycastTarget = false;
+
+        EventSystem.current.RaycastAll(eventData, objectsHit);
+
+        rawImage.raycastTarget = true;
+
+        foreach (var objectHit in objectsHit)
+        {
+            if (!ExecuteEvents.CanHandleEvent<T>(objectHit.gameObject))
+            {
+                continue;
+            }
+
+            ExecuteEvents.Execute<T>(objectHit.gameObject, eventData, eventFunc);
+            break;
         }
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UniRx;
 
 [RequireComponent(typeof(PlayerAnimator))]
@@ -11,12 +12,38 @@ public partial class PlayerCommander : ShieldCommander
 
     protected HidePool hidePool;
     protected CommandInput input;
-
-    protected Command attack;
-    protected Command attackStraight;
+    protected FightInput fightInput;
 
     private bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
-    private bool IsAttack => currentCommand == attackStraight;
+    private bool IsAttack => currentCommand is PlayerAttack;
+
+    protected class FightInput
+    {
+        FightCircle fightCircle;
+
+        Command jab;
+        Command straight;
+
+        public FightInput(PlayerCommander commander)
+        {
+            this.fightCircle = commander.fightCircle;
+            SetCommands(commander);
+        }
+
+        protected void SetCommands(PlayerCommander commander)
+        {
+            jab = new PlayerJab(commander, 0.6f);
+            straight = new PlayerStraight(commander, 0.8f);
+
+            fightCircle.JabButton.AttackSubject
+                .Subscribe(_ => commander.InputReactive.Execute(jab))
+                .AddTo(commander);
+
+            fightCircle.StraightButton.AttackSubject
+                .Subscribe(_ => commander.InputReactive.Execute(straight))
+                .AddTo(commander);
+        }
+    }
 
     protected override void Awake()
     {
@@ -27,11 +54,8 @@ public partial class PlayerCommander : ShieldCommander
     protected override void SetCommands()
     {
         die = new DieCommand(this, 10.0f);
-        attack = new PlayerJab(this, 0.6f);
-        attackStraight = new PlayerStraight(this, 0.8f);
         input = new CommandInput(this);
-
-        fightCircle.AttackSubject.Subscribe(_ => InputReactive.Execute(attackStraight)).AddTo(this);
+        fightInput = new FightInput(this);
     }
 
     protected override Command GetCommand()
@@ -52,6 +76,38 @@ public partial class PlayerCommander : ShieldCommander
         {
             guardState.SetEnemyDetected(false);
             fightCircle.Inactivate();
+        }
+    }
+
+    protected class InputManager2
+    {
+        public bool isPressed { get; protected set; } = false;
+        protected Command mainCommand;
+
+        public InputManager2(Command mainCommand)
+        {
+            this.mainCommand = mainCommand;
+        }
+
+        public virtual Command FingerDown()
+        {
+            isPressed = true;
+            return mainCommand;
+        }
+
+        public virtual Command FingerMove(Vector2 moveVec)
+        {
+            return mainCommand;
+        }
+        public virtual Command FingerUp()
+        {
+            isPressed = false;
+            return mainCommand;
+        }
+
+        public virtual void Reset()
+        {
+            isPressed = false;
         }
     }
 
