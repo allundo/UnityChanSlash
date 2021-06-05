@@ -1,21 +1,18 @@
 using UnityEngine;
 
 [RequireComponent(typeof(MobStatus))]
-[RequireComponent(typeof(MobCommander))]
 public class MobAttack : MonoBehaviour
 {
     [SerializeField] private Collider attackCollider = default;
     [SerializeField] private AudioSource swingSound = default;
 
     protected MobStatus status;
-    protected MobCommander commander;
 
     protected virtual float Pitch => Random.Range(0.7f, 1.3f);
 
     protected virtual void Start()
     {
         status = GetComponent<MobStatus>();
-        commander = GetComponent<MobCommander>();
 
         attackCollider.enabled = false;
     }
