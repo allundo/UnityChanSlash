@@ -4,6 +4,7 @@ public partial class PlayerCommander : ShieldCommander
 {
     [SerializeField] protected MobAttack jab = default;
     [SerializeField] protected MobAttack straight = default;
+    [SerializeField] protected MobAttack kick = default;
 
     protected abstract class PlayerCommand : ShieldCommand
     {
@@ -209,11 +210,13 @@ public partial class PlayerCommander : ShieldCommander
     {
         protected MobAttack jab;
         protected MobAttack straight;
+        protected MobAttack kick;
 
         public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration)
         {
             jab = commander.jab;
             straight = commander.straight;
+            kick = commander.kick;
         }
     }
 
@@ -236,6 +239,16 @@ public partial class PlayerCommander : ShieldCommander
         {
             anim.straight.Fire();
             straight.SetAttack();
+        }
+    }
+    protected class PlayerKick : PlayerAttack
+    {
+        public PlayerKick(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        protected override void Action()
+        {
+            anim.kick.Fire();
+            kick.SetAttack();
         }
     }
 

@@ -23,6 +23,7 @@ public partial class PlayerCommander : ShieldCommander
 
         Command jab;
         Command straight;
+        Command kick;
 
         public FightInput(PlayerCommander commander)
         {
@@ -34,6 +35,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             jab = new PlayerJab(commander, 0.6f);
             straight = new PlayerStraight(commander, 0.8f);
+            kick = new PlayerKick(commander, 1.0f);
 
             fightCircle.JabButton.AttackSubject
                 .Subscribe(_ => commander.InputReactive.Execute(jab))
@@ -41,6 +43,10 @@ public partial class PlayerCommander : ShieldCommander
 
             fightCircle.StraightButton.AttackSubject
                 .Subscribe(_ => commander.InputReactive.Execute(straight))
+                .AddTo(commander);
+
+            fightCircle.KickButton.AttackSubject
+                .Subscribe(_ => commander.InputReactive.Execute(kick))
                 .AddTo(commander);
         }
     }

@@ -7,11 +7,13 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private AttackButton jabButton = default;
     [SerializeField] private AttackButton straightButton = default;
+    [SerializeField] private AttackButton kickButton = default;
     [SerializeField] private float maxAlpha = 0.8f;
     [SerializeField] private float attackCancelThreshold = 2.0f;
 
     public AttackButton JabButton => jabButton;
     public AttackButton StraightButton => straightButton;
+    public AttackButton KickButton => kickButton;
 
     private RectTransform rectTransform;
     private RawImage rawImage;
@@ -22,6 +24,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private Vector2 UICenter;
     private Vector2 screenCenter;
+    private Vector2 kickCenter;
+
+    private bool InKick(Vector2 uiPos) => (uiPos - kickCenter).magnitude < 20.0f;
 
     private AttackButton currentButton = null;
     private Vector2 pressPos = Vector2.zero;
@@ -40,6 +45,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         rawImage = GetComponent<RawImage>();
 
         radius = rectTransform.rect.height / 2 - 10;
+        kickCenter = new Vector2(0, -(radius - 20.0f));
 
         UICenter = rectTransform.anchoredPosition;
         screenCenter = new Vector2(Screen.width / 2, Screen.height / 2) + UICenter;
@@ -146,6 +152,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private AttackButton GetAttack(Vector2 uiPos)
     {
+        Debug.Log("uipos: " + uiPos);
+        Debug.Log("kickcenter: " + kickCenter);
+
+        if (InKick(uiPos)) return kickButton;
         return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
 

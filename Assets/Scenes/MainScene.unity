@@ -9224,18 +9224,6 @@ Transform:
   m_Father: {fileID: 170570285}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1134792243 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1134792243, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5189892436850581060}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1161797529
 Mesh:
   m_ObjectHideFlags: 0
@@ -14656,18 +14644,6 @@ Transform:
   m_Father: {fileID: 170570285}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1939527614 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7805837824672269612, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5189892436850581060}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2022153800
 GameObject:
   m_ObjectHideFlags: 0
@@ -15650,21 +15626,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
-    - target: {fileID: 4333210480299337855, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: jabButton
-      value: 
-      objectReference: {fileID: 1939527614}
-    - target: {fileID: 4333210480299337855, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: straightButton
-      value: 
-      objectReference: {fileID: 1134792243}
-    - target: {fileID: 4333210480299337855, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: attackCancelThreshold
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: mainCamera
