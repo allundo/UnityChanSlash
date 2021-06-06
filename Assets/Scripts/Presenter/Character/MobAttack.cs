@@ -40,7 +40,6 @@ public class MobAttack : MonoBehaviour
 
     public virtual void OnAttackStart()
     {
-        attackCollider.enabled = true;
         if (swingSound != null)
         {
             swingSound.pitch = Pitch;
@@ -49,7 +48,14 @@ public class MobAttack : MonoBehaviour
         vfx?.Play();
     }
 
-    public void OnHitAttack(Collider collider)
+    public virtual void OnAttackFinished() { }
+
+    public virtual void OnHitStart()
+    {
+        attackCollider.enabled = true;
+    }
+
+    public virtual void OnHitAttack(Collider collider)
     {
         MobReactor targetMob = collider.GetComponent<MobReactor>();
 
@@ -58,16 +64,18 @@ public class MobAttack : MonoBehaviour
         targetMob.OnDamage(status.Attack * attackMultiplier, status.dir);
     }
 
-    public void OnAttackFinished()
+    public virtual void OnHitFinished()
     {
         attackCollider.enabled = false;
     }
 
-    public Tween SetAttack()
+    public Tween SetAttack(float attackDuration)
     {
         return DOTween.Sequence()
-            .Join(DOVirtual.DelayedCall(FrameToSec(startFrame), OnAttackStart))
-            .Join(DOVirtual.DelayedCall(FrameToSec(finishFrame), OnAttackFinished))
+            .Join(DOVirtual.DelayedCall(0, OnAttackStart))
+            .Join(DOVirtual.DelayedCall(FrameToSec(startFrame), OnHitStart))
+            .Join(DOVirtual.DelayedCall(FrameToSec(finishFrame), OnHitFinished))
+            .Join(DOVirtual.DelayedCall(attackDuration, OnAttackFinished))
             .Play();
     }
 }

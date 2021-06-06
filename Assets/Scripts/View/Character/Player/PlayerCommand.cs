@@ -231,7 +231,7 @@ public partial class PlayerCommander : ShieldCommander
         protected override void Action()
         {
             anim.attack.Fire();
-            jab.SetAttack();
+            jab.SetAttack(duration);
         }
     }
 
@@ -242,7 +242,7 @@ public partial class PlayerCommander : ShieldCommander
         protected override void Action()
         {
             anim.straight.Fire();
-            straight.SetAttack();
+            straight.SetAttack(duration);
         }
     }
     protected class PlayerKick : PlayerAttack
@@ -252,7 +252,7 @@ public partial class PlayerCommander : ShieldCommander
         protected override void Action()
         {
             anim.kick.Fire();
-            kick.SetAttack();
+            kick.SetAttack(duration);
         }
     }
 

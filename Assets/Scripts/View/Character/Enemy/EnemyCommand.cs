@@ -106,7 +106,7 @@ public partial class EnemyCommander : MobCommander
         public override void Execute()
         {
             anim.attack.Fire();
-            playingTween = enemyAttack.SetAttack();
+            playingTween = enemyAttack.SetAttack(duration);
 
             SetValidateTimer();
             SetDispatchFinal();
