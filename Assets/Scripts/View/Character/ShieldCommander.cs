@@ -5,10 +5,19 @@ public abstract class ShieldCommander : MobCommander
 {
     public GuardState guardState { get; protected set; }
 
+    protected Command shieldOn = null;
+    public virtual void EnqueueShieldOn() { EnqueueCommand(shieldOn, true); }
+
     protected override void Awake()
     {
         base.Awake();
         guardState = GetComponent<GuardState>();
+    }
+
+    protected override void SetCommands()
+    {
+        base.SetCommands();
+        shieldOn = new ShieldOnCommand(this, 0.8f);
     }
 
     protected abstract class ShieldCommand : Command
@@ -31,6 +40,19 @@ public abstract class ShieldCommander : MobCommander
 
             SetValidateTimer();
             SetDispatchFinal(() => guardState.SetManualGuard(false));
+        }
+    }
+
+    protected class ShieldOnCommand : ShieldCommand
+    {
+        public ShieldOnCommand(ShieldCommander commander, float duration) : base(commander, duration) { }
+
+        public override void Execute()
+        {
+            (commander.anim as ShieldAnimator).shield.Fire();
+
+            SetValidateTimer(0.1f);
+            SetDispatchFinal();
         }
     }
 }

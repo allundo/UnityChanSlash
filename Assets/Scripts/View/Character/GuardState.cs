@@ -24,7 +24,7 @@ public class GuardState : MonoBehaviour
 
     public bool IsShieldOn(Direction attackDir) => commander.IsIdling && IsShieldReady && map.dir.IsInverse(attackDir);
 
-    public void SetShield() { anim.shield.Fire(); }
+    public void SetShield() { commander.EnqueueShieldOn(); }
 
     public virtual void SetEnemyDetected(bool isDetected)
     {

@@ -60,6 +60,8 @@ public partial class PlayerCommander : ShieldCommander
     protected override void SetCommands()
     {
         die = new DieCommand(this, 10.0f);
+        shieldOn = new PlayerShieldOn(this, 0.42f);
+
         input = new CommandInput(this);
         fightInput = new FightInput(this);
     }
@@ -84,6 +86,8 @@ public partial class PlayerCommander : ShieldCommander
             fightCircle.Inactivate();
         }
     }
+
+    public override void EnqueueShieldOn() { EnqueueCommand(shieldOn, true); }
 
     protected class InputManager2
     {

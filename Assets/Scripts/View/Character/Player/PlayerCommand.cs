@@ -183,13 +183,17 @@ public partial class PlayerCommander : ShieldCommander
     }
     protected abstract class PlayerAction : PlayerCommand
     {
-        public PlayerAction(PlayerCommander commander, float duration) : base(commander, duration) { }
+        protected float timing;
+        public PlayerAction(PlayerCommander commander, float duration, float timing = 0.5f) : base(commander, duration)
+        {
+            this.timing = timing;
+        }
 
         public override void Execute()
         {
             Action();
 
-            SetValidateTimer();
+            SetValidateTimer(timing);
             SetDispatchFinal();
         }
 
@@ -212,7 +216,7 @@ public partial class PlayerCommander : ShieldCommander
         protected MobAttack straight;
         protected MobAttack kick;
 
-        public PlayerAttack(PlayerCommander commander, float duration) : base(commander, duration)
+        public PlayerAttack(PlayerCommander commander, float duration, float timing = 0.5f) : base(commander, duration, timing)
         {
             jab = commander.jab;
             straight = commander.straight;
@@ -249,6 +253,16 @@ public partial class PlayerCommander : ShieldCommander
         {
             anim.kick.Fire();
             kick.SetAttack();
+        }
+    }
+
+    protected class PlayerShieldOn : PlayerAttack
+    {
+        public PlayerShieldOn(PlayerCommander commander, float duration) : base(commander, duration, 0.1f) { }
+
+        protected override void Action()
+        {
+            anim.shield.Fire();
         }
     }
 
