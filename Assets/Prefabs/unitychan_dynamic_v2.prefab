@@ -689,8 +689,8 @@ MonoBehaviour:
   swingSound: {fileID: 0}
   vfx: {fileID: 1371146893463409531}
   attackMultiplier: 1.8
-  startFrame: 28
-  finishFrame: 32
+  startFrame: 32
+  finishFrame: 36
   speed: 4
   minPitch: 1.1
   maxPitch: 1.3
@@ -9796,7 +9796,7 @@ PrefabInstance:
     - target: {fileID: 7353860584111525710, guid: 589ba8d05843c4d279c87af66d475abf,
         type: 3}
       propertyPath: startDelay.scalar
-      value: 0.1
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 8795551732347673160, guid: 589ba8d05843c4d279c87af66d475abf,
         type: 3}

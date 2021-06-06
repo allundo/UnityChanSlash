@@ -15626,11 +15626,26 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 1371146893463409531, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: startDelay.scalar
+      value: 0.12
+      objectReference: {fileID: 0}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 963194229}
+    - target: {fileID: 7073669895237644905, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: startFrame
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073669895237644905, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: finishFrame
+      value: 36
+      objectReference: {fileID: 0}
     - target: {fileID: 7476530261813038914, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: m_LocalPosition.x
