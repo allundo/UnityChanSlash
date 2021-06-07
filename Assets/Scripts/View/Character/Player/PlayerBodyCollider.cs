@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UniRx;
 public class PlayerBodyCollider : BodyCollider
 {
     public PlayerBodyCollider(CapsuleCollider col) : base(col) { }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 using System;
 using System.Collections.Generic;
 
@@ -36,33 +37,42 @@ public class PlayerAnimator : ShieldAnimator
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
 
-        jump = new TriggerJump(anim, jumpHeight, bodyCollider);
+        jump = new TriggerJump(this, jumpHeight, bodyCollider);
     }
 
     public class TriggerJump : TriggerEx
     {
-        PlayerBodyCollider bodyCollider;
-        AnimatorFloat jumpHeight;
+        protected IDisposable updateCollider = null;
+        protected AnimatorFloat jumpHeight;
+        protected PlayerBodyCollider bodyCollider;
+        protected PlayerAnimator playerAnim;
 
-        public TriggerJump(Animator anim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider) : base(anim, "Jump")
+        public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider) : base(playerAnim.anim, "Jump")
         {
-            this.bodyCollider = bodyCollider;
+            this.playerAnim = playerAnim;
             this.jumpHeight = jumpHeight;
+            this.bodyCollider = bodyCollider;
+
+            // Disable the updateing collider when exiting state "Jump"
+            playerAnim.StateExit
+                .Where(x => x.StateInfo.fullPathHash == hashedVar)
+                .Subscribe(_ =>
+                {
+                    updateCollider?.Dispose();
+                    bodyCollider.ResetCollider();
+                })
+                .AddTo(playerAnim);
         }
 
-        /// <summary>
-        /// Fires 'Jump' trigger with updating BodyCollider shape <br>
-        /// The shape changes according to 'JumpHeight' Animator paramator<br>
-        /// </summary>
-        /// <param name="duration">Due time of 'JumpHeight' observation and update collider</param>
-        /// <returns>Disposable of polling observer</returns>
-        public IDisposable Fire(float duration)
+        public override void Execute()
         {
-            return FireWithPolling(
-                duration,
-                _ => bodyCollider.JumpCollider(jumpHeight.Float),
-                () => bodyCollider.ResetCollider()
-            );
+            anim.SetTrigger(hashedVar);
+
+            // Start updating collider every frame
+            updateCollider = Observable
+                .IntervalFrame(1)
+                .Subscribe(_ => bodyCollider.JumpCollider(jumpHeight.Float))
+                .AddTo(playerAnim);
         }
     }
 }
