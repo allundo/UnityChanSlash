@@ -39,22 +39,6 @@ public class PlayerAnimator : ShieldAnimator
         jump = new TriggerJump(anim, jumpHeight, bodyCollider);
     }
 
-    protected override Dictionary<string, AnimeState> GetStateNameMap()
-    {
-        var map = base.GetStateNameMap();
-
-        map["Move.Locomotion"] = map["Move.WalkBack"] = map["Move.WalkL"] = map["Move.WalkR"]
-            = map["Turn.TurnL"] = map["Turn.TurnR"]
-            = map["Handle"]
-            = map["Attack"]
-            = map["Die"]
-            = map["Stand.Idle"] = map["Stand.Rest"] = map["Guard"] = map["Shield"]
-            = map["Jump"]
-            = standardState;
-
-        return map;
-    }
-
     public class TriggerJump : TriggerEx
     {
         PlayerBodyCollider bodyCollider;

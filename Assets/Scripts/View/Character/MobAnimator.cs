@@ -1,4 +1,6 @@
 using UnityEngine;
+using UniRx.Triggers;
+using static UniRx.Triggers.ObservableStateMachineTrigger;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +12,9 @@ public abstract class MobAnimator : MonoBehaviour
 
     protected Animator anim;
     protected AnimeState standardState;
+    protected ObservableStateMachineTrigger Trigger;
+    protected IObservable<OnStateInfo> StateEnter => Trigger.OnStateEnterAsObservable();
+    protected IObservable<OnStateInfo> StateExit => Trigger.OnStateExitAsObservable();
 
     private Dictionary<int, AnimeState> stateMap = new Dictionary<int, AnimeState>();
 
@@ -19,66 +24,10 @@ public abstract class MobAnimator : MonoBehaviour
     protected virtual void Awake()
     {
         anim = GetComponent<Animator>();
-        LoadAnimeState();
+        Trigger = anim.GetBehaviour<ObservableStateMachineTrigger>();
 
         speed = new AnimatorFloat(anim, "Speed");
         die = new AnimatorTrigger(anim, "Die");
-
-    }
-
-    protected virtual void Update()
-    {
-        LoadCurrentState();
-
-        if (currentState != prevState)
-        {
-            prevState = currentState;
-        }
-
-        currentState.UpdateState();
-
-        currentState = null;
-    }
-
-    private void LoadAnimeState()
-    {
-        var stateNameMap = GetStateNameMap();
-
-        foreach (KeyValuePair<string, AnimeState> map in stateNameMap)
-        {
-            stateMap[Animator.StringToHash("Base Layer." + map.Key)] = map.Value;
-        }
-    }
-
-    protected virtual Dictionary<string, AnimeState> GetStateNameMap()
-    {
-        standardState = new AnimeState(anim);
-
-        return new Dictionary<string, AnimeState> {
-            { "Idle", standardState },
-            { "Attack", standardState },
-        };
-    }
-    public int GetCurrentStateID()
-    {
-        return anim.GetCurrentAnimatorStateInfo(0).fullPathHash;
-    }
-
-    public AnimeState LoadCurrentState()
-    {
-        if (currentState == null)
-        {
-            try
-            {
-                currentState = stateMap[GetCurrentStateID()];
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Illegal State: " + e.Message);
-            }
-        }
-
-        return currentState;
     }
 
     public abstract class AnimatorParam

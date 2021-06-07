@@ -7,9 +7,4 @@ public class EnemyAnimator : MobAnimator
         base.Awake();
         attack = new AnimatorTrigger(anim, "Attack");
     }
-
-    protected override void Update()
-    {
-        // None
-    }
 }

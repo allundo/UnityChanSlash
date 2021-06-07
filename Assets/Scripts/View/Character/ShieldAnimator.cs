@@ -15,11 +15,9 @@ public abstract class ShieldAnimator : MobAnimator
         shield = new TriggerEx(anim, "Shield", 1);
         guard = new AnimatorBool(anim, "Guard");
     }
-    protected override void Update()
-    {
-        // Don't update current AnimeState
-        // base.Update();
 
+    protected virtual void Update()
+    {
         TriggerEx.SetOrderedTriggers();
     }
 
