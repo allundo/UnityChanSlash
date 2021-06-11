@@ -11,6 +11,10 @@ public class DoorControl : MonoBehaviour
     protected Transform doorL;
     protected Transform doorR;
 
+    protected Material materialGate;
+    protected Material materialR;
+    protected Material materialL;
+
     void Start()
     {
         doorState = GetComponent<DoorState>();
@@ -18,6 +22,10 @@ public class DoorControl : MonoBehaviour
 
         doorR = this.transform.GetChild(0);
         doorL = this.transform.GetChild(1);
+
+        materialGate = GetComponent<Renderer>().material;
+        materialR = doorR.GetComponent<Renderer>().material;
+        materialL = doorL.GetComponent<Renderer>().material;
 
         ResetAlpha();
     }
@@ -35,9 +43,9 @@ public class DoorControl : MonoBehaviour
 
     protected void SetColorToMaterial(Color color)
     {
-        GetComponent<Renderer>().material.SetColor("_Color", color);
-        doorR.GetComponent<Renderer>().material.SetColor("_Color", color);
-        doorL.GetComponent<Renderer>().material.SetColor("_Color", color);
+        materialGate.SetColor("_Color", color);
+        materialR.SetColor("_Color", color);
+        materialL.SetColor("_Color", color);
     }
 
     private void OnStateChange(DoorState.StateEnum state)
