@@ -96,10 +96,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
             return;
         }
-        else
-        {
-            Debug.Log("position UP: " + eventData.position);
-        }
 
         if (!isActive) return;
 
@@ -115,10 +111,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
             return;
-        }
-        else
-        {
-            Debug.Log("position DOWN: " + eventData.position);
         }
 
         if (!isActive) return;
@@ -144,17 +136,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
             return;
         }
-
-        if (!isActive) return;
-
-        Debug.Log("Drag delta: " + eventData.delta);
     }
 
     private AttackButton GetAttack(Vector2 uiPos)
     {
-        Debug.Log("uipos: " + uiPos);
-        Debug.Log("kickcenter: " + kickCenter);
-
         if (InKick(uiPos)) return kickButton;
         return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
