@@ -22,7 +22,7 @@ public class GuardState : MonoBehaviour
     [SerializeField] protected int SHIELD_READY = 10;
     public bool IsShieldReady => shieldCount == SHIELD_READY;
 
-    public bool IsShieldOn(Direction attackDir) => commander.IsIdling && IsShieldReady && map.dir.IsInverse(attackDir);
+    public bool IsShieldOn(Direction attackDir) => commander.IsFightValid && IsShieldReady && map.dir.IsInverse(attackDir);
 
     public void SetShield() { commander.EnqueueShieldOn(); }
 

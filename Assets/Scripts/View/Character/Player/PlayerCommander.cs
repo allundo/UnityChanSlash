@@ -77,8 +77,8 @@ public partial class PlayerCommander : ShieldCommander
 
         if (IsFaceToEnemy)
         {
-            if (IsIdling) guardState.SetEnemyDetected(true);
-            fightCircle.SetActive(IsIdling || IsAttack);
+            if (IsFightValid) guardState.SetEnemyDetected(true);
+            fightCircle.SetActive(IsFightValid || IsAttack);
         }
         else
         {

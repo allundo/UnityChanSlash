@@ -5,6 +5,8 @@ public abstract class ShieldCommander : MobCommander
 {
     public GuardState guardState { get; protected set; }
 
+    public bool IsFightValid => currentCommand == null || currentCommand is GuardCommand;
+
     protected Command shieldOn = null;
     public virtual void EnqueueShieldOn() { EnqueueCommand(shieldOn, true); }
 
