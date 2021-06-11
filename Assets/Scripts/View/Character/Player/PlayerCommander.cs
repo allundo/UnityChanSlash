@@ -59,7 +59,7 @@ public partial class PlayerCommander : ShieldCommander
 
     protected override void SetCommands()
     {
-        die = new DieCommand(this, 10.0f);
+        die = new DieCommand(this, 8.0f);
         shieldOn = new PlayerShieldOn(this, 0.42f);
 
         input = new CommandInput(this);

@@ -83,7 +83,7 @@ public abstract partial class MobCommander : MonoBehaviour
         /// </summary>
         protected void SetDestoryFinal()
         {
-            tweenMove.SetFinallyCall(() => commander.reactor.Inactivate());
+            tweenMove.SetFinallyCall(() => commander.reactor.FadeOutToInactive());
         }
 
         private TweenCallback DispatchFinally(Action OnComplete = null)

@@ -8,7 +8,7 @@ public partial class EnemyCommander : MobCommander
 
     protected override void SetCommands()
     {
-        die = new DieCommand(this, 3.0f);
+        die = new DieCommand(this, 2.0f);
         enemyAI = new EnemyAI(this);
     }
 

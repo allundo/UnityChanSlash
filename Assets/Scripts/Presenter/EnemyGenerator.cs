@@ -18,7 +18,7 @@ public class EnemyGenerator : MonoBehaviour
         {
             if (!t.gameObject.activeSelf)
             {
-                t.GetComponent<MobReactor>().Activate();
+                t.GetComponent<MobReactor>().FadeInToActive();
                 return;
             }
         }

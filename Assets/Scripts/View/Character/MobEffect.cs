@@ -68,4 +68,26 @@ public class MobEffect : MonoBehaviour
             flash.Append(mat.DOColor(Color.black, 2.0f * rate)).Play();
         }
     }
+
+    public Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);
+    public Tween FadeOutTween(float duration = 0.5f) => GetFadeTween(false, duration);
+    protected Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
+    {
+        Sequence fade = DOTween.Sequence();
+
+        foreach (Material mat in flashMaterials)
+        {
+            fade.Join(
+                DOTween.ToAlpha(
+                    () => mat.color,
+                    color => mat.color = color,
+                    isFadeIn ? 1.0f : 0.0f,
+                    duration
+                )
+                .SetEase(Ease.InSine)
+            );
+        }
+
+        return fade;
+    }
 }

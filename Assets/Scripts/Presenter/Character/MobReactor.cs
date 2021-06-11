@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniRx;
+using DG.Tweening;
 
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(MobEffect))]
@@ -42,20 +43,23 @@ public class MobReactor : MonoBehaviour
         status.Damage(damage);
     }
 
-    protected void OnDie()
+    protected virtual void OnDie()
     {
         effect.OnDie();
         commander.SetDie();
     }
 
-    protected virtual void OnActivate()
+    public virtual void FadeInToActive(float duration = 0.5f)
     {
         Activate();
+        effect.FadeInTween(duration).Play();
     }
 
-    protected virtual void OnInactivate()
+    public virtual void FadeOutToInactive(float duration = 0.5f)
     {
-        Inactivate();
+        effect.FadeOutTween(duration)
+            .OnComplete(() => Inactivate())
+            .Play();
     }
 
     public void Activate()
