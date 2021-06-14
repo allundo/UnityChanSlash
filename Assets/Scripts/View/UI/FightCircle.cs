@@ -146,12 +146,18 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Activate()
     {
+        if (isActive) return;
+
         isActive = true;
         gameObject.SetActive(true);
+
+        Debug.Log("Fight Circle Active");
     }
 
     public void Inactivate()
     {
+        if (!isActive) return;
+
         ButtonCancel(true);
         isActive = false;
     }
