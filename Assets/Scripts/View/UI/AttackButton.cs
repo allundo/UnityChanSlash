@@ -18,11 +18,14 @@ public class AttackButton : MonoBehaviour
 
     public ISubject<Unit> AttackSubject { get; protected set; } = new Subject<Unit>();
 
-    void Start()
+    private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
+    }
 
+    void Start()
+    {
         defaultSize = rectTransform.sizeDelta;
         defaultColor = image.color;
 
