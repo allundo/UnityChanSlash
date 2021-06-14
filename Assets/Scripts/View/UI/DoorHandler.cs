@@ -46,8 +46,9 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private bool IsPressed => currentFlick != null;
 
-    private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter;
-    private Vector2 DragVector(Vector2 screenPos) => UIPos(screenPos) - pressPos;
+    private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter - UICenter;
+    private Vector2 ScreenVec(Vector2 screenPos) => screenPos - screenCenter;
+    private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
 
 
     void Start()
@@ -142,8 +143,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         isFingerDown = true;
 
-        Vector2 pos = UIPos(eventData.position);
-        FlickInteraction flick = GetFlick(pos);
+        FlickInteraction flick = GetFlick(ScreenVec(eventData.position));
 
         if (flick == null)
         {
@@ -153,7 +153,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        pressPos = pos;
+        pressPos = eventData.position;
         currentFlick = flick;
 
         currentFlick.UpdateImage(DragVector(eventData.position));

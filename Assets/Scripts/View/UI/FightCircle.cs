@@ -36,7 +36,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private float DrawComponent(Vector2 delta) => IsPressed ? Vector2.Dot(pressPos.normalized, delta) : 0.0f;
     private float radius;
 
-    private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter;
+    private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter - UICenter;
+    private Vector2 ScreenVec(Vector2 screenPos) => screenPos - screenCenter;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
 
     void Start()
@@ -48,7 +49,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         kickCenter = new Vector2(0, -(radius - 20.0f));
 
         UICenter = rectTransform.anchoredPosition;
-        screenCenter = new Vector2(Screen.width / 2, Screen.height / 2) + UICenter;
+        screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
         SetAlpha(0.0f);
         gameObject.SetActive(false);
@@ -115,10 +116,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        pressPos = UIPos(eventData.position);
-        currentButton = GetAttack(pressPos);
+        pressPos = eventData.position;
+        currentButton = GetAttack(UIPos(eventData.position));
 
-        currentButton.Activate(pressPos);
+        currentButton.Activate(ScreenVec(pressPos));
     }
 
     public void OnDrag(PointerEventData eventData)
