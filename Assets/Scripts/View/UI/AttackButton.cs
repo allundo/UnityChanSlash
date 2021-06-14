@@ -31,10 +31,15 @@ public class AttackButton : MonoBehaviour
 
         fadeIn = GetActivateFadeIn(image, 0.2f);
         fadeOut = GetInactivateFadeOut(image, 0.2f);
-        expand = GetResize(rectTransform, 1.5f, 0.2f);
-        shrink = GetResize(rectTransform, 0.5f, 0.2f);
+        expand = GetResize(1.5f, 0.2f, true).OnComplete(ResetSize);
+        shrink = GetResize(0.5f, 0.2f, true).OnComplete(ResetSize);
 
         GetInactivateFadeOut(image, 0.0f).SetAutoKill(true).Complete();
+    }
+
+    private void ResetSize()
+    {
+        rectTransform.sizeDelta = defaultSize;
     }
 
     private Tween GetActivateFadeIn(Image image, float duration = 0.2f)
@@ -63,11 +68,11 @@ public class AttackButton : MonoBehaviour
             .AsReusable(gameObject);
     }
 
-    private Tween GetResize(RectTransform rt, float ratio = 1.5f, float duration = 0.2f)
+    private Tween GetResize(float ratio = 1.5f, float duration = 0.2f, bool isReusable = false)
     {
-        Vector2 defaultSize = rt.sizeDelta;
+        Tween resize = rectTransform.DOSizeDelta(defaultSize * ratio, duration);
 
-        return rt.DOSizeDelta(defaultSize * ratio, duration).OnComplete(() => rt.sizeDelta = defaultSize).AsReusable(gameObject);
+        return isReusable ? resize.AsReusable(gameObject) : resize;
     }
 
     public void Activate(Vector2 pos, float duration = 0.2f)
