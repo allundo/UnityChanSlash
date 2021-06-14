@@ -53,22 +53,22 @@ public class MapUtil : MonoBehaviour
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable();
 
     public Vector3 CurrentVec3Pos => tf.position;
-    public Pos CurrentPos => map.MapPos(tf.position);
-    public Pos GetForward => dir.GetForward(CurrentPos);
-    public Pos GetLeft => dir.GetLeft(CurrentPos);
-    public Pos GetRight => dir.GetRight(CurrentPos);
-    public Pos GetBackward => dir.GetBackward(CurrentPos);
+    public Pos CurrentPos => onTilePos;
+    public Pos GetForward => dir.GetForward(onTilePos);
+    public Pos GetLeft => dir.GetLeft(onTilePos);
+    public Pos GetRight => dir.GetRight(onTilePos);
+    public Pos GetBackward => dir.GetBackward(onTilePos);
 
-    public bool IsForwardMovable => IsMovable(dir.GetForward(CurrentPos));
-    public bool IsForwardLeapable => IsLeapable(dir.GetForward(CurrentPos));
-    public bool IsBackwardMovable => IsMovable(dir.GetBackward(CurrentPos));
-    public bool IsLeftMovable => IsMovable(dir.GetLeft(CurrentPos));
-    public bool IsRightMovable => IsMovable(dir.GetRight(CurrentPos));
-    public bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(CurrentPos)));
+    public bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos));
+    public bool IsForwardLeapable => IsLeapable(dir.GetForward(onTilePos));
+    public bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos));
+    public bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos));
+    public bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
+    public bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(onTilePos)));
 
     public static bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
 
-    public bool IsPlayerFound() => IsPlayerFound(CurrentPos);
+    public bool IsPlayerFound() => IsPlayerFound(onTilePos);
     /// <summary>
     /// 指定した地点から前方に向けてプレイヤーがいないか再帰的にチェック<br>
     /// 壁などの進めないマスに到達したら探索終了

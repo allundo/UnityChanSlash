@@ -9,6 +9,13 @@ public partial class PlayerCommander : ShieldCommander
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
     [SerializeField] protected FightCircle fightCircle = default;
     [SerializeField] protected DoorHandler doorHandler = default;
+    [SerializeField] protected PointerEnterUI forwardUI = default;
+    [SerializeField] protected PointerEnterUI rightUI = default;
+    [SerializeField] protected PointerEnterUI leftUI = default;
+    [SerializeField] protected PointerEnterUI backwardUI = default;
+    [SerializeField] protected PointerDownUI turnRUI = default;
+    [SerializeField] protected PointerDownUI turnLUI = default;
+    [SerializeField] protected PointerDownUI jumpUI = default;
 
     protected HidePool hidePool;
     protected CommandInput input;
@@ -133,6 +140,15 @@ public partial class PlayerCommander : ShieldCommander
         {
             doorHandler.Inactivate();
         }
+
+        forwardUI.SetActive(forwardTile.IsEnterable());
+        backwardUI.SetActive(map.IsBackwardMovable);
+        rightUI.SetActive(map.IsRightMovable);
+        leftUI.SetActive(map.IsLeftMovable);
+
+        turnRUI.SetActive(isCommandValid);
+        turnLUI.SetActive(isCommandValid);
+        jumpUI.SetActive(isCommandValid);
     }
 
     public override void SetDie()
