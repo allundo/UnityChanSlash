@@ -39,6 +39,9 @@ public class FlickInteraction : MonoBehaviour
     public ISubject<Unit> RightSubject => right.FlickSubject;
     public ISubject<Unit> LeftSubject => left.FlickSubject;
 
+    protected IReactiveProperty<bool> isHandOn = new ReactiveProperty<bool>(false);
+    public IReadOnlyReactiveProperty<bool> IsHandOn => isHandOn;
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -72,7 +75,10 @@ public class FlickInteraction : MonoBehaviour
 
     private void UpdateParentImage(float dragRatio)
     {
-        parent.UpdateImage(dragRatio);
+        isHandOn.Value = dragRatio > 0.5f;
+
+        parent.SetAlpha(1.0f - dragRatio);
+        parent.textRT.gameObject.SetActive(isHandOn.Value);
     }
 
     private Tween GetFadeOutToInactive(float duration = 0.2f, TweenCallback OnPlay = null)
@@ -168,6 +174,7 @@ public class FlickInteraction : MonoBehaviour
     private void Clear()
     {
         currentDir = null;
+        isHandOn.Value = false;
         parent.ReleaseButton();
     }
 

@@ -15,6 +15,7 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerEx kick { get; protected set; }
     public TriggerEx dieEx { get; protected set; }
     public AnimatorBool rest { get; protected set; }
+    public AnimatorBool handOn { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
 
@@ -32,6 +33,7 @@ public class PlayerAnimator : ShieldAnimator
         kick = new TriggerEx(anim, "Kick", 5);
         dieEx = new TriggerEx(anim, "Die", 0);
         rest = new AnimatorBool(anim, "Rest");
+        handOn = new AnimatorBool(anim, "HandOn");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 

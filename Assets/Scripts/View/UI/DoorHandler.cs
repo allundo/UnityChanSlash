@@ -17,7 +17,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public IObservable<Unit> ObserveGo => Observable.Merge(closeRFlick.UpSubject, closeLFlick.UpSubject);
     public IObservable<Unit> ObserveHandle => Observable.Merge(openFlick.RightSubject, openFlick.LeftSubject, closeRFlick.LeftSubject, closeLFlick.RightSubject);
-    public IObservable<Unit> ObserveTest => Observable.Merge(openFlick.RightSubject, openFlick.LeftSubject);
+    public IObservable<bool> ObserveHandOn => Observable.Merge(openFlick.IsHandOn, closeRFlick.IsHandOn, closeLFlick.IsHandOn);
 
     private RectTransform rectTransform;
     private RawImage rawImage;

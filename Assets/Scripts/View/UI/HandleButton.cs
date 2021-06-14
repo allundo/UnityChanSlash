@@ -4,10 +4,10 @@ using DG.Tweening;
 
 public class HandleButton : MonoBehaviour
 {
-    [SerializeField] Sprite handle = default;
-    [SerializeField] Sprite circle = default;
-    [SerializeField] float maxAlpha = 1.0f;
-    [SerializeField] RectTransform textRT = default;
+    [SerializeField] private Sprite handle = default;
+    [SerializeField] private Sprite circle = default;
+    [SerializeField] private float maxAlpha = 1.0f;
+    [SerializeField] public RectTransform textRT = default;
 
     protected RectTransform rectTransform;
     protected Image image;
@@ -79,12 +79,6 @@ public class HandleButton : MonoBehaviour
         textRT.gameObject.SetActive(false);
     }
 
-    public void UpdateImage(float dragRatio)
-    {
-        textRT.gameObject.SetActive(dragRatio > 0.5f);
-        SetAlpha(1.0f - dragRatio);
-    }
-
     public void SetAlpha(float alpha)
     {
         Color c = image.color;
@@ -93,6 +87,7 @@ public class HandleButton : MonoBehaviour
 
     public void Activate(float alpha)
     {
+        isPressed = false;
         SetAlpha(alpha);
         gameObject.SetActive(true);
     }
