@@ -99,7 +99,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        currentButton.Release();
+        currentButton?.Release();
         currentButton = null;
     }
 
