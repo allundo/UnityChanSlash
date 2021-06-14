@@ -32,4 +32,7 @@ public class Door : Tile
     public bool IsLeapable() => false;
     public bool IsViewOpen() => state.IsOpen;
     public bool IsCharactorOn { get; set; } = false;
+
+    public Vector3 Position => state.transform.position;
+    public bool IsOpen => state.IsOpen;
 }

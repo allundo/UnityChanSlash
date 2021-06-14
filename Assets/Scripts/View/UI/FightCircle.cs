@@ -19,7 +19,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private RawImage rawImage;
 
     private float alpha = 0.0f;
-    private bool isActive = false;
+    public bool isActive { get; private set; } = false;
     private bool isFingerDown = false;
 
     private Vector2 UICenter;

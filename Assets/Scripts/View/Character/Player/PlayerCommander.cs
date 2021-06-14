@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UniRx;
 
 [RequireComponent(typeof(PlayerAnimator))]
@@ -9,13 +8,15 @@ public partial class PlayerCommander : ShieldCommander
 {
     [SerializeField] protected ThirdPersonCamera mainCamera = default;
     [SerializeField] protected FightCircle fightCircle = default;
+    [SerializeField] protected DoorHandler doorHandler = default;
 
     protected HidePool hidePool;
     protected CommandInput input;
     protected FightInput fightInput;
+    protected DoorInput doorInput;
 
-    private bool IsFaceToEnemy => map.IsCharactorOn(map.GetForward);
     private bool IsAttack => currentCommand is PlayerAttack;
+    private bool IsLeaving => currentCommand is MoveCommand || currentCommand is JumpCommand && !isCommandValid;
 
     protected class FightInput
     {
@@ -50,6 +51,33 @@ public partial class PlayerCommander : ShieldCommander
                 .AddTo(commander);
         }
     }
+    protected class DoorInput
+    {
+        DoorHandler doorHandler;
+
+        Command forward;
+        Command handle;
+
+        public DoorInput(PlayerCommander commander)
+        {
+            this.doorHandler = commander.doorHandler;
+            SetCommands(commander);
+        }
+
+        protected void SetCommands(PlayerCommander commander)
+        {
+            forward = new ForwardCommand(commander, 1.0f);
+            handle = new PlayerHandle(commander, 1.0f);
+
+            doorHandler.ObserveGo
+                .Subscribe(_ => { commander.InputReactive.Execute(forward); Debug.Log("Go"); })
+                .AddTo(commander);
+
+            doorHandler.ObserveHandle
+                .Subscribe(_ => { commander.InputReactive.Execute(handle); Debug.Log("Handle"); })
+                .AddTo(commander);
+        }
+    }
 
     protected override void Awake()
     {
@@ -63,7 +91,9 @@ public partial class PlayerCommander : ShieldCommander
         shieldOn = new PlayerShieldOn(this, 0.42f);
 
         input = new CommandInput(this);
+
         fightInput = new FightInput(this);
+        doorInput = new DoorInput(this);
     }
 
     protected override Command GetCommand()
@@ -75,7 +105,10 @@ public partial class PlayerCommander : ShieldCommander
     {
         InputReactive.Execute(GetCommand());
 
-        if (IsFaceToEnemy)
+        Tile forwardTile = map.ForwardTile;
+
+        // Is face to enemy
+        if (forwardTile.IsCharactorOn)
         {
             if (IsFightValid) guardState.SetEnemyDetected(true);
             fightCircle.SetActive(IsFightValid || IsAttack);
@@ -85,6 +118,23 @@ public partial class PlayerCommander : ShieldCommander
             guardState.SetEnemyDetected(false);
             fightCircle.Inactivate();
         }
+
+        if (!fightCircle.isActive && forwardTile is Door && !IsLeaving)
+        {
+            doorHandler.Activate((forwardTile as Door).IsOpen);
+        }
+        else
+        {
+            doorHandler.Inactivate();
+        }
+    }
+
+    public override void SetDie()
+    {
+        doorHandler.Inactivate();
+        fightCircle.Inactivate();
+
+        base.SetDie();
     }
 
     public override void EnqueueShieldOn() { EnqueueCommand(shieldOn, true); }
