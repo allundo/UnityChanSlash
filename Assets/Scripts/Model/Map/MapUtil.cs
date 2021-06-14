@@ -9,6 +9,7 @@ public class MapUtil : MonoBehaviour
     private WorldMap map;
     private Transform tf;
     public Direction dir { get; protected set; }
+    private Pos onTilePos;
     public static readonly float TILE_UNIT = 2.5f;
 
     private static readonly Vector3 defaultPos = new Vector3(-50, 0, 50);
@@ -46,7 +47,7 @@ public class MapUtil : MonoBehaviour
     public Vector3 GetRightVector(int distance = 1) => Quaternion.Euler(0, 90, 0) * dir.LookAt * TILE_UNIT * distance;
     public Vector3 GetLeftVector(int distance = 1) => Quaternion.Euler(0, -90, 0) * dir.LookAt * TILE_UNIT * distance;
 
-    public Tile ForwardTile => map.GetTile(GetForward);
+    public Tile ForwardTile => map.GetTile(dir.GetForward(onTilePos));
     public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
     public bool IsMovable(Pos destPos) => map.GetTile(destPos).IsEnterable();
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable();
@@ -108,6 +109,7 @@ public class MapUtil : MonoBehaviour
     public void SetOnCharactor(Pos pos)
     {
         map.GetTile(pos).IsCharactorOn = true;
+        onTilePos = pos;
     }
 
     /// <summary>

@@ -87,7 +87,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void UpdateTransparent()
     {
-        alpha += isActive ? 0.2f : -0.2f;
+        alpha += isActive ? 0.05f : -0.1f;
 
         if (alpha > maxAlpha)
         {
@@ -189,10 +189,9 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Activate(bool isOpen)
     {
+        if (isActive && this.isOpen == isOpen) return;
+
         this.isOpen = isOpen;
-
-        if (isActive) return;
-
         isActive = true;
         gameObject.SetActive(true);
 

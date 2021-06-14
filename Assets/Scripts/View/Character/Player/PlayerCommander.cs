@@ -16,7 +16,6 @@ public partial class PlayerCommander : ShieldCommander
     protected DoorInput doorInput;
 
     private bool IsAttack => currentCommand is PlayerAttack;
-    private bool IsLeaving => currentCommand is MoveCommand || currentCommand is JumpCommand && !isCommandValid;
 
     protected class FightInput
     {
@@ -119,7 +118,7 @@ public partial class PlayerCommander : ShieldCommander
             fightCircle.Inactivate();
         }
 
-        if (!fightCircle.isActive && forwardTile is Door && !IsLeaving)
+        if (!fightCircle.isActive && forwardTile is Door)
         {
             doorHandler.Activate((forwardTile as Door).IsOpen);
         }
