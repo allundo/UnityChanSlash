@@ -72,15 +72,15 @@ public partial class PlayerCommander : ShieldCommander
             handle = new PlayerHandle(commander, 0.4f);
 
             doorHandler.ObserveGo
-                .Subscribe(_ => { commander.InputReactive.Execute(forward); Debug.Log("Go"); })
+                .Subscribe(_ => commander.InputReactive.Execute(forward))
                 .AddTo(commander);
 
             doorHandler.ObserveHandle
-                .Subscribe(_ => { commander.InputReactive.Execute(handle); Debug.Log("Handle"); })
+                .Subscribe(_ => commander.InputReactive.Execute(handle))
                 .AddTo(commander);
 
             doorHandler.ObserveHandOn
-                .Subscribe(isHandOn => { anim.handOn.Bool = isHandOn; Debug.Log("HandOn: " + isHandOn); })
+                .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
                 .AddTo(commander);
         }
     }
