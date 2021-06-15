@@ -5,23 +5,23 @@ using UniRx;
 
 public class FlickInteraction : MonoBehaviour
 {
-    [SerializeField] private HandleButton parent = default;
-    [SerializeField] private Sprite upSprite = null;
-    [SerializeField] private Sprite downSprite = null;
-    [SerializeField] private Sprite leftSprite = null;
-    [SerializeField] private Sprite rightSprite = null;
+    [SerializeField] protected HandleButton parent = default;
+    [SerializeField] protected Sprite upSprite = null;
+    [SerializeField] protected Sprite downSprite = null;
+    [SerializeField] protected Sprite leftSprite = null;
+    [SerializeField] protected Sprite rightSprite = null;
 
-    [SerializeField] private float upLimit = 0.0f;
-    [SerializeField] private float downLimit = 0.0f;
-    [SerializeField] private float rightLimit = 0.0f;
-    [SerializeField] private float leftLimit = 0.0f;
+    [SerializeField] protected float upLimit = 0.0f;
+    [SerializeField] protected float downLimit = 0.0f;
+    [SerializeField] protected float rightLimit = 0.0f;
+    [SerializeField] protected float leftLimit = 0.0f;
 
-    [SerializeField] float maxAlpha = 1.0f;
+    [SerializeField] protected float maxAlpha = 1.0f;
 
-    private FlickDirection up = null;
-    private FlickDirection down = null;
-    private FlickDirection right = null;
-    private FlickDirection left = null;
+    protected FlickDirection up = null;
+    protected FlickDirection down = null;
+    protected FlickDirection right = null;
+    protected FlickDirection left = null;
 
     private FlickDirection currentDir = null;
 
@@ -39,14 +39,17 @@ public class FlickInteraction : MonoBehaviour
     public ISubject<Unit> RightSubject => right.FlickSubject;
     public ISubject<Unit> LeftSubject => left.FlickSubject;
 
-    protected IReactiveProperty<bool> isHandOn = new ReactiveProperty<bool>(false);
-    public IReadOnlyReactiveProperty<bool> IsHandOn => isHandOn;
 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
 
+        SetFlicks();
+    }
+
+    protected virtual void SetFlicks()
+    {
         up = FlickUp.New(this);
         down = FlickDown.New(this);
         right = FlickRight.New(this);
@@ -71,14 +74,6 @@ public class FlickInteraction : MonoBehaviour
     {
         Color c = image.color;
         image.color = new Color(c.r, c.g, c.b, alpha * maxAlpha);
-    }
-
-    private void UpdateParentImage(float dragRatio)
-    {
-        isHandOn.Value = dragRatio > 0.5f;
-
-        parent.SetAlpha(1.0f - dragRatio);
-        parent.textRT.gameObject.SetActive(isHandOn.Value);
     }
 
     private Tween GetFadeOutToInactive(float duration = 0.2f, TweenCallback OnPlay = null)
@@ -171,25 +166,27 @@ public class FlickInteraction : MonoBehaviour
         return dir;
     }
 
-    private void Clear()
+    protected virtual void Clear()
     {
         currentDir = null;
-        isHandOn.Value = false;
         parent.ReleaseButton();
     }
 
-    private abstract class FlickDirection
+    protected abstract class FlickDirection
     {
         protected FlickInteraction flick;
         protected Sprite sprite;
         protected float limit;
+        protected RectTransform textRT;
+
         public ISubject<Unit> FlickSubject { get; protected set; } = new Subject<Unit>();
 
-        protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit)
+        protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit, RectTransform textRT)
         {
             this.flick = flick;
             this.sprite = sprite;
             this.limit = limit;
+            this.textRT = textRT;
         }
 
         protected virtual Vector2 Destination => Vector2.zero;
@@ -217,7 +214,17 @@ public class FlickInteraction : MonoBehaviour
 
             flick.SetPos(limitedVec);
             flick.SetAlpha(dragRatio);
-            flick.UpdateParentImage(dragRatio);
+            UpdateParentImage(dragRatio);
+        }
+
+        /// <summary>
+        /// Hide parent circle image and show command text when flick type is determinded
+        /// </summary>
+        /// <param name="dragRatio"></param>
+        protected virtual void UpdateParentImage(float dragRatio)
+        {
+            flick.parent.SetAlpha(1.0f - dragRatio);
+            textRT.gameObject.SetActive(dragRatio > 0.5f);
         }
 
         /// <summary>
@@ -246,61 +253,61 @@ public class FlickInteraction : MonoBehaviour
         }
     }
 
-    private class FlickUp : FlickDirection
+    protected class FlickUp : FlickDirection
     {
-        private FlickUp(FlickInteraction flick) : base(flick, flick.upSprite, flick.upLimit) { }
+        protected FlickUp(FlickInteraction flick) : base(flick, flick.upSprite, flick.upLimit, flick.parent.upTextRT) { }
 
         public static FlickUp New(FlickInteraction flick)
         {
-            if (flick.upLimit <= 0.0f || flick.upSprite == null) return null;
-
-            return new FlickUp(flick);
+            return IsValid(flick) ? new FlickUp(flick) : null;
         }
+
+        protected static bool IsValid(FlickInteraction flick) => flick.upLimit > 0.0f && flick.upSprite != null;
 
         protected override Vector2 Destination => new Vector2(0, limit * 1.5f);
         protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(0, Mathf.Clamp(dragVector.y, 0, limit));
     }
 
-    private class FlickDown : FlickDirection
+    protected class FlickDown : FlickDirection
     {
-        private FlickDown(FlickInteraction flick) : base(flick, flick.downSprite, flick.downLimit) { }
+        protected FlickDown(FlickInteraction flick) : base(flick, flick.downSprite, flick.downLimit, flick.parent.downTextRT) { }
 
         public static FlickDown New(FlickInteraction flick)
         {
-            if (flick.downLimit <= 0.0f || flick.downSprite == null) return null;
-
-            return new FlickDown(flick);
+            return IsValid(flick) ? new FlickDown(flick) : null;
         }
+
+        protected static bool IsValid(FlickInteraction flick) => flick.downLimit > 0.0f && flick.downSprite != null;
 
         protected override Vector2 Destination => new Vector2(0, -limit * 1.5f);
         protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(0, Mathf.Clamp(dragVector.y, -limit, 0));
     }
 
-    private class FlickRight : FlickDirection
+    protected class FlickRight : FlickDirection
     {
-        private FlickRight(FlickInteraction flick) : base(flick, flick.rightSprite, flick.rightLimit) { }
+        protected FlickRight(FlickInteraction flick) : base(flick, flick.rightSprite, flick.rightLimit, flick.parent.rightTextRT) { }
 
         public static FlickRight New(FlickInteraction flick)
         {
-            if (flick.rightLimit <= 0.0f || flick.rightSprite == null) return null;
-
-            return new FlickRight(flick);
+            return IsValid(flick) ? new FlickRight(flick) : null;
         }
+
+        protected static bool IsValid(FlickInteraction flick) => flick.rightLimit > 0.0f && flick.rightSprite != null;
 
         protected override Vector2 Destination => new Vector2(limit * 1.5f, 0);
         protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(Mathf.Clamp(dragVector.x, 0, limit), 0);
     }
 
-    private class FlickLeft : FlickDirection
+    protected class FlickLeft : FlickDirection
     {
-        private FlickLeft(FlickInteraction flick) : base(flick, flick.leftSprite, flick.leftLimit) { }
+        protected FlickLeft(FlickInteraction flick) : base(flick, flick.leftSprite, flick.leftLimit, flick.parent.leftTextRT) { }
 
         public static FlickLeft New(FlickInteraction flick)
         {
-            if (flick.leftLimit <= 0.0f || flick.leftSprite == null) return null;
-
-            return new FlickLeft(flick);
+            return IsValid(flick) ? new FlickLeft(flick) : null;
         }
+
+        protected static bool IsValid(FlickInteraction flick) => flick.leftLimit > 0.0f && flick.leftSprite != null;
 
         protected override Vector2 Destination => new Vector2(-limit * 1.5f, 0);
         protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(Mathf.Clamp(dragVector.x, -limit, 0), 0);

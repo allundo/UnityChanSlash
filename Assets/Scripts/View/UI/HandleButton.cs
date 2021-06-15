@@ -7,7 +7,11 @@ public class HandleButton : MonoBehaviour
     [SerializeField] private Sprite handle = default;
     [SerializeField] private Sprite circle = default;
     [SerializeField] private float maxAlpha = 1.0f;
-    [SerializeField] public RectTransform textRT = default;
+
+    [SerializeField] public RectTransform upTextRT = default;
+    [SerializeField] public RectTransform downTextRT = default;
+    [SerializeField] public RectTransform rightTextRT = default;
+    [SerializeField] public RectTransform leftTextRT = default;
 
     protected RectTransform rectTransform;
     protected Image image;
@@ -33,7 +37,7 @@ public class HandleButton : MonoBehaviour
         cycle = GetRotate(-90.0f, 5.0f, true).SetEase(Ease.Linear);
         expand = GetResize(1.5f, 0.2f, true);
 
-        textRT.gameObject.SetActive(false);
+        InactiveTexts();
     }
 
     private void ResetSize()
@@ -76,7 +80,7 @@ public class HandleButton : MonoBehaviour
         SetAlpha(1.0f);
         image.sprite = handle;
 
-        textRT.gameObject.SetActive(false);
+        InactiveTexts();
     }
 
     public void SetAlpha(float alpha)
@@ -95,6 +99,14 @@ public class HandleButton : MonoBehaviour
     public void Inactivate()
     {
         gameObject.SetActive(false);
-        textRT.gameObject.SetActive(false);
+        InactiveTexts();
+    }
+
+    public void InactiveTexts()
+    {
+        if (upTextRT != null) upTextRT.gameObject.SetActive(false);
+        if (downTextRT != null) downTextRT.gameObject.SetActive(false);
+        if (rightTextRT != null) rightTextRT.gameObject.SetActive(false);
+        if (leftTextRT != null) leftTextRT.gameObject.SetActive(false);
     }
 }

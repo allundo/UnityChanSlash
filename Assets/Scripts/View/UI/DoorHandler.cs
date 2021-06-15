@@ -10,9 +10,9 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private HandleButton openButton = default;
     [SerializeField] private HandleButton closeRButton = default;
     [SerializeField] private HandleButton closeLButton = default;
-    [SerializeField] private FlickInteraction openFlick = default;
-    [SerializeField] private FlickInteraction closeRFlick = default;
-    [SerializeField] private FlickInteraction closeLFlick = default;
+    [SerializeField] private DoorFlick openFlick = default;
+    [SerializeField] private DoorFlick closeRFlick = default;
+    [SerializeField] private DoorFlick closeLFlick = default;
     [SerializeField] private float maxAlpha = 0.8f;
 
     public IObservable<Unit> ObserveGo => Observable.Merge(closeRFlick.UpSubject, closeLFlick.UpSubject);
