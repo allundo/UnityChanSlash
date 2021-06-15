@@ -16,7 +16,7 @@ public class DoorState : MonoBehaviour
     private bool isLocked = false;
 
     public bool IsOpen => State.Value == StateEnum.OPEN || State.Value == StateEnum.OPENING;
-    private bool IsControllable => State.Value == StateEnum.OPEN || State.Value == StateEnum.CLOSE;
+    public bool IsControllable => State.Value == StateEnum.OPEN || State.Value == StateEnum.CLOSE;
 
     public void TransitionNext()
     {

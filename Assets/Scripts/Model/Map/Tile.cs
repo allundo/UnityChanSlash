@@ -35,4 +35,5 @@ public class Door : Tile
 
     public Vector3 Position => state.transform.position;
     public bool IsOpen => state.IsOpen;
+    public bool IsControllable => state.IsControllable;
 }

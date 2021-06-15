@@ -44,7 +44,9 @@ public partial class PlayerCommander : ShieldCommander
 
         if (!fightCircle.isActive && forwardTile is Door)
         {
-            doorHandler.Activate((forwardTile as Door).IsOpen);
+            Door door = forwardTile as Door;
+
+            doorHandler.SetActive(door.IsControllable, door.IsOpen);
         }
         else
         {
@@ -60,7 +62,7 @@ public partial class PlayerCommander : ShieldCommander
         turnLUI.SetActive(isCommandValid);
         jumpUI.SetActive(isCommandValid);
 
-        guardUI.SetActive(true);
+        guardUI.SetActive(!fightCircle.isActive);
     }
 
     private void InactivateUIs()
