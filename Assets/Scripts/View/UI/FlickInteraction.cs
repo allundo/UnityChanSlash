@@ -160,12 +160,12 @@ public class FlickInteraction : MonoBehaviour
         if (Mathf.Abs(dragVector.x) >= Mathf.Abs(dragVector.y))
         {
             dir = dragVector.x > 0 ? right : left;
-            dir = dir ?? (dragVector.y > 0 ? up : down);
+            dir = dir ?? (dragVector.y > 0 ? up : down) ?? right ?? left;
         }
         else
         {
             dir = dragVector.y > 0 ? up : down;
-            dir = dir ?? (dragVector.x > 0 ? right : left);
+            dir = dir ?? (dragVector.x > 0 ? right : left) ?? up ?? down;
         }
 
         return dir;
@@ -258,7 +258,7 @@ public class FlickInteraction : MonoBehaviour
         }
 
         protected override Vector2 Destination => new Vector2(0, limit * 1.5f);
-        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(0, Mathf.Min(limit, dragVector.y));
+        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(0, Mathf.Clamp(dragVector.y, 0, limit));
     }
 
     private class FlickDown : FlickDirection
@@ -273,7 +273,7 @@ public class FlickInteraction : MonoBehaviour
         }
 
         protected override Vector2 Destination => new Vector2(0, -limit * 1.5f);
-        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(0, Mathf.Max(-limit, dragVector.y));
+        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(0, Mathf.Clamp(dragVector.y, -limit, 0));
     }
 
     private class FlickRight : FlickDirection
@@ -288,7 +288,7 @@ public class FlickInteraction : MonoBehaviour
         }
 
         protected override Vector2 Destination => new Vector2(limit * 1.5f, 0);
-        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(Mathf.Min(limit, dragVector.x), 0);
+        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(Mathf.Clamp(dragVector.x, 0, limit), 0);
     }
 
     private class FlickLeft : FlickDirection
@@ -303,6 +303,6 @@ public class FlickInteraction : MonoBehaviour
         }
 
         protected override Vector2 Destination => new Vector2(-limit * 1.5f, 0);
-        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(Mathf.Max(-limit, dragVector.x), 0);
+        protected override Vector2 LimitedVec(Vector2 dragVector) => new Vector2(Mathf.Clamp(dragVector.x, -limit, 0), 0);
     }
 }
