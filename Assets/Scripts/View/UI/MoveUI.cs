@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class MoveUI : MonoBehaviour
 {
-    [SerializeField] private MoveButton moveButton = default;
+    [SerializeField] protected MoveButton moveButton = default;
     [SerializeField] private float maxAlpha = 0.4f;
 
     private RectTransform rectTransform;
@@ -19,15 +19,15 @@ public class MoveUI : MonoBehaviour
     private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter - UICenter;
     private Vector2 ScreenVec(Vector2 screenPos) => screenPos - screenCenter;
 
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
     }
 
-    void Start()
+    protected virtual void Start()
     {
-
         UICenter = rectTransform.anchoredPosition;
         screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 

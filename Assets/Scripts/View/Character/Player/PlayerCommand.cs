@@ -2,6 +2,8 @@ using UnityEngine;
 
 public partial class PlayerCommander : ShieldCommander
 {
+    [SerializeField] protected ThirdPersonCamera mainCamera = default;
+
     [SerializeField] protected MobAttack jab = default;
     [SerializeField] protected MobAttack straight = default;
     [SerializeField] protected MobAttack kick = default;

@@ -1,380 +1,215 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.Utilities;
-using UnityEngine.InputSystem.EnhancedTouch;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
-using TouchPhase = UnityEngine.InputSystem.TouchPhase;
+using UniRx;
 
 public partial class PlayerCommander : ShieldCommander
 {
-    private void OnEnable()
+    [SerializeField] protected FightCircle fightCircle = default;
+    [SerializeField] protected DoorHandler doorHandler = default;
+    [SerializeField] protected PointerEnterUI forwardUI = default;
+    [SerializeField] protected PointerEnterUI rightUI = default;
+    [SerializeField] protected PointerEnterUI leftUI = default;
+    [SerializeField] protected PointerEnterUI backwardUI = default;
+    [SerializeField] protected PointerDownUI turnRUI = default;
+    [SerializeField] protected PointerDownUI turnLUI = default;
+    [SerializeField] protected PointerDownUI jumpUI = default;
+    [SerializeField] protected PointerEnterUI guardUI = default;
+
+    protected HidePool hidePool;
+    protected FightInput fightInput;
+    protected DoorInput doorInput;
+    protected MoveInput moveInput;
+
+    private void SetInputs()
     {
-        TouchSimulation.Enable();
-        EnhancedTouchSupport.Enable();
+        fightInput = new FightInput(this);
+        doorInput = new DoorInput(this);
+        moveInput = new MoveInput(this);
     }
 
-    private void OnDisable()
+    private void CommandInput()
     {
-        TouchSimulation.Disable();
-        EnhancedTouchSupport.Disable();
+        Tile forwardTile = map.ForwardTile;
+
+        // Is face to enemy
+        if (forwardTile.IsCharactorOn)
+        {
+            if (IsFightValid) guardState.SetEnemyDetected(true);
+            fightCircle.SetActive(IsFightValid || IsAttack);
+        }
+        else
+        {
+            guardState.SetEnemyDetected(false);
+            fightCircle.Inactivate();
+        }
+
+        if (!fightCircle.isActive && forwardTile is Door)
+        {
+            doorHandler.Activate((forwardTile as Door).IsOpen);
+        }
+        else
+        {
+            doorHandler.Inactivate();
+        }
+
+        forwardUI.SetActive(forwardTile.IsEnterable());
+        backwardUI.SetActive(map.IsBackwardMovable);
+        rightUI.SetActive(map.IsRightMovable);
+        leftUI.SetActive(map.IsLeftMovable);
+
+        turnRUI.SetActive(isCommandValid);
+        turnLUI.SetActive(isCommandValid);
+        jumpUI.SetActive(isCommandValid);
+
+        guardUI.SetActive(true);
     }
 
-    protected class CommandInput
+    private void InactivateUIs()
     {
-        private GuardState guardState;
+        doorHandler.Inactivate();
+        fightCircle.Inactivate();
 
-        // TODO: Rename variable of InputManagers for consistency. Those names should be used by Command.
-        // TODO: InputManager might be replaced with uGUI controllers.
-        private InputManager currentInput = new InputManager(null);
-        private InputManager forward;
-        private InputManager turnL;
-        private InputManager turnR;
-        private InputManager attack;
-        private InputManager guard;
-        private InputManager back;
-        private InputManager right;
-        private InputManager left;
-        private InputManager jump;
-        private InputManager handle;
+        forwardUI.Inactivate();
+        backwardUI.Inactivate();
+        rightUI.Inactivate();
+        leftUI.Inactivate();
 
-        public InputManager Current => currentInput;
+        turnRUI.Inactivate();
+        turnLUI.Inactivate();
+        jumpUI.Inactivate();
 
-        public CommandInput(PlayerCommander commander)
+        guardUI.Inactivate();
+    }
+
+    protected class FightInput
+    {
+        FightCircle fightCircle;
+
+        Command jab;
+        Command straight;
+        Command kick;
+
+        public FightInput(PlayerCommander commander)
         {
-            guardState = commander.guardState;
-            SetInputManagers(commander);
+            this.fightCircle = commander.fightCircle;
+            SetCommands(commander);
         }
 
-        public void SetInputManagers(PlayerCommander commander)
+        protected void SetCommands(PlayerCommander commander)
         {
-            forward = new FrontInput(new ForwardCommand(commander, 1.0f), new PlayerJab(commander, 2.0f), null);
-            turnL = new TriggerInput(new TurnLCommand(commander, 0.5f));
-            turnR = new TriggerInput(new TurnRCommand(commander, 0.5f));
-            attack = new EmptyInput(new PlayerJab(commander, 0.6f));
+            jab = new PlayerJab(commander, 0.6f);
+            straight = new PlayerStraight(commander, 0.8f);
+            kick = new PlayerKick(commander, 1.0f);
 
-            back = new InputManager(new BackCommand(commander, 1.2f));
-            right = new InputManager(new RightCommand(commander, 1.2f));
-            left = new InputManager(new LeftCommand(commander, 1.2f));
-            jump = new TriggerInput(new JumpCommand(commander, 2.0f));
-            handle = new EmptyInput(new PlayerHandle(commander, 1.0f));
-            guard = new InputManager(new GuardCommand(commander, 0.2f));
+            fightCircle.JabButton.AttackSubject
+                .Subscribe(_ => commander.InputReactive.Execute(jab))
+                .AddTo(commander);
+
+            fightCircle.StraightButton.AttackSubject
+                .Subscribe(_ => commander.InputReactive.Execute(straight))
+                .AddTo(commander);
+
+            fightCircle.KickButton.AttackSubject
+                .Subscribe(_ => commander.InputReactive.Execute(kick))
+                .AddTo(commander);
+        }
+    }
+    protected class DoorInput
+    {
+        DoorHandler doorHandler;
+
+        Command forward;
+        Command handle;
+
+        PlayerAnimator anim;
+
+        public DoorInput(PlayerCommander commander)
+        {
+            doorHandler = commander.doorHandler;
+            anim = commander.anim as PlayerAnimator;
+            SetCommands(commander);
         }
 
-        public Command GetCommand()
+        protected void SetCommands(PlayerCommander commander)
         {
-            ReadOnlyArray<Touch> activeTouches = Touch.activeTouches;
-            if (activeTouches.Count == 0) return null;
+            forward = new ForwardCommand(commander, 1.0f);
+            handle = new PlayerHandle(commander, 0.4f);
 
-            Touch latestTouch = default;
+            doorHandler.ObserveGo
+                .Subscribe(_ => commander.InputReactive.Execute(forward))
+                .AddTo(commander);
 
-            foreach (Touch touch in Touch.activeTouches)
-            {
-                if (latestTouch.finger == null || touch.startTime > latestTouch.startTime)
-                {
-                    latestTouch = touch;
-                }
-            }
+            doorHandler.ObserveHandle
+                .Subscribe(_ => commander.InputReactive.Execute(handle))
+                .AddTo(commander);
 
-            switch (latestTouch.phase)
-            {
-                case TouchPhase.Began:
-                    currentInput = GetNewInput(latestTouch.screenPosition);
-
-                    return currentInput.FingerDown();
-
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                    if (currentInput == forward && currentInput.isPressed)
-                    {
-                        return currentInput.FingerMove(latestTouch.delta);
-                    }
-                    if (currentInput == attack && currentInput.isPressed)
-                    {
-                        return currentInput.FingerMove(latestTouch.delta);
-                    }
-
-                    currentInput = GetNewInput(latestTouch.screenPosition);
-                    return currentInput.FingerMove(Vector2.zero);
-
-                case TouchPhase.Ended:
-                    return currentInput.FingerUp();
-
-                default:
-                    return null;
-
-            }
-        }
-
-        private InputManager GetNewInput(Vector2 screenPos)
-        {
-            InputManager ret = null;
-
-            if (IsInRect(screenPos, -0.18f, 0.6f, 0.18f, 0.9f))
-            {
-                ret = jump;
-            }
-            if (IsInRect(screenPos, -0.7f, 0.16f, -0.18f, 0.6f))
-            {
-                ret = turnL;
-            }
-            if (IsInRect(screenPos, 0.18f, 0.16f, 0.7f, 0.6f))
-            {
-                ret = turnR;
-            }
-
-            if (IsInRect(screenPos, -0.18f, 0.16f, 0.18f, 0.34f))
-            {
-                ret = guardState.IsAutoGuard ? attack : guard;
-            }
-            if (IsInRect(screenPos, -0.18f, 0.34f, 0.18f, 0.6f))
-            {
-                ret = forward;
-            }
-            if (IsInRect(screenPos, -0.7f, 0, -0.18f, 0.16f))
-            {
-                ret = left;
-            }
-            if (IsInRect(screenPos, 0.18f, 0, 0.9f, 0.16f))
-            {
-                ret = right;
-            }
-            if (IsInRect(screenPos, -0.18f, 0, 0.18f, 0.16f))
-            {
-                ret = back;
-            }
-
-            if (ret != null)
-            {
-                currentInput.Reset();
-                return ret;
-            }
-
-            return currentInput;
-        }
-
-        private bool IsInRect(Vector2 pos, Vector2 lowerLeft, Vector2 upperRight)
-        {
-            return IsInRect(pos, lowerLeft.x, lowerLeft.y, upperRight.x, upperRight.y);
-        }
-
-        private bool IsInRect(Vector2 pos, float left, float bottom, float right, float top)
-        {
-            float centerX = Screen.width / 2.0f / Screen.height;
-            float scaledPosX = pos.x / Screen.height;
-            float scaledPosY = pos.y / Screen.height;
-            return scaledPosX >= left + centerX && scaledPosX < right + centerX && scaledPosY >= bottom && scaledPosY < top;
+            doorHandler.ObserveHandOn
+                .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
+                .AddTo(commander);
         }
     }
 
-    protected class InputManager
+    protected class MoveInput
     {
-        public bool isPressed { get; protected set; } = false;
-        protected Command mainCommand;
+        Command forward;
+        Command right;
+        Command left;
+        Command backward;
+        Command turnR;
+        Command turnL;
+        Command jump;
+        Command guard;
 
-        public InputManager(Command mainCommand)
+        PlayerAnimator anim;
+
+        public MoveInput(PlayerCommander commander)
         {
-            this.mainCommand = mainCommand;
+            SetCommands(commander);
         }
 
-        public virtual Command FingerDown()
+        protected void SetCommands(PlayerCommander commander)
         {
-            isPressed = true;
-            return mainCommand;
-        }
+            forward = new ForwardCommand(commander, 1.0f);
+            right = new RightCommand(commander, 1.2f);
+            left = new LeftCommand(commander, 1.2f);
+            backward = new BackCommand(commander, 1.2f);
 
-        public virtual Command FingerMove(Vector2 moveVec)
-        {
-            return mainCommand;
-        }
-        public virtual Command FingerUp()
-        {
-            isPressed = false;
-            return mainCommand;
-        }
+            turnR = new TurnRCommand(commander, 0.5f);
+            turnL = new TurnLCommand(commander, 0.5f);
+            jump = new JumpCommand(commander, 2.0f);
 
-        public virtual void Reset()
-        {
-            isPressed = false;
-        }
-    }
+            guard = new GuardCommand(commander, 0.2f);
 
-    protected class EmptyInput : InputManager
-    {
-        public EmptyInput(Command mainCommand) : base(mainCommand) { }
-        public override Command FingerDown()
-        {
-            isPressed = true;
-            return null;
-        }
+            commander.forwardUI.EnterObservable
+                .Subscribe(_ => commander.InputReactive.Execute(forward))
+                .AddTo(commander);
 
-        public override Command FingerMove(Vector2 moveVec)
-        {
-            return null;
-        }
-        public override Command FingerUp()
-        {
-            isPressed = false;
-            return null;
-        }
-    }
+            commander.rightUI.EnterObservable
+                .Subscribe(_ => commander.InputReactive.Execute(right))
+                .AddTo(commander);
 
-    protected class TriggerInput : InputManager
-    {
-        public TriggerInput(Command mainCommand) : base(mainCommand) { }
-        public override Command FingerMove(Vector2 moveVec)
-        {
-            return null;
-        }
-        public override Command FingerUp()
-        {
-            isPressed = false;
-            return null;
-        }
-    }
+            commander.leftUI.EnterObservable
+                .Subscribe(_ => commander.InputReactive.Execute(left))
+                .AddTo(commander);
 
-    protected class FrontInput : InputManager
-    {
-        protected bool isStationary = false;
-        protected bool isPulling = false;
-        protected bool isPushing = false;
-        protected bool isRight = false;
-        protected bool isLeft = false;
-        protected bool isExecuted = false;
+            commander.backwardUI.EnterObservable
+                .Subscribe(_ => commander.InputReactive.Execute(backward))
+                .AddTo(commander);
 
-        protected PlayerAttack attack;
-        protected PlayerHandle handle;
+            commander.turnRUI.PressObservable
+                .Subscribe(_ => commander.InputReactive.Execute(turnR))
+                .AddTo(commander);
 
-        public FrontInput(Command mainCommand, PlayerAttack attack, PlayerHandle handle) : base(mainCommand)
-        {
-            this.attack = attack;
-            this.handle = handle;
-        }
+            commander.turnLUI.PressObservable
+                .Subscribe(_ => commander.InputReactive.Execute(turnL))
+                .AddTo(commander);
 
-        public override Command FingerDown()
-        {
-            isPressed = true;
-            return null;
-        }
+            commander.jumpUI.PressObservable
+                .Subscribe(_ => commander.InputReactive.Execute(jump))
+                .AddTo(commander);
 
-        public override Command FingerMove(Vector2 moveVec)
-        {
-            if (!isPressed) return mainCommand;
-
-            float absX = Mathf.Abs(moveVec.x);
-            float absY = Mathf.Abs(moveVec.y);
-
-            if (absX < 0.00001f && absY < 0.00001f)
-            {
-                // Tap command
-                if (isStationary)
-                {
-                    isExecuted = true;
-                    isPressed = false;
-                    return mainCommand;
-                }
-                else
-                {
-                    isStationary = true;
-                    return null;
-                }
-            }
-
-            if (absX < absY)
-            {
-                // Vertical command
-                if (moveVec.y < 0)
-                {
-                    // Pulling command
-                    if (absX * 2 < absY)
-                    {
-                        if (isPulling)
-                        {
-                            isPressed = false;
-                            return handle;
-                        }
-                        else
-                        {
-                            isStationary = false;
-                            isPulling = true;
-                            return null;
-                        }
-                    }
-                }
-                else
-                {
-                    // Pushing command
-                    if (absX * 2 < absY)
-                    {
-                        if (isPushing)
-                        {
-                            isPressed = false;
-                            return attack;
-                        }
-                        else
-                        {
-                            isStationary = false;
-                            isPushing = true;
-                            return null;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Horizontal command
-                if (moveVec.x < 0)
-                {
-                    if (absY * 2 < absX)
-                    {
-                        // Door opening command
-                        if (isLeft)
-                        {
-                            isPressed = false;
-                            return handle;
-                        }
-                        else
-                        {
-                            isStationary = false;
-                            isLeft = true;
-                            return null;
-                        }
-                    }
-                }
-                else
-                {
-                    if (absY * 2 < absX)
-                    {
-                        // Door opening command
-                        if (isRight)
-                        {
-                            isPressed = false;
-                            return handle;
-                        }
-                        else
-                        {
-                            isStationary = false;
-                            isRight = true;
-                            return null;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-        public override Command FingerUp()
-        {
-            if (isPressed)
-            {
-                Reset();
-                return mainCommand;
-            }
-            return null;
-        }
-
-        public override void Reset()
-        {
-            isPressed = isStationary = isPulling = isPushing = isRight = isLeft = false;
+            commander.guardUI.EnterObservable
+                .Subscribe(_ => commander.InputReactive.Execute(guard))
+                .AddTo(commander);
         }
     }
 }

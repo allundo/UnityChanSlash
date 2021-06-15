@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UniRx;
 
 public class MoveButton : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class MoveButton : MonoBehaviour
     protected Image image;
     private Vector2 defaultSize;
 
-    private bool isPressed = false;
+    protected IReactiveProperty<bool> isPressed = new ReactiveProperty<bool>(false);
+    public IReadOnlyReactiveProperty<bool> IsPressed => isPressed;
 
     protected Tween shrink = null;
     protected Tween defaultAlpha = null;
@@ -47,7 +49,6 @@ public class MoveButton : MonoBehaviour
 
     protected void ResetSize()
     {
-        Debug.Log("ResetSize");
         Resize(1.0f);
     }
 
@@ -58,9 +59,9 @@ public class MoveButton : MonoBehaviour
 
     public virtual void PressButton()
     {
-        if (isPressed) return;
+        if (isPressed.Value) return;
 
-        isPressed = true;
+        isPressed.Value = true;
         shrink?.Kill();
         defaultAlpha?.Kill();
         Resize(1.5f);
@@ -69,13 +70,11 @@ public class MoveButton : MonoBehaviour
 
     public virtual void ReleaseButton()
     {
-        if (!isPressed) return;
+        if (!isPressed.Value) return;
 
-        isPressed = false;
+        isPressed.Value = false;
         shrink = GetResize(1.0f).Play();
         defaultAlpha = GetToAlpha(0.4f).Play();
-        // shrink.Restart();
-        // defaultAlpha.Restart();
     }
 
     public void SetAlpha(float alpha)
@@ -86,7 +85,6 @@ public class MoveButton : MonoBehaviour
 
     public void Activate(float alpha)
     {
-        isPressed = false;
         SetAlpha(alpha);
         ResetSize();
         gameObject.SetActive(true);
@@ -94,6 +92,7 @@ public class MoveButton : MonoBehaviour
 
     public void Inactivate()
     {
+        isPressed.Value = false;
         shrink?.Kill();
         defaultAlpha?.Kill();
         gameObject.SetActive(false);
