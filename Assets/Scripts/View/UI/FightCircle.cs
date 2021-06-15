@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UniRx;
 
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
@@ -10,6 +11,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private AttackButton kickButton = default;
     [SerializeField] private float maxAlpha = 0.8f;
     [SerializeField] private float attackCancelThreshold = 2.0f;
+    [SerializeField] private GameObject UIMask = default;
 
     public AttackButton JabButton => jabButton;
     public AttackButton StraightButton => straightButton;
@@ -28,16 +30,17 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private bool InKick(Vector2 uiPos) => (uiPos - kickCenter).magnitude < 20.0f;
 
-    private AttackButton currentButton = null;
+    private IReactiveProperty<AttackButton> CurrentButton = new ReactiveProperty<AttackButton>(null);
     private Vector2 pressPos = Vector2.zero;
 
-    private bool IsPressed => currentButton != null;
+    private bool IsPressed => CurrentButton.Value != null;
 
-    private float DrawComponent(Vector2 delta) => IsPressed ? Vector2.Dot(pressPos.normalized, delta) : 0.0f;
+    private float DrawComponent(Vector2 screenPos) => IsPressed ? Vector2.Dot(UIPos(pressPos).normalized, DragVector(screenPos)) : 0.0f;
     private float radius;
 
     private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter - UICenter;
     private Vector2 ScreenVec(Vector2 screenPos) => screenPos - screenCenter;
+    private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
 
     void Start()
@@ -53,6 +56,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         SetAlpha(0.0f);
         gameObject.SetActive(false);
+
+        CurrentButton.Subscribe(button => UIMask.SetActive(button != null));
     }
 
     void Update()
@@ -100,8 +105,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        currentButton?.Release();
-        currentButton = null;
+        CurrentButton.Value?.Release();
+        CurrentButton.Value = null;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -117,16 +122,16 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (!isActive) return;
 
         pressPos = eventData.position;
-        currentButton = GetAttack(UIPos(eventData.position));
+        CurrentButton.Value = GetAttack(UIPos(eventData.position));
 
-        currentButton.Activate(ScreenVec(pressPos));
+        CurrentButton.Value.Activate(ScreenVec(pressPos));
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (!isFingerDown) return;
 
-        if (DrawComponent(eventData.delta) < -attackCancelThreshold)
+        if (DrawComponent(eventData.position) < -attackCancelThreshold)
         {
             ButtonCancel();
             return;
@@ -167,15 +172,15 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (isFadeOnly)
         {
-            currentButton?.Inactivate();
+            CurrentButton.Value?.Inactivate();
         }
         else
         {
-            currentButton?.Cancel();
+            CurrentButton.Value?.Cancel();
         }
 
         isFingerDown = false;
-        currentButton = null;
+        CurrentButton.Value = null;
         pressPos = Vector2.zero;
     }
 
