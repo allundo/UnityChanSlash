@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -10,6 +11,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
+
         var maze = new MazeCreator();
         maze.CreateMaze();
 
@@ -18,6 +20,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         MapRenderer.Instance.Init(worldMap);
         MapRenderer.Instance.Fix(maze);
 
+        DOTween.SetTweensCapacity(500, 50);
     }
 
     public Pos PlayerPos => worldMap.MapPos(playerTransform.position);
