@@ -156,6 +156,9 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = eventData.position;
         currentFlick = flick;
 
+        if (currentFlick == closeLFlick) closeRButton.Inactivate();
+        if (currentFlick == closeRFlick) closeLButton.Inactivate();
+
         currentFlick.UpdateImage(DragVector(eventData.position));
     }
 
