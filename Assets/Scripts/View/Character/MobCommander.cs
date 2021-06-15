@@ -21,7 +21,9 @@ public abstract partial class MobCommander : MonoBehaviour
         }
     }
     protected IReactiveProperty<bool> IsCommandValid;
-    protected ReactiveCommand<Command> InputReactive;
+    protected ReactiveCommand<Command> InputCommand;
+
+
 
     public bool IsIdling => currentCommand == null;
 
@@ -38,15 +40,14 @@ public abstract partial class MobCommander : MonoBehaviour
         map = GetComponent<MapUtil>();
 
         IsCommandValid = new ReactiveProperty<bool>(true);
-        InputReactive = new ReactiveCommand<Command>(IsCommandValid);
-
+        InputCommand = new ReactiveCommand<Command>(IsCommandValid);
     }
 
     protected virtual void Start()
     {
         SetCommands();
 
-        InputReactive.Subscribe(com => EnqueueCommand(com, IsIdling)).AddTo(this);
+        InputCommand.Subscribe(com => EnqueueCommand(com, IsIdling)).AddTo(this);
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ public abstract partial class MobCommander : MonoBehaviour
 
     protected virtual void Update()
     {
-        InputReactive.Execute(GetCommand());
+        InputCommand.Execute(GetCommand());
     }
 
     protected virtual void EnqueueCommand(Command cmd, bool dispatch = false)
@@ -67,7 +68,7 @@ public abstract partial class MobCommander : MonoBehaviour
         if (cmd == null) return;
 
         cmdQueue.Enqueue(cmd);
-        isCommandValid = false;
+        InvalidateInput();
 
         if (dispatch)
         {
@@ -106,11 +107,21 @@ public abstract partial class MobCommander : MonoBehaviour
 
     public virtual void Activate()
     {
-        isCommandValid = true;
+        ValidateInput();
     }
 
     public virtual void Inactivate()
     {
         currentCommand = null;
+    }
+
+    protected virtual void ValidateInput()
+    {
+        isCommandValid = true;
+    }
+
+    protected virtual void InvalidateInput()
+    {
+        isCommandValid = false;
     }
 }

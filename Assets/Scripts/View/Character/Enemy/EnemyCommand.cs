@@ -45,7 +45,7 @@ public partial class EnemyCommander : MobCommander
         {
             if (!IsMovable)
             {
-                enemyCommander.isCommandValid = true;
+                enemyCommander.ValidateInput();
                 enemyCommander.DispatchCommand();
                 return;
             }

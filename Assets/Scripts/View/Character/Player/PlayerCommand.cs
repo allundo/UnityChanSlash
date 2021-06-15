@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public partial class PlayerCommander : ShieldCommander
 {
@@ -16,6 +17,8 @@ public partial class PlayerCommander : ShieldCommander
         protected ThirdPersonCamera mainCamera;
         protected HidePool hidePool;
 
+        protected Tween validateTrigger;
+
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
             playerCommander = commander;
@@ -23,6 +26,28 @@ public partial class PlayerCommander : ShieldCommander
             anim = commander.anim as PlayerAnimator;
             mainCamera = commander.mainCamera;
             hidePool = commander.hidePool;
+        }
+
+        protected override void SetValidateTimer(float timing = 0.5f)
+        {
+            validateTween = tweenMove.SetDelayedCall(timing, playerCommander.ValidateInput);
+        }
+
+        protected void SetValidateTimer(float timing, float triggerTiming)
+        {
+            base.SetValidateTimer(timing);
+            SetValidateTriggerTimer(triggerTiming);
+        }
+
+        protected void SetValidateTriggerTimer(float timing = 0.5f)
+        {
+            validateTrigger = tweenMove.SetDelayedCall(timing, () => { playerCommander.isTriggerValid = true; });
+        }
+
+        public override void Cancel()
+        {
+            base.Cancel();
+            validateTrigger?.Kill();
         }
     }
 
@@ -56,7 +81,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             if (!IsMovable)
             {
-                playerCommander.isCommandValid = true;
+                playerCommander.ValidateInput();
                 playerCommander.DispatchCommand();
                 return;
             }
@@ -72,7 +97,7 @@ public partial class PlayerCommander : ShieldCommander
                 ResetSpeed();
             });
 
-            SetValidateTimer(0.95f);
+            SetValidateTimer(0.95f, 0.5f);
         }
     }
 
@@ -164,7 +189,7 @@ public partial class PlayerCommander : ShieldCommander
             mainCamera.TurnLeft();
             anim.turnL.Fire();
 
-            SetValidateTimer();
+            SetValidateTimer(0.5f, 0.1f);
             PlayTween(tweenMove.GetRotate(-90), () => mainCamera.ResetCamera());
         }
     }
@@ -179,7 +204,7 @@ public partial class PlayerCommander : ShieldCommander
             mainCamera.TurnRight();
             anim.turnR.Fire();
 
-            SetValidateTimer();
+            SetValidateTimer(0.5f, 0.1f);
             PlayTween(tweenMove.GetRotate(90), () => mainCamera.ResetCamera());
         }
     }
@@ -195,7 +220,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             Action();
 
-            SetValidateTimer(timing);
+            SetValidateTimer(timing, timing * 0.5f);
             SetDispatchFinal();
         }
 

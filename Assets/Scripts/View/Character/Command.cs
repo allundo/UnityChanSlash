@@ -64,9 +64,9 @@ public abstract partial class MobCommander : MonoBehaviour
         /// Reserve validating of next command input
         /// </summary>
         /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
-        protected void SetValidateTimer(float timing = 0.5f)
+        protected virtual void SetValidateTimer(float timing = 0.5f)
         {
-            validateTween = tweenMove.SetDelayedCall(timing, () => { commander.isCommandValid = true; });
+            validateTween = tweenMove.SetDelayedCall(timing, commander.ValidateInput);
         }
 
         /// <summary>

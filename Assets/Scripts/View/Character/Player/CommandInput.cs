@@ -58,9 +58,11 @@ public partial class PlayerCommander : ShieldCommander
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);
 
-        turnRUI.SetActive(isCommandValid);
-        turnLUI.SetActive(isCommandValid);
-        jumpUI.SetActive(isCommandValid);
+        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || currentCommand is GuardCommand;
+
+        turnRUI.SetActive(isTriggerActive);
+        turnLUI.SetActive(isTriggerActive);
+        jumpUI.SetActive(isTriggerActive);
 
         guardUI.SetActive(!fightCircle.isActive);
     }
@@ -103,15 +105,15 @@ public partial class PlayerCommander : ShieldCommander
             kick = new PlayerKick(commander, 1.0f);
 
             fightCircle.JabButton.AttackSubject
-                .Subscribe(_ => commander.InputReactive.Execute(jab))
+                .Subscribe(_ => commander.ExecuteCommand(jab))
                 .AddTo(commander);
 
             fightCircle.StraightButton.AttackSubject
-                .Subscribe(_ => commander.InputReactive.Execute(straight))
+                .Subscribe(_ => commander.ExecuteCommand(straight))
                 .AddTo(commander);
 
             fightCircle.KickButton.AttackSubject
-                .Subscribe(_ => commander.InputReactive.Execute(kick))
+                .Subscribe(_ => commander.ExecuteCommand(kick))
                 .AddTo(commander);
         }
     }
@@ -137,11 +139,11 @@ public partial class PlayerCommander : ShieldCommander
             handle = new PlayerHandle(commander, 0.4f);
 
             doorHandler.ObserveGo
-                .Subscribe(_ => commander.InputReactive.Execute(forward))
+                .Subscribe(_ => commander.ExecuteCommand(forward))
                 .AddTo(commander);
 
             doorHandler.ObserveHandle
-                .Subscribe(_ => commander.InputReactive.Execute(handle))
+                .Subscribe(_ => commander.InputTrigger.Execute(handle))
                 .AddTo(commander);
 
             doorHandler.ObserveHandOn
@@ -182,35 +184,35 @@ public partial class PlayerCommander : ShieldCommander
             guard = new GuardCommand(commander, 0.2f);
 
             commander.forwardUI.EnterObservable
-                .Subscribe(_ => commander.InputReactive.Execute(forward))
+                .Subscribe(_ => commander.ExecuteCommand(forward))
                 .AddTo(commander);
 
             commander.rightUI.EnterObservable
-                .Subscribe(_ => commander.InputReactive.Execute(right))
+                .Subscribe(_ => commander.ExecuteCommand(right))
                 .AddTo(commander);
 
             commander.leftUI.EnterObservable
-                .Subscribe(_ => commander.InputReactive.Execute(left))
+                .Subscribe(_ => commander.ExecuteCommand(left))
                 .AddTo(commander);
 
             commander.backwardUI.EnterObservable
-                .Subscribe(_ => commander.InputReactive.Execute(backward))
+                .Subscribe(_ => commander.ExecuteCommand(backward))
                 .AddTo(commander);
 
             commander.turnRUI.PressObservable
-                .Subscribe(_ => commander.InputReactive.Execute(turnR))
+                .Subscribe(_ => commander.InputTrigger.Execute(turnR))
                 .AddTo(commander);
 
             commander.turnLUI.PressObservable
-                .Subscribe(_ => commander.InputReactive.Execute(turnL))
+                .Subscribe(_ => commander.InputTrigger.Execute(turnL))
                 .AddTo(commander);
 
             commander.jumpUI.PressObservable
-                .Subscribe(_ => commander.InputReactive.Execute(jump))
+                .Subscribe(_ => commander.InputTrigger.Execute(jump))
                 .AddTo(commander);
 
             commander.guardUI.EnterObservable
-                .Subscribe(_ => commander.InputReactive.Execute(guard))
+                .Subscribe(_ => commander.InputTrigger.Execute(guard))
                 .AddTo(commander);
         }
     }
