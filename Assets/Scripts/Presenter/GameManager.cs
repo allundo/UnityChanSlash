@@ -20,7 +20,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         MapRenderer.Instance.Init(worldMap);
         MapRenderer.Instance.Fix(maze);
 
-        DOTween.SetTweensCapacity(500, 50);
+        DOTween.SetTweensCapacity(500, 100);
     }
 
     public Pos PlayerPos => worldMap.MapPos(playerTransform.position);
