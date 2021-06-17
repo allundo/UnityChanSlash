@@ -60,9 +60,9 @@ public partial class PlayerCommander : ShieldCommander
 
         bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || currentCommand is GuardCommand;
 
-        turnRUI.SetActive(isTriggerActive);
-        turnLUI.SetActive(isTriggerActive);
-        jumpUI.SetActive(isTriggerActive);
+        turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
+        turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
+        jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
 
         guardUI.SetActive(!fightCircle.isActive);
     }

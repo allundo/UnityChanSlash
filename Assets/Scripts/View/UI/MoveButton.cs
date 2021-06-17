@@ -6,9 +6,11 @@ using UniRx;
 public class MoveButton : MonoBehaviour
 {
     [SerializeField] float maxAlpha = 1.0f;
+    [SerializeField] Vector2 fightingOffset = default;
 
     protected RectTransform rectTransform;
     protected Image image;
+    private Vector2 defaultPos;
     private Vector2 defaultSize;
 
     protected IReactiveProperty<bool> isPressed = new ReactiveProperty<bool>(false);
@@ -16,6 +18,10 @@ public class MoveButton : MonoBehaviour
 
     protected Tween shrink = null;
     protected Tween defaultAlpha = null;
+    protected Tween moveFight = null;
+    protected Tween moveDefault = null;
+
+    protected bool isFighting = false;
 
     public Vector2 Position => rectTransform.anchoredPosition;
     public Vector2 Size => rectTransform.sizeDelta;
@@ -29,7 +35,11 @@ public class MoveButton : MonoBehaviour
 
     void Start()
     {
+        defaultPos = Position;
         defaultSize = Size;
+
+        moveFight = GetMove(defaultPos + fightingOffset, 0.05f, true);
+        moveDefault = GetMove(defaultPos, 0.2f, true);
 
         ResetSize();
         SetAlpha(0.4f);
@@ -45,6 +55,12 @@ public class MoveButton : MonoBehaviour
     {
         Tween toAlpha = DOTween.ToAlpha(() => image.color, c => image.color = c, alpha * maxAlpha, duration);
         return isReusable ? toAlpha.AsReusable(gameObject) : toAlpha;
+    }
+
+    protected Tween GetMove(Vector2 dest, float duration = 0.2f, bool isReusable = false)
+    {
+        Tween move = rectTransform.DOAnchorPos(dest, duration);
+        return isReusable ? move.AsReusable(gameObject) : move;
     }
 
     protected void ResetSize()
@@ -97,4 +113,35 @@ public class MoveButton : MonoBehaviour
         defaultAlpha?.Kill();
         gameObject.SetActive(false);
     }
+
+    public void SetFightingPos(bool isFighting)
+    {
+        if (isFighting)
+        {
+            MoveFight();
+        }
+        else
+        {
+            MoveDefault();
+        }
+    }
+
+    private void MoveFight()
+    {
+        if (isFighting) return;
+
+        isFighting = true;
+        moveDefault?.Pause();
+        moveFight?.Restart();
+    }
+
+    private void MoveDefault()
+    {
+        if (!isFighting) return;
+
+        isFighting = false;
+        moveFight?.Pause();
+        moveDefault?.Restart();
+    }
+
 }

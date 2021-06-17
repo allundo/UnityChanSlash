@@ -69,8 +69,10 @@ public class MoveUI : MonoBehaviour
         moveButton.SetAlpha(alpha);
     }
 
-    public void Activate()
+    public void Activate(bool isFighting = false)
     {
+        moveButton.SetFightingPos(isFighting);
+
         if (isActive) return;
 
         isActive = true;
@@ -79,22 +81,24 @@ public class MoveUI : MonoBehaviour
         moveButton.Activate(alpha);
     }
 
-    public void Inactivate()
+    public void Inactivate(bool isFighting = false)
     {
+        moveButton.SetFightingPos(isFighting);
+
         if (!isActive) return;
 
         isActive = false;
     }
 
-    public void SetActive(bool value)
+    public void SetActive(bool value, bool isFighting = false)
     {
         if (value)
         {
-            Activate();
+            Activate(isFighting);
         }
         else
         {
-            Inactivate();
+            Inactivate(isFighting);
         }
     }
 
