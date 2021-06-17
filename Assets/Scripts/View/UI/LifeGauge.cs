@@ -9,6 +9,7 @@ public class LifeGauge : MonoBehaviour
     [SerializeField] private Image GreenGauge = default;
     [SerializeField] private Image RedGauge = default;
     // [SerializeField] private TextMeshPro life;
+    private RectTransform rectTransform;
 
     private readonly Color32[] ratio =
     {
@@ -20,8 +21,14 @@ public class LifeGauge : MonoBehaviour
         new Color32(0x00, 0xE0, 0xE0, 0xFF),
     };
 
-    private Tween redGaugeTween;
+    private Tween redGaugeTween = null;
+    private Tween greenGaugeTween = null;
+    private Tween shakeTween = null;
 
+    void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+    }
     void Start()
     {
         GreenGauge.color = ratio[5];
@@ -30,19 +37,26 @@ public class LifeGauge : MonoBehaviour
 
     private void OnLifeChange(float lifeRatio)
     {
+        float damageRatio = GreenGauge.fillAmount - lifeRatio;
+
         GreenGauge.fillAmount = lifeRatio;
 
         for (float compare = 5.0f; compare >= 0.0f; compare -= 1.0f)
         {
             if (lifeRatio > compare / 6.0f)
             {
-                GreenGauge.color = ratio[(int)compare];
+                GreenGauge.color = new Color(1, 1, 1);
+                greenGaugeTween?.Kill();
+                greenGaugeTween = GreenGauge.DOColor(ratio[(int)compare], 0.5f).Play();
                 break;
             }
         }
 
         redGaugeTween?.Kill();
         redGaugeTween = GetRedGaugeTween(RedGauge.fillAmount, lifeRatio).Play();
+
+        shakeTween?.Kill();
+        shakeTween = GetShake(100 * damageRatio, 2.0f * damageRatio).Play();
     }
 
     private Tween GetRedGaugeTween(float valueFrom, float valueTo, float duration = 1f)
@@ -53,6 +67,11 @@ public class LifeGauge : MonoBehaviour
             valueTo,
             duration
         );
+    }
+
+    private Tween GetShake(float strength, float duration = 1f)
+    {
+        return rectTransform.DOShakeAnchorPos(duration, strength, 30);
     }
 
 }
