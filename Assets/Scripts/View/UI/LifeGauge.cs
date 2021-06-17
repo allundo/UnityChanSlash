@@ -1,11 +1,9 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using UniRx;
 
 public class LifeGauge : MonoBehaviour
 {
-    [SerializeField] private MobStatus status = default;
     [SerializeField] private Image GreenGauge = default;
     [SerializeField] private Image RedGauge = default;
     // [SerializeField] private TextMeshPro life;
@@ -31,32 +29,42 @@ public class LifeGauge : MonoBehaviour
     }
     void Start()
     {
+        GreenGauge.fillAmount = RedGauge.fillAmount = 1.0f;
         GreenGauge.color = ratio[5];
-        status.Life.Subscribe(life => OnLifeChange(life / status.LifeMax));
     }
 
-    private void OnLifeChange(float lifeRatio)
+    public void OnLifeChange(float life, float lifeMax)
     {
-        float damageRatio = GreenGauge.fillAmount - lifeRatio;
+        float lifeRatio = life / lifeMax;
 
+        UpdateGreenGauge(lifeRatio);
+
+        redGaugeTween?.Kill();
+        redGaugeTween = GetRedGaugeTween(RedGauge.fillAmount, lifeRatio).Play();
+    }
+
+    public void OnDamage(float damageRatio)
+    {
+        if (damageRatio < 0.000001f) return;
+
+        GreenGauge.color = new Color(1, 1, 1);
+        shakeTween?.Kill();
+        shakeTween = GetDamageShake(damageRatio)?.Play();
+    }
+
+    private void UpdateGreenGauge(float lifeRatio)
+    {
         GreenGauge.fillAmount = lifeRatio;
 
         for (float compare = 5.0f; compare >= 0.0f; compare -= 1.0f)
         {
             if (lifeRatio > compare / 6.0f)
             {
-                GreenGauge.color = new Color(1, 1, 1);
                 greenGaugeTween?.Kill();
                 greenGaugeTween = GreenGauge.DOColor(ratio[(int)compare], 0.5f).Play();
                 break;
             }
         }
-
-        redGaugeTween?.Kill();
-        redGaugeTween = GetRedGaugeTween(RedGauge.fillAmount, lifeRatio).Play();
-
-        shakeTween?.Kill();
-        shakeTween = GetShake(100 * damageRatio, 2.0f * damageRatio).Play();
     }
 
     private Tween GetRedGaugeTween(float valueFrom, float valueTo, float duration = 1f)
@@ -69,9 +77,10 @@ public class LifeGauge : MonoBehaviour
         );
     }
 
-    private Tween GetShake(float strength, float duration = 1f)
+    private Tween GetDamageShake(float damageRatio)
     {
-        return rectTransform.DOShakeAnchorPos(duration, strength, 30);
+        if (damageRatio <= 0.0f) return null;
+        return rectTransform.DOShakeAnchorPos(2 * damageRatio, 100 * damageRatio, (int)(300 * damageRatio));
     }
 
 }

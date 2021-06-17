@@ -28,13 +28,10 @@ public class MobEffect : MonoBehaviour
         Play(dieSound);
     }
 
-    public virtual void OnDamage(float damage, float lifeMax)
+    public virtual void OnDamage(float damageRatio)
     {
-        float rate = Mathf.Clamp(damage / lifeMax, 0.01f, 1.0f);
-
-        if (damage > 0.0001f) Play(rate > 0.1f ? criticalSound : damageSound);
-
-        DamageFlash(damage, rate);
+        DamageSound(damageRatio);
+        DamageFlash(damageRatio);
     }
 
     protected void StoreMaterialColors()
@@ -51,22 +48,29 @@ public class MobEffect : MonoBehaviour
         }
     }
 
-    protected void DamageFlash(float damage, float rate)
+    protected void DamageFlash(float damageRatio)
     {
-        if (damage < 0.0001f) return;
+        if (damageRatio < 0.000001f) return;
 
         foreach (Material mat in flashMaterials)
         {
             Sequence flash = DOTween.Sequence().Append(mat.DOColor(Color.white, 0.02f));
 
-            if (rate > 0.1f)
+            if (damageRatio > 0.1f)
             {
                 flash.Append(mat.DOColor(Color.black, 0.02f));
                 flash.Append(mat.DOColor(Color.red, 0.02f));
             }
 
-            flash.Append(mat.DOColor(Color.black, 2.0f * rate)).Play();
+            flash.Append(mat.DOColor(Color.black, 2.0f * damageRatio)).Play();
         }
+    }
+
+    protected void DamageSound(float damageRatio)
+    {
+        if (damageRatio < 0.000001f) return;
+
+        Play(damageRatio > 0.1f ? criticalSound : damageSound);
     }
 
     public Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);

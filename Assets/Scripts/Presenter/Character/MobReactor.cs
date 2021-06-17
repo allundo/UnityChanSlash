@@ -7,6 +7,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobCommander))]
 public class MobReactor : MonoBehaviour
 {
+    [SerializeField] protected LifeGauge lifeGauge = default;
     protected MobStatus status;
     protected MobEffect effect;
     protected MobCommander commander;
@@ -22,7 +23,15 @@ public class MobReactor : MonoBehaviour
 
     protected virtual void Start()
     {
-        status.Life.Subscribe(life => OnLifeChange(life)).AddTo(this);
+        status.Life
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(life => OnLifeChange(life))
+            .AddTo(this);
+
+        status.LifeMax
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(lifeMax => OnLifeMaxChange(lifeMax))
+            .AddTo(this);
         // Call Activate() directly for now.
         // Inactivator.Subscribe(_ => OnInactivate()).AddTo(this);
     }
@@ -30,17 +39,30 @@ public class MobReactor : MonoBehaviour
     protected void OnLifeChange(float life)
     {
         if (life <= 0.0f) OnDie();
+        lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
+    }
+
+    protected void OnLifeMaxChange(float lifeMax)
+    {
+        lifeGauge?.OnLifeChange(status.Life.Value, lifeMax);
     }
 
     public virtual void OnDamage(float attack, Direction dir)
     {
         if (!status.IsAlive) return;
 
-        float damage = status.CalcAttack(attack, dir);
+        float damage = CalcDamage(attack, dir);
+        float damageRatio = Mathf.Clamp(damage / status.LifeMax.Value, 0.0f, 1.0f);
 
-        effect.OnDamage(damage, status.LifeMax);
+        effect.OnDamage(damageRatio);
+        lifeGauge?.OnDamage(damageRatio);
 
         status.Damage(damage);
+    }
+
+    protected virtual float CalcDamage(float attack, Direction dir)
+    {
+        return status.CalcAttack(attack, dir);
     }
 
     protected virtual void OnDie()

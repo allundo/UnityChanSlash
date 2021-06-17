@@ -11,22 +11,16 @@ public class PlayerReactor : MobReactor
         guardState = GetComponent<GuardState>();
     }
 
-    public override void OnDamage(float attack, Direction attackDir)
+    protected override float CalcDamage(float attack, Direction dir)
     {
-        if (!status.IsAlive) return;
-
         float shield = 0.0f;
 
-        if (guardState.IsShieldOn(attackDir))
+        if (guardState.IsShieldOn(dir))
         {
             shield = status.Shield;
             guardState.SetShield();
         }
 
-        float damage = Mathf.Max(status.CalcAttack(attack, attackDir) - shield, 0.0f);
-
-        effect.OnDamage(damage, status.LifeMax);
-
-        status.Damage(damage);
+        return Mathf.Max(status.CalcAttack(attack, dir) - shield, 0.0f);
     }
 }
