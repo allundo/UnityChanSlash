@@ -105,15 +105,15 @@ public partial class PlayerCommander : ShieldCommander
             kick = new PlayerKick(commander, 1.0f);
 
             fightCircle.JabButton.AttackSubject
-                .Subscribe(_ => commander.ExecuteCommand(jab))
+                .Subscribe(_ => commander.Execute(jab))
                 .AddTo(commander);
 
             fightCircle.StraightButton.AttackSubject
-                .Subscribe(_ => commander.ExecuteCommand(straight))
+                .Subscribe(_ => commander.Execute(straight))
                 .AddTo(commander);
 
             fightCircle.KickButton.AttackSubject
-                .Subscribe(_ => commander.ExecuteCommand(kick))
+                .Subscribe(_ => commander.Execute(kick))
                 .AddTo(commander);
         }
     }
@@ -139,11 +139,11 @@ public partial class PlayerCommander : ShieldCommander
             handle = new PlayerHandle(commander, 0.4f);
 
             doorHandler.ObserveGo
-                .Subscribe(_ => commander.ExecuteCommand(forward))
+                .Subscribe(_ => commander.Execute(forward))
                 .AddTo(commander);
 
             doorHandler.ObserveHandle
-                .Subscribe(_ => commander.InputTrigger.Execute(handle))
+                .Subscribe(_ => commander.ExecuteTrigger(handle))
                 .AddTo(commander);
 
             doorHandler.ObserveHandOn
@@ -184,35 +184,35 @@ public partial class PlayerCommander : ShieldCommander
             guard = new GuardCommand(commander, 0.02f);
 
             commander.forwardUI.EnterObservable
-                .Subscribe(_ => commander.ExecuteCommand(forward))
+                .Subscribe(_ => commander.Execute(forward))
                 .AddTo(commander);
 
             commander.rightUI.EnterObservable
-                .Subscribe(_ => commander.ExecuteCommand(right))
+                .Subscribe(_ => commander.Execute(right))
                 .AddTo(commander);
 
             commander.leftUI.EnterObservable
-                .Subscribe(_ => commander.ExecuteCommand(left))
+                .Subscribe(_ => commander.Execute(left))
                 .AddTo(commander);
 
             commander.backwardUI.EnterObservable
-                .Subscribe(_ => commander.ExecuteCommand(backward))
+                .Subscribe(_ => commander.Execute(backward))
                 .AddTo(commander);
 
             commander.turnRUI.PressObservable
-                .Subscribe(_ => commander.InputTrigger.Execute(turnR))
+                .Subscribe(_ => commander.ExecuteTrigger(turnR))
                 .AddTo(commander);
 
             commander.turnLUI.PressObservable
-                .Subscribe(_ => commander.InputTrigger.Execute(turnL))
+                .Subscribe(_ => commander.ExecuteTrigger(turnL))
                 .AddTo(commander);
 
             commander.jumpUI.PressObservable
-                .Subscribe(_ => commander.InputTrigger.Execute(jump))
+                .Subscribe(_ => commander.ExecuteTrigger(jump))
                 .AddTo(commander);
 
             commander.guardUI.EnterObservable
-                .Subscribe(_ => commander.InputTrigger.Execute(guard))
+                .Subscribe(_ => commander.ExecuteTrigger(guard))
                 .AddTo(commander);
         }
     }

@@ -6,19 +6,7 @@ using UniRx;
 [RequireComponent(typeof(HidePool))]
 public partial class PlayerCommander : ShieldCommander
 {
-    protected bool isTriggerValid
-    {
-        get
-        {
-            return IsTriggerValid.Value;
-        }
-        set
-        {
-            IsTriggerValid.Value = value;
-        }
-    }
-    protected IReactiveProperty<bool> IsTriggerValid;
-    protected ReactiveCommand<Command> InputTrigger;
+    protected bool isTriggerValid = true;
 
     private bool IsAttack => currentCommand is PlayerAttack;
 
@@ -26,15 +14,6 @@ public partial class PlayerCommander : ShieldCommander
     {
         base.Awake();
         hidePool = GetComponent<HidePool>();
-
-        IsTriggerValid = new ReactiveProperty<bool>(true);
-        InputTrigger = new ReactiveCommand<Command>(IsTriggerValid);
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-        InputTrigger.Subscribe(cmd => EnqueueCommand(cmd, IsIdling)).AddTo(this);
     }
 
     protected override void SetCommands()
@@ -45,10 +24,19 @@ public partial class PlayerCommander : ShieldCommander
         SetInputs();
     }
 
-    protected void ExecuteCommand(Command cmd)
+    private void ExecuteTrigger(Command cmd)
+    {
+        if (!isTriggerValid) return;
+        EnqueueCommand(cmd, IsIdling);
+    }
+
+    protected override void Execute(Command cmd)
     {
         isTriggerValid = false;
-        InputCommand.Execute(cmd);
+
+        if (!isCommandValid) return;
+
+        EnqueueCommand(cmd, IsIdling);
     }
 
     protected override Command GetCommand() { return null; }

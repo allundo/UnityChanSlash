@@ -9,21 +9,7 @@ public abstract partial class MobCommander : MonoBehaviour
     public MobAnimator anim { get; protected set; }
     protected MobReactor reactor;
 
-    protected bool isCommandValid
-    {
-        get
-        {
-            return IsCommandValid.Value;
-        }
-        set
-        {
-            IsCommandValid.Value = value;
-        }
-    }
-    protected IReactiveProperty<bool> IsCommandValid;
-    protected ReactiveCommand<Command> InputCommand;
-
-
+    protected bool isCommandValid = true;
 
     public bool IsIdling => currentCommand == null;
 
@@ -38,16 +24,11 @@ public abstract partial class MobCommander : MonoBehaviour
         reactor = GetComponent<MobReactor>();
         anim = GetComponent<MobAnimator>();
         map = GetComponent<MapUtil>();
-
-        IsCommandValid = new ReactiveProperty<bool>(true);
-        InputCommand = new ReactiveCommand<Command>(IsCommandValid);
     }
 
     protected virtual void Start()
     {
         SetCommands();
-
-        InputCommand.Subscribe(com => EnqueueCommand(com, IsIdling)).AddTo(this);
     }
 
     /// <summary>
@@ -60,7 +41,13 @@ public abstract partial class MobCommander : MonoBehaviour
 
     protected virtual void Update()
     {
-        InputCommand.Execute(GetCommand());
+        Execute(GetCommand());
+    }
+
+    protected virtual void Execute(Command cmd)
+    {
+        if (!isCommandValid) return;
+        EnqueueCommand(cmd, IsIdling);
     }
 
     protected virtual void EnqueueCommand(Command cmd, bool dispatch = false)
