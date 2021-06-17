@@ -181,7 +181,7 @@ public partial class PlayerCommander : ShieldCommander
             turnL = new TurnLCommand(commander, 0.5f);
             jump = new JumpCommand(commander, 2.0f);
 
-            guard = new GuardCommand(commander, 0.2f);
+            guard = new GuardCommand(commander, 0.02f);
 
             commander.forwardUI.EnterObservable
                 .Subscribe(_ => commander.ExecuteCommand(forward))
