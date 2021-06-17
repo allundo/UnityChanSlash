@@ -32,6 +32,8 @@ public class MobReactor : MonoBehaviour
             .SkipLatestValueOnSubscribe()
             .Subscribe(lifeMax => OnLifeMaxChange(lifeMax))
             .AddTo(this);
+
+        lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
         // Call Activate() directly for now.
         // Inactivator.Subscribe(_ => OnInactivate()).AddTo(this);
     }

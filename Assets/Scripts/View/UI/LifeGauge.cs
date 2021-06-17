@@ -1,12 +1,14 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LifeGauge : MonoBehaviour
 {
     [SerializeField] private Image GreenGauge = default;
     [SerializeField] private Image RedGauge = default;
-    // [SerializeField] private TextMeshPro life;
+    [SerializeField] private TextMeshProUGUI lifeText = default;
+
     private RectTransform rectTransform;
 
     private readonly Color32[] ratio =
@@ -37,6 +39,7 @@ public class LifeGauge : MonoBehaviour
     {
         float lifeRatio = life / lifeMax;
 
+        UpdateLifeText(life, lifeMax);
         UpdateGreenGauge(lifeRatio);
 
         redGaugeTween?.Kill();
@@ -50,6 +53,12 @@ public class LifeGauge : MonoBehaviour
         GreenGauge.color = new Color(1, 1, 1);
         shakeTween?.Kill();
         shakeTween = GetDamageShake(damageRatio)?.Play();
+    }
+
+    public void UpdateLifeText(float life, float lifeMax)
+    {
+        int hp = life > 0.0f ? (int)(life * 10) : 0;
+        lifeText.text = hp + " / " + (int)(lifeMax * 10);
     }
 
     private void UpdateGreenGauge(float lifeRatio)
