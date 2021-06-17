@@ -7,9 +7,9 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
 {
     public IObservable<Unit> EnterObservable { get; private set; }
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         // To be observed every frame when IsPressed is true
         EnterObservable =

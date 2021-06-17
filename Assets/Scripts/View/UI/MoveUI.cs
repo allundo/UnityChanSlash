@@ -20,7 +20,7 @@ public class MoveUI : MonoBehaviour
     private Vector2 ScreenVec(Vector2 screenPos) => screenPos - screenCenter;
 
 
-    void Awake()
+    protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
