@@ -152,7 +152,6 @@ public partial class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
-            Debug.Log("Jump");
 
             startPos = map.CurrentVec3Pos;
 

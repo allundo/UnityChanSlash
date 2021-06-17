@@ -5,7 +5,6 @@ public class PointerEnter : MoveButton, IPointerEnterHandler, IPointerExitHandle
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("PointerEnter");
         PressButton();
     }
 
