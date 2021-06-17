@@ -25,8 +25,8 @@ public partial class EnemyCommander
         public void SetCommands()
         {
             moveForward = new ForwardCommand(commander, 2.0f);
-            turnL = new TurnLCommand(commander, 0.1f);
-            turnR = new TurnRCommand(commander, 0.1f);
+            turnL = new TurnLCommand(commander, 0.2f);
+            turnR = new TurnRCommand(commander, 0.2f);
             attack = new EnemyAttack(commander, 2.0f);
         }
 
