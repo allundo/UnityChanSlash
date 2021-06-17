@@ -43,6 +43,7 @@ public partial class PlayerCommander : ShieldCommander
 
     protected override void Update()
     {
+        if (currentCommand is DieCommand) return;
         CommandInput();
     }
 
