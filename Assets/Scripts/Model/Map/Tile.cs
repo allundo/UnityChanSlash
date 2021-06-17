@@ -31,7 +31,17 @@ public class Door : Tile
     public bool IsEnterable() => state.IsOpen && !IsCharactorOn;
     public bool IsLeapable() => false;
     public bool IsViewOpen() => state.IsOpen;
-    public bool IsCharactorOn { get; set; } = false;
+    public bool IsCharactorOn
+    {
+        get
+        {
+            return state.IsCharactorOn;
+        }
+        set
+        {
+            state.IsCharactorOn = value;
+        }
+    }
 
     public Vector3 Position => state.transform.position;
     public bool IsOpen => state.IsOpen;
