@@ -135,6 +135,9 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
+        if (currentFlick == closeLFlick) closeRButton.Activate(alpha);
+        if (currentFlick == closeRFlick) closeLButton.Activate(alpha);
+
         currentFlick.Release(DragVector(eventData.position));
         currentFlick = null;
     }
