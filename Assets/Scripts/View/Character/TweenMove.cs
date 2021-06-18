@@ -42,12 +42,12 @@ public class TweenMove
 
     public Sequence GetJumpSequence(Vector3 moveVector, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
     {
-        float middleTime = duration - 2 * edgeTime;
+        float middleTime = duration - 1.5f * edgeTime;
         float flyingRate = 1.0f - takeoffRate;
 
         return DOTween.Sequence()
             .Append(
-                tf.DOMove(moveVector * takeoffRate, edgeTime).SetEase(Ease.OutExpo).SetRelative()
+                tf.DOMove(moveVector * takeoffRate, edgeTime * 0.5f).SetEase(Ease.OutExpo).SetRelative()
             )
             .Append(
                 tf.DOJump(moveVector * flyingRate, jumpPower, 1, middleTime).SetRelative()
