@@ -3,7 +3,7 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 
-public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
+public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     public IObservable<Unit> EnterObservable { get; private set; }
 
@@ -27,5 +27,10 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         Execute<IPointerExitHandler>(eventData, (handler, data) => handler.OnPointerExit(data as PointerEventData));
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
     }
 }
