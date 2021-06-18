@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UniRx;
+using System;
+using TMPro;
 
 public class FlickInteraction : MonoBehaviour
 {
-    [SerializeField] protected HandleButton parent = default;
     [SerializeField] protected Sprite upSprite = null;
     [SerializeField] protected Sprite downSprite = null;
     [SerializeField] protected Sprite leftSprite = null;
@@ -39,6 +40,12 @@ public class FlickInteraction : MonoBehaviour
     public ISubject<Unit> RightSubject => right.FlickSubject;
     public ISubject<Unit> LeftSubject => left.FlickSubject;
 
+    public IObservable<Unit> ReleaseSubject { get; protected set; } = new Subject<Unit>();
+
+    public IReadOnlyReactiveProperty<float> DragUp => up.DragRatioRP;
+    public IReadOnlyReactiveProperty<float> DragDown => down.DragRatioRP;
+    public IReadOnlyReactiveProperty<float> DragRight => right.DragRatioRP;
+    public IReadOnlyReactiveProperty<float> DragLeft => left.DragRatioRP;
 
     void Awake()
     {
@@ -46,6 +53,11 @@ public class FlickInteraction : MonoBehaviour
         image = GetComponent<Image>();
 
         SetFlicks();
+
+        foreach (var flick in new FlickDirection[] { up, down, right, left })
+        {
+            if (flick != null) ReleaseSubject = ReleaseSubject.Merge(flick.ReleaseSubject);
+        }
     }
 
     protected virtual void SetFlicks()
@@ -133,7 +145,7 @@ public class FlickInteraction : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Inactivate(float duration = 0.2f)
+    public virtual void Inactivate(float duration = 0.2f)
     {
         if (currentDir == null) return;
 
@@ -146,7 +158,6 @@ public class FlickInteraction : MonoBehaviour
 
         currentDir = GetDirection(dragVector);
         currentDir?.UpdateImage(dragVector);
-        parent.PressButton();
     }
 
     private FlickDirection GetDirection(Vector2 dragVector)
@@ -169,7 +180,6 @@ public class FlickInteraction : MonoBehaviour
     protected virtual void Clear()
     {
         currentDir = null;
-        parent.ReleaseButton();
     }
 
     protected abstract class FlickDirection
@@ -177,16 +187,18 @@ public class FlickInteraction : MonoBehaviour
         protected FlickInteraction flick;
         protected Sprite sprite;
         protected float limit;
-        protected RectTransform textRT;
+
+        protected ReactiveProperty<float> dragRatio = new ReactiveProperty<float>(0.0f);
+        public IReadOnlyReactiveProperty<float> DragRatioRP => dragRatio;
 
         public ISubject<Unit> FlickSubject { get; protected set; } = new Subject<Unit>();
+        public ISubject<Unit> ReleaseSubject { get; protected set; } = new Subject<Unit>();
 
-        protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit, RectTransform textRT)
+        protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit)
         {
             this.flick = flick;
             this.sprite = sprite;
             this.limit = limit;
-            this.textRT = textRT;
         }
 
         protected virtual Vector2 Destination => Vector2.zero;
@@ -201,6 +213,11 @@ public class FlickInteraction : MonoBehaviour
             FlickSubject.OnNext(Unit.Default);
         }
 
+        private void ReleaseOnNext()
+        {
+            ReleaseSubject.OnNext(Unit.Default);
+        }
+
         /// <summary>
         /// Change sprite, move by drag directional factor and set alpha according to drag directional ratio.
         /// </summary>
@@ -210,21 +227,11 @@ public class FlickInteraction : MonoBehaviour
             flick.image.sprite = sprite;
 
             Vector2 limitedVec = LimitedVec(dragVector);
-            float dragRatio = DragRatio(limitedVec.magnitude);
+
+            dragRatio.SetValueAndForceNotify(DragRatio(limitedVec.magnitude));
 
             flick.SetPos(limitedVec);
-            flick.SetAlpha(dragRatio);
-            UpdateParentImage(dragRatio);
-        }
-
-        /// <summary>
-        /// Hide parent circle image and show command text when flick type is determinded
-        /// </summary>
-        /// <param name="dragRatio"></param>
-        protected virtual void UpdateParentImage(float dragRatio)
-        {
-            flick.parent.SetAlpha(1.0f - dragRatio);
-            textRT.gameObject.SetActive(dragRatio > 0.5f);
+            flick.SetAlpha(dragRatio.Value);
         }
 
         /// <summary>
@@ -236,6 +243,8 @@ public class FlickInteraction : MonoBehaviour
 
         public void Release(Vector2 dragVector, float duration = 0.2f)
         {
+            ReleaseOnNext();
+
             if (DragRatio(dragVector) < 0.5f)
             {
                 flick.Cancel(duration);
@@ -255,7 +264,7 @@ public class FlickInteraction : MonoBehaviour
 
     protected class FlickUp : FlickDirection
     {
-        protected FlickUp(FlickInteraction flick) : base(flick, flick.upSprite, flick.upLimit, flick.parent.upTextRT) { }
+        protected FlickUp(FlickInteraction flick) : base(flick, flick.upSprite, flick.upLimit) { }
 
         public static FlickUp New(FlickInteraction flick)
         {
@@ -270,7 +279,7 @@ public class FlickInteraction : MonoBehaviour
 
     protected class FlickDown : FlickDirection
     {
-        protected FlickDown(FlickInteraction flick) : base(flick, flick.downSprite, flick.downLimit, flick.parent.downTextRT) { }
+        protected FlickDown(FlickInteraction flick) : base(flick, flick.downSprite, flick.downLimit) { }
 
         public static FlickDown New(FlickInteraction flick)
         {
@@ -285,7 +294,7 @@ public class FlickInteraction : MonoBehaviour
 
     protected class FlickRight : FlickDirection
     {
-        protected FlickRight(FlickInteraction flick) : base(flick, flick.rightSprite, flick.rightLimit, flick.parent.rightTextRT) { }
+        protected FlickRight(FlickInteraction flick) : base(flick, flick.rightSprite, flick.rightLimit) { }
 
         public static FlickRight New(FlickInteraction flick)
         {
@@ -300,7 +309,7 @@ public class FlickInteraction : MonoBehaviour
 
     protected class FlickLeft : FlickDirection
     {
-        protected FlickLeft(FlickInteraction flick) : base(flick, flick.leftSprite, flick.leftLimit, flick.parent.leftTextRT) { }
+        protected FlickLeft(FlickInteraction flick) : base(flick, flick.leftSprite, flick.leftLimit) { }
 
         public static FlickLeft New(FlickInteraction flick)
         {

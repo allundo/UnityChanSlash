@@ -8,10 +8,6 @@ public class HandleButton : MonoBehaviour
     [SerializeField] private Sprite circle = default;
     [SerializeField] private float maxAlpha = 1.0f;
 
-    [SerializeField] public RectTransform upTextRT = default;
-    [SerializeField] public RectTransform downTextRT = default;
-    [SerializeField] public RectTransform rightTextRT = default;
-    [SerializeField] public RectTransform leftTextRT = default;
 
     protected RectTransform rectTransform;
     protected Image image;
@@ -21,14 +17,13 @@ public class HandleButton : MonoBehaviour
     private Tween expand;
     private bool isPressed = false;
 
-    public Vector2 Position => rectTransform.anchoredPosition;
     public Vector2 Size => rectTransform.sizeDelta;
-    public float Radius => Size.x * 0.5f;
 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
+
     }
 
     void Start()
@@ -37,7 +32,6 @@ public class HandleButton : MonoBehaviour
         cycle = GetRotate(-90.0f, 5.0f, true).SetEase(Ease.Linear);
         expand = GetResize(1.5f, 0.2f, true);
 
-        InactiveTexts();
     }
 
     private void ResetSize()
@@ -59,8 +53,10 @@ public class HandleButton : MonoBehaviour
         return isReusable ? resize.AsReusable(gameObject) : resize;
     }
 
-    public void PressButton()
+    public void OnDrag(float dragRatio)
     {
+        SetAlpha(1.0f - dragRatio);
+
         if (isPressed) return;
 
         isPressed = true;
@@ -69,18 +65,15 @@ public class HandleButton : MonoBehaviour
         expand.Restart();
     }
 
-    public void ReleaseButton()
+    public void OnRelease()
     {
-        if (!isPressed) return;
-
         isPressed = false;
+
         cycle.Rewind();
         expand.Rewind();
         ResetSize();
         SetAlpha(1.0f);
         image.sprite = handle;
-
-        InactiveTexts();
     }
 
     public void SetAlpha(float alpha)
@@ -98,15 +91,7 @@ public class HandleButton : MonoBehaviour
 
     public void Inactivate()
     {
+        OnRelease();
         gameObject.SetActive(false);
-        InactiveTexts();
-    }
-
-    public void InactiveTexts()
-    {
-        if (upTextRT != null) upTextRT.gameObject.SetActive(false);
-        if (downTextRT != null) downTextRT.gameObject.SetActive(false);
-        if (rightTextRT != null) rightTextRT.gameObject.SetActive(false);
-        if (leftTextRT != null) leftTextRT.gameObject.SetActive(false);
     }
 }

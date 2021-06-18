@@ -9248,18 +9248,6 @@ Transform:
   m_Father: {fileID: 170570285}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &1161602523 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7476530261382612515, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5189892436850581060}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cae62acf7506d4cf6968df116271d612, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1161797529
 Mesh:
   m_ObjectHideFlags: 0
@@ -11253,18 +11241,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6be951783560046ec9d2a9e35f4f5625, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1510860396 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1258380969, guid: 3b111658a672a4449b3bceda64ae90af,
-    type: 3}
-  m_PrefabInstance: {fileID: 8337679456419231782}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!43 &1522103338
@@ -15823,19 +15799,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1547443840, guid: 3b111658a672a4449b3bceda64ae90af, type: 3}
-      propertyPath: status
-      value: 
-      objectReference: {fileID: 1161602523}
-    - target: {fileID: 1547443840, guid: 3b111658a672a4449b3bceda64ae90af, type: 3}
-      propertyPath: lifeText
-      value: 
-      objectReference: {fileID: 1510860396}
-    - target: {fileID: 3690022220104526684, guid: 3b111658a672a4449b3bceda64ae90af,
-        type: 3}
-      propertyPath: fightingOffset.y
-      value: 64
-      objectReference: {fileID: 0}
     - target: {fileID: 8337679454760430875, guid: 3b111658a672a4449b3bceda64ae90af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15945,16 +15908,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EffectUIOverlayCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 8337679455473605177, guid: 3b111658a672a4449b3bceda64ae90af,
-        type: 3}
-      propertyPath: fightingOffset.x
-      value: 32
-      objectReference: {fileID: 0}
-    - target: {fileID: 8337679456582474612, guid: 3b111658a672a4449b3bceda64ae90af,
-        type: 3}
-      propertyPath: fightingOffset.x
-      value: -32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b111658a672a4449b3bceda64ae90af, type: 3}

@@ -21,34 +21,27 @@ public class DoorFlick : FlickInteraction
 
     protected class DoorFlickRight : FlickRight
     {
-        private DoorFlickRight(DoorFlick flick) : base(flick) { }
+        private DoorFlickRight(DoorFlick flick) : base(flick)
+        {
+            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f);
+        }
 
         public static DoorFlickRight New(DoorFlick flick)
         {
             return IsValid(flick) ? new DoorFlickRight(flick) : null;
         }
-
-        protected override void UpdateParentImage(float dragRatio)
-        {
-            base.UpdateParentImage(dragRatio);
-            (flick as DoorFlick).isHandOn.Value = dragRatio > 0.5f;
-        }
     }
 
     protected class DoorFlickLeft : FlickLeft
     {
-        private DoorFlickLeft(DoorFlick flick) : base(flick) { }
+        private DoorFlickLeft(DoorFlick flick) : base(flick)
+        {
+            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f);
+        }
 
         public static DoorFlickLeft New(DoorFlick flick)
         {
             return IsValid(flick) ? new DoorFlickLeft(flick) : null;
         }
-
-        protected override void UpdateParentImage(float dragRatio)
-        {
-            base.UpdateParentImage(dragRatio);
-            (flick as DoorFlick).isHandOn.Value = dragRatio > 0.5f;
-        }
     }
-
 }

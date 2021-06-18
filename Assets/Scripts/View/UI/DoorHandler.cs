@@ -7,9 +7,9 @@ using UniRx;
 
 public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField] private HandleButton openButton = default;
-    [SerializeField] private HandleButton closeRButton = default;
-    [SerializeField] private HandleButton closeLButton = default;
+    [SerializeField] private DoorUIEffect openDoorUI = default;
+    [SerializeField] private DoorUIEffect closeRDoorUI = default;
+    [SerializeField] private DoorUIEffect closeLDoorUI = default;
     [SerializeField] private DoorFlick openFlick = default;
     [SerializeField] private DoorFlick closeRFlick = default;
     [SerializeField] private DoorFlick closeLFlick = default;
@@ -59,17 +59,17 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         UICenter = rectTransform.anchoredPosition;
         screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
-        openCenter = openButton.Position;
-        closeRCenter = closeRButton.Position;
-        closeLCenter = closeLButton.Position;
+        openCenter = openDoorUI.ParentPos;
+        closeRCenter = closeRDoorUI.ParentPos;
+        closeLCenter = closeLDoorUI.ParentPos;
 
         Debug.Log("openCenter: " + openCenter);
         Debug.Log("closeRCenter: " + closeRCenter);
         Debug.Log("closeLCenter: " + closeLCenter);
 
-        openRadius = openButton.Radius;
-        closeRRadius = closeRButton.Radius;
-        closeLRadius = closeLButton.Radius;
+        openRadius = openDoorUI.Radius;
+        closeRRadius = closeRDoorUI.Radius;
+        closeLRadius = closeLDoorUI.Radius;
 
         Debug.Log("openRadius: " + openRadius);
         Debug.Log("closeRRadius: " + closeRRadius);
@@ -112,12 +112,12 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (isOpen)
         {
-            closeRButton.SetAlpha(alpha);
-            closeLButton.SetAlpha(alpha);
+            closeRDoorUI.SetAlpha(alpha);
+            closeLDoorUI.SetAlpha(alpha);
         }
         else
         {
-            openButton.SetAlpha(alpha);
+            openDoorUI.SetAlpha(alpha);
         }
     }
 
@@ -135,8 +135,8 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        if (currentFlick == closeLFlick) closeRButton.Activate(alpha);
-        if (currentFlick == closeRFlick) closeLButton.Activate(alpha);
+        if (currentFlick == closeLFlick) closeRDoorUI.Activate(alpha);
+        if (currentFlick == closeRFlick) closeLDoorUI.Activate(alpha);
 
         currentFlick.Release(DragVector(eventData.position));
         currentFlick = null;
@@ -159,8 +159,8 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = eventData.position;
         currentFlick = flick;
 
-        if (currentFlick == closeLFlick) closeRButton.Inactivate();
-        if (currentFlick == closeRFlick) closeLButton.Inactivate();
+        if (currentFlick == closeLFlick) closeRDoorUI.Inactivate();
+        if (currentFlick == closeRFlick) closeLDoorUI.Inactivate();
 
         currentFlick.UpdateImage(DragVector(eventData.position));
     }
@@ -212,23 +212,23 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (isOpen)
         {
-            openButton.Inactivate();
-            closeRButton.Activate(alpha);
-            closeLButton.Activate(alpha);
+            openDoorUI.Inactivate();
+            closeRDoorUI.Activate(alpha);
+            closeLDoorUI.Activate(alpha);
         }
         else
         {
-            openButton.Activate(alpha);
-            closeRButton.Inactivate();
-            closeLButton.Inactivate();
+            openDoorUI.Activate(alpha);
+            closeRDoorUI.Inactivate();
+            closeLDoorUI.Inactivate();
         }
     }
 
     private void InactivateButtons()
     {
-        openButton.Inactivate();
-        closeRButton.Inactivate();
-        closeLButton.Inactivate();
+        openDoorUI.Inactivate();
+        closeRDoorUI.Inactivate();
+        closeLDoorUI.Inactivate();
 
         currentFlick?.Inactivate();
     }
