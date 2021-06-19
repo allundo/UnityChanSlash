@@ -63,6 +63,7 @@ public partial class PlayerCommander : ShieldCommander
     {
         isCommandValid = false;
         isTriggerValid = false;
+        currentCommand?.CancelValidateTween();
     }
 
     public override void EnqueueShieldOn() { EnqueueCommand(shieldOn, true); }

@@ -49,6 +49,12 @@ public partial class PlayerCommander : ShieldCommander
             base.Cancel();
             validateTrigger?.Kill();
         }
+
+        public override void CancelValidateTween()
+        {
+            validateTween?.Kill();
+            validateTrigger?.Kill();
+        }
     }
 
     protected abstract class MoveCommand : PlayerCommand

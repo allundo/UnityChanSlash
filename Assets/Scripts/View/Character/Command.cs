@@ -32,6 +32,11 @@ public abstract partial class MobCommander : MonoBehaviour
             finallyCall?.Kill();
         }
 
+        public virtual void CancelValidateTween()
+        {
+            validateTween?.Kill();
+        }
+
         public abstract void Execute();
         public virtual float Speed => 0.0f;
         public virtual float RSpeed => 0.0f;
