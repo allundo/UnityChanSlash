@@ -101,8 +101,8 @@ public partial class PlayerCommander : ShieldCommander
         protected void SetCommands(PlayerCommander commander)
         {
             jab = new PlayerJab(commander, 0.6f);
-            straight = new PlayerStraight(commander, 0.8f);
-            kick = new PlayerKick(commander, 1.0f);
+            straight = new PlayerStraight(commander, 0.85f);
+            kick = new PlayerKick(commander, 1.2f);
 
             fightCircle.JabButton.AttackSubject
                 .Subscribe(_ => commander.Execute(jab))

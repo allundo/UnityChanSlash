@@ -5,6 +5,7 @@ using UniRx;
 
 public class AttackButton : MonoBehaviour
 {
+    [SerializeField] float duration = 0.2f;
     protected RectTransform rectTransform;
     protected Image image;
 
@@ -13,8 +14,12 @@ public class AttackButton : MonoBehaviour
 
     private Tween fadeIn;
     private Tween fadeOut;
+    private Tween attackFadeOut;
     private Tween expand;
     private Tween shrink;
+
+    protected bool isFiring = false;
+    protected bool isActive = false;
 
     public ISubject<Unit> AttackSubject { get; protected set; } = new Subject<Unit>();
 
@@ -31,7 +36,8 @@ public class AttackButton : MonoBehaviour
 
         fadeIn = GetActivateFadeIn(image, 0.2f);
         fadeOut = GetInactivateFadeOut(image, 0.2f);
-        expand = GetResize(1.5f, 0.2f, true).OnComplete(ResetSize);
+        attackFadeOut = GetInactivateFadeOut(image, duration);
+        expand = GetResize(1.5f, duration, true).OnComplete(ResetSize);
         shrink = GetResize(0.5f, 0.2f, true).OnComplete(ResetSize);
 
         GetInactivateFadeOut(image, 0.0f).SetAutoKill(true).Complete();
@@ -64,7 +70,7 @@ public class AttackButton : MonoBehaviour
                 0.0f,
                 duration
             )
-            .OnComplete(() => gameObject.SetActive(false))
+            .OnComplete(() => { isActive = isFiring = false; gameObject.SetActive(false); })
             .AsReusable(gameObject);
     }
 
@@ -77,18 +83,24 @@ public class AttackButton : MonoBehaviour
 
     public void Activate(Vector2 pos, float duration = 0.2f)
     {
+        if (isFiring) return;
+
+        isActive = true;
         fadeIn.Restart();
         SetPos(pos);
     }
 
-    public void Release(float duration = 0.2f)
+    public void Release()
     {
+        if (!isActive) return;
+
         Vector2 midPosToCenter = rectTransform.anchoredPosition * 0.5f;
 
+        isFiring = true;
         rectTransform.DOAnchorPos(midPosToCenter, duration).Play();
         expand.Restart();
 
-        Inactivate();
+        attackFadeOut.Restart(); ;
 
         AttackSubject.OnNext(Unit.Default);
     }
@@ -97,6 +109,7 @@ public class AttackButton : MonoBehaviour
     {
         Vector2 quarterPosToCenter = rectTransform.anchoredPosition * 0.75f;
 
+        isFiring = true;
         rectTransform.DOAnchorPos(quarterPosToCenter, duration).Play();
         shrink.Restart();
 
@@ -108,7 +121,7 @@ public class AttackButton : MonoBehaviour
         fadeOut.Restart();
     }
 
-    public void SetPos(Vector2 pos)
+    private void SetPos(Vector2 pos)
     {
         rectTransform.anchoredPosition = pos;
     }
