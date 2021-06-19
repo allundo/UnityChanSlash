@@ -18,7 +18,7 @@ public class MoveButton : MonoBehaviour
 
     protected Tween shrink = null;
     protected Tween defaultAlpha = null;
-    protected Tween moveFight = null;
+    protected Tween fightExpand = null;
     protected Tween moveDefault = null;
 
     protected bool isFighting = false;
@@ -38,7 +38,7 @@ public class MoveButton : MonoBehaviour
         defaultPos = Position;
         defaultSize = Size;
 
-        moveFight = GetMove(defaultPos + fightingOffset, 0.05f, true);
+        fightExpand = GetMove(defaultPos + fightingOffset, 0.05f, true);
         moveDefault = GetMove(defaultPos, 0.2f, true);
 
         ResetSize();
@@ -132,7 +132,7 @@ public class MoveButton : MonoBehaviour
 
         isFighting = true;
         moveDefault?.Pause();
-        moveFight?.Restart();
+        fightExpand?.Restart();
     }
 
     private void MoveDefault()
@@ -140,7 +140,7 @@ public class MoveButton : MonoBehaviour
         if (!isFighting) return;
 
         isFighting = false;
-        moveFight?.Pause();
+        fightExpand?.Pause();
         moveDefault?.Restart();
     }
 
