@@ -41,7 +41,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 227b89e1a64e64ac0a22df99b3415cdc, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8280fbf34fff741219423fd9e0bb601e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -422,7 +422,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4a7863258551f41e197bae3bda4d7f99, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 7f7066d1d66234860a4c62490b829953, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.513
   m_Pitch: 1
@@ -5804,6 +5804,7 @@ MonoBehaviour:
   FaceDamageMultiplier: 1
   SideDamageMultiplier: 1.5
   BackDamageMultiplier: 2
+  DefaultLifeMax: 10
 --- !u!114 &3209831462872584038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5835,12 +5836,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30cef1b1e12d74f039f42b70441c124b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fightCircle: {fileID: 0}
+  doorHandler: {fileID: 0}
+  forwardUI: {fileID: 0}
+  rightUI: {fileID: 0}
+  leftUI: {fileID: 0}
+  backwardUI: {fileID: 0}
+  turnRUI: {fileID: 0}
+  turnLUI: {fileID: 0}
+  jumpUI: {fileID: 0}
+  guardUI: {fileID: 0}
+  mainCamera: {fileID: 0}
   jab: {fileID: 560743435053443771}
   straight: {fileID: 6555124617954558180}
   kick: {fileID: 7073669895237644905}
-  mainCamera: {fileID: 0}
-  fightCircle: {fileID: 0}
-  doorHandler: {fileID: 0}
 --- !u!114 &5189892437265779398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5902,6 +5911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eabb119b9c7040bab757525a56e21bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifeGauge: {fileID: 0}
 --- !u!114 &2275338065153999959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9624,7 +9634,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6a4d8a4020abf42569409e8a0e7fd5a6, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 3964db701a154413889e3c06e5ef7ef0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.508
   m_Pitch: 1
@@ -9753,7 +9763,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c535ef3adf3d84decb9974dd0277f98d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -7525,24 +7525,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!1 &918889506 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 974814930939844399, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-    type: 3}
-  m_PrefabInstance: {fileID: 2313251513572095602}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &918889513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918889506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ddf8f300671a4a8aa7c5e48370c2aca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &933776576
 Mesh:
   m_ObjectHideFlags: 0
@@ -15460,16 +15442,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 974097492613650505, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-        type: 3}
-      propertyPath: bodyCollider
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 974097492613650505, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-        type: 3}
-      propertyPath: LifeMax
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 974814930939844399, guid: 5edb2c3a0fa004778b542b5eae5349a0,
         type: 3}
       propertyPath: m_Name
@@ -15535,16 +15507,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3385861504873685437, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3385861504873685437, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5edb2c3a0fa004778b542b5eae5349a0, type: 3}
 --- !u!4 &3442943665555902726 stripped
@@ -15560,15 +15522,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1529953212, guid: dc7cf6d8cb857479ca22d4d12ab9027e, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 963194227}
-    - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 963194229}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: fightCircle
@@ -15584,11 +15537,6 @@ PrefabInstance:
       propertyPath: forwardUI
       value: 
       objectReference: {fileID: 620581723}
-    - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: jumpUI
-      value: 
-      objectReference: {fileID: 8337679456419231783}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: rightUI
@@ -15616,9 +15564,19 @@ PrefabInstance:
       objectReference: {fileID: 1400263964}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
+      propertyPath: jumpUI
+      value: 
+      objectReference: {fileID: 8337679456419231783}
+    - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
       propertyPath: guardUI
       value: 
       objectReference: {fileID: 5794931035596765977}
+    - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 963194229}
     - target: {fileID: 7476530261813038914, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: m_LocalPosition.x
