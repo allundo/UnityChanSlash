@@ -55,14 +55,30 @@ public partial class PlayerCommander : ShieldCommander
             validateTween?.Kill();
             validateTrigger?.Kill();
         }
+
+        protected void EnterStair(Tile destTile)
+        {
+            if (!(destTile is Stair)) return;
+
+            playerCommander.cmdQueue.Clear();
+
+            tweenMove.SetDelayedCall(0.6f, () =>
+            {
+                GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
+                Cancel();
+                anim.Pause();
+            });
+        }
     }
 
     protected abstract class MoveCommand : PlayerCommand
     {
+        protected Tile destTile;
         public MoveCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         protected abstract bool IsMovable { get; }
         protected abstract Vector3 Dest { get; }
+        protected abstract Tile DestTile { get; }
         protected Vector3 startPos = default;
 
         protected void SetSpeed()
@@ -92,6 +108,8 @@ public partial class PlayerCommander : ShieldCommander
                 return;
             }
 
+            EnterStair(DestTile);
+
             startPos = map.CurrentVec3Pos;
             map.SetOnCharactor(startPos + Dest);
             map.ResetOnCharactor(startPos);
@@ -112,6 +130,7 @@ public partial class PlayerCommander : ShieldCommander
         public ForwardCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         protected override bool IsMovable => map.IsForwardMovable;
+        protected override Tile DestTile => map.ForwardTile;
         protected override Vector3 Dest => map.GetForwardVector();
         public override float Speed => TILE_UNIT / duration;
     }
@@ -121,6 +140,7 @@ public partial class PlayerCommander : ShieldCommander
         public BackCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         protected override bool IsMovable => map.IsBackwardMovable;
+        protected override Tile DestTile => map.BackwardTile;
         protected override Vector3 Dest => map.GetBackwardVector();
         public override float Speed => -TILE_UNIT / duration;
     }
@@ -130,6 +150,7 @@ public partial class PlayerCommander : ShieldCommander
         public RightCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         protected override bool IsMovable => map.IsRightMovable;
+        protected override Tile DestTile => map.RightTile;
         protected override Vector3 Dest => map.GetRightVector();
         public override float RSpeed => TILE_UNIT / duration;
     }
@@ -139,6 +160,7 @@ public partial class PlayerCommander : ShieldCommander
         public LeftCommand(PlayerCommander commander, float duration) : base(commander, duration) { }
 
         protected override bool IsMovable => map.IsLeftMovable;
+        protected override Tile DestTile => map.LeftTile;
         protected override Vector3 Dest => map.GetLeftVector();
         public override float RSpeed => -TILE_UNIT / duration;
     }
@@ -158,12 +180,18 @@ public partial class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
-
-            startPos = map.CurrentVec3Pos;
-
             int distance = map.IsJumpable ? 2 : map.IsForwardMovable ? 1 : 0;
+
+            Tile destTile =
+                distance == 2 ? map.JumpTile :
+                distance == 1 ? map.ForwardTile :
+                null;
+
+            EnterStair(destTile);
+
             dest = map.GetForwardVector(distance);
 
+            startPos = map.CurrentVec3Pos;
             map.SetOnCharactor(startPos + dest);
             map.ResetOnCharactor(startPos);
 

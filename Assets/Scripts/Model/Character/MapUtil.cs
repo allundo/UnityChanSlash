@@ -6,10 +6,10 @@ using UnityEngine;
 /// </summary>
 public class MapUtil : MonoBehaviour
 {
-    private WorldMap map;
+    protected WorldMap map;
     private Transform tf;
     public Direction dir { get; protected set; }
-    private Pos onTilePos;
+    protected Pos onTilePos;
     public static readonly float TILE_UNIT = 2.5f;
 
     private static readonly Vector3 defaultPos = new Vector3(-50, 0, 50);
@@ -48,8 +48,13 @@ public class MapUtil : MonoBehaviour
     public Vector3 GetLeftVector(int distance = 1) => Quaternion.Euler(0, -90, 0) * dir.LookAt * TILE_UNIT * distance;
 
     public Tile ForwardTile => map.GetTile(dir.GetForward(onTilePos));
+    public Tile BackwardTile => map.GetTile(dir.GetBackward(onTilePos));
+    public Tile RightTile => map.GetTile(dir.GetRight(onTilePos));
+    public Tile LeftTile => map.GetTile(dir.GetLeft(onTilePos));
+    public Tile JumpTile => map.GetTile(dir.GetForward(dir.GetForward(onTilePos)));
+
     public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
-    public bool IsMovable(Pos destPos) => map.GetTile(destPos).IsEnterable();
+    public bool IsMovable(Pos destPos, Direction dir = null) => map.GetTile(destPos).IsEnterable(dir);
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable();
 
     public Vector3 CurrentVec3Pos => tf.position;
@@ -59,12 +64,12 @@ public class MapUtil : MonoBehaviour
     public Pos GetRight => dir.GetRight(onTilePos);
     public Pos GetBackward => dir.GetBackward(onTilePos);
 
-    public bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos));
+    public virtual bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos));
     public bool IsForwardLeapable => IsLeapable(dir.GetForward(onTilePos));
-    public bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos));
-    public bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos));
-    public bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
-    public bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(onTilePos)));
+    public virtual bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos));
+    public virtual bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos));
+    public virtual bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
+    public virtual bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(onTilePos)));
 
     public static bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
 

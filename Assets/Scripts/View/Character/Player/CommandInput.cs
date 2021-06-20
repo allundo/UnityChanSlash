@@ -53,7 +53,7 @@ public partial class PlayerCommander : ShieldCommander
             doorHandler.Inactivate();
         }
 
-        forwardUI.SetActive(forwardTile.IsEnterable());
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir));
         backwardUI.SetActive(map.IsBackwardMovable);
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UniRx;
 using System;
-using System.Collections.Generic;
+using UnityChan;
 
 public class PlayerAnimator : ShieldAnimator
 {
@@ -20,6 +20,10 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorFloat rSpeed { get; protected set; }
 
     private PlayerBodyCollider bodyCollider;
+    private RandomWind randomWind;
+
+    public override void Pause() { randomWind.isWindActive = false; anim.speed = 0.0f; }
+    protected override void Start() { randomWind.isWindActive = true; anim.speed = 1.0f; }
 
     protected override void Awake()
     {
@@ -38,6 +42,7 @@ public class PlayerAnimator : ShieldAnimator
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
+        randomWind = GetComponent<RandomWind>();
 
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
     }
