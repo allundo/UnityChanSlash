@@ -33,6 +33,10 @@ public class WorldMap
                         Matrix[i, j] = new Door();
                         break;
 
+                    case Terrain.Stair:
+                        Matrix[i, j] = new Stair();
+                        break;
+
                     default:
                         Matrix[i, j] = new Ground();
                         break;

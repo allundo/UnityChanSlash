@@ -7,6 +7,7 @@ public enum Terrain
     Wall,
     Pall,
     Door,
+    Stair,
 }
 
 public struct Pos

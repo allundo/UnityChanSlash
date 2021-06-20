@@ -36,6 +36,10 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
     [SerializeField] private GameObject pall = default;
     [SerializeField] private GameObject doorV = default;
     [SerializeField] private GameObject doorH = default;
+    [SerializeField] private GameObject upStairN = default;
+    [SerializeField] private GameObject upStairE = default;
+    [SerializeField] private GameObject upStairS = default;
+    [SerializeField] private GameObject upStairW = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -83,6 +87,17 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         Door tileDoor = map.GetTile(pos) as Door;
         tileDoor.state = door.GetComponent<DoorState>();
     }
+    public void SetStair(Pos pos, Direction dir)
+    {
+        if (dir is North) PlacePrefab(pos, upStairN);
+        if (dir is East) PlacePrefab(pos, upStairE);
+        if (dir is South) PlacePrefab(pos, upStairS);
+        if (dir is West) PlacePrefab(pos, upStairW);
+
+        Stair tileStair = map.GetTile(pos) as Stair;
+        tileStair.enterDir = dir;
+        tileStair.isUpStair = true;
+    }
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
     {
@@ -129,6 +144,10 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
                             break;
                         }
                         terrainMeshes.Push(GetMeshInstance(wallMesh[(int)pallDir], new Pos(i, j)));
+                        break;
+
+                    case Terrain.Stair:
+                        SetStair(new Pos(i, j), maze.stairDir);
                         break;
                 }
             }

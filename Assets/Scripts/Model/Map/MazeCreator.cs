@@ -103,7 +103,12 @@ public class MazeCreator
             }
         }
 
+        (Direction stairDir, Pos stairPos) = SearchDeadEnd(new Pos(Width - 2, Height - 2));
+        this.stairDir = stairDir;
+
         CreateRooms();
+
+        SetStair(stairPos, stairDir);
         return this.Matrix;
     }
 
@@ -208,6 +213,48 @@ public class MazeCreator
         }
     }
 
+    private (Direction, Pos) SearchDeadEnd(Pos startPos)
+    {
+        if (!IsPathable(Matrix[startPos.x, startPos.y]))
+        {
+            throw new ArgumentException("Position: (" + startPos.x + ", " + startPos.y + ") is not a Path but ... " + Matrix[startPos.x, startPos.y]);
+        }
+
+        var mat = (Terrain[,])Matrix.Clone();
+        var stack = new Stack<(Direction, Pos)>();
+
+        stack.Push((new North(), startPos));
+
+        while (stack.Count > 0)
+        {
+            (Direction dir, Pos pos) = stack.Pop();
+
+            Pos forward = dir.GetForward(pos);
+            Pos right = dir.GetRight(pos);
+            Pos left = dir.GetLeft(pos);
+
+            Terrain ft = IsOutWall(forward) ? Terrain.Wall : mat[forward.x, forward.y];
+            Terrain lt = IsOutWall(left) ? Terrain.Wall : mat[left.x, left.y];
+            Terrain rt = IsOutWall(right) ? Terrain.Wall : mat[right.x, right.y];
+
+            int count = stack.Count;
+
+            if (IsPathable(ft)) stack.Push((dir, forward));
+            if (IsPathable(lt)) stack.Push((dir.Left, left));
+            if (IsPathable(rt)) stack.Push((dir.Right, right));
+
+            if (stack.Count == count) return (dir.Backward, pos);
+
+            mat[pos.x, pos.y] = Terrain.Wall;
+        }
+
+        throw new Exception("Dead end not found");
+    }
+
+    public bool IsPathable(Terrain terrain) => terrain == Terrain.Path || terrain == Terrain.Ground;
+    public bool IsOutWall(Pos pos) => IsOutWall(pos.x, pos.y);
+    public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
+
     private Pos GetRandomPos(int w, int h, Pos offset, int trim = 0)
     {
         Random rnd = this.Random;
@@ -239,6 +286,28 @@ public class MazeCreator
         .Concat(GetDividingRandomPos(w / 2, h / 2, offset.AddX(w / 2), numOfDivide - 1))
         .Concat(GetDividingRandomPos(w / 2, h / 2, offset.AddY(h / 2), numOfDivide - 1))
         .Concat(GetDividingRandomPos(w / 2, h / 2, offset.AddX(w / 2).AddY(h / 2), numOfDivide - 1)).ToList<Pos>();
+    }
+
+    private void SetStair(Pos pos, Direction dir)
+    {
+        if (IsOutWall(pos)) throw new ArgumentException("Position: (" + pos.x + ", " + pos.y + ") is out of range");
+
+        SetTerrain(Terrain.Stair, pos);
+
+        Pos left = dir.GetLeft(pos);
+        Pos right = dir.GetRight(pos);
+        Pos back = dir.GetBackward(pos);
+        Pos vecBack = back - pos;
+
+        SetTerrain(Terrain.Wall, left, right, back, left + vecBack, right + vecBack);
+    }
+
+    private void SetTerrain(Terrain terrain, params Pos[] positions)
+    {
+        foreach (Pos pos in positions)
+        {
+            this.Matrix[pos.x, pos.y] = terrain;
+        }
     }
 
     private void MakeRoom(Pos posHalf)
@@ -393,4 +462,6 @@ public class MazeCreator
     {
         return GetDir(x, y, Terrain.Pall);
     }
+
+    public Direction stairDir;
 }
