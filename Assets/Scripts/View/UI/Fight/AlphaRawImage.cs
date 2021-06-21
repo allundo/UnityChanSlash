@@ -29,7 +29,7 @@ public class AlphaRawImage : MonoBehaviour
         gauge.color = new Color(c.r, c.g, c.b, alpha * maxAlpha);
     }
 
-    public void UpdateGauge(float valueRatio)
+    public void SetGauge(float valueRatio)
     {
         gauge.color = GetColor(valueRatio);
     }

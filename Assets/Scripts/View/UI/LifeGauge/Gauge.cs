@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 [RequireComponent(typeof(Image))]
 public abstract class Gauge : MonoBehaviour
@@ -28,6 +29,10 @@ public abstract class Gauge : MonoBehaviour
         }
     }
 
+    protected Tween gaugeTween = null;
+
+    protected virtual Tween UpdateTween(float valueRatio) => null;
+
     protected virtual void Awake()
     {
         gauge = GetComponent<Image>();
@@ -38,9 +43,14 @@ public abstract class Gauge : MonoBehaviour
         SetGauge(1.0f);
     }
 
-    protected abstract void SetGauge(float valueRatio);
+    public virtual void SetGauge(float valueRatio)
+    {
+        fillAmount = valueRatio;
+    }
+
     public virtual void UpdateGauge(float valueRatio)
     {
-        SetGauge(valueRatio);
+        gaugeTween?.Kill();
+        gaugeTween = UpdateTween(valueRatio);
     }
 }

@@ -1,13 +1,13 @@
 ﻿using DG.Tweening;
 
-public class RedGauge : ActionGauge
+public class RedGauge : Gauge
 {
-    protected override void SetGauge(float valueRatio)
+    public override void SetGauge(float valueRatio)
     {
         fillAmount = valueRatio;
     }
 
-    protected override Tween GaugeTween(float valueRatio)
+    protected override Tween UpdateTween(float valueRatio)
     {
         return DOTween.To(
             () => fillAmount,

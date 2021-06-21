@@ -1,7 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 
-public class RedGaugeAlpha : ActionGaugeAlpha
+public class RedGaugeAlpha : GaugeAlpha
 {
     protected float prevRatio;
     protected RectTransform rectTransform;
@@ -13,14 +13,15 @@ public class RedGaugeAlpha : ActionGaugeAlpha
         base.Awake();
         rectTransform = GetComponent<RectTransform>();
     }
-    protected override void SetGauge(float valueRatio)
+
+    public override void SetGauge(float valueRatio)
     {
         prevRatio = valueRatio;
         fillAmount = 0f;
         rectTransform.Rotate(DestRotate(valueRatio));
     }
 
-    protected override Tween GaugeTween(float valueRatio)
+    protected override Tween UpdateTween(float valueRatio)
     {
         fillAmount += prevRatio - valueRatio;
 

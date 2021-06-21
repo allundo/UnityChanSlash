@@ -31,6 +31,7 @@ public class PlayerLifeGauge : MonoBehaviour
         if (damageRatio < 0.000001f) return;
 
         greenGauge.color = new Color(1, 1, 1);
+
         shakeTween?.Kill();
         shakeTween = DamageShake(damageRatio);
     }

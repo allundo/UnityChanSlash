@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GreenGaugeAlpha : GaugeAlpha
 {
@@ -14,7 +13,7 @@ public class GreenGaugeAlpha : GaugeAlpha
         new Color32(0x00, 0x80, 0xFF, 0xFF),
     };
 
-    protected override void SetGauge(float valueRatio)
+    public override void SetGauge(float valueRatio)
     {
         fillAmount = valueRatio;
         color = GetColor(valueRatio);

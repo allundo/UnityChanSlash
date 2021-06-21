@@ -21,7 +21,7 @@ public class EnemyLifeGauge : MonoBehaviour
     {
         greenGauge.UpdateGauge(lifeRatio);
         redGauge.UpdateGauge(lifeRatio);
-        blackGauge.UpdateGauge(lifeRatio);
-        brightness.UpdateGauge(lifeRatio);
+        blackGauge.SetGauge(lifeRatio);
+        brightness.SetGauge(lifeRatio);
     }
 }
