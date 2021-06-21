@@ -89,14 +89,12 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (alpha > maxAlpha)
         {
             alpha = maxAlpha;
-            return;
         }
 
         if (alpha < 0.0f)
         {
             alpha = 0.0f;
             gameObject.SetActive(false);
-            return;
         }
 
         circle.SetAlpha(alpha);
