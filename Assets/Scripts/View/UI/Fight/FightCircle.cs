@@ -71,7 +71,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 circle.OnEnemyChange(status.Life.Value, status.LifeMax.Value);
                 return status.Life;
             })
-            .TakeUntil(EnemyStatus)
+            .TakeUntil(EnemyStatus.Skip(1))
             .RepeatUntilDestroy(gameObject)
             .Subscribe(life => circle.OnLifeChange(life))
             .AddTo(this);
