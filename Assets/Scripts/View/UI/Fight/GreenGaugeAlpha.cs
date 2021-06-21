@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class GreenGaugeAlpha : GaugeAlpha
 {
@@ -17,6 +18,12 @@ public class GreenGaugeAlpha : GaugeAlpha
     {
         fillAmount = valueRatio;
         color = GetColor(valueRatio);
+    }
+
+    protected override Tween UpdateTween(float valueRatio)
+    {
+        fillAmount = valueRatio;
+        return gauge.DOColor(GetColor(valueRatio), 0.5f).Play();
     }
 
     protected Color GetColor(float valueRatio)
