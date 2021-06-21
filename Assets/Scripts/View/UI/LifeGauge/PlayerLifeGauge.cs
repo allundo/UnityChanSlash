@@ -32,7 +32,7 @@ public class PlayerLifeGauge : MonoBehaviour
 
         greenGauge.color = new Color(1, 1, 1);
         shakeTween?.Kill();
-        shakeTween = GetDamageShake(damageRatio)?.Play();
+        shakeTween = DamageShake(damageRatio);
     }
 
     public void UpdateLifeText(float life, float lifeMax)
@@ -41,10 +41,10 @@ public class PlayerLifeGauge : MonoBehaviour
         lifeText.text = hp + " / " + (int)(lifeMax * 10);
     }
 
-    private Tween GetDamageShake(float damageRatio)
+    private Tween DamageShake(float damageRatio)
     {
         if (damageRatio <= 0.0f) return null;
-        return rectTransform.DOShakeAnchorPos(2 * damageRatio, 100 * damageRatio, (int)(300 * damageRatio));
+        return rectTransform.DOShakeAnchorPos(2 * damageRatio, 100 * damageRatio, (int)(300 * damageRatio)).Play();
     }
 
 }

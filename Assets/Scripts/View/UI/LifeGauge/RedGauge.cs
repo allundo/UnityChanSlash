@@ -1,19 +1,19 @@
 ﻿using DG.Tweening;
 
-public class RedGauge : Gauge
+public class RedGauge : ActionGauge
 {
     protected override void SetGauge(float valueRatio)
     {
         fillAmount = valueRatio;
     }
 
-    protected override Tween GetGaugeTween(float valueRatio)
+    protected override Tween GaugeTween(float valueRatio)
     {
         return DOTween.To(
             () => fillAmount,
             value => fillAmount = value,
             valueRatio,
             1f
-        );
+        ).Play();
     }
 }

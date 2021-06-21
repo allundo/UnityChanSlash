@@ -55,7 +55,8 @@ MonoBehaviour:
   greenGauge: {fileID: 2541506056793175848}
   blackGauge: {fileID: 6857768784457278104}
   redGauge: {fileID: 2907871748737141375}
-  brightness: {fileID: 4477120780519508622}
+  brightness: {fileID: 4883638993849964391}
+  lifeRatio: 0.5
 --- !u!1001 &4473415046759024975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,9 +182,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4473415046759024975}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4477120780519508622 stripped
+--- !u!114 &4883638993849964391 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 14969754738951105, guid: 8da25d484e26d43a5ab62d4b25233996,
+  m_CorrespondingSourceObject: {fileID: 9066564648741494312, guid: 8da25d484e26d43a5ab62d4b25233996,
     type: 3}
   m_PrefabInstance: {fileID: 4473415046759024975}
   m_PrefabAsset: {fileID: 0}

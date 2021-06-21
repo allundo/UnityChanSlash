@@ -1,17 +1,17 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 
-public class GreenGauge : ActionGauge
+public class GreenGaugeAlpha : GaugeAlpha
 {
     [SerializeField]
     protected Color32[] ratio =
     {
         new Color32(0xFF, 0xFF, 0x00, 0xFF),
-        new Color32(0xa3, 0xFF, 0x00, 0xFF),
-        new Color32(0x30, 0xFF, 0x00, 0xFF),
-        new Color32(0x00, 0xF6, 0x3F, 0xFF),
-        new Color32(0x00, 0xE9, 0x9B, 0xFF),
-        new Color32(0x00, 0xE0, 0xE0, 0xFF),
+        new Color32(0xCF, 0xE7, 0x30, 0xFF),
+        new Color32(0xA1, 0xD0, 0x5E, 0xFF),
+        new Color32(0x73, 0xB9, 0x8E, 0xFF),
+        new Color32(0x45, 0xA2, 0xBA, 0xFF),
+        new Color32(0x00, 0x80, 0xFF, 0xFF),
     };
 
     protected override void SetGauge(float valueRatio)
@@ -20,19 +20,14 @@ public class GreenGauge : ActionGauge
         color = GetColor(valueRatio);
     }
 
-    protected override Tween GaugeTween(float valueRatio)
-    {
-        fillAmount = valueRatio;
-        return gauge.DOColor(GetColor(valueRatio), 0.5f).Play();
-    }
-
     protected Color GetColor(float valueRatio)
     {
         for (float compare = 5.0f; compare >= 0.0f; compare -= 1.0f)
         {
             if (valueRatio > compare / 6.0f)
             {
-                return ratio[(int)compare];
+                Color c = ratio[(int)compare];
+                return new Color(c.r, c.g, c.b, color.a);
             }
         }
 

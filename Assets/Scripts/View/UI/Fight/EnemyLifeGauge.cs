@@ -1,14 +1,13 @@
-﻿using DG.Tweening;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class EnemyLifeGauge : MonoBehaviour
 {
-    [SerializeField] private GaugeAlpha greenGauge;
-    [SerializeField] private GaugeAlpha blackGauge;
-    [SerializeField] private GaugeAlpha redGauge;
-    [SerializeField] private AlphaRawImage brightness;
+    [SerializeField] private GaugeAlpha greenGauge = default;
+    [SerializeField] private GaugeAlpha blackGauge = default;
+    [SerializeField] private GaugeAlpha redGauge = default;
+    [SerializeField] private AlphaRawImage brightness = default;
 
+    [SerializeField] public float lifeRatio = 1.0f;
 
     public void SetAlpha(float alpha)
     {
@@ -16,5 +15,13 @@ public class EnemyLifeGauge : MonoBehaviour
         redGauge.SetAlpha(alpha);
         blackGauge.SetAlpha(alpha);
         brightness.SetAlpha(alpha);
+    }
+
+    void Update()
+    {
+        greenGauge.UpdateGauge(lifeRatio);
+        redGauge.UpdateGauge(lifeRatio);
+        blackGauge.UpdateGauge(lifeRatio);
+        brightness.UpdateGauge(lifeRatio);
     }
 }

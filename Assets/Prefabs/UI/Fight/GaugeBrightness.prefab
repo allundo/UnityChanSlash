@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5082908459204493877}
   - component: {fileID: 968930774069108500}
   - component: {fileID: 8583469999263756421}
-  - component: {fileID: 14969754738951105}
+  - component: {fileID: 9066564648741494312}
   m_Layer: 5
   m_Name: GaugeBrightness
   m_TagString: Untagged
@@ -72,7 +72,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &14969754738951105
+--- !u!114 &9066564648741494312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,4 +84,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a96f42b340fa473b85b17cc558ee4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ratio:
+  - serializedVersion: 2
+    rgba: 4286644223
+  - serializedVersion: 2
+    rgba: 4288933340
+  - serializedVersion: 2
+    rgba: 4290425541
+  - serializedVersion: 2
+    rgba: 4291942062
+  - serializedVersion: 2
+    rgba: 4293446551
+  - serializedVersion: 2
+    rgba: 4294951040
   maxAlpha: 0.5
