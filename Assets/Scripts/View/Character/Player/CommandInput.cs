@@ -34,7 +34,7 @@ public partial class PlayerCommander : ShieldCommander
         if (forwardTile.IsCharactorOn)
         {
             if (IsFightValid) guardState.SetEnemyDetected(true);
-            fightCircle.SetActive(IsFightValid || IsAttack);
+            fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.OnCharacter);
         }
         else
         {

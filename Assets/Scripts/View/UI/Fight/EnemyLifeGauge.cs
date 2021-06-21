@@ -7,7 +7,7 @@ public class EnemyLifeGauge : MonoBehaviour
     [SerializeField] private GaugeAlpha redGauge = default;
     [SerializeField] private AlphaRawImage brightness = default;
 
-    [SerializeField] public float lifeRatio = 1.0f;
+    private float lifeMax = 1.0f;
 
     public void SetAlpha(float alpha)
     {
@@ -17,8 +17,21 @@ public class EnemyLifeGauge : MonoBehaviour
         brightness.SetAlpha(alpha);
     }
 
-    void Update()
+    public void OnEnemyChange(float life, float lifeMax)
     {
+        this.lifeMax = lifeMax;
+        float lifeRatio = life / lifeMax;
+
+        greenGauge.SetGauge(lifeRatio);
+        redGauge.SetGauge(lifeRatio);
+        blackGauge.SetGauge(lifeRatio);
+        brightness.SetGauge(lifeRatio);
+    }
+
+    public void OnLifeChange(float life)
+    {
+        float lifeRatio = life / lifeMax;
+
         greenGauge.UpdateGauge(lifeRatio);
         redGauge.UpdateGauge(lifeRatio);
         blackGauge.SetGauge(lifeRatio);

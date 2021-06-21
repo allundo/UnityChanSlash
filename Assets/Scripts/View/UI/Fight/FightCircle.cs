@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 using System.Collections.Generic;
 using UniRx;
 
@@ -45,6 +46,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
 
+    private IReactiveProperty<MobStatus> EnemyStatus = new ReactiveProperty<MobStatus>(null);
+
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -60,6 +63,18 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         gameObject.SetActive(false);
 
         CurrentButton.Subscribe(button => UIMask.SetActive(button != null));
+
+        EnemyStatus
+            .Where(status => status != null)
+            .SelectMany(status =>
+            {
+                circle.OnEnemyChange(status.Life.Value, status.LifeMax.Value);
+                return status.Life;
+            })
+            .TakeUntil(EnemyStatus)
+            .RepeatUntilDestroy(gameObject)
+            .Subscribe(life => circle.OnLifeChange(life))
+            .AddTo(this);
     }
 
     void Update()
@@ -146,8 +161,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
 
-    public void Activate()
+    public void Activate(MobStatus status)
     {
+        EnemyStatus.Value = status;
+
         if (isActive) return;
 
         isActive = true;
@@ -180,11 +197,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = Vector2.zero;
     }
 
-    public void SetActive(bool value)
+    public void SetActive(bool value, MobStatus status)
     {
         if (value)
         {
-            Activate();
+            Activate(status);
         }
         else
         {

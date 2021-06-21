@@ -10,6 +10,7 @@ public class MapUtil : MonoBehaviour
     private Transform tf;
     public Direction dir { get; protected set; }
     protected Pos onTilePos;
+    protected MobStatus status;
     public static readonly float TILE_UNIT = 2.5f;
 
     private static readonly Vector3 defaultPos = new Vector3(-50, 0, 50);
@@ -19,6 +20,7 @@ public class MapUtil : MonoBehaviour
     {
         this.map = GameManager.Instance.worldMap;
         this.tf = transform;
+        status = GetComponent<MobStatus>();
     }
 
     public virtual void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }
@@ -55,7 +57,7 @@ public class MapUtil : MonoBehaviour
 
     public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
     public bool IsMovable(Pos destPos, Direction dir = null) => map.GetTile(destPos).IsEnterable(dir);
-    public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable();
+    public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
     public Vector3 CurrentVec3Pos => tf.position;
     public Pos CurrentPos => onTilePos;
@@ -113,7 +115,7 @@ public class MapUtil : MonoBehaviour
     /// <param name="pos">Pos unit Tile position</param>
     public void SetOnCharactor(Pos pos)
     {
-        map.GetTile(pos).IsCharactorOn = true;
+        map.GetTile(pos).OnCharacter = status;
         onTilePos = pos;
     }
 
@@ -134,6 +136,6 @@ public class MapUtil : MonoBehaviour
     /// <param name="pos">Pos unit Tile position</param>
     public void ResetOnCharactor(Pos pos)
     {
-        map.GetTile(pos).IsCharactorOn = false;
+        map.GetTile(pos).OnCharacter = null;
     }
 }

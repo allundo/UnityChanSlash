@@ -65,7 +65,7 @@ public class WorldMap
     /// <summary>
     /// The tile can be seen through
     /// </summary>
-    public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsViewOpen();
+    public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsViewOpen;
     public bool IsPlayerRange(int x, int y)
     {
         Pos pos = GameManager.Instance.PlayerPos;

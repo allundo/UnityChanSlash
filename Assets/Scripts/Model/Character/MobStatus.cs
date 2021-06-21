@@ -21,7 +21,7 @@ public class MobStatus : MonoBehaviour
     public IReadOnlyReactiveProperty<float> LifeMax => lifeMax;
 
     public bool IsAlive => Life.Value > 0.0f;
-
+    public float LifeRatio => life.Value / lifeMax.Value;
 
     public virtual float Attack => 1.0f;
     public virtual float Shield => 0.0f;
