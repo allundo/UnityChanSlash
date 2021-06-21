@@ -7,7 +7,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobCommander))]
 public class MobReactor : MonoBehaviour
 {
-    [SerializeField] protected LifeGauge lifeGauge = default;
+    [SerializeField] protected PlayerLifeGauge lifeGauge = default;
     protected MobStatus status;
     protected MobEffect effect;
     protected MobCommander commander;

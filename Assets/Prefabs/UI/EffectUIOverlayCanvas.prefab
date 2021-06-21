@@ -47,7 +47,7 @@ RectTransform:
   - {fileID: 8117546466267448941}
   - {fileID: 9093447961990007117}
   - {fileID: 5501434602242153948}
-  - {fileID: 1034645334843020285}
+  - {fileID: 1074574739066922981}
   - {fileID: 1547443839}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -694,7 +694,7 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4814024081009252503}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &5283828547978540411
+--- !u!1001 &5323688425305424227
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -811,6 +811,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightCircle
       objectReference: {fileID: 0}
+    - target: {fileID: 5898889457596752356, guid: afab28cb3ee64442dbae903cbdbc25ce,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5898889457596752356, guid: afab28cb3ee64442dbae903cbdbc25ce,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8875052918753153172, guid: afab28cb3ee64442dbae903cbdbc25ce,
         type: 3}
       propertyPath: jabButton
@@ -833,11 +843,11 @@ PrefabInstance:
       objectReference: {fileID: 8337679454794146309}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afab28cb3ee64442dbae903cbdbc25ce, type: 3}
---- !u!224 &1034645334843020285 stripped
+--- !u!224 &1074574739066922981 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5118378783149221510, guid: afab28cb3ee64442dbae903cbdbc25ce,
     type: 3}
-  m_PrefabInstance: {fileID: 5283828547978540411}
+  m_PrefabInstance: {fileID: 5323688425305424227}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5523297438163862033
 PrefabInstance:

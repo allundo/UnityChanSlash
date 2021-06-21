@@ -13,6 +13,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private float attackCancelThreshold = 2.0f;
     [SerializeField] private GameObject UIMask = default;
 
+    [SerializeField] private EnemyLifeGauge circle = default;
+
     public AttackButton JabButton => jabButton;
     public AttackButton StraightButton => straightButton;
     public AttackButton KickButton => kickButton;
@@ -54,7 +56,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         UICenter = rectTransform.anchoredPosition;
         screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
-        SetAlpha(0.0f);
+        circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
 
         CurrentButton.Subscribe(button => UIMask.SetActive(button != null));
@@ -82,13 +84,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             return;
         }
 
-        SetAlpha(alpha);
-    }
-
-    private void SetAlpha(float alpha)
-    {
-        Color c = image.color;
-        image.color = new Color(c.r, c.g, c.b, alpha);
+        circle.SetAlpha(alpha);
     }
 
     public void OnPointerUp(PointerEventData eventData)
