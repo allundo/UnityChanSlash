@@ -18,7 +18,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public AttackButton KickButton => kickButton;
 
     private RectTransform rectTransform;
-    private RawImage rawImage;
+    private Image image;
 
     private float alpha = 0.0f;
     public bool isActive { get; private set; } = false;
@@ -46,9 +46,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-        rawImage = GetComponent<RawImage>();
+        image = GetComponent<Image>();
 
-        radius = rectTransform.rect.height / 2 - 10;
+        radius = 260.0f;
         kickCenter = new Vector2(0, -(radius - 20.0f));
 
         UICenter = rectTransform.anchoredPosition;
@@ -87,8 +87,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void SetAlpha(float alpha)
     {
-        Color c = rawImage.color;
-        rawImage.color = new Color(c.r, c.g, c.b, alpha);
+        Color c = image.color;
+        image.color = new Color(c.r, c.g, c.b, alpha);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -200,11 +200,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         var objectsHit = new List<RaycastResult>();
 
         // Exclude this UI object from raycast target
-        rawImage.raycastTarget = false;
+        image.raycastTarget = false;
 
         EventSystem.current.RaycastAll(eventData, objectsHit);
 
-        rawImage.raycastTarget = true;
+        image.raycastTarget = true;
 
         foreach (var objectHit in objectsHit)
         {

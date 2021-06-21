@@ -4955,6 +4955,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dcb82dfe160d458698b2023f6310174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &644040612 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3637056415623243247, guid: 3b111658a672a4449b3bceda64ae90af,
+    type: 3}
+  m_PrefabInstance: {fileID: 8337679456419231782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5829df758ae49e4b225bd607e47bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &671906690
 GameObject:
   m_ObjectHideFlags: 0
@@ -17470,7 +17482,7 @@ PrefabInstance:
         type: 3}
       propertyPath: fightCircle
       value: 
-      objectReference: {fileID: 9002834731968907544}
+      objectReference: {fileID: 644040612}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: doorHandler
@@ -17823,17 +17835,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df663dc9cee574e849b77c8d8f74d375, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9002834731968907544 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1100317806835986750, guid: 3b111658a672a4449b3bceda64ae90af,
-    type: 3}
-  m_PrefabInstance: {fileID: 8337679456419231782}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5829df758ae49e4b225bd607e47bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
