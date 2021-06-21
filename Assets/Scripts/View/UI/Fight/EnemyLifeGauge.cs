@@ -30,7 +30,7 @@ public class EnemyLifeGauge : MonoBehaviour
 
     public void OnLifeChange(float life)
     {
-        float lifeRatio = life / lifeMax;
+        float lifeRatio = Mathf.Max(life, 0f) / lifeMax;
 
         greenGauge.UpdateGauge(lifeRatio);
         redGauge.UpdateGauge(lifeRatio);
