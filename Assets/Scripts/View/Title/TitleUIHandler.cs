@@ -1,26 +1,21 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using DG.Tweening;
 using System.Collections;
 
 public class TitleUIHandler : MonoBehaviour
 {
     [SerializeField] private LogoAnimation logo = default;
     [SerializeField] private StartButton unityChanIcon = default;
-    [SerializeField] private Camera mainCamera = default;
+    [SerializeField] private CameraWork cameraWork = default;
     [SerializeField] private TitleAnimation txtUnity = default;
     [SerializeField] private TitleAnimation txtSlash = default;
 
     private AsyncOperation asyncLoad;
 
-    void Awake()
-    {
-        mainCamera.transform.position = new Vector3(-10f, 1f, 2.5f);
-    }
-
     void Start()
     {
         unityChanIcon.startButton.onClick.AddListener(SceneTransition);
+        unityChanIcon.startButton.onClick.AddListener(cameraWork.StopCameraWork);
 
         unityChanIcon.LogoTween();
         logo.LogoTween(() => StartCoroutine(LoadScene()));
@@ -28,7 +23,7 @@ public class TitleUIHandler : MonoBehaviour
 
     private void ToTitle()
     {
-        mainCamera.transform.DOMove(new Vector3(0f, 1f, 2.5f), 1.2f).Play();
+        cameraWork.ToTitle(cameraWork.StartCameraWork);
 
         unityChanIcon.ToTitle();
         logo.ToTitle();
