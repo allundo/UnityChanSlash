@@ -8,6 +8,7 @@ public class LogoAnimation : MonoBehaviour
     [SerializeField] private RectTransform rtFrame = default;
     [SerializeField] private Sprite frameEmpty = default;
     [SerializeField] private ParticleSystem vfxRain = default;
+    [SerializeField] private BlinkTMP nowLoading = default;
     private Image imageFrame;
 
     private RectTransform rtButton;
@@ -17,6 +18,7 @@ public class LogoAnimation : MonoBehaviour
     {
         rtBackGround = GetComponent<RectTransform>();
         imageFrame = rtFrame.GetComponent<Image>();
+        nowLoading.Inactivate();
     }
 
     public void LogoTween(TweenCallback OnComplete = null)
@@ -39,6 +41,7 @@ public class LogoAnimation : MonoBehaviour
             .AppendInterval(0.1f)
             .Append(DOTween.To(() => imageFrame.fillAmount, fill => imageFrame.fillAmount = fill, 1f, 0.15f).SetEase(Ease.Linear))
             .AppendInterval(0.15f)
+            .AppendCallback(() => nowLoading.Activate())
             .OnComplete(OnComplete)
             .Play();
     }
@@ -46,8 +49,10 @@ public class LogoAnimation : MonoBehaviour
     public void ToTitle()
     {
         imageFrame.sprite = frameEmpty;
-
         vfxRain?.Stop();
+        nowLoading.Inactivate();
+
+        DOVirtual.DelayedCall(0.6f, () => vfxRain?.Clear()).Play();
 
         rtBackGround
             .DOAnchorPos(new Vector2(2820f, 0), 1.8f)

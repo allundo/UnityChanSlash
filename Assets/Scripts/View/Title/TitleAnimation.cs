@@ -29,8 +29,8 @@ public class TitleAnimation : MonoBehaviour
         rt.anchoredPosition = new Vector2(-2820f, defaultPos.y);
 
         DOTween.Sequence()
-            .AppendInterval(0.5f)
-            .Append(rt.DOAnchorPos(new Vector2(0f, defaultPos.y), 0.5f).SetEase(Ease.Linear))
+            .AppendInterval(0.4f)
+            .Append(rt.DOAnchorPos(new Vector2(0f, defaultPos.y), 0.6f).SetEase(Ease.Linear))
             .Append(Overrun(480f, 0.5f))
             .Join(SizeTweenAll(0.5f, 0.5f))
             .Play();
@@ -61,5 +61,10 @@ public class TitleAnimation : MonoBehaviour
         return DOTween.Sequence()
             .Append(rt.DOSizeDelta(defaultSize * scale, duration * 0.5f).SetEase(Ease.OutQuad))
             .Append(rt.DOSizeDelta(defaultSize, duration * 0.5f).SetEase(Ease.InQuad));
+    }
+
+    public Tween CameraOutTween()
+    {
+        return rt.DOAnchorPos(new Vector2(0f, 1280f), 0.2f);
     }
 }

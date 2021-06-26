@@ -4,11 +4,21 @@ using System.Collections;
 
 public class CameraWork : MonoBehaviour
 {
+    private enum State
+    {
+        NONE,
+        TRACK,
+        TRAIL
+    }
+
     [SerializeField] private Transform tfUnityChan = default;
 
     private Vector3 EyePosition => tfUnityChan.position + new Vector3(0f, 1.35f, 0f);
 
     private Tween cameraWorkTween = null;
+    private State state = State.TRACK;
+    private Vector3 currentLookAt = Vector3.zero;
+
     private void CameraTween()
     {
         float distance = Random.Range(2f, 3f);
@@ -25,7 +35,27 @@ public class CameraWork : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(EyePosition);
+        switch (state)
+        {
+            case State.TRACK:
+                LookAt(EyePosition);
+                break;
+
+            case State.TRAIL:
+                Trail(EyePosition);
+                break;
+        }
+    }
+
+    private void LookAt(Vector3 lookAt)
+    {
+        currentLookAt = lookAt;
+        transform.LookAt(lookAt);
+    }
+
+    private void Trail(Vector3 target)
+    {
+        LookAt(currentLookAt * 0.75f + target * 0.25f);
     }
 
     public void ToTitle(TweenCallback OnComplete = null)
@@ -39,6 +69,7 @@ public class CameraWork : MonoBehaviour
             .Play();
     }
 
+
     private IEnumerator AngleChangeLoop()
     {
         while (true)
@@ -46,6 +77,13 @@ public class CameraWork : MonoBehaviour
             yield return new WaitForSeconds(10);
             CameraTween();
         }
+    }
+
+    public Tween StartTween()
+    {
+        return transform
+            .DOMove(EyePosition + new Vector3(0f, 0.2f, 2f), 1f)
+            .OnPlay(() => cameraWorkTween?.Kill());
     }
 
     public void StartCameraWork()
@@ -57,5 +95,11 @@ public class CameraWork : MonoBehaviour
     {
         cameraWorkTween?.Kill();
         StopCoroutine(AngleChangeLoop());
+        state = State.NONE;
+    }
+
+    public void StartTrail()
+    {
+        state = State.TRAIL;
     }
 }

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Animator))]
-public abstract class MobAnimator : MonoBehaviour
+public class MobAnimator : MonoBehaviour
 {
     protected AnimeState prevState = null;
     protected AnimeState currentState = null;

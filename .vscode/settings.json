@@ -55,5 +55,9 @@
     },
     "cSpell.words": [
         "inactivator"
+    ],
+    "cSpell.ignoreWords": [
+        "anims",
+        "face"
     ]
 }
