@@ -30,6 +30,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void EnterStair(bool isUpStair) => Debug.Log("Stair" + (isUpStair ? "UP" : "DOWN"));
 
     // FIXME
-    public Vector3 GetPlayerInitPos => worldMap.InitPos;
+    public Pos GetPlayerInitPos => worldMap.InitPos;
 
 }

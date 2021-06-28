@@ -85,7 +85,7 @@ public class WorldMap
     }
 
     // FIXME
-    public Vector3 InitPos
+    public Pos InitPos
     {
         get
         {
@@ -95,10 +95,10 @@ public class WorldMap
                 for (int i = 1; i < Width - 1; i++)
                 {
                     Debug.Log("Terrain: " + Matrix[i, j]);
-                    if (Matrix[i, j] is Ground) return WorldPos(i, j);
+                    if (Matrix[i, j] is Ground) return new Pos(i, j);
                 }
             }
-            return Vector3.zero;
+            return new Pos();
         }
     }
 

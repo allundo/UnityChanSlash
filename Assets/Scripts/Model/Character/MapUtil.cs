@@ -13,7 +13,7 @@ public class MapUtil : MonoBehaviour
     protected MobStatus status;
     public static readonly float TILE_UNIT = 2.5f;
 
-    private static readonly Vector3 defaultPos = new Vector3(-50, 0, 50);
+    private static readonly Pos defaultPos = new Pos(20, 20);
     private static readonly Direction defaultDir = new North();
 
     protected virtual void Awake()
@@ -24,12 +24,12 @@ public class MapUtil : MonoBehaviour
     }
 
     public virtual void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }
-    public void SetPosition(Vector3 pos, Direction dir = null, bool IsOnCharactor = true)
+    public void SetPosition(Pos pos, Direction dir = null, bool IsOnCharactor = true)
     {
-        this.tf.position = pos;
+        this.tf.position = map.WorldPos(pos);
 
         this.dir = dir ?? MapUtil.defaultDir;
-        tf.LookAt(pos + this.dir.LookAt);
+        tf.LookAt(this.tf.position + this.dir.LookAt);
 
         if (IsOnCharactor) SetOnCharactor();
     }
