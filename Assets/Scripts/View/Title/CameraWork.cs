@@ -19,6 +19,8 @@ public class CameraWork : MonoBehaviour
     private State state = State.TRACK;
     private Vector3 currentLookAt = Vector3.zero;
 
+    private Coroutine angleChangeLoop = null;
+
     private void CameraTween()
     {
         float distance = Random.Range(2f, 3f);
@@ -88,13 +90,13 @@ public class CameraWork : MonoBehaviour
 
     public void StartCameraWork()
     {
-        StartCoroutine(AngleChangeLoop());
+        angleChangeLoop = StartCoroutine(AngleChangeLoop());
     }
 
     public void StopCameraWork()
     {
         cameraWorkTween?.Kill();
-        StopCoroutine(AngleChangeLoop());
+        StopCoroutine(angleChangeLoop);
         state = State.NONE;
     }
 
