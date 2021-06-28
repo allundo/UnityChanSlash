@@ -8,7 +8,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public WorldMap worldMap { get; protected set; }
 
-
     protected override void Awake()
     {
         base.Awake();

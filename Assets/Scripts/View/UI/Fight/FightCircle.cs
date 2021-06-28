@@ -28,10 +28,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private bool isFingerDown = false;
 
     private Vector2 UICenter;
-    private Vector2 screenCenter;
-    private Vector2 kickCenter;
+    private Vector2 kickUICenter;
 
-    private bool InKick(Vector2 uiPos) => (uiPos - kickCenter).magnitude < 20.0f;
+    private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).magnitude < 20.0f;
 
     private IReactiveProperty<AttackButton> CurrentButton = new ReactiveProperty<AttackButton>(null);
     private Vector2 pressPos = Vector2.zero;
@@ -41,23 +40,24 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private float DrawComponent(Vector2 screenPos) => IsPressed ? Vector2.Dot(UIPos(pressPos).normalized, DragVector(screenPos)) : 0.0f;
     private float radius;
 
-    private Vector2 UIPos(Vector2 screenPos) => screenPos - screenCenter - UICenter;
-    private Vector2 ScreenVec(Vector2 screenPos) => screenPos - screenCenter;
+    private Vector2 UIPos(Vector2 screenPos) => screenPos - UICenter;
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
 
     private IReactiveProperty<MobStatus> EnemyStatus = new ReactiveProperty<MobStatus>(null);
 
-    void Start()
+    void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
+    }
 
+    void Start()
+    {
         radius = 260.0f;
-        kickCenter = new Vector2(0, -(radius - 20.0f));
+        kickUICenter = new Vector2(0, -(radius - 20.0f));
 
-        UICenter = rectTransform.anchoredPosition;
-        screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        ResetCenterPos();
 
         circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
@@ -133,7 +133,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = eventData.position;
         CurrentButton.Value = GetAttack(UIPos(eventData.position));
 
-        CurrentButton.Value.Activate(ScreenVec(pressPos));
+        CurrentButton.Value.Activate(pressPos);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -151,6 +151,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
             return;
         }
+    }
+
+    public void ResetCenterPos()
+    {
+        UICenter = rectTransform.position;
     }
 
     private AttackButton GetAttack(Vector2 uiPos)

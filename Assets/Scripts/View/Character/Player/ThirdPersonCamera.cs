@@ -1,17 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using DG.Tweening;
+using UniRx;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
-    public Transform lookAt;
-    public Vector3 followOffset = default;
-    public Vector3 cameraPosition = default;
+    [SerializeField] public Transform lookAt;
+    [SerializeField] public float fieldOfViewP = 40f;
+    [SerializeField] public float fieldOfViewL = 30f;
+    [SerializeField] public Vector3 followOffsetP = new Vector3(0, 0, 7f);
+    [SerializeField] public Vector3 followOffsetL = new Vector3(0, 0, 4f);
+    [SerializeField] public Vector3 cameraPositionP = new Vector3(0, 10f, -10f);
+    [SerializeField] public Vector3 cameraPositionL = new Vector3(0, 8f, -8f);
+    [SerializeField] private SideCamera sideCamera = default;
+    [SerializeField] private RawImage crossFade = default;
+    [SerializeField] private ScreenRotateHandler rotate = default;
 
-    public SideCamera sideCamera = default;
-
-    public RawImage crossFade = default;
+    public float fieldOfView { get; private set; }
+    public Vector3 followOffset { get; private set; }
+    public Vector3 cameraPosition { get; private set; }
 
     private RenderTexture renderTexture;
 
@@ -19,19 +26,43 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Start()
     {
-        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
-        crossFade.texture = renderTexture;
+        cam = Camera.main;
+
+        ResetRenderSettings(DeviceOrientation.Portrait);
         crossFade.enabled = false;
 
-        cam = GetComponent<Camera>();
-        sideCamera.SetTarget(this);
+        rotate.Orientation.Subscribe(orientation => ResetRenderSettings(orientation));
     }
+
 
     void LateUpdate()
     {
         transform.position = lookAt.position + lookAt.rotation * cameraPosition;
 
         transform.LookAt(lookAt.position + lookAt.rotation * followOffset);
+    }
+
+    public void ResetRenderSettings(DeviceOrientation orientation)
+    {
+        switch (orientation)
+        {
+            case DeviceOrientation.Portrait:
+                fieldOfView = fieldOfViewP;
+                followOffset = followOffsetP;
+                cameraPosition = cameraPositionP;
+                break;
+
+            case DeviceOrientation.LandscapeRight:
+                fieldOfView = fieldOfViewL;
+                followOffset = followOffsetL;
+                cameraPosition = cameraPositionL;
+                break;
+        }
+
+        cam.fieldOfView = fieldOfView;
+        sideCamera.SetTarget(this);
+        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
+        crossFade.texture = renderTexture;
     }
 
     public void TurnRight()

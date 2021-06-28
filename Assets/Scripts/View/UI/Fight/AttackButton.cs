@@ -123,6 +123,6 @@ public class AttackButton : MonoBehaviour
 
     private void SetPos(Vector2 pos)
     {
-        rectTransform.anchoredPosition = pos;
+        rectTransform.position = pos;
     }
 }

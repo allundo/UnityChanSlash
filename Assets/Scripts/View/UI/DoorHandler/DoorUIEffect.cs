@@ -33,8 +33,7 @@ public class DoorUIEffect : MonoBehaviour
 
     private bool isPressed = false;
 
-    private RectTransform parentRT;
-    public Vector2 ParentPos => parentRT.anchoredPosition;
+    public Vector2 Position => rectTransform.position;
     protected RectTransform rectTransform;
     public Vector2 Size => rectTransform.sizeDelta;
     public float Radius => Size.x * 0.5f;
@@ -48,7 +47,6 @@ public class DoorUIEffect : MonoBehaviour
         SetParentToStopArrows();
 
         rectTransform = GetComponent<RectTransform>();
-        parentRT = transform.parent.GetComponent<RectTransform>();
     }
 
     void Start()
