@@ -109,6 +109,10 @@ public struct Pos
     {
         return new Pos(a.x * n, a.y * n);
     }
+    public static Pos operator /(Pos a, int n)
+    {
+        return new Pos(a.x / n, a.y / n);
+    }
 
     public static bool operator ==(Pos a, Pos b)
     {

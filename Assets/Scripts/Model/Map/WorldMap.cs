@@ -11,6 +11,29 @@ public class WorldMap
     public Tile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public Tile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : Matrix[x, y];
 
+    public Ground GetGround(ref int x, ref int y)
+    {
+        Tile tile = GetTile(x, y);
+        if (tile is Ground) return tile as Ground;
+
+        for (int j = y - 1; j < y + 1; j++)
+        {
+            for (int i = x - 1; i < x + 1; i++)
+            {
+                tile = GetTile(i, j);
+
+                if (tile is Ground)
+                {
+                    x = i;
+                    y = j;
+                    return tile as Ground;
+                }
+
+            }
+        }
+        return null;
+    }
+
     public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
 
     public int Width { get; protected set; } = 49;

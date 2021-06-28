@@ -4,8 +4,10 @@ using DG.Tweening;
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private Transform playerTransform = default;
+    [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
 
     public WorldMap worldMap { get; protected set; }
+
 
     protected override void Awake()
     {
@@ -19,6 +21,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         MapRenderer.Instance.Init(worldMap);
         MapRenderer.Instance.Fix(maze);
+
+        placeEnemyGenerator.Place(worldMap);
 
         DOTween.SetTweensCapacity(500, 100);
     }

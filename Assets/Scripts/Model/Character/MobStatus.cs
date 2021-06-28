@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MobStatus : MonoBehaviour
 {
-    protected MapUtil map;
+    public MapUtil map { get; protected set; }
     public Direction dir => map.dir;
 
     [SerializeField] public float FaceDamageMultiplier = 1.0f;
@@ -72,7 +72,6 @@ public class MobStatus : MonoBehaviour
 
     public virtual void Activate()
     {
-        map.SetPosition();
         ResetStatus();
         transform.gameObject.SetActive(true);
 

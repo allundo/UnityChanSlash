@@ -73,6 +73,12 @@ public class MobReactor : MonoBehaviour
         commander.SetDie();
     }
 
+    public void OnSpawn(Pos pos, Direction dir = null, float duration = 0.5f)
+    {
+        status.map.SetPosition(pos, dir);
+        FadeInToActive(duration);
+    }
+
     public virtual void FadeInToActive(float duration = 0.5f)
     {
         Activate();
