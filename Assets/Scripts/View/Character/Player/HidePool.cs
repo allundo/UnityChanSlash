@@ -165,7 +165,7 @@ public class HidePool : MonoBehaviour
                     int x = playerPos.x + i;
                     int y = playerPos.y + j;
 
-                    if (plateMap[i, j] != (plateData[x, y] == null ? Plate.NONE : plateData[x, y].plate))
+                    if (plateMap[i, j] != (plateData[x, y]?.plate ?? Plate.NONE))
                     {
                         plateData[x, y]?.Remove(0.25f);
                         plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j), 0.25f);
