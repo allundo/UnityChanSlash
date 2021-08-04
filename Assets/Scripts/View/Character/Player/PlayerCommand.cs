@@ -221,6 +221,7 @@ public partial class PlayerCommander : ShieldCommander
             map.TurnLeft();
             mainCamera.TurnLeft();
             anim.turnL.Fire();
+            hidePool.Turn();
 
             SetValidateTimer(0.5f, 0.1f);
             PlayTween(tweenMove.GetRotate(-90), () => mainCamera.ResetCamera());
@@ -236,6 +237,7 @@ public partial class PlayerCommander : ShieldCommander
             map.TurnRight();
             mainCamera.TurnRight();
             anim.turnR.Fire();
+            hidePool.Turn();
 
             SetValidateTimer(0.5f, 0.1f);
             PlayTween(tweenMove.GetRotate(90), () => mainCamera.ResetCamera());

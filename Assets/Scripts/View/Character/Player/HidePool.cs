@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UniRx;
 
 public class HidePool : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class HidePool : MonoBehaviour
     [SerializeField] private GameObject plate3 = default;
     [SerializeField] private GameObject plate2 = default;
     [SerializeField] private GameObject plate1 = default;
+
+    [SerializeField] private ScreenRotateHandler screenRotate = default;
 
     protected Transform[] pool = new Transform[0b10000];
     protected GameObject[] prefab = new GameObject[0b10000];
@@ -41,8 +44,14 @@ public class HidePool : MonoBehaviour
         portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH);
         portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT);
         portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH);
+    }
 
-        currentUpdater = landscape;
+    void Start()
+    {
+        screenRotate.Orientation
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(orientation => ResetOrientation(orientation))
+            .AddTo(this);
     }
 
     private void InitHidePlates()
@@ -98,9 +107,9 @@ public class HidePool : MonoBehaviour
         prevPos = playerPos;
     }
 
-    public void Init()
+    public void Draw()
     {
-        UpdateRange((playerPos, plateMap) => currentUpdater.InitRange(playerPos, plateMap));
+        UpdateRange((playerPos, plateMap) => currentUpdater.DrawRange(playerPos, plateMap));
     }
 
     public void Redraw()
@@ -111,6 +120,39 @@ public class HidePool : MonoBehaviour
     public void Move()
     {
         UpdateRange((playerPos, plateMap) => currentUpdater.MoveRange(playerPos, plateMap));
+    }
+
+
+    public void Turn()
+    {
+        if (currentUpdater == landscape) return;
+
+        currentUpdater?.ClearRange(CurrentPos);
+        currentUpdater = portrait[mapUtil.dir];
+        Draw();
+    }
+
+    public void Init()
+    {
+        ResetOrientation(DeviceOrientation.Portrait);
+    }
+
+    private void ResetOrientation(DeviceOrientation orientation)
+    {
+        currentUpdater?.ClearRange(CurrentPos);
+
+        switch (orientation)
+        {
+            case DeviceOrientation.Portrait:
+                currentUpdater = portrait[mapUtil.dir];
+                break;
+
+            case DeviceOrientation.LandscapeRight:
+                currentUpdater = landscape;
+                break;
+        }
+
+        Draw();
     }
 
     protected abstract class HidePlateUpdater
@@ -139,7 +181,7 @@ public class HidePool : MonoBehaviour
         /// <summary>
         /// Light weight simple version of RedrawRange() method
         /// </summary>
-        public void InitRange(Pos playerPos, Plate[,] plateMap)
+        public void DrawRange(Pos playerPos, Plate[,] plateMap)
         {
             Pos startPos = playerPos - playerOffsetPos;
 
@@ -173,6 +215,18 @@ public class HidePool : MonoBehaviour
                 }
             }
         }
+
+        public void ClearRange(Pos playerPos)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    plateData[playerPos.x + i, playerPos.y + j]?.Remove(0.25f);
+                }
+            }
+        }
+
         private void RedrawXShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 1, 0);
         private void RedrawYShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 0, 1);
 
