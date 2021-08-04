@@ -87,7 +87,7 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         Door tileDoor = map.GetTile(pos) as Door;
         tileDoor.state = door.GetComponent<DoorState>();
     }
-    public void SetStair(Pos pos, Direction dir)
+    public void SetStair(Pos pos, IDirection dir)
     {
         if (dir is North) PlacePrefab(pos, upStairN);
         if (dir is East) PlacePrefab(pos, upStairE);

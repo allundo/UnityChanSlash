@@ -14,7 +14,6 @@ public partial class PlayerCommander : ShieldCommander
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
 
-    protected HidePool hidePool;
     protected FightInput fightInput;
     protected DoorInput doorInput;
     protected MoveInput moveInput;

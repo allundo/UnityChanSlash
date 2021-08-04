@@ -135,7 +135,7 @@ public struct Pos
     }
 }
 
-public interface Direction
+public interface IDirection
 {
     Pos GetForward(Pos pos);
     Pos GetLeft(Pos pos);
@@ -144,17 +144,42 @@ public interface Direction
 
     Vector3 LookAt { get; }
 
-    Direction Left { get; }
-    Direction Right { get; }
-    Direction Backward { get; }
+    IDirection Left { get; }
+    IDirection Right { get; }
+    IDirection Backward { get; }
 
-    bool IsSame(Direction dir);
-    bool IsLeft(Direction dir);
-    bool IsRight(Direction dir);
-    bool IsInverse(Direction dir);
+    bool IsSame(IDirection dir);
+    bool IsLeft(IDirection dir);
+    bool IsRight(IDirection dir);
+    bool IsInverse(IDirection dir);
 }
 
-public class North : Direction
+public abstract class Direction
+{
+    public static North north = new North();
+    public static East east = new East();
+    public static South south = new South();
+    public static West west = new West();
+    public abstract bool IsSame(IDirection dir);
+
+    public bool IsLeft(IDirection dir) => IsSame(dir?.Right);
+    public bool IsRight(IDirection dir) => IsSame(dir?.Left);
+    public bool IsInverse(IDirection dir) => IsSame(dir?.Backward);
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        return IsSame(obj as IDirection);
+    }
+
+    public override int GetHashCode() => 0;
+}
+
+public class North : Direction, IDirection
 {
     public Pos GetForward(Pos pos)
     {
@@ -175,17 +200,16 @@ public class North : Direction
 
     public Vector3 LookAt => new Vector3(0, 0, 1.0f);
 
-    public Direction Left => new West();
-    public Direction Right => new East();
-    public Direction Backward => new South();
+    public IDirection Left => Direction.west;
+    public IDirection Right => Direction.east;
+    public IDirection Backward => Direction.south;
 
-    public bool IsSame(Direction dir) => dir is North;
-    public bool IsLeft(Direction dir) => dir is West;
-    public bool IsRight(Direction dir) => dir is East;
-    public bool IsInverse(Direction dir) => dir is South;
+    public override bool IsSame(IDirection dir) => dir is North;
+
+    public override int GetHashCode() => 0b0001;
 }
 
-public class East : Direction
+public class East : Direction, IDirection
 {
     public Pos GetForward(Pos pos)
     {
@@ -206,17 +230,16 @@ public class East : Direction
 
     public Vector3 LookAt => new Vector3(1.0f, 0, 0);
 
-    public Direction Left => new North();
-    public Direction Right => new South();
-    public Direction Backward => new West();
+    public IDirection Left => Direction.north;
+    public IDirection Right => Direction.south;
+    public IDirection Backward => Direction.west;
 
-    public bool IsSame(Direction dir) => dir is East;
-    public bool IsLeft(Direction dir) => dir is North;
-    public bool IsRight(Direction dir) => dir is South;
-    public bool IsInverse(Direction dir) => dir is West;
+    public override bool IsSame(IDirection dir) => dir is East;
+
+    public override int GetHashCode() => 0b0010;
 }
 
-public class South : Direction
+public class South : Direction, IDirection
 {
     public Pos GetForward(Pos pos)
     {
@@ -237,17 +260,16 @@ public class South : Direction
 
     public Vector3 LookAt => new Vector3(0, 0, -1.0f);
 
-    public Direction Left => new East();
-    public Direction Right => new West();
-    public Direction Backward => new North();
+    public IDirection Left => Direction.east;
+    public IDirection Right => Direction.west;
+    public IDirection Backward => Direction.north;
 
-    public bool IsSame(Direction dir) => dir is South;
-    public bool IsLeft(Direction dir) => dir is East;
-    public bool IsRight(Direction dir) => dir is West;
-    public bool IsInverse(Direction dir) => dir is North;
+    public override bool IsSame(IDirection dir) => dir is South;
+
+    public override int GetHashCode() => 0b0100;
 }
 
-public class West : Direction
+public class West : Direction, IDirection
 {
     public Pos GetForward(Pos pos)
     {
@@ -268,15 +290,13 @@ public class West : Direction
 
     public Vector3 LookAt => new Vector3(-1.0f, 0, 0);
 
-    public Direction Left => new South();
-    public Direction Right => new North();
-    public Direction Backward => new East();
+    public IDirection Left => Direction.south;
+    public IDirection Right => Direction.north;
+    public IDirection Backward => Direction.east;
 
-    public bool IsSame(Direction dir) => dir is West;
-    public bool IsLeft(Direction dir) => dir is South;
-    public bool IsRight(Direction dir) => dir is North;
-    public bool IsInverse(Direction dir) => dir is East;
+    public override bool IsSame(IDirection dir) => dir is West;
 
+    public override int GetHashCode() => 0b1000;
 }
 public enum Dir
 {

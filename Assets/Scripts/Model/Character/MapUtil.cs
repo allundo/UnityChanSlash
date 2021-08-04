@@ -8,13 +8,13 @@ public class MapUtil : MonoBehaviour
 {
     protected WorldMap map;
     private Transform tf;
-    public Direction dir { get; protected set; }
+    public IDirection dir { get; protected set; }
     protected Pos onTilePos;
     protected MobStatus status;
     public static readonly float TILE_UNIT = 2.5f;
 
     private static readonly Pos defaultPos = new Pos(20, 20);
-    private static readonly Direction defaultDir = new North();
+    private static readonly IDirection defaultDir = new North();
 
     protected virtual void Awake()
     {
@@ -24,7 +24,7 @@ public class MapUtil : MonoBehaviour
     }
 
     public virtual void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }
-    public void SetPosition(Pos pos, Direction dir = null, bool IsOnCharactor = true)
+    public void SetPosition(Pos pos, IDirection dir = null, bool IsOnCharactor = true)
     {
         this.tf.position = map.WorldPos(pos);
 
@@ -56,7 +56,7 @@ public class MapUtil : MonoBehaviour
     public Tile JumpTile => map.GetTile(dir.GetForward(dir.GetForward(onTilePos)));
 
     public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
-    public bool IsMovable(Pos destPos, Direction dir = null) => map.GetTile(destPos).IsEnterable(dir);
+    public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
     public Vector3 CurrentVec3Pos => tf.position;

@@ -11,7 +11,7 @@ public class PlayerReactor : MobReactor
         guardState = GetComponent<GuardState>();
     }
 
-    protected override float CalcDamage(float attack, Direction dir)
+    protected override float CalcDamage(float attack, IDirection dir)
     {
         float shield = 0.0f;
 

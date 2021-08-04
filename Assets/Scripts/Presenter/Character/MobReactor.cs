@@ -49,7 +49,7 @@ public class MobReactor : MonoBehaviour
         lifeGauge?.OnLifeChange(status.Life.Value, lifeMax);
     }
 
-    public virtual void OnDamage(float attack, Direction dir)
+    public virtual void OnDamage(float attack, IDirection dir)
     {
         if (!status.IsAlive) return;
 
@@ -62,7 +62,7 @@ public class MobReactor : MonoBehaviour
         status.Damage(damage);
     }
 
-    protected virtual float CalcDamage(float attack, Direction dir)
+    protected virtual float CalcDamage(float attack, IDirection dir)
     {
         return status.CalcAttack(attack, dir);
     }
@@ -73,7 +73,7 @@ public class MobReactor : MonoBehaviour
         commander.SetDie();
     }
 
-    public void OnSpawn(Pos pos, Direction dir = null, float duration = 0.5f)
+    public void OnSpawn(Pos pos, IDirection dir = null, float duration = 0.5f)
     {
         status.map.SetPosition(pos, dir);
         FadeInToActive(duration);

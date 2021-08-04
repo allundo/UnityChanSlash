@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MobStatus : MonoBehaviour
 {
     public MapUtil map { get; protected set; }
-    public Direction dir => map.dir;
+    public IDirection dir => map.dir;
 
     [SerializeField] public float FaceDamageMultiplier = 1.0f;
     [SerializeField] public float SideDamageMultiplier = 1.5f;
@@ -45,12 +45,12 @@ public class MobStatus : MonoBehaviour
         life.Value -= damage;
     }
 
-    public virtual float CalcAttack(float attack, Direction attackDir)
+    public virtual float CalcAttack(float attack, IDirection attackDir)
     {
         return attack * ArmorMultiplier * GetDirMultiplier(attackDir);
     }
 
-    protected float GetDirMultiplier(Direction attackerDir)
+    protected float GetDirMultiplier(IDirection attackerDir)
     {
         if (attackerDir.IsInverse(dir))
         {

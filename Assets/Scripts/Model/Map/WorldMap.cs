@@ -126,5 +126,5 @@ public class WorldMap
     }
 
     // FIXME
-    public Direction InitDir => new South();
+    public IDirection InitDir => new South();
 }

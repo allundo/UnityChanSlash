@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface Tile
 {
-    bool IsEnterable(Direction dir = null);
+    bool IsEnterable(IDirection dir = null);
     bool IsLeapable { get; }
     bool IsViewOpen { get; }
     bool IsCharactorOn { get; }
@@ -11,7 +11,7 @@ public interface Tile
 
 public class Ground : Tile
 {
-    public bool IsEnterable(Direction dir = null) => !IsCharactorOn;
+    public bool IsEnterable(IDirection dir = null) => !IsCharactorOn;
     public bool IsLeapable => true;
     public bool IsViewOpen => true;
     public bool IsCharactorOn => status != null;
@@ -21,7 +21,7 @@ public class Ground : Tile
 
 public class Wall : Tile
 {
-    public bool IsEnterable(Direction dir = null) => false;
+    public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => false;
     public bool IsViewOpen => false;
     public bool IsCharactorOn => false;
@@ -30,7 +30,7 @@ public class Wall : Tile
 
 public class Door : Tile
 {
-    public bool IsEnterable(Direction dir = null) => state.IsOpen && !IsCharactorOn;
+    public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharactorOn;
     public bool IsLeapable => false;
     public bool IsViewOpen => state.IsOpen;
     public bool IsCharactorOn => state.IsCharactorOn;
@@ -43,12 +43,12 @@ public class Door : Tile
 
 public class Stair : Tile
 {
-    public bool IsEnterable(Direction dir = null) => enterDir.IsInverse(dir);
+    public bool IsEnterable(IDirection dir = null) => enterDir.IsInverse(dir);
     public bool IsLeapable => false;
     public bool IsViewOpen => true;
     public bool IsCharactorOn => false;
     public MobStatus OnCharacter { get { return null; } set { } }
 
-    public Direction enterDir { protected get; set; }
+    public IDirection enterDir { protected get; set; }
     public bool isUpStair;
 }

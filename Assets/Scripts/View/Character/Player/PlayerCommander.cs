@@ -1,11 +1,11 @@
 using UnityEngine;
-using UniRx;
 
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(HidePool))]
 public partial class PlayerCommander : ShieldCommander
 {
+    protected HidePool hidePool;
     protected bool isTriggerValid = true;
 
     private bool IsAttack => currentCommand is PlayerAttack;
