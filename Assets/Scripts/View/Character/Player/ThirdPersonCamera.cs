@@ -8,9 +8,9 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] public Transform lookAt;
     [SerializeField] public float fieldOfViewP = 40f;
     [SerializeField] public float fieldOfViewL = 30f;
-    [SerializeField] public Vector3 followOffsetP = new Vector3(0, 0, 7f);
+    [SerializeField] public Vector3 followOffsetP = new Vector3(0, 0, 6.3f);
     [SerializeField] public Vector3 followOffsetL = new Vector3(0, 0, 4f);
-    [SerializeField] public Vector3 cameraPositionP = new Vector3(0, 10f, -10f);
+    [SerializeField] public Vector3 cameraPositionP = new Vector3(0, 9f, -9f);
     [SerializeField] public Vector3 cameraPositionL = new Vector3(0, 8f, -8f);
     [SerializeField] private SideCamera sideCamera = default;
     [SerializeField] private RawImage crossFade = default;

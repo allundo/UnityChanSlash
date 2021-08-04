@@ -8179,9 +8179,9 @@ MonoBehaviour:
   lookAt: {fileID: 3442943665555902726}
   fieldOfViewP: 40
   fieldOfViewL: 30
-  followOffsetP: {x: 0, y: 0, z: 7}
+  followOffsetP: {x: 0, y: 0, z: 6.3}
   followOffsetL: {x: 0, y: 0, z: 4}
-  cameraPositionP: {x: 0, y: 10, z: -10}
+  cameraPositionP: {x: 0, y: 9, z: -9}
   cameraPositionL: {x: 0, y: 8, z: -8}
   sideCamera: {fileID: 736671719}
   crossFade: {fileID: 2022153802}
