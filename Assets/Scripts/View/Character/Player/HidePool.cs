@@ -271,12 +271,12 @@ public class HidePool : MonoBehaviour
                 }
             }
 
-            var openStack = new Stack<(int x, int y)>();
+            var openStack = new Stack<Pos>();
 
             // Start from player tile
-            for (openStack.Push((width / 2, height / 2)); openStack.Count > 0;)
+            for (openStack.Push(playerOffsetPos); openStack.Count > 0;)
             {
-                var pos = openStack.Pop();
+                Pos pos = openStack.Pop();
 
                 // Delete focused hide plate
                 plateMap[pos.x, pos.y] = Plate.NONE;
@@ -312,7 +312,7 @@ public class HidePool : MonoBehaviour
                 // If not a delete candidate, delete only a half of the plate
                 if (viewOpen[ptX - 1, ptY])
                 {
-                    openStack.Push((pos.x - 1, pos.y));
+                    openStack.Push(pos.DecX());
                 }
                 else if (pos.x - 1 >= 0)
                 {
@@ -321,7 +321,7 @@ public class HidePool : MonoBehaviour
 
                 if (viewOpen[ptX, ptY - 1])
                 {
-                    openStack.Push((pos.x, pos.y - 1));
+                    openStack.Push(pos.DecY());
                 }
                 else if (pos.y - 1 >= 0)
                 {
@@ -330,7 +330,7 @@ public class HidePool : MonoBehaviour
 
                 if (viewOpen[ptX + 1, ptY])
                 {
-                    openStack.Push((pos.x + 1, pos.y));
+                    openStack.Push(pos.IncX());
                 }
                 else if (pos.x + 1 < width)
                 {
@@ -339,7 +339,7 @@ public class HidePool : MonoBehaviour
 
                 if (viewOpen[ptX, ptY + 1])
                 {
-                    openStack.Push((pos.x, pos.y + 1));
+                    openStack.Push(pos.IncY());
                 }
                 else if (pos.y + 1 < height)
                 {
