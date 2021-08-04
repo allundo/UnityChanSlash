@@ -15,10 +15,7 @@ public class HidePool : MonoBehaviour
     protected Quaternion[] rotate = new Quaternion[0b10000];
 
     protected LandscapeUpdater landscape = null;
-    protected HidePlateUpdater portrateN = null;
-    protected HidePlateUpdater portrateE = null;
-    protected HidePlateUpdater portrateS = null;
-    protected HidePlateUpdater portrateW = null;
+    protected Dictionary<IDirection, HidePlateUpdater> portrait = new Dictionary<IDirection, HidePlateUpdater>();
 
     private HidePlateUpdater currentUpdater = null;
 
@@ -26,6 +23,8 @@ public class HidePool : MonoBehaviour
     private MapUtil mapUtil;
 
     protected const int RANGE = 11;
+    protected const int WIDTH = 7;
+    protected const int HEIGHT = 15;
     protected HidePlate[,] plateData;
 
     private Pos prevPos = new Pos();
@@ -38,6 +37,11 @@ public class HidePool : MonoBehaviour
         InitHidePlates();
 
         landscape = new LandscapeUpdater(this, RANGE);
+        portrait[Direction.north] = new PortraitNUpdater(this, WIDTH, HEIGHT);
+        portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH);
+        portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT);
+        portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH);
+
         currentUpdater = landscape;
     }
 
@@ -137,19 +141,23 @@ public class HidePool : MonoBehaviour
         /// </summary>
         public void InitRange(Pos playerPos, Plate[,] plateMap)
         {
+            Pos startPos = playerPos - playerOffsetPos;
+
             for (int j = 0; j < height; j++)
             {
                 for (int i = 0; i < width; i++)
                 {
                     int x = playerPos.x + i;
                     int y = playerPos.y + j;
-                    plateData[x, y] = GetInstance(plateMap[i, j], OffsetPos(playerPos, i, j));
+                    plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j));
                 }
             }
         }
 
         public void RedrawRange(Pos playerPos, Plate[,] plateMap, int xShrink = 0, int yShrink = 0)
         {
+            Pos startPos = playerPos - playerOffsetPos;
+
             for (int j = yShrink; j < height - yShrink; j++)
             {
                 for (int i = xShrink; i < width - xShrink; i++)
@@ -160,7 +168,7 @@ public class HidePool : MonoBehaviour
                     if (plateMap[i, j] != (plateData[x, y] == null ? Plate.NONE : plateData[x, y].plate))
                     {
                         plateData[x, y]?.Remove(0.25f);
-                        plateData[x, y] = GetInstance(plateMap[i, j], OffsetPos(playerPos, i, j), 0.25f);
+                        plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j), 0.25f);
                     }
                 }
             }
@@ -180,43 +188,48 @@ public class HidePool : MonoBehaviour
 
         private void MoveRangeNorth(Pos playerPos, Plate[,] plateMap)
         {
+            Pos startPos = playerPos - playerOffsetPos;
+
             for (int i = 0; i < width; i++)
             {
                 plateData[playerPos.x + i, playerPos.y + height]?.Remove();
-                plateData[playerPos.x + i, playerPos.y] = GetInstance(plateMap[i, 0], OffsetPos(playerPos, i, 0));
+                plateData[playerPos.x + i, playerPos.y] = GetInstance(plateMap[i, 0], startPos.AddX(i));
             }
             RedrawYShrink(playerPos, plateMap);
         }
         private void MoveRangeSouth(Pos playerPos, Plate[,] plateMap)
         {
+            Pos startPos = playerPos - playerOffsetPos;
+
             for (int i = 0; i < width; i++)
             {
                 plateData[playerPos.x + i, playerPos.y - 1]?.Remove();
-                plateData[playerPos.x + i, playerPos.y + height - 1] = GetInstance(plateMap[i, height - 1], OffsetPos(playerPos, i, height - 1));
+                plateData[playerPos.x + i, playerPos.y + height - 1] = GetInstance(plateMap[i, height - 1], startPos.Add(i, height - 1));
             }
             RedrawYShrink(playerPos, plateMap);
         }
         private void MoveRangeWest(Pos playerPos, Plate[,] plateMap)
         {
+            Pos startPos = playerPos - playerOffsetPos;
+
             for (int j = 0; j < height; j++)
             {
                 plateData[playerPos.x + width, playerPos.y + j]?.Remove();
-                plateData[playerPos.x, playerPos.y + j] = GetInstance(plateMap[0, j], OffsetPos(playerPos, 0, j));
+                plateData[playerPos.x, playerPos.y + j] = GetInstance(plateMap[0, j], startPos.AddY(j));
             }
             RedrawXShrink(playerPos, plateMap);
         }
         private void MoveRangeEast(Pos playerPos, Plate[,] plateMap)
         {
+            Pos startPos = playerPos - playerOffsetPos;
+
             for (int j = 0; j < height; j++)
             {
                 plateData[playerPos.x - 1, playerPos.y + j]?.Remove();
-                plateData[playerPos.x + width - 1, playerPos.y + j] = GetInstance(plateMap[width - 1, j], OffsetPos(playerPos, width - 1, j));
+                plateData[playerPos.x + width - 1, playerPos.y + j] = GetInstance(plateMap[width - 1, j], startPos.Add(width - 1, j));
             }
             RedrawXShrink(playerPos, plateMap);
         }
-
-        private Pos OffsetPos(Pos pos, int offsetX, int offsetY)
-            => new Pos(pos.x - width / 2 + offsetX, pos.y - height / 2 + offsetY);
 
         /// <summary>
         /// Get Tiles view open inside viewing range for player's see through info
@@ -350,12 +363,42 @@ public class HidePool : MonoBehaviour
             return plateMap;
         }
     }
+
     protected class LandscapeUpdater : HidePlateUpdater
     {
         public LandscapeUpdater(HidePool hidePool, int range) : base(hidePool, range, range)
         {
             playerOffsetPos = new Pos(range / 2, range / 2);
         }
+
+    }
+    protected class PortraitNUpdater : HidePlateUpdater
+    {
+        public PortraitNUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        {
+            playerOffsetPos = new Pos(width / 2, height - width / 2 - 1);
+        }
+    }
+    protected class PortraitSUpdater : HidePlateUpdater
+    {
+        public PortraitSUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        {
+            playerOffsetPos = new Pos(width / 2, width / 2);
+        }
+    }
+    protected class PortraitEUpdater : HidePlateUpdater
+    {
+        public PortraitEUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        {
+            playerOffsetPos = new Pos(height / 2, height / 2);
+        }
     }
 
+    protected class PortraitWUpdater : HidePlateUpdater
+    {
+        public PortraitWUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        {
+            playerOffsetPos = new Pos(width - height / 2 - 1, height / 2);
+        }
+    }
 }
