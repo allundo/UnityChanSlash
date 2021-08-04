@@ -41,6 +41,11 @@ public struct Pos
         return SubY(1);
     }
 
+    public Pos Add(int x, int y)
+    {
+        return new Pos(this.x + x, this.y + y);
+    }
+
     public Pos AddX(int x)
     {
         return new Pos(this.x + x, y);
@@ -49,6 +54,11 @@ public struct Pos
     public Pos AddY(int y)
     {
         return new Pos(x, this.y + y);
+    }
+
+    public Pos Sub(int x, int y)
+    {
+        return new Pos(this.x - x, this.y - y);
     }
 
     public Pos SubX(int x)
