@@ -119,6 +119,7 @@ public class HidePool : MonoBehaviour
 
         protected int width;
         protected int height;
+        protected Pos playerOffsetPos;
 
         protected HidePlateUpdater(HidePool hidePool, int width, int height)
         {
@@ -218,9 +219,9 @@ public class HidePool : MonoBehaviour
             => new Pos(pos.x - width / 2 + offsetX, pos.y - height / 2 + offsetY);
 
         /// <summary>
-        /// Get tiles inside player view range with see through info
+        /// Get Tiles view open inside viewing range for player's see through info
         /// </summary>
-        private bool[,] GetTileRegion(int x, int y)
+        private bool[,] GetTileViewOpen(Pos playerPos)
         {
             int tileWidth = width + 2;
             int tileHeight = height + 2;
@@ -237,14 +238,13 @@ public class HidePool : MonoBehaviour
                 region[0, j] = region[tileWidth - 1, j] = false;
             }
 
+            Pos startPos = playerPos - playerOffsetPos.Add(1, 1);
+
             for (int j = 1; j < tileHeight - 1; j++)
             {
                 for (int i = 1; i < tileWidth - 1; i++)
                 {
-                    int matX = x - tileWidth / 2 + i;
-                    int matY = y - tileHeight / 2 + j;
-
-                    region[i, j] = map.IsTileViewOpen(matX, matY);
+                    region[i, j] = map.IsTileViewOpen(startPos.x + i, startPos.y + j);
                 }
             }
 
@@ -258,12 +258,11 @@ public class HidePool : MonoBehaviour
         /// <returns></returns>
         public Plate[,] GetPlateMap(Pos playerPos)
         {
-            // Get 13x13 player view range
-            bool[,] region = GetTileRegion(playerPos.x, playerPos.y);
+            bool[,] viewOpen = GetTileViewOpen(playerPos);
 
             var plateMap = new Plate[width, height];
 
-            // Fill 11x11 tile with hide plates nearby player
+            // Fill tiles inside player view range with HidePlates
             for (int j = 0; j < height; j++)
             {
                 for (int i = 0; i < width; i++)
@@ -286,7 +285,7 @@ public class HidePool : MonoBehaviour
                 int ptX = pos.x + 1;
                 int ptY = pos.y + 1;
 
-                region[ptX, ptY] = false;
+                viewOpen[ptX, ptY] = false;
 
                 // Delete corner of hide plates nearby focusing tile
                 if (pos.x - 1 >= 0 && pos.y - 1 >= 0)
@@ -311,7 +310,7 @@ public class HidePool : MonoBehaviour
 
                 // Push neighbor tile as hide plate deleting candidate
                 // If not a delete candidate, delete only a half of the plate
-                if (region[ptX - 1, ptY])
+                if (viewOpen[ptX - 1, ptY])
                 {
                     openStack.Push((pos.x - 1, pos.y));
                 }
@@ -320,7 +319,7 @@ public class HidePool : MonoBehaviour
                     plateMap[pos.x - 1, pos.y] &= ~Plate.BD;
                 }
 
-                if (region[ptX, ptY - 1])
+                if (viewOpen[ptX, ptY - 1])
                 {
                     openStack.Push((pos.x, pos.y - 1));
                 }
@@ -329,7 +328,7 @@ public class HidePool : MonoBehaviour
                     plateMap[pos.x, pos.y - 1] &= ~Plate.CD;
                 }
 
-                if (region[ptX + 1, ptY])
+                if (viewOpen[ptX + 1, ptY])
                 {
                     openStack.Push((pos.x + 1, pos.y));
                 }
@@ -338,7 +337,7 @@ public class HidePool : MonoBehaviour
                     plateMap[pos.x + 1, pos.y] &= ~Plate.AC;
                 }
 
-                if (region[ptX, ptY + 1])
+                if (viewOpen[ptX, ptY + 1])
                 {
                     openStack.Push((pos.x, pos.y + 1));
                 }
@@ -354,7 +353,9 @@ public class HidePool : MonoBehaviour
     protected class LandscapeUpdater : HidePlateUpdater
     {
         public LandscapeUpdater(HidePool hidePool, int range) : base(hidePool, range, range)
-        { }
+        {
+            playerOffsetPos = new Pos(range / 2, range / 2);
+        }
     }
 
 }
