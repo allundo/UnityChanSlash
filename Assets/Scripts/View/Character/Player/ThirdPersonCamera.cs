@@ -31,7 +31,10 @@ public class ThirdPersonCamera : MonoBehaviour
         ResetRenderSettings(DeviceOrientation.Portrait);
         crossFade.enabled = false;
 
-        rotate.Orientation.Subscribe(orientation => ResetRenderSettings(orientation));
+        rotate.Orientation
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(orientation => ResetRenderSettings(orientation))
+            .AddTo(this);
     }
 
 
