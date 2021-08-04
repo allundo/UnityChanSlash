@@ -111,11 +111,8 @@ public class HidePool : MonoBehaviour
         }
     }
 
-    private void RedrawRange(Pos playerPos, Plate[,] plateMap, bool isXShrink = false, bool isYShrink = false)
+    private void RedrawRange(Pos playerPos, Plate[,] plateMap, int xShrink = 0, int yShrink = 0)
     {
-        int xShrink = isXShrink ? 1 : 0;
-        int yShrink = isYShrink ? 1 : 0;
-
         for (int j = yShrink; j < RANGE - yShrink; j++)
         {
             for (int i = xShrink; i < RANGE - xShrink; i++)
@@ -131,6 +128,8 @@ public class HidePool : MonoBehaviour
             }
         }
     }
+    private void RedrawXShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 1, 0);
+    private void RedrawYShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 0, 1);
 
     private void MoveRange(Pos playerPos, Plate[,] plateMap)
     {
@@ -149,7 +148,7 @@ public class HidePool : MonoBehaviour
             plateData[playerPos.x + i, playerPos.y + RANGE]?.Remove();
             plateData[playerPos.x + i, playerPos.y] = GetInstance(plateMap[i, 0], OffsetPos(playerPos, i, 0));
         }
-        RedrawRange(playerPos, plateMap, false, true);
+        RedrawYShrink(playerPos, plateMap);
     }
     private void MoveRangeSouth(Pos playerPos, Plate[,] plateMap)
     {
@@ -158,7 +157,7 @@ public class HidePool : MonoBehaviour
             plateData[playerPos.x + i, playerPos.y - 1]?.Remove();
             plateData[playerPos.x + i, playerPos.y + RANGE - 1] = GetInstance(plateMap[i, RANGE - 1], OffsetPos(playerPos, i, RANGE - 1));
         }
-        RedrawRange(playerPos, plateMap, false, true);
+        RedrawYShrink(playerPos, plateMap);
     }
     private void MoveRangeWest(Pos playerPos, Plate[,] plateMap)
     {
@@ -167,7 +166,7 @@ public class HidePool : MonoBehaviour
             plateData[playerPos.x + RANGE, playerPos.y + j]?.Remove();
             plateData[playerPos.x, playerPos.y + j] = GetInstance(plateMap[0, j], OffsetPos(playerPos, 0, j));
         }
-        RedrawRange(playerPos, plateMap, true, false);
+        RedrawXShrink(playerPos, plateMap);
     }
     private void MoveRangeEast(Pos playerPos, Plate[,] plateMap)
     {
@@ -176,7 +175,7 @@ public class HidePool : MonoBehaviour
             plateData[playerPos.x - 1, playerPos.y + j]?.Remove();
             plateData[playerPos.x + RANGE - 1, playerPos.y + j] = GetInstance(plateMap[RANGE - 1, j], OffsetPos(playerPos, RANGE - 1, j));
         }
-        RedrawRange(playerPos, plateMap, true, false);
+        RedrawXShrink(playerPos, plateMap);
     }
 
     private Pos OffsetPos(Pos pos, int offsetX, int offsetY)
