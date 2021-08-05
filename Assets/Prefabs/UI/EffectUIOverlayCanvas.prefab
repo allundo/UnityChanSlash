@@ -87,7 +87,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3418dbb15f64d48c5bcdd4bfc6b3306a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenRotate: {fileID: 0}
 --- !u!1 &7183579910493290897
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c917b1ee245d48fdb1f2fda2c65a0ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotate: {fileID: 0}
   rtUI: {fileID: 7380881916009297584}
   rtLifeGauge: {fileID: 1547443839}
   fightCircle: {fileID: 3660036650536473079}

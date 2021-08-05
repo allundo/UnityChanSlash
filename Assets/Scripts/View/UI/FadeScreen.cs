@@ -5,31 +5,13 @@ using UniRx;
 
 public class FadeScreen : MonoBehaviour
 {
-    [SerializeField] private ScreenRotateHandler screenRotate = default;
-
-    private RectTransform rectTransform;
     private Image black;
     private Tween fadeIn = null;
     private Tween fadeOut = null;
 
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
         black = GetComponent<Image>();
-    }
-
-    void Start()
-    {
-
-        screenRotate.Orientation
-            .SkipLatestValueOnSubscribe()
-            .Subscribe(orientation => ResetOrientation(orientation))
-            .AddTo(this);
-    }
-
-    private void ResetOrientation(DeviceOrientation orientation)
-    {
-        rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
     }
 
     public Tween FadeIn(float duration = 1f)

@@ -3,7 +3,6 @@ using UniRx;
 
 public class UIPosition : MonoBehaviour
 {
-    [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private RectTransform rtUI = default;
     [SerializeField] private RectTransform rtLifeGauge = default;
     [SerializeField] private FightCircle fightCircle = default;
@@ -13,12 +12,7 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private float lifeGaugeFromBottom = 60f;
     [SerializeField] private Vector2 lifeGaugeFromLeftTop = new Vector2(420f, -100f);
 
-    void Start()
-    {
-        rotate.Orientation.Subscribe(orientation => SetPosition(orientation)).AddTo(this);
-    }
-
-    private void SetPosition(DeviceOrientation orientation)
+    public void ResetPosition(DeviceOrientation orientation)
     {
         switch (orientation)
         {

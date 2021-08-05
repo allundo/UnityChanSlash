@@ -1,17 +1,27 @@
 using UnityEngine;
 using DG.Tweening;
+using UniRx;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private Transform playerTransform = default;
+    [SerializeField] private HidePool hidePool = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private FadeScreen fade = default;
+    [SerializeField] private UIPosition uiPosition = default;
+    [SerializeField] private ThirdPersonCamera mainCamera = default;
+    [SerializeField] private ScreenRotateHandler rotate = default;
+
+    private bool isInitialOrientation = true;
+    private RectTransform rtFadeScreen;
 
     public WorldMap worldMap { get; protected set; }
 
     protected override void Awake()
     {
         base.Awake();
+
+        rtFadeScreen = fade.GetComponent<RectTransform>();
 
         fade.FadeIn(0.8f).Play();
 
@@ -26,6 +36,26 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         placeEnemyGenerator.Place(worldMap);
 
         DOTween.SetTweensCapacity(500, 100);
+    }
+
+    void Start()
+    {
+        rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+    }
+
+    private void ResetOrientation(DeviceOrientation orientation)
+    {
+        rtFadeScreen.sizeDelta = new Vector2(Screen.width, Screen.height);
+
+        uiPosition.ResetPosition(orientation);
+
+        if (!isInitialOrientation)
+        {
+            hidePool.ReformHidePlates(orientation);
+            mainCamera.ResetRenderSettings(orientation);
+        }
+
+        isInitialOrientation = false;
     }
 
     public Pos PlayerPos => worldMap.MapPos(playerTransform.position);

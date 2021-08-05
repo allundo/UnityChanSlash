@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using UniRx;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -14,7 +13,6 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] public Vector3 cameraPositionL = new Vector3(0, 8f, -8f);
     [SerializeField] private SideCamera sideCamera = default;
     [SerializeField] private RawImage crossFade = default;
-    [SerializeField] private ScreenRotateHandler rotate = default;
 
     public float fieldOfView { get; private set; }
     public Vector3 followOffset { get; private set; }
@@ -30,13 +28,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         ResetRenderSettings(DeviceOrientation.Portrait);
         crossFade.enabled = false;
-
-        rotate.Orientation
-            .SkipLatestValueOnSubscribe()
-            .Subscribe(orientation => ResetRenderSettings(orientation))
-            .AddTo(this);
     }
-
 
     void LateUpdate()
     {

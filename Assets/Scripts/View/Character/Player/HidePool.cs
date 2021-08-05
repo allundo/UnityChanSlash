@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UniRx;
 
 public class HidePool : MonoBehaviour
 {
@@ -10,8 +9,6 @@ public class HidePool : MonoBehaviour
     [SerializeField] private GameObject plate3 = default;
     [SerializeField] private GameObject plate2 = default;
     [SerializeField] private GameObject plate1 = default;
-
-    [SerializeField] private ScreenRotateHandler screenRotate = default;
 
     protected Transform[] pool = new Transform[0b10000];
     protected GameObject[] prefab = new GameObject[0b10000];
@@ -44,14 +41,6 @@ public class HidePool : MonoBehaviour
         portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH);
         portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT);
         portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH);
-    }
-
-    void Start()
-    {
-        screenRotate.Orientation
-            .SkipLatestValueOnSubscribe()
-            .Subscribe(orientation => ResetOrientation(orientation))
-            .AddTo(this);
     }
 
     private void InitHidePlates()
@@ -134,10 +123,10 @@ public class HidePool : MonoBehaviour
 
     public void Init()
     {
-        ResetOrientation(DeviceOrientation.Portrait);
+        ReformHidePlates(DeviceOrientation.Portrait);
     }
 
-    private void ResetOrientation(DeviceOrientation orientation)
+    public void ReformHidePlates(DeviceOrientation orientation)
     {
         currentUpdater?.ClearRange(CurrentPos);
 

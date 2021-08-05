@@ -3773,8 +3773,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 3442943665555902726}
+  hidePool: {fileID: 508555771}
   placeEnemyGenerator: {fileID: 1196509789}
   fade: {fileID: 622275874}
+  uiPosition: {fileID: 1898412435}
+  mainCamera: {fileID: 963194229}
+  rotate: {fileID: 458642054}
 --- !u!4 &442718009
 Transform:
   m_ObjectHideFlags: 0
@@ -4148,6 +4152,18 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 540}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &508555771 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1035482312927549619, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5189892436850581060}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c75097332af84554b4349e61e8f533b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &534809527
 GameObject:
   m_ObjectHideFlags: 0
@@ -15229,6 +15245,18 @@ Transform:
   m_Father: {fileID: 170570285}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1898412435 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4848191031649484721, guid: 3b111658a672a4449b3bceda64ae90af,
+    type: 3}
+  m_PrefabInstance: {fileID: 8337679456419231782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c917b1ee245d48fdb1f2fda2c65a0ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2022153802 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8337679454934869612, guid: 3b111658a672a4449b3bceda64ae90af,
