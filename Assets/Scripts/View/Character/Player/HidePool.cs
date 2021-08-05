@@ -209,8 +209,8 @@ public class HidePool : MonoBehaviour
 
                     if (plateMap[i, j] != (plateData[x, y]?.plate ?? Plate.NONE))
                     {
-                        plateData[x, y]?.Remove(0.25f);
-                        plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j), 0.25f);
+                        plateData[x, y]?.Remove(0.3f);
+                        plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j), 0.2f);
                     }
                 }
             }
