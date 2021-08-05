@@ -338,4 +338,15 @@ public partial class PlayerCommander : ShieldCommander
             SetDestoryFinal();
         }
     }
+
+    protected class PlayerDropFloor : PlayerCommand
+    {
+        public PlayerDropFloor(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        public override void Execute()
+        {
+            anim.dropFloor.Fire();
+            PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), playerCommander.ValidateInput);
+        }
+    }
 }

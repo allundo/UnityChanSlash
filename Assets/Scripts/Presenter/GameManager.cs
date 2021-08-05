@@ -6,6 +6,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private Transform playerTransform = default;
     [SerializeField] private HidePool hidePool = default;
+    [SerializeField] private PlayerCommander commander = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] private UIPosition uiPosition = default;
@@ -41,6 +42,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
 
         fade.FadeIn(0.8f, 1.2f).Play();
+        commander.EnqueueDropFloor();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)

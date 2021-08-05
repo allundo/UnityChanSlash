@@ -54,6 +54,15 @@ public class TweenMove
             )
             .AppendInterval(edgeTime);
     }
+    public Sequence GetDropMove(float startY, float endY, float stunDuration = 0.0f, float wakeUpDuration = 0.65f)
+    {
+        float fallDuration = duration - stunDuration - wakeUpDuration;
+
+        return DOTween.Sequence()
+            .Append(tf.DOMoveY(startY, 0f).SetRelative())
+            .Append(tf.DOMoveY(endY - startY, fallDuration).SetRelative().SetEase(Ease.InQuad))
+            .AppendInterval(stunDuration + wakeUpDuration);
+    }
 
     /// <summary>
     /// Reserve processing after command duration
