@@ -17791,11 +17791,6 @@ PrefabInstance:
       propertyPath: rotate
       value: 
       objectReference: {fileID: 458642054}
-    - target: {fileID: 4848191031649484721, guid: 3b111658a672a4449b3bceda64ae90af,
-        type: 3}
-      propertyPath: portraitFromBottom
-      value: 720
-      objectReference: {fileID: 0}
     - target: {fileID: 8337679454760430875, guid: 3b111658a672a4449b3bceda64ae90af,
         type: 3}
       propertyPath: m_LocalPosition.x
