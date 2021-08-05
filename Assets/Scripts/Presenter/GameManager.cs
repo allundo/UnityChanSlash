@@ -40,7 +40,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
 
-        fade.FadeIn(0.8f).Play();
+        fade.FadeIn(0.8f, 1.2f).Play();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
