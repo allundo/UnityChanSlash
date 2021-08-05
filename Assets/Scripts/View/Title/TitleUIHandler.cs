@@ -82,6 +82,7 @@ public class TitleUIHandler : MonoBehaviour
 
         DOTween.Sequence()
             .Append(startTween)
+            .AppendInterval(0.4f)
             .Append(unityChanDropTween)
             .Join(fadeOutTween.SetDelay(0.75f))
             .AppendInterval(0.5f)

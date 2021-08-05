@@ -8,6 +8,7 @@ public class CameraWork : MonoBehaviour
     {
         NONE,
         TRACK,
+        START,
         TRAIL
     }
 
@@ -43,8 +44,12 @@ public class CameraWork : MonoBehaviour
                 LookAt(EyePosition);
                 break;
 
+            case State.START:
+                Trail(EyePosition + new Vector3(0f, -0.4f, 0f));
+                break;
+
             case State.TRAIL:
-                Trail(EyePosition);
+                Trail(EyePosition, 0.25f);
                 break;
         }
     }
@@ -55,9 +60,9 @@ public class CameraWork : MonoBehaviour
         transform.LookAt(lookAt);
     }
 
-    private void Trail(Vector3 target)
+    private void Trail(Vector3 target, float rate = 0.025f)
     {
-        LookAt(currentLookAt * 0.75f + target * 0.25f);
+        LookAt(currentLookAt * (1.0f - rate) + target * rate);
     }
 
     public void ToTitle(TweenCallback OnComplete = null)
@@ -83,8 +88,9 @@ public class CameraWork : MonoBehaviour
 
     public Tween StartTween()
     {
+        state = State.START;
         return transform
-            .DOMove(EyePosition + new Vector3(0f, 0.2f, 2f), 1f)
+            .DOMove(EyePosition + new Vector3(0f, -0.4f, 1.8f), 1f)
             .OnPlay(() => cameraWorkTween?.Kill());
     }
 
