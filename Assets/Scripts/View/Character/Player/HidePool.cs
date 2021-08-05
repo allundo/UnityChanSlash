@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class HidePool : MonoBehaviour
 {
@@ -9,10 +10,14 @@ public class HidePool : MonoBehaviour
     [SerializeField] private GameObject plate3 = default;
     [SerializeField] private GameObject plate2 = default;
     [SerializeField] private GameObject plate1 = default;
+    [SerializeField] private GameObject plateOuterPrefab = default;
+
 
     protected Transform[] pool = new Transform[0b10000];
     protected GameObject[] prefab = new GameObject[0b10000];
     protected Quaternion[] rotate = new Quaternion[0b10000];
+
+    protected GameObject plateOuter;
 
     protected LandscapeUpdater landscape = null;
     protected Dictionary<IDirection, HidePlateUpdater> portrait = new Dictionary<IDirection, HidePlateUpdater>();
@@ -61,6 +66,8 @@ public class HidePool : MonoBehaviour
         rotate[(int)Plate.B] = rotate[(int)Plate.BD] = rotate[(int)Plate.ABD] = rotate[(int)Plate.BC] = Quaternion.Euler(0, 90, 0);
         rotate[(int)Plate.D] = rotate[(int)Plate.CD] = rotate[(int)Plate.BCD] = Quaternion.Euler(0, 180, 0);
         rotate[(int)Plate.C] = rotate[(int)Plate.AC] = rotate[(int)Plate.ACD] = Quaternion.Euler(0, 270, 0);
+
+        plateOuter = Instantiate(plateOuterPrefab, Vector3.zero, Quaternion.identity);
     }
 
     private HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f)
@@ -92,8 +99,19 @@ public class HidePool : MonoBehaviour
         Plate[,] plateMap = currentUpdater.GetPlateMap(playerPos);
 
         DrawAction(playerPos, plateMap);
+        MoveOuterPlate(playerPos);
 
         prevPos = playerPos;
+    }
+
+    private void MoveOuterPlate(Pos pos)
+    {
+        // Move with delay
+        DOVirtual.DelayedCall(0.1f, () =>
+        {
+            plateOuter.transform.position = map.WorldPos(pos);
+        })
+        .Play();
     }
 
     public void Draw()
