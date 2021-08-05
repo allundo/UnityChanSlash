@@ -23,8 +23,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         rtFadeScreen = fade.GetComponent<RectTransform>();
 
-        fade.FadeIn(0.8f).Play();
-
         var maze = new MazeCreator();
         maze.CreateMaze();
 
@@ -41,6 +39,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void Start()
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+
+        fade.FadeIn(0.8f).Play();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
