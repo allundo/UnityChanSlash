@@ -3774,6 +3774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 3442943665555902726}
   placeEnemyGenerator: {fileID: 1196509789}
+  fade: {fileID: 622275874}
 --- !u!4 &442718009
 Transform:
   m_ObjectHideFlags: 0
@@ -5002,6 +5003,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dcb82dfe160d458698b2023f6310174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &622275874 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 113910405701912061, guid: 3b111658a672a4449b3bceda64ae90af,
+    type: 3}
+  m_PrefabInstance: {fileID: 8337679456419231782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3418dbb15f64d48c5bcdd4bfc6b3306a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &671906690
@@ -17786,6 +17799,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 113910405701912061, guid: 3b111658a672a4449b3bceda64ae90af,
+        type: 3}
+      propertyPath: screenRotate
+      value: 
+      objectReference: {fileID: 458642054}
     - target: {fileID: 4848191031649484721, guid: 3b111658a672a4449b3bceda64ae90af,
         type: 3}
       propertyPath: rotate

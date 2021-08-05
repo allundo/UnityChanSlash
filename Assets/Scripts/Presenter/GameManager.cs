@@ -5,6 +5,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private Transform playerTransform = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
+    [SerializeField] private FadeScreen fade = default;
 
     public WorldMap worldMap { get; protected set; }
 
@@ -12,6 +13,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
+        fade.FadeIn(0.8f).Play();
 
         var maze = new MazeCreator();
         maze.CreateMaze();
