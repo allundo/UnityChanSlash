@@ -7341,29 +7341,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &2110886711 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4379356342470970479, guid: b1fce0d6376df46ca905a24230f5e609,
+--- !u!114 &2110886712 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2110886712, guid: b1fce0d6376df46ca905a24230f5e609,
     type: 3}
   m_PrefabInstance: {fileID: 2852255921376559641}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2110886712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2110886711}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a0374fc38844efebbf7248fa3dada5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  faceNormal: {fileID: 7400000, guid: 6394472d24c9347e5bb789ec1f15e5bb, type: 2}
-  faceAngry: {fileID: 7400000, guid: 689da6f371ad8441395f39acaf2c7ae3, type: 2}
-  faceEyeClose: {fileID: 7400000, guid: 73cb3ae8fc1de47a0a307cb5f95ec701, type: 2}
-  faceSmile: {fileID: 7400000, guid: 06b76ba9895174fc19d91c361e7c911b, type: 2}
-  faceSuprise: {fileID: 7400000, guid: ff0ec808b24b748e482e13ebfc9305ad, type: 2}
 --- !u!4 &2110886717 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4379356342470676565, guid: b1fce0d6376df46ca905a24230f5e609,
@@ -7377,11 +7366,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4379356342461628157, guid: b1fce0d6376df46ca905a24230f5e609,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a562180b8c2ae4f6da4d730ab63dc393, type: 2}
     - target: {fileID: 4379356342470676565, guid: b1fce0d6376df46ca905a24230f5e609,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7441,11 +7425,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: unitychan_title
-      objectReference: {fileID: 0}
-    - target: {fileID: 4379356342470970479, guid: b1fce0d6376df46ca905a24230f5e609,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1fce0d6376df46ca905a24230f5e609, type: 3}

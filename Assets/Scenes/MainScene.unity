@@ -17599,17 +17599,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1035482312927549619, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: screenRotate
-      value: 
-      objectReference: {fileID: 458642054}
-    - target: {fileID: 1035482312927549619, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
-      propertyPath: plateOuterPrefab
-      value: 
-      objectReference: {fileID: 6420048817010996313, guid: 56760f06023b340fdb670459b3f76120,
-        type: 3}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: fightCircle
@@ -17845,16 +17834,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 113910405701912061, guid: 3b111658a672a4449b3bceda64ae90af,
-        type: 3}
-      propertyPath: screenRotate
-      value: 
-      objectReference: {fileID: 458642054}
-    - target: {fileID: 4848191031649484721, guid: 3b111658a672a4449b3bceda64ae90af,
-        type: 3}
-      propertyPath: rotate
-      value: 
-      objectReference: {fileID: 458642054}
     - target: {fileID: 8337679454760430875, guid: 3b111658a672a4449b3bceda64ae90af,
         type: 3}
       propertyPath: m_LocalPosition.x
