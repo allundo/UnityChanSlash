@@ -11,6 +11,7 @@ public partial class PlayerCommander : ShieldCommander
     private bool IsAttack => currentCommand is PlayerAttack;
 
     public void EnqueueDropFloor() { EnqueueCommand(new PlayerDropFloor(this, 6.11f), true); }
+    public void EnqueueStartMessage() { EnqueueCommand(new PlayerStartMessage(this, 0.1f)); }
 
     protected override void Awake()
     {

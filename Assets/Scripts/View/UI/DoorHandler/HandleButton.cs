@@ -23,7 +23,6 @@ public class HandleButton : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         image = GetComponent<Image>();
-
     }
 
     void Start()

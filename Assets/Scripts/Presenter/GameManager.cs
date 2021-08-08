@@ -18,6 +18,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public WorldMap worldMap { get; protected set; }
 
+    public void Pause() { Time.timeScale = 0f; }
+    public void Resume() { Time.timeScale = 1f; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,6 +46,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         fade.FadeIn(0.8f, 1.2f).Play();
         commander.EnqueueDropFloor();
+        commander.EnqueueStartMessage();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)

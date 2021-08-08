@@ -349,4 +349,30 @@ public partial class PlayerCommander : ShieldCommander
             PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), playerCommander.ValidateInput);
         }
     }
+    protected class PlayerStartMessage : PlayerCommand
+    {
+        public PlayerStartMessage(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        public override void Execute()
+        {
+            SetValidateTimer(0.5f, 0.5f);
+            SetDispatchFinal();
+
+            MessageData data = new MessageData
+            {
+                sentences = new string[]
+                {
+                    "痛〜〜〜！何なの一体？？",
+                    "ちょっと！・・・この扱いはどういうこと！？"
+                },
+                faces = new FaceID[]
+                {
+                    FaceID.DISATTRACT,
+                    FaceID.ANGRY
+                }
+            };
+
+            playerCommander.messageController.InputMessageData(data);
+        }
+    }
 }
