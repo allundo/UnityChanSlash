@@ -55,7 +55,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
 
-        fade.FadeIn(0.8f, 1.2f).Play();
+        fade.FadeIn(1.0f, 1.1f).Play();
         commander.EnqueueDropFloor();
         commander.EnqueueStartMessage();
     }
