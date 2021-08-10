@@ -27,6 +27,9 @@ namespace UnityChan
         public AnimationCurve dragCurve;
         public SpringBone[] springBones;
 
+        private float DeltaTime => Time.deltaTime > 0f ? Time.deltaTime : 1f / FPS;
+        private int FPS => Application.targetFrameRate > 0 ? Application.targetFrameRate : 60;
+
         void Start()
         {
             UpdateParameters();
@@ -34,6 +37,7 @@ namespace UnityChan
 
         void Update()
         {
+
 #if UNITY_EDITOR
             //Kobayashi
             if (dynamicRatio >= 1.0f)
@@ -54,7 +58,7 @@ namespace UnityChan
                 {
                     if (dynamicRatio > springBones[i].threshold)
                     {
-                        springBones[i].UpdateSpring();
+                        springBones[i].UpdateSpring(DeltaTime);
                     }
                 }
             }

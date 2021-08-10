@@ -3775,6 +3775,8 @@ MonoBehaviour:
   playerTransform: {fileID: 3442943665555902726}
   hidePool: {fileID: 508555771}
   commander: {fileID: 508555776}
+  springManager: {fileID: 5189892436850581062}
+  randomWind: {fileID: 5189892436850581061}
   placeEnemyGenerator: {fileID: 1196509789}
   fade: {fileID: 622275874}
   uiPosition: {fileID: 1898412435}
@@ -17738,6 +17740,30 @@ PrefabInstance:
       objectReference: {fileID: 373684748}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc7cf6d8cb857479ca22d4d12ab9027e, type: 3}
+--- !u!114 &5189892436850581061 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7476530261807130424, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5189892436850581060}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38e39ada51aaba4db6d352ce218849e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5189892436850581062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7476530261807130404, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5189892436850581060}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6514ba86f976d724ab63844a6015b2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5411086375114402768
 PrefabInstance:
   m_ObjectHideFlags: 0

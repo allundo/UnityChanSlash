@@ -76,14 +76,14 @@ namespace UnityChan
             prevTipPos = child.position;
         }
 
-        public void UpdateSpring()
+        public void UpdateSpring(float deltaTime)
         {
             //Kobayashi
             org = trs;
             //回転をリセット
             trs.localRotation = Quaternion.identity * localRotation;
 
-            float sqrDt = Time.deltaTime * Time.deltaTime;
+            float sqrDt = deltaTime * deltaTime;
 
             //stiffness
             Vector3 force = trs.rotation * (boneAxis * stiffnessForce) / sqrDt;
