@@ -18,6 +18,8 @@ public class TextHandler : MonoBehaviour
 
     private Tween literalsTween = null;
 
+    private bool isTapped = false;
+
     public ISubject<FaceID> subject = new Subject<FaceID>();
 
     void Awake()
@@ -27,6 +29,7 @@ public class TextHandler : MonoBehaviour
 
     void Update()
     {
+        isTapped = false;
 
         if (IsMessageEmpty) return;
 
@@ -35,6 +38,9 @@ public class TextHandler : MonoBehaviour
 
     public void TapNext()
     {
+        if (isTapped) return;
+        isTapped = true;
+
         if (IsMessageEmpty) return;
 
         if (IsDisplayedAll)
