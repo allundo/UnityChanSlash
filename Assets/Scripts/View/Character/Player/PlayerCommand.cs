@@ -345,8 +345,11 @@ public partial class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
+            playerCommander.InvisibleInput();
+            SetValidateTimer(1f, 1f);
+
             anim.dropFloor.Fire();
-            PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), playerCommander.ValidateInput);
+            PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), playerCommander.VisibleInput);
         }
     }
     protected class PlayerStartMessage : PlayerCommand

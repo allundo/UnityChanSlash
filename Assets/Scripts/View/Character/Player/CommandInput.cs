@@ -19,6 +19,19 @@ public partial class PlayerCommander : ShieldCommander
     protected DoorInput doorInput;
     protected MoveInput moveInput;
 
+    protected bool isInputVisible = true;
+
+    public void InvisibleInput()
+    {
+        isInputVisible = false;
+        InactivateUIs();
+    }
+
+    public void VisibleInput()
+    {
+        isInputVisible = true;
+    }
+
     private void SetInputs()
     {
         fightInput = new FightInput(this);
@@ -28,6 +41,8 @@ public partial class PlayerCommander : ShieldCommander
 
     private void CommandInput()
     {
+        if (!isInputVisible) return;
+
         Tile forwardTile = map.ForwardTile;
 
         // Is face to enemy

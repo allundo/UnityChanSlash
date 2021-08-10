@@ -18,7 +18,8 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
 
     protected override void Start()
     {
-        base.Start();
+        base.Inactivate(0f);
+
         textHandler.subject.Subscribe(
             faceID => characterUI.DispFace(faceID),
             err => Debug.Log(err),
@@ -53,7 +54,7 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
     {
         onComplete = onComplete ?? (() => { });
 
-        GameManager.Instance.Pause();
+        GameManager.Instance.Pause(true);
 
         base.Activate(duration, () =>
         {

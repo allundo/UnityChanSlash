@@ -18,8 +18,19 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public WorldMap worldMap { get; protected set; }
 
-    public void Pause() { Time.timeScale = 0f; }
-    public void Resume() { Time.timeScale = 1f; }
+    public void Pause(bool isHideUIs = false)
+    {
+        if (isHideUIs) HideUIs();
+        Time.timeScale = 0f;
+    }
+    public void Resume()
+    {
+        DisplayUIs();
+        Time.timeScale = 1f;
+    }
+
+    private void HideUIs() { commander.InvisibleInput(); }
+    private void DisplayUIs() { commander.VisibleInput(); }
 
     protected override void Awake()
     {
