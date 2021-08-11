@@ -10,17 +10,19 @@ public class HidePool : MonoBehaviour
     [SerializeField] private GameObject plate3 = default;
     [SerializeField] private GameObject plate2 = default;
     [SerializeField] private GameObject plate1 = default;
-    [SerializeField] private GameObject plateOuterPrefab = default;
+    [SerializeField] private GameObject plateFrontPrefab = default;
 
 
     protected Transform[] pool = new Transform[0b10000];
     protected GameObject[] prefab = new GameObject[0b10000];
     protected Quaternion[] rotate = new Quaternion[0b10000];
 
-    protected GameObject plateOuter;
+    protected GameObject plateFront;
 
     protected LandscapeUpdater landscape = null;
     protected Dictionary<IDirection, HidePlateUpdater> portrait = new Dictionary<IDirection, HidePlateUpdater>();
+    protected Dictionary<IDirection, Quaternion> rotatePlateFront = new Dictionary<IDirection, Quaternion>();
+    protected Dictionary<IDirection, Pos> vecPlateFront = new Dictionary<IDirection, Pos>();
 
     private HidePlateUpdater currentUpdater = null;
 
@@ -35,6 +37,9 @@ public class HidePool : MonoBehaviour
     private Pos prevPos = new Pos();
     private Pos CurrentPos => map.MapPos(transform.position);
 
+    private Pos currentOffset = new Pos();
+    private Quaternion currentRotate = Quaternion.identity;
+
     void Awake()
     {
         map = GameManager.Instance.worldMap;
@@ -46,6 +51,16 @@ public class HidePool : MonoBehaviour
         portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH);
         portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT);
         portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH);
+
+        rotatePlateFront[Direction.north] = Quaternion.identity;
+        rotatePlateFront[Direction.east] = Quaternion.Euler(0f, 90f, 0f);
+        rotatePlateFront[Direction.south] = Quaternion.identity;
+        rotatePlateFront[Direction.west] = Quaternion.Euler(0f, 90f, 0f);
+
+        vecPlateFront[Direction.north] = new Pos(0, -1);
+        vecPlateFront[Direction.east] = new Pos(1, 0);
+        vecPlateFront[Direction.south] = new Pos(0, 1);
+        vecPlateFront[Direction.west] = new Pos(-1, 0);
     }
 
     private void InitHidePlates()
@@ -67,7 +82,7 @@ public class HidePool : MonoBehaviour
         rotate[(int)Plate.D] = rotate[(int)Plate.CD] = rotate[(int)Plate.BCD] = Quaternion.Euler(0, 180, 0);
         rotate[(int)Plate.C] = rotate[(int)Plate.AC] = rotate[(int)Plate.ACD] = Quaternion.Euler(0, 270, 0);
 
-        plateOuter = Instantiate(plateOuterPrefab, Vector3.zero, Quaternion.identity);
+        plateFront = Instantiate(plateFrontPrefab, Vector3.zero, Quaternion.identity);
     }
 
     private HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f)
@@ -109,7 +124,8 @@ public class HidePool : MonoBehaviour
         // Move with delay
         DOVirtual.DelayedCall(0.1f, () =>
         {
-            plateOuter.transform.position = map.WorldPos(pos);
+            plateFront.transform.rotation = currentRotate;
+            plateFront.transform.position = map.WorldPos(pos + currentOffset);
         })
         .Play();
     }
@@ -132,7 +148,16 @@ public class HidePool : MonoBehaviour
 
     public void Turn()
     {
-        if (currentUpdater == landscape) return;
+        currentRotate = rotatePlateFront[mapUtil.dir];
+
+        if (currentUpdater == landscape)
+        {
+            currentOffset = vecPlateFront[mapUtil.dir] * (RANGE * 3 / 2 + 1);
+            MoveOuterPlate(prevPos);
+            return;
+        }
+
+        currentOffset = vecPlateFront[mapUtil.dir] * (2 * HEIGHT - WIDTH);
 
         currentUpdater?.ClearRange(CurrentPos);
         currentUpdater = portrait[mapUtil.dir];
@@ -152,10 +177,14 @@ public class HidePool : MonoBehaviour
         {
             case DeviceOrientation.Portrait:
                 currentUpdater = portrait[mapUtil.dir];
+                currentRotate = rotatePlateFront[mapUtil.dir];
+                currentOffset = vecPlateFront[mapUtil.dir] * (2 * HEIGHT - WIDTH);
                 break;
 
             case DeviceOrientation.LandscapeRight:
                 currentUpdater = landscape;
+                currentRotate = rotatePlateFront[mapUtil.dir];
+                currentOffset = vecPlateFront[mapUtil.dir] * (RANGE * 3 / 2 + 1);
                 break;
         }
 
