@@ -22,6 +22,11 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private Camera cam = default;
 
+    public static readonly Vector2 viewPortAspect = new Vector2(1920f, 1080f);
+    public static readonly float aspect = viewPortAspect.x / viewPortAspect.y;
+    public static float ScreenAspect => Mathf.Max(Screen.width, Screen.height) / Mathf.Min(Screen.width, Screen.height);
+    public static float Margin => Mathf.Clamp01(1f - aspect / ScreenAspect) * 0.5f;
+
     private void Start()
     {
         cam = Camera.main;
@@ -39,24 +44,35 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void ResetRenderSettings(DeviceOrientation orientation)
     {
+        Rect viewPortRect = new Rect(0f, 0f, 1f, 1f);
+        float margin = Margin;
+
         switch (orientation)
         {
             case DeviceOrientation.Portrait:
                 fieldOfView = fieldOfViewP;
                 followOffset = followOffsetP;
                 cameraPosition = cameraPositionP;
+
+                viewPortRect = new Rect(0f, margin, 1f, 1f - margin * 2f);
+                renderTexture = new RenderTexture(Screen.width, Screen.height - (int)(margin * 2), 16);
+
                 break;
 
             case DeviceOrientation.LandscapeRight:
                 fieldOfView = fieldOfViewL;
                 followOffset = followOffsetL;
                 cameraPosition = cameraPositionL;
+
+                viewPortRect = new Rect(margin, 0f, 1f - margin * 2f, 1f);
+                renderTexture = new RenderTexture(Screen.width - (int)(margin * 2), Screen.height, 16);
                 break;
         }
 
         cam.fieldOfView = fieldOfView;
         sideCamera.SetTarget(this);
-        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
+
+        cam.rect = sideCamera.rect = viewPortRect;
         crossFade.texture = renderTexture;
     }
 

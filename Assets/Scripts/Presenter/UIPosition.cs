@@ -17,7 +17,7 @@ public class UIPosition : MonoBehaviour
         switch (orientation)
         {
             case DeviceOrientation.Portrait:
-                rtUI.anchoredPosition = new Vector2(0f, portraitFromBottom - Screen.height * 0.5f);
+                rtUI.anchoredPosition = new Vector2(0f, portraitFromBottom - Screen.height * (0.5f - ThirdPersonCamera.Margin));
                 rtLifeGauge.anchoredPosition = new Vector2(0f, lifeGaugeFromBottom - Screen.height * 0.5f);
                 break;
 

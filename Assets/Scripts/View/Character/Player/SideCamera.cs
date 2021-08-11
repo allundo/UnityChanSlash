@@ -9,6 +9,8 @@ public class SideCamera : MonoBehaviour
 
     private Camera cam;
 
+    public Rect rect { get { return cam.rect; } set { cam.rect = value; } }
+
     public void Enable()
     {
         cam.enabled = true;
