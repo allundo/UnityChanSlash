@@ -33,4 +33,9 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler,
     {
         Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
     }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Execute<IPointerExitHandler>(eventData, (handler, data) => handler.OnPointerExit(data as PointerEventData));
+    }
 }

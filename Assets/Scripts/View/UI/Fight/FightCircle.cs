@@ -196,7 +196,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             CurrentButton.Value?.Cancel();
         }
 
-        isFingerDown = false;
+        var eventData = new PointerEventData(EventSystem.current);
+        eventData.pressPosition = pressPos;
+        RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+
         CurrentButton.Value = null;
         pressPos = Vector2.zero;
     }
