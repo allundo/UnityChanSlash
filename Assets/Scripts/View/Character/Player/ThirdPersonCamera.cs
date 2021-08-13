@@ -55,8 +55,6 @@ public class ThirdPersonCamera : MonoBehaviour
                 cameraPosition = cameraPositionP;
 
                 viewPortRect = new Rect(0f, margin, 1f, 1f - margin * 2f);
-                renderTexture = new RenderTexture(Screen.width, Screen.height - (int)(margin * 2), 16);
-
                 break;
 
             case DeviceOrientation.LandscapeRight:
@@ -65,7 +63,6 @@ public class ThirdPersonCamera : MonoBehaviour
                 cameraPosition = cameraPositionL;
 
                 viewPortRect = new Rect(margin, 0f, 1f - margin * 2f, 1f);
-                renderTexture = new RenderTexture(Screen.width - (int)(margin * 2), Screen.height, 16);
                 break;
         }
 
@@ -73,6 +70,8 @@ public class ThirdPersonCamera : MonoBehaviour
         sideCamera.SetTarget(this);
 
         cam.rect = sideCamera.rect = viewPortRect;
+        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
+        crossFade.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         crossFade.texture = renderTexture;
     }
 
