@@ -21,14 +21,5 @@ public class ScreenRotateHandler : MonoBehaviour
     }
 
     private DeviceOrientation GetOrientation()
-    {
-        DeviceOrientation result = Input.deviceOrientation;
-
-        if (result == DeviceOrientation.Unknown)
-        {
-            return Screen.width < Screen.height ? DeviceOrientation.Portrait : DeviceOrientation.LandscapeRight;
-        }
-
-        return result;
-    }
+         => Screen.width < Screen.height ? DeviceOrientation.Portrait : DeviceOrientation.LandscapeRight;
 }
