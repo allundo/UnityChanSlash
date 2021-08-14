@@ -14,7 +14,8 @@ public class CameraWork : MonoBehaviour
 
     [SerializeField] private Transform tfUnityChan = default;
 
-    private Vector3 EyePosition => tfUnityChan.position + new Vector3(0f, 1.35f, 0f);
+    private Vector3 EyePosition => tfUnityChan.position + EyeHeight;
+    private readonly Vector3 EyeHeight = new Vector3(0f, 1.35f, 0f);
 
     private Tween cameraWorkTween = null;
     private State state = State.TRACK;
