@@ -4,7 +4,7 @@ using DG.Tweening;
 
 public class FadeTween
 {
-    protected Image image;
+    protected MaskableGraphic image;
     protected float maxAlpha;
     protected bool isValidOnPause;
 
@@ -13,14 +13,14 @@ public class FadeTween
 
     protected float AlphaRatio => image.color.a / maxAlpha;
 
-    public FadeTween(Image image, float maxAlpha = 1f, bool isValidOnPause = false)
+    public FadeTween(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
     {
         this.image = image;
         this.maxAlpha = maxAlpha;
         this.isValidOnPause = isValidOnPause;
     }
     public FadeTween(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
-        : this(gameObject.GetComponent<Image>(), maxAlpha, isValidOnPause) { }
+        : this(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause) { }
 
     public void SetAlpha(float alpha)
     {

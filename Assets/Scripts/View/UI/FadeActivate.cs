@@ -9,7 +9,7 @@ public class FadeActivate : MonoBehaviour
 
     protected virtual void Awake()
     {
-        fade = new FadeTween(GetComponent<Image>(), 1f);
+        fade = new FadeTween(GetComponent<MaskableGraphic>(), 1f);
     }
 
     protected virtual void Start()
