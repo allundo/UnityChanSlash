@@ -51,14 +51,16 @@ public class UITween
         return isReusable ? move.AsReusable(gameObject) : move;
     }
 
-    public void SetPos(Vector2 destPos)
+    public void SetPos(Vector2 destPos, bool setDefault = false)
     {
         rectTransform.anchoredPosition = destPos;
+        if (setDefault) defaultPos = destPos;
     }
 
-    public void SetSize(Vector2 size)
+    public void SetSize(Vector2 size, bool setDefault = false)
     {
         rectTransform.sizeDelta = size;
+        if (setDefault) defaultSize = size;
     }
 
     public Tween Resize(float ratio = 1.5f, float duration = 1f, bool isReusable = false)
