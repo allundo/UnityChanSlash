@@ -17,33 +17,33 @@ public class FadeActivate : MonoBehaviour
         Inactivate(0f);
     }
 
-    public virtual void Activate(float duration = 1f, TweenCallback onComplete = null)
+    public virtual Tween Activate(float duration = 1f, TweenCallback onComplete = null)
     {
-        if (isActive) return;
+        if (isActive) return null;
 
         onComplete = onComplete ?? (() => { });
 
         gameObject.SetActive(true);
 
-        fade.In(duration).OnComplete(onComplete).Play();
-
         isActive = true;
+
+        return fade.In(duration).OnComplete(onComplete).Play();
     }
 
-    public virtual void Inactivate(float duration = 1f, TweenCallback onComplete = null)
+    public virtual Tween Inactivate(float duration = 1f, TweenCallback onComplete = null)
     {
-        if (!isActive) return;
+        if (!isActive) return null;
 
         onComplete = onComplete ?? (() => { });
 
-        fade.Out(duration)
+        isActive = false;
+
+        return fade.Out(duration)
             .OnComplete(() =>
             {
                 onComplete();
                 gameObject.SetActive(false);
             })
             .Play();
-
-        isActive = false;
     }
 }

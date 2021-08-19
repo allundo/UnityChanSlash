@@ -50,25 +50,26 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
         characterUI.DispFace(FaceID.NONE);
     }
 
-    public override void Activate(float duration = 1f, TweenCallback onComplete = null)
+    public override Tween Activate(float duration = 1f, TweenCallback onComplete = null)
     {
         onComplete = onComplete ?? (() => { });
 
         GameManager.Instance.Pause(true);
 
-        base.Activate(duration, () =>
+        return base.Activate(duration, () =>
         {
             isUIActive = true;
             onComplete();
         });
     }
 
-    public override void Inactivate(float duration = 1f, TweenCallback onComplete = null)
+    public override Tween Inactivate(float duration = 1f, TweenCallback onComplete = null)
     {
         onComplete = onComplete ?? (() => { });
 
         isUIActive = false;
-        base.Inactivate(duration, () =>
+
+        return base.Inactivate(duration, () =>
         {
             onComplete();
             GameManager.Instance.Resume();

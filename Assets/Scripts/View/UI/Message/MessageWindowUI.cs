@@ -14,15 +14,15 @@ public class MessageWindowUI : FadeActivate
 
     }
 
-    public override void Activate(float duration = 1f, TweenCallback onComplete = null)
+    public override Tween Activate(float duration = 1f, TweenCallback onComplete = null)
     {
         uiTween.ResizeY(1f, 0.5f).Play();
-        base.Activate(duration, onComplete);
+        return base.Activate(duration, onComplete);
     }
 
-    public override void Inactivate(float duration = 1f, TweenCallback onComplete = null)
+    public override Tween Inactivate(float duration = 1f, TweenCallback onComplete = null)
     {
         uiTween.ResizeY(0f, 0.5f).Play();
-        base.Inactivate(duration, onComplete);
+        return base.Inactivate(duration, onComplete);
     }
 }
