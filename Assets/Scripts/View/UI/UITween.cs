@@ -29,7 +29,7 @@ public class UITween
         return isReusable ? move.AsReusable(gameObject) : move;
     }
 
-    public Tween MoveRelative(Vector2 moveVec, float duration = 1f, bool isReusable = false)
+    public Tween MoveRelative(Vector2 moveVec, float duration = 1f)
     {
         return
             rectTransform
@@ -37,6 +37,12 @@ public class UITween
                 .SetRelative(true)
                 .SetUpdate(isValidOnPause);
     }
+
+    public Tween MoveX(float moveX, float duration = 1f)
+        => MoveRelative(new Vector2(moveX, 0f), duration);
+
+    public Tween MoveY(float moveY, float duration = 1f)
+        => MoveRelative(new Vector2(0f, moveY), duration);
 
     public Tween MoveBack(float duration = 1f, bool isReusable = false)
     {
