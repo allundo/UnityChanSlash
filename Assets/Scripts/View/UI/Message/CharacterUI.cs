@@ -12,7 +12,6 @@ public class CharacterUI : MonoBehaviour
     private Vector2 faceMoveOrigin;
     private FaceID[] faceIDs;
 
-    private Tween dispFaceTween;
     void Awake()
     {
         image = GetComponent<Image>();
@@ -22,14 +21,6 @@ public class CharacterUI : MonoBehaviour
 
         fade.SetAlpha(0f);
         faceMoveOrigin = uiTween.defaultPos + new Vector2(50f, 0);
-
-        /*
-                dispFaceTween =
-                    DOTween.Sequence()
-                        .Join(fade.In(0.5f))
-                        .Join(uiTween.MoveBack(0.5f))
-                        .AsReusable(gameObject);
-                        */
     }
 
     public void InputFaceIDs(FaceID[] faceIDs)
@@ -48,7 +39,5 @@ public class CharacterUI : MonoBehaviour
         fade.In(0.5f).Play();
         uiTween.SetPos(faceMoveOrigin);
         uiTween.MoveBack(0.5f).Play();
-        // dispFaceTween.Restart();
-
     }
 }
