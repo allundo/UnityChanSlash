@@ -12,7 +12,7 @@ public class EnemyGenerator : MonoBehaviour
 
     protected Coroutine searchCharacter = null;
 
-    private void Start()
+    protected virtual void Start()
     {
         detectCharacter = GetComponent<Collider>();
 
