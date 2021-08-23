@@ -11,18 +11,21 @@ public class MessageWindowUI : FadeActivate
         uiTween = new UITween(gameObject, true);
 
         uiTween.SetSize(new Vector2(uiTween.defaultSize.x, 0f));
-
     }
 
-    public override Tween Activate(float duration = 1f, TweenCallback onComplete = null)
+    public override Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
-        uiTween.ResizeY(1f, 0.5f).Play();
-        return base.Activate(duration, onComplete);
+        return DOTween.Sequence()
+                .Join(uiTween.ResizeY(1f, duration))
+                .Join(base.FadeIn(duration, onPlay, onComplete))
+                .SetUpdate(true);
     }
 
-    public override Tween Inactivate(float duration = 1f, TweenCallback onComplete = null)
+    public override Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
-        uiTween.ResizeY(0f, 0.5f).Play();
-        return base.Inactivate(duration, onComplete);
+        return DOTween.Sequence()
+                .Join(uiTween.ResizeY(0f, duration))
+                .Join(base.FadeOut(duration, onPlay, onComplete))
+                .SetUpdate(true);
     }
 }

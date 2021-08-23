@@ -11,6 +11,8 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
 
     protected bool isUIActive = false;
 
+    protected Tween activateTween = null;
+
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
@@ -18,61 +20,52 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
 
     protected override void Start()
     {
-        base.Inactivate(0f);
-
         textHandler.subject.Subscribe(
             faceID => characterUI.DispFace(faceID),
             err => Debug.Log(err),
             () => CloseMessage()
         ).AddTo(this);
 
+        Inactivate();
     }
 
     public void OnPointerDown(PointerEventData eventData) { }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!isUIActive) return;
+        if (!isActive) return;
+
+        activateTween?.Complete(true);
+
         textHandler.TapNext();
     }
 
     public void InputMessageData(MessageData data)
     {
-        Activate(0.5f, () => textHandler.InputMessageData(data));
-        window.Activate(0.5f);
+        activateTween =
+            DOTween.Sequence()
+            .Join(
+                FadeIn(
+                    0.5f,
+                    () => GameManager.Instance.Pause(),
+                    () =>
+                    {
+                        textHandler.InputMessageData(data);
+                        activateTween = null;
+                    }
+                )
+            )
+            .Join(window.FadeIn(0.5f))
+            .SetUpdate(true)
+            .Play();
+
         characterUI.InputFaceIDs(data.faces);
     }
 
     private void CloseMessage()
     {
-        Inactivate(0.5f);
-        window.Inactivate(0.5f);
+        FadeOut(0.5f, null, () => GameManager.Instance.Resume()).Play();
+        window.FadeOut(0.5f).Play();
         characterUI.DispFace(FaceID.NONE);
-    }
-
-    public override Tween Activate(float duration = 1f, TweenCallback onComplete = null)
-    {
-        onComplete = onComplete ?? (() => { });
-
-        GameManager.Instance.Pause(true);
-
-        return base.Activate(duration, () =>
-        {
-            isUIActive = true;
-            onComplete();
-        });
-    }
-
-    public override Tween Inactivate(float duration = 1f, TweenCallback onComplete = null)
-    {
-        onComplete = onComplete ?? (() => { });
-
-        isUIActive = false;
-
-        return base.Inactivate(duration, () =>
-        {
-            onComplete();
-            GameManager.Instance.Resume();
-        });
     }
 }

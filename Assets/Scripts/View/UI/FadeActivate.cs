@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
 public class FadeActivate : MonoBehaviour
@@ -9,41 +8,58 @@ public class FadeActivate : MonoBehaviour
 
     protected virtual void Awake()
     {
-        fade = new FadeTween(GetComponent<MaskableGraphic>(), 1f);
+        fade = new FadeTween(gameObject, 1f);
     }
 
     protected virtual void Start()
     {
-        Inactivate(0f);
+        Inactivate();
     }
 
-    public virtual Tween Activate(float duration = 1f, TweenCallback onComplete = null)
+    public virtual void Activate()
     {
-        if (isActive) return null;
-
-        onComplete = onComplete ?? (() => { });
-
         gameObject.SetActive(true);
-
         isActive = true;
-
-        return fade.In(duration).OnComplete(onComplete).Play();
+        fade.SetAlpha(1f);
     }
 
-    public virtual Tween Inactivate(float duration = 1f, TweenCallback onComplete = null)
+    public virtual void Inactivate()
     {
-        if (!isActive) return null;
+        gameObject.SetActive(false);
+        isActive = false;
+        fade.SetAlpha(0f);
+    }
 
+    public virtual Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    {
+        onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
 
-        isActive = false;
+        return fade.In(duration, 0f,
+            () =>
+            {
+                gameObject.SetActive(true);
+                isActive = true;
+                onPlay();
+            },
+            onComplete);
+    }
 
-        return fade.Out(duration)
-            .OnComplete(() =>
+    public virtual Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    {
+        onPlay = onPlay ?? (() => { });
+        onComplete = onComplete ?? (() => { });
+
+        return fade.Out(duration, 0f,
+            () =>
+            {
+                isActive = false;
+                onPlay();
+            },
+            () =>
             {
                 onComplete();
                 gameObject.SetActive(false);
-            })
-            .Play();
+            });
     }
 }

@@ -27,15 +27,35 @@ public class FadeTween
         image.color = new Color(image.color.r, image.color.g, image.color.b, alpha * maxAlpha);
     }
 
-    public virtual Tween In(float duration = 1f, float delay = 0f)
+    public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
-        fadeIn = Fade(maxAlpha, duration * (1f - AlphaRatio), delay).SetUpdate(isValidOnPause).OnPlay(() => fadeOut?.Kill());
+        onPlay = onPlay ?? (() => { });
+        onComplete = onComplete ?? (() => { });
+
+        fadeIn = Fade(maxAlpha, duration * (1f - AlphaRatio), delay)
+            .OnPlay(() =>
+            {
+                fadeOut?.Kill();
+                onPlay();
+            })
+            .OnComplete(onComplete);
+
         return fadeIn;
     }
 
-    public virtual Tween Out(float duration = 1f, float delay = 0f)
+    public virtual Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
-        fadeOut = Fade(0, duration * AlphaRatio, delay).SetUpdate(isValidOnPause).OnPlay(() => fadeIn?.Kill());
+        onPlay = onPlay ?? (() => { });
+        onComplete = onComplete ?? (() => { });
+
+        fadeOut = Fade(0, duration * AlphaRatio, delay)
+            .OnPlay(() =>
+            {
+                fadeIn?.Kill();
+                onPlay();
+            })
+            .OnComplete(onComplete);
+
         return fadeOut;
     }
 
@@ -44,6 +64,7 @@ public class FadeTween
         return
             DOTween
                 .ToAlpha(() => image.color, color => image.color = color, alpha, duration)
+                .SetUpdate(isValidOnPause)
                 .SetDelay(delay);
     }
 }
