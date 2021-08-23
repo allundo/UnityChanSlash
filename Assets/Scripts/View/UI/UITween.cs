@@ -33,7 +33,7 @@ public class UITween
     {
         return
             rectTransform
-                .DOAnchorPos(CurrentPos + moveVec, duration)
+                .DOAnchorPos(moveVec, duration)
                 .SetRelative(true)
                 .SetUpdate(isValidOnPause);
     }
