@@ -18,7 +18,7 @@ public class MapUtil : MonoBehaviour
 
     protected virtual void Awake()
     {
-        this.map = GameManager.Instance.worldMap;
+        this.map = MainSceneManager.Instance.worldMap;
         this.tf = transform;
         status = GetComponent<MobStatus>();
     }
@@ -73,7 +73,7 @@ public class MapUtil : MonoBehaviour
     public virtual bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
     public virtual bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(onTilePos)));
 
-    public static bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
+    public static bool IsOnPlayer(Pos destPos) => MainSceneManager.Instance.IsOnPlayer(destPos);
 
     public bool IsPlayerFound() => IsPlayerFound(onTilePos);
     /// <summary>

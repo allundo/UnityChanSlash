@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
+    [SerializeField] private bool isPersistent = false;
+
     private static T instance;
     public static T Instance
     {
@@ -23,7 +25,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
         }
     }
 
-    virtual protected void Awake()
+    protected virtual void Awake()
     {
         if (this != Instance)
         {
@@ -35,7 +37,6 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
             return;
         }
 
-        DontDestroyOnLoad(this.gameObject);
+        if (isPersistent) DontDestroyOnLoad(this.gameObject);
     }
-
 }

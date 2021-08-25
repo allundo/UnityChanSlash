@@ -17,7 +17,7 @@ public class PlayerStatus : MobStatus
     public override void Activate()
     {
         ResetStatus();
-        map.SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
+        map.SetPosition(MainSceneManager.Instance.GetPlayerInitPos, new South());
         hidePool.Init();
     }
 

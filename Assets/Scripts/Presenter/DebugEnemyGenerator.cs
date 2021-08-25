@@ -6,7 +6,7 @@ public class DebugEnemyGenerator : EnemyGenerator
     {
         base.Start();
         Vector3 pos = transform.position;
-        WorldMap map = GameManager.Instance.worldMap;
+        WorldMap map = MainSceneManager.Instance.worldMap;
         Init(gameObject, map.GetTile(pos), map.MapPos(pos));
     }
 }
