@@ -19,18 +19,17 @@ public class UnityChanIcon : MonoBehaviour
         uiTween.SetPos(-uiTween.CurrentPos, true);
     }
 
-    public void LogoTween()
+    public Tween LogoTween()
     {
-        uiTween.SetPos(new Vector2(0f, 1920.0f));
-
-        DOTween.Sequence()
-            .AppendInterval(0.8f)
-            .Append(uiTween.MoveBack(1f).SetEase(Ease.InQuad))
-            .Append(uiTween.MoveY(-100f, 0.1f).SetEase(Ease.OutQuad))
-            .Join(uiTween.Resize(new Vector2(1.5f, 0.5f), 0.1f).SetEase(Ease.OutQuad))
-            .Append(uiTween.MoveBack(0.1f).SetEase(Ease.InQuad))
-            .Join(uiTween.Resize(1f, 0.1f).SetEase(Ease.InQuad))
-            .Play();
+        return
+            DOTween.Sequence()
+                .AppendCallback(() => uiTween.SetPos(new Vector2(0f, 1920.0f)))
+                .AppendInterval(0.8f)
+                .Append(uiTween.MoveBack(1f).SetEase(Ease.InQuad))
+                .Append(uiTween.MoveY(-100f, 0.1f).SetEase(Ease.OutQuad))
+                .Join(uiTween.Resize(new Vector2(1.5f, 0.5f), 0.1f).SetEase(Ease.OutQuad))
+                .Append(uiTween.MoveBack(0.1f).SetEase(Ease.InQuad))
+                .Join(uiTween.Resize(1f, 0.1f).SetEase(Ease.InQuad));
     }
 
     public void ToTitle(Vector3 jumpDest)

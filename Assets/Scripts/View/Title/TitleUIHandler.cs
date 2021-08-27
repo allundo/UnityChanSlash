@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
+using System;
 using DG.Tweening;
+using UniRx;
 
 public class TitleUIHandler : MonoBehaviour
 {
@@ -15,7 +15,6 @@ public class TitleUIHandler : MonoBehaviour
     [SerializeField] private FadeScreen fade = default;
 
     private Transform tfUnityChan;
-    private AsyncOperation asyncLoad;
 
     void Awake()
     {
@@ -24,11 +23,14 @@ public class TitleUIHandler : MonoBehaviour
         fade.SetAlpha(1f);
     }
 
-    void Start()
+    public IObservable<Tween> Logo()
     {
-        fade.FadeIn(1f).Play();
-        unityChanIcon.LogoTween();
-        logo.LogoTween(() => StartCoroutine(LoadScene()));
+        return
+            DOTween.Sequence()
+                .Join(fade.FadeIn(1f))
+                .Join(unityChanIcon.LogoTween())
+                .Join(logo.LogoTween())
+                .OnCompleteAsObservable();
     }
 
     public void SkipLogo()
@@ -38,7 +40,7 @@ public class TitleUIHandler : MonoBehaviour
         fade.FadeIn(1f, 1f).Play();
     }
 
-    private void ToTitle()
+    public void ToTitle()
     {
         cameraWork.ToTitle(cameraWork.StartCameraWork);
 

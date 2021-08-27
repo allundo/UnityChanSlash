@@ -29,31 +29,28 @@ public class LogoAnimation : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void LogoTween(TweenCallback OnComplete = null)
+    public Tween LogoTween()
     {
-        OnComplete = OnComplete ?? (() => { });
-
-        DOTween.Sequence()
-            .AppendCallback(() =>
-            {
-                ballTween.SetPos(new Vector2(-1080.0f, 0f));
-                imageFrame.fillAmount = 0f;
-            })
-            .Append(ballTween.MoveBack(1f).SetEase(Ease.InQuad))
-            .Join(ballTween.Rotate(-360f, 1f).SetEase(Ease.InQuad))
-            .Append(ballTween.MoveX(10f, 0.2f).SetEase(Ease.OutQuad))
-            .Join(ballTween.Rotate(-10f, 0.2f, false).SetEase(Ease.OutQuad))
-            .Append(ballTween.MoveBack(0.2f).SetEase(Ease.InQuad))
-            .Join(ballTween.Rotate(0f, 0.2f, false).SetEase(Ease.InQuad))
-            .AppendInterval(0.4f)
-            .Append(ballTween.MoveY(-50f, 0.1f).SetEase(Ease.OutQuad))
-            .Append(ballTween.MoveBack(0.1f).SetEase(Ease.InQuad))
-            .AppendInterval(0.1f)
-            .Append(DOTween.To(() => imageFrame.fillAmount, fill => imageFrame.fillAmount = fill, 1f, 0.15f).SetEase(Ease.Linear))
-            .AppendInterval(0.15f)
-            .AppendCallback(() => nowLoading.Activate())
-            .OnComplete(OnComplete)
-            .Play();
+        return
+            DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    ballTween.SetPos(new Vector2(-1080.0f, 0f));
+                    imageFrame.fillAmount = 0f;
+                })
+                .Append(ballTween.MoveBack(1f).SetEase(Ease.InQuad))
+                .Join(ballTween.Rotate(-360f, 1f).SetEase(Ease.InQuad))
+                .Append(ballTween.MoveX(10f, 0.2f).SetEase(Ease.OutQuad))
+                .Join(ballTween.Rotate(-10f, 0.2f, false).SetEase(Ease.OutQuad))
+                .Append(ballTween.MoveBack(0.2f).SetEase(Ease.InQuad))
+                .Join(ballTween.Rotate(0f, 0.2f, false).SetEase(Ease.InQuad))
+                .AppendInterval(0.4f)
+                .Append(ballTween.MoveY(-50f, 0.1f).SetEase(Ease.OutQuad))
+                .Append(ballTween.MoveBack(0.1f).SetEase(Ease.InQuad))
+                .AppendInterval(0.1f)
+                .Append(DOTween.To(() => imageFrame.fillAmount, fill => imageFrame.fillAmount = fill, 1f, 0.15f).SetEase(Ease.Linear))
+                .AppendInterval(0.15f)
+                .AppendCallback(() => nowLoading.Activate());
     }
 
     public void ToTitle()
