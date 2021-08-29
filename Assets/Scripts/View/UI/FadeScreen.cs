@@ -1,21 +1,41 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class FadeScreen : MonoBehaviour
 {
-    private FadeTween fade;
-    void Awake()
+    [SerializeField] protected Image fadeImage = null;
+
+    protected FadeTween fade = null;
+
+    public virtual Vector2 sizeDelta
     {
-        fade = new FadeTween(gameObject, 1f, true);
+        get
+        {
+            return fadeImage.rectTransform.sizeDelta;
+        }
+        set
+        {
+            fadeImage.rectTransform.sizeDelta = value;
+        }
     }
 
-    public Tween FadeIn(float duration = 1f, float delay = 0f)
+    public virtual void SetAlpha(float alpha) => fade.SetAlpha(alpha);
+
+    protected virtual void Awake()
+    {
+        fadeImage = fadeImage ?? GetComponent<Image>();
+        fade = new FadeTween(fadeImage, 1f, true);
+        SetAlpha(0f);
+    }
+
+    public virtual Tween FadeIn(float duration = 1f, float delay = 0f)
     {
         // Fade out black image to display screen
         return fade.Out(duration, delay).SetEase(Ease.InQuad);
     }
 
-    public Tween FadeOut(float duration = 1f, float delay = 0f)
+    public virtual Tween FadeOut(float duration = 1f, float delay = 0f)
     {
         // Fade in black image to hide screen
         return fade.In(duration, delay).SetEase(Ease.OutQuad);

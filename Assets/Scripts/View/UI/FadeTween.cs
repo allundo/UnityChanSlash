@@ -11,7 +11,19 @@ public class FadeTween
     private Tween fadeIn = null;
     private Tween fadeOut = null;
 
-    protected float AlphaRatio => image.color.a / maxAlpha;
+    protected virtual Color color
+    {
+        get
+        {
+            return image.color;
+        }
+        set
+        {
+            image.color = value;
+        }
+    }
+
+    protected float AlphaRatio => color.a / maxAlpha;
 
     public FadeTween(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
     {
@@ -24,7 +36,7 @@ public class FadeTween
 
     public void SetAlpha(float alpha)
     {
-        image.color = new Color(image.color.r, image.color.g, image.color.b, alpha * maxAlpha);
+        color = new Color(color.r, color.g, color.b, alpha * maxAlpha);
     }
 
     public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
@@ -63,7 +75,7 @@ public class FadeTween
     {
         return
             DOTween
-                .ToAlpha(() => image.color, color => image.color = color, alpha, duration)
+                .ToAlpha(() => color, value => color = value, alpha, duration)
                 .SetUpdate(isValidOnPause)
                 .SetDelay(delay);
     }

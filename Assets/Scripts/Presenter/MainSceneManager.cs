@@ -8,13 +8,12 @@ public class MainSceneManager : SingletonMonoBehaviour<MainSceneManager>
     [SerializeField] private HidePool hidePool = default;
     [SerializeField] private PlayerCommander commander = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
-    [SerializeField] private FadeScreen fade = default;
+    [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
 
     private bool isInitialOrientation = true;
-    private RectTransform rtFadeScreen;
 
     public WorldMap worldMap { get; protected set; }
 
@@ -36,8 +35,6 @@ public class MainSceneManager : SingletonMonoBehaviour<MainSceneManager>
     {
         base.Awake();
 
-        rtFadeScreen = fade.GetComponent<RectTransform>();
-
         var maze = new MazeCreator();
         maze.CreateMaze();
 
@@ -55,14 +52,15 @@ public class MainSceneManager : SingletonMonoBehaviour<MainSceneManager>
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
 
-        fade.FadeIn(1.0f, 1.1f).Play();
+        cover.SetAlpha(1f);
+        cover.FadeIn(1.0f, 1.1f).Play();
         commander.EnqueueDropFloor();
         commander.EnqueueStartMessage();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
     {
-        rtFadeScreen.sizeDelta = new Vector2(Screen.width, Screen.height);
+        cover.sizeDelta = new Vector2(Screen.width, Screen.height);
 
         uiPosition.ResetPosition(orientation);
 
