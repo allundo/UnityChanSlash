@@ -52,7 +52,8 @@ public class LogoAnimation : MonoBehaviour
         vfxRain?.Stop();
         nowLoading.Inactivate();
 
-        DOVirtual.DelayedCall(0.6f, () => vfxRain?.Clear()).Play();
+        DOVirtual.DelayedCall(0.1f, () => vfxRain?.Pause()).Play();
+        DOVirtual.DelayedCall(0.5f, () => vfxRain?.Clear()).Play();
 
         rtBackGround
             .DOAnchorPos(new Vector2(2820f, 0), 1.8f)
