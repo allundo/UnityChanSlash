@@ -118,6 +118,14 @@ public class CameraWork : MonoBehaviour
             .OnPlay(() => cameraWorkTween?.Kill());
     }
 
+    public Tween ShakeTween()
+    {
+        Transform tf = currentCamera.transform;
+        return DOTween.Sequence()
+            .Append(tf.DORotate(new Vector3(-4f, 0f, 0f), 0.05f).SetRelative(true).SetEase(Ease.Linear))
+            .Append(tf.DORotate(new Vector3(6f, 0f, 0f), 0.25f).SetRelative(true).SetEase(Ease.OutQuad));
+    }
+
     public void StartCameraWork()
     {
         state = State.TRACK;

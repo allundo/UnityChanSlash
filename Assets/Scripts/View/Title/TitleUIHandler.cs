@@ -68,6 +68,7 @@ public class TitleUIHandler : MonoBehaviour
             .OnPlay(() =>
             {
                 cameraWork.StopCameraWork();
+                cameraWork.ShakeTween().Play();
                 unityChanAnim.drop.Fire();
             })
             .SetEase(Ease.InQuad)
