@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-namespace Mebiustos.BlendShapeEditHelper {
+namespace Mebiustos.BlendShapeEditHelper
+{
     [CustomEditor(typeof(BlendShapeEditHelper))]
-    public class BlendShapeEditHelperEditor : Editor {
+    public class BlendShapeEditHelperEditor : Editor
+    {
         const string MenuItemName = "CONTEXT/BlendShapeEditHelper/DispStyleChange - TAB,LIST";
         //const string HideButtonLabel = "Hide SomeGizmo & Wireframe";
         const string HideButtonLabel = "Hide Wireframe";
 
         [MenuItem(MenuItemName)]
-        private static void DispStyleTab(MenuCommand command) {
+        private static void DispStyleTab(MenuCommand command)
+        {
             //if (!IsTabStyle())
             //    return;
 
@@ -27,7 +30,8 @@ namespace Mebiustos.BlendShapeEditHelper {
         Color defaultBackgroundColor;
         Color defaultContentColor;
 
-        void OnEnable() {
+        void OnEnable()
+        {
             this.defaultColor = GUI.color;
             this.defaultBackgroundColor = GUI.backgroundColor;
             this.defaultContentColor = GUI.contentColor;
@@ -37,7 +41,8 @@ namespace Mebiustos.BlendShapeEditHelper {
             this.HideCollider(BlendShapeEditHelper.hideSomeGizmoAndWireframe);
         }
 
-        public override void OnInspectorGUI() {
+        public override void OnInspectorGUI()
+        {
             var helper = (BlendShapeEditHelper)target;
 
             helper.maxWeight = EditorGUILayout.FloatField("Max Weight", helper.maxWeight);
@@ -49,14 +54,17 @@ namespace Mebiustos.BlendShapeEditHelper {
             this.DrawButtons();
             EditorGUILayout.Separator();
 
-            if (GUI.changed) {
+            if (GUI.changed)
+            {
                 this.HideAllWireframe(BlendShapeEditHelper.hideSomeGizmoAndWireframe);
                 this.HideCollider(BlendShapeEditHelper.hideSomeGizmoAndWireframe);
             }
 
             var smeshs = GetSkinnedMeshRenderers();
-            if (smeshs.Length > 0) {
-                switch (helper.guiStyle) {
+            if (smeshs.Length > 0)
+            {
+                switch (helper.guiStyle)
+                {
                     case BlendShapeEditHelper.GUIStyle.Tab:
                         this.DrawTabStyle(smeshs);
                         break;
@@ -66,27 +74,32 @@ namespace Mebiustos.BlendShapeEditHelper {
                 }
             }
 
-            if (GUI.changed) {
+            if (GUI.changed)
+            {
                 EditorUtility.SetDirty(target);
             }
         }
 
-        void CreateAnimationClip(SkinnedMeshRenderer component) {
+        void CreateAnimationClip(SkinnedMeshRenderer component)
+        {
             var helper = (BlendShapeEditHelper)target;
 
             var animclip = new AnimationClip();
 
             var smeshs = this.GetSkinnedMeshRenderers();
-            foreach (var mesh in smeshs) {
+            foreach (var mesh in smeshs)
+            {
                 var pathsb = new StringBuilder().Append(mesh.transform.name);
                 var trans = mesh.transform;
-                while (trans.parent != null && trans.parent != helper.transform) {
+                while (trans.parent != null && trans.parent != helper.transform)
+                {
                     trans = trans.parent;
                     pathsb.Insert(0, "/").Insert(0, trans.name);
                 }
                 var path = pathsb.ToString();
 
-                for (int i = 0; i < mesh.sharedMesh.blendShapeCount; i++) {
+                for (int i = 0; i < mesh.sharedMesh.blendShapeCount; i++)
+                {
                     EditorCurveBinding curveBinding = new EditorCurveBinding();
                     curveBinding.type = typeof(SkinnedMeshRenderer);
                     curveBinding.path = path;
@@ -104,12 +117,14 @@ namespace Mebiustos.BlendShapeEditHelper {
             AssetDatabase.Refresh();
         }
 
-        void DrawButtons() {
+        void DrawButtons()
+        {
             var helper = (BlendShapeEditHelper)target;
 
             GUILayout.BeginHorizontal();
             GUI.color = Color.green;
-            if (GUILayout.Button("Create Clip", GUILayout.ExpandWidth(false))) {
+            if (GUILayout.Button("Create Clip", GUILayout.ExpandWidth(false)))
+            {
                 CreateAnimationClip(helper.GetComponentInChildren<SkinnedMeshRenderer>());
             }
             GUI.color = this.defaultColor;
@@ -121,12 +136,15 @@ namespace Mebiustos.BlendShapeEditHelper {
             Color hideButtonCtColor;
 
             // collider gizmo
-            if (BlendShapeEditHelper.hideSomeGizmoAndWireframe) {
+            if (BlendShapeEditHelper.hideSomeGizmoAndWireframe)
+            {
                 //hideButtonColor = Color.yellow;
                 hideButtonBgColor = Color.gray;
                 hideButtonCtColor = Color.yellow;
                 hideButtonLabel = BlendShapeEditHelperEditor.HideButtonLabel;
-            } else {
+            }
+            else
+            {
                 //hideButtonColor = this.defaultColor;
                 hideButtonBgColor = this.defaultBackgroundColor;
                 hideButtonCtColor = this.defaultContentColor;
@@ -144,19 +162,22 @@ namespace Mebiustos.BlendShapeEditHelper {
             GUILayout.EndHorizontal();
         }
 
-        void HideAllWireframe(bool hidden) {
+        void HideAllWireframe(bool hidden)
+        {
             var helper = (BlendShapeEditHelper)target;
             if (!helper) return;
             var rends = helper.GetComponentsInChildren<Renderer>();
-            for (int i=0; i<rends.Length; i++) {
+            for (int i = 0; i < rends.Length; i++)
+            {
                 EditorUtility.SetSelectedWireframeHidden(rends[i], hidden);
             }
         }
 
-        void HideCollider(bool hidden) {
+        void HideCollider(bool hidden)
+        {
             ////for (int testloop = 0; testloop < 100; testloop++) {
             //    //Debug.Log("testloop: " + testloop);
-                
+
             //    // Annotation
             //    var annotationType = System.Type.GetType("UnityEditor.Annotation, UnityEditor");
             //    var classIdField = annotationType.GetField("classID");
@@ -210,25 +231,30 @@ namespace Mebiustos.BlendShapeEditHelper {
             ////}
         }
 
-        SkinnedMeshRenderer[] GetSkinnedMeshRenderers() {
+        SkinnedMeshRenderer[] GetSkinnedMeshRenderers()
+        {
             var helper = (BlendShapeEditHelper)target;
             var renderers = helper.GetComponentsInChildren<SkinnedMeshRenderer>();
             List<SkinnedMeshRenderer> smeshList = new List<SkinnedMeshRenderer>();
-            for (int i = 0; i < renderers.Length; i++) {
+            for (int i = 0; i < renderers.Length; i++)
+            {
                 var rend = renderers[i];
                 var cnt = rend.sharedMesh.blendShapeCount;
-                if (cnt > 0) {
+                if (cnt > 0)
+                {
                     smeshList.Add(rend);
                 }
             }
             return smeshList.ToArray();
         }
 
-        void DrawTabStyle(SkinnedMeshRenderer[] smeshs) {
+        void DrawTabStyle(SkinnedMeshRenderer[] smeshs)
+        {
             var helper = (BlendShapeEditHelper)target;
 
             string[] tabItems = new string[smeshs.Length];
-            for (int i = 0; i < smeshs.Length; i++) {
+            for (int i = 0; i < smeshs.Length; i++)
+            {
                 tabItems[i] = smeshs[i].gameObject.name;
             }
 
@@ -240,11 +266,14 @@ namespace Mebiustos.BlendShapeEditHelper {
 
             var targetRenderer = smeshs[helper.tabIndex];
             var sharedMesh = targetRenderer.sharedMesh;
-            for (int i = 0; i < targetRenderer.sharedMesh.blendShapeCount; i++) {
+            for (int i = 0; i < targetRenderer.sharedMesh.blendShapeCount; i++)
+            {
                 var label = sharedMesh.GetBlendShapeName(i);
-                if (!helper.fullName) {
+                if (!helper.fullName)
+                {
                     var lidx = label.IndexOf('.');
-                    if (lidx > -1 && lidx + 1 < label.Length) {
+                    if (lidx > -1 && lidx + 1 < label.Length)
+                    {
                         label = label.Substring(label.IndexOf('.') + 1);
                     }
                 }
@@ -253,11 +282,13 @@ namespace Mebiustos.BlendShapeEditHelper {
             }
         }
 
-        void DrawListStyle(SkinnedMeshRenderer[] smeshs) {
+        void DrawListStyle(SkinnedMeshRenderer[] smeshs)
+        {
             var helper = (BlendShapeEditHelper)target;
 
-            for (int i=0; i<smeshs.Length; i++) {
-                if (i>0) EditorGUILayout.Separator();
+            for (int i = 0; i < smeshs.Length; i++)
+            {
+                if (i > 0) EditorGUILayout.Separator();
                 var targetRenderer = smeshs[i];
                 GUI.color = Color.cyan;
                 GUILayout.Label(targetRenderer.gameObject.name, EditorStyles.boldLabel);
@@ -265,11 +296,14 @@ namespace Mebiustos.BlendShapeEditHelper {
                 EditorGUILayout.HelpBox(GetGameObjectPath(helper.transform, targetRenderer.transform), MessageType.None);
 
                 var sharedMesh = targetRenderer.sharedMesh;
-                for (int j = 0; j < targetRenderer.sharedMesh.blendShapeCount; j++) {
+                for (int j = 0; j < targetRenderer.sharedMesh.blendShapeCount; j++)
+                {
                     var label = sharedMesh.GetBlendShapeName(j);
-                    if (!helper.fullName) {
+                    if (!helper.fullName)
+                    {
                         var lidx = label.IndexOf('.');
-                        if (lidx > -1 && lidx + 1 < label.Length) {
+                        if (lidx > -1 && lidx + 1 < label.Length)
+                        {
                             label = label.Substring(label.IndexOf('.') + 1);
                         }
                     }
@@ -279,11 +313,13 @@ namespace Mebiustos.BlendShapeEditHelper {
             }
         }
 
-        static string GetGameObjectPath(Transform root, Transform transform) {
+        static string GetGameObjectPath(Transform root, Transform transform)
+        {
             StringBuilder path = new StringBuilder().Append(transform.name);
-            while (transform.parent != null && transform.parent != root) {
+            while (transform.parent != null && transform.parent != root)
+            {
                 transform = transform.parent;
-                path.Insert(0, "/").Insert(0,transform.name);
+                path.Insert(0, "/").Insert(0, transform.name);
             }
             path.Insert(0, "/").Insert(0, "[this]");
             return path.ToString();
