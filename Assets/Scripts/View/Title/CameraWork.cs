@@ -25,7 +25,7 @@ public class CameraWork : MonoBehaviour
     private readonly Vector3 EyeHeight = new Vector3(0f, 1.35f, 0f);
 
     private Tween cameraWorkTween = null;
-    private State state = State.TRACK;
+    private State state = State.NONE;
     private Vector3 currentLookAt = Vector3.zero;
 
     private Coroutine angleChangeLoop = null;
@@ -120,6 +120,7 @@ public class CameraWork : MonoBehaviour
 
     public void StartCameraWork()
     {
+        state = State.TRACK;
         standByCamera.transform.position = currentCamera.transform.position;
         angleChangeLoop = StartCoroutine(AngleChangeLoop());
     }
