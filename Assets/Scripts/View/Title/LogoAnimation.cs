@@ -21,6 +21,11 @@ public class LogoAnimation : MonoBehaviour
         nowLoading.Inactivate();
     }
 
+    public void Inactivate()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void LogoTween(TweenCallback OnComplete = null)
     {
         OnComplete = OnComplete ?? (() => { });

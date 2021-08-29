@@ -17,13 +17,25 @@ public class TitleUIHandler : MonoBehaviour
     private Transform tfUnityChan;
     private AsyncOperation asyncLoad;
 
-    void Start()
+    void Awake()
     {
         tfUnityChan = unityChanAnim.GetComponent<Transform>();
         selectButtons.startButton.onClick.AddListener(StartSequence);
+        fade.SetAlpha(1f);
+    }
 
+    void Start()
+    {
+        fade.FadeIn(1f).Play();
         unityChanIcon.LogoTween();
         logo.LogoTween(() => StartCoroutine(LoadScene()));
+    }
+
+    public void SkipLogo()
+    {
+        logo.Inactivate();
+        ToTitle();
+        fade.FadeIn(1f, 1f).Play();
     }
 
     private void ToTitle()

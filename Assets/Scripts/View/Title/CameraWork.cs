@@ -46,7 +46,7 @@ public class CameraWork : MonoBehaviour
         cameraWorkTween = currentCamera.transform.DOMove(endPos, duration).SetEase(Ease.Linear).Play();
     }
 
-    void Start()
+    void Awake()
     {
         currentCamera = Camera.main;
         secondCamera.fieldOfView = currentCamera.fieldOfView;
