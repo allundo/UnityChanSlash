@@ -169,7 +169,7 @@ namespace Mebiustos.BlendShapeEditHelper
             var rends = helper.GetComponentsInChildren<Renderer>();
             for (int i = 0; i < rends.Length; i++)
             {
-                EditorUtility.SetSelectedWireframeHidden(rends[i], hidden);
+                EditorUtility.SetSelectedRenderState(rends[i], hidden ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Wireframe);
             }
         }
 
