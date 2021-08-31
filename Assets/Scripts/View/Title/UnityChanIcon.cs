@@ -47,9 +47,9 @@ public class UnityChanIcon : MonoBehaviour
             .Play();
     }
 
-    public Tween SelectTween(Vector2 buttonPos)
+    public Tween SelectTween(Vector2 iconPos)
     {
-        uiTween.SetPos(new Vector2(buttonPos.x - 320f, buttonPos.y), true);
+        uiTween.SetPos(iconPos, true);
 
         selectTween?.Kill();
 

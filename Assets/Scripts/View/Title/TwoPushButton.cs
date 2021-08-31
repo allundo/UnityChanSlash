@@ -38,6 +38,7 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     public IObservable<TwoPushButton> Selected => selected;
 
     public Vector2 Pos => rt.anchoredPosition;
+    public Vector2 IconPos => Pos - new Vector2(defaultSize.x * 0.5625f, 0f);
 
     void Awake()
     {

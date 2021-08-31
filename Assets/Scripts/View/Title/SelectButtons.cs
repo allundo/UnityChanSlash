@@ -43,7 +43,7 @@ public class SelectButtons : MonoBehaviour
     {
         currentButton?.Deselect();
         currentButton = button;
-        unityChanIcon.SelectTween(button.Pos);
+        unityChanIcon.SelectTween(button.IconPos);
     }
 
     private void ActivateButtons()

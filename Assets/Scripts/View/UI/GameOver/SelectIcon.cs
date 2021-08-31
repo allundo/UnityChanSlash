@@ -7,18 +7,15 @@ public class SelectIcon : MonoBehaviour
 
     private Tween selectTween = null;
 
-    private float offsetX;
-
     void Awake()
     {
         uiTween = new UITween(gameObject, true);
-        offsetX = uiTween.defaultPos.x;
     }
 
-    public Tween SelectTween(Vector2 buttonPos)
+    public Tween SelectTween(Vector2 iconPos)
     {
 
-        uiTween.SetPos(new Vector2(buttonPos.x + offsetX, buttonPos.y), true);
+        uiTween.SetPos(iconPos, true);
 
         selectTween?.Kill();
 

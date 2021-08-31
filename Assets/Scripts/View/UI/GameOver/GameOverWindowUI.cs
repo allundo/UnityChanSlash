@@ -25,7 +25,7 @@ public class GameOverWindowUI : MessageWindowUI
     {
         currentButton?.Deselect();
         currentButton = button;
-        unityChanIcon.SelectTween(button.Pos);
+        unityChanIcon.SelectTween(button.IconPos);
     }
 
     public void ActivateButtons()
