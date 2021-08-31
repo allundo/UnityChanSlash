@@ -19,6 +19,9 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     private UnityEvent onClickEvent = new UnityEvent();
     public UnityEvent onClick => onClickEvent;
 
+    private ISubject<Unit> subject = new Subject<Unit>();
+    public IObservable<Unit> OnClickAsObservable() => subject;
+
     private RectTransform rt;
     private Image image;
     private Vector2 defaultSize;
@@ -144,6 +147,7 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
         if (isButtonValid)
         {
             onClickEvent.Invoke();
+            subject.OnNext(Unit.Default);
         }
     }
 

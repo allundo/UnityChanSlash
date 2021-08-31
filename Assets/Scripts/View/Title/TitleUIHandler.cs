@@ -16,10 +16,17 @@ public class TitleUIHandler : MonoBehaviour
 
     private Transform tfUnityChan;
 
+    public IObservable<object> TransitSignal;
+
     void Awake()
     {
         tfUnityChan = unityChanAnim.GetComponent<Transform>();
-        selectButtons.startButton.onClick.AddListener(StartSequence);
+
+        TransitSignal =
+            selectButtons.startButton
+                .OnClickAsObservable()
+                .SelectMany(_ => StartSequence().OnCompleteAsObservable());
+
         fade.SetAlpha(1f);
     }
 
@@ -50,25 +57,7 @@ public class TitleUIHandler : MonoBehaviour
         txtSlash.TitleTween().Play();
     }
 
-    private IEnumerator LoadScene()
-    {
-        asyncLoad = SceneManager.LoadSceneAsync(1);
-        asyncLoad.allowSceneActivation = false;
-
-        while (asyncLoad.progress < 0.9f)
-        {
-            yield return new WaitForSeconds(3);
-        }
-
-        ToTitle();
-    }
-
-    private void SceneTransition()
-    {
-        asyncLoad.allowSceneActivation = true;
-    }
-
-    private void StartSequence()
+    private Tween StartSequence()
     {
         Tween startTween = DOTween.Sequence()
             .Join(selectButtons.startButton.PressedTween())
@@ -91,13 +80,12 @@ public class TitleUIHandler : MonoBehaviour
             .Join(txtSlash.CameraOutTween())
             .Join(selectButtons.CameraOutTween());
 
-        DOTween.Sequence()
-            .Append(startTween)
-            .AppendInterval(0.4f)
-            .Append(unityChanDropTween)
-            .Join(fadeOutTween.SetDelay(0.75f))
-            .AppendInterval(0.5f)
-            .OnComplete(SceneTransition)
-            .Play();
+        return
+            DOTween.Sequence()
+                .Append(startTween)
+                .AppendInterval(0.4f)
+                .Append(unityChanDropTween)
+                .Join(fadeOutTween.SetDelay(0.75f))
+                .AppendInterval(0.5f);
     }
 }

@@ -19,6 +19,10 @@ public class TitleSceneManager : MonoBehaviour
             .IgnoreElements()
             .Subscribe(null, StartLoading)
             .AddTo(this);
+
+        titleUIHandler.TransitSignal
+            .Subscribe(_ => sceneLoader.SceneTransition())
+            .AddTo(this);
     }
 
     private void StartLoading()
