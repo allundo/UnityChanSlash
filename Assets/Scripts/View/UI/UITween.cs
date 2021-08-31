@@ -44,6 +44,9 @@ public class UITween
     public Tween MoveY(float moveY, float duration = 1f)
         => MoveRelative(new Vector2(0f, moveY), duration);
 
+    /// <summary>
+    /// Returns Tween of moving back to default position.
+    /// </summary>
     public Tween MoveBack(float duration = 1f, bool isReusable = false)
     {
         Tween move = rectTransform.DOAnchorPos(defaultPos, duration).SetUpdate(isValidOnPause);
@@ -51,6 +54,20 @@ public class UITween
         return isReusable ? move.AsReusable(gameObject) : move;
     }
 
+    public Tween Jump(float destX, float destY, float duration = 1f, float jumpPower = 1000f, int numJumps = 1)
+        => rectTransform.DOJump(new Vector3(destX, destY), jumpPower, numJumps, duration);
+
+    public Tween Rotate(Vector3 endValue, float duration = 1f, bool isBeyond360 = true)
+        => rectTransform.DORotate(endValue, duration, isBeyond360 ? RotateMode.FastBeyond360 : RotateMode.Fast);
+
+    public Tween Rotate(float endValue, float duration = 1f, bool isBeyond360 = true)
+        => Rotate(new Vector3(0f, 0f, endValue), duration, isBeyond360);
+
+    /// <summary>
+    /// Set position and move immediately.
+    /// </summary>
+    /// <param name="destPos"></param>
+    /// <param name="setDefault">sets destPos as default position if true</param>
     public void SetPos(Vector2 destPos, bool setDefault = false)
     {
         rectTransform.anchoredPosition = destPos;
