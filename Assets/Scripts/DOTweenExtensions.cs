@@ -36,6 +36,27 @@ static public class DOTweenExtensions
         });
     }
 
+    static public IObservable<Sequence> OnCompleteAsObservable(this Sequence sequence)
+    {
+        return Observable.Create<Sequence>(o =>
+        {
+            sequence.onComplete = sequence.onComplete ?? (() => { });
+            var onComplete = sequence.onComplete.Clone() as TweenCallback;
+
+            sequence.OnComplete(() =>
+            {
+                onComplete();
+                o.OnNext(sequence);
+                o.OnCompleted();
+            }).Play();
+
+            return Disposable.Create(() =>
+            {
+                sequence.Kill();
+            });
+        });
+    }
+
     static public IObservable<Tween> AsObservable(this Tween tween)
     {
         return Observable.Create<Tween>(o =>
