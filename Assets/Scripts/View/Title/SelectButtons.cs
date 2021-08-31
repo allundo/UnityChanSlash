@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UniRx;
-using System;
 using DG.Tweening;
 
 public class SelectButtons : MonoBehaviour
@@ -10,24 +9,13 @@ public class SelectButtons : MonoBehaviour
     [SerializeField] public TwoPushButton resultsButton = default;
     [SerializeField] private UnityChanIcon unityChanIcon = default;
 
-    private RectTransform rt;
-    private Vector2 defaultPos;
-
-    private RectTransform rtStart;
-    private RectTransform rtOption;
-    private RectTransform rtResults;
+    private UITween uiTween;
 
     private TwoPushButton currentButton;
 
     void Awake()
     {
-        rt = GetComponent<RectTransform>();
-
-        rtStart = startButton.GetComponent<RectTransform>();
-        rtOption = optionButton.GetComponent<RectTransform>();
-        rtResults = resultsButton.GetComponent<RectTransform>();
-
-        defaultPos = rt.anchoredPosition;
+        uiTween = new UITween(gameObject);
     }
 
     void Start()
@@ -57,27 +45,21 @@ public class SelectButtons : MonoBehaviour
 
     public void TitleTween()
     {
-        rt.anchoredPosition = new Vector2(-2820f, defaultPos.y);
-
         DOTween.Sequence()
+            .AppendCallback(() => uiTween.SetPosX(-2820f))
             .AppendInterval(0.4f)
-            .Append(rt.DOAnchorPos(new Vector2(0f, defaultPos.y), 0.6f).SetEase(Ease.Linear))
+            .Append(uiTween.MoveBack(0.6f).SetEase(Ease.Linear))
             .Append(Overrun(100f, 0.5f))
             .OnComplete(ActivateButtons)
             .Play();
     }
 
     private Tween Overrun(float overrun, float duration)
-    {
-        return DOTween.Sequence()
-            .Append(rt.DOAnchorPos(new Vector2(overrun, defaultPos.y), duration * 0.5f).SetEase(Ease.OutQuad))
-            .Append(rt.DOAnchorPos(new Vector2(0f, defaultPos.y), duration * 0.5f).SetEase(Ease.InQuad));
-    }
+        => DOTween.Sequence()
+            .Append(uiTween.MoveX(overrun, duration * 0.5f).SetEase(Ease.OutQuad))
+            .Append(uiTween.MoveBack(duration * 0.5f).SetEase(Ease.InQuad));
 
-    public Tween CameraOutTween()
-    {
-        return rt.DOAnchorPos(new Vector2(0f, 1280f), 0.2f);
-    }
+    public Tween CameraOutTween() => uiTween.MoveY(1280f, 0.2f);
 
     private void SetIconAsChild(Transform tfIcon)
     {

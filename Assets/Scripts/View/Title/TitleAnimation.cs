@@ -1,70 +1,50 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Linq;
 
 public class TitleAnimation : MonoBehaviour
 {
-    [SerializeField] private RectTransform[] rtTitles = default;
+    [SerializeField] private RectTransform[] titleChildren = default;
 
-    private Vector2[] defaultSizes;
-    private RectTransform rt;
-
-    private Vector2 defaultPos;
+    private UITween baseTween;
+    private List<UITween> childTweens = new List<UITween>();
 
     void Awake()
     {
-        rt = GetComponent<RectTransform>();
-
-        defaultPos = rt.anchoredPosition;
-
-        defaultSizes = new Vector2[rtTitles.Length];
-
-        for (int i = 0; i < rtTitles.Length; i++)
-        {
-            defaultSizes[i] = rtTitles[i].sizeDelta;
-        }
+        baseTween = new UITween(gameObject);
+        childTweens = titleChildren.Select(rt => new UITween(rt.gameObject)).ToList();
     }
 
     public void TitleTween()
     {
-        rt.anchoredPosition = new Vector2(-2820f, defaultPos.y);
-
         DOTween.Sequence()
+            .AppendCallback(() => baseTween.SetPosX(-2820f))
             .AppendInterval(0.4f)
-            .Append(rt.DOAnchorPos(new Vector2(0f, defaultPos.y), 0.6f).SetEase(Ease.Linear))
+            .Append(baseTween.MoveBack(0.6f).SetEase(Ease.Linear))
             .Append(Overrun(480f, 0.5f))
             .Join(SizeTweenAll(0.5f, 0.5f))
             .Play();
     }
 
     private Tween Overrun(float overrun, float duration)
-    {
-        return DOTween.Sequence()
-            .Append(rt.DOAnchorPos(new Vector2(overrun, defaultPos.y), duration * 0.5f).SetEase(Ease.OutQuad))
-            .Append(rt.DOAnchorPos(new Vector2(0f, defaultPos.y), duration * 0.5f).SetEase(Ease.InQuad));
-
-    }
+        => DOTween.Sequence()
+            .Append(baseTween.MoveX(overrun, duration * 0.5f).SetEase(Ease.OutQuad))
+            .Append(baseTween.MoveBack(duration * 0.5f).SetEase(Ease.InQuad));
 
     private Tween SizeTweenAll(float scale, float duration)
     {
         Sequence seq = DOTween.Sequence();
 
-        for (int i = 0; i < rtTitles.Length; i++)
-        {
-            seq.Join(SizeTween(rtTitles[i], defaultSizes[i], scale, duration));
-        }
+        childTweens.ForEach(tween => seq.Join(SizeTween(tween, scale, duration)));
 
         return seq;
     }
 
-    private Tween SizeTween(RectTransform rt, Vector2 defaultSize, float scale, float duration)
-    {
-        return DOTween.Sequence()
-            .Append(rt.DOSizeDelta(defaultSize * scale, duration * 0.5f).SetEase(Ease.OutQuad))
-            .Append(rt.DOSizeDelta(defaultSize, duration * 0.5f).SetEase(Ease.InQuad));
-    }
+    private Tween SizeTween(UITween tween, float scale, float duration)
+        => DOTween.Sequence()
+            .Append(tween.Resize(scale, duration * 0.5f).SetEase(Ease.OutQuad))
+            .Append(tween.Resize(1f, duration * 0.5f).SetEase(Ease.InQuad));
 
-    public Tween CameraOutTween()
-    {
-        return rt.DOAnchorPos(new Vector2(0f, 1280f), 0.2f);
-    }
+    public Tween CameraOutTween() => baseTween.MoveY(1280f, 0.2f);
 }

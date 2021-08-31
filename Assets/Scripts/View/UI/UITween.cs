@@ -57,6 +57,9 @@ public class UITween
     public Tween Jump(float destX, float destY, float duration = 1f, float jumpPower = 1000f, int numJumps = 1)
         => rectTransform.DOJump(new Vector3(destX, destY), jumpPower, numJumps, duration);
 
+    public Tween Jump(Vector2 dest, float duration = 1f, float jumpPower = 1000f, int numJumps = 1)
+        => Jump(dest.x, dest.y, duration, jumpPower, numJumps);
+
     public Tween Rotate(Vector3 endValue, float duration = 1f, bool isBeyond360 = true)
         => rectTransform.DORotate(endValue, duration, isBeyond360 ? RotateMode.FastBeyond360 : RotateMode.Fast);
 
@@ -73,6 +76,9 @@ public class UITween
         rectTransform.anchoredPosition = destPos;
         if (setDefault) defaultPos = destPos;
     }
+
+    public void SetPosX(float destX) => SetPos(new Vector2(destX, defaultPos.y));
+    public void SetPos(float destY) => SetPos(new Vector2(defaultPos.x, destY));
 
     public void SetSize(Vector2 size, bool setDefault = false)
     {

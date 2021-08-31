@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0884ce02afa4bf9a44613396e08ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rtTitles:
+  titleChildren:
   - {fileID: 1576447584}
   - {fileID: 710371038}
 --- !u!1 &386963001
@@ -6712,7 +6712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0884ce02afa4bf9a44613396e08ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rtTitles:
+  titleChildren:
   - {fileID: 957460978}
 --- !u!1 &1576447583
 GameObject:
