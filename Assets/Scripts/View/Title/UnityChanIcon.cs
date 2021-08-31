@@ -32,20 +32,22 @@ public class UnityChanIcon : MonoBehaviour
                 .Join(uiTween.Resize(1f, 0.1f).SetEase(Ease.InQuad));
     }
 
-    public void ToTitle(Vector3 jumpDest)
+    public Tween TitleTween(SelectButtons buttons)
     {
-        DOTween.Sequence()
-            .Append(uiTween.MoveY(-100f, 0.1f).SetEase(Ease.OutQuad))
-            .Join(uiTween.Resize(new Vector2(1.5f, 0.5f), 0.1f).SetEase(Ease.OutQuad))
-            .Append(uiTween.MoveBack(0.1f).SetEase(Ease.InQuad))
-            .Join(uiTween.Resize(1f, 0.1f).SetEase(Ease.InQuad))
-            .Append(uiTween.Jump(-360f, -240f, 0.6f).SetRelative(true))
-            .Join(uiTween.Resize(0.3f, 0.6f).SetEase(Ease.Linear))
-            .Join(uiTween.Rotate(720f, 0.6f).SetEase(Ease.Linear))
-            .AppendInterval(0.2f)
-            .AppendCallback(() => finishLogoTask.OnNext(transform))
-            .Play();
+        return
+            DOTween.Sequence()
+                .Append(uiTween.MoveY(-100f, 0.1f).SetEase(Ease.OutQuad))
+                .Join(uiTween.Resize(new Vector2(1.5f, 0.5f), 0.1f).SetEase(Ease.OutQuad))
+                .Append(uiTween.MoveBack(0.1f).SetEase(Ease.InQuad))
+                .Join(uiTween.Resize(1f, 0.1f).SetEase(Ease.InQuad))
+                .Append(uiTween.Jump(buttons.Pos + buttons.startButton.IconPos, 0.6f).SetRelative(true))
+                .Join(uiTween.Resize(0.3f, 0.6f).SetEase(Ease.Linear))
+                .Join(uiTween.Rotate(720f, 0.6f).SetEase(Ease.Linear))
+                .AppendInterval(0.2f)
+                .AppendCallback(() => SetParent(buttons.transform));
     }
+
+    private void SetParent(Transform parent) => transform.SetParent(parent);
 
     public Tween SelectTween(Vector2 iconPos)
     {

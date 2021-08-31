@@ -11,6 +11,8 @@ public class SelectButtons : MonoBehaviour
 
     private UITween uiTween;
 
+    public Vector2 Pos => uiTween.CurrentPos;
+
     private TwoPushButton currentButton;
 
     void Awake()
@@ -23,8 +25,6 @@ public class SelectButtons : MonoBehaviour
         startButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
         optionButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
         resultsButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
-
-        unityChanIcon.FinishLogoTask.Subscribe(tf => SetIconAsChild(tf)).AddTo(this);
     }
 
     private void SetCurrentButton(TwoPushButton button)
@@ -43,15 +43,15 @@ public class SelectButtons : MonoBehaviour
         startButton.Select(true);
     }
 
-    public void TitleTween()
+    public Tween TitleTween()
     {
-        DOTween.Sequence()
-            .AppendCallback(() => uiTween.SetPosX(-2820f))
-            .AppendInterval(0.4f)
-            .Append(uiTween.MoveBack(0.6f).SetEase(Ease.Linear))
-            .Append(Overrun(100f, 0.5f))
-            .OnComplete(ActivateButtons)
-            .Play();
+        return
+            DOTween.Sequence()
+                .AppendCallback(() => uiTween.SetPosX(-2820f))
+                .AppendInterval(0.4f)
+                .Append(uiTween.MoveBack(0.6f).SetEase(Ease.Linear))
+                .Append(Overrun(100f, 0.5f))
+                .OnComplete(ActivateButtons);
     }
 
     private Tween Overrun(float overrun, float duration)
@@ -60,9 +60,4 @@ public class SelectButtons : MonoBehaviour
             .Append(uiTween.MoveBack(duration * 0.5f).SetEase(Ease.InQuad));
 
     public Tween CameraOutTween() => uiTween.MoveY(1280f, 0.2f);
-
-    private void SetIconAsChild(Transform tfIcon)
-    {
-        tfIcon.SetParent(transform);
-    }
 }

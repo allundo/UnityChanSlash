@@ -53,19 +53,21 @@ public class LogoAnimation : MonoBehaviour
                 .AppendCallback(() => nowLoading.Activate());
     }
 
-    public void ToTitle()
+    public Tween TitleTween()
     {
-        imageFrame.sprite = frameEmpty;
-        vfxRain?.Stop();
-        nowLoading.Inactivate();
-
-        DOVirtual.DelayedCall(0.1f, () => vfxRain?.Pause()).Play();
-        DOVirtual.DelayedCall(0.5f, () => vfxRain?.Clear()).Play();
-
-        rtBackGround
-            .DOAnchorPos(new Vector2(2820f, 0), 1.8f)
-            .SetDelay(0.2f)
-            .OnComplete(() => rtBackGround.transform.gameObject.SetActive(false))
-            .Play();
+        return
+            DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    imageFrame.sprite = frameEmpty;
+                    vfxRain?.Stop();
+                    nowLoading.Inactivate();
+                })
+                .AppendInterval(0.1f)
+                .AppendCallback(() => vfxRain?.Pause())
+                .AppendInterval(0.1f)
+                .Append(rtBackGround.DOAnchorPos(new Vector2(2820f, 0), 1.8f))
+                .Join(DOVirtual.DelayedCall(0.3f, () => vfxRain?.Clear()))
+                .OnComplete(() => rtBackGround.transform.gameObject.SetActive(false));
     }
 }

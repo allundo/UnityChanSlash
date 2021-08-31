@@ -16,16 +16,13 @@ public class TitleAnimation : MonoBehaviour
         childTweens = titleChildren.Select(rt => new UITween(rt.gameObject)).ToList();
     }
 
-    public void TitleTween()
-    {
-        DOTween.Sequence()
+    public Tween TitleTween()
+        => DOTween.Sequence()
             .AppendCallback(() => baseTween.SetPosX(-2820f))
             .AppendInterval(0.4f)
             .Append(baseTween.MoveBack(0.6f).SetEase(Ease.Linear))
             .Append(Overrun(480f, 0.5f))
-            .Join(SizeTweenAll(0.5f, 0.5f))
-            .Play();
-    }
+            .Join(SizeTweenAll(0.5f, 0.5f));
 
     private Tween Overrun(float overrun, float duration)
         => DOTween.Sequence()

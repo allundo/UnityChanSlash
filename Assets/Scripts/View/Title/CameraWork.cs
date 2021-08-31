@@ -90,15 +90,16 @@ public class CameraWork : MonoBehaviour
         LookAt(currentLookAt * (1.0f - rate) + target * rate);
     }
 
-    public void ToTitle(TweenCallback OnComplete = null)
+    public Tween TitleTween()
     {
-        OnComplete = OnComplete ?? (() => { });
-
-        currentCamera.transform.position = new Vector3(-10f, 1.35f, 2.5f);
-
-        currentCamera.transform.DOMove(new Vector3(0f, 1.35f, 2.5f), 1.2f)
-            .OnComplete(OnComplete)
-            .Play();
+        return
+            DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    currentCamera.transform.position = new Vector3(-10f, 1.35f, 2.5f);
+                })
+                .Append(currentCamera.transform.DOMove(new Vector3(0f, 1.35f, 2.5f), 1.2f))
+                .OnComplete(StartCameraWork);
     }
 
     private IEnumerator AngleChangeLoop(float duration = 10f)

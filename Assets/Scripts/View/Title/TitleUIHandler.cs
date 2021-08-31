@@ -42,16 +42,12 @@ public class TitleUIHandler : MonoBehaviour
 
     public void ToTitle()
     {
-        cameraWork.ToTitle(cameraWork.StartCameraWork);
-
-        Vector2 pos = selectButtons.startButton.Pos;
-        unityChanIcon.ToTitle(new Vector3(pos.x - 320f, pos.y));
-
-        logo.ToTitle();
-
-        selectButtons.TitleTween();
-        txtUnity.TitleTween();
-        txtSlash.TitleTween();
+        cameraWork.TitleTween().Play();
+        unityChanIcon.TitleTween(selectButtons).Play();
+        logo.TitleTween().Play();
+        selectButtons.TitleTween().Play();
+        txtUnity.TitleTween().Play();
+        txtSlash.TitleTween().Play();
     }
 
     private IEnumerator LoadScene()
