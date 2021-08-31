@@ -19,14 +19,16 @@ static public class DOTweenExtensions
     {
         return Observable.Create<Tween>(o =>
         {
-            TweenCallback onComplete = tween.onComplete;
+            tween.onComplete = tween.onComplete ?? (() => { });
+            var onComplete = tween.onComplete.Clone() as TweenCallback;
 
             tween.OnComplete(() =>
             {
                 onComplete();
                 o.OnNext(tween);
                 o.OnCompleted();
-            });
+            }).Play();
+
             return Disposable.Create(() =>
             {
                 tween.Kill();
