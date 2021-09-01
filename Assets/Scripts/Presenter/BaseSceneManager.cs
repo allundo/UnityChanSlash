@@ -1,6 +1,12 @@
 using UnityEngine;
 
-public class BaseSceneManager : SingletonMonoBehaviour<TitleSceneManager>
+[RequireComponent(typeof(SceneLoader))]
+public class BaseSceneManager : MonoBehaviour
 {
+    protected SceneLoader sceneLoader;
 
+    protected virtual void Awake()
+    {
+        sceneLoader = GetComponent<SceneLoader>();
+    }
 }

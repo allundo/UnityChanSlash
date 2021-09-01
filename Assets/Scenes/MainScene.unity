@@ -1597,7 +1597,7 @@ GameObject:
   - component: {fileID: 156831332}
   - component: {fileID: 156831331}
   m_Layer: 0
-  m_Name: MainSceneManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 156831330}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b9d2c439eb9c475baa8176144b554d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6109eb7e7221d4a9a81047ba29568342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistent: 0

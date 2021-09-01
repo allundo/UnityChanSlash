@@ -42,7 +42,7 @@ public class HidePool : MonoBehaviour
 
     void Awake()
     {
-        map = MainSceneManager.Instance.worldMap;
+        map = GameManager.Instance.worldMap;
         mapUtil = GetComponent<MapUtil>();
         InitHidePlates();
 

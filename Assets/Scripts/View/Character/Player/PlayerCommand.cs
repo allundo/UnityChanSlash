@@ -64,7 +64,7 @@ public partial class PlayerCommander : ShieldCommander
 
             tweenMove.SetDelayedCall(0.6f, () =>
             {
-                MainSceneManager.Instance.EnterStair((destTile as Stair).isUpStair);
+                GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
                 Cancel();
                 anim.Pause();
             });

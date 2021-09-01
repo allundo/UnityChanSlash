@@ -47,7 +47,7 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
             .Join(
                 FadeIn(
                     0.5f,
-                    () => MainSceneManager.Instance.Pause(),
+                    () => GameManager.Instance.Pause(),
                     () =>
                     {
                         textHandler.InputMessageData(data);
@@ -64,7 +64,7 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
 
     private void CloseMessage()
     {
-        FadeOut(0.5f, null, () => MainSceneManager.Instance.Resume()).Play();
+        FadeOut(0.5f, null, () => GameManager.Instance.Resume()).Play();
         window.FadeOut(0.5f).Play();
         characterUI.DispFace(FaceID.NONE);
     }

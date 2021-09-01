@@ -91,7 +91,7 @@ public class WorldMap
     public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsViewOpen;
     public bool IsPlayerRange(int x, int y)
     {
-        Pos pos = MainSceneManager.Instance.PlayerPos;
+        Pos pos = GameManager.Instance.PlayerPos;
         return x >= pos.x - 5 && x < pos.x + 5 && y >= pos.y - 5 && y < pos.y + 5;
     }
 

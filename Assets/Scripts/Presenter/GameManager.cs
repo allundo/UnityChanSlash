@@ -2,7 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using UniRx;
 
-public class MainSceneManager : SingletonMonoBehaviour<MainSceneManager>
+public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private Transform playerTransform = default;
     [SerializeField] private HidePool hidePool = default;
@@ -51,11 +51,16 @@ public class MainSceneManager : SingletonMonoBehaviour<MainSceneManager>
     void Start()
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+        DropStart();
+    }
 
+    public void DropStart()
+    {
         cover.SetAlpha(1f);
         cover.FadeIn(1.0f, 1.1f).Play();
         commander.EnqueueDropFloor();
         commander.EnqueueStartMessage();
+
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
