@@ -1,35 +1,20 @@
 using UnityEngine;
 using UniRx;
 
-[RequireComponent(typeof(SceneLoader))]
-public class TitleSceneManager : MonoBehaviour
+public class TitleSceneManager : BaseSceneManager
 {
     [SerializeField] TitleUIHandler titleUIHandler = default;
-
-    protected SceneLoader sceneLoader;
-
-    void Awake()
-    {
-        sceneLoader = GetComponent<SceneLoader>();
-    }
 
     void Start()
     {
         titleUIHandler.Logo()
+            .SelectMany(_ => sceneLoader.LoadSceneAsync(1, 3f))
             .IgnoreElements()
-            .Subscribe(null, StartLoading)
+            .Subscribe(null, titleUIHandler.ToTitle)
             .AddTo(this);
 
         titleUIHandler.TransitSignal
             .Subscribe(_ => sceneLoader.SceneTransition())
-            .AddTo(this);
-    }
-
-    private void StartLoading()
-    {
-        sceneLoader.LoadSceneAsync(1, 3f)
-            .IgnoreElements()
-            .Subscribe(null, titleUIHandler.ToTitle)
             .AddTo(this);
     }
 }
