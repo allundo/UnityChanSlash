@@ -9,13 +9,11 @@ public class PlaceEnemyGenerator : MonoBehaviour
     {
         enemyPool = new GameObject("Enemy Pool");
 
-
         int division = (int)Mathf.Log(prefabEnemyGenerators.Length, 4);
 
         var regions = GetRegions(new Pos(0, 0), new Pos(map.Width - 1, map.Height - 1), division);
 
-        int counter = 0;
-        foreach (var prefab in prefabEnemyGenerators)
+        for (int counter = 0; counter < prefabEnemyGenerators.Length; counter++)
         {
             (Pos leftTop, Pos rightBottom) region = regions[counter % regions.Length];
 
@@ -24,12 +22,9 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
             Ground ground = map.GetGround(ref x, ref y);
 
-            if (ground != null)
-            {
-                Instantiate(prefab, map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground, new Pos(x, y));
-            }
+            if (ground == null) continue;
 
-            counter++;
+            Instantiate(prefabEnemyGenerators[counter], map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground, new Pos(x, y));
         }
     }
 
