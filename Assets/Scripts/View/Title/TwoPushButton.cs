@@ -125,10 +125,11 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
         return txtMP.DOColor(defaultTxtColor * ratio, duration);
     }
 
-    public Tween PressedTween()
-    {
-        return image.DOColor(new Color(1, 1, 1, 1), 0.1f).SetLoops(10, LoopType.Yoyo);
-    }
+    public IObservable<Tween> OnPressedCompleteAsObservable(float duration = 1f)
+        => subject.Select(_ => PressedTween((int)(duration / 0.1f)).OnCompleteAsObservable()).Switch();
+
+    public Tween PressedTween(int flashCount = 10)
+         => image.DOColor(new Color(1, 1, 1, 1), 0.1f).SetLoops(flashCount, LoopType.Yoyo);
 
     private T GetInstance<T>(T prefab)
         where T : UnityEngine.Object
@@ -148,6 +149,7 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
         {
             onClickEvent.Invoke();
             subject.OnNext(Unit.Default);
+            subject.OnCompleted();
         }
     }
 

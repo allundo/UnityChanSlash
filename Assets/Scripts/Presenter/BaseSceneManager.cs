@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(SceneLoader))]
 public class BaseSceneManager : MonoBehaviour
@@ -15,4 +16,13 @@ public class BaseSceneManager : MonoBehaviour
         }
         sceneLoader = GetComponent<SceneLoader>();
     }
+
+    protected void SceneTransition(Action updateGameInfo = null)
+    {
+        (updateGameInfo ?? (() => { }))();
+        sceneLoader.SceneTransition();
+    }
+
+    protected void SceneTransition(int startActionID)
+        => SceneTransition(() => GameInfo.Instance.startActionID = startActionID);
 }

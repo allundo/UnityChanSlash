@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UniRx;
+using System;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -13,6 +14,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
+
+    private Action startAction;
+
+    private Action[] starters;
 
     private bool isInitialOrientation = true;
 
@@ -36,6 +41,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
+        startAction =
+            new Action[]
+            {
+                DropStart,
+                Restart
+            }
+            [GameInfo.Instance.startActionID];
+
         worldMap = GameInfo.Instance.Map(1);
         mapRenderer.Render(worldMap);
     }
@@ -45,7 +58,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
         placeEnemyGenerator.Place(worldMap);
 
-        DropStart();
+        startAction();
     }
 
     public void DropStart()
@@ -56,7 +69,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         commander.EnqueueStartMessage();
     }
 
-    public void ReStart()
+    public void Restart()
     {
         cover.SetAlpha(1f);
         cover.FadeIn(1.0f).Play();
