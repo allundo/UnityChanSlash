@@ -1,11 +1,12 @@
 using UnityEngine;
+using System;
 
 public enum Terrain
 {
     Path,
     Ground,
     Wall,
-    Pall,
+    Pall, // Gate or Pall
     Door,
     Stair,
 }
@@ -148,6 +149,8 @@ public interface IDirection
     IDirection Right { get; }
     IDirection Backward { get; }
 
+    Dir Enum { get; }
+
     bool IsSame(IDirection dir);
     bool IsLeft(IDirection dir);
     bool IsRight(IDirection dir);
@@ -160,6 +163,24 @@ public abstract class Direction
     public static East east = new East();
     public static South south = new South();
     public static West west = new West();
+
+    public static IDirection Convert(Dir dir)
+    {
+        switch (dir)
+        {
+            case Dir.N:
+                return north;
+            case Dir.E:
+                return east;
+            case Dir.S:
+                return south;
+            case Dir.W:
+                return west;
+            default:
+                throw new ArgumentException("Invalid enum: " + dir + " cannot convert to Direction.");
+        }
+    }
+
     public abstract bool IsSame(IDirection dir);
 
     public bool IsLeft(IDirection dir) => IsSame(dir?.Right);
@@ -204,6 +225,8 @@ public class North : Direction, IDirection
     public IDirection Right => Direction.east;
     public IDirection Backward => Direction.south;
 
+    public Dir Enum => Dir.N;
+
     public override bool IsSame(IDirection dir) => dir is North;
 
     public override int GetHashCode() => 0b0001;
@@ -233,6 +256,8 @@ public class East : Direction, IDirection
     public IDirection Left => Direction.north;
     public IDirection Right => Direction.south;
     public IDirection Backward => Direction.west;
+
+    public Dir Enum => Dir.E;
 
     public override bool IsSame(IDirection dir) => dir is East;
 
@@ -264,6 +289,8 @@ public class South : Direction, IDirection
     public IDirection Right => Direction.west;
     public IDirection Backward => Direction.north;
 
+    public Dir Enum => Dir.S;
+
     public override bool IsSame(IDirection dir) => dir is South;
 
     public override int GetHashCode() => 0b0100;
@@ -293,6 +320,8 @@ public class West : Direction, IDirection
     public IDirection Left => Direction.south;
     public IDirection Right => Direction.north;
     public IDirection Backward => Direction.east;
+
+    public Dir Enum => Dir.W;
 
     public override bool IsSame(IDirection dir) => dir is West;
 

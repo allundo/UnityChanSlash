@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,14 +7,23 @@ public class WorldMap
 {
     public static readonly float TILE_UNIT = 2.5f;
 
-    public Tile[,] Matrix { get; protected set; }
+    public Tile[,] tileInfo { get; protected set; }
+    public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
+
+    private MapManager map;
+    public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
+    public Dir[,] CloneDirMap() => map.dirMap.Clone() as Dir[,];
+    public Dictionary<Pos, IDirection> CopyDeadEndPos() => new Dictionary<Pos, IDirection>(map.deadEndPos);
+    public Dir GetPallDir(int x, int y) => map.GetPallDir(x, y);
+
     public Tile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public Tile GetTile(Pos pos) => GetTile(pos.x, pos.y);
-    public Tile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : Matrix[x, y];
+    public Tile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : tileInfo[x, y];
 
     public Ground GetGround(ref int x, ref int y)
     {
         Tile tile = GetTile(x, y);
+
         if (tile is Ground) return tile as Ground;
 
         for (int j = y - 1; j < y + 1; j++)
@@ -39,9 +49,17 @@ public class WorldMap
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 
-    public WorldMap(MazeCreator maze) : this(maze.Matrix) { }
-    public WorldMap(Terrain[,] matrix) : this(matrix.GetLength(0), matrix.GetLength(1))
+    public WorldMap()
     {
+        map = new MapManager().SetStair();
+
+        Width = map.width;
+        Height = map.height;
+
+        tileInfo = new Tile[Width, Height];
+
+        var matrix = CloneMatrix();
+
         for (int i = 0; i < Width; i++)
         {
             for (int j = 0; j < Height; j++)
@@ -49,31 +67,24 @@ public class WorldMap
                 switch (matrix[i, j])
                 {
                     case Terrain.Wall:
-                        Matrix[i, j] = new Wall();
+                    case Terrain.Pall:
+                        tileInfo[i, j] = new Wall();
                         break;
 
                     case Terrain.Door:
-                        Matrix[i, j] = new Door();
+                        tileInfo[i, j] = new Door();
                         break;
 
                     case Terrain.Stair:
-                        Matrix[i, j] = new Stair();
+                        tileInfo[i, j] = new Stair();
                         break;
 
                     default:
-                        Matrix[i, j] = new Ground();
+                        tileInfo[i, j] = new Ground();
                         break;
                 }
             }
         }
-    }
-
-    public WorldMap(int width, int height)
-    {
-        this.Width = width;
-        this.Height = height;
-
-        Matrix = new Tile[width, height];
     }
 
     public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
@@ -88,7 +99,7 @@ public class WorldMap
     /// <summary>
     /// The tile can be seen through
     /// </summary>
-    public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : Matrix[x, y].IsViewOpen;
+    public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : tileInfo[x, y].IsViewOpen;
     public bool IsPlayerRange(int x, int y)
     {
         Pos pos = GameManager.Instance.PlayerPos;
@@ -117,8 +128,8 @@ public class WorldMap
                 Debug.Log("Height: " + j);
                 for (int i = 1; i < Width - 1; i++)
                 {
-                    Debug.Log("Terrain: " + Matrix[i, j]);
-                    if (Matrix[i, j] is Ground) return new Pos(i, j);
+                    Debug.Log("Terrain: " + tileInfo[i, j]);
+                    if (tileInfo[i, j] is Ground) return new Pos(i, j);
                 }
             }
             return new Pos();

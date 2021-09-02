@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
-public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
+public class MapRenderer : MonoBehaviour
 {
-    private WorldMap map;
+    public WorldMap map { get; private set; }
 
     private float TILE_UNIT => WorldMap.TILE_UNIT;
 
@@ -43,15 +42,18 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
+    private Mesh[] upStairMesh = new Mesh[0b10000];
     private Mesh wallVMesh;
     private Mesh wallHMesh;
     private GameObject[] plate = new GameObject[0b10000];
 
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
-    public void Init(WorldMap map)
-    {
-        this.map = map;
 
+    ///  <summary>
+    /// Initiate meshes to combine. This method must be called before rendering.
+    /// </summary>
+    private void InitMeshes()
+    {
         wallVMesh = GetMeshFromObject(wallV);
         wallHMesh = GetMeshFromObject(wallH);
 
@@ -78,6 +80,11 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         gateMesh[(int)Dir.SWN] = GetMeshFromObject(gateVW);
         gateMesh[(int)Dir.WNE] = GetMeshFromObject(gateHN);
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
+
+        upStairMesh[(int)Dir.N] = GetMeshFromObject(upStairN);
+        upStairMesh[(int)Dir.E] = GetMeshFromObject(upStairE);
+        upStairMesh[(int)Dir.S] = GetMeshFromObject(upStairS);
+        upStairMesh[(int)Dir.W] = GetMeshFromObject(upStairW);
     }
 
     private void SetDoor(Pos pos, GameObject doorPrefab)
@@ -87,13 +94,9 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         Door tileDoor = map.GetTile(pos) as Door;
         tileDoor.state = door.GetComponent<DoorState>();
     }
+
     public void SetStair(Pos pos, IDirection dir)
     {
-        if (dir is North) PlacePrefab(pos, upStairN);
-        if (dir is East) PlacePrefab(pos, upStairE);
-        if (dir is South) PlacePrefab(pos, upStairS);
-        if (dir is West) PlacePrefab(pos, upStairW);
-
         Stair tileStair = map.GetTile(pos) as Stair;
         tileStair.enterDir = dir;
         tileStair.isUpStair = true;
@@ -104,16 +107,19 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
         return Instantiate(prefab, map.WorldPos(pos), Quaternion.identity);
     }
 
-    public void Fix(MazeCreator maze)
+    public void Render(WorldMap map)
     {
+        this.map = map;
 
-        int width = maze.Width;
-        int height = maze.Height;
+        int width = map.Width;
+        int height = map.Height;
 
-        Dir[,] dirMap = (Dir[,])maze.GetDirMap().Clone();
-        Terrain[,] matrix = (Terrain[,])maze.Matrix.Clone();
+        var dirMap = map.CloneDirMap();
+        var matrix = map.CloneMatrix();
 
         var terrainMeshes = new Stack<CombineInstance>();
+
+        InitMeshes();
 
         for (int j = 0; j < height; j++)
         {
@@ -129,14 +135,12 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
                         break;
 
                     case Terrain.Door:
-                        // if (dirMap[i, j] == Dir.NS) terrainMeshes.Push(GetMeshInstance(doorVMesh, new Pos(i, j)));
-                        // if (dirMap[i, j] == Dir.EW) terrainMeshes.Push(GetMeshInstance(doorHMesh, new Pos(i, j)));
                         if (dirMap[i, j] == Dir.NS) SetDoor(new Pos(i, j), doorV);
                         if (dirMap[i, j] == Dir.EW) SetDoor(new Pos(i, j), doorH);
                         break;
 
                     case Terrain.Wall:
-                        Dir pallDir = maze.GetPallDir(i, j);
+                        Dir pallDir = map.GetPallDir(i, j);
                         if (pallDir == Dir.NONE)
                         {
                             if (dirMap[i, j] == Dir.NS) terrainMeshes.Push(GetMeshInstance(wallVMesh, new Pos(i, j)));
@@ -147,7 +151,8 @@ public class MapRenderer : SingletonMonoBehaviour<MapRenderer>
                         break;
 
                     case Terrain.Stair:
-                        SetStair(new Pos(i, j), maze.stairDir);
+                        terrainMeshes.Push(GetMeshInstance(upStairMesh[(int)dirMap[i, j]], new Pos(i, j)));
+                        SetStair(new Pos(i, j), Direction.Convert(dirMap[i, j]));
                         break;
                 }
             }

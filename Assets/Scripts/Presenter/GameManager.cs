@@ -4,6 +4,7 @@ using UniRx;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
+    [SerializeField] private MapRenderer mapRenderer = default;
     [SerializeField] private Transform playerTransform = default;
     [SerializeField] private HidePool hidePool = default;
     [SerializeField] private PlayerCommander commander = default;
@@ -35,22 +36,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
-        var maze = new MazeCreator();
-        maze.CreateMaze();
-
-        worldMap = new WorldMap(maze);
-
-        MapRenderer.Instance.Init(worldMap);
-        MapRenderer.Instance.Fix(maze);
-
-        placeEnemyGenerator.Place(worldMap);
-
-        DOTween.SetTweensCapacity(500, 100);
+        worldMap = GameInfo.Instance.Map(1);
+        mapRenderer.Render(worldMap);
     }
 
     void Start()
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+        placeEnemyGenerator.Place(worldMap);
+
         DropStart();
     }
 
