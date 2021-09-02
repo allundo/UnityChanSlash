@@ -39,6 +39,14 @@ public class FadeTween
         color = new Color(color.r, color.g, color.b, alpha * maxAlpha);
     }
 
+    public void SetEnabled(bool isEnable = true)
+    {
+        image.enabled = isEnable;
+    }
+
+    public void Enable() => SetEnabled(true);
+    public void Disable() => SetEnabled(false);
+
     public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
         onPlay = onPlay ?? (() => { });
