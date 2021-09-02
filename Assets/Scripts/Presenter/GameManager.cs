@@ -54,7 +54,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         cover.FadeIn(1.0f, 1.1f).Play();
         commander.EnqueueDropFloor();
         commander.EnqueueStartMessage();
+    }
 
+    public void ReStart()
+    {
+        cover.SetAlpha(1f);
+        cover.FadeIn(1.0f).Play();
+        commander.EnqueueRestartMessage();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)

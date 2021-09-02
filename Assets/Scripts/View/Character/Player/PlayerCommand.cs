@@ -379,4 +379,31 @@ public partial class PlayerCommander : ShieldCommander
             playerCommander.messageController.InputMessageData(data);
         }
     }
+
+    protected class PlayerRestartMessage : PlayerCommand
+    {
+        public PlayerRestartMessage(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        public override void Execute()
+        {
+            SetValidateTimer(0.5f, 0.5f);
+            SetDispatchFinal();
+
+            MessageData data = new MessageData
+            {
+                sentences = new string[]
+                {
+                    "・・・という夢だったのさ",
+                    "なんも解決してないんだけどねっ！",
+                },
+                faces = new FaceID[]
+                {
+                    FaceID.SMILE,
+                    FaceID.ANGRY
+                }
+            };
+
+            playerCommander.messageController.InputMessageData(data);
+        }
+    }
 }

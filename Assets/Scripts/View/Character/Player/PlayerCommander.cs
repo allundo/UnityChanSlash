@@ -12,6 +12,8 @@ public partial class PlayerCommander : ShieldCommander
 
     public void EnqueueDropFloor() { EnqueueCommand(new PlayerDropFloor(this, 6.11f), true); }
     public void EnqueueStartMessage() { EnqueueCommand(new PlayerStartMessage(this, 0.1f)); }
+    public void EnqueueRestartMessage() { EnqueueCommand(new PlayerRestartMessage(this, 0.1f), true); }
+
 
     protected override void Awake()
     {
