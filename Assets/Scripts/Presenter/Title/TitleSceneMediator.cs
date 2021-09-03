@@ -7,7 +7,11 @@ public class TitleSceneMediator : SceneMediator
 
     protected override void InitBeforeStart()
     {
-        SetStartActions(Logo, titleUIHandler.SkipLogo);
+        SetStartActions(Logo, SkipLogo);
+
+        titleUIHandler.TransitSignal
+            .Subscribe(_ => SceneTransition(0))
+            .AddTo(this);
     }
 
     private void Logo()
@@ -17,9 +21,13 @@ public class TitleSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.ToTitle)
             .AddTo(this);
+    }
 
-        titleUIHandler.TransitSignal
-            .Subscribe(_ => sceneLoader.SceneTransition())
+    private void SkipLogo()
+    {
+        sceneLoader.LoadSceneAsync(1)
+            .IgnoreElements()
+            .Subscribe(null, titleUIHandler.SkipLogo)
             .AddTo(this);
     }
 }

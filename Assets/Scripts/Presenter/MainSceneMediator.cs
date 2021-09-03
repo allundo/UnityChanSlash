@@ -17,6 +17,13 @@ public class MainSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, () => SceneTransition(1))
             .AddTo(this);
+
+        gameOver.titleButton
+            .OnPressedCompleteAsObservable()
+            .ContinueWith(_ => LoadSceneWithCoverOn(0))
+            .IgnoreElements()
+            .Subscribe(null, () => SceneTransition(1))
+            .AddTo(this);
     }
 
     private IObservable<Unit> LoadSceneWithCoverOn(int sceneBuildIndex, float duration = 2f)
