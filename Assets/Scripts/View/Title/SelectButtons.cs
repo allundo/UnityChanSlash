@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UniRx;
 using DG.Tweening;
+using System.Linq;
+using System;
 
 public class SelectButtons : MonoBehaviour
 {
@@ -25,6 +27,10 @@ public class SelectButtons : MonoBehaviour
         startButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
         optionButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
         resultsButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
+
+        startButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
+        optionButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
+        resultsButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
     }
 
     private void SetCurrentButton(TwoPushButton button)
@@ -41,6 +47,14 @@ public class SelectButtons : MonoBehaviour
         resultsButton.SetInteractable();
 
         startButton.Select(true);
+    }
+
+    private void InactivateButtons(TwoPushButton exceptFor = null)
+    {
+        new[] { startButton, optionButton, resultsButton }
+            .Where(btn => btn != exceptFor)
+            .ToList()
+            .ForEach(btn => btn.SetInteractable(false));
     }
 
     public Tween TitleTween()

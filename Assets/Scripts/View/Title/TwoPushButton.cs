@@ -19,8 +19,8 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     private UnityEvent onClickEvent = new UnityEvent();
     public UnityEvent onClick => onClickEvent;
 
-    private ISubject<Unit> subject = new Subject<Unit>();
-    public IObservable<Unit> OnClickAsObservable() => subject;
+    private ISubject<TwoPushButton> Clicked = new Subject<TwoPushButton>();
+    public IObservable<TwoPushButton> OnClickAsObservable() => Clicked;
 
     private RectTransform rt;
     private Image image;
@@ -126,7 +126,7 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     }
 
     public IObservable<Tween> OnPressedCompleteAsObservable(float duration = 1f)
-        => subject.Select(_ => PressedTween((int)(duration / 0.1f)).OnCompleteAsObservable()).Switch();
+        => Clicked.Select(_ => PressedTween((int)(duration / 0.1f)).OnCompleteAsObservable()).Switch();
 
     public Tween PressedTween(int flashCount = 10)
          => image.DOColor(new Color(1, 1, 1, 1), 0.1f).SetLoops(flashCount, LoopType.Yoyo);
@@ -148,14 +148,15 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
         if (isButtonValid)
         {
             onClickEvent.Invoke();
-            subject.OnNext(Unit.Default);
-            subject.OnCompleted();
+            Clicked.OnNext(this);
+            Clicked.OnCompleted();
         }
     }
 
     public void SetInteractable(bool isInteractable = true)
     {
         button.interactable = isInteractable;
+        ResetTxtColor(isInteractable ? 1f : 0.5f).Play();
     }
 
     public void Deselect(BaseEventData eventData = null)

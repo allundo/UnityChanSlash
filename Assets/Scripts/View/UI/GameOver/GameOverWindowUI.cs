@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniRx;
+using System.Linq;
 
 public class GameOverWindowUI : MessageWindowUI
 {
@@ -13,6 +14,9 @@ public class GameOverWindowUI : MessageWindowUI
     {
         restartButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
         titleButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
+
+        restartButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
+        titleButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
 
         restartButton.gameObject.SetActive(false);
         titleButton.gameObject.SetActive(false);
@@ -38,5 +42,13 @@ public class GameOverWindowUI : MessageWindowUI
         titleButton.SetInteractable();
 
         restartButton.Select(true);
+    }
+
+    private void InactivateButtons(TwoPushButton exceptFor = null)
+    {
+        new[] { restartButton, titleButton }
+            .Where(btn => btn != exceptFor)
+            .ToList()
+            .ForEach(btn => btn.SetInteractable(false));
     }
 }
