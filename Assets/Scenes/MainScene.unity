@@ -17472,7 +17472,7 @@ GameObject:
   - component: {fileID: 1981193378}
   - component: {fileID: 1981193377}
   m_Layer: 0
-  m_Name: MainSceneManager
+  m_Name: MainSceneMediator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17487,7 +17487,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1981193376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b9d2c439eb9c475baa8176144b554d6, type: 3}
+  m_Script: {fileID: 11500000, guid: eb96d4352235747939a57d1d7d678e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   prefabGameInfo: {fileID: 3952858366562794599, guid: 881a30d094786442e8fd345fab01078c,

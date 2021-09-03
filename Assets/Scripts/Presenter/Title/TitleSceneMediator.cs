@@ -1,7 +1,7 @@
 using UnityEngine;
 using UniRx;
 
-public class TitleSceneManager : BaseSceneManager
+public class TitleSceneMediator : SceneMediator
 {
     [SerializeField] TitleUIHandler titleUIHandler = default;
 

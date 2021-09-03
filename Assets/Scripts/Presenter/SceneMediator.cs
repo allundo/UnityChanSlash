@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 
 [RequireComponent(typeof(SceneLoader))]
-public class BaseSceneManager : MonoBehaviour
+public abstract class SceneMediator : MonoBehaviour
 {
     [SerializeField] private GameObject prefabGameInfo = default;
     protected SceneLoader sceneLoader;

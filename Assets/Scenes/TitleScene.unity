@@ -673,10 +673,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 642505874}
-  - component: {fileID: 642505875}
   - component: {fileID: 642505876}
+  - component: {fileID: 642505875}
   m_Layer: 0
-  m_Name: TitleSceneManager
+  m_Name: TitleSceneMediator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -705,7 +705,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 642505873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5608e24f2d594f59a3c437a833287f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b071303e0a7a45cd9f2dd938f3d7bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   prefabGameInfo: {fileID: 3952858366562794599, guid: 881a30d094786442e8fd345fab01078c,

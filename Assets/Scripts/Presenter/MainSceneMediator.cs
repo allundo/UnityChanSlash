@@ -2,7 +2,7 @@ using UnityEngine;
 using UniRx;
 using System;
 
-public class MainSceneManager : BaseSceneManager
+public class MainSceneMediator : SceneMediator
 {
     [SerializeField] private GameOverWindowUI gameOver = default;
     [SerializeField] private CoverScreen cover = default;
