@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using UniRx;
 using DG.Tweening;
 using System.Linq;
-using System;
 
 public class SelectButtons : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class SelectButtons : MonoBehaviour
 
     public Vector2 Pos => uiTween.CurrentPos;
 
-    private TwoPushButton currentButton;
+    private ButtonsHandler handler;
 
     void Awake()
     {
@@ -24,37 +22,7 @@ public class SelectButtons : MonoBehaviour
 
     void Start()
     {
-        startButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
-        optionButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
-        resultsButton.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(this);
-
-        startButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
-        optionButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
-        resultsButton.OnClickAsObservable().Subscribe(button => InactivateButtons(button)).AddTo(this);
-    }
-
-    private void SetCurrentButton(TwoPushButton button)
-    {
-        currentButton?.Deselect();
-        currentButton = button;
-        unityChanIcon.SelectTween(button.IconPos);
-    }
-
-    private void ActivateButtons()
-    {
-        startButton.SetInteractable();
-        optionButton.SetInteractable();
-        resultsButton.SetInteractable();
-
-        startButton.Select(true);
-    }
-
-    private void InactivateButtons(TwoPushButton exceptFor = null)
-    {
-        new[] { startButton, optionButton, resultsButton }
-            .Where(btn => btn != exceptFor)
-            .ToList()
-            .ForEach(btn => btn.SetInteractable(false));
+        handler = new ButtonsHandler(unityChanIcon, startButton, optionButton, resultsButton);
     }
 
     public Tween TitleTween()
@@ -65,7 +33,7 @@ public class SelectButtons : MonoBehaviour
                 .AppendInterval(0.4f)
                 .Append(uiTween.MoveBack(0.6f).SetEase(Ease.Linear))
                 .Append(Overrun(100f, 0.5f))
-                .OnComplete(ActivateButtons);
+                .OnComplete(handler.EnableInteraction);
     }
 
     private Tween Overrun(float overrun, float duration)

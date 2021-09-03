@@ -3,16 +3,16 @@ using DG.Tweening;
 
 public class SelectIcon : MonoBehaviour
 {
-    private UITween uiTween;
+    protected UITween uiTween;
 
-    private Tween selectTween = null;
+    protected Tween selectTween = null;
 
-    void Awake()
+    protected virtual void Awake()
     {
         uiTween = new UITween(gameObject, true);
     }
 
-    public Tween SelectTween(Vector2 iconPos)
+    public virtual Tween SelectTween(Vector2 iconPos)
     {
 
         uiTween.SetPos(iconPos, true);

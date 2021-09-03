@@ -1,19 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using UniRx;
 
-public class UnityChanIcon : MonoBehaviour
+public class UnityChanIcon : SelectIcon
 {
-    private Tween selectTween = null;
-
     private ISubject<Transform> finishLogoTask = new Subject<Transform>();
     public IObservable<Transform> FinishLogoTask => finishLogoTask;
 
-    private UITween uiTween;
-
-    void Awake()
+    protected override void Awake()
     {
         uiTween = new UITween(gameObject);
         uiTween.SetPos(-uiTween.CurrentPos, true);
@@ -49,7 +44,7 @@ public class UnityChanIcon : MonoBehaviour
 
     private void SetParent(Transform parent) => transform.SetParent(parent);
 
-    public Tween SelectTween(Vector2 iconPos)
+    public override Tween SelectTween(Vector2 iconPos)
     {
         uiTween.SetPos(iconPos, true);
 
