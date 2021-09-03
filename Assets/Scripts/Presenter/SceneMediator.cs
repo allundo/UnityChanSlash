@@ -12,7 +12,6 @@ public abstract class SceneMediator : MonoBehaviour
         if (FindObjectOfType(typeof(GameInfo)) == null)
         {
             Instantiate(prefabGameInfo, Vector3.zero, Quaternion.identity); ;
-            Debug.Log("GameInfo not found. Instantiated temporary.");
         }
         sceneLoader = GetComponent<SceneLoader>();
     }
