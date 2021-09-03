@@ -5,7 +5,12 @@ public class TitleSceneMediator : SceneMediator
 {
     [SerializeField] TitleUIHandler titleUIHandler = default;
 
-    void Start()
+    protected override void InitBeforeStart()
+    {
+        SetStartActions(Logo, titleUIHandler.SkipLogo);
+    }
+
+    private void Logo()
     {
         titleUIHandler.Logo()
             .SelectMany(_ => sceneLoader.LoadSceneAsync(1, 3f))

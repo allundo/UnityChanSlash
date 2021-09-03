@@ -7,15 +7,16 @@ public class MainSceneMediator : SceneMediator
     [SerializeField] private GameOverWindowUI gameOver = default;
     [SerializeField] private CoverScreen cover = default;
 
-    void Start()
+    protected override void InitBeforeStart()
     {
+        SetStartActions(GameManager.Instance.DropStart, GameManager.Instance.Restart);
+
         gameOver.restartButton
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ => LoadSceneWithCoverOn(1))
             .IgnoreElements()
             .Subscribe(null, () => SceneTransition(1))
             .AddTo(this);
-
     }
 
     private IObservable<Unit> LoadSceneWithCoverOn(int sceneBuildIndex, float duration = 2f)

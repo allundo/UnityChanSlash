@@ -15,9 +15,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
 
-    private Action startAction;
-
-    private Action[] starters;
 
     private bool isInitialOrientation = true;
 
@@ -41,14 +38,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
-        startAction =
-            new Action[]
-            {
-                DropStart,
-                Restart
-            }
-            [GameInfo.Instance.startActionID];
-
         worldMap = GameInfo.Instance.Map(1);
         mapRenderer.Render(worldMap);
     }
@@ -57,8 +46,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
         placeEnemyGenerator.Place(worldMap);
-
-        startAction();
     }
 
     public void DropStart()
