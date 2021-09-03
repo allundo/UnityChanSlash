@@ -20,7 +20,7 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
 
     protected override void Start()
     {
-        textHandler.subject.Subscribe(
+        textHandler.Sentence.Subscribe(
             faceID => characterUI.DispFace(faceID),
             err => Debug.Log(err),
             () => CloseMessage()

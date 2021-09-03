@@ -9,6 +9,7 @@ public class CharacterUI : MonoBehaviour
     private Image image;
     private FadeTween fade;
     private UITween uiTween;
+    private Tween faceTween = null;
     private Vector2 faceMoveOrigin;
     private FaceID[] faceIDs;
 
@@ -36,8 +37,14 @@ public class CharacterUI : MonoBehaviour
 
         image.sprite = face[(int)faceID];
 
-        fade.In(0.5f).Play();
-        uiTween.SetPos(faceMoveOrigin);
-        uiTween.MoveBack(0.5f).Play();
+        faceTween?.Kill();
+
+        faceTween =
+            DOTween.Sequence()
+                .AppendCallback(() => uiTween.SetPos(faceMoveOrigin))
+                .Join(fade.In(0.5f))
+                .Join(uiTween.MoveBack(0.5f))
+                .SetUpdate(true)
+                .Play();
     }
 }

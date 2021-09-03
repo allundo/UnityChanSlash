@@ -20,7 +20,8 @@ public class TextHandler : MonoBehaviour
 
     private bool isTapped = false;
 
-    public ISubject<FaceID> subject = new Subject<FaceID>();
+    private ISubject<FaceID> sentence = new Subject<FaceID>();
+    public ISubject<FaceID> Sentence => sentence;
 
     void Awake()
     {
@@ -68,13 +69,13 @@ public class TextHandler : MonoBehaviour
         if (index >= length)
         {
             tm.text = currentSentence = "";
-            subject.OnCompleted();
+            sentence.OnCompleted();
             return;
         }
 
         currentSentence = messageData.sentences[index];
         currentLength = currentSentence.Length;
-        subject.OnNext(messageData.faces[index]);
+        sentence.OnNext(messageData.faces[index]);
 
         literalsTween =
             DOTween
