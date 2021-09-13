@@ -6,12 +6,12 @@ public class HandleButton : MonoBehaviour
 {
     [SerializeField] private Sprite handle = default;
     [SerializeField] private Sprite circle = default;
+    [SerializeField] private Vector2 defaultSize = new Vector2(100f, 100f);
     [SerializeField] private float maxAlpha = 1.0f;
 
 
     protected RectTransform rectTransform;
     protected Image image;
-    private Vector2 defaultSize;
 
     private Tween cycle;
     private Tween expand;
@@ -22,12 +22,15 @@ public class HandleButton : MonoBehaviour
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+
+        // BUG: Initialize on awake in case sizeDelta is set to zero at scene transition
+        rectTransform.sizeDelta = defaultSize;
+
         image = GetComponent<Image>();
     }
 
     void Start()
     {
-        defaultSize = Size;
         cycle = GetRotate(-90.0f, 5.0f, true).SetEase(Ease.Linear);
         expand = GetResize(1.5f, 0.2f, true);
 

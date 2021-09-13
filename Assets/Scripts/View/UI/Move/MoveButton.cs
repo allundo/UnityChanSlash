@@ -6,12 +6,13 @@ using UniRx;
 public class MoveButton : MonoBehaviour
 {
     [SerializeField] float maxAlpha = 1.0f;
+    [SerializeField] Vector2 defaultSize = new Vector2(100f, 100f);
     [SerializeField] Vector2 fightingOffset = default;
 
     protected RectTransform rectTransform;
     protected Image image;
     private Vector2 defaultPos;
-    private Vector2 defaultSize;
+    private Rect currentSize = new Rect(0f, 0f, 10f, 10f);
 
     protected IReactiveProperty<bool> isPressed = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsPressed => isPressed;
@@ -30,13 +31,16 @@ public class MoveButton : MonoBehaviour
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+
+        // BUG: Initialize on awake in case sizeDelta is set to zero at scene transition
+        rectTransform.sizeDelta = defaultSize;
+
         image = GetComponent<Image>();
     }
 
     void Start()
     {
         defaultPos = Position;
-        defaultSize = Size;
 
         fightExpand = GetMove(defaultPos + fightingOffset, 0.05f, true);
         moveDefault = GetMove(defaultPos, 0.2f, true);
