@@ -3,7 +3,7 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 
-public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     public IObservable<Unit> EnterObservable { get; private set; }
 
