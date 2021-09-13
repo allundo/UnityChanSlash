@@ -21083,6 +21083,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectUIOverlayCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8337679455484197133, guid: 3b111658a672a4449b3bceda64ae90af,
+        type: 3}
+      propertyPath: forward
+      value: 
+      objectReference: {fileID: 620581723}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b111658a672a4449b3bceda64ae90af, type: 3}
 --- !u!114 &8337679456419231783 stripped

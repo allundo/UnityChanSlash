@@ -3243,6 +3243,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba483604c749a45b2a8833e39e8172b6, type: 3}
+--- !u!114 &4161162793967419315 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8450850516890566915, guid: ba483604c749a45b2a8833e39e8172b6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5546209634056912560}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcb82dfe160d458698b2023f6310174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4161162793967419316 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8450850516890566916, guid: ba483604c749a45b2a8833e39e8172b6,
@@ -4788,6 +4800,11 @@ PrefabInstance:
       propertyPath: closeLDoorUI
       value: 
       objectReference: {fileID: 5445931825758939581}
+    - target: {fileID: 920384165210820562, guid: 9e97057df93f9467fa270dd324f92097,
+        type: 3}
+      propertyPath: forward
+      value: 
+      objectReference: {fileID: 4161162793967419315}
     - target: {fileID: 920384165210820563, guid: 9e97057df93f9467fa270dd324f92097,
         type: 3}
       propertyPath: m_LocalPosition.x
