@@ -41,5 +41,5 @@ public class SelectButtons : MonoBehaviour
             .Append(uiTween.MoveX(overrun, duration * 0.5f).SetEase(Ease.OutQuad))
             .Append(uiTween.MoveBack(duration * 0.5f).SetEase(Ease.InQuad));
 
-    public Tween CameraOutTween() => uiTween.MoveY(1280f, 0.2f);
+    public Tween CameraOutTween() => uiTween.MoveY(1920f, 0.2f);
 }
