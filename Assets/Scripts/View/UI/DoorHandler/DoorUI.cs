@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UniRx;
 
-public class DoorUIEffect : MonoBehaviour
+public class DoorUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI upTextPrefab = default;
     [SerializeField] private TextMeshProUGUI downTextPrefab = default;

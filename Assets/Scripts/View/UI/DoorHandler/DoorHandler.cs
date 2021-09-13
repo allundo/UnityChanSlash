@@ -7,9 +7,9 @@ using UniRx;
 
 public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField] private DoorUIEffect openDoorUI = default;
-    [SerializeField] private DoorUIEffect closeRDoorUI = default;
-    [SerializeField] private DoorUIEffect closeLDoorUI = default;
+    [SerializeField] private DoorUI openDoorUI = default;
+    [SerializeField] private DoorUI closeRDoorUI = default;
+    [SerializeField] private DoorUI closeLDoorUI = default;
     [SerializeField] private DoorFlick openFlick = default;
     [SerializeField] private DoorFlick closeRFlick = default;
     [SerializeField] private DoorFlick closeLFlick = default;
@@ -66,6 +66,10 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Debug.Log("closeRRadius: " + closeRRadius);
         Debug.Log("closeLRadius: " + closeLRadius);
 
+        Debug.Log("openCenter: " + openCenter);
+        Debug.Log("closeRCenter: " + closeRCenter);
+        Debug.Log("closeLCenter: " + closeLCenter);
+
         SetAlpha(0.0f);
         gameObject.SetActive(false);
         InactivateButtons();
@@ -78,8 +82,10 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void LateUpdate()
     {
+        Debug.Log("LateUpdate: " + IsPressed);
         if (IsPressed)
         {
+            Debug.Log("Inactivate");
             forward.Inactivate();
         }
     }
@@ -153,6 +159,8 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             return;
         }
 
+        Debug.Log("OnPointerDown: " + gameObject.name);
+
         if (!isActive) return;
 
         pressPos = eventData.position;
@@ -188,6 +196,8 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private FlickInteraction GetFlick(Vector2 screenPos)
     {
+        Debug.Log("GetFlick: " + screenPos);
+
         if (isOpen)
         {
             if (InCloseR(screenPos)) return closeRFlick;
