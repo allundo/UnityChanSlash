@@ -151,11 +151,12 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     public void SetInteractable(bool isInteractable = true)
     {
         button.interactable = isInteractable;
-        ResetTxtColor(isInteractable ? 1f : 0.5f).Play();
+        ResetTxtColor(isInteractable ? (isSelected ? 1f : 0.78f) : 0.5f).Play();
     }
 
     public void Deselect(BaseEventData eventData = null)
     {
+
         isSelected = isButtonValid = false;
         ExecuteEvents.Execute<IDeselectHandler>(button.gameObject, eventData, (target, data) => target.OnDeselect(eventData));
         expandTween?.Pause();
