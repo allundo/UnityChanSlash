@@ -79,8 +79,6 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
                 .AsReusable(gameObject)
                 .Play();
 
-        button.onClick.AddListener(Invoke);
-
         button.interactable = false;
     }
 
@@ -139,15 +137,6 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
         return instance;
     }
 
-    private void Invoke()
-    {
-        if (isButtonValid)
-        {
-            Clicked.OnNext(this);
-            Clicked.OnCompleted();
-        }
-    }
-
     public void SetInteractable(bool isInteractable = true)
     {
         button.interactable = isInteractable;
@@ -191,6 +180,12 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (isButtonValid)
+        {
+            Clicked.OnNext(this);
+            Clicked.OnCompleted();
+        }
+
         if (isSelected) isButtonValid = true;
     }
 }
