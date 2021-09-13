@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 using UniRx;
+using DG.Tweening;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class SceneLoader : MonoBehaviour
 
     public void SceneTransition()
     {
+        DOTween.KillAll();
         asyncLoad.allowSceneActivation = true;
     }
 }
