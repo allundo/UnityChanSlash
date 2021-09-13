@@ -32,12 +32,11 @@ public class CharacterUI : MonoBehaviour
     public void DispFace(FaceID faceID = FaceID.NONE)
     {
         fade.SetAlpha(0f);
+        faceTween?.Kill();
 
         if (faceID == FaceID.NONE) return;
 
         image.sprite = face[(int)faceID];
-
-        faceTween?.Kill();
 
         faceTween =
             DOTween.Sequence()
