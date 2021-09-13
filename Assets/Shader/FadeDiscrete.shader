@@ -23,7 +23,7 @@
 
         void surf (Input IN, inout SurfaceOutput o) {
             half3 c = tex2D(_MainTex, IN.uv_MainTex).rgb;
-            half rule = (c.r + c.g + c.b) * 0.3333f + 0.00001f;
+            half rule = (c.r + c.g + c.b) * 0.3333f + 0.0001f;
 
             // clip() : 値が 0 より小さければピクセルを破棄
             // _Color の alpha から rule の色を引いた値が正なら塗りつぶし
