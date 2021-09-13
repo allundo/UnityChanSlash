@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 using DG.Tweening;
 using UniRx;
 using System;
@@ -15,9 +14,6 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     private Button button;
     private bool isSelected = false;
     private bool isButtonValid = false;
-
-    private UnityEvent onClickEvent = new UnityEvent();
-    public UnityEvent onClick => onClickEvent;
 
     private ISubject<TwoPushButton> Clicked = new Subject<TwoPushButton>();
     public IObservable<TwoPushButton> OnClickAsObservable() => Clicked;
@@ -147,7 +143,6 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
     {
         if (isButtonValid)
         {
-            onClickEvent.Invoke();
             Clicked.OnNext(this);
             Clicked.OnCompleted();
         }
