@@ -33,10 +33,10 @@ public class DoorUI : MonoBehaviour
 
     private bool isPressed = false;
 
-    public Vector2 Position => rectTransform.position;
     protected RectTransform rectTransform;
+    protected Vector2 screenPos;
+
     public Vector2 Size => rectTransform.sizeDelta;
-    public float Radius => Size.x * 0.5f;
 
     void Awake()
     {
@@ -51,6 +51,8 @@ public class DoorUI : MonoBehaviour
 
     void Start()
     {
+        ResetCenterPos();
+
         InactiveTexts();
         SetActiveMoveArrows(false);
         SetActiveStopArrows(false);
@@ -61,6 +63,17 @@ public class DoorUI : MonoBehaviour
         if (leftText != null && leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragLeft(ratio)).AddTo(this);
 
         flick.ReleaseSubject.Subscribe(_ => OnRelease()).AddTo(this);
+    }
+
+    public void ResetCenterPos()
+    {
+        screenPos = rectTransform.GetScreenPos();
+    }
+
+    public bool InRegion(Vector2 screenPos)
+    {
+        var vec = screenPos - this.screenPos;
+        return Mathf.Abs(vec.x) < Size.x * 0.5f && Mathf.Abs(vec.y) < Size.y * 0.5f;
     }
 
     private void InstantiateAllPrefabs()

@@ -28,19 +28,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private bool isOpen = false;
     private bool isFingerDown = false;
 
-    private Vector2 UICenter;
-
-    private Vector2 openCenter;
-    private Vector2 closeRCenter;
-    private Vector2 closeLCenter;
-    private float openRadius;
-    private float closeRRadius;
-    private float closeLRadius;
-
-    private bool InOpen(Vector2 screenPos) => (screenPos - openCenter).magnitude < openRadius;
-    private bool InCloseR(Vector2 screenPos) => (screenPos - closeRCenter).magnitude < closeRRadius;
-    private bool InCloseL(Vector2 screenPos) => (screenPos - closeLCenter).magnitude < closeLRadius;
-
+    private DoorUI[] doorUIs;
     private FlickInteraction currentFlick = null;
     private Vector2 pressPos = Vector2.zero;
 
@@ -52,23 +40,13 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         rectTransform = GetComponent<RectTransform>();
         rawImage = GetComponent<RawImage>();
+
+        doorUIs = new[] { openDoorUI, closeRDoorUI, closeLDoorUI };
     }
 
     void Start()
     {
         ResetCenterPos();
-
-        openRadius = openDoorUI.Radius;
-        closeRRadius = closeRDoorUI.Radius;
-        closeLRadius = closeLDoorUI.Radius;
-
-        Debug.Log("openRadius: " + openRadius);
-        Debug.Log("closeRRadius: " + closeRRadius);
-        Debug.Log("closeLRadius: " + closeLRadius);
-
-        Debug.Log("openCenter: " + openCenter);
-        Debug.Log("closeRCenter: " + closeRCenter);
-        Debug.Log("closeLCenter: " + closeLCenter);
 
         SetAlpha(0.0f);
         gameObject.SetActive(false);
@@ -187,11 +165,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void ResetCenterPos()
     {
-        UICenter = rectTransform.anchoredPosition;
-
-        openCenter = openDoorUI.Position;
-        closeRCenter = closeRDoorUI.Position;
-        closeLCenter = closeLDoorUI.Position;
+        doorUIs.ForEach(doorUI => doorUI.ResetCenterPos());
     }
 
     private FlickInteraction GetFlick(Vector2 screenPos)
@@ -200,12 +174,12 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (isOpen)
         {
-            if (InCloseR(screenPos)) return closeRFlick;
-            if (InCloseL(screenPos)) return closeLFlick;
+            if (closeRDoorUI.InRegion(screenPos)) return closeRFlick;
+            if (closeLDoorUI.InRegion(screenPos)) return closeLFlick;
         }
         else
         {
-            if (InOpen(screenPos)) return openFlick;
+            if (openDoorUI.InRegion(screenPos)) return openFlick;
         }
 
         return null;
