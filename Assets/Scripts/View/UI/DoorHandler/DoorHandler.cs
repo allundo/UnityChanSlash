@@ -218,10 +218,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void InactivateButtons()
     {
-        openDoorUI.Inactivate();
-        closeRDoorUI.Inactivate();
-        closeLDoorUI.Inactivate();
-
+        doorUIs.ForEach(doorUI => doorUI.Inactivate());
         currentFlick?.Inactivate();
     }
 

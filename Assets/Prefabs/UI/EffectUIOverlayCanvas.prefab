@@ -1484,13 +1484,13 @@ MonoBehaviour:
   leftTextPrefab: {fileID: 8220755531836773774, guid: e402a305f4eb74721a30ad0419434e8d,
     type: 3}
   stopArrowPrefabs:
-  - {fileID: 656124577931889964, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
-  - {fileID: 6727708138508902270, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
-  upArrowPrefab: {fileID: 8207883339750184177, guid: 5cc546fc365814434bc04a49ee709a27,
+  - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
+  - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
+  upArrowPrefab: {fileID: 8278511109164863214, guid: 5cc546fc365814434bc04a49ee709a27,
     type: 3}
   downArrowPrefab: {fileID: 0}
   rightArrowPrefab: {fileID: 0}
-  leftArrowPrefab: {fileID: 7807411784793244791, guid: 868b6cb73a7224da8bafefdcac653d89,
+  leftArrowPrefab: {fileID: 8021491684955217512, guid: 868b6cb73a7224da8bafefdcac653d89,
     type: 3}
   handleButton: {fileID: 8337679455013771671}
   flick: {fileID: 2390227622152886555}
@@ -2149,13 +2149,13 @@ MonoBehaviour:
   leftTextPrefab: {fileID: 6565131811906035979, guid: 2a29fa42884ff4b53b0b3b93ed4151bd,
     type: 3}
   stopArrowPrefabs:
-  - {fileID: 4609771014700600205, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
-  - {fileID: 656124577931889964, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
+  - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
+  - {fileID: 3453705348552658848, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
   upArrowPrefab: {fileID: 0}
   downArrowPrefab: {fileID: 0}
-  rightArrowPrefab: {fileID: 7682507999000849697, guid: ed2fe054a824c4b9ba424519b34f5a56,
+  rightArrowPrefab: {fileID: 1523490823619203249, guid: ed2fe054a824c4b9ba424519b34f5a56,
     type: 3}
-  leftArrowPrefab: {fileID: 7807411784793244791, guid: 868b6cb73a7224da8bafefdcac653d89,
+  leftArrowPrefab: {fileID: 8021491684955217512, guid: 868b6cb73a7224da8bafefdcac653d89,
     type: 3}
   handleButton: {fileID: 8337679455208885476}
   flick: {fileID: 6019712527327095267}
@@ -2304,12 +2304,12 @@ MonoBehaviour:
     type: 3}
   leftTextPrefab: {fileID: 0}
   stopArrowPrefabs:
-  - {fileID: 4609771014700600205, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
-  - {fileID: 6727708138508902270, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
-  upArrowPrefab: {fileID: 8207883339750184177, guid: 5cc546fc365814434bc04a49ee709a27,
+  - {fileID: 3453705348552658848, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
+  - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
+  upArrowPrefab: {fileID: 8278511109164863214, guid: 5cc546fc365814434bc04a49ee709a27,
     type: 3}
   downArrowPrefab: {fileID: 0}
-  rightArrowPrefab: {fileID: 7682507999000849697, guid: ed2fe054a824c4b9ba424519b34f5a56,
+  rightArrowPrefab: {fileID: 1523490823619203249, guid: ed2fe054a824c4b9ba424519b34f5a56,
     type: 3}
   leftArrowPrefab: {fileID: 0}
   handleButton: {fileID: 8337679455512156529}
@@ -2581,6 +2581,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorCloseUIsR
       objectReference: {fileID: 0}
+    - target: {fileID: 3449973858880680780, guid: e9fb5f93b82f94a54a708f3b2b216991,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7851678501209822973, guid: e9fb5f93b82f94a54a708f3b2b216991,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2840,6 +2845,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DoorCloseUIsL
+      objectReference: {fileID: 0}
+    - target: {fileID: 4814024081474479800, guid: 84dc5d813a1a14633b79d085228d98be,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84dc5d813a1a14633b79d085228d98be, type: 3}
@@ -3837,6 +3847,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DoorOpenUIs
+      objectReference: {fileID: 0}
+    - target: {fileID: 6248641780369404757, guid: 954fe0a0b51c244258c44e4b1c1a7a71,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 954fe0a0b51c244258c44e4b1c1a7a71, type: 3}

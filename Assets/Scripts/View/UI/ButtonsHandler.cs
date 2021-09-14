@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UniRx;
 
 public class ButtonsHandler
@@ -13,7 +11,7 @@ public class ButtonsHandler
         this.buttons = buttons;
         this.selectIcon = selectIcon;
 
-        Array.ForEach(buttons, btn =>
+        buttons.ForEach(btn =>
         {
             btn.Selected.Subscribe(button => SetCurrentButton(button)).AddTo(btn);
             btn.OnClickAsObservable().Subscribe(button => DisableInteraction(button)).AddTo(btn);
@@ -29,29 +27,26 @@ public class ButtonsHandler
 
     public void EnableInteraction()
     {
-        Array.ForEach(buttons, btn => btn.SetInteractable());
+        buttons.ForEach(btn => btn.SetInteractable());
 
         buttons[0].Select(true);
     }
 
     public void DisableInteraction(TwoPushButton exceptFor = null)
     {
-        buttons
-            .Where(btn => btn != exceptFor)
-            .ToList()
-            .ForEach(btn => btn.SetInteractable(false));
+        buttons.ForEach(btn => btn.SetInteractable(false), exceptFor);
     }
 
     public void Activate(bool isInteractable = false)
     {
-        Array.ForEach(buttons, btn => btn.gameObject.SetActive(true));
+        buttons.ForEach(btn => btn.gameObject.SetActive(true));
         selectIcon.gameObject.SetActive(true);
         if (isInteractable) EnableInteraction();
     }
 
     public void Inactivate()
     {
-        Array.ForEach(buttons, btn => btn.gameObject.SetActive(false));
+        buttons.ForEach(btn => btn.gameObject.SetActive(false));
         selectIcon.gameObject.SetActive(false);
     }
 }

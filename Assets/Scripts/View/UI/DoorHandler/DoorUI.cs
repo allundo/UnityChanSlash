@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
+using UnityEngine.UI;
+using System.Linq;
 using TMPro;
 using UniRx;
+using Coffee.UIExtensions;
 
 public class DoorUI : MonoBehaviour
 {
@@ -15,18 +16,20 @@ public class DoorUI : MonoBehaviour
     public TextMeshProUGUI downText { get; protected set; } = default;
     public TextMeshProUGUI rightText { get; protected set; } = default;
     public TextMeshProUGUI leftText { get; protected set; } = default;
+    protected TextMeshProUGUI[] texts;
 
-    [SerializeField] protected ParticleSystem[] stopArrowPrefabs = default;
-    protected List<ParticleSystem> stopArrows = new List<ParticleSystem>();
+    [SerializeField] protected UIParticle[] stopArrowPrefabs = default;
+    protected UIParticle[] stopArrows;
 
-    [SerializeField] protected ParticleSystem upArrowPrefab = default;
-    [SerializeField] protected ParticleSystem downArrowPrefab = default;
-    [SerializeField] protected ParticleSystem rightArrowPrefab = default;
-    [SerializeField] protected ParticleSystem leftArrowPrefab = default;
-    protected ParticleSystem upArrow = default;
-    protected ParticleSystem downArrow = default;
-    protected ParticleSystem rightArrow = default;
-    protected ParticleSystem leftArrow = default;
+    [SerializeField] protected UIParticle upArrowPrefab = default;
+    [SerializeField] protected UIParticle downArrowPrefab = default;
+    [SerializeField] protected UIParticle rightArrowPrefab = default;
+    [SerializeField] protected UIParticle leftArrowPrefab = default;
+    protected UIParticle upArrow = default;
+    protected UIParticle downArrow = default;
+    protected UIParticle rightArrow = default;
+    protected UIParticle leftArrow = default;
+    protected UIParticle[] moveArrows;
 
     [SerializeField] private HandleButton handleButton = default;
     [SerializeField] private FlickInteraction flick = default;
@@ -41,11 +44,6 @@ public class DoorUI : MonoBehaviour
     void Awake()
     {
         InstantiateAllPrefabs();
-
-        SetParentToTexts();
-        SetParentToMoveArrows();
-        SetParentToStopArrows();
-
         rectTransform = GetComponent<RectTransform>();
     }
 
@@ -53,9 +51,9 @@ public class DoorUI : MonoBehaviour
     {
         ResetCenterPos();
 
-        InactiveTexts();
-        SetActiveMoveArrows(false);
-        SetActiveStopArrows(false);
+        SetUIsActive(texts, false);
+        SetUIsActive(stopArrows, false);
+        SetUIsActive(moveArrows, false);
 
         if (upText != null && upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragUp(ratio)).AddTo(this);
         if (downText != null && downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragDown(ratio)).AddTo(this);
@@ -83,53 +81,50 @@ public class DoorUI : MonoBehaviour
         if (rightTextPrefab != null) rightText = Instantiate(rightTextPrefab);
         if (leftTextPrefab != null) leftText = Instantiate(leftTextPrefab);
 
-        foreach (var prefab in stopArrowPrefabs)
-        {
-            stopArrows.Add(Instantiate(prefab));
-        }
+        texts = new[] { upText, downText, rightText, leftText };
+
+        stopArrows = stopArrowPrefabs.Select(arrow => Instantiate(arrow)).ToArray();
 
         if (upArrowPrefab != null) upArrow = Instantiate(upArrowPrefab);
         if (downArrowPrefab != null) downArrow = Instantiate(downArrowPrefab);
         if (rightArrowPrefab != null) rightArrow = Instantiate(rightArrowPrefab);
         if (leftArrowPrefab != null) leftArrow = Instantiate(leftArrowPrefab);
+
+        moveArrows = new[] { upArrow, downArrow, rightArrow, leftArrow };
+
+        SetUIsAsChildren(texts, stopArrows, moveArrows);
     }
 
     /// <summary>
     /// UGUI objects must be set as children of Canvas object
     /// </summary>
-    public void SetParentToMoveArrows()
+    private void SetUIsAsChildren(params MaskableGraphic[][] sequences)
     {
-        DoAllMoveArrow(SetParentToArrow);
+        sequences.ForEach(
+            seq => seq.ForEach(ui => SetUIAsChild(ui), null)
+        );
     }
 
-    public void SetParentToStopArrows()
+    private void SetUIAsChild(MaskableGraphic ui)
     {
-        foreach (var arrow in stopArrows)
-        {
-            SetParentToArrow(arrow);
-        }
+        ui.transform.SetParent(transform);
+        ui.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
-    public void SetParentToArrow(ParticleSystem arrow)
+    private void SetUIsActive(MaskableGraphic[] sequence, bool isActive)
     {
-        arrow.transform.SetParent(transform);
-        arrow.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        sequence.ForEach(ui => ui.gameObject.SetActive(isActive), null);
     }
-
-    public void SetParentToTexts()
+    private void SetUIsActive(MaskableGraphic[] sequence, bool isActive, MaskableGraphic exceptFor)
     {
-        DoAllText(textMP =>
-        {
-            textMP.transform.SetParent(transform);
-            textMP.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        });
+        sequence.ForEach(ui => ui.gameObject.SetActive(isActive), null, exceptFor);
     }
 
     private void OnDragUp(float dragRatio)
     {
         upText.gameObject.SetActive(dragRatio > 0.5f);
 
-        SetActiveArrowsExceptFor(upArrow, dragRatio < 0.5f);
+        SetUIsActive(moveArrows, dragRatio < 0.5f, upArrow);
 
         OnDrag(dragRatio);
     }
@@ -138,7 +133,7 @@ public class DoorUI : MonoBehaviour
     {
         downText.gameObject.SetActive(dragRatio > 0.5f);
 
-        SetActiveArrowsExceptFor(downArrow, dragRatio < 0.5f);
+        SetUIsActive(moveArrows, dragRatio < 0.5f, downArrow);
 
         OnDrag(dragRatio);
     }
@@ -147,7 +142,7 @@ public class DoorUI : MonoBehaviour
     {
         rightText.gameObject.SetActive(dragRatio > 0.5f);
 
-        SetActiveArrowsExceptFor(rightArrow, dragRatio < 0.5f);
+        SetUIsActive(moveArrows, dragRatio < 0.5f, rightArrow);
 
         OnDrag(dragRatio);
     }
@@ -156,7 +151,7 @@ public class DoorUI : MonoBehaviour
     {
         leftText.gameObject.SetActive(dragRatio > 0.5f);
 
-        SetActiveArrowsExceptFor(leftArrow, dragRatio < 0.5f);
+        SetUIsActive(moveArrows, dragRatio < 0.5f, leftArrow);
 
         OnDrag(dragRatio);
     }
@@ -169,8 +164,8 @@ public class DoorUI : MonoBehaviour
 
         isPressed = true;
 
-        SetActiveStopArrows(false);
-        SetActiveMoveArrows(true);
+        SetUIsActive(stopArrows, false);
+        SetUIsActive(moveArrows, true);
     }
 
     public void OnRelease()
@@ -179,10 +174,9 @@ public class DoorUI : MonoBehaviour
 
         handleButton.OnRelease();
 
-        InactiveTexts();
-
-        SetActiveStopArrows(true);
-        SetActiveMoveArrows(false);
+        SetUIsActive(texts, false);
+        SetUIsActive(stopArrows, true);
+        SetUIsActive(moveArrows, false);
     }
 
     public void Activate(float alpha)
@@ -192,7 +186,7 @@ public class DoorUI : MonoBehaviour
         gameObject.SetActive(true);
 
         handleButton.Activate(alpha);
-        SetActiveStopArrows(true);
+        SetUIsActive(stopArrows, true);
     }
 
     public void Inactivate()
@@ -202,18 +196,9 @@ public class DoorUI : MonoBehaviour
 
         handleButton.Inactivate();
 
-        InactiveTexts();
-
-        SetActiveStopArrows(false);
-        SetActiveMoveArrows(false);
-    }
-
-    public void InactiveTexts()
-    {
-        DoAllText(textMP =>
-        {
-            textMP.gameObject.SetActive(false);
-        });
+        SetUIsActive(texts, false);
+        SetUIsActive(stopArrows, false);
+        SetUIsActive(moveArrows, false);
     }
 
     public void SetAlpha(float alpha)
@@ -224,54 +209,10 @@ public class DoorUI : MonoBehaviour
 
     private void SetTextAlpha(float alpha)
     {
-        DoAllText(textMP =>
+        texts.ForEach(txt =>
         {
-            Color c = textMP.color;
-            textMP.color = new Color(c.r, c.g, c.b, alpha);
-        });
-    }
-
-    private void DoAllText(Action<TextMeshProUGUI> action)
-    {
-        foreach (var textMP in new TextMeshProUGUI[] { upText, downText, rightText, leftText })
-        {
-            if (textMP == null) continue;
-            action(textMP);
-        }
-    }
-
-    public void SetActiveMoveArrows(bool isActivate)
-    {
-        DoAllMoveArrow(arrow => arrow.gameObject.SetActive(isActivate));
-    }
-
-    public void SetActiveStopArrows(bool isActivate)
-    {
-        DoAllStopArrow(arrow => arrow.gameObject.SetActive(isActivate));
-    }
-
-    private void DoAllMoveArrow(Action<ParticleSystem> action)
-    {
-        foreach (var arrow in new ParticleSystem[] { upArrow, downArrow, rightArrow, leftArrow })
-        {
-            if (arrow == null) continue;
-            action(arrow);
-        }
-    }
-
-    private void DoAllStopArrow(Action<ParticleSystem> action)
-    {
-        foreach (var arrow in stopArrows)
-        {
-            action(arrow);
-        }
-    }
-
-    public void SetActiveArrowsExceptFor(ParticleSystem arrow, bool isActivate)
-    {
-        DoAllMoveArrow(activeArrow =>
-        {
-            activeArrow.gameObject.SetActive(activeArrow == arrow || isActivate);
-        });
+            Color c = txt.color;
+            txt.color = new Color(c.r, c.g, c.b, alpha);
+        }, null);
     }
 }
