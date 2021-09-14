@@ -32,7 +32,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private FlickInteraction currentFlick = null;
     private Vector2 pressPos = Vector2.zero;
 
-    private bool IsPressed => currentFlick != null;
+    public bool IsPressed => currentFlick != null;
 
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
 
@@ -56,16 +56,6 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Update()
     {
         UpdateTransparent();
-    }
-
-    void LateUpdate()
-    {
-        Debug.Log("LateUpdate: " + IsPressed);
-        if (IsPressed)
-        {
-            Debug.Log("Inactivate");
-            forward.Inactivate();
-        }
     }
 
     private void UpdateTransparent()

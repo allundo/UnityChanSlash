@@ -63,13 +63,15 @@ public partial class PlayerCommander : ShieldCommander
             Door door = forwardTile as Door;
 
             doorHandler.SetActive(door.IsControllable, door.IsOpen);
+            forwardUI.Resize(0.5f, 1f);
         }
         else
         {
             doorHandler.Inactivate();
+            forwardUI.Resize(1f, 1f);
         }
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir));
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.IsPressed);
         backwardUI.SetActive(map.IsBackwardMovable);
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);
