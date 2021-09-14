@@ -12,7 +12,7 @@ public class MoveUI : MonoBehaviour
     protected Vector2 defaultSize;
 
     private float alpha = 0.0f;
-    private bool isActive = false;
+    protected bool isActive = false;
 
     protected virtual void Awake()
     {

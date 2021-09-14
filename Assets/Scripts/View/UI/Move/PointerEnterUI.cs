@@ -21,6 +21,7 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!isActive) return;
         Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
     }
 
@@ -31,6 +32,7 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!isActive) return;
         Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
     }
 
