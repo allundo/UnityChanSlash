@@ -44,4 +44,10 @@ public abstract class SceneMediator : MonoBehaviour
 
     protected void SceneTransition(int startActionID)
         => SceneTransition(() => GameInfo.Instance.startActionID = startActionID);
+
+    protected void SceneTransition(int startActionID, Action updateGameInfo)
+    {
+        updateGameInfo();
+        SceneTransition(startActionID);
+    }
 }

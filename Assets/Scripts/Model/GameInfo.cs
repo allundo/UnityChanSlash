@@ -4,7 +4,7 @@ using System.Linq;
 public class GameInfo : SingletonMonoBehaviour<GameInfo>
 {
     private static readonly int MAX_FLOOR = 10;
-    private WorldMap[] maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR).ToArray();
+    private WorldMap[] maps;
 
     public int startActionID = 0;
 
@@ -23,5 +23,12 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         base.Awake();
 
         DOTween.SetTweensCapacity(500, 100);
+
+        ClearMaps();
+    }
+
+    public void ClearMaps()
+    {
+        maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR).ToArray();
     }
 }
