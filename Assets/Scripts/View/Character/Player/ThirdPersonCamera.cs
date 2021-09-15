@@ -70,6 +70,7 @@ public class ThirdPersonCamera : MonoBehaviour
         sideCamera.SetTarget(this);
 
         cam.rect = sideCamera.rect = viewPortRect;
+        renderTexture?.Release();
         renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
         crossFade.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         crossFade.texture = renderTexture;
