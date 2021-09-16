@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class WorldMap
 {
     public static readonly float TILE_UNIT = 2.5f;
 
     public Tile[,] tileInfo { get; protected set; }
+    public Texture2D texMap { get; protected set; }
+    public bool[,] discovered { get; protected set; }
+
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
 
     private MapManager map;
@@ -58,33 +61,47 @@ public class WorldMap
 
         tileInfo = new Tile[Width, Height];
 
+        texMap = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+        var pixels = texMap.GetPixels();
+
+        discovered = new bool[Width, Height];
+
         var matrix = CloneMatrix();
 
         for (int i = 0; i < Width; i++)
         {
             for (int j = 0; j < Height; j++)
             {
+                discovered[i, j] = false;
+
                 switch (matrix[i, j])
                 {
                     case Terrain.Wall:
                     case Terrain.Pall:
                         tileInfo[i, j] = new Wall();
+                        pixels[i + Width * j] = Color.gray;
                         break;
 
                     case Terrain.Door:
                         tileInfo[i, j] = new Door();
+                        pixels[i + Width * j] = Color.red;
                         break;
 
                     case Terrain.Stair:
                         tileInfo[i, j] = new Stair();
+                        pixels[i + Width * j] = Color.blue;
                         break;
 
                     default:
                         tileInfo[i, j] = new Ground();
+                        pixels[i + Width * j] = Color.black;
                         break;
                 }
             }
         }
+
+        texMap.SetPixels(pixels);
+        texMap.Apply();
     }
 
     public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
@@ -100,6 +117,72 @@ public class WorldMap
     /// The tile can be seen through
     /// </summary>
     public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : tileInfo[x, y].IsViewOpen;
+
+    public Texture2D GetMiniMap(int mapSize = 15)
+    {
+        Pos pos = GameManager.Instance.PlayerPos;
+
+        int x = Mathf.Clamp(pos.x - mapSize / 2, 0, Width - mapSize);
+        int y = Mathf.Clamp(pos.y - mapSize / 2, 0, Height - mapSize);
+
+        Color[] pixels = texMap.GetPixels(x, y, mapSize, mapSize);
+
+        var texture = new Texture2D(mapSize, mapSize);
+        texture.SetPixels(MiniMapPixels(pixels, x, y, mapSize, mapSize));
+        texture.Apply();
+        texture.filterMode = FilterMode.Point;
+
+        return texture;
+    }
+
+    public void SetDiscovered(Pos pos) => SetDiscovered(pos.x, pos.y);
+    public void SetDiscovered(int x, int y)
+    {
+        for (int i = x - 1; i <= x + 1; i++)
+        {
+            for (int j = y - 1; j <= y + 1; j++)
+            {
+                discovered[i, j] = true;
+            }
+        }
+    }
+
+    public bool[,] GetDiscovered(int x, int y, int blockWidth, int blockHeight)
+    {
+        var discovered = new bool[blockWidth, blockHeight];
+
+        for (int j = 0; j < blockHeight; j++)
+        {
+            for (int i = 0; i < blockWidth; i++)
+            {
+                discovered[i, j] = this.discovered[x + i, y + j];
+            }
+        }
+
+        return discovered;
+    }
+
+    private Color[] MiniMapPixels(Color[] texPixels, int x, int y, int blockWidth, int blockHeight)
+    {
+        Color[] pixels = Enumerable.Repeat(Color.clear, texPixels.Length).ToArray();
+
+        for (int j = 0; j < blockHeight; j++)
+        {
+            for (int i = 0; i < blockWidth; i++)
+            {
+                if (!discovered[x + i, y + j]) continue;
+
+                int inverseJ = blockHeight - j - 1;
+                Tile tile = tileInfo[x + i, y + j];
+
+                pixels[i + inverseJ * blockWidth] =
+                    tile is Door && (tile as Door).IsOpen ?
+                        new Color(0.75f, 0, 0, 1f) : texPixels[i + j * blockWidth];
+            }
+        }
+
+        return pixels;
+    }
 
     // FIXME
     public Pos InitPos

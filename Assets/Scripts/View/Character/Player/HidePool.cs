@@ -374,12 +374,16 @@ public class HidePool : MonoBehaviour
                 }
             }
 
+            var edgePos = playerPos - playerOffsetPos;
             var openStack = new Stack<Pos>();
 
             // Start from player tile
             for (openStack.Push(playerOffsetPos); openStack.Count > 0;)
             {
                 Pos pos = openStack.Pop();
+
+                // Set open plate as discovered area
+                map.SetDiscovered(edgePos + pos);
 
                 // Delete focused hide plate
                 plateMap[pos.x, pos.y] = Plate.NONE;
