@@ -100,23 +100,6 @@ public class WorldMap
     /// The tile can be seen through
     /// </summary>
     public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : tileInfo[x, y].IsViewOpen;
-    public bool IsPlayerRange(int x, int y)
-    {
-        Pos pos = GameManager.Instance.PlayerPos;
-        return x >= pos.x - 5 && x < pos.x + 5 && y >= pos.y - 5 && y < pos.y + 5;
-    }
-
-    public Vector3 GetRespawnPos()
-    {
-        while (true)
-        {
-            int rndX = Random.Range(0, Width);
-            int rndY = Random.Range(0, Height);
-
-            if (IsPlayerRange(rndX, rndY)) continue;
-            if (GetTile(rndX, rndY).IsEnterable()) return WorldPos(rndX, rndY);
-        }
-    }
 
     // FIXME
     public Pos InitPos
