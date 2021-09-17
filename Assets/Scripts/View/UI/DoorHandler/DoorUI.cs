@@ -76,40 +76,28 @@ public class DoorUI : MonoBehaviour
 
     private void InstantiateAllPrefabs()
     {
-        if (upTextPrefab != null) upText = Instantiate(upTextPrefab);
-        if (downTextPrefab != null) downText = Instantiate(downTextPrefab);
-        if (rightTextPrefab != null) rightText = Instantiate(rightTextPrefab);
-        if (leftTextPrefab != null) leftText = Instantiate(leftTextPrefab);
+        if (upTextPrefab != null) upText = InstantiateUI(upTextPrefab);
+        if (downTextPrefab != null) downText = InstantiateUI(downTextPrefab);
+        if (rightTextPrefab != null) rightText = InstantiateUI(rightTextPrefab);
+        if (leftTextPrefab != null) leftText = InstantiateUI(leftTextPrefab);
 
         texts = new[] { upText, downText, rightText, leftText };
 
-        stopArrows = stopArrowPrefabs.Select(arrow => Instantiate(arrow)).ToArray();
+        stopArrows = stopArrowPrefabs.Select(arrow => InstantiateUI(arrow)).ToArray();
 
-        if (upArrowPrefab != null) upArrow = Instantiate(upArrowPrefab);
-        if (downArrowPrefab != null) downArrow = Instantiate(downArrowPrefab);
-        if (rightArrowPrefab != null) rightArrow = Instantiate(rightArrowPrefab);
-        if (leftArrowPrefab != null) leftArrow = Instantiate(leftArrowPrefab);
+        if (upArrowPrefab != null) upArrow = InstantiateUI(upArrowPrefab);
+        if (downArrowPrefab != null) downArrow = InstantiateUI(downArrowPrefab);
+        if (rightArrowPrefab != null) rightArrow = InstantiateUI(rightArrowPrefab);
+        if (leftArrowPrefab != null) leftArrow = InstantiateUI(leftArrowPrefab);
 
         moveArrows = new[] { upArrow, downArrow, rightArrow, leftArrow };
-
-        SetUIsAsChildren(texts, stopArrows, moveArrows);
     }
 
     /// <summary>
     /// UGUI objects must be set as children of Canvas object
     /// </summary>
-    private void SetUIsAsChildren(params MaskableGraphic[][] sequences)
-    {
-        sequences.ForEach(
-            seq => seq.ForEach(ui => SetUIAsChild(ui), null)
-        );
-    }
-
-    private void SetUIAsChild(MaskableGraphic ui)
-    {
-        ui.transform.SetParent(transform);
-        ui.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-    }
+    private T InstantiateUI<T>(T prefabUI) where T : UnityEngine.Object
+        => Instantiate(prefabUI, transform, false);
 
     private void SetUIsActive(MaskableGraphic[] sequence, bool isActive)
     {
