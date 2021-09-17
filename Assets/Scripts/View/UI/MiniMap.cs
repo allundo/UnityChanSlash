@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class MiniMap : MonoBehaviour
 {
+    private readonly int MINIMAP_SIZE = 15;
+
     private RawImage image = default;
     private RectTransform rectTransform;
 
@@ -10,8 +12,12 @@ public class MiniMap : MonoBehaviour
 
     private Vector2 defaultSize;
 
+    private WorldMap map;
+
     void Awake()
     {
+        map = GameManager.Instance.worldMap;
+
         image = GetComponent<RawImage>();
         rectTransform = GetComponent<RectTransform>();
 
@@ -21,9 +27,8 @@ public class MiniMap : MonoBehaviour
         image.texture = renderTexture = new RenderTexture((int)defaultSize.x, (int)defaultSize.y, 0);
     }
 
-    private void Update()
+    public void UpdateMiniMap()
     {
-        Texture2D tex = GameManager.Instance.worldMap.GetMiniMap();
-        Graphics.Blit(tex, renderTexture);
+        Graphics.Blit(map.GetMiniMap(MINIMAP_SIZE), renderTexture);
     }
 }

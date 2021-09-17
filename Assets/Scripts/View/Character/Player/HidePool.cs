@@ -11,6 +11,7 @@ public class HidePool : MonoBehaviour
     [SerializeField] private GameObject plate2 = default;
     [SerializeField] private GameObject plate1 = default;
     [SerializeField] private GameObject plateFrontPrefab = default;
+    [SerializeField] private MiniMap miniMap = default;
 
 
     protected Transform[] pool = new Transform[0b10000];
@@ -112,6 +113,9 @@ public class HidePool : MonoBehaviour
     {
         Pos playerPos = CurrentPos;
         Plate[,] plateMap = currentUpdater.GetPlateMap(playerPos);
+
+        // Update MiniMap at changing player view
+        miniMap.UpdateMiniMap();
 
         DrawAction(playerPos, plateMap);
         MoveOuterPlate(playerPos);

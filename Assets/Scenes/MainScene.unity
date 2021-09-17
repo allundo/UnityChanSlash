@@ -17707,6 +17707,18 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &2030489815 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2030489815, guid: 3b111658a672a4449b3bceda64ae90af,
+    type: 3}
+  m_PrefabInstance: {fileID: 8337679456419231782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d319ebacb9047119446c43e16ec15a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2042532945
 GameObject:
   m_ObjectHideFlags: 0
@@ -20728,6 +20740,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1035482312927549619, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: miniMap
+      value: 
+      objectReference: {fileID: 2030489815}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: fightCircle
@@ -20785,14 +20802,14 @@ PrefabInstance:
       objectReference: {fileID: 1981641776}
     - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 963194229}
-    - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
-        type: 3}
       propertyPath: gameOverUI
       value: 
       objectReference: {fileID: 8337679456419231784}
+    - target: {fileID: 5189892437611810425, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
+        type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 963194229}
     - target: {fileID: 7476530261813038914, guid: dc7cf6d8cb857479ca22d4d12ab9027e,
         type: 3}
       propertyPath: m_LocalPosition.x

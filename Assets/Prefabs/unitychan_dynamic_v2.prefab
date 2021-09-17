@@ -5847,6 +5847,7 @@ MonoBehaviour:
   jumpUI: {fileID: 0}
   guardUI: {fileID: 0}
   messageController: {fileID: 0}
+  gameOverUI: {fileID: 0}
   mainCamera: {fileID: 0}
   jab: {fileID: 560743435053443771}
   straight: {fileID: 6555124617954558180}
@@ -5945,6 +5946,7 @@ MonoBehaviour:
   plate1: {fileID: 2216583042054745137, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b, type: 3}
   plateFrontPrefab: {fileID: 3009684819150035271, guid: 27aaebf1280af48638468e9f9e004434,
     type: 3}
+  miniMap: {fileID: 0}
 --- !u!1 &7476530261813138298
 GameObject:
   m_ObjectHideFlags: 0
