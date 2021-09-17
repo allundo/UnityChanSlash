@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6959446006855203845}
   - component: {fileID: 783483934516781975}
   - component: {fileID: 256765180137344945}
-  - component: {fileID: 6456816386958404980}
+  - component: {fileID: 6922161111149463326}
   m_Layer: 5
   m_Name: EnemyPoint
   m_TagString: Untagged
@@ -58,14 +58,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 55cd65066de6244a69f35216ee44dcfb, type: 2}
+  m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 63475e2f9860342f6b6953bc05b22212, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -75,7 +75,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6456816386958404980
+--- !u!114 &6922161111149463326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,6 +84,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1448965526145164404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6410ef9b7c21a4cb88d46d222e48f44c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e0ed17e5c95d48929723804b5118b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

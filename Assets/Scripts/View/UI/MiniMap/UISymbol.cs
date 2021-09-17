@@ -4,7 +4,7 @@ public class UISymbol : SpawnObject<UISymbol>
 {
     protected RectTransform rectTransform;
 
-    void Awake()
+    protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }
@@ -16,13 +16,13 @@ public class UISymbol : SpawnObject<UISymbol>
         return this;
     }
 
-    public UISymbol SetPos(Vector2 pos)
+    public virtual UISymbol SetPos(Vector2 pos)
     {
         rectTransform.anchoredPosition = pos;
         return this;
     }
 
-    public UISymbol SetSize(Vector2 size)
+    public virtual UISymbol SetSize(Vector2 size)
     {
         rectTransform.sizeDelta = size;
         return this;
