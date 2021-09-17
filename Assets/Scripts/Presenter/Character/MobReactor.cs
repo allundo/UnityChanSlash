@@ -5,7 +5,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(MobEffect))]
 [RequireComponent(typeof(MobCommander))]
-public class MobReactor : MonoBehaviour
+public class MobReactor : SpawnObject<MobReactor>
 {
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
     protected MobStatus status;
@@ -73,10 +73,11 @@ public class MobReactor : MonoBehaviour
         commander.SetDie();
     }
 
-    public void OnSpawn(Pos pos, IDirection dir = null, float duration = 0.5f)
+    public override MobReactor OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
     {
         status.map.SetPosition(pos, dir);
         FadeInToActive(duration);
+        return this;
     }
 
     public virtual void FadeInToActive(float duration = 0.5f)
@@ -98,7 +99,7 @@ public class MobReactor : MonoBehaviour
         commander.Activate();
     }
 
-    public void Inactivate()
+    public override void Inactivate()
     {
         status.Inactivate();
         commander.Inactivate();

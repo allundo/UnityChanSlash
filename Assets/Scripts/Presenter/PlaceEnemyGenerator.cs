@@ -24,7 +24,7 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
             if (ground == null) continue;
 
-            Instantiate(prefabEnemyGenerators[counter], map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground, new Pos(x, y));
+            Instantiate(prefabEnemyGenerators[counter], map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground);
         }
     }
 

@@ -2,11 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class EnemyGenerator : MonoBehaviour
+public class EnemyGenerator : Generator<MobReactor>
 {
-    [SerializeField] protected MobReactor enemyPrefab = default;
-    protected Transform pool;
-    protected Pos spawnPoint;
     protected Tile spawnTile;
     protected Collider detectCharacter;
 
@@ -20,24 +17,11 @@ public class EnemyGenerator : MonoBehaviour
         StartCoroutine(SpawnLoop());
     }
 
-    public void Init(GameObject enemyPool, Tile tile, Pos pos)
+    public void Init(GameObject enemyPool, Tile tile)
     {
+        // Set another parent since Collider cannot detect self child GameObjects.
         pool = enemyPool.transform;
         spawnTile = tile;
-        spawnPoint = pos;
-    }
-
-    protected void Spawn()
-    {
-        foreach (Transform t in pool)
-        {
-            if (!t.gameObject.activeSelf)
-            {
-                t.GetComponent<MobReactor>().OnSpawn(spawnPoint);
-                return;
-            }
-        }
-        Instantiate(enemyPrefab, pool, false).OnSpawn(spawnPoint);
     }
 
     public IEnumerator SpawnLoop()

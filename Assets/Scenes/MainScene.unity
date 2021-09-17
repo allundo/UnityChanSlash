@@ -10532,8 +10532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf189f5ee32946cbb4f37bca96fb7b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6883324137953325015, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-    type: 3}
+  prefab: {fileID: 6883324137953325015, guid: 5edb2c3a0fa004778b542b5eae5349a0, type: 3}
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -18832,35 +18831,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onTriggerStay:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1770598731873372927}
-        m_MethodName: OnDoorStay
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onTriggerEnter:
     m_PersistentCalls:
       m_Calls: []
   onTriggerExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1770598731873372927}
-        m_MethodName: OnDoorExit
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!135 &2010569136
 SphereCollider:
   m_ObjectHideFlags: 0

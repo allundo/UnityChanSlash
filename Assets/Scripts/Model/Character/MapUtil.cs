@@ -23,16 +23,18 @@ public class MapUtil : MonoBehaviour
         status = GetComponent<MobStatus>();
     }
 
-    public virtual void SetPosition(bool IsOnCharactor = true) { SetPosition(defaultPos, defaultDir, IsOnCharactor); }
-    public void SetPosition(Pos pos, IDirection dir = null, bool IsOnCharactor = true)
+    public virtual void SetPosition(bool isOnCharacter = true) { SetPosition(defaultPos, defaultDir, isOnCharacter); }
+    public void SetPosition(Vector3 pos, IDirection dir = null, bool isOnCharacter = true)
     {
-        this.tf.position = map.WorldPos(pos);
+        this.tf.position = pos;
 
         this.dir = dir ?? MapUtil.defaultDir;
         tf.LookAt(this.tf.position + this.dir.LookAt);
 
-        if (IsOnCharactor) SetOnCharactor();
+        if (isOnCharacter) SetOnCharactor();
     }
+    public void SetPosition(Pos pos, IDirection dir = null, bool isOnCharacter = true)
+        => SetPosition(map.WorldPos(pos), dir, isOnCharacter);
 
     public virtual void TurnLeft()
     {

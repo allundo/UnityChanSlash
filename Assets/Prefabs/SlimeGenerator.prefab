@@ -45,8 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7cf73b9c51b0488b98b9305e6033c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6883324137953325015, guid: 5edb2c3a0fa004778b542b5eae5349a0,
-    type: 3}
+  prefab: {fileID: 6883324137953325015, guid: 5edb2c3a0fa004778b542b5eae5349a0, type: 3}
 --- !u!135 &20117482218954675
 SphereCollider:
   m_ObjectHideFlags: 0
