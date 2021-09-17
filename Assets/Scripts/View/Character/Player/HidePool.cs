@@ -166,6 +166,8 @@ public class HidePool : MonoBehaviour
         currentUpdater?.ClearRange(CurrentPos);
         currentUpdater = portrait[mapUtil.dir];
         Draw();
+
+        miniMap.Turn(mapUtil.dir);
     }
 
     public void Init()

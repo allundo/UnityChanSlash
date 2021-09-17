@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MiniMap : MonoBehaviour
 {
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
-    [SerializeField] private UISymbol playerSymbol = default;
+    [SerializeField] private PlayerSymbol playerSymbol = default;
 
     private readonly int MINIMAP_SIZE = 15;
     private Vector2 uiTileUnit;
@@ -83,6 +83,8 @@ public class MiniMap : MonoBehaviour
         MoveEnemySymbols(center);
         isUpdated = true;
     }
+
+    public PlayerSymbol Turn(IDirection dir) => playerSymbol.SetDir(dir);
 
     public void OnEnemyFind(Collider col)
     {

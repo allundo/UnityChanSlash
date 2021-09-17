@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UISymbol : SpawnObject<UISymbol>
 {
-    private RectTransform rectTransform;
+    protected RectTransform rectTransform;
 
     void Awake()
     {
