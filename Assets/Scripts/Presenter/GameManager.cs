@@ -79,6 +79,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     }
 
     public Pos PlayerPos => worldMap.MapPos(playerTransform.position);
+    public Vector3 PlayerWorldPos
+        => new Vector3(playerTransform.position.x, 0f, playerTransform.position.z);
+
+
     public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
 

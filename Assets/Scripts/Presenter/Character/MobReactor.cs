@@ -93,7 +93,7 @@ public class MobReactor : SpawnObject<MobReactor>
             .Play();
     }
 
-    public void Activate()
+    public override void Activate()
     {
         status.Activate();
         commander.Activate();

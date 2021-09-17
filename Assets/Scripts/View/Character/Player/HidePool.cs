@@ -171,6 +171,7 @@ public class HidePool : MonoBehaviour
     public void Init()
     {
         ReformHidePlates(DeviceOrientation.Portrait);
+        // miniMap.UpdateMiniMap();
     }
 
     public void ReformHidePlates(DeviceOrientation orientation)

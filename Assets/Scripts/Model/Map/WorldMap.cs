@@ -120,10 +120,10 @@ public class WorldMap
 
     public Texture2D GetMiniMap(int mapSize = 15)
     {
-        Pos pos = GameManager.Instance.PlayerPos;
+        Pos pos = MiniMapCenterPos(mapSize);
 
-        int x = Mathf.Clamp(pos.x - mapSize / 2, 0, Width - mapSize);
-        int y = Mathf.Clamp(pos.y - mapSize / 2, 0, Height - mapSize);
+        int x = pos.x - mapSize / 2;
+        int y = pos.y - mapSize / 2;
 
         Color[] pixels = texMap.GetPixels(x, y, mapSize, mapSize);
 
@@ -134,6 +134,18 @@ public class WorldMap
 
         return texture;
     }
+
+    private Pos MiniMapCenterPos(int mapSize = 15)
+    {
+        Pos pos = GameManager.Instance.PlayerPos;
+        int half = mapSize / 2;
+
+        return new Pos(
+            Mathf.Clamp(pos.x, half, Width - half - 1),
+            Mathf.Clamp(pos.y, half, Height - half - 1)
+        );
+    }
+    public Vector3 MiniMapCenterWorldPos(int mapSize = 15) => WorldPos(MiniMapCenterPos(mapSize));
 
     public void SetDiscovered(Pos pos) => SetDiscovered(pos.x, pos.y);
     public void SetDiscovered(int x, int y)
