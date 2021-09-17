@@ -37,7 +37,7 @@ public class EnemyGenerator : MonoBehaviour
                 return;
             }
         }
-        Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, pool).OnSpawn(spawnPoint);
+        Instantiate(enemyPrefab, pool, false).OnSpawn(spawnPoint);
     }
 
     public IEnumerator SpawnLoop()
