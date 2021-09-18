@@ -203,10 +203,8 @@ public class WorldMap
         {
             for (int j = 1; j < Height - 1; j++)
             {
-                Debug.Log("Height: " + j);
                 for (int i = 1; i < Width - 1; i++)
                 {
-                    Debug.Log("Terrain: " + tileInfo[i, j]);
                     if (tileInfo[i, j] is Ground) return new Pos(i, j);
                 }
             }

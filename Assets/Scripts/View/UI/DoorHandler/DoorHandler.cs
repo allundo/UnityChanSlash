@@ -127,8 +127,6 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             return;
         }
 
-        Debug.Log("OnPointerDown: " + gameObject.name);
-
         if (!isActive) return;
 
         pressPos = eventData.position;
@@ -160,8 +158,6 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private FlickInteraction GetFlick(Vector2 screenPos)
     {
-        Debug.Log("GetFlick: " + screenPos);
-
         if (isOpen)
         {
             if (closeRDoorUI.InRegion(screenPos)) return closeRFlick;
@@ -184,8 +180,6 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         gameObject.SetActive(true);
 
         ActivateButtons();
-
-        // Debug.Log("Door Handler Active");
     }
 
     private void ActivateButtons()

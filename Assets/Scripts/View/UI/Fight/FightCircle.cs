@@ -102,7 +102,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("OnPointerUp");
         if (!isFingerDown) return;
 
         isFingerDown = false;
@@ -173,8 +172,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isActive = true;
         gameObject.SetActive(true);
-
-        Debug.Log("Fight Circle Active");
     }
 
     public void Inactivate()
