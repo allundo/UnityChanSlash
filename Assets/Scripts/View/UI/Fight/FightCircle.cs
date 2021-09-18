@@ -84,7 +84,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void UpdateTransparent()
     {
-        alpha += isActive ? 0.1f : -0.1f;
+        alpha += (isActive ? 6f : -6f) * Time.deltaTime;
 
         if (alpha > maxAlpha)
         {

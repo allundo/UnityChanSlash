@@ -17,18 +17,27 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
 
     private bool isInitialOrientation = true;
+    public bool isPaused { get; private set; } = false;
 
     public WorldMap worldMap { get; protected set; }
 
     public void Pause(bool isHideUIs = false)
     {
+        if (isPaused) return;
+
         if (isHideUIs) HideUIs();
         Time.timeScale = 0f;
+
+        isPaused = true;
     }
     public void Resume()
     {
+        if (!isPaused) return;
+
         DisplayUIs();
         Time.timeScale = 1f;
+
+        isPaused = false;
     }
 
     private void HideUIs() { commander.InvisibleInput(); }

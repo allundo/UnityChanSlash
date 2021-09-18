@@ -41,12 +41,16 @@ public abstract partial class MobCommander : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (GameManager.Instance.isPaused) return;
+
         Execute(GetCommand());
     }
 
     protected virtual void Execute(Command cmd)
     {
         if (!isCommandValid) return;
+
+
         EnqueueCommand(cmd, IsIdling);
     }
 

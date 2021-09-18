@@ -36,7 +36,7 @@ public class MoveUI : MonoBehaviour
 
     private void UpdateTransparent()
     {
-        alpha += isActive ? 0.05f : -0.05f;
+        alpha += (isActive ? 3f : -3f) * Time.deltaTime;
 
         if (alpha > maxAlpha)
         {

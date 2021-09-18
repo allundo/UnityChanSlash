@@ -40,6 +40,8 @@ public class GuardState : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.isPaused) return;
+
         if (IsGuardOn)
         {
             if (shieldCount < SHIELD_READY) shieldCount++;

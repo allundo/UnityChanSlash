@@ -60,7 +60,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void UpdateTransparent()
     {
-        alpha += isActive ? 0.05f : -0.1f;
+        alpha += (isActive ? 3f : -6f) * Time.deltaTime;
 
         if (alpha > maxAlpha)
         {
