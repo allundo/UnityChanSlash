@@ -10,6 +10,7 @@ public class WorldMap
     public Tile[,] tileInfo { get; protected set; }
     public Texture2D texMap { get; protected set; }
     public bool[,] discovered { get; protected set; }
+    public List<Pos> currentViewOpen { get; protected set; } = new List<Pos>();
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
 
@@ -118,6 +119,9 @@ public class WorldMap
     /// </summary>
     public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : tileInfo[x, y].IsViewOpen;
 
+    public bool IsCurrentViewOpen(Vector3 worldPos) => IsCurrentViewOpen(MapPos(worldPos));
+    public bool IsCurrentViewOpen(Pos pos) => currentViewOpen.Contains(pos);
+
     public Texture2D GetMiniMap(int mapSize = 15)
     {
         Pos pos = MiniMapCenterPos(mapSize);
@@ -147,31 +151,17 @@ public class WorldMap
     }
     public Vector3 MiniMapCenterWorldPos(int mapSize = 15) => WorldPos(MiniMapCenterPos(mapSize));
 
-    public void SetDiscovered(Pos pos) => SetDiscovered(pos.x, pos.y);
-    public void SetDiscovered(int x, int y)
+    public void SetDiscovered(Pos pos)
     {
-        for (int i = x - 1; i <= x + 1; i++)
+        currentViewOpen.Add(pos);
+
+        for (int i = pos.x - 1; i <= pos.x + 1; i++)
         {
-            for (int j = y - 1; j <= y + 1; j++)
+            for (int j = pos.y - 1; j <= pos.y + 1; j++)
             {
                 discovered[i, j] = true;
             }
         }
-    }
-
-    public bool[,] GetDiscovered(int x, int y, int blockWidth, int blockHeight)
-    {
-        var discovered = new bool[blockWidth, blockHeight];
-
-        for (int j = 0; j < blockHeight; j++)
-        {
-            for (int i = 0; i < blockWidth; i++)
-            {
-                discovered[i, j] = this.discovered[x + i, y + j];
-            }
-        }
-
-        return discovered;
     }
 
     private Color[] MiniMapPixels(Color[] texPixels, int x, int y, int blockWidth, int blockHeight)

@@ -7,7 +7,7 @@ public class MiniMap : MonoBehaviour
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
     [SerializeField] private PlayerSymbol playerSymbol = default;
 
-    private readonly int MINIMAP_SIZE = 15;
+    private static readonly int MINIMAP_SIZE = 15;
     private Vector2 uiTileUnit;
 
     private RawImage image = default;
@@ -16,15 +16,17 @@ public class MiniMap : MonoBehaviour
     private RenderTexture renderTexture;
 
     private Vector2 defaultSize;
+    private static readonly Vector2 OUT_OF_SCREEN = new Vector2(1024f, 1024f);
 
     private WorldMap map;
 
-    private Vector3 distance;
     private Vector3 center;
 
     private bool isUpdated = false;
 
     private Dictionary<MobReactor, UISymbol> enemies = new Dictionary<MobReactor, UISymbol>();
+
+    private bool[,] tileViewOpen = new bool[MINIMAP_SIZE, MINIMAP_SIZE];
 
     void Awake()
     {
@@ -47,7 +49,7 @@ public class MiniMap : MonoBehaviour
 
     void Update()
     {
-        MoveEnemySymbols(center);
+        MoveEnemySymbols();
     }
 
     void LateUpdate()
@@ -55,22 +57,25 @@ public class MiniMap : MonoBehaviour
         isUpdated = false;
     }
 
-    private void MoveEnemySymbols(Vector3 miniMapCenter)
+    private void MoveEnemySymbols()
     {
         if (isUpdated) return;
 
-        enemies.ForEach(kv => kv.Value.SetPos(UIOffset(kv.Key.transform.position - miniMapCenter)));
+        enemies.ForEach(kv => kv.Value.SetPos(UIOffset(kv.Key.transform.position)));
     }
 
-    private Vector2 UIOffset(Vector3 vec)
+    private Vector2 UIOffset(Vector3 worldPos)
     {
-        Vector3 tileUnitVec = vec / WorldMap.TILE_UNIT;
+        if (!map.IsCurrentViewOpen(worldPos)) return OUT_OF_SCREEN;
+
+        Vector3 tileUnitVec = (worldPos - center) / WorldMap.TILE_UNIT;
         return new Vector2(tileUnitVec.x * uiTileUnit.x, tileUnitVec.z * uiTileUnit.y);
+
     }
 
-    private Vector2 UIOffsetDiscrete(Vector3 vec)
+    private Vector2 UIOffsetDiscrete(Vector3 worldPos)
     {
-        Vector3 tileUnitVec = vec / WorldMap.TILE_UNIT;
+        Vector3 tileUnitVec = (worldPos - center) / WorldMap.TILE_UNIT;
         return new Vector2(Mathf.Round(tileUnitVec.x) * uiTileUnit.x, Mathf.Round(tileUnitVec.z) * uiTileUnit.y);
     }
 
@@ -79,8 +84,8 @@ public class MiniMap : MonoBehaviour
         Graphics.Blit(map.GetMiniMap(MINIMAP_SIZE), renderTexture);
 
         center = map.MiniMapCenterWorldPos(MINIMAP_SIZE);
-        playerSymbol.SetPos(UIOffsetDiscrete(GameManager.Instance.PlayerWorldPos - center));
-        MoveEnemySymbols(center);
+        playerSymbol.SetPos(UIOffsetDiscrete(GameManager.Instance.PlayerWorldPos));
+        MoveEnemySymbols();
         isUpdated = true;
     }
 
@@ -92,7 +97,7 @@ public class MiniMap : MonoBehaviour
 
         if (enemy != null)
         {
-            Vector2 uiOffset = UIOffset(enemy.transform.position - GameManager.Instance.PlayerWorldPos);
+            Vector2 uiOffset = UIOffset(enemy.transform.position);
             enemies[enemy] = enemyPointGenerator.Spawn(uiOffset).SetSize(uiTileUnit);
         }
     }

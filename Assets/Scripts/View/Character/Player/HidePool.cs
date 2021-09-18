@@ -381,6 +381,8 @@ public class HidePool : MonoBehaviour
                 }
             }
 
+            map.currentViewOpen.Clear();
+
             var edgePos = playerPos - playerOffsetPos;
             var openStack = new Stack<Pos>();
 
