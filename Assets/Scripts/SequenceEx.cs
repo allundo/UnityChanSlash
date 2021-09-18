@@ -17,6 +17,13 @@ public class SequenceEx
 
     public bool isPlaying = false;
 
+    private bool isIndependentUpdate = DOTween.defaultTimeScaleIndependent;
+
+    public SequenceEx SetUpdate(bool value = false)
+    {
+        isIndependentUpdate = value;
+        return this;
+    }
 
     public SequenceEx SetSkipable(bool isSkipable = true)
     {
@@ -29,7 +36,7 @@ public class SequenceEx
 
     private SequenceEx InitNext()
     {
-        next = new SequenceEx();
+        next = new SequenceEx().SetUpdate(isIndependentUpdate);
         next.prev = this;
 
         onComplete = (longestTween.onComplete ?? (() => { })).Clone() as TweenCallback;
@@ -53,7 +60,7 @@ public class SequenceEx
             maxDuration = duration;
         }
 
-        list.Add(tween);
+        list.Add(tween.SetUpdate(isIndependentUpdate));
         return this;
     }
 
@@ -61,7 +68,7 @@ public class SequenceEx
         => (longestTween == null) ? Join(tween) : InitNext().Join(tween);
 
     public SequenceEx AppendInterval(float duration)
-        => Append(DOVirtual.DelayedCall(duration, () => { }));
+        => Append(DOVirtual.DelayedCall(duration, () => { }, isIndependentUpdate));
 
     public SequenceEx AppendCallback(TweenCallback callback)
         => InitNext().InsertCallback(callback);

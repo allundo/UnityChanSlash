@@ -72,10 +72,10 @@ public class MobAttack : MonoBehaviour
     public Tween SetAttack(float attackDuration)
     {
         return DOTween.Sequence()
-            .Join(DOVirtual.DelayedCall(0, OnAttackStart))
-            .Join(DOVirtual.DelayedCall(FrameToSec(startFrame), OnHitStart))
-            .Join(DOVirtual.DelayedCall(FrameToSec(finishFrame), OnHitFinished))
-            .Join(DOVirtual.DelayedCall(attackDuration, OnAttackFinished))
+            .Join(DOVirtual.DelayedCall(0, OnAttackStart, false))
+            .Join(DOVirtual.DelayedCall(FrameToSec(startFrame), OnHitStart, false))
+            .Join(DOVirtual.DelayedCall(FrameToSec(finishFrame), OnHitFinished, false))
+            .Join(DOVirtual.DelayedCall(attackDuration, OnAttackFinished, false))
             .Play();
     }
 }
