@@ -42,6 +42,7 @@ public class MobEffect : MonoBehaviour
             {
                 if (mat.HasProperty("_AdditiveColor"))
                 {
+                    mat.color = new Color(0, 0, 0, 1);
                     flashMaterials.Add(mat);
                 }
             }

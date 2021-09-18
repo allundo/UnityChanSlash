@@ -22,6 +22,7 @@ sampler2D _RimLightSampler;
 sampler2D _SpecularReflectionSampler;
 sampler2D _EnvMapSampler;
 sampler2D _NormalMapSampler;
+sampler2D _DitherMaskLOD2D;
 
 // Constants
 #define FALLOFF_POWER 0.3
@@ -36,10 +37,11 @@ struct v2f
 	float2 uv       : TEXCOORD2;
 	float3 eyeDir   : TEXCOORD3;
 	float3 lightDir : TEXCOORD4;
-	float3 normal   : TEXCOORD5;
+	float4 screenPos : TEXCOORD5;
+	float3 normal   : TEXCOORD6;
 #ifdef ENABLE_NORMAL_MAP
-	float3 tangent  : TEXCOORD6;
-	float3 binormal : TEXCOORD7;
+	float3 tangent  : TEXCOORD7;
+	float3 binormal : TEXCOORD8;
 #endif
 };
 
@@ -52,10 +54,11 @@ struct v2f
 	float2 uv       : TEXCOORD0;
 	float3 eyeDir   : TEXCOORD1;
 	float3 lightDir : TEXCOORD2;
-	float3 normal   : TEXCOORD3;
+	float4 screenPos : TEXCOORD3;
+	float3 normal   : TEXCOORD4;
 #ifdef ENABLE_NORMAL_MAP
-	float3 tangent  : TEXCOORD4;
-	float3 binormal : TEXCOORD5;
+	float3 tangent  : TEXCOORD5;
+	float3 binormal : TEXCOORD6;
 #endif
 };
 
@@ -80,6 +83,8 @@ v2f vert( appdata_tan v )
 	half4 worldPos = mul( unity_ObjectToWorld, v.vertex );
 	o.eyeDir.xyz = normalize( _WorldSpaceCameraPos.xyz - worldPos.xyz ).xyz;
 	o.lightDir = WorldSpaceLightDir( v.vertex );
+
+	o.screenPos = ComputeScreenPos(o.pos);
 
 #ifdef ENABLE_NORMAL_MAP
 	// Binormal and tangent (for normal map)
@@ -129,6 +134,18 @@ inline float3_t GetNormalFromMap( v2f input )
 // Fragment shader
 float4 frag( v2f i ) : COLOR
 {
+	// Dither Transparent
+	// Pixel clipping process
+    float2 vpos = i.screenPos.xy / i.screenPos.w * _ScreenParams.xy * 0.25;
+
+    // ディザパターンを 1 px ずらす(半透明同士が重なった時の点滅防止)
+    vpos.x += 0.25;
+
+    vpos.y = _AdditiveColor.a * 0.9375 + frac(vpos.y) * 0.0625;
+
+    clip(tex2D(_DitherMaskLOD2D, vpos).a - 0.5);
+
+
 	float4_t diffSamplerColor = tex2D( _MainTex, i.uv.xy );
 
 #ifdef ENABLE_NORMAL_MAP

@@ -18,6 +18,7 @@ float4 _MainTex_ST;
 sampler2D _MainTex;
 sampler2D _FalloffSampler;
 sampler2D _RimLightSampler;
+sampler2D _DitherMaskLOD2D;
 
 // Constants
 #define FALLOFF_POWER 1.0
@@ -33,6 +34,7 @@ struct v2f
 	float2 uv     : TEXCOORD3;
 	float3 eyeDir : TEXCOORD4;
 	float3 lightDir : TEXCOORD5;
+	float4 screenPos : TEXCOORD6;
 };
 
 #else
@@ -45,6 +47,7 @@ struct v2f
 	float2 uv     : TEXCOORD1;
 	float3 eyeDir : TEXCOORD2;
 	float3 lightDir : TEXCOORD3;
+	float4 screenPos : TEXCOORD4;
 };
 
 #endif
@@ -69,6 +72,8 @@ v2f vert( appdata_base v )
 
 	o.lightDir = WorldSpaceLightDir( v.vertex );
 
+	o.screenPos = ComputeScreenPos(o.pos);
+
 #ifdef ENABLE_CAST_SHADOWS
 	TRANSFER_VERTEX_TO_FRAGMENT( o );
 #endif
@@ -79,6 +84,18 @@ v2f vert( appdata_base v )
 // Fragment shader
 float4 frag( v2f i ) : COLOR
 {
+	// Dither Transparent
+	// Pixel clipping process
+    float2 vpos = i.screenPos.xy / i.screenPos.w * _ScreenParams.xy * 0.25;
+
+    // ディザパターンを 1 px ずらす(半透明同士が重なった時の点滅防止)
+    vpos.x += 0.25;
+
+    vpos.y = _AdditiveColor.a * 0.9375 + frac(vpos.y) * 0.0625;
+
+    clip(tex2D(_DitherMaskLOD2D, vpos).a - 0.5);
+
+
 	float4_t diffSamplerColor = tex2D( _MainTex, i.uv );
 
 	// Falloff. Convert the angle between the normal and the camera direction into a lookup for the gradient
