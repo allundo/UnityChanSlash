@@ -43,17 +43,18 @@ public class DoorUI : MonoBehaviour
 
     void Awake()
     {
-        InstantiateAllPrefabs();
         rectTransform = GetComponent<RectTransform>();
+
+        InstantiateAllPrefabs();
+
+        SetUIsActive(texts, false);
+        SetUIsActive(stopArrows, false);
+        SetUIsActive(moveArrows, false);
     }
 
     void Start()
     {
         ResetCenterPos();
-
-        SetUIsActive(texts, false);
-        SetUIsActive(stopArrows, false);
-        SetUIsActive(moveArrows, false);
 
         if (upText != null && upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragUp(ratio)).AddTo(this);
         if (downText != null && downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragDown(ratio)).AddTo(this);
