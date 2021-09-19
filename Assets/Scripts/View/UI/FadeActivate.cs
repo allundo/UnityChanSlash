@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
-public class FadeActivate : MonoBehaviour
+public class FadeActivate<T> : MonoBehaviour
+    where T : MaskableGraphic
 {
     protected bool isActive = true;
-    protected FadeTween fade;
+    protected FadeTween<T> fade;
 
     protected virtual void Awake()
     {
-        fade = new FadeTween(gameObject, 1f);
+        fade = new FadeTween<T>(gameObject, 1f);
     }
 
     protected virtual void Start()

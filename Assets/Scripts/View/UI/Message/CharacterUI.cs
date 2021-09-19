@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
 public class CharacterUI : MonoBehaviour
 {
     [SerializeField] private Sprite[] face = default;
 
-    private Image image;
-    private FadeTween fade;
+    private FadeTweenImage fade;
     private UITween uiTween;
     private Tween faceTween = null;
     private Vector2 faceMoveOrigin;
@@ -15,9 +13,7 @@ public class CharacterUI : MonoBehaviour
 
     void Awake()
     {
-        image = GetComponent<Image>();
-
-        fade = new FadeTween(image, 1f, true);
+        fade = new FadeTweenImage(gameObject, 1f, true);
         uiTween = new UITween(gameObject, true);
 
         fade.SetAlpha(0f);
@@ -36,7 +32,7 @@ public class CharacterUI : MonoBehaviour
 
         if (faceID == FaceID.NONE) return;
 
-        image.sprite = face[(int)faceID];
+        fade.SetSprite(face[(int)faceID]);
 
         faceTween =
             DOTween.Sequence()

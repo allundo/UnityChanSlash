@@ -1,11 +1,10 @@
-using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
-public class GameOverUI : FadeActivate, IPointerDownHandler, IPointerUpHandler
+public class GameOverUI : FadeActivateImage, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private FadeActivate gameOverTxt = default;
-    [SerializeField] private FadeActivate gameOverBG = default;
+    [SerializeField] private FadeActivateTMPro gameOverTxt = default;
+    [SerializeField] private FadeActivateImage gameOverBG = default;
     [SerializeField] private GameOverWindowUI selectUI = default;
 
     public void OnPointerDown(PointerEventData eventData) { }
@@ -22,7 +21,7 @@ public class GameOverUI : FadeActivate, IPointerDownHandler, IPointerUpHandler
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, 0.25f, true);
+        fade = new FadeTweenImage(gameObject, 0.25f, true);
     }
 
     protected override void Start()

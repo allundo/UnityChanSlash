@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class MessageWindowUI : FadeActivate
+public class MessageWindowUI : FadeActivateImage
 {
     private UITween uiTween;
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, 1f, true);
+        fade = new FadeTweenImage(gameObject, 1f, true);
         uiTween = new UITween(gameObject, true);
 
         uiTween.SetSize(new Vector2(uiTween.defaultSize.x, 0f));

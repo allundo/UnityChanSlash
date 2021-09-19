@@ -29,7 +29,7 @@ public class CoverScreen : FadeScreen
 
     protected override void Awake()
     {
-        if (fadeImage != null) fade = new FadeTween(fadeImage, 1f, true);
+        if (fadeImage != null) fade = new FadeTweenImage(fadeImage, 1f, true);
 
         coverImage = coverImage ?? GetComponent<Image>();
         fadeMC = new FadeMaterialColor(coverImage, 1f, true);

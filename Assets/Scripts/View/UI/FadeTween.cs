@@ -2,9 +2,9 @@
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class FadeTween
+public class FadeTween<T> where T : MaskableGraphic
 {
-    protected MaskableGraphic image;
+    protected T image;
     protected float maxAlpha;
     protected bool isValidOnPause;
 
@@ -25,14 +25,14 @@ public class FadeTween
 
     protected float AlphaRatio => color.a / maxAlpha;
 
-    public FadeTween(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
+    public FadeTween(T image, float maxAlpha = 1f, bool isValidOnPause = false)
     {
         this.image = image;
         this.maxAlpha = maxAlpha;
         this.isValidOnPause = isValidOnPause;
     }
     public FadeTween(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
-        : this(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause) { }
+        : this(gameObject.GetComponent<T>(), maxAlpha, isValidOnPause) { }
 
     public void SetAlpha(float alpha)
     {
