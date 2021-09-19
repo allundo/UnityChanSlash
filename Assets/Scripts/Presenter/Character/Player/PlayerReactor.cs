@@ -23,4 +23,5 @@ public class PlayerReactor : MobReactor
 
         return Mathf.Max(status.CalcAttack(attack, dir) - shield, 0.0f);
     }
+    protected override void Dead() => Inactivate();
 }

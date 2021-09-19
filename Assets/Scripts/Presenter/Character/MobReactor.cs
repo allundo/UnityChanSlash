@@ -12,7 +12,10 @@ public class MobReactor : SpawnObject<MobReactor>
     protected MobEffect effect;
     protected MobCommander commander;
 
-    // public ISubject<Unit> Inactivator { get; protected set; } = new Subject<Unit>();
+    // private ISubject<MobReactor> onDead = new Subject<MobReactor>();
+    // public IObservable<MobReactor> OnDead => onDead;
+
+    private static readonly Vector3 OUT_OF_SCREEN = new Vector3(-100.0f, 0.0f, -100.0f);
 
     protected virtual void Awake()
     {
@@ -34,8 +37,6 @@ public class MobReactor : SpawnObject<MobReactor>
             .AddTo(this);
 
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
-        // Call Activate() directly for now.
-        // Inactivator.Subscribe(_ => OnInactivate()).AddTo(this);
     }
 
     protected void OnLifeChange(float life)
@@ -86,10 +87,10 @@ public class MobReactor : SpawnObject<MobReactor>
         effect.FadeInTween(duration).Play();
     }
 
-    public virtual void FadeOutToInactive(float duration = 0.5f)
+    public virtual void FadeOutToDead(float duration = 0.5f)
     {
         effect.FadeOutTween(duration)
-            .OnComplete(() => Inactivate())
+            .OnComplete(() => Dead())
             .Play();
     }
 
@@ -103,5 +104,12 @@ public class MobReactor : SpawnObject<MobReactor>
     {
         status.Inactivate();
         commander.Inactivate();
+    }
+
+    protected virtual void Dead()
+    {
+        transform.position = OUT_OF_SCREEN;
+        Inactivate();
+        // onDead.OnNext(this);
     }
 }
