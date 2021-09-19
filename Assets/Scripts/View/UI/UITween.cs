@@ -28,6 +28,8 @@ public class UITween
 
         return isReusable ? move.AsReusable(gameObject) : move;
     }
+    public Tween MoveOffset(Vector2 offset, float duration = 1f, bool isReusable = false)
+        => Move(defaultPos + offset, duration, isReusable);
 
     public Tween MoveRelative(Vector2 moveVec, float duration = 1f)
     {
@@ -78,12 +80,26 @@ public class UITween
     }
 
     public void SetPosX(float destX) => SetPos(new Vector2(destX, defaultPos.y));
-    public void SetPos(float destY) => SetPos(new Vector2(defaultPos.x, destY));
+    public void SetPosY(float destY) => SetPos(new Vector2(defaultPos.x, destY));
+
+    /// <summary>
+    /// Set image position by offset vector from default position
+    /// </summary>
+    /// <param name="offset">Offset vector from default position</param>
+    public void SetPosOffset(Vector2 offset)
+    {
+        rectTransform.anchoredPosition = defaultPos + offset;
+    }
 
     public void SetSize(Vector2 size, bool setDefault = false)
     {
         rectTransform.sizeDelta = size;
         if (setDefault) defaultSize = size;
+    }
+
+    public void ResetSize()
+    {
+        rectTransform.sizeDelta = defaultSize;
     }
 
     public Tween Resize(float ratio = 1.5f, float duration = 1f, bool isReusable = false)

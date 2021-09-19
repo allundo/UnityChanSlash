@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UniRx;
 using System;
-using TMPro;
 
 public class FlickInteraction : MonoBehaviour
 {
@@ -26,14 +25,8 @@ public class FlickInteraction : MonoBehaviour
 
     private FlickDirection currentDir = null;
 
-    private RectTransform rectTransform;
-    private Image image;
-
-    private Vector2 defaultSize;
-    private Vector2 defaultPos;
-    private Color defaultColor;
-
-    private Vector2 dragVector;
+    protected FadeTweenImage fade;
+    protected UITween ui;
 
     public ISubject<Unit> UpSubject => up.FlickSubject;
     public ISubject<Unit> DownSubject => down.FlickSubject;
@@ -49,8 +42,8 @@ public class FlickInteraction : MonoBehaviour
 
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        image = GetComponent<Image>();
+        fade = new FadeTweenImage(gameObject, maxAlpha);
+        ui = new UITween(gameObject);
 
         SetFlicks();
 
@@ -70,51 +63,11 @@ public class FlickInteraction : MonoBehaviour
 
     void Start()
     {
-        defaultSize = rectTransform.sizeDelta;
-        defaultPos = rectTransform.anchoredPosition;
-        defaultColor = image.color;
-
         gameObject.SetActive(false);
     }
 
-    private void ResetSize()
-    {
-        rectTransform.sizeDelta = defaultSize;
-    }
-
-    private void SetAlpha(float alpha)
-    {
-        Color c = image.color;
-        image.color = new Color(c.r, c.g, c.b, alpha * maxAlpha);
-    }
-
-    private Tween GetFadeOutToInactive(float duration = 0.2f, TweenCallback OnPlay = null)
-    {
-        OnPlay = OnPlay ?? Clear;
-
-        return
-            GetToAlpha(0.0f, duration)
-                .OnPlay(OnPlay)
-                .OnComplete(() => gameObject.SetActive(false));
-    }
-
-    private Tween GetResize(float ratio = 1.5f, float duration = 0.2f)
-    {
-        return
-            rectTransform
-                .DOSizeDelta(defaultSize * ratio, duration)
-                .OnComplete(() => rectTransform.sizeDelta = defaultSize);
-    }
-
-    private Tween GetMove(Vector2 destination, float duration = 0.2f)
-    {
-        return rectTransform.DOAnchorPos(destination + defaultPos, duration);
-    }
-
-    private Tween GetToAlpha(float alpha, float duration = 0.2f)
-    {
-        return DOTween.ToAlpha(() => image.color, c => image.color = c, alpha * maxAlpha, duration);
-    }
+    private Tween GetFadeOutToInactive(float duration = 0.2f)
+        => fade.Out(duration, 0, Clear, () => gameObject.SetActive(false));
 
     public void Release(Vector2 dragVector, float duration = 0.2f)
     {
@@ -123,25 +76,16 @@ public class FlickInteraction : MonoBehaviour
 
     public void Cancel(float duration = 0.2f)
     {
-        GetMove(Vector2.zero, duration).Play();
-        GetResize(0.5f, duration).Play();
+        ui.MoveBack(duration).Play();
+        ui.Resize(0.5f, duration).Play();
         GetFadeOutToInactive(duration).Play();
-    }
-
-    /// <summary>
-    /// Set image position by offset vector from initial position
-    /// </summary>
-    /// <param name="pos">Offset vector from initial position</param>
-    private void SetPos(Vector2 pos)
-    {
-        rectTransform.anchoredPosition = pos + defaultPos;
     }
 
     private void Activate(Vector2 dragVector)
     {
         if (currentDir != null) return;
 
-        ResetSize();
+        ui.ResetSize();
         gameObject.SetActive(true);
     }
 
@@ -185,6 +129,8 @@ public class FlickInteraction : MonoBehaviour
     protected abstract class FlickDirection
     {
         protected FlickInteraction flick;
+        protected FadeTweenImage fade;
+        protected UITween ui;
         protected Sprite sprite;
         protected float limit;
 
@@ -197,6 +143,8 @@ public class FlickInteraction : MonoBehaviour
         protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit)
         {
             this.flick = flick;
+            this.fade = flick.fade;
+            this.ui = flick.ui;
             this.sprite = sprite;
             this.limit = limit;
         }
@@ -224,14 +172,14 @@ public class FlickInteraction : MonoBehaviour
         /// <param name="dragVector"></param>
         public void UpdateImage(Vector2 dragVector)
         {
-            flick.image.sprite = sprite;
+            fade.SetSprite(sprite);
 
             Vector2 limitedVec = LimitedVec(dragVector);
 
             dragRatio.SetValueAndForceNotify(DragRatio(limitedVec.magnitude));
 
-            flick.SetPos(limitedVec);
-            flick.SetAlpha(dragRatio.Value);
+            ui.SetPosOffset(limitedVec);
+            fade.SetAlpha(dragRatio.Value);
         }
 
         /// <summary>
@@ -252,9 +200,9 @@ public class FlickInteraction : MonoBehaviour
             }
 
             DOTween.Sequence()
-                .Append(flick.GetMove(Destination, duration))
-                .Join(flick.GetToAlpha(1.0f, duration))
-                .Append(flick.GetResize(1.5f, duration))
+                .Append(ui.MoveOffset(Destination, duration))
+                .Join(fade.In(duration))
+                .Append(ui.Resize(1.5f, duration))
                 .Join(flick.GetFadeOutToInactive(duration))
                 .Play();
 
