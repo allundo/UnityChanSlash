@@ -7,7 +7,7 @@ public class WorldMap
 {
     public static readonly float TILE_UNIT = 2.5f;
 
-    public Tile[,] tileInfo { get; protected set; }
+    public ITile[,] tileInfo { get; protected set; }
     public Texture2D texMap { get; protected set; }
     public bool[,] discovered { get; protected set; }
     public List<Pos> currentViewOpen { get; protected set; } = new List<Pos>();
@@ -20,13 +20,13 @@ public class WorldMap
     public Dictionary<Pos, IDirection> CopyDeadEndPos() => new Dictionary<Pos, IDirection>(map.deadEndPos);
     public Dir GetPallDir(int x, int y) => map.GetPallDir(x, y);
 
-    public Tile GetTile(Vector3 pos) => GetTile(MapPos(pos));
-    public Tile GetTile(Pos pos) => GetTile(pos.x, pos.y);
-    public Tile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : tileInfo[x, y];
+    public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
+    public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
+    public ITile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : tileInfo[x, y];
 
     public Ground GetGround(ref int x, ref int y)
     {
-        Tile tile = GetTile(x, y);
+        ITile tile = GetTile(x, y);
 
         if (tile is Ground) return tile as Ground;
 
@@ -60,7 +60,7 @@ public class WorldMap
         Width = map.width;
         Height = map.height;
 
-        tileInfo = new Tile[Width, Height];
+        tileInfo = new ITile[Width, Height];
 
         texMap = new Texture2D(Width, Height, TextureFormat.RGB24, false);
         var pixels = texMap.GetPixels();
@@ -175,7 +175,7 @@ public class WorldMap
                 if (!discovered[x + i, y + j]) continue;
 
                 int inverseJ = blockHeight - j - 1;
-                Tile tile = tileInfo[x + i, y + j];
+                ITile tile = tileInfo[x + i, y + j];
 
                 pixels[i + inverseJ * blockWidth] =
                     tile is Door && (tile as Door).IsOpen ?

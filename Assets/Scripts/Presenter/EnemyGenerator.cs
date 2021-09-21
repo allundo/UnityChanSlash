@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Collider))]
 public class EnemyGenerator : Generator<MobReactor>
 {
-    protected Tile spawnTile;
+    protected ITile spawnTile;
     protected Collider detectCharacter;
 
     protected Coroutine searchCharacter = null;
@@ -17,7 +17,7 @@ public class EnemyGenerator : Generator<MobReactor>
         StartCoroutine(SpawnLoop());
     }
 
-    public void Init(GameObject enemyPool, Tile tile)
+    public void Init(GameObject enemyPool, ITile tile)
     {
         // Set another parent since Collider cannot detect self child GameObjects.
         pool = enemyPool.transform;

@@ -1,6 +1,6 @@
-using UnityEngine;
+using System.Collections.Generic;
 
-public interface Tile
+public interface ITile
 {
     bool IsEnterable(IDirection dir = null);
     bool IsLeapable { get; }
@@ -9,7 +9,7 @@ public interface Tile
     MobStatus OnCharacter { get; set; }
 }
 
-public class Ground : Tile
+public class Ground : ITile
 {
     public bool IsEnterable(IDirection dir = null) => !IsCharactorOn;
     public bool IsLeapable => true;
@@ -19,7 +19,7 @@ public class Ground : Tile
     public MobStatus status = null;
 }
 
-public class Wall : Tile
+public class Wall : ITile
 {
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => false;
@@ -28,7 +28,7 @@ public class Wall : Tile
     public MobStatus OnCharacter { get { return null; } set { } }
 }
 
-public class Door : Tile
+public class Door : ITile
 {
     public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharactorOn;
     public bool IsLeapable => false;
@@ -41,7 +41,7 @@ public class Door : Tile
     public bool IsControllable => state.IsControllable;
 }
 
-public class Stair : Tile
+public class Stair : ITile
 {
     public bool IsEnterable(IDirection dir = null) => enterDir.IsInverse(dir);
     public bool IsLeapable => false;

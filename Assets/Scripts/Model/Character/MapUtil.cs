@@ -51,11 +51,11 @@ public class MapUtil : MonoBehaviour
     public Vector3 GetRightVector(int distance = 1) => Quaternion.Euler(0, 90, 0) * dir.LookAt * TILE_UNIT * distance;
     public Vector3 GetLeftVector(int distance = 1) => Quaternion.Euler(0, -90, 0) * dir.LookAt * TILE_UNIT * distance;
 
-    public Tile ForwardTile => map.GetTile(dir.GetForward(onTilePos));
-    public Tile BackwardTile => map.GetTile(dir.GetBackward(onTilePos));
-    public Tile RightTile => map.GetTile(dir.GetRight(onTilePos));
-    public Tile LeftTile => map.GetTile(dir.GetLeft(onTilePos));
-    public Tile JumpTile => map.GetTile(dir.GetForward(dir.GetForward(onTilePos)));
+    public ITile ForwardTile => map.GetTile(dir.GetForward(onTilePos));
+    public ITile BackwardTile => map.GetTile(dir.GetBackward(onTilePos));
+    public ITile RightTile => map.GetTile(dir.GetRight(onTilePos));
+    public ITile LeftTile => map.GetTile(dir.GetLeft(onTilePos));
+    public ITile JumpTile => map.GetTile(dir.GetForward(dir.GetForward(onTilePos)));
 
     public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
     public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);

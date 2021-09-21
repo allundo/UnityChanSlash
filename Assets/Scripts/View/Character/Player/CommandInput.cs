@@ -44,7 +44,7 @@ public partial class PlayerCommander : ShieldCommander
     {
         if (!isInputVisible) return;
 
-        Tile forwardTile = map.ForwardTile;
+        ITile forwardTile = map.ForwardTile;
 
         // Is face to enemy
         if (forwardTile.IsCharactorOn)
