@@ -3485,7 +3485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66df21ecf9e594aeca256c4749b61a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handle: {fileID: 21300000, guid: 8ad952606b50e4c47a68c5e7036a4888, type: 3}
+  handle: {fileID: 21300000, guid: c95d2fd27ed914889a45cd5c0732e2ac, type: 3}
   circle: {fileID: 21300000, guid: 6d4299babd2f84e909db7978748179cb, type: 3}
   defaultSize: {x: 100, y: 100}
   maxAlpha: 1
@@ -3551,7 +3551,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8ad952606b50e4c47a68c5e7036a4888, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c95d2fd27ed914889a45cd5c0732e2ac, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11145,7 +11145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66df21ecf9e594aeca256c4749b61a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handle: {fileID: 21300000, guid: 3ab22d4483b4444eab22ee93efafe43c, type: 3}
+  handle: {fileID: 21300000, guid: 067c6650495714c38847a5bd3a272da4, type: 3}
   circle: {fileID: 21300000, guid: 6d4299babd2f84e909db7978748179cb, type: 3}
   defaultSize: {x: 100, y: 100}
   maxAlpha: 1
@@ -11211,7 +11211,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3ab22d4483b4444eab22ee93efafe43c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 067c6650495714c38847a5bd3a272da4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12209,10 +12209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2224466b0200e4229b678f8f187443b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeRDoorUI: {fileID: 0}
-  closeLDoorUI: {fileID: 0}
-  closeRFlick: {fileID: 0}
-  closeLFlick: {fileID: 0}
+  getItemRUI: {fileID: 0}
+  getItemLUI: {fileID: 0}
+  getRFlick: {fileID: 0}
+  getLFlick: {fileID: 0}
   maxAlpha: 0.8
 --- !u!114 &1266231271
 MonoBehaviour:
@@ -13430,15 +13430,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1361193906}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6f0b0fd03d24904ab3e0b300de13d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f96513c69694453d91789ea24d1b184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
-  downSprite: {fileID: 0}
+  downSprite: {fileID: 21300000, guid: c95d2fd27ed914889a45cd5c0732e2ac, type: 3}
   leftSprite: {fileID: 0}
-  rightSprite: {fileID: 21300000, guid: 8ad952606b50e4c47a68c5e7036a4888, type: 3}
+  rightSprite: {fileID: 0}
   upLimit: 80
-  downLimit: 0
+  downLimit: 80
   rightLimit: 80
   leftLimit: 0
   maxAlpha: 1
@@ -14964,14 +14964,16 @@ MonoBehaviour:
   stopArrowPrefabs:
   - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
   - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
+  - {fileID: 2528914885245505418, guid: 68893b6a5ddf143be91b52b5a8ff2105, type: 3}
   upArrowPrefab: {fileID: 8278511109164863214, guid: 5cc546fc365814434bc04a49ee709a27,
     type: 3}
-  downArrowPrefab: {fileID: 0}
+  downArrowPrefab: {fileID: 329058419030458098, guid: af255e65eeeb049a58a857620cf7a562,
+    type: 3}
   rightArrowPrefab: {fileID: 0}
   leftArrowPrefab: {fileID: 8021491684955217512, guid: 868b6cb73a7224da8bafefdcac653d89,
     type: 3}
   handleButton: {fileID: 1130520979}
-  flick: {fileID: 2111762170}
+  flick: {fileID: 0}
 --- !u!114 &1472527884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15878,14 +15880,16 @@ MonoBehaviour:
   stopArrowPrefabs:
   - {fileID: 3453705348552658848, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
   - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
+  - {fileID: 2528914885245505418, guid: 68893b6a5ddf143be91b52b5a8ff2105, type: 3}
   upArrowPrefab: {fileID: 8278511109164863214, guid: 5cc546fc365814434bc04a49ee709a27,
     type: 3}
-  downArrowPrefab: {fileID: 0}
+  downArrowPrefab: {fileID: 329058419030458098, guid: af255e65eeeb049a58a857620cf7a562,
+    type: 3}
   rightArrowPrefab: {fileID: 1523490823619203249, guid: ed2fe054a824c4b9ba424519b34f5a56,
     type: 3}
   leftArrowPrefab: {fileID: 0}
   handleButton: {fileID: 285289248}
-  flick: {fileID: 1361193908}
+  flick: {fileID: 0}
 --- !u!114 &1562782466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21647,15 +21651,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2111762168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6f0b0fd03d24904ab3e0b300de13d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f96513c69694453d91789ea24d1b184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
-  downSprite: {fileID: 0}
-  leftSprite: {fileID: 21300000, guid: 3ab22d4483b4444eab22ee93efafe43c, type: 3}
+  downSprite: {fileID: 21300000, guid: 067c6650495714c38847a5bd3a272da4, type: 3}
+  leftSprite: {fileID: 0}
   rightSprite: {fileID: 0}
   upLimit: 80
-  downLimit: 0
+  downLimit: 80
   rightLimit: 0
   leftLimit: 80
   maxAlpha: 1

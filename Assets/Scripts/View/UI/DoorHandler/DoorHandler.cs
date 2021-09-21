@@ -7,9 +7,9 @@ using UniRx;
 
 public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField] private DoorUI openDoorUI = default;
-    [SerializeField] private DoorUI closeRDoorUI = default;
-    [SerializeField] private DoorUI closeLDoorUI = default;
+    [SerializeField] private HandleUI openDoorUI = default;
+    [SerializeField] private HandleUI closeRDoorUI = default;
+    [SerializeField] private HandleUI closeLDoorUI = default;
     [SerializeField] private DoorFlick openFlick = default;
     [SerializeField] private DoorFlick closeRFlick = default;
     [SerializeField] private DoorFlick closeLFlick = default;
@@ -27,7 +27,7 @@ public class DoorHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private bool isOpen = false;
     private bool isFingerDown = false;
 
-    private DoorUI[] doorUIs;
+    private HandleUI[] doorUIs;
     private FlickInteraction currentFlick = null;
     private Vector2 pressPos = Vector2.zero;
 

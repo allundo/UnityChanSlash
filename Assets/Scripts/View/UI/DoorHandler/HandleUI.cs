@@ -5,7 +5,7 @@ using TMPro;
 using UniRx;
 using Coffee.UIExtensions;
 
-public class DoorUI : MonoBehaviour
+public class HandleUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI upTextPrefab = default;
     [SerializeField] private TextMeshProUGUI downTextPrefab = default;
