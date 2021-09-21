@@ -12209,10 +12209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2224466b0200e4229b678f8f187443b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  getItemRUI: {fileID: 0}
-  getItemLUI: {fileID: 0}
-  getRFlick: {fileID: 0}
-  getLFlick: {fileID: 0}
+  handleRUI: {fileID: 1472527883}
+  handleLUI: {fileID: 1562782465}
+  flickR: {fileID: 2111762170}
+  flickL: {fileID: 1361193908}
   maxAlpha: 0.8
 --- !u!114 &1266231271
 MonoBehaviour:
@@ -13436,7 +13436,7 @@ MonoBehaviour:
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
   downSprite: {fileID: 21300000, guid: c95d2fd27ed914889a45cd5c0732e2ac, type: 3}
   leftSprite: {fileID: 0}
-  rightSprite: {fileID: 0}
+  rightSprite: {fileID: 21300000, guid: 934d7c628efe4490a813875dd6fb95f5, type: 3}
   upLimit: 80
   downLimit: 80
   rightLimit: 80
@@ -13461,7 +13461,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8ad952606b50e4c47a68c5e7036a4888, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c95d2fd27ed914889a45cd5c0732e2ac, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14957,9 +14957,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upTextPrefab: {fileID: 7459873300014110790, guid: 943e17ff89eac40158666f8d9088d94f,
     type: 3}
-  downTextPrefab: {fileID: 0}
+  downTextPrefab: {fileID: 374313864119943862, guid: 15eb546be0a00487ea4f4c0f34d79e64,
+    type: 3}
   rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 8220755531836773774, guid: e402a305f4eb74721a30ad0419434e8d,
+  leftTextPrefab: {fileID: 6797976007714848974, guid: acf45289fa5c14e76832418a132a3e46,
     type: 3}
   stopArrowPrefabs:
   - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
@@ -14973,7 +14974,7 @@ MonoBehaviour:
   leftArrowPrefab: {fileID: 8021491684955217512, guid: 868b6cb73a7224da8bafefdcac653d89,
     type: 3}
   handleButton: {fileID: 1130520979}
-  flick: {fileID: 0}
+  flick: {fileID: 2111762170}
 --- !u!114 &1472527884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15132,13 +15133,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be951783560046ec9d2a9e35f4f5625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openDoorUI: {fileID: 2346006232178893650}
-  closeRDoorUI: {fileID: 6818265316883718342}
-  closeLDoorUI: {fileID: 8337679455963713635}
-  openFlick: {fileID: 2323633022319743429}
-  closeRFlick: {fileID: 5953380551960256829}
-  closeLFlick: {fileID: 5098289428419672123}
+  handleRUI: {fileID: 6818265316883718342}
+  handleLUI: {fileID: 8337679455963713635}
+  flickR: {fileID: 5953380551960256829}
+  flickL: {fileID: 5098289428419672123}
   maxAlpha: 0.8
+  openDoorUI: {fileID: 2346006232178893650}
+  openFlick: {fileID: 2323633022319743429}
 --- !u!43 &1522103338
 Mesh:
   m_ObjectHideFlags: 0
@@ -15873,8 +15874,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upTextPrefab: {fileID: 7459873300014110790, guid: 943e17ff89eac40158666f8d9088d94f,
     type: 3}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 8220755531836773774, guid: e402a305f4eb74721a30ad0419434e8d,
+  downTextPrefab: {fileID: 374313864119943862, guid: 15eb546be0a00487ea4f4c0f34d79e64,
+    type: 3}
+  rightTextPrefab: {fileID: 6797976007714848974, guid: acf45289fa5c14e76832418a132a3e46,
     type: 3}
   leftTextPrefab: {fileID: 0}
   stopArrowPrefabs:
@@ -15889,7 +15891,7 @@ MonoBehaviour:
     type: 3}
   leftArrowPrefab: {fileID: 0}
   handleButton: {fileID: 285289248}
-  flick: {fileID: 0}
+  flick: {fileID: 1361193908}
 --- !u!114 &1562782466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21656,7 +21658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
   downSprite: {fileID: 21300000, guid: 067c6650495714c38847a5bd3a272da4, type: 3}
-  leftSprite: {fileID: 0}
+  leftSprite: {fileID: 21300000, guid: 934d7c628efe4490a813875dd6fb95f5, type: 3}
   rightSprite: {fileID: 0}
   upLimit: 80
   downLimit: 80
@@ -21682,7 +21684,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3ab22d4483b4444eab22ee93efafe43c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 067c6650495714c38847a5bd3a272da4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
