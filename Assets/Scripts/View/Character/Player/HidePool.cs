@@ -13,7 +13,6 @@ public class HidePool : MonoBehaviour
     [SerializeField] private GameObject plateFrontPrefab = default;
     [SerializeField] private MiniMap miniMap = default;
 
-
     protected Transform[] pool = new Transform[0b10000];
     protected GameObject[] prefab = new GameObject[0b10000];
     protected Quaternion[] rotate = new Quaternion[0b10000];

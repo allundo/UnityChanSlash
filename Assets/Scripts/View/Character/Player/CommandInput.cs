@@ -5,6 +5,7 @@ public partial class PlayerCommander : ShieldCommander
 {
     [SerializeField] protected FightCircle fightCircle = default;
     [SerializeField] protected DoorHandler doorHandler = default;
+    [SerializeField] protected ItemHandler itemHandler = default;
     [SerializeField] protected PointerEnterUI forwardUI = default;
     [SerializeField] protected PointerEnterUI rightUI = default;
     [SerializeField] protected PointerEnterUI leftUI = default;
@@ -15,6 +16,7 @@ public partial class PlayerCommander : ShieldCommander
     [SerializeField] protected PointerEnterUI guardUI = default;
     [SerializeField] protected MessageController messageController = default;
     [SerializeField] protected GameOverUI gameOverUI = default;
+    [SerializeField] protected ItemGenerator itemGenerator = default;
 
     protected FightInput fightInput;
     protected DoorInput doorInput;
@@ -58,7 +60,7 @@ public partial class PlayerCommander : ShieldCommander
             fightCircle.Inactivate();
         }
 
-        if (!fightCircle.isActive && forwardTile is Door)
+        if (!fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn)
         {
             Door door = forwardTile as Door;
 
@@ -71,7 +73,18 @@ public partial class PlayerCommander : ShieldCommander
             forwardUI.Resize(1f, 1f);
         }
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.IsPressed);
+        if (!fightCircle.isActive && forwardTile.IsItemOn)
+        {
+            itemHandler.Activate();
+            forwardUI.Resize(0.5f, 1f);
+        }
+        else
+        {
+            itemHandler.Inactivate();
+            forwardUI.Resize(1f, 1f);
+        }
+
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.IsPressed && !itemHandler.IsPressed);
         backwardUI.SetActive(map.IsBackwardMovable);
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);

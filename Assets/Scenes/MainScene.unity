@@ -7676,6 +7676,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fightCircle: {fileID: 4719329011268037073}
   doorHandler: {fileID: 1506115883}
+  itemHandler: {fileID: 1266231270}
   forwardUI: {fileID: 5335086371177449365}
   rightUI: {fileID: 7928616715383661}
   leftUI: {fileID: 1001582510976532804}
@@ -7686,6 +7687,7 @@ MonoBehaviour:
   guardUI: {fileID: 5794931035596765977}
   messageController: {fileID: 8337679455110417430}
   gameOverUI: {fileID: 5465461844953474837}
+  itemGenerator: {fileID: 1345430765}
   mainCamera: {fileID: 963194229}
   jab: {fileID: 5750562921869030655}
   straight: {fileID: 1368611260059262624}
@@ -12177,7 +12179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1266231269
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12486,6 +12488,51 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1345430764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1345430766}
+  - component: {fileID: 1345430765}
+  m_Layer: 0
+  m_Name: ItemGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1345430765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345430764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c463a24e0a7f48aabd228f8e30c83f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3400831684517067014, guid: ea0ac0796c67846c8ad4583da7318a04, type: 3}
+  spawnPoint: {x: 0, y: 0, z: 0}
+--- !u!4 &1345430766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345430764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1347946255
 GameObject:
   m_ObjectHideFlags: 0
@@ -14921,7 +14968,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1472527882
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15838,7 +15885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1562782464
 RectTransform:
   m_ObjectHideFlags: 0

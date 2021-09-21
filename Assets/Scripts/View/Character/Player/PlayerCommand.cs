@@ -16,6 +16,7 @@ public partial class PlayerCommander : ShieldCommander
         protected PlayerAnimator anim;
         protected ThirdPersonCamera mainCamera;
         protected HidePool hidePool;
+        protected ItemGenerator itemGenerator;
 
         protected Tween validateTrigger;
 
@@ -26,6 +27,7 @@ public partial class PlayerCommander : ShieldCommander
             anim = commander.anim as PlayerAnimator;
             mainCamera = commander.mainCamera;
             hidePool = commander.hidePool;
+            itemGenerator = commander.itemGenerator;
         }
 
         protected override void SetValidateTimer(float timing = 0.5f)
@@ -222,6 +224,7 @@ public partial class PlayerCommander : ShieldCommander
             mainCamera.TurnLeft();
             anim.turnL.Fire();
             hidePool.Turn();
+            itemGenerator.Turn(map.dir);
 
             SetValidateTimer(0.5f, 0.1f);
             PlayTween(tweenMove.GetRotate(-90), () => mainCamera.ResetCamera());
@@ -238,6 +241,7 @@ public partial class PlayerCommander : ShieldCommander
             mainCamera.TurnRight();
             anim.turnR.Fire();
             hidePool.Turn();
+            itemGenerator.Turn(map.dir);
 
             SetValidateTimer(0.5f, 0.1f);
             PlayTween(tweenMove.GetRotate(90), () => mainCamera.ResetCamera());

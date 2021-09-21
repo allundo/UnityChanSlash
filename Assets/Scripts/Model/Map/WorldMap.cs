@@ -56,6 +56,7 @@ public class WorldMap
     public WorldMap()
     {
         map = new MapManager().SetStair();
+        deadEndPos = CopyDeadEndPos();
 
         Width = map.width;
         Height = map.height;
