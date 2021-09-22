@@ -17,6 +17,7 @@ public partial class PlayerCommander : ShieldCommander
         protected ThirdPersonCamera mainCamera;
         protected HidePool hidePool;
         protected ItemGenerator itemGenerator;
+        protected ItemIconGenerator itemIconGenerator;
 
         protected Tween validateTrigger;
 
@@ -28,6 +29,7 @@ public partial class PlayerCommander : ShieldCommander
             mainCamera = commander.mainCamera;
             hidePool = commander.hidePool;
             itemGenerator = commander.itemGenerator;
+            itemIconGenerator = commander.itemIconGenerator;
         }
 
         protected override void SetValidateTimer(float timing = 0.5f)
@@ -273,6 +275,19 @@ public partial class PlayerCommander : ShieldCommander
         protected override void Action()
         {
             anim.handle.Fire();
+        }
+    }
+
+    protected class PlayerGetItem : PlayerAction
+    {
+        public PlayerGetItem(PlayerCommander commander, float duration) : base(commander, duration) { }
+
+        protected override void Action()
+        {
+            ITile tile = map.ForwardTile;
+            Item item = tile.PickItem();
+
+            if (!itemIconGenerator.PickUp(item)) tile.PutItem(item);
         }
     }
 

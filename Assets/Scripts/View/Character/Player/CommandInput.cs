@@ -17,9 +17,10 @@ public partial class PlayerCommander : ShieldCommander
     [SerializeField] protected MessageController messageController = default;
     [SerializeField] protected GameOverUI gameOverUI = default;
     [SerializeField] protected ItemGenerator itemGenerator = default;
+    [SerializeField] protected ItemIconGenerator itemIconGenerator = default;
 
     protected FightInput fightInput;
-    protected DoorInput doorInput;
+    protected HandleInput doorInput;
     protected MoveInput moveInput;
 
     protected bool isInputVisible = true;
@@ -38,7 +39,7 @@ public partial class PlayerCommander : ShieldCommander
     private void SetInputs()
     {
         fightInput = new FightInput(this);
-        doorInput = new DoorInput(this);
+        doorInput = new HandleInput(this);
         moveInput = new MoveInput(this);
     }
 
@@ -148,18 +149,21 @@ public partial class PlayerCommander : ShieldCommander
                 .AddTo(commander);
         }
     }
-    protected class DoorInput
+    protected class HandleInput
     {
         DoorHandler doorHandler;
+        ItemHandler itemHandler;
 
         Command forward;
         Command handle;
+        Command getItem;
 
         PlayerAnimator anim;
 
-        public DoorInput(PlayerCommander commander)
+        public HandleInput(PlayerCommander commander)
         {
             doorHandler = commander.doorHandler;
+            itemHandler = commander.itemHandler;
             anim = commander.anim as PlayerAnimator;
             SetCommands(commander);
         }
@@ -168,8 +172,9 @@ public partial class PlayerCommander : ShieldCommander
         {
             forward = new ForwardCommand(commander, 1.0f);
             handle = new PlayerHandle(commander, 0.4f);
+            getItem = new PlayerGetItem(commander, 0.8f);
 
-            doorHandler.ObserveGo
+            Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
                 .Subscribe(_ => commander.Execute(forward))
                 .AddTo(commander);
 
@@ -177,8 +182,12 @@ public partial class PlayerCommander : ShieldCommander
                 .Subscribe(_ => commander.ExecuteTrigger(handle))
                 .AddTo(commander);
 
-            doorHandler.ObserveHandOn
+            Observable.Merge(doorHandler.ObserveHandOn, itemHandler.ObserveHandOn)
                 .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
+                .AddTo(commander);
+
+            itemHandler.ObserveGet
+                .Subscribe(_ => commander.ExecuteTrigger(getItem))
                 .AddTo(commander);
         }
     }

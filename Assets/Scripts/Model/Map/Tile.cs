@@ -19,6 +19,8 @@ public class Tile
 
     public virtual bool PutItem(Item item)
     {
+        if (item == null) return false;
+
         items.Push(item);
         return true;
     }
@@ -27,7 +29,10 @@ public class Tile
     {
         if (items.Count == 0) return null;
 
-        return items.Pop();
+        var item = items.Pop();
+        item.Inactivate();
+
+        return item;
     }
 }
 

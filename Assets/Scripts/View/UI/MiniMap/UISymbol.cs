@@ -1,12 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(MaskableGraphic))]
 public class UISymbol : SpawnObject<UISymbol>
 {
     protected RectTransform rectTransform;
+    protected MaskableGraphic image;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        image = GetComponent<MaskableGraphic>();
     }
 
     public override UISymbol OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)

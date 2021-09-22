@@ -374,3 +374,8 @@ public enum Plate
     ACD = 0b1101,
     ABCD = 0b1111,
 }
+
+public enum ItemType
+{
+    Potion
+}
