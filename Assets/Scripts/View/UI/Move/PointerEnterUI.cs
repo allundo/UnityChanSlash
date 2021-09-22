@@ -1,4 +1,5 @@
 ﻿using UnityEngine.EventSystems;
+using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System;
@@ -21,6 +22,11 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+#if UNITY_EDITOR
+        // BUG: Unintended pointer enter (0,0) is detected on Unity Editor.
+        if (eventData.position == Vector2.zero) return;
+#endif
+
         if (!isActive) return;
         Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
     }
@@ -32,6 +38,11 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
+#if UNITY_EDITOR
+        // BUG: Unintended pointer down (0,0) is detected on Unity Editor.
+        if (eventData.position == Vector2.zero) return;
+#endif
+
         if (!isActive) return;
         Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
     }
