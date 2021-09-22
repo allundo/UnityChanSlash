@@ -7,10 +7,12 @@ public class UISymbol : SpawnObject<UISymbol>
 {
     protected RectTransform rectTransform;
     protected MaskableGraphic image;
+    protected Vector2 parentPos;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        parentPos = transform.parent.GetComponent<RectTransform>().localPosition;
         image = GetComponent<MaskableGraphic>();
     }
 

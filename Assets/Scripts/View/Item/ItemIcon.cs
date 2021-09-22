@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class ItemIcon : UISymbol
 {
@@ -6,8 +7,15 @@ public class ItemIcon : UISymbol
 
     public override UISymbol OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5F)
     {
-        SetPos(pos);
+        SetPos(pos, duration);
         Activate();
+        return this;
+    }
+
+    public ItemIcon SetPos(Vector3 pos, float duration = 0.5f)
+    {
+        rectTransform.localPosition = new Vector2(-parentPos.x, -parentPos.y - 300f);
+        rectTransform.DOAnchorPos(pos, duration).SetEase(Ease.OutExpo).Play();
         return this;
     }
 
