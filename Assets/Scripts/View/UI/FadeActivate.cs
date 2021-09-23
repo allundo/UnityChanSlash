@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
 public class FadeActivate : MonoBehaviour
 {
-    protected bool isActive = true;
+    public bool isActive { get; protected set; } = true;
     protected FadeTween fade;
 
     protected virtual void Awake()
@@ -31,7 +30,7 @@ public class FadeActivate : MonoBehaviour
         fade.Disable();
     }
 
-    public virtual Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    public virtual Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
@@ -43,10 +42,11 @@ public class FadeActivate : MonoBehaviour
                 isActive = true;
                 onPlay();
             },
-            onComplete);
+            onComplete,
+            isContinuous);
     }
 
-    public virtual Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    public virtual Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
@@ -61,6 +61,7 @@ public class FadeActivate : MonoBehaviour
             {
                 onComplete();
                 fade.Disable();
-            });
+            },
+            isContinuous);
     }
 }

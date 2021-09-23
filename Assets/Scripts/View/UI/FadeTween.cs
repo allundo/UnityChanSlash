@@ -55,12 +55,22 @@ public class FadeTween
     public void Enable() => SetEnabled(true);
     public void Disable() => SetEnabled(false);
 
-    public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+
+        if (isContinuous) return In(duration * (1f - AlphaRatio), delay, onPlay, onComplete);
+
+        return DOTween.Sequence()
+            .AppendCallback(() => SetAlpha(0f))
+            .Append(In(duration, delay, onPlay, onComplete));
+    }
+
+    private Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
 
-        fadeIn = Fade(maxAlpha, duration * (1f - AlphaRatio), delay)
+        fadeIn = Fade(maxAlpha, duration, delay)
             .OnPlay(() =>
             {
                 fadeOut?.Kill();
@@ -71,12 +81,21 @@ public class FadeTween
         return fadeIn;
     }
 
-    public virtual Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    public virtual Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+        if (isContinuous) return Out(duration * AlphaRatio, delay, onPlay, onComplete);
+
+        return DOTween.Sequence()
+            .AppendCallback(() => SetAlpha(1f))
+            .Append(Out(duration, delay, onPlay, onComplete));
+    }
+
+    private Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
 
-        fadeOut = Fade(0, duration * AlphaRatio, delay)
+        fadeOut = Fade(0, duration, delay)
             .OnPlay(() =>
             {
                 fadeIn?.Kill();

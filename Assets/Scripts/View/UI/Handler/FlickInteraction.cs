@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using UniRx;
 using System;
+using System.Linq;
 
 public class FlickInteraction : MonoBehaviour
 {
@@ -23,21 +24,25 @@ public class FlickInteraction : MonoBehaviour
     protected FlickDirection left = null;
 
     private FlickDirection currentDir = null;
+    private FlickDirection[] flickDirections;
 
     protected FadeTween fade;
     protected UITween ui;
 
-    public ISubject<Unit> UpSubject => up.FlickSubject;
-    public ISubject<Unit> DownSubject => down.FlickSubject;
-    public ISubject<Unit> RightSubject => right.FlickSubject;
-    public ISubject<Unit> LeftSubject => left.FlickSubject;
+    public IObservable<Unit> UpSubject => up.FlickSubject;
+    public IObservable<Unit> DownSubject => down.FlickSubject;
+    public IObservable<Unit> RightSubject => right.FlickSubject;
+    public IObservable<Unit> LeftSubject => left.FlickSubject;
 
-    public IObservable<Unit> ReleaseSubject { get; protected set; } = new Subject<Unit>();
+    public IObservable<Unit> FlickSubject { get; protected set; }
+    public IObservable<Unit> ReleaseSubject { get; protected set; }
 
     public IReadOnlyReactiveProperty<float> DragUp => up.DragRatioRP;
     public IReadOnlyReactiveProperty<float> DragDown => down.DragRatioRP;
     public IReadOnlyReactiveProperty<float> DragRight => right.DragRatioRP;
     public IReadOnlyReactiveProperty<float> DragLeft => left.DragRatioRP;
+
+    public IObservable<FlickDirection> Drag { get; protected set; }
 
     void Awake()
     {
@@ -46,10 +51,18 @@ public class FlickInteraction : MonoBehaviour
 
         SetFlicks();
 
-        foreach (var flick in new FlickDirection[] { up, down, right, left })
-        {
-            if (flick != null) ReleaseSubject = ReleaseSubject.Merge(flick.ReleaseSubject);
-        }
+        FlickSubject = Merge(flick => flick.FlickSubject);
+        ReleaseSubject = Merge(flick => flick.ReleaseSubject);
+        Drag = Merge(flick => flick.Drag);
+    }
+
+    private IObservable<T> Merge<T>(Func<FlickDirection, IObservable<T>> observable)
+    {
+        return Observable.Merge(
+            new FlickDirection[] { up, down, right, left }
+                .Where(x => x != null)
+                .Select(observable)
+        );
     }
 
     protected virtual void SetFlicks()
@@ -125,7 +138,7 @@ public class FlickInteraction : MonoBehaviour
         currentDir = null;
     }
 
-    protected abstract class FlickDirection
+    public abstract class FlickDirection
     {
         protected FlickInteraction flick;
         protected FadeTween fade;
@@ -137,8 +150,14 @@ public class FlickInteraction : MonoBehaviour
         public IReadOnlyReactiveProperty<float> DragRatioRP => dragRatio;
         public float Ratio => dragRatio.Value;
 
-        public ISubject<Unit> FlickSubject { get; protected set; } = new Subject<Unit>();
-        public ISubject<Unit> ReleaseSubject { get; protected set; } = new Subject<Unit>();
+        public IObservable<FlickDirection> Drag;
+
+        protected ISubject<Unit> flickSubject = new Subject<Unit>();
+        public IObservable<Unit> FlickSubject => flickSubject;
+
+        protected ISubject<Unit> releaseSubject = new Subject<Unit>();
+        public IObservable<Unit> ReleaseSubject => releaseSubject;
+
 
         protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit)
         {
@@ -147,6 +166,8 @@ public class FlickInteraction : MonoBehaviour
             this.ui = flick.ui;
             this.sprite = sprite;
             this.limit = limit;
+
+            Drag = DragRatioRP.Select(_ => this);
         }
 
         protected virtual Vector2 Destination => Vector2.zero;
@@ -158,12 +179,12 @@ public class FlickInteraction : MonoBehaviour
 
         private void FlickOnNext()
         {
-            FlickSubject.OnNext(Unit.Default);
+            flickSubject.OnNext(Unit.Default);
         }
 
         private void ReleaseOnNext()
         {
-            ReleaseSubject.OnNext(Unit.Default);
+            releaseSubject.OnNext(Unit.Default);
         }
 
         /// <summary>

@@ -97,9 +97,9 @@ public class UITween
         if (setDefault) defaultSize = size;
     }
 
-    public void ResetSize()
+    public void ResetSize(float ratio = 1f)
     {
-        rectTransform.sizeDelta = defaultSize;
+        rectTransform.sizeDelta = defaultSize * ratio;
     }
 
     public Tween Resize(float ratio = 1.5f, float duration = 1f, bool isReusable = false)
