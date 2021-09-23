@@ -135,6 +135,7 @@ public class FlickInteraction : MonoBehaviour
 
         protected ReactiveProperty<float> dragRatio = new ReactiveProperty<float>(0.0f);
         public IReadOnlyReactiveProperty<float> DragRatioRP => dragRatio;
+        public float Ratio => dragRatio.Value;
 
         public ISubject<Unit> FlickSubject { get; protected set; } = new Subject<Unit>();
         public ISubject<Unit> ReleaseSubject { get; protected set; } = new Subject<Unit>();
