@@ -8,6 +8,8 @@
 
     SubShader {
         Tags { "RenderType" = "Opaque" }
+        ZTest [unity_GUIZTestMode]
+
         CGPROGRAM
         #pragma surface surf Lambert
         #include "UnityCG.cginc"
