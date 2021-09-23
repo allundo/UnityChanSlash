@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 
+// UnityEngine.Debug.Log(System.Reflection.MethodBase.GetCurrentMethod().Name + ": " + gameObject.name, gameObject);
+
 public enum Terrain
 {
     Path,
