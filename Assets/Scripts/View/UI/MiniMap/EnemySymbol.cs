@@ -3,11 +3,11 @@ using DG.Tweening;
 
 public class EnemySymbol : UISymbol
 {
-    protected FadeTweenImage fade;
+    protected FadeTween fade;
     protected override void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        fade = new FadeTweenImage(gameObject, 1f);
+        fade = new FadeTween(gameObject, 1f);
     }
 
     public override void Activate()

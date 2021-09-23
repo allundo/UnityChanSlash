@@ -3,9 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UniRx;
 
-public class MessageController : FadeActivateImage, IPointerDownHandler, IPointerUpHandler
+public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] protected FadeActivateImage window = default;
+    [SerializeField] protected FadeActivate window = default;
     [SerializeField] protected CharacterUI characterUI = default;
     [SerializeField] protected TextHandler textHandler = default;
 
@@ -15,7 +15,7 @@ public class MessageController : FadeActivateImage, IPointerDownHandler, IPointe
 
     protected override void Awake()
     {
-        fade = new FadeTweenImage(gameObject, 0.25f, true);
+        fade = new FadeTween(gameObject, 0.25f, true);
     }
 
     protected override void Start()

@@ -5,7 +5,7 @@ public class CharacterUI : MonoBehaviour
 {
     [SerializeField] private Sprite[] face = default;
 
-    private FadeTweenImage fade;
+    private FadeTween fade;
     private UITween uiTween;
     private Tween faceTween = null;
     private Vector2 faceMoveOrigin;
@@ -13,7 +13,7 @@ public class CharacterUI : MonoBehaviour
 
     void Awake()
     {
-        fade = new FadeTweenImage(gameObject, 1f, true);
+        fade = new FadeTween(gameObject, 1f, true);
         uiTween = new UITween(gameObject, true);
 
         fade.SetAlpha(0f);

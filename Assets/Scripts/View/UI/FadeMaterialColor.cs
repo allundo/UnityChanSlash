@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeMaterialColor : FadeTween<MaskableGraphic>
+public class FadeMaterialColor : FadeTween
 {
     public FadeMaterialColor(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
         : base(image, maxAlpha, isValidOnPause) { }

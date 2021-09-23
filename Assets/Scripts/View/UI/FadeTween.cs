@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class FadeTween<T> where T : MaskableGraphic
+public class FadeTween
 {
-    protected T image;
+    protected MaskableGraphic image;
     protected float maxAlpha;
     protected bool isValidOnPause;
 
@@ -25,18 +26,25 @@ public class FadeTween<T> where T : MaskableGraphic
 
     protected float AlphaRatio => color.a / maxAlpha;
 
-    public FadeTween(T image, float maxAlpha = 1f, bool isValidOnPause = false)
+    public FadeTween(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
     {
         this.image = image;
         this.maxAlpha = maxAlpha;
         this.isValidOnPause = isValidOnPause;
     }
     public FadeTween(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
-        : this(gameObject.GetComponent<T>(), maxAlpha, isValidOnPause) { }
+        : this(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause) { }
 
     public void SetAlpha(float alpha)
     {
         color = new Color(color.r, color.g, color.b, alpha * maxAlpha);
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        if (!(image is Image)) throw new TypeAccessException("Failed to set Sprite. Target is not an Image.");
+
+        (image as Image).sprite = sprite;
     }
 
     public void SetEnabled(bool isEnable = true)

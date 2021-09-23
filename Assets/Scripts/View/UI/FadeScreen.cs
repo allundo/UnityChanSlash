@@ -6,7 +6,7 @@ public class FadeScreen : MonoBehaviour
 {
     [SerializeField] protected Image fadeImage = null;
 
-    protected FadeTweenImage fade = null;
+    protected FadeTween fade = null;
 
     public virtual Vector2 sizeDelta
     {
@@ -25,7 +25,7 @@ public class FadeScreen : MonoBehaviour
     protected virtual void Awake()
     {
         fadeImage = fadeImage ?? GetComponent<Image>();
-        fade = new FadeTweenImage(fadeImage, 1f, true);
+        fade = new FadeTween(fadeImage, 1f, true);
         SetAlpha(0f);
     }
 

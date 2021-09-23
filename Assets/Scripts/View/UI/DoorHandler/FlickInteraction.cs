@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using UniRx;
 using System;
@@ -25,7 +24,7 @@ public class FlickInteraction : MonoBehaviour
 
     private FlickDirection currentDir = null;
 
-    protected FadeTweenImage fade;
+    protected FadeTween fade;
     protected UITween ui;
 
     public ISubject<Unit> UpSubject => up.FlickSubject;
@@ -42,7 +41,7 @@ public class FlickInteraction : MonoBehaviour
 
     void Awake()
     {
-        fade = new FadeTweenImage(gameObject, maxAlpha);
+        fade = new FadeTween(gameObject, maxAlpha);
         ui = new UITween(gameObject);
 
         SetFlicks();
@@ -129,9 +128,9 @@ public class FlickInteraction : MonoBehaviour
     protected abstract class FlickDirection
     {
         protected FlickInteraction flick;
-        protected FadeTweenImage fade;
+        protected FadeTween fade;
         protected UITween ui;
-        protected Sprite sprite;
+        public Sprite sprite { get; protected set; }
         protected float limit;
 
         protected ReactiveProperty<float> dragRatio = new ReactiveProperty<float>(0.0f);
