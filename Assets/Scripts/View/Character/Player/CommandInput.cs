@@ -61,7 +61,9 @@ public partial class PlayerCommander : ShieldCommander
             fightCircle.Inactivate();
         }
 
-        if (!fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn)
+        bool isFaceToDoor = !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
+
+        if (isFaceToDoor)
         {
             Door door = forwardTile as Door;
 
@@ -71,10 +73,10 @@ public partial class PlayerCommander : ShieldCommander
         else
         {
             doorHandler.Inactivate();
-            forwardUI.Resize(1f, 1f);
         }
 
-        if (!fightCircle.isActive && forwardTile.IsItemOn)
+        bool isFaceToItem = !fightCircle.isActive && forwardTile.IsItemOn;
+        if (isFaceToItem)
         {
             itemHandler.Activate();
             forwardUI.Resize(0.5f, 1f);
@@ -82,8 +84,9 @@ public partial class PlayerCommander : ShieldCommander
         else
         {
             itemHandler.Inactivate();
-            forwardUI.Resize(1f, 1f);
         }
+
+        if (!isFaceToDoor && !isFaceToItem) forwardUI.Resize(1f, 1f);
 
         forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.IsPressed && !itemHandler.IsPressed);
         backwardUI.SetActive(map.IsBackwardMovable);
