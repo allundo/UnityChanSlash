@@ -48,6 +48,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+*.icloud
 /ProjectSettings/ProjectSettings.asset
 
 # Unity3D generated meta files
