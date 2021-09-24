@@ -3504,7 +3504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5756,7 +5756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4feb7328134f8494494536f3d2517027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: -32, y: 0}
 --- !u!1 &528637047
@@ -13897,7 +13897,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 509289298}
-  maxAlpha: 0.5
 --- !u!4 &1405737036 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5376730180583771975, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb,
@@ -15330,7 +15329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4feb7328134f8494494536f3d2517027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 32, y: 0}
 --- !u!224 &1506115882
@@ -18753,7 +18752,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 1482891807}
-  maxAlpha: 0.5
 --- !u!43 &1780721290
 Mesh:
   m_ObjectHideFlags: 0
@@ -23213,7 +23211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70000108535cd4773b1ae77ecb0e18d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
 --- !u!1 &7928615057760574
@@ -23343,7 +23341,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 7928615057760562}
-  maxAlpha: 0.5
 --- !u!224 &64780494972688082
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24165,7 +24162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70000108535cd4773b1ae77ecb0e18d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
 --- !u!222 &1001582510908394513
@@ -24324,7 +24321,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 1001582510908394512}
-  maxAlpha: 0.5
 --- !u!222 &1001582510976532805
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -43872,7 +43868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70000108535cd4773b1ae77ecb0e18d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
 --- !u!1 &3877168679441176993
@@ -44404,7 +44400,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 4647984070977934202}
-  maxAlpha: 0.5
 --- !u!114 &4647984070977934200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44465,7 +44460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4feb7328134f8494494536f3d2517027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 64}
 --- !u!222 &4647984070977934203
@@ -45119,7 +45114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70000108535cd4773b1ae77ecb0e18d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
 --- !u!1 &5335086371177449361
@@ -45211,7 +45206,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 5335086370429315495}
-  maxAlpha: 0.5
 --- !u!1 &5355774548021667145
 GameObject:
   m_ObjectHideFlags: 0
@@ -45597,7 +45591,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 3840810834097955327}
-  maxAlpha: 0.5
 --- !u!1 &5794931035596765981
 GameObject:
   m_ObjectHideFlags: 0
@@ -79617,7 +79610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70000108535cd4773b1ae77ecb0e18d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAlpha: 1
+  maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
 --- !u!1 &7263179161030713681
@@ -79757,7 +79750,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 7263179161030713677}
-  maxAlpha: 0.5
 --- !u!1 &7263179161045669119
 GameObject:
   m_ObjectHideFlags: 0

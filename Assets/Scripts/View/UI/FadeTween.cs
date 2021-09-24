@@ -41,9 +41,9 @@ public class FadeTween
         fadeOut?.Kill();
     }
 
-    public void SetAlpha(float alpha)
+    public void SetAlpha(float alpha, bool isScaledByMaxAlpha = true)
     {
-        color = new Color(color.r, color.g, color.b, alpha * maxAlpha);
+        color = new Color(color.r, color.g, color.b, isScaledByMaxAlpha ? alpha * maxAlpha : alpha);
     }
 
     public void SetSprite(Sprite sprite)
@@ -63,7 +63,6 @@ public class FadeTween
 
     public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
-
         if (isContinuous) return In(duration * (1f - AlphaRatio), delay, onPlay, onComplete);
 
         return DOTween.Sequence()
@@ -76,7 +75,7 @@ public class FadeTween
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
 
-        fadeIn = Fade(maxAlpha, duration, delay)
+        fadeIn = ToAlpha(maxAlpha, duration, delay)
             .OnPlay(() =>
             {
                 fadeOut?.Kill();
@@ -101,7 +100,7 @@ public class FadeTween
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
 
-        fadeOut = Fade(0, duration, delay)
+        fadeOut = ToAlpha(0, duration, delay)
             .OnPlay(() =>
             {
                 fadeIn?.Kill();
@@ -112,7 +111,7 @@ public class FadeTween
         return fadeOut;
     }
 
-    private Tween Fade(float alpha, float duration = 1f, float delay = 0f)
+    public Tween ToAlpha(float alpha, float duration = 1f, float delay = 0f)
     {
         return
             DOTween

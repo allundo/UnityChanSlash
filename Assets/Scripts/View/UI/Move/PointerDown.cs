@@ -16,10 +16,11 @@ public class PointerDown : MoveButton, IPointerDownHandler
         PressSubject.OnNext(Unit.Default);
 
         shrink?.Kill();
-        defaultAlpha?.Kill();
-        Resize(1.5f);
-        SetAlpha(1.0f);
-        shrink = GetResize(1.0f, 0.4f).Play();
-        defaultAlpha = GetToAlpha(0.4f, 0.4f).Play();
+        ui.ResetSize(1.5f);
+        shrink = ui.Resize(1.0f, 0.4f).Play();
+
+        alphaTween?.Kill();
+        fade.SetAlpha(1f, false);
+        alphaTween = fade.ToAlpha(0.4f, 0.4f).Play();
     }
 }

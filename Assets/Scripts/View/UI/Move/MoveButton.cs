@@ -1,80 +1,47 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using UniRx;
 
-public class MoveButton : MonoBehaviour
+public class MoveButton : FadeActivate
 {
-    [SerializeField] float maxAlpha = 1.0f;
+    [SerializeField] float maxAlpha = DEFAULT_ALPHA;
     [SerializeField] Vector2 defaultSize = new Vector2(100f, 100f);
     [SerializeField] Vector2 fightingOffset = default;
 
-    protected RectTransform rectTransform;
-    protected Image image;
-    private Vector2 defaultPos;
-    private Rect currentSize = new Rect(0f, 0f, 10f, 10f);
+    private static readonly float DEFAULT_ALPHA = 0.4f;
+
+    protected UITween ui;
 
     protected IReactiveProperty<bool> isPressed = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsPressed => isPressed;
 
     protected Tween shrink = null;
-    protected Tween defaultAlpha = null;
+    protected Tween alphaTween = null;
     protected Tween fightExpand = null;
     protected Tween moveDefault = null;
 
     protected bool isFighting = false;
 
-    public Vector2 Position => rectTransform.anchoredPosition;
-    public Vector2 Size => rectTransform.sizeDelta;
-    public float Radius => Size.x * 0.5f;
 
-    void Awake()
+    protected override void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
+        fade = new FadeTween(gameObject, maxAlpha);
+        ui = new UITween(gameObject);
 
         // BUG: Initialize on awake in case sizeDelta is set to zero at scene transition
-        rectTransform.sizeDelta = defaultSize;
-
-        image = GetComponent<Image>();
+        ui.SetSize(defaultSize, true);
     }
 
-    void Start()
+    protected override void Start()
     {
-        defaultPos = Position;
 
-        fightExpand = GetMove(defaultPos + fightingOffset, 0.05f, true);
-        moveDefault = GetMove(defaultPos, 0.2f, true);
+        fightExpand = ui.MoveOffset(fightingOffset, 0.05f, true);
+        moveDefault = ui.MoveBack(0.2f, true);
 
-        ResetSize();
-        SetAlpha(0.4f);
-    }
+        ui.ResetSize();
+        fade.SetAlpha(maxAlpha);
 
-    protected Tween GetResize(float ratio = 1.5f, float duration = 0.2f, bool isReusable = false)
-    {
-        Tween resize = rectTransform.DOSizeDelta(defaultSize * ratio, duration);
-        return isReusable ? resize.AsReusable(gameObject) : resize;
-    }
-
-    protected Tween GetToAlpha(float alpha, float duration = 0.2f, bool isReusable = false)
-    {
-        Tween toAlpha = DOTween.ToAlpha(() => image.color, c => image.color = c, alpha * maxAlpha, duration);
-        return isReusable ? toAlpha.AsReusable(gameObject) : toAlpha;
-    }
-
-    protected Tween GetMove(Vector2 dest, float duration = 0.2f, bool isReusable = false)
-    {
-        Tween move = rectTransform.DOAnchorPos(dest, duration);
-        return isReusable ? move.AsReusable(gameObject) : move;
-    }
-
-    protected void ResetSize()
-    {
-        Resize(1.0f);
-    }
-
-    protected void Resize(float ratio)
-    {
-        rectTransform.sizeDelta = defaultSize * ratio;
+        Inactivate();
     }
 
     public virtual void PressButton()
@@ -83,9 +50,9 @@ public class MoveButton : MonoBehaviour
 
         isPressed.Value = true;
         shrink?.Kill();
-        defaultAlpha?.Kill();
-        Resize(1.5f);
-        SetAlpha(1.0f);
+        ui.ResetSize(1.5f);
+        alphaTween?.Kill();
+        alphaTween = fade.ToAlpha(1.0f, 0.1f).Play();
     }
 
     public virtual void ReleaseButton()
@@ -93,29 +60,32 @@ public class MoveButton : MonoBehaviour
         if (!isPressed.Value) return;
 
         isPressed.Value = false;
-        shrink = GetResize(1.0f).Play();
-        defaultAlpha = GetToAlpha(0.4f).Play();
+        shrink = ui.Resize(1f, 0.2f).Play();
+        alphaTween = fade.ToAlpha(maxAlpha, 0.3f).Play();
     }
 
-    public void SetAlpha(float alpha)
-    {
-        Color c = image.color;
-        image.color = new Color(c.r, c.g, c.b, alpha * maxAlpha);
-    }
+    public void SetAlpha(float alpha) => fade.SetAlpha(alpha);
 
     public void Activate(float alpha)
     {
-        SetAlpha(alpha);
-        ResetSize();
-        gameObject.SetActive(true);
+        Activate();
+        fade.KillTweens();
+        fade.SetAlpha(alpha);
     }
 
-    public void Inactivate()
+    public override void Activate()
+    {
+        fade.Enable();
+        isActive = true;
+        ui.ResetSize();
+    }
+
+    public override void Inactivate()
     {
         isPressed.Value = false;
         shrink?.Kill();
-        defaultAlpha?.Kill();
-        gameObject.SetActive(false);
+        alphaTween?.Kill();
+        base.Inactivate();
     }
 
     public void SetFightingPos(bool isFighting)
@@ -147,5 +117,4 @@ public class MoveButton : MonoBehaviour
         fightExpand?.Pause();
         moveDefault?.Restart();
     }
-
 }
