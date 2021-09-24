@@ -5,7 +5,7 @@ using UniRx;
 using System;
 using System.Linq;
 
-public class FlickInteraction : MonoBehaviour
+public class FlickInteraction : FadeActivate
 {
     [SerializeField] protected Sprite upSprite = null;
     [SerializeField] protected Sprite downSprite = null;
@@ -29,7 +29,6 @@ public class FlickInteraction : MonoBehaviour
     private FlickDirection[] flickDirections;
 
     protected Image image;
-    protected FadeTween fade;
     protected UITween ui;
 
     public IObservable<Unit> UpSubject => up.FlickSubject;
@@ -47,7 +46,7 @@ public class FlickInteraction : MonoBehaviour
 
     public IObservable<FlickDirection> Drag { get; protected set; }
 
-    void Awake()
+    protected override void Awake()
     {
         image = GetComponent<Image>();
         fade = new FadeTween(image, maxAlpha);
@@ -75,11 +74,6 @@ public class FlickInteraction : MonoBehaviour
         left = FlickLeft.New(this);
     }
 
-    void Start()
-    {
-        gameObject.SetActive(false);
-    }
-
     private Tween GetFadeOutToInactive(float duration = 0.2f)
         => fade.Out(duration, 0, Clear, () => gameObject.SetActive(false));
 
@@ -92,23 +86,16 @@ public class FlickInteraction : MonoBehaviour
     {
         ui.MoveBack(duration).Play();
         ui.Resize(0.5f, duration).Play();
-        GetFadeOutToInactive(duration).Play();
+        FadeInactive(duration).Play();
     }
 
-    private void Activate()
+    public override void Activate()
     {
-        if (currentDir != null) return;
-
         ui.ResetSize();
-        gameObject.SetActive(true);
+        base.Activate();
     }
 
-    public virtual void Inactivate(float duration = 0.2f)
-    {
-        if (currentDir == null) return;
-
-        GetFadeOutToInactive(duration).Play();
-    }
+    public Tween FadeInactive(float duration = 0.2f) => FadeOut(duration, null, Clear);
 
     public void UpdateImage(Vector2 dragVector)
     {
@@ -228,7 +215,7 @@ public class FlickInteraction : MonoBehaviour
                 .Append(ui.MoveOffset(Destination, duration))
                 .Join(fade.In(duration))
                 .Append(ui.Resize(1.5f, duration))
-                .Join(flick.GetFadeOutToInactive(duration))
+                .Join(flick.FadeInactive(duration))
                 .Play();
 
             FlickOnNext();

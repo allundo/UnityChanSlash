@@ -173,7 +173,7 @@ public class BaseHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void InactivateButtons()
     {
         handleUIs.ForEach(handleUI => handleUI.Inactivate());
-        currentFlick?.Inactivate();
+        currentFlick?.FadeInactive()?.Play();
     }
 
     public void Inactivate()
@@ -188,7 +188,7 @@ public class BaseHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (isFadeOnly)
         {
-            currentFlick?.Inactivate();
+            currentFlick?.FadeInactive()?.Play();
         }
         else
         {
