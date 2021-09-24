@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using UniRx;
 using System;
@@ -24,8 +25,10 @@ public class FlickInteraction : MonoBehaviour
     protected FlickDirection left = null;
 
     private FlickDirection currentDir = null;
+    private FlickDirection defaultDir = null;
     private FlickDirection[] flickDirections;
 
+    protected Image image;
     protected FadeTween fade;
     protected UITween ui;
 
@@ -46,10 +49,15 @@ public class FlickInteraction : MonoBehaviour
 
     void Awake()
     {
-        fade = new FadeTween(gameObject, maxAlpha);
+        image = GetComponent<Image>();
+        fade = new FadeTween(image, maxAlpha);
         ui = new UITween(gameObject);
 
         SetFlicks();
+        flickDirections = new FlickDirection[] { up, down, right, left };
+
+        // Set image.sprite as default icon of the handling UI
+        defaultDir = flickDirections.Where(x => x?.sprite == image.sprite).FirstOrDefault();
 
         FlickSubject = Merge(flick => flick.FlickSubject);
         ReleaseSubject = Merge(flick => flick.ReleaseSubject);
@@ -57,13 +65,7 @@ public class FlickInteraction : MonoBehaviour
     }
 
     private IObservable<T> Merge<T>(Func<FlickDirection, IObservable<T>> observable)
-    {
-        return Observable.Merge(
-            new FlickDirection[] { up, down, right, left }
-                .Where(x => x != null)
-                .Select(observable)
-        );
-    }
+        => Observable.Merge(flickDirections.Where(x => x != null).Select(observable));
 
     protected virtual void SetFlicks()
     {
@@ -93,7 +95,7 @@ public class FlickInteraction : MonoBehaviour
         GetFadeOutToInactive(duration).Play();
     }
 
-    private void Activate(Vector2 dragVector)
+    private void Activate()
     {
         if (currentDir != null) return;
 
@@ -110,7 +112,7 @@ public class FlickInteraction : MonoBehaviour
 
     public void UpdateImage(Vector2 dragVector)
     {
-        Activate(dragVector);
+        Activate();
 
         currentDir = GetDirection(dragVector);
         currentDir?.UpdateImage(dragVector);
@@ -118,6 +120,8 @@ public class FlickInteraction : MonoBehaviour
 
     private FlickDirection GetDirection(Vector2 dragVector)
     {
+        if (dragVector == Vector2.zero && defaultDir != null) return defaultDir;
+
         FlickDirection dir;
         if (Mathf.Abs(dragVector.x) >= Mathf.Abs(dragVector.y))
         {
