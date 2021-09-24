@@ -4,7 +4,7 @@ public class PointerEnter : MoveButton, IPointerEnterHandler, IPointerExitHandle
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        PressButton();
+        if (isActive) PressButton();
     }
 
     public void OnPointerExit(PointerEventData eventData)
