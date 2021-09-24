@@ -1,65 +1,26 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class MoveUI : MonoBehaviour
 {
     [SerializeField] protected MoveButton moveButton = default;
-    [SerializeField] private float maxAlpha = 0.4f;
 
     protected RectTransform rectTransform;
-    private Image image;
     protected Vector2 defaultSize;
 
-    private float alpha = 0.0f;
     protected bool isActive = false;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        image = GetComponent<Image>();
-
         defaultSize = rectTransform.sizeDelta;
     }
 
     protected virtual void Start()
     {
-        SetAlpha(0.0f);
         moveButton.Inactivate();
         gameObject.SetActive(false);
-    }
-
-    void Update()
-    {
-        UpdateTransparent();
-    }
-
-    private void UpdateTransparent()
-    {
-        alpha += (isActive ? 3f : -3f) * Time.deltaTime;
-
-        if (alpha > maxAlpha)
-        {
-            alpha = maxAlpha;
-            return;
-        }
-
-        if (alpha < 0.0f)
-        {
-            alpha = 0.0f;
-
-            moveButton.Inactivate();
-            gameObject.SetActive(false);
-
-            return;
-        }
-
-        SetAlpha(alpha);
-    }
-
-    private void SetAlpha(float alpha)
-    {
-        moveButton.SetAlpha(alpha);
     }
 
     public void Resize(float ratioX, float ratioY)
@@ -75,8 +36,7 @@ public class MoveUI : MonoBehaviour
 
         isActive = true;
         gameObject.SetActive(true);
-
-        moveButton.Activate(alpha);
+        moveButton.FadeIn(0.2f).Play();
     }
 
     public void Inactivate(bool isFighting = false)
@@ -86,6 +46,7 @@ public class MoveUI : MonoBehaviour
         if (!isActive) return;
 
         isActive = false;
+        moveButton.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
     }
 
     public void SetActive(bool value, bool isFighting = false)
