@@ -35,6 +35,12 @@ public class FadeTween
     public FadeTween(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
         : this(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause) { }
 
+    public void KillTweens()
+    {
+        fadeIn?.Kill();
+        fadeOut?.Kill();
+    }
+
     public void SetAlpha(float alpha)
     {
         color = new Color(color.r, color.g, color.b, alpha * maxAlpha);

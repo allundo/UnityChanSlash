@@ -20,12 +20,14 @@ public class FadeActivate : MonoBehaviour
     {
         fade.Enable();
         isActive = true;
+        fade.KillTweens();
         fade.SetAlpha(1f);
     }
 
     public virtual void Inactivate()
     {
         isActive = false;
+        fade.KillTweens();
         fade.SetAlpha(0f);
         fade.Disable();
     }
