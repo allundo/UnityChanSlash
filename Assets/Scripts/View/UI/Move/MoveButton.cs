@@ -34,7 +34,6 @@ public class MoveButton : FadeActivate
 
     protected override void Start()
     {
-
         fightExpand = ui.MoveOffset(fightingOffset, 0.05f, true);
         moveDefault = ui.MoveBack(0.2f, true);
 
@@ -42,6 +41,34 @@ public class MoveButton : FadeActivate
         fade.SetAlpha(maxAlpha);
 
         Inactivate();
+    }
+
+    public override Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+        onPlay = onPlay ?? (() => { });
+
+        return base.FadeIn(duration,
+            () =>
+            {
+                ui.ResetSize();
+                onPlay();
+            },
+            onComplete,
+            isContinuous);
+    }
+
+    public override Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+        onPlay = onPlay ?? (() => { });
+
+        return base.FadeOut(duration,
+            () =>
+            {
+                isPressed.Value = false;
+                onPlay();
+            },
+            onComplete,
+            isContinuous);
     }
 
     public virtual void PressButton()
@@ -64,19 +91,12 @@ public class MoveButton : FadeActivate
         alphaTween = fade.ToAlpha(maxAlpha, 0.3f).Play();
     }
 
-    public void SetAlpha(float alpha) => fade.SetAlpha(alpha);
-
-    public void Activate(float alpha)
-    {
-        Activate();
-        fade.KillTweens();
-        fade.SetAlpha(alpha);
-    }
-
     public override void Activate()
     {
         fade.Enable();
         isActive = true;
+        fade.KillTweens();
+        fade.SetAlpha(1f);
         ui.ResetSize();
     }
 
