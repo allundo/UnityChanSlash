@@ -22,9 +22,11 @@ public class GameOverUI : FadeActivate, IPointerDownHandler, IPointerUpHandler
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
+
+        Inactivate();
     }
 
-    protected override void Start()
+    protected virtual void Start()
     {
         uiTween = new UITween(gameOverBG.gameObject, true);
 
@@ -36,8 +38,6 @@ public class GameOverUI : FadeActivate, IPointerDownHandler, IPointerUpHandler
             .Join(uiTween.Move(new Vector2(0f, 380f), 1f))
             .Join(selectUI.FadeIn())
             .AppendCallback(selectUI.ActivateButtons);
-
-        Inactivate();
     }
 
     public void Play()

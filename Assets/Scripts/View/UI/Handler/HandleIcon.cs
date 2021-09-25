@@ -14,9 +14,10 @@ public class HandleIcon : FadeActivate
     {
         fade = new FadeTween(gameObject, 1f);
         ui = new UITween(gameObject);
+        Inactivate();
     }
 
-    protected override void Start()
+    protected virtual void Start()
     {
         Observable
             .Merge(flicks.Select(flick => flick.Drag))
@@ -32,8 +33,6 @@ public class HandleIcon : FadeActivate
             .Merge(flicks.Select(flick => flick.ReleaseSubject))
             .Subscribe(_ => PlayTween(FadeOut()))
             .AddTo(this);
-
-        Inactivate();
     }
 
     public void Activate(Sprite sprite)

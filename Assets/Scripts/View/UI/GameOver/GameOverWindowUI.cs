@@ -8,12 +8,10 @@ public class GameOverWindowUI : MessageWindowUI
 
     private ButtonsHandler handler;
 
-    protected override void Start()
+    protected virtual void Start()
     {
         handler = new ButtonsHandler(unityChanIcon, restartButton, titleButton);
         handler.Inactivate();
-
-        Inactivate();
     }
 
     public void ActivateButtons() => handler.Activate(true);

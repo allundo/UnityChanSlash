@@ -16,17 +16,16 @@ public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHa
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
+        Inactivate();
     }
 
-    protected override void Start()
+    protected virtual void Start()
     {
         textHandler.Sentence.Subscribe(
             faceID => characterUI.DispFace(faceID),
             err => Debug.Log(err),
             () => CloseMessage()
         ).AddTo(this);
-
-        Inactivate();
     }
 
     public void OnPointerDown(PointerEventData eventData) { }

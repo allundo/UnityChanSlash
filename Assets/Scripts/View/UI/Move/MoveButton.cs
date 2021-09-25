@@ -30,17 +30,17 @@ public class MoveButton : FadeActivate
 
         // BUG: Initialize on awake in case sizeDelta is set to zero at scene transition
         ui.SetSize(defaultSize, true);
-    }
-
-    protected override void Start()
-    {
-        fightExpand = ui.MoveOffset(fightingOffset, 0.05f, true);
-        moveDefault = ui.MoveBack(0.2f, true);
 
         ui.ResetSize();
         fade.SetAlpha(maxAlpha);
 
         Inactivate();
+    }
+
+    protected virtual void Start()
+    {
+        fightExpand = ui.MoveOffset(fightingOffset, 0.05f, true);
+        moveDefault = ui.MoveBack(0.2f, true);
     }
 
     public override Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)

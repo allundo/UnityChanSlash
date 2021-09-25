@@ -9,10 +9,6 @@ public class FadeActivate : MonoBehaviour
     protected virtual void Awake()
     {
         fade = new FadeTween(gameObject, 1f);
-    }
-
-    protected virtual void Start()
-    {
         Inactivate();
     }
 

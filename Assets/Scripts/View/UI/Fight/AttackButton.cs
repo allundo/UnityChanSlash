@@ -18,14 +18,14 @@ public class AttackButton : FadeActivate
     {
         fade = new FadeTween(gameObject);
         ui = new UITween(gameObject);
+
+        Inactivate();
     }
 
-    protected override void Start()
+    protected virtual void Start()
     {
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
-
-        fade.Disable();
     }
 
     public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
