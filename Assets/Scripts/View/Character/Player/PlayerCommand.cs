@@ -287,7 +287,14 @@ public partial class PlayerCommander : ShieldCommander
             ITile tile = map.ForwardTile;
             Item item = tile.PickItem();
 
-            if (!itemIconGenerator.PickUp(item)) tile.PutItem(item);
+            if (itemIconGenerator.PickUp(item))
+            {
+                anim.getItem.Fire();
+            }
+            else
+            {
+                tile.PutItem(item);
+            }
         }
     }
 
