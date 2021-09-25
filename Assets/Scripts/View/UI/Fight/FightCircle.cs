@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
+using DG.Tweening;
 using System.Collections.Generic;
 using UniRx;
 
@@ -133,7 +133,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = eventData.position;
         CurrentButton.Value = GetAttack(UIPos(eventData.position));
 
-        CurrentButton.Value.Activate(pressPos);
+        CurrentButton.Value.Press(pressPos);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -186,7 +186,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (isFadeOnly)
         {
-            CurrentButton.Value?.Inactivate();
+            CurrentButton.Value?.FadeOut()?.Play();
         }
         else
         {

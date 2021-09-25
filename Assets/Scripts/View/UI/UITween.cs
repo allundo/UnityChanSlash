@@ -50,11 +50,14 @@ public class UITween
     /// Returns Tween of moving back to default position.
     /// </summary>
     public Tween MoveBack(float duration = 1f, bool isReusable = false)
-    {
-        Tween move = rectTransform.DOAnchorPos(defaultPos, duration).SetUpdate(isValidOnPause);
+        => Move(defaultPos, duration, isReusable);
 
-        return isReusable ? move.AsReusable(gameObject) : move;
-    }
+    /// <summary>
+    /// Returns Tween of moving back vector to default position with distance ratio.
+    /// </summary>
+    /// <param name="ratio">Normalized destination between current to default position</param>
+    public Tween MoveBackRatio(float duration = 1f, float ratio = 1f, bool isReusable = false)
+        => Move((rectTransform.anchoredPosition - defaultPos) * (1f - ratio), duration, isReusable);
 
     public Tween Jump(float destX, float destY, float duration = 1f, float jumpPower = 1000f, int numJumps = 1)
         => rectTransform.DOJump(new Vector3(destX, destY), jumpPower, numJumps, duration);
@@ -77,6 +80,11 @@ public class UITween
     {
         rectTransform.anchoredPosition = destPos;
         if (setDefault) defaultPos = destPos;
+    }
+
+    public void SetScreenPos(Vector2 destPos)
+    {
+        rectTransform.position = destPos;
     }
 
     public void SetPosX(float destX) => SetPos(new Vector2(destX, defaultPos.y));
