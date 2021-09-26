@@ -392,8 +392,8 @@ public partial class PlayerCommander : ShieldCommander
             {
                 sentences = new string[]
                 {
-                    "痛〜〜〜！何なの一体？？",
-                    "ちょっと！・・・この扱いはどういうこと！？"
+                    "[仮] (ここに開幕の説明が入ります)",
+                    "[仮] ・・・メタすぎる！"
                 },
                 faces = new FaceID[]
                 {
@@ -419,8 +419,8 @@ public partial class PlayerCommander : ShieldCommander
             {
                 sentences = new string[]
                 {
-                    "・・・という夢だったのさ",
-                    "なんも解決してないんだけどねっ！",
+                    "[仮] ・・・という夢だったのさ",
+                    "[仮] なんも解決してないんだけどねっ！",
                 },
                 faces = new FaceID[]
                 {
