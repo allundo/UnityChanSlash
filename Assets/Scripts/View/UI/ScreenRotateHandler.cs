@@ -6,7 +6,7 @@ public class ScreenRotateHandler : MonoBehaviour
     private IReactiveProperty<DeviceOrientation> currentOrientation = new ReactiveProperty<DeviceOrientation>();
     public IReadOnlyReactiveProperty<DeviceOrientation> Orientation => currentOrientation;
 
-    void Awake()
+    protected virtual void Awake()
     {
         Screen.orientation = ScreenOrientation.AutoRotation;
         Screen.autorotateToPortrait = true;

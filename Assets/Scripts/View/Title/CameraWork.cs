@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
+using UniRx;
 
 public class CameraWork : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class CameraWork : MonoBehaviour
     [SerializeField] private Transform tfUnityChan = default;
     [SerializeField] private RawImage crossFade = default;
     [SerializeField] private Camera secondCamera = default;
+    [SerializeField] private TitleRotateHandler rotate = default;
 
     private Camera currentCamera;
     private Camera standByCamera;
@@ -51,12 +53,23 @@ public class CameraWork : MonoBehaviour
         currentCamera = Camera.main;
         secondCamera.fieldOfView = currentCamera.fieldOfView;
 
-        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
-        crossFade.texture = renderTexture;
         crossFade.enabled = false;
 
         standByCamera = secondCamera;
         standByCamera.enabled = false;
+
+        ResetOrientation();
+    }
+
+    void Start()
+    {
+        rotate.Orientation.Subscribe(_ => ResetOrientation()).AddTo(this);
+    }
+
+    private void ResetOrientation()
+    {
+        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
+        crossFade.texture = renderTexture;
         standByCamera.targetTexture = renderTexture;
     }
 
