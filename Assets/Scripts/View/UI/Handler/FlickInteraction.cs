@@ -30,6 +30,8 @@ public class FlickInteraction : FadeActivate
 
     protected Image image;
     protected UITween ui;
+    protected Tween fadeInactive = null;
+    protected Tween fadeOutActive = null;
 
     public IObservable<Unit> UpSubject => up.FlickSubject;
     public IObservable<Unit> DownSubject => down.FlickSubject;
@@ -63,6 +65,21 @@ public class FlickInteraction : FadeActivate
         Drag = Merge(flick => flick.Drag);
     }
 
+    public Tween FadeOutActive(float duration = 0.2f)
+    {
+        fadeOutActive = fade.ToAlpha(0, duration)
+            .OnPlay(() => isActive = false)
+            .OnComplete(() =>
+            {
+                InitImage();
+                Clear();
+                FadeIn(0.1f).Play();
+            });
+
+        return DOTween.Sequence()
+            .AppendCallback(() => { if (isActive) fadeOutActive?.Play(); });
+    }
+
     private IObservable<T> Merge<T>(Func<FlickDirection, IObservable<T>> observable)
         => Observable.Merge(flickDirections.Where(x => x != null).Select(observable));
 
@@ -74,9 +91,6 @@ public class FlickInteraction : FadeActivate
         left = FlickLeft.New(this);
     }
 
-    private Tween GetFadeOutToInactive(float duration = 0.2f)
-        => fade.Out(duration, 0, Clear, () => gameObject.SetActive(false));
-
     public void Release(Vector2 dragVector, float duration = 0.2f)
     {
         currentDir?.Release(dragVector, duration);
@@ -86,21 +100,60 @@ public class FlickInteraction : FadeActivate
     {
         ui.MoveBack(duration).Play();
         ui.Resize(0.5f, duration).Play();
-        FadeInactive(duration).Play();
+        FadeOutActive(duration).Play();
     }
 
     public override void Activate()
     {
+        defaultDir.SetSprite();
         ui.ResetSize();
+        ui.ResetPos();
         base.Activate();
     }
 
-    public Tween FadeInactive(float duration = 0.2f) => FadeOut(duration, null, Clear);
+    public override void Inactivate()
+    {
+        Clear();
+        base.Inactivate();
+    }
+
+    public override Tween FadeIn(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+        onPlay = onPlay ?? (() => { });
+
+        return base.FadeIn(duration,
+            () =>
+            {
+                InitImage();
+                onPlay();
+            },
+            onComplete,
+            isContinuous
+        );
+
+    }
+    public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+        onPlay = onPlay ?? (() => { });
+        onComplete = onComplete ?? (() => { });
+
+        return base.FadeOut(duration,
+            () =>
+            {
+                fadeOutActive?.Kill();
+                onPlay();
+            },
+            () =>
+            {
+                Clear();
+                onComplete();
+            },
+            isContinuous
+        );
+    }
 
     public void UpdateImage(Vector2 dragVector)
     {
-        Activate();
-
         currentDir = GetDirection(dragVector);
         currentDir?.UpdateImage(dragVector);
     }
@@ -129,6 +182,13 @@ public class FlickInteraction : FadeActivate
         currentDir = null;
     }
 
+    protected void InitImage()
+    {
+        defaultDir.SetSprite();
+        ui.ResetSize();
+        ui.ResetPos();
+    }
+
     public abstract class FlickDirection
     {
         protected FlickInteraction flick;
@@ -148,7 +208,6 @@ public class FlickInteraction : FadeActivate
 
         protected ISubject<Unit> releaseSubject = new Subject<Unit>();
         public IObservable<Unit> ReleaseSubject => releaseSubject;
-
 
         protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit)
         {
@@ -177,6 +236,8 @@ public class FlickInteraction : FadeActivate
         {
             releaseSubject.OnNext(Unit.Default);
         }
+
+        public void SetSprite() => fade.SetSprite(sprite);
 
         /// <summary>
         /// Change sprite, move by drag directional factor and set alpha according to drag directional ratio.
@@ -215,7 +276,7 @@ public class FlickInteraction : FadeActivate
                 .Append(ui.MoveOffset(Destination, duration))
                 .Join(fade.In(duration))
                 .Append(ui.Resize(1.5f, duration))
-                .Join(flick.FadeInactive(duration))
+                .Join(flick.FadeOutActive(duration))
                 .Play();
 
             FlickOnNext();

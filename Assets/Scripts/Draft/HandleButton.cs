@@ -33,7 +33,6 @@ public class HandleButton : MonoBehaviour
     {
         cycle = GetRotate(-90.0f, 5.0f, true).SetEase(Ease.Linear);
         expand = GetResize(1.5f, 0.2f, true);
-
     }
 
     private void ResetSize()

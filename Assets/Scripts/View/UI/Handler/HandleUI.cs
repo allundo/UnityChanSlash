@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UniRx;
 using Coffee.UIExtensions;
+using DG.Tweening;
 
 public class HandleUI : MonoBehaviour
 {
@@ -31,7 +32,6 @@ public class HandleUI : MonoBehaviour
     protected UIParticle leftArrow = default;
     protected UIParticle[] moveArrows;
 
-    [SerializeField] private HandleButton handleButton = default;
     [SerializeField] private FlickInteraction flick = default;
 
     private bool isPressed = false;
@@ -147,8 +147,6 @@ public class HandleUI : MonoBehaviour
 
     public void OnDrag(float dragRatio)
     {
-        handleButton.OnDrag(dragRatio);
-
         if (isPressed) return;
 
         isPressed = true;
@@ -161,8 +159,6 @@ public class HandleUI : MonoBehaviour
     {
         isPressed = false;
 
-        handleButton.OnRelease();
-
         SetUIsActive(texts, false);
         SetUIsActive(stopArrows, true);
         SetUIsActive(moveArrows, false);
@@ -174,16 +170,14 @@ public class HandleUI : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        handleButton.Activate(alpha);
+        flick.FadeIn(0.2f).Play();
         SetUIsActive(stopArrows, true);
     }
 
     public void Inactivate()
     {
         OnRelease();
-        gameObject.SetActive(false);
-
-        handleButton.Inactivate();
+        flick.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
 
         SetUIsActive(texts, false);
         SetUIsActive(stopArrows, false);
@@ -193,7 +187,6 @@ public class HandleUI : MonoBehaviour
     public void SetAlpha(float alpha)
     {
         SetTextAlpha(alpha);
-        handleButton.SetAlpha(alpha);
     }
 
     private void SetTextAlpha(float alpha)

@@ -99,6 +99,11 @@ public class UITween
         rectTransform.anchoredPosition = defaultPos + offset;
     }
 
+    public void ResetPos()
+    {
+        rectTransform.anchoredPosition = defaultPos;
+    }
+
     public void SetSize(Vector2 size, bool setDefault = false)
     {
         rectTransform.sizeDelta = size;
