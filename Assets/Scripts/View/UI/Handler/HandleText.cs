@@ -28,6 +28,16 @@ public class HandleText : FadeActivate
             .Append(ui.ResizeY(1f, duration * 0.75f));
     }
 
+    public Tween Switch(string str, float duration = 0.2f)
+    {
+        return DOTween.Sequence()
+            .AppendCallback(() => tm.text = str)
+            .AppendCallback(() => ui.ResetSize(1f, 0.5f))
+            .Join(base.FadeIn(duration * 0.25f, null, null, false))
+            .Join(ui.ResizeY(1.75f, duration * 0.25f))
+            .Append(ui.ResizeY(1f, duration * 0.75f));
+    }
+
     public Tween Hide(float duration = 0.2f)
     {
         return DOTween.Sequence()

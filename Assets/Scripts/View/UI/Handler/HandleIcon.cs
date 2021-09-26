@@ -12,6 +12,7 @@ public class HandleIcon : FadeActivate
 
     protected UITween ui;
     protected Tween prevTween = null;
+    private FlickInteraction.FlickDirection currentFlick = null;
 
     protected override void Awake()
     {
@@ -34,7 +35,7 @@ public class HandleIcon : FadeActivate
 
         Observable
             .Merge(flicks.Select(flick => flick.ReleaseSubject))
-            .Subscribe(_ => PlayTween(Hide()))
+            .Subscribe(_ => Disable())
             .AddTo(this);
     }
 
@@ -48,11 +49,21 @@ public class HandleIcon : FadeActivate
     {
         if (flick.Ratio > 0.5f)
         {
-            if (!isActive) PlayTween(Show(flick));
+            if (!isActive)
+            {
+                PlayTween(Show(flick));
+            }
+            else if (flick != currentFlick)
+            {
+                PlayTween(Switch(flick));
+            }
+
+            currentFlick = flick;
         }
-        else
+        else if (isActive)
         {
-            if (isActive) PlayTween(Hide());
+            Disable();
+            currentFlick = null;
         }
     }
 
@@ -64,6 +75,15 @@ public class HandleIcon : FadeActivate
             .Join(base.FadeIn(duration))
             .Join(ui.Resize(1.5f, duration))
             .Join(text.Show(flick.text));
+    }
+    private Tween Switch(FlickInteraction.FlickDirection flick, float duration = 0.4f)
+    {
+        return DOTween.Sequence()
+            .AppendCallback(() => fade.SetSprite(flick.sprite))
+            .AppendCallback(() => ui.ResetSize(2f))
+            .Join(base.FadeIn(duration, null, null, false))
+            .Join(ui.Resize(1.5f, duration))
+            .Join(text.Switch(flick.text));
     }
 
     private Tween Hide(float duration = 0.4f)
