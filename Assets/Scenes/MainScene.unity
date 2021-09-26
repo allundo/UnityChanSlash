@@ -7526,6 +7526,7 @@ MonoBehaviour:
   fightCircle: {fileID: 4719329011268037073}
   doorHandler: {fileID: 1506115883}
   itemHandler: {fileID: 1266231270}
+  handleIcon: {fileID: 233540040}
   forwardUI: {fileID: 5335086371177449365}
   rightUI: {fileID: 7928616715383661}
   leftUI: {fileID: 1001582510976532804}
@@ -7741,7 +7742,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 72}
+  m_SizeDelta: {x: 250, y: 72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &801967061
 MonoBehaviour:
@@ -7783,8 +7784,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278214143
-  m_fontColor: {r: 1, g: 0.36509785, b: 0, a: 1}
+    rgba: 4294927104
+  m_fontColor: {r: 0, g: 0.38648796, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7805,7 +7806,7 @@ MonoBehaviour:
   m_fontSizeBase: 72
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 36
   m_fontSizeMax: 144
   m_fontStyle: 1
   m_HorizontalAlignment: 2
@@ -7816,8 +7817,8 @@ MonoBehaviour:
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_charWidthMaxAdj: 50
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -7830,7 +7831,7 @@ MonoBehaviour:
   m_isOrthographic: 1
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
-  m_verticalMapping: 3
+  m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
   m_IsTextObjectScaleStatic: 0
@@ -13309,12 +13310,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
   downSprite: {fileID: 21300000, guid: c95d2fd27ed914889a45cd5c0732e2ac, type: 3}
-  leftSprite: {fileID: 0}
   rightSprite: {fileID: 21300000, guid: 934d7c628efe4490a813875dd6fb95f5, type: 3}
-  upTextPrefab: {fileID: 0}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 0}
+  leftSprite: {fileID: 0}
+  upText: GO
+  downText: GET
+  rightText: INSPECT
+  leftText: 
   upLimit: 80
   downLimit: 80
   rightLimit: 80
@@ -14831,13 +14832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70ddc2d023314dacadf9e2331e30339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upTextPrefab: {fileID: 7459873300014110790, guid: 943e17ff89eac40158666f8d9088d94f,
-    type: 3}
-  downTextPrefab: {fileID: 374313864119943862, guid: 15eb546be0a00487ea4f4c0f34d79e64,
-    type: 3}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 6797976007714848974, guid: acf45289fa5c14e76832418a132a3e46,
-    type: 3}
   stopArrowPrefabs:
   - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
   - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
@@ -15746,13 +15740,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70ddc2d023314dacadf9e2331e30339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upTextPrefab: {fileID: 7459873300014110790, guid: 943e17ff89eac40158666f8d9088d94f,
-    type: 3}
-  downTextPrefab: {fileID: 374313864119943862, guid: 15eb546be0a00487ea4f4c0f34d79e64,
-    type: 3}
-  rightTextPrefab: {fileID: 6797976007714848974, guid: acf45289fa5c14e76832418a132a3e46,
-    type: 3}
-  leftTextPrefab: {fileID: 0}
   stopArrowPrefabs:
   - {fileID: 3453705348552658848, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
   - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
@@ -21361,12 +21348,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
   downSprite: {fileID: 21300000, guid: 067c6650495714c38847a5bd3a272da4, type: 3}
-  leftSprite: {fileID: 21300000, guid: 934d7c628efe4490a813875dd6fb95f5, type: 3}
   rightSprite: {fileID: 0}
-  upTextPrefab: {fileID: 0}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 0}
+  leftSprite: {fileID: 21300000, guid: 934d7c628efe4490a813875dd6fb95f5, type: 3}
+  upText: GO
+  downText: GET
+  rightText: 
+  leftText: INSPECT
   upLimit: 80
   downLimit: 80
   rightLimit: 0
@@ -29262,12 +29249,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 0}
   downSprite: {fileID: 0}
-  leftSprite: {fileID: 21300000, guid: eb8cf3d3814014dfd800e1d80ad2c229, type: 3}
   rightSprite: {fileID: 21300000, guid: 6b365c52907e94650ab7127e0d923336, type: 3}
-  upTextPrefab: {fileID: 0}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 0}
+  leftSprite: {fileID: 21300000, guid: eb8cf3d3814014dfd800e1d80ad2c229, type: 3}
+  upText: 
+  downText: 
+  rightText: OPEN
+  leftText: OPEN
   upLimit: 0
   downLimit: 0
   rightLimit: 80
@@ -29285,12 +29272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70ddc2d023314dacadf9e2331e30339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upTextPrefab: {fileID: 0}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 6565131811906035979, guid: 2a29fa42884ff4b53b0b3b93ed4151bd,
-    type: 3}
-  leftTextPrefab: {fileID: 6565131811906035979, guid: 2a29fa42884ff4b53b0b3b93ed4151bd,
-    type: 3}
   stopArrowPrefabs:
   - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
   - {fileID: 3453705348552658848, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
@@ -44306,12 +44287,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
   downSprite: {fileID: 0}
-  leftSprite: {fileID: 0}
   rightSprite: {fileID: 21300000, guid: 8ad952606b50e4c47a68c5e7036a4888, type: 3}
-  upTextPrefab: {fileID: 0}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 0}
+  leftSprite: {fileID: 0}
+  upText: GO
+  downText: 
+  rightText: CLOSE
+  leftText: 
   upLimit: 80
   downLimit: 0
   rightLimit: 80
@@ -54632,12 +54613,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: a92f68d12c3e44e948e09713084dbc46, type: 3}
   downSprite: {fileID: 0}
-  leftSprite: {fileID: 21300000, guid: 3ab22d4483b4444eab22ee93efafe43c, type: 3}
   rightSprite: {fileID: 0}
-  upTextPrefab: {fileID: 0}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 0}
+  leftSprite: {fileID: 21300000, guid: 3ab22d4483b4444eab22ee93efafe43c, type: 3}
+  upText: GO
+  downText: 
+  rightText: 
+  leftText: CLOSE
   upLimit: 80
   downLimit: 0
   rightLimit: 0
@@ -74042,12 +74023,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70ddc2d023314dacadf9e2331e30339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upTextPrefab: {fileID: 7459873300014110790, guid: 943e17ff89eac40158666f8d9088d94f,
-    type: 3}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 0}
-  leftTextPrefab: {fileID: 8220755531836773774, guid: e402a305f4eb74721a30ad0419434e8d,
-    type: 3}
   stopArrowPrefabs:
   - {fileID: 1757142215483030293, guid: 2179ef279ef654ecfa749090f094812d, type: 3}
   - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}
@@ -79260,7 +79235,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4573671692682118167}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -85176,12 +85151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70ddc2d023314dacadf9e2331e30339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upTextPrefab: {fileID: 7459873300014110790, guid: 943e17ff89eac40158666f8d9088d94f,
-    type: 3}
-  downTextPrefab: {fileID: 0}
-  rightTextPrefab: {fileID: 8220755531836773774, guid: e402a305f4eb74721a30ad0419434e8d,
-    type: 3}
-  leftTextPrefab: {fileID: 0}
   stopArrowPrefabs:
   - {fileID: 3453705348552658848, guid: cd2f9b442f75640319449ad8c00e8853, type: 3}
   - {fileID: 5486515412855040327, guid: 20c54bc002ec94e31804d13afb05995a, type: 3}

@@ -6,6 +6,7 @@ public partial class PlayerCommander : ShieldCommander
     [SerializeField] protected FightCircle fightCircle = default;
     [SerializeField] protected DoorHandler doorHandler = default;
     [SerializeField] protected ItemHandler itemHandler = default;
+    [SerializeField] protected HandleIcon handleIcon = default;
     [SerializeField] protected PointerEnterUI forwardUI = default;
     [SerializeField] protected PointerEnterUI rightUI = default;
     [SerializeField] protected PointerEnterUI leftUI = default;
@@ -86,7 +87,11 @@ public partial class PlayerCommander : ShieldCommander
             itemHandler.Inactivate();
         }
 
-        if (!isFaceToDoor && !isFaceToItem) forwardUI.Resize(1f, 1f);
+        if (!isFaceToDoor && !isFaceToItem)
+        {
+            forwardUI.Resize(1f, 1f);
+            handleIcon.Disable();
+        }
 
         forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.IsPressed && !itemHandler.IsPressed);
         backwardUI.SetActive(map.IsBackwardMovable);

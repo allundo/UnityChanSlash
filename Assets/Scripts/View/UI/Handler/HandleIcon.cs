@@ -74,6 +74,8 @@ public class HandleIcon : FadeActivate
             .Join(text.Hide());
     }
 
+    public Tween Disable() => PlayTween(Hide());
+
     private Tween Apply(float duration = 0.3f)
     {
         return DOTween.Sequence()
