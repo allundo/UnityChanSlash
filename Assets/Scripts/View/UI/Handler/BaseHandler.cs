@@ -43,7 +43,6 @@ public class BaseHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         ResetCenterPos();
 
-        SetAlpha(0.0f);
         gameObject.SetActive(false);
         InactivateButtons();
     }
@@ -72,14 +71,6 @@ public class BaseHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
             return;
         }
-
-        SetAlpha(alpha);
-    }
-
-    protected virtual void SetAlpha(float alpha)
-    {
-        handleRUI.SetAlpha(alpha);
-        handleLUI.SetAlpha(alpha);
     }
 
     public virtual void OnPointerUp(PointerEventData eventData)
@@ -96,8 +87,8 @@ public class BaseHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        if (currentFlick == flickL) handleRUI.Activate(alpha);
-        if (currentFlick == flickR) handleLUI.Activate(alpha);
+        if (currentFlick == flickL) handleRUI.Activate();
+        if (currentFlick == flickR) handleLUI.Activate();
 
         currentFlick.Release(DragVector(eventData.position));
         currentFlick = null;
@@ -166,8 +157,8 @@ public class BaseHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         alpha = 0.0f;
 
-        handleRUI.Activate(alpha);
-        handleLUI.Activate(alpha);
+        handleRUI.Activate();
+        handleLUI.Activate();
     }
 
     private void InactivateButtons()

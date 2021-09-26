@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UniRx;
 using DG.Tweening;
 using System.Linq;
 
+[RequireComponent(typeof(Image))]
 public class HandleIcon : FadeActivate
 {
     [SerializeField] private FlickInteraction[] flicks = default;
+    [SerializeField] private HandleText text = default;
 
     protected UITween ui;
     protected Tween prevTween = null;
@@ -31,7 +34,7 @@ public class HandleIcon : FadeActivate
 
         Observable
             .Merge(flicks.Select(flick => flick.ReleaseSubject))
-            .Subscribe(_ => PlayTween(FadeOut()))
+            .Subscribe(_ => PlayTween(Hide()))
             .AddTo(this);
     }
 
@@ -45,35 +48,38 @@ public class HandleIcon : FadeActivate
     {
         if (flick.Ratio > 0.5f)
         {
-            if (!isActive) PlayTween(FadeIn(flick.sprite));
+            if (!isActive) PlayTween(Show(flick));
         }
         else
         {
-            if (isActive) PlayTween(FadeOut());
+            if (isActive) PlayTween(Hide());
         }
     }
 
-    private Tween FadeIn(Sprite sprite, float duration = 0.4f)
+    private Tween Show(FlickInteraction.FlickDirection flick, float duration = 0.4f)
     {
         return DOTween.Sequence()
-            .AppendCallback(() => fade.SetSprite(sprite))
+            .AppendCallback(() => fade.SetSprite(flick.sprite))
             .AppendCallback(() => ui.ResetSize(2f))
             .Join(base.FadeIn(duration))
-            .Join(ui.Resize(1.5f, duration));
+            .Join(ui.Resize(1.5f, duration))
+            .Join(text.Show(flick.text));
     }
 
-    private Tween FadeOut(float duration = 0.4f)
+    private Tween Hide(float duration = 0.4f)
     {
         return DOTween.Sequence()
             .Join(base.FadeOut(duration))
-            .Join(ui.Resize(1f, duration));
+            .Join(ui.Resize(1f, duration))
+            .Join(text.Hide());
     }
 
     private Tween Apply(float duration = 0.3f)
     {
         return DOTween.Sequence()
             .Join(base.FadeOut(duration, null, null, false))
-            .Join(ui.Resize(4f, duration));
+            .Join(ui.Resize(4f, duration))
+            .Join(text.Apply());
     }
 
     private Tween PlayTween(Tween tween)

@@ -8,17 +8,6 @@ using DG.Tweening;
 
 public class HandleUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI upTextPrefab = default;
-    [SerializeField] private TextMeshProUGUI downTextPrefab = default;
-    [SerializeField] private TextMeshProUGUI rightTextPrefab = default;
-    [SerializeField] private TextMeshProUGUI leftTextPrefab = default;
-
-    public TextMeshProUGUI upText { get; protected set; } = default;
-    public TextMeshProUGUI downText { get; protected set; } = default;
-    public TextMeshProUGUI rightText { get; protected set; } = default;
-    public TextMeshProUGUI leftText { get; protected set; } = default;
-    protected TextMeshProUGUI[] texts;
-
     [SerializeField] protected UIParticle[] stopArrowPrefabs = default;
     protected UIParticle[] stopArrows;
 
@@ -47,7 +36,6 @@ public class HandleUI : MonoBehaviour
 
         InstantiateAllPrefabs();
 
-        SetUIsActive(texts, false);
         SetUIsActive(stopArrows, false);
         SetUIsActive(moveArrows, false);
     }
@@ -56,10 +44,10 @@ public class HandleUI : MonoBehaviour
     {
         ResetCenterPos();
 
-        if (upText != null && upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragUp(ratio)).AddTo(this);
-        if (downText != null && downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragDown(ratio)).AddTo(this);
-        if (rightText != null && rightArrow != null) flick.DragRight.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragRight(ratio)).AddTo(this);
-        if (leftText != null && leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragLeft(ratio)).AddTo(this);
+        if (upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragUp(ratio)).AddTo(this);
+        if (downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragDown(ratio)).AddTo(this);
+        if (rightArrow != null) flick.DragRight.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragRight(ratio)).AddTo(this);
+        if (leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragLeft(ratio)).AddTo(this);
 
         flick.ReleaseSubject.Subscribe(_ => OnRelease()).AddTo(this);
     }
@@ -77,13 +65,6 @@ public class HandleUI : MonoBehaviour
 
     private void InstantiateAllPrefabs()
     {
-        if (upTextPrefab != null) upText = InstantiateUI(upTextPrefab);
-        if (downTextPrefab != null) downText = InstantiateUI(downTextPrefab);
-        if (rightTextPrefab != null) rightText = InstantiateUI(rightTextPrefab);
-        if (leftTextPrefab != null) leftText = InstantiateUI(leftTextPrefab);
-
-        texts = new[] { upText, downText, rightText, leftText };
-
         stopArrows = stopArrowPrefabs.Select(arrow => InstantiateUI(arrow)).ToArray();
 
         if (upArrowPrefab != null) upArrow = InstantiateUI(upArrowPrefab);
@@ -111,8 +92,6 @@ public class HandleUI : MonoBehaviour
 
     private void OnDragUp(float dragRatio)
     {
-        upText.gameObject.SetActive(dragRatio > 0.5f);
-
         SetUIsActive(moveArrows, dragRatio < 0.5f, upArrow);
 
         OnDrag(dragRatio);
@@ -120,8 +99,6 @@ public class HandleUI : MonoBehaviour
 
     private void OnDragDown(float dragRatio)
     {
-        downText.gameObject.SetActive(dragRatio > 0.5f);
-
         SetUIsActive(moveArrows, dragRatio < 0.5f, downArrow);
 
         OnDrag(dragRatio);
@@ -129,8 +106,6 @@ public class HandleUI : MonoBehaviour
 
     private void OnDragRight(float dragRatio)
     {
-        rightText.gameObject.SetActive(dragRatio > 0.5f);
-
         SetUIsActive(moveArrows, dragRatio < 0.5f, rightArrow);
 
         OnDrag(dragRatio);
@@ -138,8 +113,6 @@ public class HandleUI : MonoBehaviour
 
     private void OnDragLeft(float dragRatio)
     {
-        leftText.gameObject.SetActive(dragRatio > 0.5f);
-
         SetUIsActive(moveArrows, dragRatio < 0.5f, leftArrow);
 
         OnDrag(dragRatio);
@@ -159,12 +132,11 @@ public class HandleUI : MonoBehaviour
     {
         isPressed = false;
 
-        SetUIsActive(texts, false);
         SetUIsActive(stopArrows, true);
         SetUIsActive(moveArrows, false);
     }
 
-    public void Activate(float alpha)
+    public void Activate()
     {
         isPressed = false;
 
@@ -179,22 +151,7 @@ public class HandleUI : MonoBehaviour
         OnRelease();
         flick.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
 
-        SetUIsActive(texts, false);
         SetUIsActive(stopArrows, false);
         SetUIsActive(moveArrows, false);
-    }
-
-    public void SetAlpha(float alpha)
-    {
-        SetTextAlpha(alpha);
-    }
-
-    private void SetTextAlpha(float alpha)
-    {
-        texts.ForEach(txt =>
-        {
-            Color c = txt.color;
-            txt.color = new Color(c.r, c.g, c.b, alpha);
-        }, null);
     }
 }

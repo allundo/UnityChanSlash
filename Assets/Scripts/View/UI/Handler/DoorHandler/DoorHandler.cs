@@ -26,18 +26,6 @@ public class DoorHandler : BaseHandler
         doorFlickL = flickL as DoorFlick;
     }
 
-    protected override void SetAlpha(float alpha)
-    {
-        if (isOpen)
-        {
-            base.SetAlpha(alpha);
-        }
-        else
-        {
-            openDoorUI.SetAlpha(alpha);
-        }
-    }
-
     protected override FlickInteraction GetFlick(Vector2 screenPos)
     {
         if (isOpen)
@@ -70,12 +58,12 @@ public class DoorHandler : BaseHandler
         if (isOpen)
         {
             openDoorUI.Inactivate();
-            handleRUI.Activate(alpha);
-            handleLUI.Activate(alpha);
+            handleRUI.Activate();
+            handleLUI.Activate();
         }
         else
         {
-            openDoorUI.Activate(alpha);
+            openDoorUI.Activate();
             handleRUI.Inactivate();
             handleLUI.Inactivate();
         }

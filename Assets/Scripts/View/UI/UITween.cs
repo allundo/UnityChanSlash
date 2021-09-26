@@ -115,6 +115,22 @@ public class UITween
         rectTransform.sizeDelta = defaultSize * ratio;
     }
 
+    public void ResetSize(float ratioX, float ratioY)
+    {
+
+        rectTransform.sizeDelta = new Vector2(defaultSize.x * ratioX, defaultSize.y * ratioY);
+    }
+
+    public void ResetSizeX(float ratio = 1f)
+    {
+        rectTransform.sizeDelta = new Vector2(defaultSize.x * ratio, rectTransform.sizeDelta.y);
+    }
+
+    public void ResetSizeY(float ratio = 1f)
+    {
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, defaultSize.y * ratio);
+    }
+
     public Tween Resize(float ratio = 1.5f, float duration = 1f, bool isReusable = false)
         => Resize(new Vector2(ratio, ratio), duration, isReusable);
 

@@ -9,8 +9,13 @@ public class FlickInteraction : FadeActivate
 {
     [SerializeField] protected Sprite upSprite = null;
     [SerializeField] protected Sprite downSprite = null;
-    [SerializeField] protected Sprite leftSprite = null;
     [SerializeField] protected Sprite rightSprite = null;
+    [SerializeField] protected Sprite leftSprite = null;
+
+    [SerializeField] private string upText = null;
+    [SerializeField] private string downText = null;
+    [SerializeField] private string rightText = null;
+    [SerializeField] private string leftText = null;
 
     [SerializeField] protected float upLimit = 0.0f;
     [SerializeField] protected float downLimit = 0.0f;
@@ -195,6 +200,7 @@ public class FlickInteraction : FadeActivate
         protected FadeTween fade;
         protected UITween ui;
         public Sprite sprite { get; protected set; }
+        public string text { get; protected set; }
         protected float limit;
 
         protected ReactiveProperty<float> dragRatio = new ReactiveProperty<float>(0.0f);
@@ -209,12 +215,13 @@ public class FlickInteraction : FadeActivate
         protected ISubject<Unit> releaseSubject = new Subject<Unit>();
         public IObservable<Unit> ReleaseSubject => releaseSubject;
 
-        protected FlickDirection(FlickInteraction flick, Sprite sprite, float limit)
+        protected FlickDirection(FlickInteraction flick, Sprite sprite, string text, float limit)
         {
             this.flick = flick;
             this.fade = flick.fade;
             this.ui = flick.ui;
             this.sprite = sprite;
+            this.text = text;
             this.limit = limit;
 
             Drag = DragRatioRP.Select(_ => this);
@@ -288,7 +295,7 @@ public class FlickInteraction : FadeActivate
 
     protected class FlickUp : FlickDirection
     {
-        protected FlickUp(FlickInteraction flick) : base(flick, flick.upSprite, flick.upLimit) { }
+        protected FlickUp(FlickInteraction flick) : base(flick, flick.upSprite, flick.upText, flick.upLimit) { }
 
         public static FlickUp New(FlickInteraction flick)
         {
@@ -303,7 +310,7 @@ public class FlickInteraction : FadeActivate
 
     protected class FlickDown : FlickDirection
     {
-        protected FlickDown(FlickInteraction flick) : base(flick, flick.downSprite, flick.downLimit) { }
+        protected FlickDown(FlickInteraction flick) : base(flick, flick.downSprite, flick.downText, flick.downLimit) { }
 
         public static FlickDown New(FlickInteraction flick)
         {
@@ -318,7 +325,7 @@ public class FlickInteraction : FadeActivate
 
     protected class FlickRight : FlickDirection
     {
-        protected FlickRight(FlickInteraction flick) : base(flick, flick.rightSprite, flick.rightLimit) { }
+        protected FlickRight(FlickInteraction flick) : base(flick, flick.rightSprite, flick.rightText, flick.rightLimit) { }
 
         public static FlickRight New(FlickInteraction flick)
         {
@@ -333,7 +340,7 @@ public class FlickInteraction : FadeActivate
 
     protected class FlickLeft : FlickDirection
     {
-        protected FlickLeft(FlickInteraction flick) : base(flick, flick.leftSprite, flick.leftLimit) { }
+        protected FlickLeft(FlickInteraction flick) : base(flick, flick.leftSprite, flick.leftText, flick.leftLimit) { }
 
         public static FlickLeft New(FlickInteraction flick)
         {
