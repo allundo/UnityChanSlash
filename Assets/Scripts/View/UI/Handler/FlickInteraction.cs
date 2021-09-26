@@ -252,7 +252,10 @@ public class FlickInteraction : FadeActivate
             dragRatio.SetValueAndForceNotify(DragRatio(limitedVec.magnitude));
 
             ui.SetPosOffset(limitedVec);
-            fade.SetAlpha(dragRatio.Value);
+
+            float degree = 1f - dragRatio.Value * 0.5f;
+            ui.ResetSize(0.5f + degree);
+            fade.SetAlpha(degree);
         }
 
         /// <summary>
