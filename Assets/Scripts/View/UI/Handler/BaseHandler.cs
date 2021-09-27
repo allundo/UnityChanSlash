@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using UniRx;
-using DG.Tweening;
 
+[RequireComponent(typeof(Image))]
 public class BaseHandler : MonoBehaviour
 {
     [SerializeField] protected HandleUI handleRUI = default;
@@ -19,24 +20,35 @@ public class BaseHandler : MonoBehaviour
     protected bool isActive = false;
     public bool isPressed { get; protected set; } = false;
 
+    protected Image image;
+
     protected HandleUI[] handleUIs;
-    private FlickInteraction currentFlick = null;
 
     protected virtual void Awake()
     {
+        image = GetComponent<Image>();
+        image.raycastTarget = false;
+
         handleUIs = new[] { handleRUI, handleLUI };
     }
 
     protected virtual void Start()
     {
-        flickL.IsPressed.Subscribe(_ => { handleRUI.Inactivate(); isPressed = true; }).AddTo(this);
-        flickR.IsPressed.Subscribe(_ => { handleLUI.Inactivate(); isPressed = true; }).AddTo(this);
+        flickL.IsPressed.Subscribe(_ => SetPressActive(handleRUI, true)).AddTo(this);
+        flickR.IsPressed.Subscribe(_ => SetPressActive(handleLUI, true)).AddTo(this);
 
-        flickL.ReleaseSubject.Subscribe(_ => { handleRUI.Activate(); isPressed = false; }).AddTo(this);
-        flickR.ReleaseSubject.Subscribe(_ => { handleLUI.Activate(); isPressed = false; }).AddTo(this);
+        flickL.ReleaseSubject.Subscribe(_ => SetPressActive(handleRUI, false)).AddTo(this);
+        flickR.ReleaseSubject.Subscribe(_ => SetPressActive(handleLUI, false)).AddTo(this);
 
         gameObject.SetActive(false);
         InactivateButtons();
+    }
+
+    protected void SetPressActive(HandleUI handleUI, bool isActive)
+    {
+        image.raycastTarget = isActive;
+        isPressed = isActive;
+        handleUI?.SetActive(!isActive);
     }
 
     protected virtual void Update()
@@ -79,37 +91,21 @@ public class BaseHandler : MonoBehaviour
     {
         alpha = 0.0f;
 
-        handleRUI.Activate();
-        handleLUI.Activate();
+        handleUIs.ForEach(handleUI => handleUI.Activate());
     }
 
     private void InactivateButtons()
     {
         handleUIs.ForEach(handleUI => handleUI.Inactivate());
-        currentFlick?.FadeOut()?.Play();
     }
 
     public void Inactivate()
     {
         if (!isActive) return;
 
-        ButtonCancel(true);
-        isActive = false;
-    }
-
-    protected void ButtonCancel(bool isFadeOnly = false)
-    {
-        if (isFadeOnly)
-        {
-            currentFlick?.FadeOut()?.Play();
-        }
-        else
-        {
-            currentFlick?.Cancel();
-        }
-
         isPressed = false;
-        currentFlick = null;
+        isActive = false;
+        InactivateButtons();
     }
 
     public virtual void SetActive(bool value)

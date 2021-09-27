@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using UniRx;
 
@@ -18,10 +19,20 @@ public class DoorHandler : BaseHandler
 
     protected override void Awake()
     {
+        image = GetComponent<Image>();
+        image.raycastTarget = false;
+
         handleUIs = new[] { openDoorUI, handleRUI, handleLUI };
 
         doorFlickR = flickR as DoorFlick;
         doorFlickL = flickL as DoorFlick;
+    }
+    protected override void Start()
+    {
+        openFlick.IsPressed.Subscribe(_ => SetPressActive(null, true)).AddTo(this);
+        openFlick.ReleaseSubject.Subscribe(_ => SetPressActive(null, false)).AddTo(this);
+
+        base.Start();
     }
 
     public void Activate(bool isOpen)

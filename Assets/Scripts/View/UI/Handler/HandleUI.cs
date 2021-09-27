@@ -127,10 +127,22 @@ public class HandleUI : MonoBehaviour
 
     public void Inactivate()
     {
-        OnRelease();
+        isPressed = false;
         flick.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
 
         SetUIsActive(stopArrows, false);
         SetUIsActive(moveArrows, false);
+    }
+
+    public void SetActive(bool isActive)
+    {
+        if (isActive)
+        {
+            Activate();
+        }
+        else
+        {
+            Inactivate();
+        }
     }
 }
