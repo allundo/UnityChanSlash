@@ -90,7 +90,7 @@ public class MobReactor : SpawnObject<MobReactor>
     public virtual void FadeOutToDead(float duration = 0.5f)
     {
         effect.FadeOutTween(duration)
-            .OnComplete(() => Dead())
+            .OnComplete(Dead)
             .Play();
     }
 

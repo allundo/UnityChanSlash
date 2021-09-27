@@ -1,7 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
 using UniRx;
-using System;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -14,7 +13,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
-
 
     private bool isInitialOrientation = true;
     public bool isPaused { get; private set; } = false;
@@ -99,5 +97,4 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     // FIXME
     public Pos GetPlayerInitPos => worldMap.InitPos;
-
 }

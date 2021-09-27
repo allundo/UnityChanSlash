@@ -2,21 +2,14 @@ using UnityEngine;
 using UniRx.Triggers;
 using static UniRx.Triggers.ObservableStateMachineTrigger;
 using System;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Animator))]
 public class MobAnimator : MonoBehaviour
 {
-    protected AnimeState prevState = null;
-    protected AnimeState currentState = null;
-
     protected Animator anim;
-    protected AnimeState standardState;
     protected ObservableStateMachineTrigger Trigger;
     protected IObservable<OnStateInfo> StateEnter => Trigger.OnStateEnterAsObservable();
     protected IObservable<OnStateInfo> StateExit => Trigger.OnStateExitAsObservable();
-
-    private Dictionary<int, AnimeState> stateMap = new Dictionary<int, AnimeState>();
 
     public AnimatorFloat speed { get; protected set; }
     public AnimatorTrigger die { get; protected set; }

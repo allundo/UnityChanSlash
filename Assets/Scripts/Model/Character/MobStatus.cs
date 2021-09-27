@@ -1,6 +1,5 @@
 using UnityEngine;
 using UniRx;
-using System.Collections.Generic;
 
 public class MobStatus : MonoBehaviour
 {
@@ -11,8 +10,6 @@ public class MobStatus : MonoBehaviour
     [SerializeField] public float SideDamageMultiplier = 1.5f;
     [SerializeField] public float BackDamageMultiplier = 2.0f;
     [SerializeField] private float DefaultLifeMax = 10;
-
-    protected List<Material> flashMaterials = new List<Material>();
 
     protected IReactiveProperty<float> life;
     public IReadOnlyReactiveProperty<float> Life => life;

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UniRx;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MobAnimator))]
@@ -49,7 +48,6 @@ public abstract partial class MobCommander : MonoBehaviour
     protected virtual void Execute(Command cmd)
     {
         if (!isCommandValid) return;
-
 
         EnqueueCommand(cmd, IsIdling);
     }

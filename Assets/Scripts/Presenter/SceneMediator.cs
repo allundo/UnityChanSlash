@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(SceneLoader))]
 public abstract class SceneMediator : MonoBehaviour

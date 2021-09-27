@@ -34,7 +34,6 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
         if (regions == null) regions = new (Pos, Pos)[numOfRegions];
 
-
         if (division == 0)
         {
             regions[offset] = (leftTop, rightBottom);
