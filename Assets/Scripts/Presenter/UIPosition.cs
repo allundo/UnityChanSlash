@@ -6,7 +6,6 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private RectTransform rtUI = default;
     [SerializeField] private RectTransform rtLifeGauge = default;
     [SerializeField] private FightCircle fightCircle = default;
-    [SerializeField] private DoorHandler doorHandler = default;
     [SerializeField] private float portraitFromBottom = 720f;
     [SerializeField] private float landscapeFromLeft = 480f;
     [SerializeField] private float lifeGaugeFromBottom = 60f;
@@ -28,6 +27,5 @@ public class UIPosition : MonoBehaviour
         }
 
         fightCircle.ResetCenterPos();
-        doorHandler.ResetCenterPos();
     }
 }

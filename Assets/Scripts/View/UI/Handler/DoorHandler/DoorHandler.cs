@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System;
 using UniRx;
 
@@ -19,25 +18,10 @@ public class DoorHandler : BaseHandler
 
     protected override void Awake()
     {
-        rawImage = GetComponent<RawImage>();
         handleUIs = new[] { openDoorUI, handleRUI, handleLUI };
 
         doorFlickR = flickR as DoorFlick;
         doorFlickL = flickL as DoorFlick;
-    }
-
-    protected override FlickInteraction GetFlick(Vector2 screenPos)
-    {
-        if (isOpen)
-        {
-            return base.GetFlick(screenPos);
-        }
-        else
-        {
-            if (openDoorUI.InRegion(screenPos)) return openFlick;
-        }
-
-        return null;
     }
 
     public void Activate(bool isOpen)

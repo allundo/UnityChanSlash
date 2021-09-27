@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using TMPro;
 using UniRx;
 using Coffee.UIExtensions;
 using DG.Tweening;
@@ -25,15 +24,8 @@ public class HandleUI : MonoBehaviour
 
     private bool isPressed = false;
 
-    protected RectTransform rectTransform;
-    protected Vector2 screenPos;
-
-    public Vector2 Size => rectTransform.sizeDelta;
-
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-
         InstantiateAllPrefabs();
 
         SetUIsActive(stopArrows, false);
@@ -42,25 +34,12 @@ public class HandleUI : MonoBehaviour
 
     void Start()
     {
-        ResetCenterPos();
-
         if (upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragUp(ratio)).AddTo(this);
         if (downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragDown(ratio)).AddTo(this);
         if (rightArrow != null) flick.DragRight.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragRight(ratio)).AddTo(this);
         if (leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragLeft(ratio)).AddTo(this);
 
         flick.ReleaseSubject.Subscribe(_ => OnRelease()).AddTo(this);
-    }
-
-    public void ResetCenterPos()
-    {
-        screenPos = rectTransform.GetScreenPos();
-    }
-
-    public bool InRegion(Vector2 screenPos)
-    {
-        var vec = screenPos - this.screenPos;
-        return Mathf.Abs(vec.x) < Size.x * 0.5f && Mathf.Abs(vec.y) < Size.y * 0.5f;
     }
 
     private void InstantiateAllPrefabs()

@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 using UniRx;
 using System;
 using System.Linq;
 
-public class FlickInteraction : FadeActivate
+public class FlickInteraction : FadeActivate, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] protected Sprite upSprite = null;
     [SerializeField] protected Sprite downSprite = null;
@@ -35,7 +36,6 @@ public class FlickInteraction : FadeActivate
 
     protected Image image;
     protected UITween ui;
-    protected Tween fadeInactive = null;
     protected Tween fadeOutActive = null;
 
     public IObservable<Unit> UpSubject => up.FlickSubject;
@@ -52,6 +52,12 @@ public class FlickInteraction : FadeActivate
     public IReadOnlyReactiveProperty<float> DragLeft => left.DragRatioRP;
 
     public IObservable<FlickDirection> Drag { get; protected set; }
+
+    private ISubject<Unit> isPressed = new Subject<Unit>();
+    public IObservable<Unit> IsPressed => isPressed;
+
+    private Vector2 pressPos = Vector2.zero;
+    private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
 
     protected override void Awake()
     {
@@ -94,6 +100,24 @@ public class FlickInteraction : FadeActivate
         down = FlickDown.New(this);
         right = FlickRight.New(this);
         left = FlickLeft.New(this);
+    }
+
+
+    public virtual void OnPointerDown(PointerEventData eventData)
+    {
+        isPressed.OnNext(Unit.Default);
+        pressPos = eventData.position;
+        UpdateImage(Vector2.zero);
+    }
+
+    public virtual void OnPointerUp(PointerEventData eventData)
+    {
+        Release(DragVector(eventData.position));
+    }
+
+    public virtual void OnDrag(PointerEventData eventData)
+    {
+        UpdateImage(DragVector(eventData.position));
     }
 
     public void Release(Vector2 dragVector, float duration = 0.2f)

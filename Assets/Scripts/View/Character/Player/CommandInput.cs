@@ -93,7 +93,7 @@ public partial class PlayerCommander : ShieldCommander
             handleIcon.Disable();
         }
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.IsPressed && !itemHandler.IsPressed);
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.isPressed && !itemHandler.isPressed);
         backwardUI.SetActive(map.IsBackwardMovable);
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);
