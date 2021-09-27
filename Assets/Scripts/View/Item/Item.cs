@@ -1,16 +1,17 @@
 using UnityEngine;
+using DG.Tweening;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Renderer))]
 public class Item : SpawnObject<Item>
 {
-    private static readonly Dictionary<IDirection, Quaternion> angles =
-        new Dictionary<IDirection, Quaternion>()
+    private static readonly Dictionary<IDirection, Vector3> angles =
+        new Dictionary<IDirection, Vector3>()
         {
-            {Direction.north, Quaternion.identity},
-            {Direction.east, Quaternion.Euler(0, 90, 0)},
-            {Direction.south, Quaternion.Euler(0, 180, 0)},
-            {Direction.west, Quaternion.Euler(0, -90, 0)},
+            {Direction.north, Vector3.zero},
+            {Direction.east, new Vector3(0, 90, 0)},
+            {Direction.south, new Vector3(0, 180, 0)},
+            {Direction.west, new Vector3(0, -90, 0)},
         };
 
     private Renderer meshRenderer;
@@ -44,7 +45,7 @@ public class Item : SpawnObject<Item>
 
     public Item SetDir(IDirection dir)
     {
-        transform.rotation = angles[dir];
+        transform.DORotate(angles[dir], 0.04f).SetEase(Ease.InQuad).Play();
         return this;
     }
 
