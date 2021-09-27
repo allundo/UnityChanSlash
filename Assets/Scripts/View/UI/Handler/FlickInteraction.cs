@@ -135,8 +135,8 @@ public class FlickInteraction : FadeActivate
             onComplete,
             isContinuous
         );
-
     }
+
     public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
         onPlay = onPlay ?? (() => { });
@@ -165,21 +165,32 @@ public class FlickInteraction : FadeActivate
 
     private FlickDirection GetDirection(Vector2 dragVector)
     {
-        if (dragVector == Vector2.zero && defaultDir != null) return defaultDir;
+        FlickDirection dir = null;
 
-        FlickDirection dir;
         if (Mathf.Abs(dragVector.x) >= Mathf.Abs(dragVector.y))
         {
-            dir = dragVector.x > 0 ? right : left;
-            dir = dir ?? (dragVector.y > 0 ? up : down) ?? right ?? left;
+            if (dragVector.x > 0) dir = right;
+            if (dragVector.x < 0) dir = left;
+
+            if (dir == null)
+            {
+                if (dragVector.y > 0) dir = up;
+                if (dragVector.y < 0) dir = down;
+            }
         }
         else
         {
-            dir = dragVector.y > 0 ? up : down;
-            dir = dir ?? (dragVector.x > 0 ? right : left) ?? up ?? down;
+            if (dragVector.y > 0) dir = up;
+            if (dragVector.y < 0) dir = down;
+
+            if (dir == null)
+            {
+                if (dragVector.x > 0) dir = right;
+                if (dragVector.x < 0) dir = left;
+            }
         }
 
-        return dir;
+        return dir ?? defaultDir ?? flickDirections.Where(x => x != null).First();
     }
 
     protected virtual void Clear()
