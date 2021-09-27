@@ -10,7 +10,7 @@ public class TitleSceneMediator : SceneMediator
         SetStartActions(Logo, SkipLogo);
 
         titleUIHandler.TransitSignal
-            .Subscribe(_ => SceneTransition(0))
+            .Subscribe(_ => SceneTransition(0, GameInfo.Instance.ClearMaps))
             .AddTo(this);
     }
 
