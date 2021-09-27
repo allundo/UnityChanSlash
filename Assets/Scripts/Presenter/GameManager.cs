@@ -13,6 +13,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
+    [SerializeField] private DebugEnemyGenerator debugEnemyGenerator = default;
 
     private bool isInitialOrientation = true;
     public bool isPaused { get; private set; } = false;
@@ -52,11 +53,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void Start()
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
-        placeEnemyGenerator.Place(worldMap);
     }
 
     public void DropStart()
     {
+        placeEnemyGenerator.Place(worldMap);
+
         cover.SetAlpha(1f);
         cover.FadeIn(1.0f, 1.1f).Play();
         commander.EnqueueDropFloor();
@@ -65,9 +67,18 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void Restart()
     {
+        placeEnemyGenerator.Place(worldMap);
+
         cover.SetAlpha(1f);
         cover.FadeIn(1.0f).Play();
         commander.EnqueueRestartMessage();
+    }
+
+    public void DebugStart()
+    {
+        Debug.Log("DEBUG MODE");
+        debugEnemyGenerator.gameObject.SetActive(true);
+        cover.SetAlpha(0f);
     }
 
     private void ResetOrientation(DeviceOrientation orientation)

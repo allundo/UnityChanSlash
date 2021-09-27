@@ -5,7 +5,7 @@ using System;
 
 public enum Terrain
 {
-    Path,
+    Path = 0,
     Ground,
     Wall,
     Pall, // Gate or Pall

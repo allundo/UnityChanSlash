@@ -12,17 +12,14 @@ public class MapManager
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
 
-    private Random rnd;
-
     public MapManager(int width = 49, int height = 49)
     {
         this.width = width;
         this.height = height;
 
-        rnd = new Random();
         dirMap = new Dir[width, height];
 
-        var maze = new MazeCreator(width, height, rnd)
+        var maze = new MazeCreator(width, height, new Random())
             .CreateMaze()
             .SearchDeadEnds(new Pos(width - 2, height - 2))
             .CreateRooms();
@@ -30,6 +27,26 @@ public class MapManager
         matrix = maze.Matrix.Clone() as Terrain[,];
         deadEndPos = new Dictionary<Pos, IDirection>(maze.deadEndPos);
 
+        CreateDirMap();
+    }
+
+    public MapManager(int[] matrix, int width, Dictionary<Pos, IDirection> deadEndPos = null)
+    {
+        this.width = width;
+        this.height = matrix.Length / width;
+        this.deadEndPos = deadEndPos ?? new Dictionary<Pos, IDirection>();
+
+        this.matrix = new Terrain[width, height];
+
+        for (int j = 0; j < height; j++)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                this.matrix[i, j] = (Terrain)Enum.ToObject(typeof(Terrain), matrix[i + j * width]);
+            }
+        }
+
+        this.dirMap = new Dir[width, height];
         CreateDirMap();
     }
 

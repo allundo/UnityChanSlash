@@ -53,13 +53,13 @@ public class WorldMap
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 
-    public WorldMap()
+    public WorldMap(MapManager map = null)
     {
-        map = new MapManager().SetStair();
+        this.map = map ?? new MapManager().SetStair();
         deadEndPos = CopyDeadEndPos();
 
-        Width = map.width;
-        Height = map.height;
+        Width = this.map.width;
+        Height = this.map.height;
 
         tileInfo = new ITile[Width, Height];
 
@@ -192,16 +192,25 @@ public class WorldMap
     {
         get
         {
+            if (!initPos.IsNull) return initPos;
+
             for (int j = 1; j < Height - 1; j++)
             {
                 for (int i = 1; i < Width - 1; i++)
                 {
-                    if (tileInfo[i, j] is Ground) return new Pos(i, j);
+                    if (tileInfo[i, j] is Ground)
+                    {
+                        initPos = new Pos(i, j);
+                        return initPos;
+                    }
                 }
             }
-            return new Pos();
+
+            return initPos;
         }
+        set { initPos = value; }
     }
+    private Pos initPos = new Pos();
 
     // FIXME
     public IDirection InitDir => new South();

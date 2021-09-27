@@ -9,7 +9,8 @@ public class MainSceneMediator : SceneMediator
 
     protected override void InitBeforeStart()
     {
-        SetStartActions(GameManager.Instance.DropStart, GameManager.Instance.Restart);
+        var gm = GameManager.Instance;
+        SetStartActions(gm.DropStart, gm.Restart, gm.DebugStart);
 
         gameOver.restartButton
             .OnPressedCompleteAsObservable()
