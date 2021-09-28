@@ -51,15 +51,31 @@ public class CoverScreen : FadeScreen
         return fadeMC.In(duration, delay).SetEase(Ease.OutQuad);
     }
 
-    public override Tween FadeIn(float duration = 1f, float delay = 0f)
+    public override Tween FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true)
     {
         fadeMC.SetAlpha(0f);
-        return base.FadeIn(duration, delay);
+        return base.FadeIn(duration, delay, isContinuous);
     }
 
-    public override Tween FadeOut(float duration = 1f, float delay = 0f)
+    public override Tween FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true)
     {
         fadeMC.SetAlpha(0f);
-        return base.FadeOut(duration, delay);
+        return base.FadeOut(duration, delay, isContinuous);
+    }
+
+    public bool prevButton = false;
+    void OnGUI()
+    {
+        Rect rect = new Rect(Screen.width - 210, 40, 200, 30);
+        if (GUI.Button(rect, "Fade"))
+        {
+            if (prevButton == false)
+            {
+                FadeOut().Play();
+            }
+            prevButton = true;
+            return;
+        }
+        prevButton = false;
     }
 }

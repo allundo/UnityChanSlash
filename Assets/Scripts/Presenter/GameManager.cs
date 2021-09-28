@@ -59,8 +59,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         placeEnemyGenerator.Place(worldMap);
 
-        cover.SetAlpha(1f);
-        cover.FadeIn(1.0f, 1.1f).Play();
+        cover.FadeIn(1.5f, 0.5f, false).Play();
         commander.EnqueueDropFloor();
         commander.EnqueueStartMessage();
     }
@@ -69,8 +68,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         placeEnemyGenerator.Place(worldMap);
 
-        cover.SetAlpha(1f);
-        cover.FadeIn(1.0f).Play();
+        cover.FadeIn(1.0f, 0, false).Play();
         commander.EnqueueRestartMessage();
     }
 
