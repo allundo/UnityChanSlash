@@ -34,10 +34,10 @@ public class HandleUI : MonoBehaviour
 
     void Start()
     {
-        if (upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragUp(ratio)).AddTo(this);
-        if (downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragDown(ratio)).AddTo(this);
-        if (rightArrow != null) flick.DragRight.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragRight(ratio)).AddTo(this);
-        if (leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDragLeft(ratio)).AddTo(this);
+        if (upArrow != null) flick.DragUp.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDrag(ratio, upArrow)).AddTo(this);
+        if (downArrow != null) flick.DragDown.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDrag(ratio, downArrow)).AddTo(this);
+        if (rightArrow != null) flick.DragRight.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDrag(ratio, rightArrow)).AddTo(this);
+        if (leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDrag(ratio, leftArrow)).AddTo(this);
 
         flick.ReleaseSubject.Subscribe(_ => OnRelease()).AddTo(this);
     }
@@ -69,36 +69,10 @@ public class HandleUI : MonoBehaviour
         sequence.ForEach(ui => ui.gameObject.SetActive(isActive), null, exceptFor);
     }
 
-    private void OnDragUp(float dragRatio)
+    public void OnDrag(float dragRatio, UIParticle moveArrow)
     {
-        SetUIsActive(moveArrows, dragRatio < 0.5f, upArrow);
+        SetUIsActive(moveArrows, dragRatio < 0.5f, moveArrow);
 
-        OnDrag(dragRatio);
-    }
-
-    private void OnDragDown(float dragRatio)
-    {
-        SetUIsActive(moveArrows, dragRatio < 0.5f, downArrow);
-
-        OnDrag(dragRatio);
-    }
-
-    private void OnDragRight(float dragRatio)
-    {
-        SetUIsActive(moveArrows, dragRatio < 0.5f, rightArrow);
-
-        OnDrag(dragRatio);
-    }
-
-    private void OnDragLeft(float dragRatio)
-    {
-        SetUIsActive(moveArrows, dragRatio < 0.5f, leftArrow);
-
-        OnDrag(dragRatio);
-    }
-
-    public void OnDrag(float dragRatio)
-    {
         if (isPressed) return;
 
         isPressed = true;
@@ -115,34 +89,34 @@ public class HandleUI : MonoBehaviour
         SetUIsActive(moveArrows, false);
     }
 
-    public void Activate()
+    public void Activate(float duration = 0.2f)
     {
         isPressed = false;
 
         gameObject.SetActive(true);
 
-        flick.FadeIn(0.2f).Play();
+        flick.FadeIn(duration).Play();
         SetUIsActive(stopArrows, true);
     }
 
-    public void Inactivate()
+    public void Inactivate(float duration = 0.2f)
     {
         isPressed = false;
-        flick.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
+        flick.FadeOut(duration, null, () => gameObject.SetActive(false)).Play();
 
         SetUIsActive(stopArrows, false);
         SetUIsActive(moveArrows, false);
     }
 
-    public void SetActive(bool isActive)
+    public void SetActive(bool isActive, float duration = 0.2f)
     {
         if (isActive)
         {
-            Activate();
+            Activate(duration);
         }
         else
         {
-            Inactivate();
+            Inactivate(duration);
         }
     }
 }

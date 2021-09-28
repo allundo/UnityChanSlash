@@ -16,6 +16,7 @@ public class BaseHandler : MonoBehaviour
     protected IObservable<Unit> ObserveDown => Observable.Merge(flickR.DownSubject, flickL.DownSubject);
     protected IObservable<Unit> ObserveRL => Observable.Merge(flickR.LeftSubject, flickL.RightSubject);
 
+    // FIXME: alpha is used only for activating timer
     protected float alpha = 0.0f;
     protected bool isActive = false;
     public bool isPressed { get; protected set; } = false;
@@ -41,7 +42,7 @@ public class BaseHandler : MonoBehaviour
         flickR.ReleaseSubject.Subscribe(_ => SetPressActive(handleLUI, false)).AddTo(this);
 
         gameObject.SetActive(false);
-        InactivateButtons();
+        SetActiveButtons(false);
     }
 
     protected void SetPressActive(HandleUI handleUI, bool isActive)
@@ -71,8 +72,6 @@ public class BaseHandler : MonoBehaviour
             alpha = 0.0f;
 
             gameObject.SetActive(false);
-            InactivateButtons();
-
             return;
         }
     }
@@ -84,28 +83,21 @@ public class BaseHandler : MonoBehaviour
         isActive = true;
         gameObject.SetActive(true);
 
-        ActivateButtons();
+        SetActiveButtons(true);
     }
 
-    protected virtual void ActivateButtons()
+    protected virtual void SetActiveButtons(bool isActive, float duration = 0.2f)
     {
-        alpha = 0.0f;
-
-        handleUIs.ForEach(handleUI => handleUI.Activate());
+        handleUIs.ForEach(handleUI => handleUI.SetActive(isActive, duration));
     }
 
-    private void InactivateButtons()
-    {
-        handleUIs.ForEach(handleUI => handleUI.Inactivate());
-    }
-
-    public void Inactivate()
+    public void Inactivate(float duration = 0.2f)
     {
         if (!isActive) return;
 
         isPressed = false;
         isActive = false;
-        InactivateButtons();
+        SetActiveButtons(false, duration);
     }
 
     public virtual void SetActive(bool value)

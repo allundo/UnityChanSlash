@@ -43,25 +43,26 @@ public class DoorHandler : BaseHandler
         isActive = true;
         gameObject.SetActive(true);
 
-        ActivateButtons();
+        SetActiveButtons(true);
     }
 
-    protected override void ActivateButtons()
+    protected override void SetActiveButtons(bool isActive, float duration = 0.2f)
     {
-        alpha = 0.0f;
-
-        if (isOpen)
+        if (isActive)
         {
-            openDoorUI.Inactivate();
-            handleRUI.Activate();
-            handleLUI.Activate();
+            ActivateButtons(duration);
         }
         else
         {
-            openDoorUI.Activate();
-            handleRUI.Inactivate();
-            handleLUI.Inactivate();
+            base.SetActiveButtons(false);
         }
+    }
+
+    protected void ActivateButtons(float duration = 0.2f)
+    {
+        openDoorUI.SetActive(!isOpen, duration);
+        handleRUI.SetActive(isOpen, duration);
+        handleLUI.SetActive(isOpen, duration);
     }
 
     public void SetActive(bool value, bool isOpen)
