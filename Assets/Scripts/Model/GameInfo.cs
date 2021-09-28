@@ -1,7 +1,5 @@
-using UnityEngine;
 using DG.Tweening;
 using System.Linq;
-using System;
 using System.Collections.Generic;
 using UniRx;
 
@@ -11,9 +9,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     private WorldMap[] maps;
 
     public int startActionID = 0;
-
-    private ISubject<bool> debugSubject = new Subject<bool>();
-    public IObservable<bool> DebugObservable => debugSubject.SampleFrame(1).Where(x => x);
 
     public WorldMap Map(int floor)
     {
@@ -79,9 +74,5 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public void ClearMaps()
     {
         maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR + 1).ToArray();
-    }
-    void OnGUI()
-    {
-        debugSubject.OnNext(GUI.Button(new Rect(10, 10, 100, 30), "Debug"));
     }
 }
