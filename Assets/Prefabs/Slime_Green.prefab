@@ -774,10 +774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c50a0e85150543a0ae77ca69f894b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FaceDamageMultiplier: 1
-  SideDamageMultiplier: 1.5
-  BackDamageMultiplier: 2
-  DefaultLifeMax: 10
+  data: {fileID: 11400000, guid: c2797916bebe04356964d7cb1dd71661, type: 2}
 --- !u!114 &8870454713836784831
 MonoBehaviour:
   m_ObjectHideFlags: 0

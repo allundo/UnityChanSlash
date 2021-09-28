@@ -8710,6 +8710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338a92763a9ce40dcb90da5b7d602fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPersistent: 0
 --- !u!114 &889236187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34629,10 +34630,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae62acf7506d4cf6968df116271d612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FaceDamageMultiplier: 1
-  SideDamageMultiplier: 1.5
-  BackDamageMultiplier: 2
-  DefaultLifeMax: 10
+  data: {fileID: 11400000, guid: 057885bf48e70446691e72bd8ceecd5d, type: 2}
+  dataIndex: 0
 --- !u!54 &3442943665148549229
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -74009,6 +74008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeImage: {fileID: 9112366752199977610}
   coverImage: {fileID: 864645607073910336}
+  prevButton: 0
 --- !u!1 &6700523260911184607
 GameObject:
   m_ObjectHideFlags: 0

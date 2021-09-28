@@ -5,8 +5,6 @@ public class PlayerStatus : MobStatus
 {
     protected HidePool hidePool;
 
-    public override float Shield => 1;
-
     protected override void Awake()
     {
         base.Awake();

@@ -1,15 +1,27 @@
 using UnityEngine;
 using UniRx;
 
-public class MobStatus : MonoBehaviour
+public class MobStatus : Status<MobData> { }
+
+public class Status<T> : MonoBehaviour
+    where T : MobData
 {
+    [SerializeField] protected T data;
+    [SerializeField] protected int dataIndex;
+    protected MobParam param;
+
+    protected virtual float FaceDamageMultiplier => param.faceDamageMultiplier;
+    protected virtual float SideDamageMultiplier => param.sideDamageMultiplier;
+    protected virtual float BackDamageMultiplier => param.backDamageMultiplier;
+    protected virtual float DefaultLifeMax => param.defaultLifeMax;
+
+    public virtual float Attack => param.attack;
+    public virtual float Shield => param.shield;
+
+    protected virtual float ArmorMultiplier => param.armorMultiplier;
+
     public MapUtil map { get; protected set; }
     public IDirection dir => map.dir;
-
-    [SerializeField] public float FaceDamageMultiplier = 1.0f;
-    [SerializeField] public float SideDamageMultiplier = 1.5f;
-    [SerializeField] public float BackDamageMultiplier = 2.0f;
-    [SerializeField] private float DefaultLifeMax = 10;
 
     protected IReactiveProperty<float> life;
     public IReadOnlyReactiveProperty<float> Life => life;
@@ -20,14 +32,12 @@ public class MobStatus : MonoBehaviour
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
 
-    public virtual float Attack => 1.0f;
-    public virtual float Shield => 0.0f;
-
-    protected virtual float ArmorMultiplier => 1.0f;
-
     protected virtual void Awake()
     {
         map = GetComponent<MapUtil>();
+
+        param = data.Param(dataIndex);
+
         life = new ReactiveProperty<float>(DefaultLifeMax);
         lifeMax = new ReactiveProperty<float>(DefaultLifeMax);
     }
