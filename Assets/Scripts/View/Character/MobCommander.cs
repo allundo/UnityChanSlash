@@ -13,7 +13,7 @@ public abstract partial class MobCommander : MonoBehaviour
     public bool IsIdling => currentCommand == null;
 
     protected Queue<Command> cmdQueue = new Queue<Command>();
-    public Command currentCommand { get; protected set; } = null;
+    protected Command currentCommand = null;
     protected Command die = null;
 
     public MapUtil map { get; protected set; } = default;
