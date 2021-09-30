@@ -12,9 +12,12 @@ public class FadeEnable : MonoBehaviour
         Inactivate();
     }
 
+    protected virtual void Activator() => fade.Enable();
+    protected virtual void Inactivator() => fade.Disable();
+
     public virtual void Activate()
     {
-        fade.Enable();
+        Activator();
         isActive = true;
         fade.KillTweens();
         fade.SetAlpha(1f);
@@ -25,7 +28,7 @@ public class FadeEnable : MonoBehaviour
         isActive = false;
         fade.KillTweens();
         fade.SetAlpha(0f);
-        fade.Disable();
+        Inactivator();
     }
 
     public virtual Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
@@ -36,7 +39,7 @@ public class FadeEnable : MonoBehaviour
         return fade.In(duration, 0f,
             () =>
             {
-                fade.Enable();
+                Activator();
                 isActive = true;
                 onPlay();
             },
@@ -58,7 +61,7 @@ public class FadeEnable : MonoBehaviour
             () =>
             {
                 onComplete();
-                fade.Disable();
+                Inactivator();
             },
             isContinuous);
     }
