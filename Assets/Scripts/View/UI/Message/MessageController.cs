@@ -3,9 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UniRx;
 
-public class MessageController : FadeActivate, IPointerDownHandler, IPointerUpHandler
+public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] protected FadeActivate window = default;
+    [SerializeField] protected FadeEnable window = default;
     [SerializeField] protected CharacterUI characterUI = default;
     [SerializeField] protected TextHandler textHandler = default;
 

@@ -2,7 +2,7 @@
 using DG.Tweening;
 using UniRx;
 
-public class AttackButton : FadeActivate
+public class AttackButton : FadeEnable
 {
     [SerializeField] float duration = 0.2f;
     protected UITween ui;

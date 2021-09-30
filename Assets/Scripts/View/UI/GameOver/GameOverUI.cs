@@ -1,10 +1,10 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
 
-public class GameOverUI : FadeActivate, IPointerDownHandler, IPointerUpHandler
+public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private FadeActivate gameOverTxt = default;
-    [SerializeField] private FadeActivate gameOverBG = default;
+    [SerializeField] private FadeEnable gameOverTxt = default;
+    [SerializeField] private FadeEnable gameOverBG = default;
     [SerializeField] private GameOverWindowUI selectUI = default;
 
     public void OnPointerDown(PointerEventData eventData) { }

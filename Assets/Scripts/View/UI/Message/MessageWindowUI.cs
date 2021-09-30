@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class MessageWindowUI : FadeActivate
+public class MessageWindowUI : FadeEnable
 {
     private UITween uiTween;
 

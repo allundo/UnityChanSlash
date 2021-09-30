@@ -4,7 +4,7 @@ using System.Linq;
 using TMPro;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class HandleText : FadeActivate
+public class HandleText : FadeEnable
 {
     private TextMeshProUGUI tm = default;
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class FadeActivate : MonoBehaviour
+public class FadeEnable : MonoBehaviour
 {
     public bool isActive { get; protected set; } = true;
     protected FadeTween fade;

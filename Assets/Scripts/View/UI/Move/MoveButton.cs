@@ -2,7 +2,7 @@
 using DG.Tweening;
 using UniRx;
 
-public class MoveButton : FadeActivate
+public class MoveButton : FadeEnable
 {
     [SerializeField] float maxAlpha = DEFAULT_ALPHA;
     [SerializeField] Vector2 defaultSize = new Vector2(100f, 100f);

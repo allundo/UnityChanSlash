@@ -6,7 +6,7 @@ using UniRx;
 using System;
 using System.Linq;
 
-public class FlickInteraction : FadeActivate, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] protected Sprite upSprite = null;
     [SerializeField] protected Sprite downSprite = null;

@@ -5,7 +5,7 @@ using DG.Tweening;
 using System.Linq;
 
 [RequireComponent(typeof(Image))]
-public class HandleIcon : FadeActivate
+public class HandleIcon : FadeEnable
 {
     [SerializeField] private FlickInteraction[] flicks = default;
     [SerializeField] private HandleText text = default;
