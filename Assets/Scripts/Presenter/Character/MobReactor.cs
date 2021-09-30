@@ -7,7 +7,13 @@ using DG.Tweening;
 [RequireComponent(typeof(MobCommander))]
 public class MobReactor : SpawnObject<MobReactor>
 {
+    /// <summary>
+    /// Reaction to life gauge is only supported for player for now.<br />
+    /// Leave it empty for the other characters.<br />
+    /// TODO: Create LifeGauge interface to apply general reaction.
+    /// </summary>
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
+
     protected MobStatus status;
     protected MobEffect effect;
     protected MobCommander commander;
