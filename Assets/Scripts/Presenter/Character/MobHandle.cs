@@ -1,15 +1,14 @@
 using UnityEngine;
 
-[RequireComponent(typeof(HidePlateUpdater))]
+[RequireComponent(typeof(HidePlateHandler))]
 public class MobHandle : MonoBehaviour
 {
     [SerializeField] private Collider handleCollider = default;
-    private HidePlateUpdater hidePool;
-
+    private HidePlateHandler hidePlateHandler;
 
     private void Start()
     {
-        hidePool = GetComponent<HidePlateUpdater>();
+        hidePlateHandler = GetComponent<HidePlateHandler>();
         handleCollider.enabled = false;
     }
 
@@ -25,7 +24,7 @@ public class MobHandle : MonoBehaviour
         if (null == targetDoor) return;
 
         targetDoor.Handle();
-        hidePool.Redraw();
+        hidePlateHandler.Redraw();
     }
 
     public void OnHandleFinished()

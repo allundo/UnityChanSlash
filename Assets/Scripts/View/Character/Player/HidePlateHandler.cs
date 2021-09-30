@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 
-public class HidePlateUpdater : MonoBehaviour
+public class HidePlateHandler : MonoBehaviour
 {
     [SerializeField] private HidePlatePool hidePlatePool;
     [SerializeField] private GameObject plateFrontPrefab = default;
@@ -12,11 +12,11 @@ public class HidePlateUpdater : MonoBehaviour
     protected GameObject plateFront;
 
     protected LandscapeUpdater landscape = null;
-    protected Dictionary<IDirection, UpdaterVariant> portrait = new Dictionary<IDirection, UpdaterVariant>();
+    protected Dictionary<IDirection, PlateUpdater> portrait = new Dictionary<IDirection, PlateUpdater>();
     protected Dictionary<IDirection, Quaternion> rotatePlateFront = new Dictionary<IDirection, Quaternion>();
     protected Dictionary<IDirection, Pos> vecPlateFront = new Dictionary<IDirection, Pos>();
 
-    private UpdaterVariant currentUpdater = null;
+    private PlateUpdater currentUpdater = null;
 
     private WorldMap map;
     private MapUtil mapUtil;
@@ -144,26 +144,25 @@ public class HidePlateUpdater : MonoBehaviour
         Draw();
     }
 
-    protected abstract class UpdaterVariant
+    protected abstract class PlateUpdater
     {
+        protected HidePlateHandler hidePlateHandler;
         protected HidePlatePool hidePlatePool;
-        protected HidePlateUpdater hidePlateUpdater;
         protected HidePlate SpawnPlate(Plate plate, Pos pos, float duration = 0.01f) => hidePlatePool.SpawnPlate(plate, pos, duration);
         protected WorldMap map;
-        protected Pos prevPos => hidePlateUpdater.prevPos;
+        protected Pos prevPos => hidePlateHandler.prevPos;
         protected HidePlate[,] plateData;
 
         protected int width;
         protected int height;
         protected Pos playerOffsetPos;
 
-        protected UpdaterVariant(HidePlateUpdater hidePlateUpdater, int width, int height)
+        protected PlateUpdater(HidePlateHandler hidePlateUpdater, int width, int height)
         {
+            this.hidePlateHandler = hidePlateUpdater;
             this.hidePlatePool = hidePlateUpdater.hidePlatePool;
-            this.hidePlateUpdater = hidePlateUpdater;
 
             map = hidePlateUpdater.map;
-            // prevPos = hidePlateUpdater.prevPos;
 
             int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
             plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
@@ -418,39 +417,39 @@ public class HidePlateUpdater : MonoBehaviour
         }
     }
 
-    protected class LandscapeUpdater : UpdaterVariant
+    protected class LandscapeUpdater : PlateUpdater
     {
-        public LandscapeUpdater(HidePlateUpdater hidePool, int range) : base(hidePool, range, range)
+        public LandscapeUpdater(HidePlateHandler hidePool, int range) : base(hidePool, range, range)
         {
             playerOffsetPos = new Pos(range / 2, range / 2);
         }
 
     }
-    protected class PortraitNUpdater : UpdaterVariant
+    protected class PortraitNUpdater : PlateUpdater
     {
-        public PortraitNUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitNUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(width / 2, height - width / 2 - 1);
         }
     }
-    protected class PortraitSUpdater : UpdaterVariant
+    protected class PortraitSUpdater : PlateUpdater
     {
-        public PortraitSUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitSUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(width / 2, width / 2);
         }
     }
-    protected class PortraitEUpdater : UpdaterVariant
+    protected class PortraitEUpdater : PlateUpdater
     {
-        public PortraitEUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitEUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(height / 2, height / 2);
         }
     }
 
-    protected class PortraitWUpdater : UpdaterVariant
+    protected class PortraitWUpdater : PlateUpdater
     {
-        public PortraitWUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitWUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(width - height / 2 - 1, height / 2);
         }

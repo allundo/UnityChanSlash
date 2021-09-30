@@ -2,10 +2,10 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(MapUtil))]
-[RequireComponent(typeof(HidePlateUpdater))]
+[RequireComponent(typeof(HidePlateHandler))]
 public partial class PlayerCommander : ShieldCommander
 {
-    protected HidePlateUpdater hidePlateUpdater;
+    protected HidePlateHandler hidePlateHandler;
     protected bool isTriggerValid = true;
 
     private bool IsAttack => currentCommand is PlayerAttack;
@@ -18,7 +18,7 @@ public partial class PlayerCommander : ShieldCommander
     protected override void Awake()
     {
         base.Awake();
-        hidePlateUpdater = GetComponent<HidePlateUpdater>();
+        hidePlateHandler = GetComponent<HidePlateHandler>();
     }
 
     protected override void SetCommands()
