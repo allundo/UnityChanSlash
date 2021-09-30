@@ -32,7 +32,6 @@ public class HidePool : MonoBehaviour
     protected const int RANGE = 11;
     protected const int WIDTH = 7;
     protected const int HEIGHT = 15;
-    protected HidePlate[,] plateData;
 
     private Pos prevPos = new Pos();
     private Pos CurrentPos => map.MapPos(transform.position);
@@ -203,7 +202,7 @@ public class HidePool : MonoBehaviour
         protected HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f) => hidePool.GetInstance(plate, pos, duration);
         protected WorldMap map => hidePool.map;
         protected Pos prevPos => hidePool.prevPos;
-        protected HidePlate[,] plateData => hidePool.plateData;
+        protected HidePlate[,] plateData;
 
         protected int width;
         protected int height;
@@ -214,7 +213,7 @@ public class HidePool : MonoBehaviour
             this.hidePool = hidePool;
 
             int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
-            hidePool.plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
+            plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
 
             this.width = width;
             this.height = height;
