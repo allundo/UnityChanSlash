@@ -152,6 +152,8 @@ public interface IDirection
     IDirection Backward { get; }
 
     Dir Enum { get; }
+    Vector3 Angle { get; }
+    Quaternion Rotate { get; }
 
     bool IsSame(IDirection dir);
     bool IsLeft(IDirection dir);
@@ -184,6 +186,9 @@ public abstract class Direction
     }
 
     public abstract bool IsSame(IDirection dir);
+
+    public abstract Vector3 Angle { get; }
+    public Quaternion Rotate => Quaternion.Euler(Angle);
 
     public bool IsLeft(IDirection dir) => IsSame(dir?.Right);
     public bool IsRight(IDirection dir) => IsSame(dir?.Left);
@@ -228,6 +233,7 @@ public class North : Direction, IDirection
     public IDirection Backward => Direction.south;
 
     public Dir Enum => Dir.N;
+    public override Vector3 Angle => Vector3.zero;
 
     public override bool IsSame(IDirection dir) => dir is North;
 
@@ -260,6 +266,7 @@ public class East : Direction, IDirection
     public IDirection Backward => Direction.west;
 
     public Dir Enum => Dir.E;
+    public override Vector3 Angle => new Vector3(0, 90, 0);
 
     public override bool IsSame(IDirection dir) => dir is East;
 
@@ -292,6 +299,7 @@ public class South : Direction, IDirection
     public IDirection Backward => Direction.north;
 
     public Dir Enum => Dir.S;
+    public override Vector3 Angle => new Vector3(0, 180, 0);
 
     public override bool IsSame(IDirection dir) => dir is South;
 
@@ -324,6 +332,7 @@ public class West : Direction, IDirection
     public IDirection Backward => Direction.east;
 
     public Dir Enum => Dir.W;
+    public override Vector3 Angle => new Vector3(0, -90, 0);
 
     public override bool IsSame(IDirection dir) => dir is West;
 
