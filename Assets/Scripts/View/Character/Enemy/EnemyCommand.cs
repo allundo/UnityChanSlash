@@ -8,13 +8,13 @@ public partial class EnemyCommander : MobCommander
     {
         protected EnemyCommander enemyCommander;
         protected MapUtil map;
-        protected EnemyAnimator anim;
+        protected EnemyAnimator enemyAnim;
 
         public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
         {
             enemyCommander = commander;
             map = commander.map;
-            anim = commander.anim as EnemyAnimator;
+            enemyAnim = anim as EnemyAnimator;
         }
     }
 
@@ -27,12 +27,12 @@ public partial class EnemyCommander : MobCommander
         protected Vector3 startPos = default;
         protected void SetSpeed()
         {
-            anim.speed.Float = Speed;
+            enemyAnim.speed.Float = Speed;
         }
 
         protected void ResetSpeed()
         {
-            anim.speed.Float = 0.0f;
+            enemyAnim.speed.Float = 0.0f;
         }
 
         public override void Cancel()
@@ -105,7 +105,7 @@ public partial class EnemyCommander : MobCommander
 
         public override void Execute()
         {
-            anim.attack.Fire();
+            enemyAnim.attack.Fire();
             playingTween = enemyAttack.SetAttack(duration);
 
             SetValidateTimer();

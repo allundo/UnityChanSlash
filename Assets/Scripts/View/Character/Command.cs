@@ -16,6 +16,8 @@ public abstract partial class MobCommander : MonoBehaviour
         protected TweenMove tweenMove;
 
         protected ISubject<Unit> onDead;
+        protected MobAnimator anim;
+
         public Command(MobCommander commander, float duration)
         {
             this.duration = duration * DURATION_UNIT;
@@ -23,6 +25,7 @@ public abstract partial class MobCommander : MonoBehaviour
             this.tweenMove = new TweenMove(commander.transform, this.duration);
 
             onDead = commander.onDead;
+            anim = commander.anim;
         }
 
         protected Tween playingTween = null;
@@ -111,7 +114,7 @@ public abstract partial class MobCommander : MonoBehaviour
 
         public override void Execute()
         {
-            commander.anim.die.Fire();
+            anim.die.Fire();
             SetDestoryFinal();
         }
     }

@@ -13,7 +13,7 @@ public partial class PlayerCommander : ShieldCommander
     {
         protected PlayerCommander playerCommander;
         protected MapUtil map;
-        protected PlayerAnimator anim;
+        protected PlayerAnimator playerAnim;
         protected ThirdPersonCamera mainCamera;
         protected HidePlateHandler hidePlateHandler;
         protected ItemGenerator itemGenerator;
@@ -25,7 +25,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             playerCommander = commander;
             map = commander.map;
-            anim = commander.anim as PlayerAnimator;
+            playerAnim = anim as PlayerAnimator;
             mainCamera = commander.mainCamera;
             hidePlateHandler = commander.hidePlateHandler;
             itemGenerator = commander.itemGenerator;
@@ -70,7 +70,7 @@ public partial class PlayerCommander : ShieldCommander
             {
                 GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
                 Cancel();
-                anim.Pause();
+                playerAnim.Pause();
             });
         }
     }
@@ -87,14 +87,14 @@ public partial class PlayerCommander : ShieldCommander
 
         protected void SetSpeed()
         {
-            anim.speed.Float = Speed;
-            anim.rSpeed.Float = RSpeed;
+            playerAnim.speed.Float = Speed;
+            playerAnim.rSpeed.Float = RSpeed;
         }
 
         protected void ResetSpeed()
         {
-            anim.speed.Float = 0.0f;
-            anim.rSpeed.Float = 0.0f;
+            playerAnim.speed.Float = 0.0f;
+            playerAnim.rSpeed.Float = 0.0f;
         }
 
         public override void Cancel()
@@ -199,7 +199,7 @@ public partial class PlayerCommander : ShieldCommander
             map.SetOnCharactor(startPos + dest);
             map.ResetOnCharactor(startPos);
 
-            anim.jump.Fire();
+            playerAnim.jump.Fire();
 
             // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
@@ -224,7 +224,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             map.TurnLeft();
             mainCamera.TurnLeft();
-            anim.turnL.Fire();
+            playerAnim.turnL.Fire();
             hidePlateHandler.Turn();
             itemGenerator.Turn(map.dir);
 
@@ -241,7 +241,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             map.TurnRight();
             mainCamera.TurnRight();
-            anim.turnR.Fire();
+            playerAnim.turnR.Fire();
             hidePlateHandler.Turn();
             itemGenerator.Turn(map.dir);
 
@@ -274,7 +274,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected override void Action()
         {
-            anim.handle.Fire();
+            playerAnim.handle.Fire();
         }
     }
 
@@ -289,7 +289,7 @@ public partial class PlayerCommander : ShieldCommander
 
             if (itemIconGenerator.PickUp(item))
             {
-                anim.getItem.Fire();
+                playerAnim.getItem.Fire();
             }
             else
             {
@@ -318,7 +318,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected override void Action()
         {
-            anim.attack.Fire();
+            playerAnim.attack.Fire();
             playingTween = jab.SetAttack(duration);
         }
     }
@@ -329,7 +329,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected override void Action()
         {
-            anim.straight.Fire();
+            playerAnim.straight.Fire();
             playingTween = straight.SetAttack(duration);
         }
     }
@@ -339,7 +339,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected override void Action()
         {
-            anim.kick.Fire();
+            playerAnim.kick.Fire();
             playingTween = kick.SetAttack(duration);
         }
     }
@@ -350,7 +350,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected override void Action()
         {
-            anim.shield.Fire();
+            playerAnim.shield.Fire();
         }
     }
 
@@ -360,7 +360,7 @@ public partial class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
-            anim.dieEx.Fire();
+            playerAnim.dieEx.Fire();
             playerCommander.gameOverUI.Play();
             SetDestoryFinal();
         }
@@ -375,7 +375,7 @@ public partial class PlayerCommander : ShieldCommander
             playerCommander.InvisibleInput();
             SetValidateTimer(1f, 1f);
 
-            anim.dropFloor.Fire();
+            playerAnim.dropFloor.Fire();
             PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), playerCommander.VisibleInput);
         }
     }
