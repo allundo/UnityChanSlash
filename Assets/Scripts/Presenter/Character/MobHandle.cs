@@ -1,15 +1,15 @@
 using UnityEngine;
 
-[RequireComponent(typeof(HidePool))]
+[RequireComponent(typeof(HidePlateUpdater))]
 public class MobHandle : MonoBehaviour
 {
     [SerializeField] private Collider handleCollider = default;
-    private HidePool hidePool;
+    private HidePlateUpdater hidePool;
 
 
     private void Start()
     {
-        hidePool = GetComponent<HidePool>();
+        hidePool = GetComponent<HidePlateUpdater>();
         handleCollider.enabled = false;
     }
 

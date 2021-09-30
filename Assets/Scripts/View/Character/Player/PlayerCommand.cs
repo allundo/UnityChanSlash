@@ -15,7 +15,7 @@ public partial class PlayerCommander : ShieldCommander
         protected MapUtil map;
         protected PlayerAnimator anim;
         protected ThirdPersonCamera mainCamera;
-        protected HidePool hidePool;
+        protected HidePlateUpdater hidePlateUpdater;
         protected ItemGenerator itemGenerator;
         protected ItemIconGenerator itemIconGenerator;
 
@@ -27,7 +27,7 @@ public partial class PlayerCommander : ShieldCommander
             map = commander.map;
             anim = commander.anim as PlayerAnimator;
             mainCamera = commander.mainCamera;
-            hidePool = commander.hidePool;
+            hidePlateUpdater = commander.hidePlateUpdater;
             itemGenerator = commander.itemGenerator;
             itemIconGenerator = commander.itemIconGenerator;
         }
@@ -121,7 +121,7 @@ public partial class PlayerCommander : ShieldCommander
             SetSpeed();
             PlayTween(tweenMove.GetLinearMove(Dest), () =>
             {
-                hidePool.Move();
+                hidePlateUpdater.Move();
                 ResetSpeed();
             });
 
@@ -204,14 +204,14 @@ public partial class PlayerCommander : ShieldCommander
             // 2マス進む場合は途中で天井の状態を更新
             if (distance == 2)
             {
-                tweenMove.SetDelayedCall(0.4f, () => hidePool.Move());
+                tweenMove.SetDelayedCall(0.4f, () => hidePlateUpdater.Move());
             }
 
             SetValidateTimer();
 
             PlayTween(tweenMove.GetJumpSequence(dest), () =>
             {
-                if (distance > 0) hidePool.Move();
+                if (distance > 0) hidePlateUpdater.Move();
             });
         }
     }
@@ -225,7 +225,7 @@ public partial class PlayerCommander : ShieldCommander
             map.TurnLeft();
             mainCamera.TurnLeft();
             anim.turnL.Fire();
-            hidePool.Turn();
+            hidePlateUpdater.Turn();
             itemGenerator.Turn(map.dir);
 
             SetValidateTimer(0.5f, 0.1f);
@@ -242,7 +242,7 @@ public partial class PlayerCommander : ShieldCommander
             map.TurnRight();
             mainCamera.TurnRight();
             anim.turnR.Fire();
-            hidePool.Turn();
+            hidePlateUpdater.Turn();
             itemGenerator.Turn(map.dir);
 
             SetValidateTimer(0.5f, 0.1f);

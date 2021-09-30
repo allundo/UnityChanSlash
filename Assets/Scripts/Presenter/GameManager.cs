@@ -6,7 +6,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private MapRenderer mapRenderer = default;
     [SerializeField] private Transform playerTransform = default;
-    [SerializeField] private HidePool hidePool = default;
+    [SerializeField] private HidePlateUpdater hidePlateUpdater = default;
     [SerializeField] private PlayerCommander commander = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private CoverScreen cover = default;
@@ -87,7 +87,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         if (!isInitialOrientation)
         {
-            hidePool.ReformHidePlates(orientation);
+            hidePlateUpdater.ReformHidePlates(orientation);
             mainCamera.ResetRenderSettings(orientation);
         }
 

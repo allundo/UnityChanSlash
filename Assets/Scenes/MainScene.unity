@@ -1706,7 +1706,7 @@ MonoBehaviour:
   isPersistent: 0
   mapRenderer: {fileID: 170570286}
   playerTransform: {fileID: 3442943665555902726}
-  hidePool: {fileID: 5069071868951529207}
+  hidePlateUpdater: {fileID: 5069071868951529207}
   commander: {fileID: 782340157}
   placeEnemyGenerator: {fileID: 1196509789}
   cover: {fileID: 6691234942917525759}

@@ -1,22 +1,22 @@
 using UnityEngine;
 
-[RequireComponent(typeof(HidePool))]
+[RequireComponent(typeof(HidePlateUpdater))]
 public class PlayerStatus : MobStatus
 {
-    protected HidePool hidePool;
+    protected HidePlateUpdater hidePlateUpdater;
 
     protected override void Awake()
     {
         base.Awake();
 
-        hidePool = GetComponent<HidePool>();
+        hidePlateUpdater = GetComponent<HidePlateUpdater>();
     }
 
     public override void Activate()
     {
         ResetStatus();
         map.SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
-        hidePool.Init();
+        hidePlateUpdater.Init();
     }
 
 }

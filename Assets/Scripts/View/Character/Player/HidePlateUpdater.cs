@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 
-public class HidePool : MonoBehaviour
+public class HidePlateUpdater : MonoBehaviour
 {
     [SerializeField] private GameObject plateCross = default;
     [SerializeField] private GameObject plateFull = default;
@@ -20,11 +20,11 @@ public class HidePool : MonoBehaviour
     protected GameObject plateFront;
 
     protected LandscapeUpdater landscape = null;
-    protected Dictionary<IDirection, HidePlateUpdater> portrait = new Dictionary<IDirection, HidePlateUpdater>();
+    protected Dictionary<IDirection, UpdaterVariant> portrait = new Dictionary<IDirection, UpdaterVariant>();
     protected Dictionary<IDirection, Quaternion> rotatePlateFront = new Dictionary<IDirection, Quaternion>();
     protected Dictionary<IDirection, Pos> vecPlateFront = new Dictionary<IDirection, Pos>();
 
-    private HidePlateUpdater currentUpdater = null;
+    private UpdaterVariant currentUpdater = null;
 
     private WorldMap map;
     private MapUtil mapUtil;
@@ -196,9 +196,9 @@ public class HidePool : MonoBehaviour
         Draw();
     }
 
-    protected abstract class HidePlateUpdater
+    protected abstract class UpdaterVariant
     {
-        protected HidePool hidePool;
+        protected HidePlateUpdater hidePool;
         protected HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f) => hidePool.GetInstance(plate, pos, duration);
         protected WorldMap map => hidePool.map;
         protected Pos prevPos => hidePool.prevPos;
@@ -208,7 +208,7 @@ public class HidePool : MonoBehaviour
         protected int height;
         protected Pos playerOffsetPos;
 
-        protected HidePlateUpdater(HidePool hidePool, int width, int height)
+        protected UpdaterVariant(HidePlateUpdater hidePool, int width, int height)
         {
             this.hidePool = hidePool;
 
@@ -465,39 +465,39 @@ public class HidePool : MonoBehaviour
         }
     }
 
-    protected class LandscapeUpdater : HidePlateUpdater
+    protected class LandscapeUpdater : UpdaterVariant
     {
-        public LandscapeUpdater(HidePool hidePool, int range) : base(hidePool, range, range)
+        public LandscapeUpdater(HidePlateUpdater hidePool, int range) : base(hidePool, range, range)
         {
             playerOffsetPos = new Pos(range / 2, range / 2);
         }
 
     }
-    protected class PortraitNUpdater : HidePlateUpdater
+    protected class PortraitNUpdater : UpdaterVariant
     {
-        public PortraitNUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitNUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(width / 2, height - width / 2 - 1);
         }
     }
-    protected class PortraitSUpdater : HidePlateUpdater
+    protected class PortraitSUpdater : UpdaterVariant
     {
-        public PortraitSUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitSUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(width / 2, width / 2);
         }
     }
-    protected class PortraitEUpdater : HidePlateUpdater
+    protected class PortraitEUpdater : UpdaterVariant
     {
-        public PortraitEUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitEUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(height / 2, height / 2);
         }
     }
 
-    protected class PortraitWUpdater : HidePlateUpdater
+    protected class PortraitWUpdater : UpdaterVariant
     {
-        public PortraitWUpdater(HidePool hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitWUpdater(HidePlateUpdater hidePool, int width, int height) : base(hidePool, width, height)
         {
             playerOffsetPos = new Pos(width - height / 2 - 1, height / 2);
         }
