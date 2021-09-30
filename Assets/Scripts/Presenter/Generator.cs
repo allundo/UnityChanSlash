@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class Generator<T> : MonoBehaviour
-    where T : SpawnObject<T>
+    where T : MonoBehaviour, ISpawnObject<T>
 {
     [SerializeField] protected T prefab = default;
     protected Transform pool;
