@@ -1,39 +1,44 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class HidePlate : MonoBehaviour
+public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
 {
-    public Plate plate = Plate.NONE;
-    public bool IsActive { get; private set; } = true;
-    public HidePlate FadeIn(float duration = 0.01f)
-    {
-        IsActive = true;
+    public Plate plate { get; protected set; } = Plate.NONE;
 
-        GetComponent<Renderer>().material
-            .DOFade(1.0f, duration)
-            .SetEase(Ease.Linear)
-            .Play();
+    private static readonly Vector3 OUT_OF_SCREEN = new Vector3(-100.0f, 0.0f, -100.0f);
+
+    private Tween fadeInTween = null;
+    private Tween removeTween = null;
+
+    protected override void Awake()
+    {
+        fade = new FadeMaterialColor(gameObject, 1f);
+    }
+
+    public HidePlate OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.01f)
+    {
+        transform.position = pos;
+
+        gameObject.SetActive(true);
+        removeTween?.Kill();
+        fadeInTween = FadeIn(duration).SetEase(Ease.Linear).Play();
 
         return this;
     }
 
-    public void Remove(float duration = 0.01f)
+    public HidePlate SetPlate(Plate plate)
     {
-        GetComponent<Renderer>().material
-            .DOFade(0.0f, duration)
-            .SetEase(Ease.Linear)
-            .OnComplete(() =>
-            {
-                IsActive = false;
-                transform.position = new Vector3(-100.0f, 0.0f, -100.0f);
-            })
-            .Play();
+        this.plate = plate;
+        return this;
     }
 
-    public static HidePlate GetInstance(GameObject go, Vector3 pos, Quaternion rotation, Transform parent, Plate plate)
+    public void Remove(float duration = 0.3f)
     {
-        HidePlate instance = Instantiate(go, pos, rotation, parent).GetComponent<HidePlate>();
-        instance.plate = plate;
-        return instance;
+        fade.KillTweens();
+        fadeInTween?.Kill();
+
+        removeTween = FadeOut(duration, null, () => transform.position = OUT_OF_SCREEN)
+            .SetEase(Ease.Linear)
+            .Play();
     }
 }

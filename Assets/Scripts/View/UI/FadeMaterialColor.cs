@@ -3,21 +3,39 @@ using UnityEngine.UI;
 
 public class FadeMaterialColor : FadeTween
 {
+    protected Material material;
+    protected GameObject gameObject;
+
     public FadeMaterialColor(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
-        : base(image, maxAlpha, isValidOnPause) { }
+        : base(image, maxAlpha, isValidOnPause)
+    {
+        material = image.material;
+        gameObject = image.gameObject;
+    }
 
     public FadeMaterialColor(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
-        : this(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause) { }
+        : base(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause)
+    {
+        material = gameObject.GetComponent<Renderer>()?.material
+            ?? gameObject.GetComponent<MaskableGraphic>().material;
+
+        this.gameObject = gameObject;
+    }
 
     protected override Color color
     {
         get
         {
-            return image.material.color;
+            return material.color;
         }
         set
         {
-            image.material.color = value;
+            material.color = value;
         }
+    }
+
+    public override void SetActive(bool isActive = true)
+    {
+        gameObject.SetActive(isActive);
     }
 }

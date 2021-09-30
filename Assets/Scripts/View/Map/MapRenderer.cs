@@ -36,13 +36,12 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject doorV = default;
     [SerializeField] private GameObject doorH = default;
     [SerializeField] private GameObject upStairN = default;
-    [SerializeField] private GameObject upStairE = default;
-    [SerializeField] private GameObject upStairS = default;
-    [SerializeField] private GameObject upStairW = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
     private Mesh[] upStairMesh = new Mesh[0b10000];
+    private Dictionary<IDirection, GameObject> upStairPrefabs;
+
     private Mesh wallVMesh;
     private Mesh wallHMesh;
     private GameObject[] plate = new GameObject[0b10000];
@@ -80,11 +79,6 @@ public class MapRenderer : MonoBehaviour
         gateMesh[(int)Dir.SWN] = GetMeshFromObject(gateVW);
         gateMesh[(int)Dir.WNE] = GetMeshFromObject(gateHN);
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
-
-        upStairMesh[(int)Dir.N] = GetMeshFromObject(upStairN);
-        upStairMesh[(int)Dir.E] = GetMeshFromObject(upStairE);
-        upStairMesh[(int)Dir.S] = GetMeshFromObject(upStairS);
-        upStairMesh[(int)Dir.W] = GetMeshFromObject(upStairW);
     }
 
     private void SetDoor(Pos pos, GameObject doorPrefab)
@@ -97,15 +91,17 @@ public class MapRenderer : MonoBehaviour
 
     public void SetStair(Pos pos, IDirection dir)
     {
+        PlacePrefab(pos, upStairN, dir.Rotate);
+
         Stair tileStair = map.GetTile(pos) as Stair;
         tileStair.enterDir = dir;
         tileStair.isUpStair = true;
     }
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
-    {
-        return Instantiate(prefab, map.WorldPos(pos), Quaternion.identity);
-    }
+        => PlacePrefab(pos, prefab, Quaternion.identity);
+    private GameObject PlacePrefab(Pos pos, GameObject prefab, Quaternion rotation)
+        => Instantiate(prefab, map.WorldPos(pos), rotation, transform);
 
     public void Render(WorldMap map)
     {
@@ -151,7 +147,6 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.Stair:
-                        terrainMeshes.Push(GetMeshInstance(upStairMesh[(int)dirMap[i, j]], new Pos(i, j)));
                         SetStair(new Pos(i, j), Direction.Convert(dirMap[i, j]));
                         break;
                 }

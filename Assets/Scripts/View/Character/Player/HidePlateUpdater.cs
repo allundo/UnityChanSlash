@@ -5,17 +5,9 @@ using DG.Tweening;
 
 public class HidePlateUpdater : MonoBehaviour
 {
-    [SerializeField] private GameObject plateCross = default;
-    [SerializeField] private GameObject plateFull = default;
-    [SerializeField] private GameObject plate3 = default;
-    [SerializeField] private GameObject plate2 = default;
-    [SerializeField] private GameObject plate1 = default;
+    [SerializeField] private HidePlatePool hidePlatePool;
     [SerializeField] private GameObject plateFrontPrefab = default;
     [SerializeField] private MiniMap miniMap = default;
-
-    protected Transform[] pool = new Transform[0b10000];
-    protected GameObject[] prefab = new GameObject[0b10000];
-    protected Quaternion[] rotate = new Quaternion[0b10000];
 
     protected GameObject plateFront;
 
@@ -43,7 +35,8 @@ public class HidePlateUpdater : MonoBehaviour
     {
         map = GameManager.Instance.worldMap;
         mapUtil = GetComponent<MapUtil>();
-        InitHidePlates();
+
+        plateFront = Instantiate(plateFrontPrefab, Vector3.zero, Quaternion.identity);
 
         landscape = new LandscapeUpdater(this, RANGE);
         portrait[Direction.north] = new PortraitNUpdater(this, WIDTH, HEIGHT);
@@ -60,51 +53,6 @@ public class HidePlateUpdater : MonoBehaviour
         vecPlateFront[Direction.east] = new Pos(1, 0);
         vecPlateFront[Direction.south] = new Pos(0, 1);
         vecPlateFront[Direction.west] = new Pos(-1, 0);
-    }
-
-    private void InitHidePlates()
-    {
-        pool[(int)Plate.A] = pool[(int)Plate.B] = pool[(int)Plate.D] = pool[(int)Plate.C] = new GameObject("Plate1").transform;
-        pool[(int)Plate.AB] = pool[(int)Plate.BD] = pool[(int)Plate.CD] = pool[(int)Plate.AC] = new GameObject("Plate2").transform;
-        pool[(int)Plate.ABD] = pool[(int)Plate.BCD] = pool[(int)Plate.ACD] = pool[(int)Plate.ABC] = new GameObject("Plate3").transform;
-        pool[(int)Plate.ABCD] = new GameObject("PlateFull").transform;
-        pool[(int)Plate.AD] = pool[(int)Plate.BC] = new GameObject("PlateCross").transform;
-
-        prefab[(int)Plate.A] = prefab[(int)Plate.B] = prefab[(int)Plate.D] = prefab[(int)Plate.C] = plate1;
-        prefab[(int)Plate.AB] = prefab[(int)Plate.BD] = prefab[(int)Plate.CD] = prefab[(int)Plate.AC] = plate2;
-        prefab[(int)Plate.ABD] = prefab[(int)Plate.BCD] = prefab[(int)Plate.ACD] = prefab[(int)Plate.ABC] = plate3;
-        prefab[(int)Plate.ABCD] = plateFull;
-        prefab[(int)Plate.AD] = prefab[(int)Plate.BC] = plateCross;
-
-        rotate[(int)Plate.A] = rotate[(int)Plate.AB] = rotate[(int)Plate.ABC] = rotate[(int)Plate.ABCD] = rotate[(int)Plate.AD] = Quaternion.identity;
-        rotate[(int)Plate.B] = rotate[(int)Plate.BD] = rotate[(int)Plate.ABD] = rotate[(int)Plate.BC] = Quaternion.Euler(0, 90, 0);
-        rotate[(int)Plate.D] = rotate[(int)Plate.CD] = rotate[(int)Plate.BCD] = Quaternion.Euler(0, 180, 0);
-        rotate[(int)Plate.C] = rotate[(int)Plate.AC] = rotate[(int)Plate.ACD] = Quaternion.Euler(0, 270, 0);
-
-        plateFront = Instantiate(plateFrontPrefab, Vector3.zero, Quaternion.identity);
-    }
-
-    private HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f)
-    {
-        if (plate == Plate.NONE) return null;
-
-        int id = (int)plate;
-
-        Vector3 worldPos = map.WorldPos(pos);
-
-        foreach (Transform t in pool[id])
-        {
-            HidePlate hp = t.GetComponent<HidePlate>();
-
-            if (!hp.IsActive)
-            {
-                t.SetPositionAndRotation(worldPos, rotate[id]);
-                hp.plate = plate;
-                return hp.FadeIn(duration);
-            }
-        }
-
-        return HidePlate.GetInstance(prefab[id], worldPos, rotate[id], pool[id], plate);
     }
 
     private void UpdateRange(Action<Pos, Plate[,]> DrawAction)
@@ -198,19 +146,24 @@ public class HidePlateUpdater : MonoBehaviour
 
     protected abstract class UpdaterVariant
     {
-        protected HidePlateUpdater hidePool;
-        protected HidePlate GetInstance(Plate plate, Pos pos, float duration = 0.01f) => hidePool.GetInstance(plate, pos, duration);
-        protected WorldMap map => hidePool.map;
-        protected Pos prevPos => hidePool.prevPos;
+        protected HidePlatePool hidePlatePool;
+        protected HidePlateUpdater hidePlateUpdater;
+        protected HidePlate SpawnPlate(Plate plate, Pos pos, float duration = 0.01f) => hidePlatePool.SpawnPlate(plate, pos, duration);
+        protected WorldMap map;
+        protected Pos prevPos => hidePlateUpdater.prevPos;
         protected HidePlate[,] plateData;
 
         protected int width;
         protected int height;
         protected Pos playerOffsetPos;
 
-        protected UpdaterVariant(HidePlateUpdater hidePool, int width, int height)
+        protected UpdaterVariant(HidePlateUpdater hidePlateUpdater, int width, int height)
         {
-            this.hidePool = hidePool;
+            this.hidePlatePool = hidePlateUpdater.hidePlatePool;
+            this.hidePlateUpdater = hidePlateUpdater;
+
+            map = hidePlateUpdater.map;
+            // prevPos = hidePlateUpdater.prevPos;
 
             int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
             plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
@@ -232,7 +185,7 @@ public class HidePlateUpdater : MonoBehaviour
                 {
                     int x = playerPos.x + i;
                     int y = playerPos.y + j;
-                    plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j));
+                    plateData[x, y] = SpawnPlate(plateMap[i, j], startPos.Add(i, j));
                 }
             }
         }
@@ -250,8 +203,8 @@ public class HidePlateUpdater : MonoBehaviour
 
                     if (plateMap[i, j] != (plateData[x, y]?.plate ?? Plate.NONE))
                     {
-                        plateData[x, y]?.Remove(0.3f);
-                        plateData[x, y] = GetInstance(plateMap[i, j], startPos.Add(i, j), 0.2f);
+                        plateData[x, y]?.Remove(0.4f);
+                        plateData[x, y] = SpawnPlate(plateMap[i, j], startPos.Add(i, j), 0.1f);
                     }
                 }
             }
@@ -288,7 +241,7 @@ public class HidePlateUpdater : MonoBehaviour
             for (int i = 0; i < width; i++)
             {
                 plateData[playerPos.x + i, playerPos.y + height]?.Remove();
-                plateData[playerPos.x + i, playerPos.y] = GetInstance(plateMap[i, 0], startPos.AddX(i));
+                plateData[playerPos.x + i, playerPos.y] = SpawnPlate(plateMap[i, 0], startPos.AddX(i));
             }
             RedrawYShrink(playerPos, plateMap);
         }
@@ -299,7 +252,7 @@ public class HidePlateUpdater : MonoBehaviour
             for (int i = 0; i < width; i++)
             {
                 plateData[playerPos.x + i, playerPos.y - 1]?.Remove();
-                plateData[playerPos.x + i, playerPos.y + height - 1] = GetInstance(plateMap[i, height - 1], startPos.Add(i, height - 1));
+                plateData[playerPos.x + i, playerPos.y + height - 1] = SpawnPlate(plateMap[i, height - 1], startPos.Add(i, height - 1));
             }
             RedrawYShrink(playerPos, plateMap);
         }
@@ -310,7 +263,7 @@ public class HidePlateUpdater : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
                 plateData[playerPos.x + width, playerPos.y + j]?.Remove();
-                plateData[playerPos.x, playerPos.y + j] = GetInstance(plateMap[0, j], startPos.AddY(j));
+                plateData[playerPos.x, playerPos.y + j] = SpawnPlate(plateMap[0, j], startPos.AddY(j));
             }
             RedrawXShrink(playerPos, plateMap);
         }
@@ -321,7 +274,7 @@ public class HidePlateUpdater : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
                 plateData[playerPos.x - 1, playerPos.y + j]?.Remove();
-                plateData[playerPos.x + width - 1, playerPos.y + j] = GetInstance(plateMap[width - 1, j], startPos.Add(width - 1, j));
+                plateData[playerPos.x + width - 1, playerPos.y + j] = SpawnPlate(plateMap[width - 1, j], startPos.Add(width - 1, j));
             }
             RedrawXShrink(playerPos, plateMap);
         }

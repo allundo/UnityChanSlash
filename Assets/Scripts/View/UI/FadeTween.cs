@@ -61,14 +61,13 @@ public class FadeTween
     public void Enable() => SetEnabled(true);
     public void Disable() => SetEnabled(false);
 
-    public void SetActive(bool isActive = true)
+    public virtual void SetActive(bool isActive = true)
     {
         image.gameObject.SetActive(isActive);
     }
 
     public void Activate() => SetActive(true);
     public void Inactivate() => SetActive(false);
-
 
     public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
