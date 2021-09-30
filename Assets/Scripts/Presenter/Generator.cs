@@ -14,15 +14,25 @@ public class Generator<T> : MonoBehaviour
     }
 
     public virtual T Spawn(IDirection dir = null) => Spawn(Vector3.zero, dir);
-    public virtual T Spawn(Vector3 offset, IDirection dir = null)
+    public virtual T Spawn(Vector3 offset, IDirection dir = null, float duration = 0.5f)
     {
-        foreach (Transform t in pool)
-        {
-            if (!t.gameObject.activeSelf)
-            {
-                return t.GetComponent<T>().OnSpawn(spawnPoint + offset, dir);
-            }
-        }
-        return Instantiate(prefab, pool, false).OnSpawn(spawnPoint + offset, dir);
+        return GetInstance().OnSpawn(spawnPoint + offset, dir, duration);
     }
+
+    public virtual T Spawn(Vector3 offset, Quaternion rotation, float duration = 0.5f)
+    {
+        T spawnObject = GetInstance();
+
+        spawnObject.transform.rotation = rotation;
+
+        return spawnObject.OnSpawn(spawnPoint + offset, null, duration);
+    }
+
+    /// <summary>
+    /// Returns inactivated but instantiated object to respawn.
+    /// </summary>
+    /// <returns>SpawnObject; null if there is no inactivated(pooled) object</returns>
+    protected T GetPooledObj() => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<T>();
+
+    protected T GetInstance() => GetPooledObj() ?? Instantiate(prefab, pool, false);
 }

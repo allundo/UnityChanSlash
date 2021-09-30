@@ -42,4 +42,19 @@ static public class ForEachExtensions
             action(tf);
         }
     }
+
+    /// <summary>
+    /// Returns the first child that satisfies a condition in the children of specified transform, or a null if no child is found.
+    /// </summary>
+    /// <param name="transform">Parent transform of iteration target</param>
+    /// <param name="predicate">A function to test each element for a condition</param>
+    static public Transform FirstOrDefault(this Transform transform, Func<Transform, bool> predicate)
+    {
+        foreach (Transform tf in transform)
+        {
+            if (predicate(tf)) return tf;
+        }
+
+        return null;
+    }
 }
