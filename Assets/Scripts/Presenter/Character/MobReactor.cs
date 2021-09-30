@@ -43,6 +43,10 @@ public class MobReactor : SpawnObject<MobReactor>
             .AddTo(this);
 
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
+
+        commander.OnDead
+            .Subscribe(_ => FadeOutToDead())
+            .AddTo(this);
     }
 
     protected void OnLifeChange(float life)

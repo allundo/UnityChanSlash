@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using UniRx;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MobAnimator))]
@@ -6,7 +8,6 @@ using System.Collections.Generic;
 public abstract partial class MobCommander : MonoBehaviour
 {
     public MobAnimator anim { get; protected set; }
-    protected MobReactor reactor;
 
     protected bool isCommandValid = true;
 
@@ -18,9 +19,11 @@ public abstract partial class MobCommander : MonoBehaviour
 
     public MapUtil map { get; protected set; } = default;
 
+    private ISubject<Unit> onDead = new Subject<Unit>();
+    public IObservable<Unit> OnDead => onDead;
+
     protected virtual void Awake()
     {
-        reactor = GetComponent<MobReactor>();
         anim = GetComponent<MobAnimator>();
         map = GetComponent<MapUtil>();
     }

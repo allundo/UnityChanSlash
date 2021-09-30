@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System;
+using UniRx;
 
 public abstract partial class MobCommander : MonoBehaviour
 {
@@ -14,11 +15,14 @@ public abstract partial class MobCommander : MonoBehaviour
         protected MobCommander commander;
         protected TweenMove tweenMove;
 
+        protected ISubject<Unit> onDead;
         public Command(MobCommander commander, float duration)
         {
             this.duration = duration * DURATION_UNIT;
             this.commander = commander;
             this.tweenMove = new TweenMove(commander.transform, this.duration);
+
+            onDead = commander.onDead;
         }
 
         protected Tween playingTween = null;
@@ -54,7 +58,7 @@ public abstract partial class MobCommander : MonoBehaviour
         }
 
         /// <summary>
-        /// Play tween and next command dispatching on complete
+        /// Play tween and dispatch next command on complete
         /// </summary>
         /// <param name="tween">Tween (or Sequence) to play</param>
         /// <param name="OnComplete">Additional process on complete</param>
@@ -88,7 +92,7 @@ public abstract partial class MobCommander : MonoBehaviour
         /// </summary>
         protected void SetDestoryFinal()
         {
-            tweenMove.SetFinallyCall(() => commander.reactor.FadeOutToDead());
+            tweenMove.SetFinallyCall(() => onDead.OnNext(Unit.Default));
         }
 
         private TweenCallback DispatchFinally(Action OnComplete = null)
