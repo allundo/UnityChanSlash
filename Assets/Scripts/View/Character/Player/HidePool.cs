@@ -5,8 +5,8 @@ using DG.Tweening;
 
 public class HidePool : MonoBehaviour
 {
-    [SerializeField] private GameObject plate5 = default;
-    [SerializeField] private GameObject plate4 = default;
+    [SerializeField] private GameObject plateCross = default;
+    [SerializeField] private GameObject plateFull = default;
     [SerializeField] private GameObject plate3 = default;
     [SerializeField] private GameObject plate2 = default;
     [SerializeField] private GameObject plate1 = default;
@@ -73,8 +73,8 @@ public class HidePool : MonoBehaviour
         prefab[(int)Plate.A] = prefab[(int)Plate.B] = prefab[(int)Plate.D] = prefab[(int)Plate.C] = plate1;
         prefab[(int)Plate.AB] = prefab[(int)Plate.BD] = prefab[(int)Plate.CD] = prefab[(int)Plate.AC] = plate2;
         prefab[(int)Plate.ABD] = prefab[(int)Plate.BCD] = prefab[(int)Plate.ACD] = prefab[(int)Plate.ABC] = plate3;
-        prefab[(int)Plate.ABCD] = plate4;
-        prefab[(int)Plate.AD] = prefab[(int)Plate.BC] = plate5;
+        prefab[(int)Plate.ABCD] = plateFull;
+        prefab[(int)Plate.AD] = prefab[(int)Plate.BC] = plateCross;
 
         rotate[(int)Plate.A] = rotate[(int)Plate.AB] = rotate[(int)Plate.ABC] = rotate[(int)Plate.ABCD] = rotate[(int)Plate.AD] = Quaternion.identity;
         rotate[(int)Plate.B] = rotate[(int)Plate.BD] = rotate[(int)Plate.ABD] = rotate[(int)Plate.BC] = Quaternion.Euler(0, 90, 0);

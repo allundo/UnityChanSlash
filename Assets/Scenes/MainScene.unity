@@ -23229,7 +23229,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262744fb0280947a682beecacb408e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <isActive>k__BackingField: 1
 --- !u!114 &731191338219286135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44258,8 +44257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c75097332af84554b4349e61e8f533b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plate5: {fileID: 4410350399330937260, guid: ba50e267e17c748778aef850f3b3f4ea, type: 3}
-  plate4: {fileID: 6562320423494379851, guid: 23623f2e6ee5b4588b1ec073d2b3c510, type: 3}
+  plateCross: {fileID: 4410350399330937260, guid: ba50e267e17c748778aef850f3b3f4ea,
+    type: 3}
+  plateFull: {fileID: 6562320423494379851, guid: 23623f2e6ee5b4588b1ec073d2b3c510,
+    type: 3}
   plate3: {fileID: 1084713294861358102, guid: 0904dcac99c1449149490f9cf6799316, type: 3}
   plate2: {fileID: 6217421790537502201, guid: 1c19d8e66c71c45d3ae5ba5777e9db73, type: 3}
   plate1: {fileID: 2216583042054745137, guid: 50fdb2c2166fc4191b1c8c92bf2eb84b, type: 3}
@@ -85735,7 +85736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262744fb0280947a682beecacb408e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <isActive>k__BackingField: 1
 --- !u!114 &8881842097821725062
 MonoBehaviour:
   m_ObjectHideFlags: 0
