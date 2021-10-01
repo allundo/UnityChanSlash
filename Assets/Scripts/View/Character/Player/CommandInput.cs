@@ -15,10 +15,10 @@ public partial class PlayerCommander : ShieldCommander
     [SerializeField] protected PointerDownUI turnLUI = default;
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
-    [SerializeField] protected MessageController messageController = default;
-    [SerializeField] protected GameOverUI gameOverUI = default;
-    [SerializeField] protected ItemGenerator itemGenerator = default;
-    [SerializeField] protected ItemIconGenerator itemIconGenerator = default;
+    [SerializeField] public MessageController messageController = default;
+    [SerializeField] public GameOverUI gameOverUI = default;
+    [SerializeField] public ItemGenerator itemGenerator = default;
+    [SerializeField] public ItemIconGenerator itemIconGenerator = default;
 
     protected FightInput fightInput;
     protected HandleInput doorInput;
@@ -184,7 +184,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected void SetCommands(PlayerCommander commander)
         {
-            forward = new ForwardCommand(commander, 1.0f);
+            forward = new PlayerForward(commander, 1.0f);
             handle = new PlayerHandle(commander, 0.4f);
             getItem = new PlayerGetItem(commander, 0.8f);
 
@@ -226,14 +226,14 @@ public partial class PlayerCommander : ShieldCommander
 
         protected void SetCommands(PlayerCommander commander)
         {
-            forward = new ForwardCommand(commander, 1.0f);
-            right = new RightCommand(commander, 1.2f);
-            left = new LeftCommand(commander, 1.2f);
-            backward = new BackCommand(commander, 1.2f);
+            forward = new PlayerForward(commander, 1.0f);
+            right = new PlayerRight(commander, 1.2f);
+            left = new PlayerLeft(commander, 1.2f);
+            backward = new PlayerBack(commander, 1.2f);
 
-            turnR = new TurnRCommand(commander, 0.5f);
-            turnL = new TurnLCommand(commander, 0.5f);
-            jump = new JumpCommand(commander, 2.0f);
+            turnR = new PlayerTurnR(commander, 0.5f);
+            turnL = new PlayerTurnL(commander, 0.5f);
+            jump = new PlayerJump(commander, 2.0f);
 
             guard = new GuardCommand(commander, 0.02f);
 

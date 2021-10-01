@@ -19,13 +19,13 @@ public abstract partial class MobCommander : MonoBehaviour
 
     public MapUtil map { get; protected set; } = default;
 
-    private ISubject<Unit> onDead = new Subject<Unit>();
+    public ISubject<Unit> onDead { get; protected set; } = new Subject<Unit>();
     public IObservable<Unit> OnDead => onDead;
 
-    protected ISubject<Unit> onCompleted = new Subject<Unit>();
+    public ISubject<Unit> onCompleted { get; protected set; } = new Subject<Unit>();
     protected IObservable<Unit> OnCompleted => onCompleted;
 
-    protected ISubject<bool> onValidated = new Subject<bool>();
+    public ISubject<bool> onValidated { get; protected set; } = new Subject<bool>();
     protected IObservable<bool> OnValidated => onValidated;
 
     protected virtual void Awake()

@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyAnimator))]
 public partial class EnemyCommander : MobCommander
 {
+    [SerializeField] public MobAttack enemyAttack = default;
+
     public EnemyAnimator enemyAnim { get; protected set; }
     protected EnemyAI enemyAI;
 

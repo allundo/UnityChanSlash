@@ -22,39 +22,4 @@ public abstract class ShieldCommander : MobCommander
         shieldOn = new ShieldOnCommand(this, 0.8f);
     }
 
-    protected abstract class ShieldCommand : Command
-    {
-        protected GuardState guardState;
-
-        public ShieldCommand(ShieldCommander commander, float duration) : base(commander, duration)
-        {
-            guardState = commander.guardState;
-        }
-    }
-
-    protected class GuardCommand : ShieldCommand
-    {
-        public GuardCommand(ShieldCommander commander, float duration) : base(commander, duration) { }
-
-        public override void Execute()
-        {
-            guardState.SetManualGuard(true);
-
-            SetValidateTimer();
-            SetDispatchFinal(() => guardState.SetManualGuard(false));
-        }
-    }
-
-    protected class ShieldOnCommand : ShieldCommand
-    {
-        public ShieldOnCommand(ShieldCommander commander, float duration) : base(commander, duration) { }
-
-        public override void Execute()
-        {
-            (anim as ShieldAnimator).shield.Fire();
-
-            SetValidateTimer(0.1f);
-            SetDispatchFinal();
-        }
-    }
 }

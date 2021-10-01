@@ -1,114 +1,109 @@
 using UnityEngine;
 using UniRx;
 
-public partial class EnemyCommander : MobCommander
+public abstract class EnemyCommand : Command
 {
-    [SerializeField] protected MobAttack enemyAttack = default;
+    protected MapUtil map;
+    protected EnemyAnimator enemyAnim;
 
-    public abstract class EnemyCommand : Command
+    public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
     {
-        protected MapUtil map;
-        protected EnemyAnimator enemyAnim;
+        map = commander.map;
+        enemyAnim = anim as EnemyAnimator;
+    }
+}
 
-        public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
-        {
-            map = commander.map;
-            enemyAnim = anim as EnemyAnimator;
-        }
+public abstract class EnemyMove : EnemyCommand
+{
+    public EnemyMove(EnemyCommander commander, float duration) : base(commander, duration) { }
+
+    protected abstract bool IsMovable { get; }
+    protected abstract Vector3 Dest { get; }
+    protected Vector3 startPos = default;
+    protected void SetSpeed()
+    {
+        enemyAnim.speed.Float = Speed;
     }
 
-    public abstract class MoveCommand : EnemyCommand
+    protected void ResetSpeed()
     {
-        public MoveCommand(EnemyCommander commander, float duration) : base(commander, duration) { }
-
-        protected abstract bool IsMovable { get; }
-        protected abstract Vector3 Dest { get; }
-        protected Vector3 startPos = default;
-        protected void SetSpeed()
-        {
-            enemyAnim.speed.Float = Speed;
-        }
-
-        protected void ResetSpeed()
-        {
-            enemyAnim.speed.Float = 0.0f;
-        }
-
-        public override void Cancel()
-        {
-            base.Cancel();
-            map.ResetOnCharactor(startPos + Dest);
-        }
-
-        public override void Execute()
-        {
-            if (!IsMovable)
-            {
-                onValidated.OnNext(false);
-                onCompleted.OnNext(Unit.Default);
-                return;
-            }
-
-            startPos = map.CurrentVec3Pos;
-            map.SetOnCharactor(startPos + Dest);
-            map.ResetOnCharactor(startPos);
-
-            SetSpeed();
-            PlayTween(tweenMove.GetLinearMove(Dest), () => ResetSpeed());
-
-            SetValidateTimer(0.95f);
-        }
+        enemyAnim.speed.Float = 0.0f;
     }
 
-    public class ForwardCommand : MoveCommand
+    public override void Cancel()
     {
-        public ForwardCommand(EnemyCommander commander, float duration) : base(commander, duration) { }
-
-        protected override bool IsMovable => map.IsForwardMovable;
-        protected override Vector3 Dest => map.GetForwardVector();
-        public override float Speed => TILE_UNIT / duration;
+        base.Cancel();
+        map.ResetOnCharactor(startPos + Dest);
     }
 
-    public class TurnLCommand : EnemyCommand
+    public override void Execute()
     {
-        public TurnLCommand(EnemyCommander commander, float duration) : base(commander, duration) { }
-
-        public override void Execute()
+        if (!IsMovable)
         {
-            PlayTween(tweenMove.GetRotate(-90));
-            map.TurnLeft();
-
-            SetValidateTimer();
+            onValidated.OnNext(false);
+            onCompleted.OnNext(Unit.Default);
+            return;
         }
+
+        startPos = map.CurrentVec3Pos;
+        map.SetOnCharactor(startPos + Dest);
+        map.ResetOnCharactor(startPos);
+
+        SetSpeed();
+        PlayTween(tweenMove.GetLinearMove(Dest), () => ResetSpeed());
+
+        SetValidateTimer(0.95f);
+    }
+}
+
+public class EnemyForward : EnemyMove
+{
+    public EnemyForward(EnemyCommander commander, float duration) : base(commander, duration) { }
+
+    protected override bool IsMovable => map.IsForwardMovable;
+    protected override Vector3 Dest => map.GetForwardVector();
+    public override float Speed => TILE_UNIT / duration;
+}
+
+public class EnemyTurnL : EnemyCommand
+{
+    public EnemyTurnL(EnemyCommander commander, float duration) : base(commander, duration) { }
+
+    public override void Execute()
+    {
+        PlayTween(tweenMove.GetRotate(-90));
+        map.TurnLeft();
+
+        SetValidateTimer();
+    }
+}
+
+public class EnemyTurnR : EnemyCommand
+{
+    public EnemyTurnR(EnemyCommander commander, float duration) : base(commander, duration) { }
+
+    public override void Execute()
+    {
+        PlayTween(tweenMove.GetRotate(90));
+        map.TurnRight();
+
+        SetValidateTimer();
+    }
+}
+public class EnemyAttack : EnemyCommand
+{
+    private MobAttack enemyAttack;
+    public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration)
+    {
+        enemyAttack = commander.enemyAttack;
     }
 
-    public class TurnRCommand : EnemyCommand
+    public override void Execute()
     {
-        public TurnRCommand(EnemyCommander commander, float duration) : base(commander, duration) { }
+        enemyAnim.attack.Fire();
+        playingTween = enemyAttack.SetAttack(duration);
 
-        public override void Execute()
-        {
-            PlayTween(tweenMove.GetRotate(90));
-            map.TurnRight();
-
-            SetValidateTimer();
-        }
-    }
-    public class EnemyAttack : EnemyCommand
-    {
-        private MobAttack enemyAttack;
-        public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration)
-        {
-            enemyAttack = commander.enemyAttack;
-        }
-
-        public override void Execute()
-        {
-            enemyAnim.attack.Fire();
-            playingTween = enemyAttack.SetAttack(duration);
-
-            SetValidateTimer();
-            SetDispatchFinal();
-        }
+        SetValidateTimer();
+        SetDispatchFinal();
     }
 }

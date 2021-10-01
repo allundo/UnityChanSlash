@@ -7,15 +7,20 @@ using System;
 [RequireComponent(typeof(HidePlateHandler))]
 public partial class PlayerCommander : ShieldCommander
 {
-    protected HidePlateHandler hidePlateHandler;
+    [SerializeField] public ThirdPersonCamera mainCamera = default;
+    [SerializeField] public MobAttack jab = default;
+    [SerializeField] public MobAttack straight = default;
+    [SerializeField] public MobAttack kick = default;
+
+    public HidePlateHandler hidePlateHandler { get; protected set; }
     protected bool isTriggerValid = true;
 
     private bool IsAttack => currentCommand is PlayerAttack;
 
-    protected ISubject<Unit> onClearAll = new Subject<Unit>();
+    public ISubject<Unit> onClearAll { get; protected set; } = new Subject<Unit>();
     protected IObservable<Unit> OnClearAll => onClearAll;
 
-    protected ISubject<bool> onUIVisible = new Subject<bool>();
+    public ISubject<bool> onUIVisible { get; protected set; } = new Subject<bool>();
     protected IObservable<bool> OnUIVisible => onUIVisible;
 
     public void EnqueueDropFloor() { EnqueueCommand(new PlayerDropFloor(this, 6.11f), true); }

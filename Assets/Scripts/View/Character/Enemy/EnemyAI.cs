@@ -24,13 +24,13 @@ public partial class EnemyCommander
 
         public void SetCommands()
         {
-            moveForward = new ForwardCommand(commander, 2.0f);
-            turnL = new TurnLCommand(commander, 0.2f);
-            turnR = new TurnRCommand(commander, 0.2f);
+            moveForward = new EnemyForward(commander, 2.0f);
+            turnL = new EnemyTurnL(commander, 0.2f);
+            turnR = new EnemyTurnR(commander, 0.2f);
             attack = new EnemyAttack(commander, 2.0f);
         }
 
-        public MobCommander.Command GetCommand()
+        public Command GetCommand()
         {
 
             var currentCommand = commander.currentCommand;
