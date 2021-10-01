@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class HidePlateHandler : MonoBehaviour
 {
-    [SerializeField] private HidePlatePool hidePlatePool;
+    [SerializeField] private HidePlatePool hidePlatePool = default;
     [SerializeField] private GameObject plateFrontPrefab = default;
     [SerializeField] private MiniMap miniMap = default;
 

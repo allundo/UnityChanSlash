@@ -5,17 +5,15 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(MobAnimator))]
 [RequireComponent(typeof(MapUtil))]
-public abstract partial class MobCommander : MonoBehaviour
+public abstract class MobCommander : MonoBehaviour
 {
     public MobAnimator anim { get; protected set; }
 
-    protected bool isCommandValid = true;
-
     public bool IsIdling => currentCommand == null;
+    public bool IsDie => currentCommand is DieCommand;
 
     protected Queue<Command> cmdQueue = new Queue<Command>();
-    protected Command currentCommand = null;
-    protected Command die = null;
+    public Command currentCommand { get; protected set; } = null;
 
     public MapUtil map { get; protected set; } = default;
 
@@ -25,8 +23,8 @@ public abstract partial class MobCommander : MonoBehaviour
     public ISubject<Unit> onCompleted { get; protected set; } = new Subject<Unit>();
     protected IObservable<Unit> OnCompleted => onCompleted;
 
-    public ISubject<bool> onValidated { get; protected set; } = new Subject<bool>();
-    protected IObservable<bool> OnValidated => onValidated;
+    public ISubject<bool> onValidateInput { get; protected set; } = new Subject<bool>();
+    public IObservable<bool> OnValidateInput => onValidateInput;
 
     protected virtual void Awake()
     {
@@ -36,47 +34,17 @@ public abstract partial class MobCommander : MonoBehaviour
 
     protected virtual void Start()
     {
-        SetCommands();
-        Subscribe();
-    }
-
-    /// <summary>
-    /// This method is called by Start(). Override it to customize commands' behavior.
-    /// </summary>
-    protected virtual void SetCommands()
-    {
-        die = new DieCommand(this, 0.1f);
-    }
-
-    /// <summary>
-    /// This method is called by Start(). Override it to customize commands' behavior.
-    /// </summary>
-    protected virtual void Subscribe()
-    {
         OnCompleted.Subscribe(_ => DispatchCommand()).AddTo(this);
-        OnValidated.Subscribe(_ => ValidateInput()).AddTo(this);
     }
 
-    protected virtual void Update()
-    {
-        if (GameManager.Instance.isPaused) return;
+    public virtual void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
 
-        Execute(GetCommand());
-    }
-
-    protected virtual void Execute(Command cmd)
-    {
-        if (!isCommandValid) return;
-
-        EnqueueCommand(cmd, IsIdling);
-    }
-
-    protected virtual void EnqueueCommand(Command cmd, bool dispatch = false)
+    public virtual void EnqueueCommand(Command cmd, bool dispatch = false)
     {
         if (cmd == null) return;
 
         cmdQueue.Enqueue(cmd);
-        InvalidateInput();
+        onValidateInput.OnNext(false);
 
         if (dispatch)
         {
@@ -98,39 +66,14 @@ public abstract partial class MobCommander : MonoBehaviour
         return false;
     }
 
-    protected abstract Command GetCommand();
-
-    public virtual void SetDie()
-    {
-        map.ResetOnCharactor();
-
-        cmdQueue.Clear();
-        currentCommand?.Cancel();
-        EnqueueDie();
-    }
-
-    protected virtual void EnqueueDie()
-    {
-        EnqueueCommand(die, true);
-    }
-
-    public virtual void Activate()
-    {
-        ValidateInput();
-    }
-
     public virtual void Inactivate()
     {
         currentCommand = null;
     }
 
-    protected virtual void ValidateInput()
+    public virtual void ClearAll()
     {
-        isCommandValid = true;
-    }
-
-    protected virtual void InvalidateInput()
-    {
-        isCommandValid = false;
+        cmdQueue.Clear();
+        currentCommand?.Cancel();
     }
 }

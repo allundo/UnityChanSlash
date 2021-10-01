@@ -5,6 +5,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(MobEffect))]
 [RequireComponent(typeof(MobCommander))]
+[RequireComponent(typeof(MobInput))]
 public class MobReactor : SpawnObject<MobReactor>
 {
     /// <summary>
@@ -17,9 +18,7 @@ public class MobReactor : SpawnObject<MobReactor>
     protected MobStatus status;
     protected MobEffect effect;
     protected MobCommander commander;
-
-    // private ISubject<MobReactor> onDead = new Subject<MobReactor>();
-    // public IObservable<MobReactor> OnDead => onDead;
+    protected MobInput input;
 
     private static readonly Vector3 OUT_OF_SCREEN = new Vector3(-100.0f, 0.0f, -100.0f);
 
@@ -28,6 +27,7 @@ public class MobReactor : SpawnObject<MobReactor>
         status = GetComponent<MobStatus>();
         effect = GetComponent<MobEffect>();
         commander = GetComponent<MobCommander>();
+        input = GetComponent<MobInput>();
     }
 
     protected virtual void Start()
@@ -81,7 +81,7 @@ public class MobReactor : SpawnObject<MobReactor>
     protected virtual void OnDie()
     {
         effect.OnDie();
-        commander.SetDie();
+        input.InputDie();
     }
 
     public override MobReactor OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
@@ -107,7 +107,7 @@ public class MobReactor : SpawnObject<MobReactor>
     public override void Activate()
     {
         status.Activate();
-        commander.Activate();
+        input.ValidateInput(true);
     }
 
     public override void Inactivate()

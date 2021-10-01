@@ -1,17 +1,16 @@
 using UnityEngine;
 
-[RequireComponent(typeof(GuardState))]
 [RequireComponent(typeof(PlayerCommander))]
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerReactor : MobReactor
 {
-    protected GuardState guardState;
-    protected PlayerCommander playerCommander;
+    protected GuardState guardState => playerInput.guardState;
+    protected PlayerInput playerInput;
 
     protected override void Awake()
     {
         base.Awake();
-        guardState = GetComponent<GuardState>();
-        playerCommander = GetComponent<PlayerCommander>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     protected override float CalcDamage(float attack, IDirection dir)
@@ -30,7 +29,7 @@ public class PlayerReactor : MobReactor
     protected override void OnDie()
     {
         base.OnDie();
-        playerCommander.SetInputVisible(false);
+        playerInput.SetInputVisible(false);
     }
 
     protected override void Dead() => Inactivate();

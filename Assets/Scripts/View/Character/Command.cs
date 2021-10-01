@@ -12,10 +12,11 @@ public abstract class Command
     protected TweenMove tweenMove;
 
     protected MobAnimator anim;
+    protected MapUtil map;
 
     protected IObserver<Unit> onDead;
     protected IObserver<Unit> onCompleted;
-    protected IObserver<bool> onValidated;
+    protected IObserver<bool> onValidateInput;
 
     public Command(MobCommander commander, float duration)
     {
@@ -24,8 +25,10 @@ public abstract class Command
 
         onDead = commander.onDead;
         onCompleted = commander.onCompleted;
-        onValidated = commander.onValidated;
+        onValidateInput = commander.onValidateInput;
+
         anim = commander.anim;
+        map = commander.map;
     }
 
     protected Tween playingTween = null;
@@ -78,7 +81,7 @@ public abstract class Command
     /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
     protected virtual void SetValidateTimer(float timing = 0.5f)
     {
-        validateTween = tweenMove.SetDelayedCall(timing, () => onValidated.OnNext(false));
+        validateTween = tweenMove.SetDelayedCall(timing, () => onValidateInput.OnNext(true));
     }
 
     /// <summary>
@@ -114,6 +117,7 @@ public class DieCommand : Command
 
     public override void Execute()
     {
+        map.ResetOnCharactor();
         anim.die.Fire();
         SetDestoryFinal();
     }

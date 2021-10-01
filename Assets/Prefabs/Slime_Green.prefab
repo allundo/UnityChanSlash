@@ -695,6 +695,7 @@ GameObject:
   - component: {fileID: 975739051571209737}
   - component: {fileID: 924700823997298557}
   - component: {fileID: 974097492613650517}
+  - component: {fileID: -7721542837202539337}
   - component: {fileID: 974097492613650505}
   - component: {fileID: 8870454713836784831}
   - component: {fileID: 7398270834105222207}
@@ -762,6 +763,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAttack: {fileID: 532131132512879399}
+--- !u!114 &-7721542837202539337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974814930939844399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1596aa9bd831b4e06aad46de0c95e1db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &974097492613650505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,6 +788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c2797916bebe04356964d7cb1dd71661, type: 2}
+  dataIndex: 0
 --- !u!114 &8870454713836784831
 MonoBehaviour:
   m_ObjectHideFlags: 0

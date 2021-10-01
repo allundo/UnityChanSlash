@@ -1,19 +1,17 @@
-using UnityEngine;
-
-
 public abstract class ShieldCommand : Command
 {
     protected GuardState guardState;
 
-    public ShieldCommand(ShieldCommander commander, float duration) : base(commander, duration)
+    public ShieldCommand(ShieldCommander commander, float duration, GuardState guardState) : base(commander, duration)
     {
-        guardState = commander.guardState;
+        this.guardState = guardState;
     }
 }
 
 public class GuardCommand : ShieldCommand
 {
-    public GuardCommand(ShieldCommander commander, float duration) : base(commander, duration) { }
+    public GuardCommand(ShieldCommander commander, float duration, GuardState guardState) : base(commander, duration, guardState)
+    { }
 
     public override void Execute()
     {
@@ -26,7 +24,8 @@ public class GuardCommand : ShieldCommand
 
 public class ShieldOnCommand : ShieldCommand
 {
-    public ShieldOnCommand(ShieldCommander commander, float duration) : base(commander, duration) { }
+    public ShieldOnCommand(ShieldCommander commander, float duration, GuardState guardState) : base(commander, duration, guardState)
+    { }
 
     public override void Execute()
     {

@@ -5,27 +5,29 @@ using System;
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(HidePlateHandler))]
-public partial class PlayerCommander : ShieldCommander
+public class PlayerCommander : ShieldCommander
 {
     [SerializeField] public ThirdPersonCamera mainCamera = default;
     [SerializeField] public MobAttack jab = default;
     [SerializeField] public MobAttack straight = default;
     [SerializeField] public MobAttack kick = default;
+    [SerializeField] public MessageController messageController = default;
+    [SerializeField] public GameOverUI gameOverUI = default;
+    [SerializeField] public ItemGenerator itemGenerator = default;
+    [SerializeField] public ItemIconGenerator itemIconGenerator = default;
 
     public HidePlateHandler hidePlateHandler { get; protected set; }
-    protected bool isTriggerValid = true;
 
-    private bool IsAttack => currentCommand is PlayerAttack;
+    public bool IsAttack => currentCommand is PlayerAttack;
+
+    public ISubject<Unit> onValidateTrigger { get; protected set; } = new Subject<Unit>();
+    protected IObservable<Unit> OnValidateTrigger => onValidateTrigger;
 
     public ISubject<Unit> onClearAll { get; protected set; } = new Subject<Unit>();
     protected IObservable<Unit> OnClearAll => onClearAll;
 
     public ISubject<bool> onUIVisible { get; protected set; } = new Subject<bool>();
-    protected IObservable<bool> OnUIVisible => onUIVisible;
-
-    public void EnqueueDropFloor() { EnqueueCommand(new PlayerDropFloor(this, 6.11f), true); }
-    public void EnqueueStartMessage() { EnqueueCommand(new PlayerStartMessage(this, 0.1f)); }
-    public void EnqueueRestartMessage() { EnqueueCommand(new PlayerRestartMessage(this, 0.1f), true); }
+    public IObservable<bool> OnUIVisible => onUIVisible;
 
     protected override void Awake()
     {
@@ -33,73 +35,9 @@ public partial class PlayerCommander : ShieldCommander
         hidePlateHandler = GetComponent<HidePlateHandler>();
     }
 
-    protected override void Subscribe()
+    protected override void Start()
     {
         OnCompleted.Subscribe(_ => DispatchCommand()).AddTo(this);
-        OnValidated.Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly)).AddTo(this);
-        OnUIVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
-        OnClearAll.Subscribe(_ => cmdQueue.Clear()).AddTo(this);
+        OnClearAll.Subscribe(_ => ClearAll()).AddTo(this);
     }
-
-    protected override void SetCommands()
-    {
-        die = new PlayerDie(this, 8.0f);
-        shieldOn = new PlayerShieldOn(this, 0.42f);
-
-        SetInputs();
-    }
-
-    private void ExecuteTrigger(Command cmd)
-    {
-        if (!isTriggerValid) return;
-        EnqueueCommand(cmd, IsIdling);
-    }
-
-    protected override void Execute(Command cmd)
-    {
-        isTriggerValid = false;
-
-        if (!isCommandValid) return;
-
-        EnqueueCommand(cmd, IsIdling);
-    }
-
-    protected override Command GetCommand() { return null; }
-
-    protected override void Update()
-    {
-        if (currentCommand is DieCommand) return;
-        CommandInput();
-    }
-
-    public override void SetDie()
-    {
-        base.SetDie();
-        InactivateUIs();
-    }
-
-    protected override void ValidateInput()
-    {
-        isCommandValid = true;
-        isTriggerValid = true;
-    }
-
-    protected void ValidateInput(bool isTriggerOnly)
-    {
-
-        isTriggerValid = true;
-
-        if (isTriggerOnly) return;
-
-        isCommandValid = true;
-    }
-
-    protected override void InvalidateInput()
-    {
-        isCommandValid = false;
-        isTriggerValid = false;
-        currentCommand?.CancelValidateTween();
-    }
-
-    public override void EnqueueShieldOn() { EnqueueCommand(shieldOn, true); }
 }

@@ -3,12 +3,10 @@ using UniRx;
 
 public abstract class EnemyCommand : Command
 {
-    protected MapUtil map;
     protected EnemyAnimator enemyAnim;
 
     public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
     {
-        map = commander.map;
         enemyAnim = anim as EnemyAnimator;
     }
 }
@@ -40,7 +38,7 @@ public abstract class EnemyMove : EnemyCommand
     {
         if (!IsMovable)
         {
-            onValidated.OnNext(false);
+            onValidateInput.OnNext(true);
             onCompleted.OnNext(Unit.Default);
             return;
         }

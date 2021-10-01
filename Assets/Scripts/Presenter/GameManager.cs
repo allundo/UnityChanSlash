@@ -7,7 +7,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private MapRenderer mapRenderer = default;
     [SerializeField] private Transform playerTransform = default;
     [SerializeField] private HidePlateHandler hidePlateHandler = default;
-    [SerializeField] private PlayerCommander commander = default;
+    [SerializeField] private PlayerInput input = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
@@ -39,8 +39,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         isPaused = false;
     }
 
-    private void HideUIs() { commander.SetInputVisible(false); }
-    private void DisplayUIs() { commander.SetInputVisible(true); }
+    private void HideUIs() { input.SetInputVisible(false); }
+    private void DisplayUIs() { input.SetInputVisible(true); }
 
     protected override void Awake()
     {
@@ -60,8 +60,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         placeEnemyGenerator.Place(worldMap);
 
         cover.FadeIn(1.5f, 0.5f, false).Play();
-        commander.EnqueueDropFloor();
-        commander.EnqueueStartMessage();
+        input.EnqueueDropFloor();
+        input.EnqueueStartMessage();
     }
 
     public void Restart()
@@ -69,7 +69,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         placeEnemyGenerator.Place(worldMap);
 
         cover.FadeIn(1.0f, 0, false).Play();
-        commander.EnqueueRestartMessage();
+        input.EnqueueRestartMessage();
     }
 
     public void DebugStart()

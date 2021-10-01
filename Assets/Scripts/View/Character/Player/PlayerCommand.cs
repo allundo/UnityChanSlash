@@ -3,9 +3,8 @@ using System;
 using UniRx;
 using DG.Tweening;
 
-public abstract class PlayerCommand : ShieldCommand
+public abstract class PlayerCommand : Command
 {
-    protected MapUtil map;
     protected PlayerAnimator playerAnim;
     protected ThirdPersonCamera mainCamera;
     protected HidePlateHandler hidePlateHandler;
@@ -16,12 +15,12 @@ public abstract class PlayerCommand : ShieldCommand
 
     protected Tween validateTrigger;
 
+    protected IObserver<Unit> onValidateTrigger;
     protected IObserver<Unit> onClearAll;
     protected IObserver<bool> onUIVisible;
 
     public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
     {
-        map = commander.map;
         playerAnim = anim as PlayerAnimator;
         mainCamera = commander.mainCamera;
         hidePlateHandler = commander.hidePlateHandler;
@@ -29,13 +28,14 @@ public abstract class PlayerCommand : ShieldCommand
         itemIconGenerator = commander.itemIconGenerator;
         messageController = commander.messageController;
         gameOverUI = commander.gameOverUI;
+        onValidateTrigger = commander.onValidateTrigger;
         onClearAll = commander.onClearAll;
         onUIVisible = commander.onUIVisible;
     }
 
     protected override void SetValidateTimer(float timing = 0.5f)
     {
-        validateTween = tweenMove.SetDelayedCall(timing, () => onValidated.OnNext(false));
+        validateTween = tweenMove.SetDelayedCall(timing, () => onValidateInput.OnNext(true));
     }
 
     protected void SetValidateTimer(float timing, float triggerTiming)
@@ -46,7 +46,7 @@ public abstract class PlayerCommand : ShieldCommand
 
     protected void SetValidateTriggerTimer(float timing = 0.5f)
     {
-        validateTrigger = tweenMove.SetDelayedCall(timing, () => onValidated.OnNext(true));
+        validateTrigger = tweenMove.SetDelayedCall(timing, () => onValidateTrigger.OnNext(Unit.Default));
     }
 
     public override void Cancel()
@@ -65,12 +65,11 @@ public abstract class PlayerCommand : ShieldCommand
     {
         if (!(destTile is Stair)) return;
 
-        onClearAll.OnNext(Unit.Default);
 
         tweenMove.SetDelayedCall(0.6f, () =>
         {
             GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
-            Cancel();
+            onClearAll.OnNext(Unit.Default);
             playerAnim.Pause();
         });
     }
@@ -108,7 +107,7 @@ public abstract class PlayerMove : PlayerCommand
     {
         if (!IsMovable)
         {
-            onValidated.OnNext(false);
+            onValidateInput.OnNext(true);
             onCompleted.OnNext(Unit.Default);
             return;
         }
@@ -345,22 +344,13 @@ public class PlayerKick : PlayerAttack
     }
 }
 
-public class PlayerShieldOn : PlayerAttack
-{
-    public PlayerShieldOn(PlayerCommander commander, float duration) : base(commander, duration, 0.1f) { }
-
-    protected override void Action()
-    {
-        playerAnim.shield.Fire();
-    }
-}
-
 public class PlayerDie : PlayerCommand
 {
     public PlayerDie(PlayerCommander commander, float duration) : base(commander, duration) { }
 
     public override void Execute()
     {
+        map.ResetOnCharactor();
         playerAnim.dieEx.Fire();
         gameOverUI.Play();
         SetDestoryFinal();
