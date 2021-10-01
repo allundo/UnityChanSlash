@@ -62,20 +62,4 @@ public class CoverScreen : FadeScreen
         fadeMC.SetAlpha(0f);
         return base.FadeOut(duration, delay, isContinuous);
     }
-
-    public bool prevButton = false;
-    void OnGUI()
-    {
-        Rect rect = new Rect(Screen.width - 210, 40, 200, 30);
-        if (GUI.Button(rect, "Fade"))
-        {
-            if (prevButton == false)
-            {
-                FadeOut().Play();
-            }
-            prevButton = true;
-            return;
-        }
-        prevButton = false;
-    }
 }
