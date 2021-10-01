@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 
 public partial class EnemyCommander : MobCommander
 {
@@ -6,13 +7,11 @@ public partial class EnemyCommander : MobCommander
 
     public abstract class EnemyCommand : Command
     {
-        protected EnemyCommander enemyCommander;
         protected MapUtil map;
         protected EnemyAnimator enemyAnim;
 
         public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
         {
-            enemyCommander = commander;
             map = commander.map;
             enemyAnim = anim as EnemyAnimator;
         }
@@ -45,8 +44,8 @@ public partial class EnemyCommander : MobCommander
         {
             if (!IsMovable)
             {
-                enemyCommander.ValidateInput();
-                enemyCommander.DispatchCommand();
+                onValidated.OnNext(false);
+                onCompleted.OnNext(Unit.Default);
                 return;
             }
 

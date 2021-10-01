@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using UniRx;
 using DG.Tweening;
 
 public partial class PlayerCommander : ShieldCommander
@@ -21,6 +23,9 @@ public partial class PlayerCommander : ShieldCommander
 
         protected Tween validateTrigger;
 
+        protected IObserver<Unit> onClearAll;
+        protected IObserver<bool> onUIVisible;
+
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
             playerCommander = commander;
@@ -30,11 +35,13 @@ public partial class PlayerCommander : ShieldCommander
             hidePlateHandler = commander.hidePlateHandler;
             itemGenerator = commander.itemGenerator;
             itemIconGenerator = commander.itemIconGenerator;
+            onClearAll = commander.onClearAll;
+            onUIVisible = commander.onUIVisible;
         }
 
         protected override void SetValidateTimer(float timing = 0.5f)
         {
-            validateTween = tweenMove.SetDelayedCall(timing, playerCommander.ValidateInput);
+            validateTween = tweenMove.SetDelayedCall(timing, () => onValidated.OnNext(false));
         }
 
         protected void SetValidateTimer(float timing, float triggerTiming)
@@ -45,7 +52,7 @@ public partial class PlayerCommander : ShieldCommander
 
         protected void SetValidateTriggerTimer(float timing = 0.5f)
         {
-            validateTrigger = tweenMove.SetDelayedCall(timing, () => { playerCommander.isTriggerValid = true; });
+            validateTrigger = tweenMove.SetDelayedCall(timing, () => onValidated.OnNext(true));
         }
 
         public override void Cancel()
@@ -64,7 +71,7 @@ public partial class PlayerCommander : ShieldCommander
         {
             if (!(destTile is Stair)) return;
 
-            playerCommander.cmdQueue.Clear();
+            onClearAll.OnNext(Unit.Default);
 
             tweenMove.SetDelayedCall(0.6f, () =>
             {
@@ -107,8 +114,8 @@ public partial class PlayerCommander : ShieldCommander
         {
             if (!IsMovable)
             {
-                playerCommander.ValidateInput();
-                playerCommander.DispatchCommand();
+                onValidated.OnNext(false);
+                onCompleted.OnNext(Unit.Default);
                 return;
             }
 

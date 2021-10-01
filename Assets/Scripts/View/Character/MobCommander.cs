@@ -22,6 +22,12 @@ public abstract partial class MobCommander : MonoBehaviour
     private ISubject<Unit> onDead = new Subject<Unit>();
     public IObservable<Unit> OnDead => onDead;
 
+    protected ISubject<Unit> onCompleted = new Subject<Unit>();
+    protected IObservable<Unit> OnCompleted => onCompleted;
+
+    protected ISubject<bool> onValidated = new Subject<bool>();
+    protected IObservable<bool> OnValidated => onValidated;
+
     protected virtual void Awake()
     {
         anim = GetComponent<MobAnimator>();
@@ -31,6 +37,7 @@ public abstract partial class MobCommander : MonoBehaviour
     protected virtual void Start()
     {
         SetCommands();
+        Subscribe();
     }
 
     /// <summary>
@@ -39,6 +46,15 @@ public abstract partial class MobCommander : MonoBehaviour
     protected virtual void SetCommands()
     {
         die = new DieCommand(this, 0.1f);
+    }
+
+    /// <summary>
+    /// This method is called by Start(). Override it to customize commands' behavior.
+    /// </summary>
+    protected virtual void Subscribe()
+    {
+        OnCompleted.Subscribe(_ => DispatchCommand()).AddTo(this);
+        OnValidated.Subscribe(_ => ValidateInput()).AddTo(this);
     }
 
     protected virtual void Update()
@@ -73,6 +89,7 @@ public abstract partial class MobCommander : MonoBehaviour
         if (cmdQueue.Count > 0)
         {
             currentCommand = cmdQueue.Dequeue();
+
             currentCommand.Execute();
             return true;
         }

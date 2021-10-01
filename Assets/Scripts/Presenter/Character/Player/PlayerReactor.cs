@@ -30,7 +30,7 @@ public class PlayerReactor : MobReactor
     protected override void OnDie()
     {
         base.OnDie();
-        playerCommander.InvisibleInput();
+        playerCommander.SetInputVisible(false);
     }
 
     protected override void Dead() => Inactivate();

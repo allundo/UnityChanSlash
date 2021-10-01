@@ -37,6 +37,12 @@ public partial class PlayerCommander : ShieldCommander
         isInputVisible = true;
     }
 
+    public void SetInputVisible(bool isVisible = true)
+    {
+        isInputVisible = isVisible;
+        if (!isVisible) InactivateUIs();
+    }
+
     private void SetInputs()
     {
         fightInput = new FightInput(this);

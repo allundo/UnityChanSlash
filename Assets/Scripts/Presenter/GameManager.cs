@@ -39,8 +39,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         isPaused = false;
     }
 
-    private void HideUIs() { commander.InvisibleInput(); }
-    private void DisplayUIs() { commander.VisibleInput(); }
+    private void HideUIs() { commander.SetInputVisible(false); }
+    private void DisplayUIs() { commander.SetInputVisible(true); }
 
     protected override void Awake()
     {

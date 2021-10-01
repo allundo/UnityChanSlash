@@ -15,8 +15,11 @@ public abstract partial class MobCommander : MonoBehaviour
         protected MobCommander commander;
         protected TweenMove tweenMove;
 
-        protected ISubject<Unit> onDead;
         protected MobAnimator anim;
+
+        protected IObserver<Unit> onDead;
+        protected IObserver<Unit> onCompleted;
+        protected IObserver<bool> onValidated;
 
         public Command(MobCommander commander, float duration)
         {
@@ -25,6 +28,8 @@ public abstract partial class MobCommander : MonoBehaviour
             this.tweenMove = new TweenMove(commander.transform, this.duration);
 
             onDead = commander.onDead;
+            onCompleted = commander.onCompleted;
+            onValidated = commander.onValidated;
             anim = commander.anim;
         }
 
@@ -78,7 +83,7 @@ public abstract partial class MobCommander : MonoBehaviour
         /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
         protected virtual void SetValidateTimer(float timing = 0.5f)
         {
-            validateTween = tweenMove.SetDelayedCall(timing, commander.ValidateInput);
+            validateTween = tweenMove.SetDelayedCall(timing, () => onValidated.OnNext(false));
         }
 
         /// <summary>
@@ -103,7 +108,7 @@ public abstract partial class MobCommander : MonoBehaviour
             return () =>
             {
                 if (OnComplete != null) OnComplete();
-                commander.DispatchCommand();
+                onCompleted.OnNext(Unit.Default);
             };
         }
     }

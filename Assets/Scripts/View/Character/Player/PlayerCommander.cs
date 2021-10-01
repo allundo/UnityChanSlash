@@ -1,4 +1,6 @@
 using UnityEngine;
+using UniRx;
+using System;
 
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(MapUtil))]
@@ -10,15 +12,28 @@ public partial class PlayerCommander : ShieldCommander
 
     private bool IsAttack => currentCommand is PlayerAttack;
 
+    protected ISubject<Unit> onClearAll = new Subject<Unit>();
+    protected IObservable<Unit> OnClearAll => onClearAll;
+
+    protected ISubject<bool> onUIVisible = new Subject<bool>();
+    protected IObservable<bool> OnUIVisible => onUIVisible;
+
     public void EnqueueDropFloor() { EnqueueCommand(new PlayerDropFloor(this, 6.11f), true); }
     public void EnqueueStartMessage() { EnqueueCommand(new PlayerStartMessage(this, 0.1f)); }
     public void EnqueueRestartMessage() { EnqueueCommand(new PlayerRestartMessage(this, 0.1f), true); }
-
 
     protected override void Awake()
     {
         base.Awake();
         hidePlateHandler = GetComponent<HidePlateHandler>();
+    }
+
+    protected override void Subscribe()
+    {
+        OnCompleted.Subscribe(_ => DispatchCommand()).AddTo(this);
+        OnValidated.Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly)).AddTo(this);
+        OnUIVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
+        OnClearAll.Subscribe(_ => cmdQueue.Clear()).AddTo(this);
     }
 
     protected override void SetCommands()
@@ -62,6 +77,16 @@ public partial class PlayerCommander : ShieldCommander
     {
         isCommandValid = true;
         isTriggerValid = true;
+    }
+
+    protected void ValidateInput(bool isTriggerOnly)
+    {
+
+        isTriggerValid = true;
+
+        if (isTriggerOnly) return;
+
+        isCommandValid = true;
     }
 
     protected override void InvalidateInput()
