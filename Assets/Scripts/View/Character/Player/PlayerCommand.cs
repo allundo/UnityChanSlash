@@ -13,13 +13,14 @@ public partial class PlayerCommander : ShieldCommander
 
     protected abstract class PlayerCommand : ShieldCommand
     {
-        protected PlayerCommander playerCommander;
         protected MapUtil map;
         protected PlayerAnimator playerAnim;
         protected ThirdPersonCamera mainCamera;
         protected HidePlateHandler hidePlateHandler;
         protected ItemGenerator itemGenerator;
         protected ItemIconGenerator itemIconGenerator;
+        protected MessageController messageController;
+        protected GameOverUI gameOverUI;
 
         protected Tween validateTrigger;
 
@@ -28,13 +29,14 @@ public partial class PlayerCommander : ShieldCommander
 
         public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
         {
-            playerCommander = commander;
             map = commander.map;
             playerAnim = anim as PlayerAnimator;
             mainCamera = commander.mainCamera;
             hidePlateHandler = commander.hidePlateHandler;
             itemGenerator = commander.itemGenerator;
             itemIconGenerator = commander.itemIconGenerator;
+            messageController = commander.messageController;
+            gameOverUI = commander.gameOverUI;
             onClearAll = commander.onClearAll;
             onUIVisible = commander.onUIVisible;
         }
@@ -368,7 +370,7 @@ public partial class PlayerCommander : ShieldCommander
         public override void Execute()
         {
             playerAnim.dieEx.Fire();
-            playerCommander.gameOverUI.Play();
+            gameOverUI.Play();
             SetDestoryFinal();
         }
     }
@@ -379,22 +381,19 @@ public partial class PlayerCommander : ShieldCommander
 
         public override void Execute()
         {
-            playerCommander.InvisibleInput();
+            onUIVisible.OnNext(false);
             SetValidateTimer(1f, 1f);
 
             playerAnim.dropFloor.Fire();
-            PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), playerCommander.VisibleInput);
+            PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), () => onUIVisible.OnNext(true));
         }
     }
-    protected class PlayerStartMessage : PlayerCommand
+    protected class PlayerStartMessage : PlayerAction
     {
         public PlayerStartMessage(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-        public override void Execute()
+        protected override void Action()
         {
-            SetValidateTimer(0.5f, 0.5f);
-            SetDispatchFinal();
-
             MessageData data = new MessageData
             {
                 sentences = new string[]
@@ -409,19 +408,16 @@ public partial class PlayerCommander : ShieldCommander
                 }
             };
 
-            playerCommander.messageController.InputMessageData(data);
+            messageController.InputMessageData(data);
         }
     }
 
-    protected class PlayerRestartMessage : PlayerCommand
+    protected class PlayerRestartMessage : PlayerAction
     {
         public PlayerRestartMessage(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-        public override void Execute()
+        protected override void Action()
         {
-            SetValidateTimer(0.5f, 0.5f);
-            SetDispatchFinal();
-
             MessageData data = new MessageData
             {
                 sentences = new string[]
@@ -436,7 +432,7 @@ public partial class PlayerCommander : ShieldCommander
                 }
             };
 
-            playerCommander.messageController.InputMessageData(data);
+            messageController.InputMessageData(data);
         }
     }
 }

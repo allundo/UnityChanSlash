@@ -12,7 +12,6 @@ public abstract partial class MobCommander : MonoBehaviour
 
         protected float duration;
 
-        protected MobCommander commander;
         protected TweenMove tweenMove;
 
         protected MobAnimator anim;
@@ -24,7 +23,6 @@ public abstract partial class MobCommander : MonoBehaviour
         public Command(MobCommander commander, float duration)
         {
             this.duration = duration * DURATION_UNIT;
-            this.commander = commander;
             this.tweenMove = new TweenMove(commander.transform, this.duration);
 
             onDead = commander.onDead;

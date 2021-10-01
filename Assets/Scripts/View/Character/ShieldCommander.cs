@@ -51,7 +51,7 @@ public abstract class ShieldCommander : MobCommander
 
         public override void Execute()
         {
-            (commander.anim as ShieldAnimator).shield.Fire();
+            (anim as ShieldAnimator).shield.Fire();
 
             SetValidateTimer(0.1f);
             SetDispatchFinal();
