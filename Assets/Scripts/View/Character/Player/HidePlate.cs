@@ -5,8 +5,6 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
 {
     public Plate plate { get; protected set; } = Plate.NONE;
 
-    private static readonly Vector3 OUT_OF_SCREEN = new Vector3(-100.0f, 0.0f, -100.0f);
-
     private Tween fadeInTween = null;
     private Tween removeTween = null;
 
@@ -37,8 +35,6 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         fade.KillTweens();
         fadeInTween?.Kill();
 
-        removeTween = FadeOut(duration, null, () => transform.position = OUT_OF_SCREEN)
-            .SetEase(Ease.Linear)
-            .Play();
+        removeTween = FadeOut(duration).SetEase(Ease.Linear).Play();
     }
 }
