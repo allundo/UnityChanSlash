@@ -20,8 +20,6 @@ public class MobReactor : MonoBehaviour
     protected MobCommander commander;
     protected MobInput input;
 
-    private static readonly Vector3 OUT_OF_SCREEN = new Vector3(-100.0f, 0.0f, -100.0f);
-
     protected virtual void Awake()
     {
         status = GetComponent<MobStatus>();
@@ -99,11 +97,7 @@ public class MobReactor : MonoBehaviour
             .OnComplete(Dead)
             .Play();
     }
-    protected virtual void Dead()
-    {
-        transform.position = OUT_OF_SCREEN;
-        Inactivate();
-    }
+    protected virtual void Dead() => Inactivate();
 
     protected void Inactivate()
     {

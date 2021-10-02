@@ -24,7 +24,7 @@ public class MiniMap : MonoBehaviour
 
     private bool isUpdated = false;
 
-    private Dictionary<MobReactor, UISymbol> enemies = new Dictionary<MobReactor, UISymbol>();
+    private Dictionary<EnemyReactor, UISymbol> enemies = new Dictionary<EnemyReactor, UISymbol>();
 
     private bool[,] tileViewOpen = new bool[MINIMAP_SIZE, MINIMAP_SIZE];
 
@@ -93,7 +93,7 @@ public class MiniMap : MonoBehaviour
 
     public void OnEnemyFind(Collider col)
     {
-        var enemy = col.GetComponent<MobReactor>();
+        var enemy = col.GetComponent<EnemyReactor>();
 
         if (enemy != null)
         {
@@ -104,7 +104,7 @@ public class MiniMap : MonoBehaviour
 
     public void OnEnemyLeft(Collider col)
     {
-        var enemy = col.GetComponent<MobReactor>();
+        var enemy = col.GetComponent<EnemyReactor>();
 
         if (enemy != null)
         {
