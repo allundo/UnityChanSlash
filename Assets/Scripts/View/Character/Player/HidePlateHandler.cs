@@ -157,12 +157,12 @@ public class HidePlateHandler : MonoBehaviour
         protected int height;
         protected Pos playerOffsetPos;
 
-        protected PlateUpdater(HidePlateHandler hidePlateUpdater, int width, int height)
+        protected PlateUpdater(HidePlateHandler hidePlateHandler, int width, int height)
         {
-            this.hidePlateHandler = hidePlateUpdater;
-            this.hidePlatePool = hidePlateUpdater.hidePlatePool;
+            this.hidePlateHandler = hidePlateHandler;
+            this.hidePlatePool = hidePlateHandler.hidePlatePool;
 
-            map = hidePlateUpdater.map;
+            map = hidePlateHandler.map;
 
             int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
             plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
