@@ -3,32 +3,77 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 
+/// <summary>
+/// Hides invisible area for player character using HidePlate(hides 1 Tile)s. <br />
+/// </summary>
 public class HidePlateHandler : MonoBehaviour
 {
     [SerializeField] private HidePlatePool hidePlatePool = default;
+
+    /// <summary>
+    /// Large hiding plate that hides far front area.
+    /// </summary>
     [SerializeField] private GameObject plateFrontPrefab = default;
+
+    /// <summary>
+    /// Turn PlayerSymbol direction with player's turn and update discovered area when calcurating visible area.
+    /// </summary>
     [SerializeField] private MiniMap miniMap = default;
 
     protected GameObject plateFront;
 
+    // Sub classes having methods for updating HidePlates position.
     protected LandscapeUpdater landscape = null;
     protected Dictionary<IDirection, PlateUpdater> portrait = new Dictionary<IDirection, PlateUpdater>();
+
+
+    /// <summary>
+    /// Quaternion rotations applies to PlateFront for each direction.
+    /// </summary>
     protected Dictionary<IDirection, Quaternion> rotatePlateFront = new Dictionary<IDirection, Quaternion>();
+
+    /// <summary>
+    /// Normalized tile vectors expresses direction.
+    /// </summary>
     protected Dictionary<IDirection, Pos> vecPlateFront = new Dictionary<IDirection, Pos>();
 
+    /// <summary>
+    /// Set proper updater from variants.
+    /// </summary>
     private PlateUpdater currentUpdater = null;
 
+    /// <summary>
+    /// FIXME: Directly handling WorldMap MODEL data by this VIEW class for now. <br />
+    /// (Could be regarded as PRESENTER class?)
+    /// </summary>
     private WorldMap map;
+
+    /// <summary>
+    /// Player's direction related data for Turn.
+    /// </summary>
     private MapUtil mapUtil;
 
     protected const int RANGE = 11;
     protected const int WIDTH = 7;
     protected const int HEIGHT = 15;
 
+    /// <summary>
+    /// Previous player position for calcurate moved direction and distance.
+    /// </summary>
     private Pos prevPos = new Pos();
+
+    /// <summary>
+    /// Calcurate current player's map tile position
+    /// </summary>
     private Pos CurrentPos => map.MapPos(transform.position);
 
+    /// <summary>
+    /// Current tile map offset position of PlateFront from player position.
+    /// </summary>
     private Pos currentOffset = new Pos();
+    /// <summary>
+    /// Current rotation of PlateFront decided by player's direction.
+    /// </summary>
     private Quaternion currentRotate = Quaternion.identity;
 
     void Awake()
@@ -64,12 +109,12 @@ public class HidePlateHandler : MonoBehaviour
         miniMap.UpdateMiniMap();
 
         DrawAction(playerPos, plateMap);
-        MoveOuterPlate(playerPos);
+        MovePlateFront(playerPos);
 
         prevPos = playerPos;
     }
 
-    private void MoveOuterPlate(Pos pos)
+    private void MovePlateFront(Pos pos)
     {
         // Move with delay
         DOVirtual.DelayedCall(0.1f, () =>
@@ -80,22 +125,37 @@ public class HidePlateHandler : MonoBehaviour
         .Play();
     }
 
-    public void Draw()
+    /// <summary>
+    /// Simple whole HidePlates drawing inside player viewing range. <br />
+    /// Can be used only when initial state or all HidePlates are cleared.
+    /// </summary>
+    private void Draw()
     {
         UpdateRange((playerPos, plateMap) => currentUpdater.DrawRange(playerPos, plateMap));
     }
 
+    /// <summary>
+    /// Draws or updates whole HidePlates inside player viewing range. <br />
+    /// Scan all plates and switch the shape of HidePlates if needed.
+    /// </summary>
     public void Redraw()
     {
         UpdateRange((playerPos, plateMap) => currentUpdater.RedrawRange(playerPos, plateMap));
     }
 
+    /// <summary>
+    /// Updates HidePlates which is the edges of viewing range. <br />
+    /// Remove the backward edge and newly draw the forward edge according to moving direction.
+    /// </summary>
     public void Move()
     {
         UpdateRange((playerPos, plateMap) => currentUpdater.MoveRange(playerPos, plateMap));
     }
 
 
+    /// <summary>
+    /// Turn the HidePlates with player's turning. <br />
+    /// </summary>
     public void Turn()
     {
         currentRotate = rotatePlateFront[mapUtil.dir];
@@ -103,7 +163,7 @@ public class HidePlateHandler : MonoBehaviour
         if (currentUpdater == landscape)
         {
             currentOffset = vecPlateFront[mapUtil.dir] * (RANGE * 3 / 2 + 1);
-            MoveOuterPlate(prevPos);
+            MovePlateFront(prevPos);
             return;
         }
 
@@ -116,12 +176,19 @@ public class HidePlateHandler : MonoBehaviour
         miniMap.Turn(mapUtil.dir);
     }
 
+    /// <summary>
+    /// Initial drawing of HidePlates
+    /// </summary>
     public void Init()
     {
         ReformHidePlates(DeviceOrientation.Portrait);
         miniMap.Turn(mapUtil.dir);
     }
 
+    /// <summary>
+    /// Clear and redraw whole HidePlates inside new player view range with newly detected orientation.
+    /// </summary>
+    /// <param name="orientation"></param>
     public void ReformHidePlates(DeviceOrientation orientation)
     {
         currentUpdater?.ClearRange(CurrentPos);
@@ -146,17 +213,49 @@ public class HidePlateHandler : MonoBehaviour
 
     protected abstract class PlateUpdater
     {
+        /// <summary>
+        /// Outer class reference
+        /// </summary>
         protected HidePlateHandler hidePlateHandler;
+        protected Pos prevPos => hidePlateHandler.prevPos;
+
+        /// <summary>
+        /// HidePlate spawner
+        /// </summary>
         protected HidePlatePool hidePlatePool;
         protected HidePlate SpawnPlate(Plate plate, Pos pos, float duration = 0.01f) => hidePlatePool.SpawnPlate(plate, pos, duration);
+
+        /// <summary>
+        /// To get tile map info and to set player visible range info
+        /// </summary>
         protected WorldMap map;
-        protected Pos prevPos => hidePlateHandler.prevPos;
+
+        /// <summary>
+        /// HidePlates data covers drawing range. <br />
+        /// Tile map width x height + player view distance will be reserved. <br />
+        /// </summary>
         protected HidePlate[,] plateData;
 
+        /// <summary>
+        /// Tile map player view range width
+        /// </summary>
         protected int width;
+        /// <summary>
+        /// Tile map player view range height
+        /// </summary>
         protected int height;
+
+        /// <summary>
+        /// Tile map offset position of player from HidePlate drawing start position(left,top origin)
+        /// </summary>
         protected Pos playerOffsetPos;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="hidePlateHandler">Outer class reference</param>
+        /// <param name="width">Player view range width</param>
+        /// <param name="height">Player view range height</param>
         protected PlateUpdater(HidePlateHandler hidePlateHandler, int width, int height)
         {
             this.hidePlateHandler = hidePlateHandler;
@@ -172,7 +271,8 @@ public class HidePlateHandler : MonoBehaviour
         }
 
         /// <summary>
-        /// Light weight simple version of RedrawRange() method
+        /// Simple plates drawing inside the range.<br />
+        /// Caution: draws plate regardless of existing plates.
         /// </summary>
         public void DrawRange(Pos playerPos, Plate[,] plateMap)
         {
@@ -189,6 +289,9 @@ public class HidePlateHandler : MonoBehaviour
             }
         }
 
+        /// <summary>
+        /// Draw or update plates drawing inside the range.<br />
+        /// </summary>
         public void RedrawRange(Pos playerPos, Plate[,] plateMap, int xShrink = 0, int yShrink = 0)
         {
             Pos startPos = playerPos - playerOffsetPos;
@@ -209,6 +312,9 @@ public class HidePlateHandler : MonoBehaviour
             }
         }
 
+        /// <summary>
+        /// Clear all plates drawing inside the range.<br />
+        /// </summary>
         public void ClearRange(Pos playerPos)
         {
             for (int j = 0; j < height; j++)
@@ -223,6 +329,9 @@ public class HidePlateHandler : MonoBehaviour
         private void RedrawXShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 1, 0);
         private void RedrawYShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 0, 1);
 
+        /// <summary>
+        /// Update the both edge of HidePlates inside player view range.
+        /// </summary>
         public void MoveRange(Pos playerPos, Plate[,] plateMap)
         {
             Pos moveVec = playerPos - prevPos;
@@ -233,6 +342,9 @@ public class HidePlateHandler : MonoBehaviour
             if (moveVec.x > 0) MoveRangeEast(playerPos, plateMap);
         }
 
+        /// <summary>
+        /// Delete south edge and newly draw north edge
+        /// </summary>
         private void MoveRangeNorth(Pos playerPos, Plate[,] plateMap)
         {
             Pos startPos = playerPos - playerOffsetPos;
@@ -244,6 +356,9 @@ public class HidePlateHandler : MonoBehaviour
             }
             RedrawYShrink(playerPos, plateMap);
         }
+        /// <summary>
+        /// Delete north edge and newly draw south edge
+        /// </summary>
         private void MoveRangeSouth(Pos playerPos, Plate[,] plateMap)
         {
             Pos startPos = playerPos - playerOffsetPos;
@@ -255,6 +370,9 @@ public class HidePlateHandler : MonoBehaviour
             }
             RedrawYShrink(playerPos, plateMap);
         }
+        /// <summary>
+        /// Delete east edge and newly draw west edge
+        /// </summary>
         private void MoveRangeWest(Pos playerPos, Plate[,] plateMap)
         {
             Pos startPos = playerPos - playerOffsetPos;
@@ -266,6 +384,9 @@ public class HidePlateHandler : MonoBehaviour
             }
             RedrawXShrink(playerPos, plateMap);
         }
+        /// <summary>
+        /// Delete west edge and newly draw east edge
+        /// </summary>
         private void MoveRangeEast(Pos playerPos, Plate[,] plateMap)
         {
             Pos startPos = playerPos - playerOffsetPos;
@@ -312,7 +433,7 @@ public class HidePlateHandler : MonoBehaviour
         }
 
         /// <summary>
-        /// Hide plate placing data
+        /// HidePlates shape data for drawing range
         /// </summary>
         /// <param name="playerPos"></param>
         /// <returns></returns>

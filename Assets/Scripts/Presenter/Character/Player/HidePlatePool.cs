@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Pool HidePlate objects and manage instaces
+/// </summary>
 public class HidePlatePool : MonoBehaviour
 {
     [SerializeField] private HidePlateGenerator plate1Generator = default;
@@ -30,6 +33,13 @@ public class HidePlatePool : MonoBehaviour
         rotate[(int)Plate.C] = rotate[(int)Plate.AC] = rotate[(int)Plate.ACD] = Quaternion.Euler(0, -90, 0);
     }
 
+    /// <summary>
+    /// Spawn a HidePlate by selected HidePlateGenerator.
+    /// </summary>
+    /// <param name="plate">Plate shape type to spawn</param>
+    /// <param name="pos">Spawn tile map postion</param>
+    /// <param name="duration">Fade-in duration at spawning</param>
+    /// <returns>One of pooled HidePlate or newly instantiated if not pooled</returns>
     public HidePlate SpawnPlate(Plate plate, Pos pos, float duration = 0.01f)
     {
         return generator[(int)plate]?.Spawn(map.WorldPos(pos), rotate[(int)plate], duration)?.SetPlate(plate);

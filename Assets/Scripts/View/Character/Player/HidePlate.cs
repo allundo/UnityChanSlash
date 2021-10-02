@@ -3,6 +3,9 @@ using DG.Tweening;
 
 public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
 {
+    /// <summary>
+    /// Plate shape type
+    /// </summary>
     public Plate plate { get; protected set; } = Plate.NONE;
 
     private Tween fadeInTween = null;
@@ -30,6 +33,10 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         return this;
     }
 
+    /// <summary>
+    /// Applies fade-out to inactivation.
+    /// </summary>
+    /// <param name="duration">Fade-out duration [sec]</param>
     public void Remove(float duration = 0.3f)
     {
         fade.KillTweens();

@@ -1,28 +1,55 @@
 using UnityEngine;
 using UniRx;
 
+/// <summary>
+/// Convert player input UIs operation into a Command and enqueue it to PlayerCommander.<br />
+/// In addition to MobInput, there is 'Trigger type' input implemented to improve usability.<br />
+/// </summary>
 [RequireComponent(typeof(PlayerCommander))]
 [RequireComponent(typeof(MapUtil))]
 public class PlayerInput : ShieldInput
 {
+    // Fight UI to fight against Enemy on front Tile
     [SerializeField] protected FightCircle fightCircle = default;
+
+    // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
     [SerializeField] protected ItemHandler itemHandler = default;
     [SerializeField] protected HandleIcon handleIcon = default;
+
+    // Moving UIs: Normal type input
+    // Those type of moving Commands are inputted continuously by long push on UI.
     [SerializeField] protected PointerEnterUI forwardUI = default;
     [SerializeField] protected PointerEnterUI rightUI = default;
     [SerializeField] protected PointerEnterUI leftUI = default;
     [SerializeField] protected PointerEnterUI backwardUI = default;
+
+    // Action UIs: Trigger type input
+    // Those type of action Commands interrupt series of moving Commands and applied once by one tap on UI.
     [SerializeField] protected PointerDownUI turnRUI = default;
     [SerializeField] protected PointerDownUI turnLUI = default;
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
 
+    /// <summary>
+    /// Target PlayerCommander to input Command. <br />
+    /// Trigger type input is validated earlyer than Normal type input<br />
+    /// but invalidated while moving Commands are executed continuously.
+    /// </summary>
     protected PlayerCommander playerCommander;
 
+    /// <summary>
+    /// Stops Trigger type input if false.
+    /// </summary>
     protected bool isTriggerValid = true;
+
+    /// <summary>
+    /// Visible flag of all input UIs.
+    /// </summary>
     protected bool isInputVisible = true;
 
+    // Reserved Command input applied by other classes.
+    // FIXME: need to implement game events handling system.
     public void EnqueueDropFloor() => ForceEnqueue(new PlayerDropFloor(playerCommander, 6.11f), true);
     public void EnqueueStartMessage() => ForceEnqueue(new PlayerStartMessage(playerCommander, 0.1f), false);
     public void EnqueueRestartMessage() => ForceEnqueue(new PlayerRestartMessage(playerCommander, 0.1f), true);
@@ -54,6 +81,11 @@ public class PlayerInput : ShieldInput
 
     protected override Command GetCommand() => null;
 
+    /// <summary>
+    /// Input a Command to PlayerCommander. <br />
+    /// When Normal input is applied, Trigger input is invalidated.
+    /// </summary>
+    /// <param name="cmd">Command to input</param>
     public override void InputCommand(Command cmd)
     {
         isTriggerValid = false;
@@ -63,6 +95,9 @@ public class PlayerInput : ShieldInput
         commander.EnqueueCommand(cmd);
     }
 
+    /// <summary>
+    /// Input a Command to PlayerCommander while isTriggerValid flag allows.
+    /// </summary>
     public void InputTrigger(Command cmd)
     {
         if (!isTriggerValid) return;
@@ -70,12 +105,18 @@ public class PlayerInput : ShieldInput
         commander.EnqueueCommand(cmd);
     }
 
+    /// <summary>
+    /// Switch visibilities of all input UIs.
+    /// </summary>
     public void SetInputVisible(bool isVisible = true)
     {
         isInputVisible = isVisible;
         if (!isVisible) InactivateUIs();
     }
 
+    /// <summary>
+    /// Switches display of input UIs according to the situation for every frames.
+    /// </summary>
     private void DisplayInputUIs()
     {
         if (!isInputVisible) return;
@@ -140,6 +181,9 @@ public class PlayerInput : ShieldInput
         guardUI.SetActive(!fightCircle.isActive);
     }
 
+    /// <summary>
+    /// Inactivate all UIs
+    /// </summary>
     private void InactivateUIs()
     {
         doorHandler.Inactivate();
@@ -157,6 +201,9 @@ public class PlayerInput : ShieldInput
         guardUI.Inactivate();
     }
 
+    /// <summary>
+    /// Reserves fight behavior Commands for each attack button
+    /// </summary>
     protected void InitFightInput()
     {
         Command jab = new PlayerJab(playerCommander, 0.6f);
@@ -176,6 +223,9 @@ public class PlayerInput : ShieldInput
             .AddTo(commander);
     }
 
+    /// <summary>
+    /// Reserves handling Commands for each handling operation
+    /// </summary>
     protected void InitHandleInput()
     {
         Command forward = new PlayerForward(playerCommander, 1.0f);
@@ -200,6 +250,9 @@ public class PlayerInput : ShieldInput
             .AddTo(commander);
     }
 
+    /// <summary>
+    /// Reserves move and action Commands for each move and action buttons.
+    /// </summary>
     protected void InitMoveInput()
     {
         Command forward = new PlayerForward(playerCommander, 1.0f);
@@ -246,6 +299,10 @@ public class PlayerInput : ShieldInput
             .AddTo(commander);
     }
 
+    /// <summary>
+    /// Set validation of both of Normal and Trigger input.
+    /// </summary>
+    /// <param name="isValid">true: validate, false: invalidate</param>
     public override void ValidateInput(bool isValid)
     {
         isCommandValid = isValid;
