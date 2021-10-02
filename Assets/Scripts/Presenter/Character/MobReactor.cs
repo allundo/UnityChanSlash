@@ -6,7 +6,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobEffect))]
 [RequireComponent(typeof(MobCommander))]
 [RequireComponent(typeof(MobInput))]
-public class MobReactor : SpawnObject<MobReactor>
+public class MobReactor : MonoBehaviour
 {
     /// <summary>
     /// Reaction to life gauge is only supported for player for now.<br />
@@ -43,6 +43,9 @@ public class MobReactor : SpawnObject<MobReactor>
             .AddTo(this);
 
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
+
+        status.OnActive
+            .Subscribe(duration => ActiveFadeIn(duration));
 
         commander.OnDead
             .Subscribe(_ => FadeOutToDead())
@@ -84,16 +87,9 @@ public class MobReactor : SpawnObject<MobReactor>
         input.InputDie();
     }
 
-    public override MobReactor OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
+    public virtual void ActiveFadeIn(float duration = 0.5f)
     {
-        status.map.SetPosition(pos, dir);
-        FadeInToActive(duration);
-        return this;
-    }
-
-    public virtual void FadeInToActive(float duration = 0.5f)
-    {
-        Activate();
+        input.ValidateInput(true);
         effect.FadeInTween(duration).Play();
     }
 
@@ -103,23 +99,15 @@ public class MobReactor : SpawnObject<MobReactor>
             .OnComplete(Dead)
             .Play();
     }
-
-    public override void Activate()
-    {
-        status.Activate();
-        input.ValidateInput(true);
-    }
-
-    public override void Inactivate()
-    {
-        status.Inactivate();
-        commander.Inactivate();
-    }
-
     protected virtual void Dead()
     {
         transform.position = OUT_OF_SCREEN;
         Inactivate();
-        // onDead.OnNext(this);
+    }
+
+    protected void Inactivate()
+    {
+        status.Inactivate();
+        commander.Inactivate();
     }
 }

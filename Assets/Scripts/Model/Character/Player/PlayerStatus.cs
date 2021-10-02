@@ -14,9 +14,12 @@ public class PlayerStatus : MobStatus
 
     public override void Activate()
     {
+        if (isActive) return;
+
+        isActive = true;
+        gameObject.SetActive(true);
         ResetStatus();
         map.SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
         hidePlateHandler.Init();
     }
-
 }

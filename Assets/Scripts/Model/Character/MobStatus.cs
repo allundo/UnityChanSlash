@@ -1,12 +1,10 @@
 using UnityEngine;
 using UniRx;
+using System;
 
-public class MobStatus : Status<MobData> { }
-
-public class Status<T> : MonoBehaviour
-    where T : MobData
+public class MobStatus : SpawnObject<MobStatus>
 {
-    [SerializeField] protected T data;
+    [SerializeField] protected MobData data;
     [SerializeField] protected int dataIndex;
     protected MobParam param;
 
@@ -31,6 +29,11 @@ public class Status<T> : MonoBehaviour
 
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
+
+    protected ISubject<float> onActive = new Subject<float>();
+    public IObservable<float> OnActive => onActive;
+
+    public bool isActive { get; protected set; } = false;
 
     protected virtual void Awake()
     {
@@ -76,19 +79,28 @@ public class Status<T> : MonoBehaviour
     {
         life.Value = LifeMax.Value;
     }
-
-    public virtual void Activate()
+    public override MobStatus OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
     {
-        ResetStatus();
-        transform.gameObject.SetActive(true);
-
-        // TODO: Fade-in with custom shader
+        Activate();
+        map.SetPosition(pos, dir);
+        return this;
     }
 
-    public virtual void Inactivate()
+    public override void Activate()
     {
-        transform.gameObject.SetActive(false);
+        if (isActive) return;
 
-        // TODO: Fade-out with custom shader
+        isActive = true;
+        gameObject.SetActive(true);
+        ResetStatus();
+        onActive.OnNext(0.5f); // 0.5f: fade-in duration
+    }
+
+    public override void Inactivate()
+    {
+        if (!isActive) return;
+
+        isActive = false;
+        gameObject.SetActive(false);
     }
 }

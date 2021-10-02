@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerCommander))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerStatus))]
 public class PlayerReactor : MobReactor
 {
     protected GuardState guardState => playerInput.guardState;
@@ -32,5 +33,5 @@ public class PlayerReactor : MobReactor
         playerInput.SetInputVisible(false);
     }
 
-    protected override void Dead() => Inactivate();
+    protected override void Dead() => base.Inactivate();
 }
