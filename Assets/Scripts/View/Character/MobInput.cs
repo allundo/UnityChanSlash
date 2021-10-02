@@ -23,7 +23,7 @@ public abstract class MobInput : MonoBehaviour
 
     protected Command die = null;
 
-    public MapUtil map { get; protected set; } = default;
+    protected MapUtil map;
 
     protected virtual void Awake()
     {
