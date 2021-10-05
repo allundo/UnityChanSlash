@@ -268,7 +268,7 @@ public class PlayerInput : ShieldInput
         Command turnL = new PlayerTurnL(playerTarget, 0.5f);
         Command jump = new PlayerJump(playerTarget, 2.0f);
 
-        Command guard = new GuardCommand(playerTarget, guardState, 0.02f);
+        Command guard = new GuardCommand(playerTarget, guardState, 0.03f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))

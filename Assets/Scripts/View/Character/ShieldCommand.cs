@@ -10,7 +10,7 @@ public abstract class ShieldCommand : Command
 
 public class GuardCommand : ShieldCommand
 {
-    public GuardCommand(CommandTarget target, GuardStateTemp guardState, float duration) : base(target, guardState, duration)
+    public GuardCommand(CommandTarget target, GuardStateTemp guardState, float duration) : base(target, guardState, duration, 0.95f)
     { }
 
     protected override void Action()
