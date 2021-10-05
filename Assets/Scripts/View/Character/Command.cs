@@ -109,7 +109,7 @@ public class DieCommand : Command
 
     protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
-        map.ResetOnCharactor();
+        map.ResetOnCharacter();
         anim.die.Fire();
 
         NotifyOnDeadFinal();

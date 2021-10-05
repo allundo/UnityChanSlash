@@ -77,7 +77,7 @@ public abstract class PlayerMove : PlayerCommand
     public override void Cancel()
     {
         base.Cancel();
-        var destPos = map.MoveOnCharactor(prevPos);
+        var destPos = map.MoveOnCharacter(prevPos);
     }
 
     protected override IObservable<bool> Execute(IObservable<bool> execObservable)
@@ -90,7 +90,7 @@ public abstract class PlayerMove : PlayerCommand
         EnterStair(DestTile);
 
         prevPos = map.CurrentPos;
-        var destPos = map.MoveOnCharactor(GetDest);
+        var destPos = map.MoveOnCharacter(GetDest);
 
         SetSpeed();
 
@@ -156,7 +156,7 @@ public class PlayerJump : PlayerCommand
     public override void Cancel()
     {
         base.Cancel();
-        map.MoveOnCharactor(prevPos);
+        map.MoveOnCharacter(prevPos);
     }
 
     protected override void Action()
@@ -180,7 +180,7 @@ public class PlayerJump : PlayerCommand
 
         EnterStair(destTile);
 
-        map.MoveOnCharactor(destPos);
+        map.MoveOnCharacter(destPos);
 
         playerAnim.jump.Fire();
 
@@ -316,7 +316,7 @@ public class PlayerDie : PlayerCommand
 
     protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
-        map.ResetOnCharactor();
+        map.ResetOnCharacter();
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();
 

@@ -36,7 +36,7 @@ public class MapUtil : MonoBehaviour
         this.dir = dir ?? MapUtil.defaultDir;
         tf.LookAt(this.tf.position + this.dir.LookAt);
 
-        if (isOnCharacter) SetOnCharactor();
+        if (isOnCharacter) SetOnCharacter();
     }
 
     public Vector3 WorldPos(Pos pos) => map.WorldPos(pos);
@@ -62,7 +62,7 @@ public class MapUtil : MonoBehaviour
     public ITile LeftTile => map.GetTile(GetLeft);
     public ITile JumpTile => map.GetTile(GetJump);
 
-    public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
+    public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharacterOn;
     public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
@@ -110,21 +110,21 @@ public class MapUtil : MonoBehaviour
     /// Set IsCharactorOn flag TRUE to the Tile currently on
     /// </summary>
     /// <returns>destPos</returns>
-    public Pos SetOnCharactor() => SetOnCharactor(tf.position);
+    public Pos SetOnCharacter() => SetOnCharacter(tf.position);
 
     /// <summary>
     /// Set IsCharactorOn flag TRUE to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="destPos">Vector3 position of destination Tile</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharactor(Vector3 destPos) => SetOnCharactor(map.MapPos(destPos));
+    public Pos SetOnCharacter(Vector3 destPos) => SetOnCharacter(map.MapPos(destPos));
 
     /// <summary>
     /// Set IsCharactorOn flag TRUE to the Tile specified by Pos unit
     /// </summary>
     /// <param name="destPos">Tile map position of destination</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharactor(Pos destPos)
+    public Pos SetOnCharacter(Pos destPos)
     {
         map.GetTile(destPos).OnCharacter = status;
         onTilePos = destPos;
@@ -134,19 +134,19 @@ public class MapUtil : MonoBehaviour
     /// <summary>
     /// Set IsCharactorOn flag FALSE to the Tile currently on
     /// </summary>
-    public void ResetOnCharactor() { ResetOnCharactor(tf.position); }
+    public void ResetOnCharacter() { ResetOnCharacter(tf.position); }
 
     /// <summary>
     /// Set IsCharactorOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="pos">Vector3 Tile position</param>
-    public void ResetOnCharactor(Vector3 pos) { ResetOnCharactor(map.MapPos(pos)); }
+    public void ResetOnCharacter(Vector3 pos) { ResetOnCharacter(map.MapPos(pos)); }
 
     /// <summary>
     /// Set IsCharactorOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="pos">Pos unit Tile position</param>
-    public void ResetOnCharactor(Pos pos)
+    public void ResetOnCharacter(Pos pos)
     {
         map.GetTile(pos).OnCharacter = null;
     }
@@ -154,10 +154,10 @@ public class MapUtil : MonoBehaviour
     /// <summary>
     /// Apply ResetOnCharacter at current Tile and SetOnCharacter to the dest Pos.
     /// </summary>
-    public Pos MoveOnCharactor(Pos destPos)
+    public Pos MoveOnCharacter(Pos destPos)
     {
-        ResetOnCharactor(onTilePos);
-        return SetOnCharactor(destPos);
+        ResetOnCharacter(onTilePos);
+        return SetOnCharacter(destPos);
     }
 
 }

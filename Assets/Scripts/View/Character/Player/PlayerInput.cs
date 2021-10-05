@@ -128,7 +128,7 @@ public class PlayerInput : ShieldInput
         ITile forwardTile = map.ForwardTile;
 
         // Is face to enemy
-        if (forwardTile.IsCharactorOn)
+        if (forwardTile.IsCharacterOn)
         {
             bool isFightValid = playerCommander.IsFightValid;
             if (isFightValid) guardState.SetEnemyDetected(true);

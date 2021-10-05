@@ -33,7 +33,7 @@ public abstract class EnemyMove : EnemyCommand
     public override void Cancel()
     {
         base.Cancel();
-        map.MoveOnCharactor(prevPos);
+        map.MoveOnCharacter(prevPos);
     }
 
     protected override IObservable<bool> Execute(IObservable<bool> execObservable)
@@ -44,7 +44,7 @@ public abstract class EnemyMove : EnemyCommand
         }
 
         prevPos = map.CurrentPos;
-        var destPos = map.MoveOnCharactor(GetDest);
+        var destPos = map.MoveOnCharacter(GetDest);
 
         SetSpeed();
         playingTween = tweenMove.GetLinearMove(map.WorldPos(destPos)).OnComplete(ResetSpeed).Play();

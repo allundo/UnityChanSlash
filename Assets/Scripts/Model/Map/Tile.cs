@@ -5,7 +5,7 @@ public interface ITile
     bool IsEnterable(IDirection dir = null);
     bool IsLeapable { get; }
     bool IsViewOpen { get; }
-    bool IsCharactorOn { get; }
+    bool IsCharacterOn { get; }
     bool IsItemOn { get; }
     MobStatus OnCharacter { get; set; }
     bool PutItem(Item item);
@@ -38,10 +38,10 @@ public class Tile
 
 public class Ground : Tile, ITile
 {
-    public bool IsEnterable(IDirection dir = null) => !IsCharactorOn;
+    public bool IsEnterable(IDirection dir = null) => !IsCharacterOn;
     public bool IsLeapable => true;
     public bool IsViewOpen => true;
-    public bool IsCharactorOn => status != null;
+    public bool IsCharacterOn => status != null;
     public MobStatus OnCharacter { get { return status; } set { status = value; } }
     public MobStatus status = null;
 }
@@ -51,7 +51,7 @@ public class Wall : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => false;
     public bool IsViewOpen => false;
-    public bool IsCharactorOn => false;
+    public bool IsCharacterOn => false;
     public MobStatus OnCharacter { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
@@ -59,10 +59,10 @@ public class Wall : Tile, ITile
 
 public class Door : Tile, ITile
 {
-    public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharactorOn;
+    public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
     public bool IsViewOpen => state.IsOpen;
-    public bool IsCharactorOn => state.IsCharactorOn;
+    public bool IsCharacterOn => state.IsCharactorOn;
     public MobStatus OnCharacter { get { return state.onCharacter; } set { state.onCharacter = value; } }
 
     public DoorState state { protected get; set; }
@@ -78,7 +78,7 @@ public class Stair : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => enterDir.IsInverse(dir);
     public bool IsLeapable => false;
     public bool IsViewOpen => true;
-    public bool IsCharactorOn => false;
+    public bool IsCharacterOn => false;
     public MobStatus OnCharacter { get { return null; } set { } }
 
     public override bool PutItem(Item item) => false;
