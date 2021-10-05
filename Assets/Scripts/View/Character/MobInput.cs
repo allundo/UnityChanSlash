@@ -4,14 +4,15 @@ using UniRx;
 /// <summary>
 /// Inputs Command to Command queue in Commander. <br />
 /// </summary>
-[RequireComponent(typeof(MobCommander))]
+[RequireComponent(typeof(CommandTarget))]
 [RequireComponent(typeof(MapUtil))]
 public abstract class MobInput : MonoBehaviour
 {
     /// <summary>
     /// Target Commander to input Command.
     /// </summary>
-    protected MobCommander commander;
+    public MobCommander commander { get; protected set; }
+    public CommandTarget target { get; protected set; }
 
     /// <summary>
     /// Stops input Command if false. <br />
@@ -27,8 +28,9 @@ public abstract class MobInput : MonoBehaviour
 
     protected virtual void Awake()
     {
-        commander = GetComponent<MobCommander>();
+        target = GetComponent<CommandTarget>();
         map = GetComponent<MapUtil>();
+        commander = new MobCommander(target);
     }
 
     protected virtual void Start()
@@ -43,7 +45,7 @@ public abstract class MobInput : MonoBehaviour
     /// </summary>
     protected virtual void SetCommands()
     {
-        die = new DieCommand(commander, 0.1f);
+        die = new DieCommand(target, 0.1f);
     }
 
     /// <summary>
@@ -51,7 +53,9 @@ public abstract class MobInput : MonoBehaviour
     /// </summary>
     protected virtual void Subscribe()
     {
-        commander.OnValidateInput.Subscribe(isValid => ValidateInput(isValid)).AddTo(this);
+        commander.OnValidateInput
+            .Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly))
+            .AddTo(this);
     }
 
     /// <summary>
@@ -70,9 +74,10 @@ public abstract class MobInput : MonoBehaviour
     /// <param name="cmd">Command to input</param>
     public virtual void InputCommand(Command cmd)
     {
-        if (!isCommandValid) return;
+        if (!isCommandValid || cmd == null) return;
 
         commander.EnqueueCommand(cmd);
+        isCommandValid = false;
     }
 
     /// <summary>
@@ -90,8 +95,8 @@ public abstract class MobInput : MonoBehaviour
         ForceEnqueue(die, true);
     }
 
-    public virtual void ValidateInput(bool isValid)
+    public virtual void ValidateInput(bool isTriggerOnly = false)
     {
-        isCommandValid = isValid;
+        isCommandValid = true;
     }
 }

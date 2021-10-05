@@ -14,4 +14,10 @@ public struct MessageData
 {
     public string[] sentences;
     public FaceID[] faces;
+
+    public MessageData(string[] sentences, FaceID[] faces)
+    {
+        this.sentences = sentences;
+        this.faces = faces;
+    }
 }

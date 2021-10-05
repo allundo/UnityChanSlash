@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyAnimator))]
-public class EnemyCommander : MobCommander
+public class EnemyCommandTarget : CommandTarget
 {
     /// <summary>
     /// Enemy attack handler for EnemyCommand execution.

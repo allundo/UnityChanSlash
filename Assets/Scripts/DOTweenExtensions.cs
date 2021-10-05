@@ -15,16 +15,18 @@ static public class DOTweenExtensions
         return tween.Pause().SetAutoKill(false).SetLink(linktarget);
     }
 
-    static public IObservable<Tween> OnCompleteAsObservable(this Tween tween)
+    static public IObservable<Tween> OnCompleteAsObservable(this Tween tween) => tween.OnCompleteAsObservable(valueOnNext: tween);
+
+    static public IObservable<T> OnCompleteAsObservable<T>(this Tween tween, T valueOnNext)
     {
-        return Observable.Create<Tween>(o =>
+        return Observable.Create<T>(o =>
         {
             var onComplete = (tween.onComplete ?? (() => { })).Clone() as TweenCallback;
 
             tween.OnComplete(() =>
             {
                 onComplete();
-                o.OnNext(tween);
+                o.OnNext(valueOnNext);
                 o.OnCompleted();
             }).Play();
 

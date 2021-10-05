@@ -1,11 +1,12 @@
-using UnityEngine;
 using UniRx;
+using System;
+using DG.Tweening;
 
 public abstract class EnemyCommand : Command
 {
     protected EnemyAnimator enemyAnim;
 
-    public EnemyCommand(EnemyCommander commander, float duration) : base(commander, duration)
+    public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
         enemyAnim = anim as EnemyAnimator;
     }
@@ -13,11 +14,12 @@ public abstract class EnemyCommand : Command
 
 public abstract class EnemyMove : EnemyCommand
 {
-    public EnemyMove(EnemyCommander commander, float duration) : base(commander, duration) { }
+    public EnemyMove(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected abstract bool IsMovable { get; }
-    protected abstract Vector3 Dest { get; }
-    protected Vector3 startPos = default;
+    protected abstract Pos GetDest { get; }
+    protected Pos prevPos = new Pos();
+
     protected void SetSpeed()
     {
         enemyAnim.speed.Float = Speed;
@@ -31,77 +33,68 @@ public abstract class EnemyMove : EnemyCommand
     public override void Cancel()
     {
         base.Cancel();
-        map.ResetOnCharactor(startPos + Dest);
+        map.MoveOnCharactor(prevPos);
     }
 
-    public override void Execute()
+    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
         if (!IsMovable)
         {
-            onValidateInput.OnNext(true);
-            onCompleted.OnNext(Unit.Default);
-            return;
+            return Observable.Return(false);
         }
 
-        startPos = map.CurrentVec3Pos;
-        map.SetOnCharactor(startPos + Dest);
-        map.ResetOnCharactor(startPos);
+        prevPos = map.CurrentPos;
+        var destPos = map.MoveOnCharactor(GetDest);
 
         SetSpeed();
-        PlayTween(tweenMove.GetLinearMove(Dest), () => ResetSpeed());
+        playingTween = tweenMove.GetLinearMove(map.WorldPos(destPos)).OnComplete(ResetSpeed).Play();
 
-        SetValidateTimer(0.95f);
+        return execObservable;
     }
 }
 
 public class EnemyForward : EnemyMove
 {
-    public EnemyForward(EnemyCommander commander, float duration) : base(commander, duration) { }
+    public EnemyForward(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => map.IsForwardMovable;
-    protected override Vector3 Dest => map.GetForwardVector();
+    protected override Pos GetDest => map.GetForward;
     public override float Speed => TILE_UNIT / duration;
 }
 
 public class EnemyTurnL : EnemyCommand
 {
-    public EnemyTurnL(EnemyCommander commander, float duration) : base(commander, duration) { }
+    public EnemyTurnL(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
-    public override void Execute()
+    protected override void Action()
     {
-        PlayTween(tweenMove.GetRotate(-90));
+        playingTween = tweenMove.TurnL.Play();
         map.TurnLeft();
-
-        SetValidateTimer();
     }
 }
 
 public class EnemyTurnR : EnemyCommand
 {
-    public EnemyTurnR(EnemyCommander commander, float duration) : base(commander, duration) { }
+    public EnemyTurnR(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
-    public override void Execute()
+    protected override void Action()
     {
-        PlayTween(tweenMove.GetRotate(90));
+        playingTween = tweenMove.TurnR.Play();
         map.TurnRight();
-
-        SetValidateTimer();
     }
 }
+
 public class EnemyAttack : EnemyCommand
 {
     private MobAttack enemyAttack;
-    public EnemyAttack(EnemyCommander commander, float duration) : base(commander, duration)
+    public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration)
     {
-        enemyAttack = commander.enemyAttack;
+        enemyAttack = target.enemyAttack;
     }
 
-    public override void Execute()
+    protected override void Action()
     {
         enemyAnim.attack.Fire();
-        playingTween = enemyAttack.SetAttack(duration);
-
-        SetValidateTimer();
-        SetDispatchFinal();
+        playingTween = enemyAttack.AttackSequence(duration).Play();
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyCommander))]
+[RequireComponent(typeof(MobCommander))]
 public class EnemyAIInput : MobInput
 {
     private Command turnL;
@@ -8,17 +8,24 @@ public class EnemyAIInput : MobInput
     private Command moveForward;
     private Command attack;
 
+    protected override void Awake()
+    {
+        target = GetComponent<CommandTarget>();
+        map = GetComponent<MapUtil>();
+        commander = new MobCommander(target);
+    }
+
     private bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
     protected override void SetCommands()
     {
-        var enemyCommander = commander as EnemyCommander;
+        var enemyTarget = target as EnemyCommandTarget;
 
-        die = new DieCommand(enemyCommander, 2.0f);
-        moveForward = new EnemyForward(enemyCommander, 2.0f);
-        turnL = new EnemyTurnL(enemyCommander, 0.2f);
-        turnR = new EnemyTurnR(enemyCommander, 0.2f);
-        attack = new EnemyAttack(enemyCommander, 2.0f);
+        die = new DieCommand(enemyTarget, 2.0f);
+        moveForward = new EnemyForward(enemyTarget, 2.0f);
+        turnL = new EnemyTurnL(enemyTarget, 0.2f);
+        turnR = new EnemyTurnR(enemyTarget, 0.2f);
+        attack = new EnemyAttack(enemyTarget, 2.0f);
     }
 
     protected override Command GetCommand()

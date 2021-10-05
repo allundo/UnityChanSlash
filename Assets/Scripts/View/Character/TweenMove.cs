@@ -26,13 +26,13 @@ public class TweenMove
         return seq;
     }
 
-    public Tween GetLinearMove(Vector3 moveVector)
+    public Tween GetLinearMove(Vector3 destPos)
     {
-        return tf.DOMove(moveVector, duration)
-            .SetRelative()
-            .SetEase(Ease.Linear);
+        return tf.DOMove(destPos, duration).SetEase(Ease.Linear);
     }
 
+    public Tween TurnL => GetRotate(-90);
+    public Tween TurnR => GetRotate(90);
     public Tween GetRotate(int angle = 90)
     {
         return tf.DORotate(new Vector3(0, angle, 0), duration)

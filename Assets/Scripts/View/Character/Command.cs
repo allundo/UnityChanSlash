@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using UniRx;
 
 public abstract class Command
@@ -8,46 +9,73 @@ public abstract class Command
     protected const float TILE_UNIT = 2.5f;
 
     protected float duration;
+    protected float invalidDuration;
 
     protected TweenMove tweenMove;
 
+    protected CommandTarget target;
     protected MobAnimator anim;
     protected MapUtil map;
 
-    protected IObserver<Unit> onDead;
-    protected IObserver<Unit> onCompleted;
     protected IObserver<bool> onValidateInput;
 
-    public Command(MobCommander commander, float duration)
+    public Command(CommandTarget target, float duration, float validateTiming = 0.5f)
     {
+        this.target = target;
+
         this.duration = duration * DURATION_UNIT;
-        this.tweenMove = new TweenMove(commander.transform, this.duration);
+        this.invalidDuration = this.duration * validateTiming;
+        tweenMove = new TweenMove(target.transform, this.duration);
 
-        onDead = commander.onDead;
-        onCompleted = commander.onCompleted;
-        onValidateInput = commander.onValidateInput;
-
-        anim = commander.anim;
-        map = commander.map;
+        anim = target.anim;
+        map = target.map;
     }
 
     protected Tween playingTween = null;
     protected Tween validateTween = null;
-    protected Tween finallyCall = null;
+    protected IDisposable onCompleteDisposable = null;
+    protected List<Action> onCompleted = new List<Action>();
 
     public virtual void Cancel()
     {
         playingTween?.Kill();
-        validateTween?.Kill();
-        finallyCall?.Kill();
+        onCompleteDisposable?.Dispose();
     }
 
-    public virtual void CancelValidateTween()
+    public virtual IObservable<bool> Execute()
     {
-        validateTween?.Kill();
+        var onValidate = DOTweenTimer(invalidDuration, false);
+
+        var onCompleted = DOTweenTimer(duration, false);
+
+        SetOnCompleted(() => playingTween?.Complete());
+
+        onCompleteDisposable = onCompleted
+            .Subscribe(_ => this.onCompleted.ForEach(action => action()))
+            .AddTo(target);
+
+        return Execute(Observable.Merge(onValidate, onCompleted.IgnoreElements()));
     }
 
-    public abstract void Execute();
+    protected virtual IObservable<bool> Execute(IObservable<bool> execObservable)
+    {
+        Action();
+        return execObservable;
+    }
+
+    /// <summary>
+    /// Since Observable.Timer() has about 25 frames delay on complete compaired to DOVirtual.DelayedCall(), <br />
+    /// you should use this DelayedCall based Observable to work with DOTween durations.
+    /// /// </summary>
+    /// <param name="dueTimeSec">wait time second for notification</param>
+    /// <param name="value">will be notified by OnNext()</param>
+    protected IObservable<T> DOTweenTimer<T>(float dueTimeSec, T value, bool ignoreTimeScale = false)
+    {
+        return DOVirtual.DelayedCall(dueTimeSec, null, ignoreTimeScale).OnCompleteAsObservable(value);
+    }
+
+    protected virtual void Action() { }
+
     public virtual float Speed => 0.0f;
     public virtual float RSpeed => 0.0f;
 
@@ -64,61 +92,28 @@ public abstract class Command
     }
 
     /// <summary>
-    /// Play tween and dispatch next command on complete
+    /// Reserve onDead notification at the end of Command execution
     /// </summary>
-    /// <param name="tween">Tween (or Sequence) to play</param>
-    /// <param name="OnComplete">Additional process on complete</param>
-    protected void PlayTween(Tween tween, Action OnComplete = null)
-    {
-        playingTween = tween;
+    protected void NotifyOnDeadFinal()
+        => SetOnCompleted(() => target.onDead.OnNext(Unit.Default));
 
-        tween.OnComplete(DispatchFinally(OnComplete)).Play();
-    }
-
-    /// <summary>
-    /// Reserve validating of next command input
-    /// </summary>
-    /// <param name="timing">Validate timing specified by normalized (0.0f,1.0f) command duration</param>
-    protected virtual void SetValidateTimer(float timing = 0.5f)
+    protected void SetOnCompleted(Action action)
     {
-        validateTween = tweenMove.SetDelayedCall(timing, () => onValidateInput.OnNext(true));
-    }
-
-    /// <summary>
-    /// Reserve next command dispatching after command duration.
-    /// </summary>
-    /// <param name="OnComplete">Additional process on complete</param>
-    protected void SetDispatchFinal(Action OnComplete = null)
-    {
-        finallyCall = tweenMove.SetFinallyCall(DispatchFinally(OnComplete));
-    }
-
-    /// <summary>
-    /// Reserve destory commander object after command duration
-    /// </summary>
-    protected void SetDestoryFinal()
-    {
-        tweenMove.SetFinallyCall(() => onDead.OnNext(Unit.Default));
-    }
-
-    private TweenCallback DispatchFinally(Action OnComplete = null)
-    {
-        return () =>
-        {
-            if (OnComplete != null) OnComplete();
-            onCompleted.OnNext(Unit.Default);
-        };
+        this.onCompleted.Add(action);
     }
 }
 
 public class DieCommand : Command
 {
-    public DieCommand(MobCommander commander, float duration) : base(commander, duration) { }
+    public DieCommand(CommandTarget target, float duration) : base(target, duration) { }
 
-    public override void Execute()
+    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
         map.ResetOnCharactor();
         anim.die.Fire();
-        SetDestoryFinal();
+
+        NotifyOnDeadFinal();
+
+        return null; // Don't validate input and dispatch next Command.
     }
 }

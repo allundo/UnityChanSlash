@@ -5,7 +5,7 @@ using UniRx;
 /// Convert player input UIs operation into a Command and enqueue it to PlayerCommander.<br />
 /// In addition to MobInput, there is 'Trigger type' input implemented to improve usability.<br />
 /// </summary>
-[RequireComponent(typeof(PlayerCommander))]
+[RequireComponent(typeof(PlayerCommandTarget))]
 [RequireComponent(typeof(MapUtil))]
 public class PlayerInput : ShieldInput
 {
@@ -31,15 +31,12 @@ public class PlayerInput : ShieldInput
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
 
-    /// <summary>
-    /// Target PlayerCommander to input Command. <br />
-    /// Trigger type input is validated earlyer than Normal type input<br />
-    /// but invalidated while moving Commands are executed continuously.
-    /// </summary>
-    protected PlayerCommander playerCommander;
+    protected PlayerCommandTarget playerTarget;
 
     /// <summary>
     /// Stops Trigger type input if false.
+    /// Trigger type input is validated earlyer than Normal type input<br />
+    /// but invalidated while moving Commands are executed continuously.
     /// </summary>
     protected bool isTriggerValid = true;
 
@@ -50,16 +47,20 @@ public class PlayerInput : ShieldInput
 
     // Reserved Command input applied by other classes.
     // FIXME: need to implement game events handling system.
-    public void EnqueueDropFloor() => ForceEnqueue(new PlayerDropFloor(playerCommander, 6.11f), true);
-    public void EnqueueStartMessage() => ForceEnqueue(new PlayerStartMessage(playerCommander, 0.1f), false);
-    public void EnqueueRestartMessage() => ForceEnqueue(new PlayerRestartMessage(playerCommander, 0.1f), true);
+    public void EnqueueDropFloor() => ForceEnqueue(new PlayerDropFloor(playerTarget, 6.11f), true);
+    public void EnqueueStartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data), false);
+    public void EnqueueRestartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data), true);
+
+    protected override void Awake()
+    {
+        base.Awake();
+        playerTarget = target as PlayerCommandTarget;
+    }
 
     protected override void SetCommands()
     {
-        playerCommander = commander as PlayerCommander;
-
-        die = new PlayerDie(playerCommander, 8.0f);
-        guardState = new GuardState(playerCommander, 0.42f);
+        die = new PlayerDie(playerTarget, 8.0f);
+        guardState = new GuardStateTemp(this);
 
         InitFightInput();
         InitHandleInput();
@@ -68,9 +69,8 @@ public class PlayerInput : ShieldInput
 
     protected override void Subscribe()
     {
-        commander.onValidateInput.Subscribe(isValid => ValidateInput(isValid)).AddTo(this);
-        playerCommander.OnUIVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
-        playerCommander.onValidateTrigger.Subscribe(_ => isTriggerValid = true).AddTo(this);
+        commander.onValidateInput.Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly)).AddTo(this);
+        playerTarget.OnUIVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
     }
 
     protected override void Update()
@@ -90,9 +90,10 @@ public class PlayerInput : ShieldInput
     {
         isTriggerValid = false;
 
-        if (!isCommandValid) return;
+        if (!isCommandValid || cmd == null) return;
 
         commander.EnqueueCommand(cmd);
+        isCommandValid = false;
     }
 
     /// <summary>
@@ -100,9 +101,10 @@ public class PlayerInput : ShieldInput
     /// </summary>
     public void InputTrigger(Command cmd)
     {
-        if (!isTriggerValid) return;
+        if (!isTriggerValid || cmd == null) return;
 
         commander.EnqueueCommand(cmd);
+        isCommandValid = isTriggerValid = false;
     }
 
     /// <summary>
@@ -120,6 +122,8 @@ public class PlayerInput : ShieldInput
     private void DisplayInputUIs()
     {
         if (!isInputVisible) return;
+
+        var playerCommander = commander as PlayerCommander;
 
         ITile forwardTile = map.ForwardTile;
 
@@ -206,21 +210,21 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitFightInput()
     {
-        Command jab = new PlayerJab(playerCommander, 0.6f);
-        Command straight = new PlayerStraight(playerCommander, 0.85f);
-        Command kick = new PlayerKick(playerCommander, 1.2f);
+        Command jab = new PlayerJab(playerTarget, 0.6f);
+        Command straight = new PlayerStraight(playerTarget, 0.85f);
+        Command kick = new PlayerKick(playerTarget, 1.2f);
 
         fightCircle.JabButton.AttackSubject
             .Subscribe(_ => InputCommand(jab))
-            .AddTo(commander);
+            .AddTo(this);
 
         fightCircle.StraightButton.AttackSubject
             .Subscribe(_ => InputCommand(straight))
-            .AddTo(commander);
+            .AddTo(this);
 
         fightCircle.KickButton.AttackSubject
             .Subscribe(_ => InputCommand(kick))
-            .AddTo(commander);
+            .AddTo(this);
     }
 
     /// <summary>
@@ -228,26 +232,26 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitHandleInput()
     {
-        Command forward = new PlayerForward(playerCommander, 1.0f);
-        Command handle = new PlayerHandle(playerCommander, 0.4f);
-        Command getItem = new PlayerGetItem(playerCommander, 0.8f);
+        Command forward = new PlayerForward(playerTarget, 1.0f);
+        Command handle = new PlayerHandle(playerTarget, 0.4f);
+        Command getItem = new PlayerGetItem(playerTarget, 0.8f);
 
         Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
             .Subscribe(_ => InputCommand(forward))
-            .AddTo(commander);
+            .AddTo(this);
 
         doorHandler.ObserveHandle
             .Subscribe(_ => InputTrigger(handle))
-            .AddTo(commander);
+            .AddTo(this);
 
-        PlayerAnimator anim = commander.anim as PlayerAnimator;
+        PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
         Observable.Merge(doorHandler.ObserveHandOn, itemHandler.ObserveHandOn)
             .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
-            .AddTo(commander);
+            .AddTo(this);
 
         itemHandler.ObserveGet
             .Subscribe(_ => InputTrigger(getItem))
-            .AddTo(commander);
+            .AddTo(this);
     }
 
     /// <summary>
@@ -255,16 +259,16 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitMoveInput()
     {
-        Command forward = new PlayerForward(playerCommander, 1.0f);
-        Command right = new PlayerRight(playerCommander, 1.2f);
-        Command left = new PlayerLeft(playerCommander, 1.2f);
-        Command backward = new PlayerBack(playerCommander, 1.2f);
+        Command forward = new PlayerForward(playerTarget, 1.0f);
+        Command right = new PlayerRight(playerTarget, 1.2f);
+        Command left = new PlayerLeft(playerTarget, 1.2f);
+        Command backward = new PlayerBack(playerTarget, 1.2f);
 
-        Command turnR = new PlayerTurnR(playerCommander, 0.5f);
-        Command turnL = new PlayerTurnL(playerCommander, 0.5f);
-        Command jump = new PlayerJump(playerCommander, 2.0f);
+        Command turnR = new PlayerTurnR(playerTarget, 0.5f);
+        Command turnL = new PlayerTurnL(playerTarget, 0.5f);
+        Command jump = new PlayerJump(playerTarget, 2.0f);
 
-        Command guard = new GuardCommand(playerCommander, 0.02f, guardState);
+        Command guard = new GuardCommand(playerTarget, guardState, 0.02f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))
@@ -284,28 +288,31 @@ public class PlayerInput : ShieldInput
 
         turnRUI.PressObservable
             .Subscribe(_ => InputTrigger(turnR))
-            .AddTo(commander);
+            .AddTo(this);
 
         turnLUI.PressObservable
             .Subscribe(_ => InputTrigger(turnL))
-            .AddTo(commander);
+            .AddTo(this);
 
         jumpUI.PressObservable
             .Subscribe(_ => InputTrigger(jump))
-            .AddTo(commander);
+            .AddTo(this);
 
         guardUI.EnterObservable
             .Subscribe(_ => InputTrigger(guard))
-            .AddTo(commander);
+            .AddTo(this);
     }
 
     /// <summary>
     /// Set validation of both of Normal and Trigger input.
     /// </summary>
-    /// <param name="isValid">true: validate, false: invalidate</param>
-    public override void ValidateInput(bool isValid)
+    /// <param name="isTriggerOnly">Validates only Trigger input if true</param>
+    public override void ValidateInput(bool isTriggerOnly = false)
     {
-        isCommandValid = isValid;
-        isTriggerValid = isValid;
+        isTriggerValid = true;
+
+        if (isTriggerOnly) return;
+
+        isCommandValid = true;
     }
 }

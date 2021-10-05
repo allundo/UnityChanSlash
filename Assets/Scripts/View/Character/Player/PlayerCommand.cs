@@ -1,64 +1,41 @@
-using UnityEngine;
 using System;
 using UniRx;
 using DG.Tweening;
 
 public abstract class PlayerCommand : Command
 {
+    protected PlayerCommandTarget playerTarget;
     protected PlayerAnimator playerAnim;
     protected ThirdPersonCamera mainCamera;
     protected HidePlateHandler hidePlateHandler;
     protected ItemGenerator itemGenerator;
     protected ItemIconGenerator itemIconGenerator;
     protected MessageController messageController;
-    protected GameOverUI gameOverUI;
 
     protected Tween validateTrigger;
 
     protected IObserver<Unit> onValidateTrigger;
-    protected IObserver<Unit> onClearAll;
-    protected IObserver<bool> onUIVisible;
 
-    public PlayerCommand(PlayerCommander commander, float duration) : base(commander, duration)
+    protected float triggerInvalidDuration;
+
+    public PlayerCommand(PlayerCommandTarget target, float duration, float validateTiming = 0.5f, float triggerTiming = 0.5f) : base(target, duration, validateTiming)
     {
+        playerTarget = target;
+        this.triggerInvalidDuration = this.duration * triggerTiming;
+
         playerAnim = anim as PlayerAnimator;
-        mainCamera = commander.mainCamera;
-        hidePlateHandler = commander.hidePlateHandler;
-        itemGenerator = commander.itemGenerator;
-        itemIconGenerator = commander.itemIconGenerator;
-        messageController = commander.messageController;
-        gameOverUI = commander.gameOverUI;
-        onValidateTrigger = commander.onValidateTrigger;
-        onClearAll = commander.onClearAll;
-        onUIVisible = commander.onUIVisible;
+        mainCamera = target.mainCamera;
+        hidePlateHandler = target.hidePlateHandler;
+        itemGenerator = target.itemGenerator;
+        itemIconGenerator = target.itemIconGenerator;
+        messageController = target.messageController;
     }
 
-    protected override void SetValidateTimer(float timing = 0.5f)
+    public override IObservable<bool> Execute()
     {
-        validateTween = tweenMove.SetDelayedCall(timing, () => onValidateInput.OnNext(true));
-    }
+        if (triggerInvalidDuration >= invalidDuration) return base.Execute();
 
-    protected void SetValidateTimer(float timing, float triggerTiming)
-    {
-        base.SetValidateTimer(timing);
-        SetValidateTriggerTimer(triggerTiming);
-    }
-
-    protected void SetValidateTriggerTimer(float timing = 0.5f)
-    {
-        validateTrigger = tweenMove.SetDelayedCall(timing, () => onValidateTrigger.OnNext(Unit.Default));
-    }
-
-    public override void Cancel()
-    {
-        base.Cancel();
-        validateTrigger?.Kill();
-    }
-
-    public override void CancelValidateTween()
-    {
-        validateTween?.Kill();
-        validateTrigger?.Kill();
+        return base.Execute()?.Merge(DOTweenTimer(triggerInvalidDuration, true));
     }
 
     protected void EnterStair(ITile destTile)
@@ -69,7 +46,7 @@ public abstract class PlayerCommand : Command
         tweenMove.SetDelayedCall(0.6f, () =>
         {
             GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
-            onClearAll.OnNext(Unit.Default);
+            playerTarget.onClearAll.OnNext(Unit.Default);
             playerAnim.Pause();
         });
     }
@@ -78,12 +55,12 @@ public abstract class PlayerCommand : Command
 public abstract class PlayerMove : PlayerCommand
 {
     protected ITile destTile;
-    public PlayerMove(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerMove(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f, 0.5f) { }
 
     protected abstract bool IsMovable { get; }
-    protected abstract Vector3 Dest { get; }
+    protected abstract Pos GetDest { get; }
     protected abstract ITile DestTile { get; }
-    protected Vector3 startPos = default;
+    protected Pos prevPos = new Pos();
 
     protected void SetSpeed()
     {
@@ -100,104 +77,110 @@ public abstract class PlayerMove : PlayerCommand
     public override void Cancel()
     {
         base.Cancel();
-        map.ResetOnCharactor(startPos + Dest);
+        var destPos = map.MoveOnCharactor(prevPos);
     }
 
-    public override void Execute()
+    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
         if (!IsMovable)
         {
-            onValidateInput.OnNext(true);
-            onCompleted.OnNext(Unit.Default);
-            return;
+            return Observable.Return(false);
         }
 
         EnterStair(DestTile);
 
-        startPos = map.CurrentVec3Pos;
-        map.SetOnCharactor(startPos + Dest);
-        map.ResetOnCharactor(startPos);
+        prevPos = map.CurrentPos;
+        var destPos = map.MoveOnCharactor(GetDest);
 
         SetSpeed();
-        PlayTween(tweenMove.GetLinearMove(Dest), () =>
-        {
-            hidePlateHandler.Move();
-            ResetSpeed();
-        });
 
-        SetValidateTimer(0.95f, 0.5f);
+        playingTween =
+            tweenMove.GetLinearMove(map.WorldPos(destPos))
+                .OnComplete(() =>
+                {
+                    hidePlateHandler.Move();
+                    ResetSpeed();
+                })
+                .Play();
+
+        return execObservable;
     }
 }
 
 public class PlayerForward : PlayerMove
 {
-    public PlayerForward(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerForward(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => map.IsForwardMovable;
     protected override ITile DestTile => map.ForwardTile;
-    protected override Vector3 Dest => map.GetForwardVector();
+    protected override Pos GetDest => map.GetForward;
     public override float Speed => TILE_UNIT / duration;
 }
 
 public class PlayerBack : PlayerMove
 {
-    public PlayerBack(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerBack(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => map.IsBackwardMovable;
     protected override ITile DestTile => map.BackwardTile;
-    protected override Vector3 Dest => map.GetBackwardVector();
+    protected override Pos GetDest => map.GetBackward;
     public override float Speed => -TILE_UNIT / duration;
 }
 
 public class PlayerRight : PlayerMove
 {
-    public PlayerRight(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerRight(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => map.IsRightMovable;
     protected override ITile DestTile => map.RightTile;
-    protected override Vector3 Dest => map.GetRightVector();
+    protected override Pos GetDest => map.GetRight;
     public override float RSpeed => TILE_UNIT / duration;
 }
 
 public class PlayerLeft : PlayerMove
 {
-    public PlayerLeft(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerLeft(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => map.IsLeftMovable;
     protected override ITile DestTile => map.LeftTile;
-    protected override Vector3 Dest => map.GetLeftVector();
+    protected override Pos GetDest => map.GetLeft;
     public override float RSpeed => -TILE_UNIT / duration;
 }
 
 public class PlayerJump : PlayerCommand
 {
-    public PlayerJump(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerJump(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected Vector3 dest = default;
-    protected Vector3 startPos = default;
+    protected Pos prevPos = new Pos();
 
     public override void Cancel()
     {
         base.Cancel();
-        map.ResetOnCharactor(startPos + dest);
+        map.MoveOnCharactor(prevPos);
     }
 
-    public override void Execute()
+    protected override void Action()
     {
-        int distance = map.IsJumpable ? 2 : map.IsForwardMovable ? 1 : 0;
+        int distance = 0;
+        ITile destTile = null;
+        Pos destPos = prevPos = map.CurrentPos;
 
-        ITile destTile =
-            distance == 2 ? map.JumpTile :
-            distance == 1 ? map.ForwardTile :
-            null;
+        if (map.IsJumpable)
+        {
+            distance = 2;
+            destTile = map.JumpTile;
+            destPos = map.GetJump;
+        }
+        else if (map.IsForwardMovable)
+        {
+            distance = 1;
+            destTile = map.ForwardTile;
+            destPos = map.GetForward;
+        }
 
         EnterStair(destTile);
 
-        dest = map.GetForwardVector(distance);
-
-        startPos = map.CurrentVec3Pos;
-        map.SetOnCharactor(startPos + dest);
-        map.ResetOnCharactor(startPos);
+        map.MoveOnCharactor(destPos);
 
         playerAnim.jump.Fire();
 
@@ -207,20 +190,21 @@ public class PlayerJump : PlayerCommand
             tweenMove.SetDelayedCall(0.4f, () => hidePlateHandler.Move());
         }
 
-        SetValidateTimer();
-
-        PlayTween(tweenMove.GetJumpSequence(dest), () =>
-        {
-            if (distance > 0) hidePlateHandler.Move();
-        });
+        playingTween =
+            tweenMove.GetJumpSequence(map.GetForwardVector(distance))
+                .OnComplete(() =>
+                {
+                    if (distance > 0) hidePlateHandler.Move();
+                })
+                .Play();
     }
 }
 
 public class PlayerTurnL : PlayerCommand
 {
-    public PlayerTurnL(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerTurnL(PlayerCommandTarget target, float duration) : base(target, duration, 0.5f, 0.1f) { }
 
-    public override void Execute()
+    protected override void Action()
     {
         map.TurnLeft();
         mainCamera.TurnLeft();
@@ -228,16 +212,15 @@ public class PlayerTurnL : PlayerCommand
         hidePlateHandler.Turn();
         itemGenerator.Turn(map.dir);
 
-        SetValidateTimer(0.5f, 0.1f);
-        PlayTween(tweenMove.GetRotate(-90), () => mainCamera.ResetCamera());
+        playingTween = tweenMove.TurnL.OnComplete(mainCamera.ResetCamera).Play();
     }
 }
 
 public class PlayerTurnR : PlayerCommand
 {
-    public PlayerTurnR(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerTurnR(PlayerCommandTarget target, float duration) : base(target, duration, 0.5f, 0.1f) { }
 
-    public override void Execute()
+    protected override void Action()
     {
         map.TurnRight();
         mainCamera.TurnRight();
@@ -245,42 +228,25 @@ public class PlayerTurnR : PlayerCommand
         hidePlateHandler.Turn();
         itemGenerator.Turn(map.dir);
 
-        SetValidateTimer(0.5f, 0.1f);
-        PlayTween(tweenMove.GetRotate(90), () => mainCamera.ResetCamera());
+        playingTween = tweenMove.TurnR.OnComplete(mainCamera.ResetCamera).Play();
     }
 }
 public abstract class PlayerAction : PlayerCommand
 {
-    protected float timing;
-    public PlayerAction(PlayerCommander commander, float duration, float timing = 0.5f) : base(commander, duration)
-    {
-        this.timing = timing;
-    }
-
-    public override void Execute()
-    {
-        Action();
-
-        SetValidateTimer(timing, timing * 0.5f);
-        SetDispatchFinal();
-    }
-
-    protected abstract void Action();
+    public PlayerAction(PlayerCommandTarget target, float duration, float validateTiming = 0.5f)
+        : base(target, duration, validateTiming, validateTiming * 0.5f) { }
 }
 
 public class PlayerHandle : PlayerAction
 {
-    public PlayerHandle(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerHandle(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
-    {
-        playerAnim.handle.Fire();
-    }
+    protected override void Action() => playerAnim.handle.Fire();
 }
 
 public class PlayerGetItem : PlayerAction
 {
-    public PlayerGetItem(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerGetItem(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override void Action()
     {
@@ -304,116 +270,89 @@ public abstract class PlayerAttack : PlayerAction
     protected MobAttack straight;
     protected MobAttack kick;
 
-    public PlayerAttack(PlayerCommander commander, float duration, float timing = 0.5f) : base(commander, duration, timing)
+    public PlayerAttack(PlayerCommandTarget target, float duration, float timing = 0.5f) : base(target, duration, timing)
     {
-        jab = commander.jab;
-        straight = commander.straight;
-        kick = commander.kick;
+        jab = target.jab;
+        straight = target.straight;
+        kick = target.kick;
     }
 }
 
 public class PlayerJab : PlayerAttack
 {
-    public PlayerJab(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override void Action()
     {
         playerAnim.attack.Fire();
-        playingTween = jab.SetAttack(duration);
+        playingTween = jab.AttackSequence(duration).Play();
     }
 }
 
 public class PlayerStraight : PlayerAttack
 {
-    public PlayerStraight(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override void Action()
     {
         playerAnim.straight.Fire();
-        playingTween = straight.SetAttack(duration);
+        playingTween = straight.AttackSequence(duration).Play();
     }
 }
 public class PlayerKick : PlayerAttack
 {
-    public PlayerKick(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override void Action()
     {
         playerAnim.kick.Fire();
-        playingTween = kick.SetAttack(duration);
+        playingTween = kick.AttackSequence(duration).Play();
     }
 }
 
 public class PlayerDie : PlayerCommand
 {
-    public PlayerDie(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerDie(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    public override void Execute()
+    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
         map.ResetOnCharactor();
         playerAnim.dieEx.Fire();
-        gameOverUI.Play();
-        SetDestoryFinal();
+        playerTarget.gameOverUI.Play();
+
+        NotifyOnDeadFinal();
+        return null;
     }
 }
 
 public class PlayerDropFloor : PlayerCommand
 {
-    public PlayerDropFloor(PlayerCommander commander, float duration) : base(commander, duration) { }
+    public PlayerDropFloor(PlayerCommandTarget target, float duration) : base(target, duration, 1f, 1f) { }
 
-    public override void Execute()
+    protected override void Action()
     {
-        onUIVisible.OnNext(false);
-        SetValidateTimer(1f, 1f);
-
+        playerTarget.onUIVisible.OnNext(false);
         playerAnim.dropFloor.Fire();
-        PlayTween(tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f), () => onUIVisible.OnNext(true));
-    }
-}
-public class PlayerStartMessage : PlayerAction
-{
-    public PlayerStartMessage(PlayerCommander commander, float duration) : base(commander, duration) { }
 
-    protected override void Action()
-    {
-        MessageData data = new MessageData
-        {
-            sentences = new string[]
-            {
-                    "[仮] (ここに開幕の説明が入ります)",
-                    "[仮] ・・・メタすぎる！"
-            },
-            faces = new FaceID[]
-            {
-                    FaceID.DISATTRACT,
-                    FaceID.ANGRY
-            }
-        };
-
-        messageController.InputMessageData(data);
+        playingTween = tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f)
+            .OnComplete(() => playerTarget.onUIVisible.OnNext(true))
+            .Play();
     }
 }
 
-public class PlayerRestartMessage : PlayerAction
+public class PlayerMessage : PlayerAction
 {
-    public PlayerRestartMessage(PlayerCommander commander, float duration) : base(commander, duration) { }
+    MessageData data;
+    public PlayerMessage(PlayerCommandTarget target, MessageData data) : base(target, 0.1f)
+    {
+        this.data = data;
+    }
+
+    public PlayerMessage(PlayerCommandTarget target, string[] sentences, FaceID[] faces)
+        : this(target, new MessageData(sentences, faces)) { }
 
     protected override void Action()
     {
-        MessageData data = new MessageData
-        {
-            sentences = new string[]
-            {
-                    "[仮] ・・・という夢だったのさ",
-                    "[仮] なんも解決してないんだけどねっ！",
-            },
-            faces = new FaceID[]
-            {
-                    FaceID.SMILE,
-                    FaceID.ANGRY
-            }
-        };
-
         messageController.InputMessageData(data);
     }
 }

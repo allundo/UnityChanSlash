@@ -1,12 +1,18 @@
 public abstract class ShieldInput : MobInput
 {
-    public GuardState guardState { get; protected set; }
-    protected Command shieldOn;
-    public virtual void EnqueueShieldOn() { commander.EnqueueCommand(shieldOn, true); }
+    public GuardStateTemp guardState { get; protected set; }
+
+    protected override void Awake()
+    {
+        target = GetComponent<CommandTarget>();
+        map = GetComponent<MapUtil>();
+        commander = new ShieldCommander(target);
+    }
 
     protected override void SetCommands()
     {
-        die = new DieCommand(commander, 0.1f);
-        guardState = new GuardState(commander as ShieldCommander);
+        guardState = new GuardStateTemp(this);
+
+        die = new DieCommand(target, 0.1f);
     }
 }

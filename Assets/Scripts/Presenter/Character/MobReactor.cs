@@ -4,7 +4,6 @@ using DG.Tweening;
 
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(MobEffect))]
-[RequireComponent(typeof(MobCommander))]
 [RequireComponent(typeof(MobInput))]
 public class MobReactor : MonoBehaviour
 {
@@ -17,19 +16,20 @@ public class MobReactor : MonoBehaviour
 
     protected MobStatus status;
     protected MobEffect effect;
-    protected MobCommander commander;
     protected MobInput input;
+    protected MobCommander commander;
 
     protected virtual void Awake()
     {
         status = GetComponent<MobStatus>();
         effect = GetComponent<MobEffect>();
-        commander = GetComponent<MobCommander>();
         input = GetComponent<MobInput>();
     }
 
     protected virtual void Start()
     {
+        commander = input.commander;
+
         status.Life
             .SkipLatestValueOnSubscribe()
             .Subscribe(life => OnLifeChange(life))

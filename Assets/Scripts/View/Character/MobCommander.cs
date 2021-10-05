@@ -7,19 +7,14 @@ using System.Collections.Generic;
 /// Handles Command queuing and dispatching. <br />
 /// Keeps attached component data used by Command execution.
 /// </summary>
-[RequireComponent(typeof(MobAnimator))]
-[RequireComponent(typeof(MapUtil))]
-public abstract class MobCommander : MonoBehaviour
+public class MobCommander
 {
-    /// <summary>
-    /// Animation handler for Command execution.
-    /// </summary>
-    public MobAnimator anim { get; protected set; }
+    public MobCommander(CommandTarget commandTarget)
+    {
+        targetObject = commandTarget.gameObject;
+    }
 
-    /// <summary>
-    /// Direction related data for Command execution.
-    /// </summary>
-    public MapUtil map { get; protected set; } = default;
+    protected GameObject targetObject;
 
     public bool IsIdling => currentCommand == null;
     public bool IsDie => currentCommand is DieCommand;
@@ -34,6 +29,7 @@ public abstract class MobCommander : MonoBehaviour
     /// Executing Command. null if no Command is executing.
     /// </summary>
     public Command currentCommand { get; protected set; } = null;
+    protected IDisposable execDisposable = null;
 
     /// <summary>
     /// Notify the end of DieCommand execution.
@@ -42,28 +38,11 @@ public abstract class MobCommander : MonoBehaviour
     public IObservable<Unit> OnDead => onDead;
 
     /// <summary>
-    /// Notify the end of Command execution. Mainly use for next Command dispatching.
-    /// </summary>
-    public ISubject<Unit> onCompleted { get; protected set; } = new Subject<Unit>();
-    protected IObservable<Unit> OnCompleted => onCompleted;
-
-    /// <summary>
     /// Notification for validating input.
     /// </summary>
     /// <typeparam name="bool">true: validate, false: invalidate</typeparam>
     public ISubject<bool> onValidateInput { get; protected set; } = new Subject<bool>();
     public IObservable<bool> OnValidateInput => onValidateInput;
-
-    protected virtual void Awake()
-    {
-        anim = GetComponent<MobAnimator>();
-        map = GetComponent<MapUtil>();
-    }
-
-    protected virtual void Start()
-    {
-        OnCompleted.Subscribe(_ => DispatchCommand()).AddTo(this);
-    }
 
     public virtual void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
 
@@ -74,10 +53,7 @@ public abstract class MobCommander : MonoBehaviour
     /// <param name="dispatch">Dispatch Command immediately if true. TODO: This is not Command interaption for now.</param>
     public virtual void EnqueueCommand(Command cmd, bool dispatch = false)
     {
-        if (cmd == null) return;
-
         cmdQueue.Enqueue(cmd);
-        onValidateInput.OnNext(false);
 
         if (dispatch)
         {
@@ -95,12 +71,24 @@ public abstract class MobCommander : MonoBehaviour
         {
             currentCommand = cmdQueue.Dequeue();
 
-            currentCommand.Execute();
+            Subscribe(currentCommand.Execute());
             return true;
         }
 
         currentCommand = null;
         return false;
+    }
+
+    protected virtual void Subscribe(IObservable<bool> executionObservable)
+    {
+        if (executionObservable == null) return;
+
+        execDisposable =
+            executionObservable.Subscribe(
+                isTriggerOnly => onValidateInput.OnNext(isTriggerOnly),
+                () => DispatchCommand()
+            )
+            .AddTo(targetObject);
     }
 
     /// <summary>
@@ -117,6 +105,13 @@ public abstract class MobCommander : MonoBehaviour
     public virtual void ClearAll()
     {
         cmdQueue.Clear();
+        Cancel();
+    }
+    public virtual void Cancel()
+    {
         currentCommand?.Cancel();
+        execDisposable?.Dispose();
+        onValidateInput.OnNext(false);
+        DispatchCommand();
     }
 }

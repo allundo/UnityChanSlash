@@ -1,8 +1,8 @@
 public abstract class ShieldCommand : Command
 {
-    protected GuardState guardState;
+    protected GuardStateTemp guardState;
 
-    public ShieldCommand(ShieldCommander commander, float duration, GuardState guardState) : base(commander, duration)
+    public ShieldCommand(CommandTarget target, GuardStateTemp guardState, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
         this.guardState = guardState;
     }
@@ -10,28 +10,20 @@ public abstract class ShieldCommand : Command
 
 public class GuardCommand : ShieldCommand
 {
-    public GuardCommand(ShieldCommander commander, float duration, GuardState guardState) : base(commander, duration, guardState)
+    public GuardCommand(CommandTarget target, GuardStateTemp guardState, float duration) : base(target, guardState, duration)
     { }
 
-    public override void Execute()
+    protected override void Action()
     {
         guardState.SetManualGuard(true);
-
-        SetValidateTimer();
-        SetDispatchFinal(() => guardState.SetManualGuard(false));
+        SetOnCompleted(() => guardState.SetManualGuard(false));
     }
 }
 
 public class ShieldOnCommand : ShieldCommand
 {
-    public ShieldOnCommand(ShieldCommander commander, float duration, GuardState guardState) : base(commander, duration, guardState)
+    public ShieldOnCommand(CommandTarget target, GuardStateTemp guardState, float duration) : base(target, guardState, duration, 0.1f)
     { }
 
-    public override void Execute()
-    {
-        (anim as ShieldAnimator).shield.Fire();
-
-        SetValidateTimer(0.1f);
-        SetDispatchFinal();
-    }
+    protected override void Action() => (anim as ShieldAnimator).shield.Fire();
 }

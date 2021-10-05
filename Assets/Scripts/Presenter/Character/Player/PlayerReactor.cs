@@ -1,11 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerCommander))]
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
 public class PlayerReactor : MobReactor
 {
-    protected GuardState guardState => playerInput.guardState;
+    protected GuardStateTemp guardState => playerInput.guardState;
     protected PlayerInput playerInput;
 
     protected override void Awake()

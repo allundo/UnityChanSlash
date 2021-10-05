@@ -61,7 +61,21 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         cover.FadeIn(1.5f, 0.5f, false).Play();
         input.EnqueueDropFloor();
-        input.EnqueueStartMessage();
+        input.EnqueueStartMessage(
+            new MessageData
+            {
+                sentences = new string[]
+                {
+                    "[仮] (ここに開幕の説明が入ります)",
+                    "[仮] ・・・メタすぎる！"
+                },
+                faces = new FaceID[]
+                {
+                    FaceID.DISATTRACT,
+                    FaceID.ANGRY
+                }
+            }
+        );
     }
 
     public void Restart()
@@ -69,7 +83,21 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         placeEnemyGenerator.Place(worldMap);
 
         cover.FadeIn(1.0f, 0, false).Play();
-        input.EnqueueRestartMessage();
+        input.EnqueueRestartMessage(
+            new MessageData
+            {
+                sentences = new string[]
+                {
+                        "[仮] ・・・という夢だったのさ",
+                        "[仮] なんも解決してないんだけどねっ！",
+                },
+                faces = new FaceID[]
+                {
+                        FaceID.SMILE,
+                        FaceID.ANGRY
+                }
+            }
+        );
     }
 
     public void DebugStart()

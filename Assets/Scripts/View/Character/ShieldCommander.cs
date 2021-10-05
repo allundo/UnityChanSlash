@@ -1,9 +1,8 @@
-using UnityEngine;
 
-[RequireComponent(typeof(ShieldAnimator))]
-public abstract class ShieldCommander : MobCommander
+public class ShieldCommander : MobCommander
 {
+    public ShieldCommander(CommandTarget target) : base(target) { }
+
     public bool IsGuard => currentCommand is ShieldCommand;
     public bool IsFightValid => IsIdling || IsGuard;
-
 }

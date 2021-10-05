@@ -39,6 +39,8 @@ public class MapUtil : MonoBehaviour
         if (isOnCharacter) SetOnCharactor();
     }
 
+    public Vector3 WorldPos(Pos pos) => map.WorldPos(pos);
+
     public virtual void TurnLeft()
     {
         dir = dir.Left;
@@ -54,11 +56,11 @@ public class MapUtil : MonoBehaviour
     public Vector3 GetRightVector(int distance = 1) => Quaternion.Euler(0, 90, 0) * dir.LookAt * TILE_UNIT * distance;
     public Vector3 GetLeftVector(int distance = 1) => Quaternion.Euler(0, -90, 0) * dir.LookAt * TILE_UNIT * distance;
 
-    public ITile ForwardTile => map.GetTile(dir.GetForward(onTilePos));
-    public ITile BackwardTile => map.GetTile(dir.GetBackward(onTilePos));
-    public ITile RightTile => map.GetTile(dir.GetRight(onTilePos));
-    public ITile LeftTile => map.GetTile(dir.GetLeft(onTilePos));
-    public ITile JumpTile => map.GetTile(dir.GetForward(dir.GetForward(onTilePos)));
+    public ITile ForwardTile => map.GetTile(GetForward);
+    public ITile BackwardTile => map.GetTile(GetBackward);
+    public ITile RightTile => map.GetTile(GetRight);
+    public ITile LeftTile => map.GetTile(GetLeft);
+    public ITile JumpTile => map.GetTile(GetJump);
 
     public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharactorOn;
     public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
@@ -70,13 +72,14 @@ public class MapUtil : MonoBehaviour
     public Pos GetLeft => dir.GetLeft(onTilePos);
     public Pos GetRight => dir.GetRight(onTilePos);
     public Pos GetBackward => dir.GetBackward(onTilePos);
+    public Pos GetJump => dir.GetForward(dir.GetForward(onTilePos));
 
     public virtual bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos));
     public bool IsForwardLeapable => IsLeapable(dir.GetForward(onTilePos));
     public virtual bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos));
     public virtual bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos));
     public virtual bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
-    public virtual bool IsJumpable => IsForwardLeapable && IsMovable(dir.GetForward(dir.GetForward(onTilePos)));
+    public virtual bool IsJumpable => IsForwardLeapable && IsMovable(GetJump);
 
     public static bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
 
@@ -106,22 +109,26 @@ public class MapUtil : MonoBehaviour
     /// <summary>
     /// Set IsCharactorOn flag TRUE to the Tile currently on
     /// </summary>
-    public void SetOnCharactor() { SetOnCharactor(tf.position); }
+    /// <returns>destPos</returns>
+    public Pos SetOnCharactor() => SetOnCharactor(tf.position);
 
     /// <summary>
     /// Set IsCharactorOn flag TRUE to the Tile specified by Vector3 position
     /// </summary>
-    /// <param name="pos">Vector3 Tile position</param>
-    public void SetOnCharactor(Vector3 pos) { SetOnCharactor(map.MapPos(pos)); }
+    /// <param name="destPos">Vector3 position of destination Tile</param>
+    /// <returns>destPos</returns>
+    public Pos SetOnCharactor(Vector3 destPos) => SetOnCharactor(map.MapPos(destPos));
 
     /// <summary>
     /// Set IsCharactorOn flag TRUE to the Tile specified by Pos unit
     /// </summary>
-    /// <param name="pos">Pos unit Tile position</param>
-    public void SetOnCharactor(Pos pos)
+    /// <param name="destPos">Tile map position of destination</param>
+    /// <returns>destPos</returns>
+    public Pos SetOnCharactor(Pos destPos)
     {
-        map.GetTile(pos).OnCharacter = status;
-        onTilePos = pos;
+        map.GetTile(destPos).OnCharacter = status;
+        onTilePos = destPos;
+        return destPos;
     }
 
     /// <summary>
@@ -143,4 +150,14 @@ public class MapUtil : MonoBehaviour
     {
         map.GetTile(pos).OnCharacter = null;
     }
+
+    /// <summary>
+    /// Apply ResetOnCharacter at current Tile and SetOnCharacter to the dest Pos.
+    /// </summary>
+    public Pos MoveOnCharactor(Pos destPos)
+    {
+        ResetOnCharactor(onTilePos);
+        return SetOnCharactor(destPos);
+    }
+
 }
