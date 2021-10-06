@@ -31,11 +31,16 @@ public abstract class PlayerCommand : Command
         messageController = target.messageController;
     }
 
-    public override IObservable<bool> Execute()
+    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
-        if (triggerInvalidDuration >= invalidDuration) return base.Execute();
+        Action();
+        return AddTriggerValidation(execObservable);
+    }
 
-        return base.Execute()?.Merge(DOTweenTimer(triggerInvalidDuration, true));
+    protected IObservable<bool> AddTriggerValidation(IObservable<bool> execObservable)
+    {
+        if (triggerInvalidDuration >= invalidDuration) return execObservable;
+        return execObservable.Merge(DOTweenTimer(triggerInvalidDuration, true));
     }
 
     protected void SetUIInvisible()
@@ -110,7 +115,7 @@ public abstract class PlayerMove : PlayerCommand
                 })
                 .Play();
 
-        return execObservable;
+        return AddTriggerValidation(execObservable);
     }
 }
 
