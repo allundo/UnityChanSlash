@@ -105,6 +105,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Debug.Log("DEBUG MODE");
         debugEnemyGenerator.gameObject.SetActive(true);
         cover.SetAlpha(0f);
+        input.SetInputVisible(true);
     }
 
     private void ResetOrientation(DeviceOrientation orientation)

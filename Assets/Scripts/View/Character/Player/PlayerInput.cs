@@ -44,7 +44,7 @@ public class PlayerInput : ShieldInput
     /// <summary>
     /// Visible flag of all input UIs.
     /// </summary>
-    protected bool isInputVisible = true;
+    protected bool isInputVisible = false;
 
     // Reserved Command input applied by other classes.
     // FIXME: need to implement game events handling system.
@@ -66,6 +66,8 @@ public class PlayerInput : ShieldInput
         InitFightInput();
         InitHandleInput();
         InitMoveInput();
+
+        SetInputVisible(isInputVisible);
     }
 
     protected override void Subscribe()

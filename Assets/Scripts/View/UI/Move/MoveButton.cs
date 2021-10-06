@@ -25,7 +25,7 @@ public class MoveButton : FadeEnable
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, maxAlpha);
+        fade = new FadeTween(gameObject, maxAlpha, true);
         ui = new UITween(gameObject);
 
         // BUG: Initialize on awake in case sizeDelta is set to zero at scene transition

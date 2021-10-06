@@ -38,6 +38,14 @@ public abstract class PlayerCommand : Command
         return base.Execute()?.Merge(DOTweenTimer(triggerInvalidDuration, true));
     }
 
+    protected void SetUIInvisible()
+    {
+        Action<bool> Visible = playerTarget.onUIVisible.OnNext;
+
+        Visible(false);
+        onCompleted.Add(() => Visible(true));
+    }
+
     protected void EnterStair(ITile destTile)
     {
         if (!(destTile is Stair)) return;
@@ -330,12 +338,9 @@ public class PlayerDropFloor : PlayerCommand
 
     protected override void Action()
     {
-        playerTarget.onUIVisible.OnNext(false);
+        SetUIInvisible();
         playerAnim.dropFloor.Fire();
-
-        playingTween = tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f)
-            .OnComplete(() => playerTarget.onUIVisible.OnNext(true))
-            .Play();
+        playingTween = tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f).Play();
     }
 }
 
@@ -352,6 +357,7 @@ public class PlayerMessage : PlayerAction
 
     protected override void Action()
     {
+        SetUIInvisible();
         messageController.InputMessageData(data);
     }
 }
