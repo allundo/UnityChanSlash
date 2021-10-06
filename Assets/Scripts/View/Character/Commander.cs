@@ -79,12 +79,12 @@ public class Commander
         return false;
     }
 
-    protected void Subscribe(IObservable<bool> executionObservable)
+    protected void Subscribe(IObservable<bool> execObservable)
     {
-        if (executionObservable == null) return;
+        if (execObservable == null) return;
 
         execDisposable =
-            executionObservable.Subscribe(
+            execObservable.Subscribe(
                 isTriggerOnly => onValidateInput.OnNext(isTriggerOnly),
                 () => DispatchCommand()
             )
