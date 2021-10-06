@@ -92,12 +92,10 @@ public class PlayerInput : ShieldInput
     /// <param name="cmd">Command to input</param>
     public override void InputCommand(Command cmd)
     {
-        isTriggerValid = false;
-
-        if (!isCommandValid || cmd == null) return;
+        if (!isTriggerValid || !isCommandValid || cmd == null) return;
 
         commander.EnqueueCommand(cmd);
-        isCommandValid = false;
+        isCommandValid = isTriggerValid = false;
     }
 
     /// <summary>
@@ -108,7 +106,25 @@ public class PlayerInput : ShieldInput
         if (!isTriggerValid || cmd == null) return;
 
         commander.EnqueueCommand(cmd);
-        isCommandValid = isTriggerValid = false;
+        isCommandValid = !isCommandValid;
+        isTriggerValid = !isTriggerValid;
+    }
+
+    /// <summary>
+    /// Set validation of both of Normal and Trigger input.
+    /// </summary>
+    /// <param name="isTriggerOnly">Start Trigger only validated mode if true</param>
+    public override void ValidateInput(bool isTriggerOnly = false)
+    {
+        // Is Trigger input done on Trigger only validated mode?
+        if (!isTriggerValid && isCommandValid)
+        {
+            isCommandValid = false;
+            return;
+        }
+
+        isTriggerValid = true;
+        isCommandValid = !isTriggerOnly;
     }
 
     /// <summary>
@@ -302,18 +318,5 @@ public class PlayerInput : ShieldInput
         guardUI.EnterObservable
             .Subscribe(_ => InputTrigger(guard))
             .AddTo(this);
-    }
-
-    /// <summary>
-    /// Set validation of both of Normal and Trigger input.
-    /// </summary>
-    /// <param name="isTriggerOnly">Validates only Trigger input if true</param>
-    public override void ValidateInput(bool isTriggerOnly = false)
-    {
-        isTriggerValid = true;
-
-        if (isTriggerOnly) return;
-
-        isCommandValid = true;
     }
 }
