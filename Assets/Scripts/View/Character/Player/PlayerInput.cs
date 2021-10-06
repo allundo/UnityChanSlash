@@ -32,6 +32,7 @@ public class PlayerInput : ShieldInput
     [SerializeField] protected PointerEnterUI guardUI = default;
 
     protected PlayerCommandTarget playerTarget;
+    protected bool IsAttack => commander.currentCommand is PlayerAttack;
 
     /// <summary>
     /// Stops Trigger type input if false.
@@ -123,16 +124,13 @@ public class PlayerInput : ShieldInput
     {
         if (!isInputVisible) return;
 
-        var playerCommander = commander as PlayerCommander;
-
         ITile forwardTile = map.ForwardTile;
 
         // Is face to enemy
         if (forwardTile.IsCharacterOn)
         {
-            bool isFightValid = playerCommander.IsFightValid;
-            if (isFightValid) guardState.SetEnemyDetected(true);
-            fightCircle.SetActive(isFightValid || playerCommander.IsAttack, forwardTile.OnCharacter);
+            if (IsFightValid) guardState.SetEnemyDetected(true);
+            fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.OnCharacter);
         }
         else
         {
@@ -176,7 +174,7 @@ public class PlayerInput : ShieldInput
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);
 
-        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || playerCommander.IsGuard;
+        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsGuard;
 
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);

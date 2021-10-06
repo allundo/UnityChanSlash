@@ -2,12 +2,8 @@ public abstract class ShieldInput : MobInput
 {
     public GuardStateTemp guardState { get; protected set; }
 
-    protected override void Awake()
-    {
-        target = GetComponent<CommandTarget>();
-        map = GetComponent<MapUtil>();
-        commander = new ShieldCommander(target);
-    }
+    protected bool IsGuard => commander.currentCommand is GuardCommand;
+    public override bool IsFightValid => IsIdling || IsGuard;
 
     protected override void SetCommands()
     {

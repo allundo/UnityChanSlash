@@ -7,9 +7,9 @@ using System.Collections.Generic;
 /// Handles Command queuing and dispatching. <br />
 /// Keeps attached component data used by Command execution.
 /// </summary>
-public class MobCommander
+public class Commander
 {
-    public MobCommander(CommandTarget commandTarget)
+    public Commander(CommandTarget commandTarget)
     {
         targetObject = commandTarget.gameObject;
     }
@@ -44,14 +44,14 @@ public class MobCommander
     public ISubject<bool> onValidateInput { get; protected set; } = new Subject<bool>();
     public IObservable<bool> OnValidateInput => onValidateInput;
 
-    public virtual void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
+    public void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
 
     /// <summary>
     /// Enqueue a Command and invalidate following input.
     /// </summary>
     /// <param name="cmd">Command to enqueue</param>
     /// <param name="dispatch">Dispatch Command immediately if true. TODO: This is not Command interaption for now.</param>
-    public virtual void EnqueueCommand(Command cmd, bool dispatch = false)
+    public void EnqueueCommand(Command cmd, bool dispatch = false)
     {
         cmdQueue.Enqueue(cmd);
 
@@ -65,7 +65,7 @@ public class MobCommander
     /// Dequeue a Command and execute it.
     /// </summary>
     /// <returns>true if Command is present and executed</returns>
-    protected virtual bool DispatchCommand()
+    protected bool DispatchCommand()
     {
         if (cmdQueue.Count > 0)
         {
@@ -79,7 +79,7 @@ public class MobCommander
         return false;
     }
 
-    protected virtual void Subscribe(IObservable<bool> executionObservable)
+    protected void Subscribe(IObservable<bool> executionObservable)
     {
         if (executionObservable == null) return;
 
@@ -94,7 +94,7 @@ public class MobCommander
     /// <summary>
     /// Clean up process on inactivation.
     /// </summary>
-    public virtual void Inactivate()
+    public void Inactivate()
     {
         currentCommand = null;
     }
@@ -102,12 +102,12 @@ public class MobCommander
     /// <summary>
     /// Clear all Command queue and cancel current executing Command.
     /// </summary>
-    public virtual void ClearAll()
+    public void ClearAll()
     {
         cmdQueue.Clear();
         Cancel();
     }
-    public virtual void Cancel()
+    public void Cancel()
     {
         currentCommand?.Cancel();
         execDisposable?.Dispose();

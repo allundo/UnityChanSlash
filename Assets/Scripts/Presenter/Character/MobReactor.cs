@@ -17,7 +17,7 @@ public class MobReactor : MonoBehaviour
     protected MobStatus status;
     protected MobEffect effect;
     protected MobInput input;
-    protected MobCommander commander;
+    protected Commander commander;
 
     protected virtual void Awake()
     {

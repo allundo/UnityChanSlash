@@ -4,7 +4,6 @@ using DG.Tweening;
 public class GuardStateTemp
 {
     private ShieldInput input;
-    private ShieldCommander commander;
     private ShieldAnimator anim;
     private MapUtil map;
     private Command shieldOn;
@@ -41,7 +40,7 @@ public class GuardStateTemp
         }
     }
 
-    public bool IsShieldOn(IDirection attackDir) => commander.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
+    public bool IsShieldOn(IDirection attackDir) => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
     public GuardStateTemp(ShieldInput input, float duration = 0.42f, float timeToReady = 0.16f)
     {
@@ -60,8 +59,6 @@ public class GuardStateTemp
             .Select(_ => isManualGuard || isAutoGuard)
             .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
             .AddTo(target);
-
-        commander = input.commander as ShieldCommander;
     }
 
     public void SetShield() => input.ForceEnqueue(shieldOn, true);

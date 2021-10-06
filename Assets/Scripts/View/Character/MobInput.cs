@@ -11,7 +11,7 @@ public abstract class MobInput : MonoBehaviour
     /// <summary>
     /// Target Commander to input Command.
     /// </summary>
-    public MobCommander commander { get; protected set; }
+    public Commander commander { get; protected set; }
     public CommandTarget target { get; protected set; }
 
     /// <summary>
@@ -22,6 +22,9 @@ public abstract class MobInput : MonoBehaviour
     /// </summary>
     public bool isCommandValid { get; protected set; } = true;
 
+    protected bool IsIdling => commander.IsIdling;
+    public virtual bool IsFightValid => IsIdling;
+
     protected Command die = null;
 
     protected MapUtil map;
@@ -30,7 +33,7 @@ public abstract class MobInput : MonoBehaviour
     {
         target = GetComponent<CommandTarget>();
         map = GetComponent<MapUtil>();
-        commander = new MobCommander(target);
+        commander = new Commander(target);
     }
 
     protected virtual void Start()

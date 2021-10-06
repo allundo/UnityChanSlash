@@ -1,19 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MobCommander))]
 public class EnemyAIInput : MobInput
 {
     private Command turnL;
     private Command turnR;
     private Command moveForward;
     private Command attack;
-
-    protected override void Awake()
-    {
-        target = GetComponent<CommandTarget>();
-        map = GetComponent<MapUtil>();
-        commander = new MobCommander(target);
-    }
 
     private bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
