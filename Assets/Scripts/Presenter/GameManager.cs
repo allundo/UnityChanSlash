@@ -130,7 +130,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
 
-    public void EnterStair(bool isUpStair) => Debug.Log("Stair" + (isUpStair ? "UP" : "DOWN"));
+    public void EnterStair(bool isUpStair)
+    {
+        Debug.Log("Stair" + (isUpStair ? "UP" : "DOWN"));
+        Pause();
+    }
 
     // FIXME
     public Pos GetPlayerInitPos => worldMap.InitPos;

@@ -72,6 +72,7 @@ public class PlayerInput : ShieldInput
     {
         commander.onValidateInput.Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly)).AddTo(this);
         playerTarget.OnUIVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
+        playerTarget.OnClearAll.Subscribe(_ => commander.ClearAll()).AddTo(this);
     }
 
     protected override void Update()

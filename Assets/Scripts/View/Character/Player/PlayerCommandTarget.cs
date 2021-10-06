@@ -37,7 +37,7 @@ public class PlayerCommandTarget : CommandTarget
     public HidePlateHandler hidePlateHandler { get; protected set; }
 
     public ISubject<Unit> onClearAll { get; protected set; } = new Subject<Unit>();
-    protected IObservable<Unit> OnClearAll => onClearAll;
+    public IObservable<Unit> OnClearAll => onClearAll;
 
     public ISubject<bool> onUIVisible { get; protected set; } = new Subject<bool>();
     public IObservable<bool> OnUIVisible => onUIVisible;
