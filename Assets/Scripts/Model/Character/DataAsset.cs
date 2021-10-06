@@ -1,12 +1,6 @@
 using UnityEngine;
 using System;
 
-[CreateAssetMenu(fileName = "MobData", menuName = "ScriptableObjects/CreateMobParamAsset")]
-public class MobData : DataAsset<MobParam> { }
-
-[CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/CreatePlayerParamAsset")]
-public class PlayerData : MobData { }
-
 public class DataAsset<T> : ScriptableObject
 {
     [SerializeField] protected T[] setParams;
