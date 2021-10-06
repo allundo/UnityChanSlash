@@ -39,7 +39,7 @@ public class HandleUI : MonoBehaviour
         if (rightArrow != null) flick.DragRight.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDrag(ratio, rightArrow)).AddTo(this);
         if (leftArrow != null) flick.DragLeft.SkipLatestValueOnSubscribe().Subscribe(ratio => OnDrag(ratio, leftArrow)).AddTo(this);
 
-        flick.ReleaseSubject.Subscribe(_ => OnRelease()).AddTo(this);
+        flick.IsReleased.Subscribe(_ => OnRelease()).AddTo(this);
     }
 
     private void InstantiateAllPrefabs()

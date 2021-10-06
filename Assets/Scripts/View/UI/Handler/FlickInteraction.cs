@@ -44,7 +44,6 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     public IObservable<Unit> LeftSubject => left.FlickSubject;
 
     public IObservable<Unit> FlickSubject { get; protected set; }
-    public IObservable<Unit> ReleaseSubject { get; protected set; }
 
     public IReadOnlyReactiveProperty<float> DragUp => up.DragRatioRP;
     public IReadOnlyReactiveProperty<float> DragDown => down.DragRatioRP;
@@ -55,6 +54,9 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
 
     private ISubject<Unit> isPressed = new Subject<Unit>();
     public IObservable<Unit> IsPressed => isPressed;
+
+    private ISubject<Unit> isReleased = new Subject<Unit>();
+    public IObservable<Unit> IsReleased => isReleased;
 
     private Vector2 pressPos = Vector2.zero;
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
@@ -72,7 +74,6 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         defaultDir = flickDirections.Where(x => x?.sprite == image.sprite).FirstOrDefault();
 
         FlickSubject = Merge(flick => flick.FlickSubject);
-        ReleaseSubject = Merge(flick => flick.ReleaseSubject);
         Drag = Merge(flick => flick.Drag);
     }
 
@@ -123,6 +124,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     public void Release(Vector2 dragVector, float duration = 0.2f)
     {
         currentDir?.Release(dragVector, duration);
+        isReleased.OnNext(Unit.Default);
     }
 
     public void Cancel(float duration = 0.2f)
@@ -247,9 +249,6 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         protected ISubject<Unit> flickSubject = new Subject<Unit>();
         public IObservable<Unit> FlickSubject => flickSubject;
 
-        protected ISubject<Unit> releaseSubject = new Subject<Unit>();
-        public IObservable<Unit> ReleaseSubject => releaseSubject;
-
         protected FlickDirection(FlickInteraction flick, Sprite sprite, string text, float limit)
         {
             this.flick = flick;
@@ -272,11 +271,6 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         private void FlickOnNext()
         {
             flickSubject.OnNext(Unit.Default);
-        }
-
-        private void ReleaseOnNext()
-        {
-            releaseSubject.OnNext(Unit.Default);
         }
 
         public void SetSprite() => fade.SetSprite(sprite);
@@ -309,8 +303,6 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
 
         public void Release(Vector2 dragVector, float duration = 0.2f)
         {
-            ReleaseOnNext();
-
             if (DragRatio(dragVector) < 0.5f)
             {
                 flick.Cancel(duration);

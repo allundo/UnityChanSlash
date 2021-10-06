@@ -38,8 +38,8 @@ public class BaseHandler : MonoBehaviour
         flickL.IsPressed.Subscribe(_ => SetPressActive(handleRUI, true)).AddTo(this);
         flickR.IsPressed.Subscribe(_ => SetPressActive(handleLUI, true)).AddTo(this);
 
-        flickL.ReleaseSubject.Subscribe(_ => SetPressActive(handleRUI, false)).AddTo(this);
-        flickR.ReleaseSubject.Subscribe(_ => SetPressActive(handleLUI, false)).AddTo(this);
+        flickL.IsReleased.Subscribe(_ => SetPressActive(handleRUI, false)).AddTo(this);
+        flickR.IsReleased.Subscribe(_ => SetPressActive(handleLUI, false)).AddTo(this);
 
         gameObject.SetActive(false);
         SetActiveButtons(false);

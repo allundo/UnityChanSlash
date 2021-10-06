@@ -34,7 +34,7 @@ public class HandleIcon : FadeEnable
             .AddTo(this);
 
         Observable
-            .Merge(flicks.Select(flick => flick.ReleaseSubject))
+            .Merge(flicks.Select(flick => flick.IsReleased))
             .Subscribe(_ => Disable())
             .AddTo(this);
     }
