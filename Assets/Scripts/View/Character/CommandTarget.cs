@@ -1,11 +1,9 @@
 using UnityEngine;
 using System;
 using UniRx;
-using System.Collections.Generic;
 
 /// <summary>
-/// Handles Command queuing and dispatching. <br />
-/// Keeps attached component data used by Command execution.
+/// Keeps attached component used by Command execution.
 /// </summary>
 [RequireComponent(typeof(MobAnimator))]
 [RequireComponent(typeof(MapUtil))]

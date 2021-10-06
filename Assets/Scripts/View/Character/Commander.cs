@@ -4,8 +4,7 @@ using UniRx;
 using System.Collections.Generic;
 
 /// <summary>
-/// Handles Command queuing and dispatching. <br />
-/// Keeps attached component data used by Command execution.
+/// Handles Command queuing and dispatching.
 /// </summary>
 public class Commander
 {
@@ -14,6 +13,9 @@ public class Commander
         targetObject = commandTarget.gameObject;
     }
 
+    /// <summary>
+    /// Used only for detecting destraction of command target object
+    /// </summary>
     protected GameObject targetObject;
 
     public bool IsIdling => currentCommand == null;
