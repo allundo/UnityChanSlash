@@ -152,6 +152,8 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
 
     public void Cancel(float duration = 0.2f)
     {
+        if (!isActive) return;
+
         ui.MoveBack(duration).Play();
         ui.Resize(0.5f, duration).Play();
         FadeOutActive(duration).Play();
