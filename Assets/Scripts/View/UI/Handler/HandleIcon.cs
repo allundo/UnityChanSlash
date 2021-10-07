@@ -12,6 +12,8 @@ public class HandleIcon : FadeEnable
 
     protected UITween ui;
     protected Tween prevTween = null;
+    protected Tween applyTween = null;
+
     private FlickInteraction.FlickDirection currentFlick = null;
 
     protected override void Awake()
@@ -98,16 +100,28 @@ public class HandleIcon : FadeEnable
 
     private Tween Apply(float duration = 0.3f)
     {
-        return DOTween.Sequence()
+        applyTween = DOTween.Sequence()
             .Join(base.FadeOut(duration, null, null, false))
             .Join(ui.Resize(4f, duration))
             .Join(text.Apply());
+
+        return applyTween;
     }
 
     private Tween PlayTween(Tween tween)
     {
-        prevTween?.Kill();
-        prevTween = tween.Play();
-        return prevTween;
+        // Don't cancel Apply Tween
+        if (prevTween == applyTween)
+        {
+            tween.Kill();
+            prevTween = tween;
+        }
+        else
+        {
+            prevTween?.Kill();
+            prevTween = tween.Play();
+        }
+
+        return tween;
     }
 }
