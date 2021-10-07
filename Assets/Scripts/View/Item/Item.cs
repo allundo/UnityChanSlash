@@ -1,6 +1,5 @@
 using UnityEngine;
 using DG.Tweening;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Renderer))]
 public class Item : SpawnObject<Item>

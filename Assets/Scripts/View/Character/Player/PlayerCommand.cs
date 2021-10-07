@@ -9,7 +9,7 @@ public abstract class PlayerCommand : Command
     protected ThirdPersonCamera mainCamera;
     protected HidePlateHandler hidePlateHandler;
     protected ItemGenerator itemGenerator;
-    protected ItemIconGenerator itemIconGenerator;
+    protected ItemInventory itemInventory;
     protected MessageController messageController;
 
     protected Tween validateTrigger;
@@ -27,7 +27,7 @@ public abstract class PlayerCommand : Command
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
         itemGenerator = target.itemGenerator;
-        itemIconGenerator = target.itemIconGenerator;
+        itemInventory = target.itemInventory;
         messageController = target.messageController;
     }
 
@@ -266,7 +266,7 @@ public class PlayerGetItem : PlayerAction
         ITile tile = map.ForwardTile;
         Item item = tile.PickItem();
 
-        if (itemIconGenerator.PickUp(item))
+        if (itemInventory.PickUp(item))
         {
             playerAnim.getItem.Fire();
         }

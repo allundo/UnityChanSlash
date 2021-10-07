@@ -14,10 +14,17 @@ public class ItemIcon : UISymbol
 
     public ItemIcon SetPos(Vector3 pos, float duration = 0.5f)
     {
+
+        // Set localPosition to -parentPos is equivalent to set position to screen center
         rectTransform.localPosition = new Vector2(-parentPos.x, -parentPos.y - 300f);
+
+        // Moving animation from front Tile to item inventory
         rectTransform.DOAnchorPos(pos, duration).SetEase(Ease.OutExpo).Play();
         return this;
     }
+
+    public ItemIcon CopyInfo(Item item)
+        => SetItemInfo(item.itemInfo).SetMaterial(item.material);
 
     public ItemIcon SetItemInfo(ItemInfo info)
     {
