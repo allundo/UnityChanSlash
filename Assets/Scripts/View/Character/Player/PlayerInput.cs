@@ -196,7 +196,7 @@ public class PlayerInput : ShieldInput
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);
 
-        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsGuard;
+        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield;
 
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);

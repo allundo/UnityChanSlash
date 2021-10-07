@@ -2,8 +2,8 @@ public abstract class ShieldInput : MobInput
 {
     public GuardStateTemp guardState { get; protected set; }
 
-    protected bool IsGuard => commander.currentCommand is GuardCommand;
-    public override bool IsFightValid => IsIdling || IsGuard;
+    protected bool IsShield => commander.currentCommand is ShieldCommand;
+    public override bool IsFightValid => IsIdling || IsShield;
 
     protected override void SetCommands()
     {
