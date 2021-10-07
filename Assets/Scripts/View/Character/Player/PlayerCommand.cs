@@ -96,6 +96,7 @@ public abstract class PlayerMove : PlayerCommand
     {
         if (!IsMovable)
         {
+            Cancel();
             return Observable.Return(false);
         }
 

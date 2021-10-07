@@ -40,6 +40,7 @@ public abstract class EnemyMove : EnemyCommand
     {
         if (!IsMovable)
         {
+            Cancel();
             return Observable.Return(false);
         }
 

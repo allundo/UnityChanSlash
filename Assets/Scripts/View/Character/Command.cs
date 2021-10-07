@@ -40,6 +40,7 @@ public abstract class Command
     {
         playingTween?.Kill();
         onCompleteDisposable?.Dispose();
+        onCompleted.Clear();
     }
 
     public virtual IObservable<bool> Execute()
