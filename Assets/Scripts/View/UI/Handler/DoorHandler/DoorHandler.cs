@@ -29,8 +29,8 @@ public class DoorHandler : BaseHandler
     }
     protected override void Start()
     {
-        openFlick.IsPressed.Subscribe(_ => SetPressActive(null, true)).AddTo(this);
-        openFlick.IsReleased.Subscribe(_ => SetPressActive(null, false)).AddTo(this);
+        openFlick.IsPressed.Subscribe(_ => SetPressActive(true)).AddTo(this);
+        openFlick.IsReleased.Subscribe(_ => SetPressActive(false)).AddTo(this);
 
         base.Start();
     }

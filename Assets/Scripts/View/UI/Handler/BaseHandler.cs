@@ -35,21 +35,24 @@ public class BaseHandler : MonoBehaviour
 
     protected virtual void Start()
     {
-        flickL.IsPressed.Subscribe(_ => SetPressActive(handleRUI, true)).AddTo(this);
-        flickR.IsPressed.Subscribe(_ => SetPressActive(handleLUI, true)).AddTo(this);
+        flickL.IsPressed.Subscribe(_ => SetPressActive(true, handleRUI)).AddTo(this);
+        flickR.IsPressed.Subscribe(_ => SetPressActive(true, handleLUI)).AddTo(this);
 
-        flickL.IsReleased.Subscribe(_ => SetPressActive(handleRUI, false)).AddTo(this);
-        flickR.IsReleased.Subscribe(_ => SetPressActive(handleLUI, false)).AddTo(this);
+        flickL.IsReleased.Subscribe(isApplied => SetPressActive(false, handleRUI, !isApplied)).AddTo(this);
+        flickR.IsReleased.Subscribe(isApplied => SetPressActive(false, handleLUI, !isApplied)).AddTo(this);
 
         gameObject.SetActive(false);
         SetActiveButtons(false);
     }
 
-    protected void SetPressActive(HandleUI handleUI, bool isActive)
+    protected void SetPressActive(bool isActive, HandleUI otherHandleUI = null)
+        => SetPressActive(isActive, otherHandleUI, !isActive);
+
+    protected void SetPressActive(bool isActive, HandleUI otherHandleUI, bool isOtherActive)
     {
         image.raycastTarget = isActive;
         isPressed = isActive;
-        handleUI?.SetActive(!isActive);
+        otherHandleUI?.SetActive(isOtherActive);
     }
 
     protected virtual void Update()

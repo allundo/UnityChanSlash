@@ -55,8 +55,12 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     private ISubject<Unit> isPressed = new Subject<Unit>();
     public IObservable<Unit> IsPressed => isPressed;
 
-    private ISubject<Unit> isReleased = new Subject<Unit>();
-    public IObservable<Unit> IsReleased => isReleased;
+    /// <summary>
+    /// Notifies the end of dragging UI.
+    /// </summary>
+    /// <typeparam name="bool">result of drag if the flick is applied(true) or canceled(false)</typeparam>
+    private ISubject<bool> isReleased = new Subject<bool>();
+    public IObservable<bool> IsReleased => isReleased;
 
     private Vector2 pressPos = Vector2.zero;
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
@@ -142,8 +146,8 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
 
     public void Release(Vector2 dragVector, float duration = 0.2f)
     {
-        currentDir?.Release(dragVector, duration);
-        isReleased.OnNext(Unit.Default);
+        bool isApplied = currentDir?.Release(dragVector, duration) ?? false;
+        isReleased.OnNext(isApplied);
     }
 
     public void Cancel(float duration = 0.2f)
@@ -320,12 +324,16 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         private float DragRatio(float abs) => abs / limit;
         private float DragRatio(Vector2 dragVector) => DragRatio(LimitedVec(dragVector).magnitude);
 
-        public void Release(Vector2 dragVector, float duration = 0.2f)
+        /// <summary>
+        /// Applies or cancels flick according to drag distance on release draging.
+        /// </summary>
+        /// <returns>true: flick applied, false: flick canceled</returns>
+        public bool Release(Vector2 dragVector, float duration = 0.2f)
         {
             if (DragRatio(dragVector) < 0.5f)
             {
                 flick.Cancel(duration);
-                return;
+                return false;
             }
 
             DOTween.Sequence()
@@ -336,6 +344,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 .Play();
 
             FlickOnNext();
+            return true;
         }
     }
 
