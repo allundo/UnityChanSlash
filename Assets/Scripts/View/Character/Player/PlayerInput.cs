@@ -97,8 +97,9 @@ public class PlayerInput : ShieldInput
 
         if (!isTriggerValid || !isCommandValid || cmd == null) return;
 
+        isCommandValid = false;
+
         commander.EnqueueCommand(cmd);
-        isCommandValid = isTriggerValid = false;
     }
 
     /// <summary>
@@ -108,9 +109,10 @@ public class PlayerInput : ShieldInput
     {
         if (!isTriggerValid || cmd == null) return;
 
-        commander.EnqueueCommand(cmd);
         isCommandValid = !isCommandValid;
         isTriggerValid = !isTriggerValid;
+
+        commander.EnqueueCommand(cmd);
     }
 
     /// <summary>

@@ -79,8 +79,9 @@ public abstract class MobInput : MonoBehaviour
     {
         if (!isCommandValid || cmd == null) return;
 
-        commander.EnqueueCommand(cmd);
         isCommandValid = false;
+
+        commander.EnqueueCommand(cmd);
     }
 
     /// <summary>
