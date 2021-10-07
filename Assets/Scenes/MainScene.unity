@@ -39039,6 +39039,8 @@ MonoBehaviour:
   rtUI: {fileID: 1574935736902618774}
   rtLifeGauge: {fileID: 8337679455544452697}
   fightCircle: {fileID: 4719329011268037073}
+  miniMap: {fileID: 8337679454959986929}
+  rtItemList: {fileID: 528637048}
   portraitFromBottom: 720
   landscapeFromLeft: 480
   lifeGaugeFromBottom: 60
@@ -80347,6 +80349,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPointGenerator: {fileID: 4907802069983716306}
   playerSymbol: {fileID: 726251882}
+  landscapeSize: {x: 420, y: 420}
+  portraitSize: {x: 480, y: 480}
 --- !u!114 &8337679455058783588
 MonoBehaviour:
   m_ObjectHideFlags: 0

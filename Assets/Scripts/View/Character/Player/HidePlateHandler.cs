@@ -159,6 +159,7 @@ public class HidePlateHandler : MonoBehaviour
     public void Turn()
     {
         currentRotate = rotatePlateFront[mapUtil.dir];
+        miniMap.Turn(mapUtil.dir);
 
         if (currentUpdater == landscape)
         {
@@ -172,8 +173,6 @@ public class HidePlateHandler : MonoBehaviour
         currentUpdater?.ClearRange(CurrentPos);
         currentUpdater = portrait[mapUtil.dir];
         Draw();
-
-        miniMap.Turn(mapUtil.dir);
     }
 
     /// <summary>

@@ -6,6 +6,8 @@ public class MiniMap : MonoBehaviour
 {
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
     [SerializeField] private PlayerSymbol playerSymbol = default;
+    [SerializeField] private Vector2 landscapeSize = new Vector2(420f, 420f);
+    [SerializeField] private Vector2 portraitSize = new Vector2(480f, 480f);
 
     private static readonly int MINIMAP_SIZE = 15;
     private Vector2 uiTileUnit;
@@ -35,15 +37,32 @@ public class MiniMap : MonoBehaviour
         image = GetComponent<RawImage>();
         rectTransform = GetComponent<RectTransform>();
 
-        defaultSize = rectTransform.sizeDelta;
-        uiTileUnit = defaultSize / MINIMAP_SIZE;
-
         // Depth is set to 0 for current 2D map use
-        image.texture = renderTexture = new RenderTexture((int)defaultSize.x, (int)defaultSize.y, 0);
+        image.texture = renderTexture = new RenderTexture((int)portraitSize.x, (int)portraitSize.y, 0);
 
         // Use only local anchored position from parent for UI object
         enemyPointGenerator.spawnPoint = Vector3.zero;
+    }
 
+    public void ResetOrientation(DeviceOrientation orientation)
+    {
+
+        switch (orientation)
+        {
+            case DeviceOrientation.Portrait:
+                rectTransform.sizeDelta = portraitSize;
+                rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 0.5f);
+                rectTransform.anchoredPosition = new Vector2(-(portraitSize.x + 40f), portraitSize.y + 80f) * 0.5f;
+                break;
+
+            case DeviceOrientation.LandscapeRight:
+                rectTransform.sizeDelta = landscapeSize;
+                rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 1f);
+                rectTransform.anchoredPosition = new Vector2(-(landscapeSize.x + 40f), -landscapeSize.y) * 0.5f;
+                break;
+        }
+
+        uiTileUnit = rectTransform.sizeDelta / MINIMAP_SIZE;
         playerSymbol.SetSize(uiTileUnit);
     }
 
