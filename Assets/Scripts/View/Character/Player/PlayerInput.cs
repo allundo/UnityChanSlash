@@ -92,6 +92,9 @@ public class PlayerInput : ShieldInput
     /// <param name="cmd">Command to input</param>
     public override void InputCommand(Command cmd)
     {
+        bool isTriggerValid = this.isTriggerValid;
+        this.isTriggerValid = false; // Disable Trigger input UI
+
         if (!isTriggerValid || !isCommandValid || cmd == null) return;
 
         commander.EnqueueCommand(cmd);
