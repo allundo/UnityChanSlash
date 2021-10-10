@@ -1,66 +1,68 @@
 using UnityEngine;
 using System.Linq;
+using UniRx;
 
 [RequireComponent(typeof(ItemIconGenerator))]
 public class ItemInventory : MonoBehaviour
 {
+    [SerializeField] private ItemSelector selector = default;
+    [SerializeField] private ItemPanel prefabItemPanel = default;
+
     private ItemIconGenerator iconGenerator;
-    private RectTransform rectTransform;
+    private ItemIndexHandler itemIndex;
 
     private static readonly int WIDTH = 5;
     private static readonly int HEIGHT = 6;
+    private static readonly int MAX_ITEMS = WIDTH * HEIGHT;
 
-    private ItemIcon[] items = Enumerable.Repeat<ItemIcon>(null, WIDTH * HEIGHT).ToArray();
+    private ItemPanel[] panels;
 
-    private Vector2 unit;
-    private Vector2 origin;
-
-    private Vector2 UIPos(int x, int y) => origin + new Vector2(unit.x * x, -unit.y * y);
-    private Vector2 UIPos(Pos pos) => UIPos(pos.x, pos.y);
-
-    public ItemIcon GetItem(Pos pos)
-        => IsValidPos(pos) ? items[pos.x + WIDTH * pos.y] : null;
-
-    private bool IsValidPos(int x, int y)
-        => x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
-    private bool IsValidPos(Pos pos) => IsValidPos(pos.x, pos.y);
+    private ItemIconHandler iconHandler = null;
 
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-
         iconGenerator = GetComponent<ItemIconGenerator>();
         iconGenerator.Init(transform);
 
-        var defaultSize = rectTransform.sizeDelta;
-        unit = new Vector2(defaultSize.x / WIDTH, defaultSize.y / HEIGHT);
+        itemIndex = new ItemIndexHandler(GetComponent<RectTransform>(), WIDTH, HEIGHT);
 
-        // Anchor of ItemIcon is set to left top by default on prefab
-        origin = new Vector2(unit.x, -unit.y) * 0.5f;
+        panels = Enumerable
+            .Range(0, MAX_ITEMS)
+            .Select(
+                index => Instantiate(prefabItemPanel, transform, false)
+                    .SetPos(itemIndex.UIPos(index))
+                    .SetIndex(index)
+            )
+            .ToArray();
+
+        selector.transform.SetAsLastSibling(); // Bring selector UI to front
+
+        iconHandler = ItemIconHandler.New(selector, itemIndex);
+    }
+
+    void Start()
+    {
+        Observable.Merge(panels.Select(panel => panel.OnPress)).Subscribe(index => iconHandler.OnPress(index));
+        Observable.Merge(panels.Select(panel => panel.OnRelease)).Subscribe(index => iconHandler.OnRelease(index));
+        selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos));
+        selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit());
     }
 
     public bool PickUp(Item item)
     {
-        for (int j = 0; j < HEIGHT; j++)
+        for (int index = 0; index < MAX_ITEMS; index++)
         {
-            for (int i = 0; i < WIDTH; i++)
-            {
-                if (SetItem(i, j, item)) return true;
-            }
+            if (SetItem(index, item)) return true;
         }
 
         return false;
     }
 
-    private bool SetItem(int x, int y, Item item)
+    private bool SetItem(int index, Item item)
     {
-        if (!IsValidPos(x, y)) return false;
+        if (itemIndex.GetItem(index) != null) return false;
 
-        int index = x + WIDTH * y;
-
-        if (items[index] != null) return false;
-
-        items[index] = iconGenerator.Spawn(UIPos(x, y), item);
+        itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), item).SetIndex(index));
         return true;
     }
 }

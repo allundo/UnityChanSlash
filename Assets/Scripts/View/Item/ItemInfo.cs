@@ -8,4 +8,9 @@ public class ItemInfo
         this.type = type;
         this.numOfItem = numOfItem;
     }
+
+    public int UseItem()
+    {
+        return --numOfItem;
+    }
 }
