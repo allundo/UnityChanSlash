@@ -86,12 +86,6 @@ public abstract class PlayerMove : PlayerCommand
         playerAnim.rSpeed.Float = 0.0f;
     }
 
-    public override void Cancel()
-    {
-        base.Cancel();
-        var destPos = map.MoveOnCharacter(prevPos);
-    }
-
     protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
         if (!IsMovable)
@@ -165,12 +159,6 @@ public class PlayerJump : PlayerCommand
     public PlayerJump(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected Pos prevPos = new Pos();
-
-    public override void Cancel()
-    {
-        base.Cancel();
-        map.MoveOnCharacter(prevPos);
-    }
 
     protected override void Action()
     {

@@ -30,12 +30,6 @@ public abstract class EnemyMove : EnemyCommand
         enemyAnim.speed.Float = 0.0f;
     }
 
-    public override void Cancel()
-    {
-        base.Cancel();
-        map.MoveOnCharacter(prevPos);
-    }
-
     protected override IObservable<bool> Execute(IObservable<bool> execObservable)
     {
         if (!IsMovable)
