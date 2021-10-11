@@ -53,15 +53,21 @@ public abstract class Command
     protected virtual IObservable<bool> ExecObservable()
     {
         var onValidate = DOTweenTimer(invalidDuration, false);
-        var onCompleted = DOTweenTimer(duration, false);
 
-        SetOnCompleted(() => playingTween?.Complete());
+        return Observable.Merge(onValidate, ExecOnCompleted(() => playingTween?.Complete()));
+    }
 
-        onCompleteDisposable = onCompleted
+    protected virtual IObservable<bool> ExecOnCompleted(params Action[] onCompleted)
+    {
+        var onCompleteObservable = DOTweenTimer(duration, false);
+
+        onCompleted.ForEach(action => SetOnCompleted(action));
+
+        onCompleteDisposable = onCompleteObservable
             .Subscribe(_ => this.onCompleted.ForEach(action => action()))
             .AddTo(target);
 
-        return Observable.Merge(onValidate, onCompleted.IgnoreElements());
+        return onCompleteObservable.IgnoreElements();
     }
 
     /// <summary>
@@ -93,10 +99,9 @@ public abstract class Command
     }
 
     /// <summary>
-    /// Reserve onDead notification at the end of Command execution
+    /// Notify onDead event.
     /// </summary>
-    protected void NotifyOnDeadFinal()
-        => SetOnCompleted(() => target.onDead.OnNext(Unit.Default));
+    protected void NotifyOnDead() => target.onDead.OnNext(Unit.Default);
 
     protected void SetOnCompleted(Action action)
     {
@@ -113,8 +118,7 @@ public class DieCommand : Command
         map.ResetOnCharacter();
         anim.die.Fire();
 
-        NotifyOnDeadFinal();
+        return ExecOnCompleted(NotifyOnDead); // Don't validate input.
 
-        return null; // Don't validate input and dispatch next Command.
     }
 }

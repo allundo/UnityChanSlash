@@ -316,8 +316,7 @@ public class PlayerDie : PlayerCommand
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();
 
-        NotifyOnDeadFinal();
-        return null;
+        return ExecOnCompleted(NotifyOnDead);
     }
 }
 

@@ -34,12 +34,6 @@ public class Commander
     protected IDisposable execDisposable = null;
 
     /// <summary>
-    /// Notify the end of DieCommand execution.
-    /// </summary>
-    public ISubject<Unit> onDead { get; protected set; } = new Subject<Unit>();
-    public IObservable<Unit> OnDead => onDead;
-
-    /// <summary>
     /// Notification for validating input.
     /// </summary>
     /// <typeparam name="bool">true: validate, false: invalidate</typeparam>
@@ -94,14 +88,6 @@ public class Commander
     }
 
     /// <summary>
-    /// Clean up process on inactivation.
-    /// </summary>
-    public void Inactivate()
-    {
-        currentCommand = null;
-    }
-
-    /// <summary>
     /// Clear all Command queue and cancel current executing Command.
     /// </summary>
     public void ClearAll()
@@ -109,6 +95,7 @@ public class Commander
         cmdQueue.Clear();
         Cancel();
     }
+
     public void Cancel()
     {
         currentCommand?.Cancel();
