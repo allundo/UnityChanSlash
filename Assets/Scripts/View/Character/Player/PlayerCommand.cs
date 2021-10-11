@@ -31,14 +31,9 @@ public abstract class PlayerCommand : Command
         messageController = target.messageController;
     }
 
-    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
+    protected override IObservable<bool> ExecObservable()
     {
-        Action();
-        return AddTriggerValidation(execObservable);
-    }
-
-    protected IObservable<bool> AddTriggerValidation(IObservable<bool> execObservable)
-    {
+        var execObservable = base.ExecObservable();
         if (triggerInvalidDuration >= invalidDuration) return execObservable;
         return execObservable.Merge(DOTweenTimer(triggerInvalidDuration, true));
     }
@@ -86,7 +81,7 @@ public abstract class PlayerMove : PlayerCommand
         playerAnim.rSpeed.Float = 0.0f;
     }
 
-    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
+    public override IObservable<bool> Execute()
     {
         if (!IsMovable)
         {
@@ -110,7 +105,7 @@ public abstract class PlayerMove : PlayerCommand
                 })
                 .Play();
 
-        return AddTriggerValidation(execObservable);
+        return ExecObservable();
     }
 }
 
@@ -315,7 +310,7 @@ public class PlayerDie : PlayerCommand
 {
     public PlayerDie(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
+    public override IObservable<bool> Execute()
     {
         map.ResetOnCharacter();
         playerAnim.dieEx.Fire();

@@ -45,8 +45,14 @@ public abstract class Command
 
     public virtual IObservable<bool> Execute()
     {
-        var onValidate = DOTweenTimer(invalidDuration, false);
+        Action();
 
+        return ExecObservable();
+    }
+
+    protected virtual IObservable<bool> ExecObservable()
+    {
+        var onValidate = DOTweenTimer(invalidDuration, false);
         var onCompleted = DOTweenTimer(duration, false);
 
         SetOnCompleted(() => playingTween?.Complete());
@@ -55,13 +61,7 @@ public abstract class Command
             .Subscribe(_ => this.onCompleted.ForEach(action => action()))
             .AddTo(target);
 
-        return Execute(Observable.Merge(onValidate, onCompleted.IgnoreElements()));
-    }
-
-    protected virtual IObservable<bool> Execute(IObservable<bool> execObservable)
-    {
-        Action();
-        return execObservable;
+        return Observable.Merge(onValidate, onCompleted.IgnoreElements());
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class DieCommand : Command
 {
     public DieCommand(CommandTarget target, float duration) : base(target, duration) { }
 
-    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
+    public override IObservable<bool> Execute()
     {
         map.ResetOnCharacter();
         anim.die.Fire();

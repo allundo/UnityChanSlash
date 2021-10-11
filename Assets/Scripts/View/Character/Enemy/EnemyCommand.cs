@@ -30,7 +30,7 @@ public abstract class EnemyMove : EnemyCommand
         enemyAnim.speed.Float = 0.0f;
     }
 
-    protected override IObservable<bool> Execute(IObservable<bool> execObservable)
+    public override IObservable<bool> Execute()
     {
         if (!IsMovable)
         {
@@ -44,7 +44,7 @@ public abstract class EnemyMove : EnemyCommand
         SetSpeed();
         playingTween = tweenMove.GetLinearMove(map.WorldPos(destPos)).OnComplete(ResetSpeed).Play();
 
-        return execObservable;
+        return ExecObservable();
     }
 }
 
