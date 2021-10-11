@@ -75,7 +75,8 @@ public class FadeTween
 
         return DOTween.Sequence()
             .AppendCallback(() => SetAlpha(0f))
-            .Append(In(duration, delay, onPlay, onComplete));
+            .Append(In(duration, delay, onPlay, onComplete))
+            .SetUpdate(isValidOnPause);
     }
 
     private Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
@@ -100,7 +101,8 @@ public class FadeTween
 
         return DOTween.Sequence()
             .AppendCallback(() => SetAlpha(1f))
-            .Append(Out(duration, delay, onPlay, onComplete));
+            .Append(Out(duration, delay, onPlay, onComplete))
+            .SetUpdate(isValidOnPause);
     }
 
     private Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
