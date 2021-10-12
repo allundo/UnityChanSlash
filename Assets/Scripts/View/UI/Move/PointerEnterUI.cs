@@ -4,7 +4,7 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 
-public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
 {
     public IObservable<Unit> EnterObservable { get; private set; }
 
@@ -32,22 +32,6 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler,
     }
 
     public void OnPointerExit(PointerEventData eventData)
-    {
-        Execute<IPointerExitHandler>(eventData, (handler, data) => handler.OnPointerExit(data as PointerEventData));
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-#if UNITY_EDITOR
-        // BUG: Unintended pointer down (0,0) is detected on Unity Editor.
-        if (eventData.position == Vector2.zero) return;
-#endif
-
-        if (!isActive) return;
-        Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
     {
         Execute<IPointerExitHandler>(eventData, (handler, data) => handler.OnPointerExit(data as PointerEventData));
     }
