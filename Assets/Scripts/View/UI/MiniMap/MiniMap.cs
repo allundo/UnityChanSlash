@@ -52,7 +52,7 @@ public class MiniMap : MonoBehaviour
             case DeviceOrientation.Portrait:
                 rectTransform.sizeDelta = portraitSize;
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 0.5f);
-                rectTransform.anchoredPosition = new Vector2(-(portraitSize.x + 40f), portraitSize.y + 80f) * 0.5f;
+                rectTransform.anchoredPosition = new Vector2(-(portraitSize.x + 40f), portraitSize.y + 280f) * 0.5f;
                 break;
 
             case DeviceOrientation.LandscapeRight:

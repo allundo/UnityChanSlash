@@ -29,7 +29,7 @@ public class UIPosition : MonoBehaviour
                 rtLifeGauge.anchoredPosition = new Vector2(0f, lifeGaugeFromBottom - Screen.height * 0.5f);
 
                 rtItemList.anchorMin = rtItemList.anchorMax = new Vector2(0f, 0.5f);
-                rtItemList.anchoredPosition = new Vector2(itemListSize.x, itemListSize.y + 80f) * 0.5f;
+                rtItemList.anchoredPosition = new Vector2(itemListSize.x, itemListSize.y + 280f) * 0.5f;
                 break;
 
             case DeviceOrientation.LandscapeRight:
