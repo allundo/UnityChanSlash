@@ -24,21 +24,24 @@ public class ItemGenerator : Generator<Item>
 
     private Item Spawn(ItemInfo itemInfo, Pos pos, IDirection dir = null)
     {
+        if (itemInfo == null) return null;
+
         return base.Spawn(map.WorldPos(pos), dir)
             .SetItemInfo(itemInfo)
             .SetMaterial(itemMaterials[itemInfo.type]);
     }
 
-    public Item Put(ItemInfo itemInfo, Pos pos, IDirection dir = null)
+    public bool Put(ItemInfo itemInfo, Pos pos, IDirection dir = null)
     {
         var item = Spawn(itemInfo, pos, dir);
 
-        map.GetTile(pos).PutItem(item);
+        if (map.GetTile(pos).PutItem(item)) return true;
 
-        return item;
+        item.Inactivate();
+        return false;
     }
 
-    public Item Put(ItemType itemType, Pos pos, IDirection dir = null)
+    public bool Put(ItemType itemType, Pos pos, IDirection dir = null)
         => Put(new ItemInfo(itemType), pos, dir);
 
     public ItemGenerator SetPoolObject(GameObject itemPool)

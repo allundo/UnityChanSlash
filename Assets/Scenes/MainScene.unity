@@ -2365,6 +2365,7 @@ MonoBehaviour:
   - {fileID: 2323633022319743429}
   - {fileID: 2111762170}
   - {fileID: 1361193908}
+  itemInventory: {fileID: 528637049}
   text: {fileID: 801967061}
 --- !u!114 &233540041
 MonoBehaviour:
@@ -31995,6 +31996,7 @@ MonoBehaviour:
   fightCircle: {fileID: 4719329011268037073}
   doorHandler: {fileID: 1506115883}
   itemHandler: {fileID: 1266231270}
+  itemInventory: {fileID: 528637049}
   handleIcon: {fileID: 233540040}
   forwardUI: {fileID: 5335086371177449365}
   rightUI: {fileID: 7928616715383661}

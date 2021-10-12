@@ -14,6 +14,8 @@ public class ItemIndexHandler
     private Vector2 origin;
     private Vector2 inventoryOrigin;
 
+    private Vector2 uiSize;
+
     public ItemIndexHandler(RectTransform rt, int width, int height)
     {
         this.WIDTH = width;
@@ -24,16 +26,17 @@ public class ItemIndexHandler
 
         items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
 
-        var defaultSize = rt.sizeDelta;
-        unit = new Vector2(defaultSize.x / WIDTH, defaultSize.y / HEIGHT);
+        uiSize = rt.sizeDelta;
+        unit = new Vector2(uiSize.x / WIDTH, uiSize.y / HEIGHT);
 
         // Anchor of ItemIcon is set to left top by default on prefab
         origin = new Vector2(unit.x, -unit.y) * 0.5f;
 
-        inventoryOrigin = new Vector2(rt.position.x - defaultSize.x * 0.5f, rt.position.y + defaultSize.y * 0.5f);
+        inventoryOrigin = new Vector2(rt.position.x - uiSize.x * 0.5f, rt.position.y + uiSize.y * 0.5f);
     }
 
     public Vector2 ConvertToVec(Vector2 screenPos) => screenPos - inventoryOrigin;
+    public bool IsOnUI(Vector2 uiPos) => uiPos.x >= 0f && uiPos.x <= uiSize.x && uiPos.y <= 0f && uiPos.y >= -uiSize.y;
 
     public Vector2 UIPos(int index) => UIPos(Index(index));
     public Vector2 UIPos(int x, int y) => origin + new Vector2(unit.x * x, -unit.y * y);
@@ -56,13 +59,14 @@ public class ItemIndexHandler
     public ItemIcon GetItem(int index) => index < MAX_ITEMS ? items[index] : null;
 
     public bool RemoveItem(Pos index) => RemoveItem(index.x, index.y);
-    public bool RemoveItem(int x, int y)
+    public bool RemoveItem(int x, int y) => RemoveItem(GetItem(x, y));
+
+    public bool RemoveItem(ItemIcon itemIcon)
     {
-        var itemIcon = GetItem(x, y);
         if (itemIcon == null) return false;
 
         itemIcon.Inactivate();
-        items[x + WIDTH * y] = null;
+        items[itemIcon.index] = null;
         return true;
     }
 

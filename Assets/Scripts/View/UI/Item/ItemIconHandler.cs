@@ -1,4 +1,6 @@
 using UnityEngine;
+using UniRx;
+using System;
 using DG.Tweening;
 
 public class ItemIconHandler
@@ -7,6 +9,7 @@ public class ItemIconHandler
     protected static NormalMode normalMode = null;
     protected static SelectMode selectMode = null;
     protected static DragMode dragMode = null;
+    protected static PutMode putMode = null;
     private static ItemIconHandler currentMode = null;
 
     protected static int pressedIndex;
@@ -14,6 +17,16 @@ public class ItemIconHandler
 
     protected ItemSelector selector;
     protected ItemIndexHandler itemIndex;
+
+    public struct ItemPutInfo
+    {
+        public bool isPutActive;
+        public ItemIcon itemIcon;
+    }
+
+    public static IObservable<ItemIcon> OnPutItem => dragMode.onPutItem.DistinctUntilChanged();
+    public static IObservable<ItemIcon> OnPutApply => putMode.onPutApply;
+    public static bool IsPutItem => currentMode is PutMode;
 
     private ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex)
     {
@@ -32,6 +45,7 @@ public class ItemIconHandler
             currentMode = normalMode = new NormalMode(selector, itemIndex);
             selectMode = new SelectMode(selector, itemIndex);
             dragMode = new DragMode(selector, itemIndex);
+            putMode = new PutMode(selector, itemIndex);
         }
 
         return instance;
@@ -56,8 +70,12 @@ public class ItemIconHandler
 
     public void OnDrag(Vector2 screenPos)
     {
-        currentMode = dragMode.Drag(itemIndex.ConvertToVec(screenPos));
+        var vec = itemIndex.ConvertToVec(screenPos);
+        currentMode = itemIndex.IsOnUI(vec) ? currentMode.Drag(vec) : currentMode.Put();
     }
+
+    public virtual ItemIconHandler Drag(Vector2 uiPos) => dragMode.Drag(uiPos);
+    public virtual ItemIconHandler Put() => dragMode.Put();
 
     protected ItemIconHandler CleanUp()
     {
@@ -127,6 +145,8 @@ public class ItemIconHandler
 
     protected class DragMode : ItemIconHandler
     {
+        public ISubject<ItemIcon> onPutItem { get; protected set; } = new Subject<ItemIcon>();
+
         public DragMode(ItemSelector selector, ItemIndexHandler itemIndex) : base(selector, itemIndex) { }
 
         public override ItemIconHandler OnPress(int index)
@@ -156,12 +176,36 @@ public class ItemIconHandler
             return CleanUp();
         }
 
-        public ItemIconHandler Drag(Vector2 uiPos)
+        public override ItemIconHandler Drag(Vector2 uiPos)
         {
             currentSelected.SetPos(uiPos);
-            return this;
+            onPutItem.OnNext(null);
+            return dragMode;
         }
 
+        public override ItemIconHandler Put()
+        {
+            onPutItem.OnNext(currentSelected);
+            return putMode;
+        }
+    }
+
+    protected class PutMode : DragMode
+    {
+        public ISubject<ItemIcon> onPutApply { get; protected set; } = new Subject<ItemIcon>();
+
+        public PutMode(ItemSelector selector, ItemIndexHandler itemIndex) : base(selector, itemIndex) { }
+
+        public override ItemIconHandler OnSubmit()
+        {
+            // Reserve moving back to item inventory
+            currentSelected.ResetSize();
+            currentSelected.Move(itemIndex.UIPos(currentSelected.index)).Play();
+            currentSelected.SetParent(selector.transform.parent, false);
+
+            // Apply put action if possible
+            onPutApply.OnNext(currentSelected);
+            return CleanUp();
+        }
     }
 }
-

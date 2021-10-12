@@ -8,6 +8,7 @@ using System.Linq;
 public class HandleIcon : FadeEnable
 {
     [SerializeField] private FlickInteraction[] flicks = default;
+    [SerializeField] private ItemInventory itemInventory = default;
     [SerializeField] private HandleText text = default;
 
     protected UITween ui;
@@ -15,6 +16,7 @@ public class HandleIcon : FadeEnable
     protected Tween applyTween = null;
 
     private FlickInteraction.FlickDirection currentFlick = null;
+    protected ItemIcon currentItemIcon = null;
 
     protected override void Awake()
     {
@@ -39,10 +41,20 @@ public class HandleIcon : FadeEnable
             .Merge(flicks.Select(flick => flick.IsReleased))
             .Subscribe(_ => Disable())
             .AddTo(this);
+
+        itemInventory.OnPutItem
+            .Subscribe(itemIcon => SetItemIconActive(itemIcon))
+            .AddTo(this);
+
+        itemInventory.OnPutApply
+            .Subscribe(_ => PlayTween(ApplyPut()))
+            .AddTo(this);
     }
 
     public void Activate(Sprite sprite)
     {
+        if (isActive) return;
+
         fade.SetSprite(sprite);
         base.Activate();
     }
@@ -78,6 +90,7 @@ public class HandleIcon : FadeEnable
             .Join(ui.Resize(1.5f, duration))
             .Join(text.Show(flick.text));
     }
+
     private Tween Switch(FlickInteraction.FlickDirection flick, float duration = 0.4f)
     {
         return DOTween.Sequence()
@@ -95,17 +108,61 @@ public class HandleIcon : FadeEnable
             .Join(ui.Resize(1f, duration))
             .Join(text.Hide());
     }
-
-    public Tween Disable() => PlayTween(Hide());
-
     private Tween Apply(float duration = 0.3f)
     {
         applyTween = DOTween.Sequence()
             .Join(base.FadeOut(duration, null, null, false))
             .Join(ui.Resize(4f, duration))
-            .Join(text.Apply());
+            .Join(text.Apply(duration));
 
         return applyTween;
+    }
+
+    public void Disable()
+    {
+        if (!isActive) return;
+
+        PlayTween(Hide());
+    }
+
+    private void SetItemIconActive(ItemIcon itemIcon)
+    {
+        if (itemIcon != null)
+        {
+            PlayTween(ShowItemIcon(itemIcon));
+        }
+        else if (currentItemIcon != null)
+        {
+            PlayTween(ResetItemIcon(currentItemIcon));
+        }
+
+        currentItemIcon = itemIcon;
+    }
+
+    private Tween ShowItemIcon(ItemIcon itemIcon, float duration = 0.4f)
+    {
+        base.Activate();
+        return DOTween.Sequence()
+            .AppendCallback(() => fade.SetAlpha(0f))
+            .AppendCallback(() => itemIcon.SetParent(transform))
+            .Join(itemIcon.LocalMove(Vector2.zero, duration))
+            .Join(itemIcon.Resize(2f, duration))
+            .Join(text.Show("PUT"));
+    }
+
+    private Tween ResetItemIcon(ItemIcon itemIcon, float duration = 0.4f)
+    {
+        base.Inactivate();
+        return DOTween.Sequence()
+            .AppendCallback(() => itemIcon.ResetSize())
+            .AppendCallback(() => itemIcon.SetParent(itemInventory.transform, false))
+            .Join(text.Hide());
+    }
+
+    private Tween ApplyPut(float duration = 0.3f)
+    {
+        base.Inactivate();
+        return text.Apply(duration);
     }
 
     private Tween PlayTween(Tween tween)
@@ -113,7 +170,7 @@ public class HandleIcon : FadeEnable
         // Don't cancel Apply Tween
         if (prevTween == applyTween)
         {
-            tween.Kill();
+            tween?.Kill();
             prevTween = tween;
         }
         else

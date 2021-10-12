@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using UniRx;
+using System;
 
 [RequireComponent(typeof(ItemIconGenerator))]
 public class ItemInventory : MonoBehaviour
@@ -18,6 +19,9 @@ public class ItemInventory : MonoBehaviour
     private ItemPanel[] panels;
 
     private ItemIconHandler iconHandler = null;
+    public IObservable<ItemIcon> OnPutItem => ItemIconHandler.OnPutItem;
+    public IObservable<ItemIcon> OnPutApply => ItemIconHandler.OnPutApply;
+    public bool IsPutItem => ItemIconHandler.IsPutItem;
 
     void Awake()
     {
@@ -57,6 +61,8 @@ public class ItemInventory : MonoBehaviour
 
         return false;
     }
+
+    public bool Remove(ItemIcon itemIcon) => itemIndex.RemoveItem(itemIcon);
 
     private bool SetItem(int index, Item item)
     {

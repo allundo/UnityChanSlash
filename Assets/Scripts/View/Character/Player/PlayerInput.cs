@@ -15,6 +15,7 @@ public class PlayerInput : ShieldInput
     // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
     [SerializeField] protected ItemHandler itemHandler = default;
+    [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] protected HandleIcon handleIcon = default;
 
     // Moving UIs: Normal type input
@@ -187,13 +188,13 @@ public class PlayerInput : ShieldInput
             itemHandler.Inactivate();
         }
 
-        if (!isFaceToDoor && !isFaceToItem)
+        if (!isFaceToDoor && !isFaceToItem && !itemInventory.IsPutItem)
         {
             forwardUI.Resize(1f, 1f);
             handleIcon.Disable();
         }
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.isPressed && !itemHandler.isPressed);
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.isPressed && !itemHandler.isPressed && !itemInventory.IsPutItem);
         backwardUI.SetActive(map.IsBackwardMovable);
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);
@@ -257,6 +258,7 @@ public class PlayerInput : ShieldInput
         Command forward = new PlayerForward(playerTarget, 1.0f);
         Command handle = new PlayerHandle(playerTarget, 0.4f);
         Command getItem = new PlayerGetItem(playerTarget, 0.8f);
+        PlayerPutItem putItem = new PlayerPutItem(playerTarget, 0.4f);
 
         Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
             .Subscribe(_ => InputCommand(forward))
@@ -267,12 +269,16 @@ public class PlayerInput : ShieldInput
             .AddTo(this);
 
         PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
-        Observable.Merge(doorHandler.ObserveHandOn, itemHandler.ObserveHandOn)
+        Observable.Merge(doorHandler.ObserveHandOn, itemHandler.ObserveHandOn, itemInventory.OnPutItem.Select(itemIcon => itemIcon != null))
             .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
             .AddTo(this);
 
         itemHandler.ObserveGet
             .Subscribe(_ => InputTrigger(getItem))
+            .AddTo(this);
+
+        itemInventory.OnPutApply
+            .Subscribe(itemIcon => InputTrigger(putItem.SetItem(itemIcon)))
             .AddTo(this);
     }
 

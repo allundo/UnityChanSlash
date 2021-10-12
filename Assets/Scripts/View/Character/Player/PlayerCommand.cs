@@ -260,6 +260,33 @@ public class PlayerGetItem : PlayerAction
     }
 }
 
+public class PlayerPutItem : PlayerAction
+{
+    private ItemIcon itemIcon = null;
+    public PlayerPutItem(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    public PlayerPutItem SetItem(ItemIcon itemIcon)
+    {
+        this.itemIcon = itemIcon;
+        return this;
+    }
+
+    protected override void Action()
+    {
+        if (itemGenerator.Put(itemIcon.itemInfo, map.GetForward, map.dir))
+        {
+            itemInventory.Remove(itemIcon);
+            playerAnim.handle.Fire();
+        }
+        else
+        {
+            Cancel();
+        }
+        playerAnim.handOn.Bool = false;
+        itemIcon = null;
+    }
+}
+
 public abstract class PlayerAttack : PlayerAction
 {
     protected MobAttack jab;
