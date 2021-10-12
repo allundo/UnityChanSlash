@@ -10,6 +10,7 @@ public class MoveUI : MonoBehaviour
     protected Vector2 defaultSize;
 
     protected bool isActive = false;
+    private Tween buttonFade = null;
 
     protected virtual void Awake()
     {
@@ -35,8 +36,10 @@ public class MoveUI : MonoBehaviour
         if (isActive) return;
 
         isActive = true;
+
+        buttonFade?.Kill();
         gameObject.SetActive(true);
-        moveButton.FadeIn(0.2f).Play();
+        buttonFade = moveButton.FadeIn(0.2f).Play();
     }
 
     public void Inactivate(bool isFighting = false)
@@ -46,7 +49,9 @@ public class MoveUI : MonoBehaviour
         if (!isActive) return;
 
         isActive = false;
-        moveButton.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
+
+        buttonFade?.Kill();
+        buttonFade = moveButton.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
     }
 
     public void SetActive(bool value, bool isFighting = false)
@@ -59,6 +64,7 @@ public class MoveUI : MonoBehaviour
         {
             Inactivate(isFighting);
         }
+
     }
 
     protected void Execute<T>(PointerEventData eventData, ExecuteEvents.EventFunction<T> eventFunc) where T : IEventSystemHandler

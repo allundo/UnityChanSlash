@@ -23,6 +23,7 @@ public class HandleUI : MonoBehaviour
     [SerializeField] private FlickInteraction flick = default;
 
     private bool isPressed = false;
+    private Tween buttonFade = null;
 
     void Awake()
     {
@@ -93,19 +94,22 @@ public class HandleUI : MonoBehaviour
     {
         isPressed = false;
 
-        gameObject.SetActive(true);
-
-        flick.FadeIn(duration).Play();
         SetUIsActive(stopArrows, true);
+
+        buttonFade?.Kill();
+        gameObject.SetActive(true);
+        buttonFade = flick.FadeIn(duration).Play();
     }
 
     public void Inactivate(float duration = 0.2f)
     {
         isPressed = false;
-        flick.FadeOut(duration, null, () => gameObject.SetActive(false)).Play();
 
         SetUIsActive(stopArrows, false);
         SetUIsActive(moveArrows, false);
+
+        buttonFade?.Kill();
+        flick.FadeOut(duration, null, () => gameObject.SetActive(false)).Play();
     }
 
     public void SetActive(bool isActive, float duration = 0.2f)
