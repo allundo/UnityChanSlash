@@ -93,14 +93,15 @@ public class Commander
     public void ClearAll()
     {
         cmdQueue.Clear();
-        Cancel();
+        Cancel(false);
     }
 
-    public void Cancel()
+    public void Cancel(bool isContinue = true)
     {
         currentCommand?.Cancel();
         execDisposable?.Dispose();
-        onValidateInput.OnNext(false);
         DispatchCommand();
+
+        if (isContinue) onValidateInput.OnNext(false);
     }
 }
