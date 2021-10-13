@@ -32,6 +32,8 @@ public class PlayerInput : ShieldInput
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
 
+    [SerializeField] protected GameObject uiMask = default;
+
     protected PlayerCommandTarget playerTarget;
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
 
@@ -194,7 +196,11 @@ public class PlayerInput : ShieldInput
             handleIcon.Disable();
         }
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !doorHandler.isPressed && !itemHandler.isPressed && !itemInventory.IsPutItem);
+        bool isHandleUIOn = doorHandler.isPressed || itemHandler.isPressed || itemInventory.IsPutItem;
+
+        uiMask.SetActive(isHandleUIOn || IsAttack);
+
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !isHandleUIOn);
         backwardUI.SetActive(map.IsBackwardMovable);
         rightUI.SetActive(map.IsRightMovable);
         leftUI.SetActive(map.IsLeftMovable);

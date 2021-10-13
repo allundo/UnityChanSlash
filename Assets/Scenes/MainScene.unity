@@ -32006,6 +32006,7 @@ MonoBehaviour:
   turnLUI: {fileID: 1400263964}
   jumpUI: {fileID: 4647984070459708861}
   guardUI: {fileID: 5794931035596765977}
+  uiMask: {fileID: 1625512483}
 --- !u!1 &3442943665555868990
 GameObject:
   m_ObjectHideFlags: 0
@@ -40064,7 +40065,6 @@ MonoBehaviour:
   kickButton: {fileID: 4011760088560822047}
   maxAlpha: 1
   attackCancelThreshold: 2
-  UIMask: {fileID: 1625512483}
   circle: {fileID: 3065396877610318412}
 --- !u!1 &4750493034323304158
 GameObject:

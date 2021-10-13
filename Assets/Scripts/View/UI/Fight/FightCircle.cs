@@ -12,7 +12,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private AttackButton kickButton = default;
     [SerializeField] private float maxAlpha = 0.8f;
     [SerializeField] private float attackCancelThreshold = 2.0f;
-    [SerializeField] private GameObject UIMask = default;
 
     [SerializeField] private EnemyLifeGauge circle = default;
 
@@ -32,10 +31,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).magnitude < 20.0f;
 
-    private IReactiveProperty<AttackButton> CurrentButton = new ReactiveProperty<AttackButton>(null);
+    private AttackButton currentButton = null;
     private Vector2 pressPos = Vector2.zero;
 
-    private bool IsPressed => CurrentButton.Value != null;
+    private bool IsPressed => currentButton != null;
 
     private float DrawComponent(Vector2 screenPos) => IsPressed ? Vector2.Dot(UIPos(pressPos).normalized, DragVector(screenPos)) : 0.0f;
     private float radius;
@@ -62,7 +61,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
 
-        CurrentButton.Subscribe(button => UIMask.SetActive(button != null));
+        // CurrentButton.Subscribe(button => UIMask.SetActive(button != null)).AddTo(this);
 
         EnemyStatus
             .Where(status => status != null)
@@ -114,8 +113,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        CurrentButton.Value?.Release();
-        CurrentButton.Value = null;
+        currentButton?.Release();
+        currentButton = null;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -131,9 +130,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (!isActive) return;
 
         pressPos = eventData.position;
-        CurrentButton.Value = GetAttack(UIPos(eventData.position));
+        currentButton = GetAttack(UIPos(eventData.position));
 
-        CurrentButton.Value.Press(pressPos);
+        currentButton.Press(pressPos);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -186,18 +185,18 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (isFadeOnly)
         {
-            CurrentButton.Value?.FadeOut()?.Play();
+            currentButton?.FadeOut()?.Play();
         }
         else
         {
-            CurrentButton.Value?.Cancel();
+            currentButton?.Cancel();
         }
 
         var eventData = new PointerEventData(EventSystem.current);
         eventData.pressPosition = pressPos;
         RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
 
-        CurrentButton.Value = null;
+        currentButton = null;
         pressPos = Vector2.zero;
     }
 
