@@ -45,9 +45,7 @@ public abstract class Command
 
     public virtual IObservable<bool> Execute()
     {
-        Action();
-
-        return ExecObservable();
+        return Action() ? ExecObservable() : Observable.Return(false);
     }
 
     protected virtual IObservable<bool> ExecObservable()
@@ -81,7 +79,7 @@ public abstract class Command
         return DOVirtual.DelayedCall(dueTimeSec, null, ignoreTimeScale).OnCompleteAsObservable(value);
     }
 
-    protected virtual void Action() { }
+    protected virtual bool Action() => false;
 
     public virtual float Speed => 0.0f;
     public virtual float RSpeed => 0.0f;

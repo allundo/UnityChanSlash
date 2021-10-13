@@ -81,12 +81,11 @@ public abstract class PlayerMove : PlayerCommand
         playerAnim.rSpeed.Float = 0.0f;
     }
 
-    public override IObservable<bool> Execute()
+    protected override bool Action()
     {
         if (!IsMovable)
         {
-            Cancel();
-            return Observable.Return(false);
+            return false;
         }
 
         EnterStair(DestTile);
@@ -105,7 +104,7 @@ public abstract class PlayerMove : PlayerCommand
                 })
                 .Play();
 
-        return ExecObservable();
+        return true;
     }
 }
 
@@ -155,7 +154,7 @@ public class PlayerJump : PlayerCommand
 
     protected Pos prevPos = new Pos();
 
-    protected override void Action()
+    protected override bool Action()
     {
         int distance = 0;
         ITile destTile = null;
@@ -193,6 +192,8 @@ public class PlayerJump : PlayerCommand
                     if (distance > 0) hidePlateHandler.Move();
                 })
                 .Play();
+
+        return true;
     }
 }
 
@@ -200,7 +201,7 @@ public class PlayerTurnL : PlayerCommand
 {
     public PlayerTurnL(PlayerCommandTarget target, float duration) : base(target, duration, 0.5f, 0.1f) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         map.TurnLeft();
         mainCamera.TurnLeft();
@@ -209,6 +210,7 @@ public class PlayerTurnL : PlayerCommand
         itemGenerator.Turn(map.dir);
 
         playingTween = tweenMove.TurnL.OnComplete(mainCamera.ResetCamera).Play();
+        return true;
     }
 }
 
@@ -216,7 +218,7 @@ public class PlayerTurnR : PlayerCommand
 {
     public PlayerTurnR(PlayerCommandTarget target, float duration) : base(target, duration, 0.5f, 0.1f) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         map.TurnRight();
         mainCamera.TurnRight();
@@ -225,6 +227,7 @@ public class PlayerTurnR : PlayerCommand
         itemGenerator.Turn(map.dir);
 
         playingTween = tweenMove.TurnR.OnComplete(mainCamera.ResetCamera).Play();
+        return true;
     }
 }
 public abstract class PlayerAction : PlayerCommand
@@ -237,14 +240,18 @@ public class PlayerHandle : PlayerAction
 {
     public PlayerHandle(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action() => playerAnim.handle.Fire();
+    protected override bool Action()
+    {
+        playerAnim.handle.Fire();
+        return true;
+    }
 }
 
 public class PlayerGetItem : PlayerAction
 {
     public PlayerGetItem(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         ITile tile = map.ForwardTile;
         Item item = tile.PickItem();
@@ -256,7 +263,9 @@ public class PlayerGetItem : PlayerAction
         else
         {
             tile.PutItem(item);
+            return false;
         }
+        return true;
     }
 }
 
@@ -271,7 +280,7 @@ public class PlayerPutItem : PlayerAction
         return this;
     }
 
-    protected override void Action()
+    protected override bool Action()
     {
         if (itemGenerator.Put(itemIcon.itemInfo, map.GetForward, map.dir))
         {
@@ -280,10 +289,12 @@ public class PlayerPutItem : PlayerAction
         }
         else
         {
-            Cancel();
+            return false;
         }
         playerAnim.handOn.Bool = false;
         itemIcon = null;
+
+        return true;
     }
 }
 
@@ -305,10 +316,11 @@ public class PlayerJab : PlayerAttack
 {
     public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         playerAnim.attack.Fire();
         playingTween = jab.AttackSequence(duration).Play();
+        return true;
     }
 }
 
@@ -316,20 +328,22 @@ public class PlayerStraight : PlayerAttack
 {
     public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         playerAnim.straight.Fire();
         playingTween = straight.AttackSequence(duration).Play();
+        return true;
     }
 }
 public class PlayerKick : PlayerAttack
 {
     public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         playerAnim.kick.Fire();
         playingTween = kick.AttackSequence(duration).Play();
+        return true;
     }
 }
 
@@ -351,11 +365,12 @@ public class PlayerDropFloor : PlayerCommand
 {
     public PlayerDropFloor(PlayerCommandTarget target, float duration) : base(target, duration, 1f, 1f) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         SetUIInvisible();
         playerAnim.dropFloor.Fire();
         playingTween = tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f).Play();
+        return true;
     }
 }
 
@@ -370,9 +385,10 @@ public class PlayerMessage : PlayerAction
     public PlayerMessage(PlayerCommandTarget target, string[] sentences, FaceID[] faces)
         : this(target, new MessageData(sentences, faces)) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         SetUIInvisible();
         messageController.InputMessageData(data);
+        return true;
     }
 }

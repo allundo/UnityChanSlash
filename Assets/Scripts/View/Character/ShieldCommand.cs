@@ -13,10 +13,11 @@ public class GuardCommand : ShieldCommand
     public GuardCommand(CommandTarget target, GuardStateTemp guardState, float duration) : base(target, guardState, duration, 0.95f)
     { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         guardState.SetManualGuard(true);
         SetOnCompleted(() => guardState.SetManualGuard(false));
+        return true;
     }
 }
 
@@ -25,5 +26,9 @@ public class ShieldOnCommand : ShieldCommand
     public ShieldOnCommand(CommandTarget target, GuardStateTemp guardState, float duration) : base(target, guardState, duration, 0.1f)
     { }
 
-    protected override void Action() => (anim as ShieldAnimator).shield.Fire();
+    protected override bool Action()
+    {
+        (anim as ShieldAnimator).shield.Fire();
+        return true;
+    }
 }

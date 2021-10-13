@@ -30,12 +30,11 @@ public abstract class EnemyMove : EnemyCommand
         enemyAnim.speed.Float = 0.0f;
     }
 
-    public override IObservable<bool> Execute()
+    protected override bool Action()
     {
         if (!IsMovable)
         {
-            Cancel();
-            return Observable.Return(false);
+            return false;
         }
 
         prevPos = map.CurrentPos;
@@ -44,7 +43,7 @@ public abstract class EnemyMove : EnemyCommand
         SetSpeed();
         playingTween = tweenMove.GetLinearMove(map.WorldPos(destPos)).OnComplete(ResetSpeed).Play();
 
-        return ExecObservable();
+        return true;
     }
 }
 
@@ -61,10 +60,11 @@ public class EnemyTurnL : EnemyCommand
 {
     public EnemyTurnL(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         playingTween = tweenMove.TurnL.Play();
         map.TurnLeft();
+        return true; ;
     }
 }
 
@@ -72,10 +72,11 @@ public class EnemyTurnR : EnemyCommand
 {
     public EnemyTurnR(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override void Action()
+    protected override bool Action()
     {
         playingTween = tweenMove.TurnR.Play();
         map.TurnRight();
+        return true;
     }
 }
 
@@ -87,9 +88,10 @@ public class EnemyAttack : EnemyCommand
         enemyAttack = target.enemyAttack;
     }
 
-    protected override void Action()
+    protected override bool Action()
     {
         enemyAnim.attack.Fire();
         playingTween = enemyAttack.AttackSequence(duration).Play();
+        return true;
     }
 }
