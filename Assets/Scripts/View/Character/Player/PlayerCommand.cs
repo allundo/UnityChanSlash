@@ -12,10 +12,6 @@ public abstract class PlayerCommand : Command
     protected ItemInventory itemInventory;
     protected MessageController messageController;
 
-    protected Tween validateTrigger;
-
-    protected IObserver<Unit> onValidateTrigger;
-
     protected float triggerInvalidDuration;
 
     public PlayerCommand(PlayerCommandTarget target, float duration, float validateTiming = 0.5f, float triggerTiming = 0.5f) : base(target, duration, validateTiming)
