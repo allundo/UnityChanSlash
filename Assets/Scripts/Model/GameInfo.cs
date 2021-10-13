@@ -62,7 +62,9 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         var deadEndPos = new Dictionary<Pos, IDirection>()
         {
             {new Pos(5, 5), Direction.west},
+            {new Pos(1, 1), Direction.north},
             {new Pos(1, 3), Direction.north},
+            {new Pos(1, 5), Direction.north},
         };
 
         maps[MAX_FLOOR] = new WorldMap(new MapManager(matrix, 15, deadEndPos).SetStair());
