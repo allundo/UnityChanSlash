@@ -162,6 +162,7 @@ public class HandleIcon : FadeEnable
     private Tween ApplyPut(float duration = 0.3f)
     {
         base.Inactivate();
+        currentItemIcon = null;
         return text.Apply(duration);
     }
 
