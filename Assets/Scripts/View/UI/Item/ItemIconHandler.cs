@@ -173,8 +173,9 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler OnSubmit()
         {
             var pressedIndex = handler.pressedIndex;
-            var currentTarget = itemIndex.GetItem(handler.pressedIndex);
             var currentSelected = handler.currentSelected;
+
+            var currentTarget = itemIndex.GetItem(pressedIndex);
 
             if (currentTarget != null && currentTarget != currentSelected)
             {
