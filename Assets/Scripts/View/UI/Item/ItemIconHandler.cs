@@ -6,7 +6,7 @@ using DG.Tweening;
 public interface IItemIconHandler
 {
     IItemIconHandler OnPress(int index);
-    IItemIconHandler OnRelease(int index);
+    IItemIconHandler OnRelease();
     IItemIconHandler OnSubmit();
     IItemIconHandler OnDrag(Vector2 screenPos);
 }
@@ -48,9 +48,9 @@ public class ItemIconHandler : IItemIconHandler
         return currentMode;
     }
 
-    public IItemIconHandler OnRelease(int index)
+    public IItemIconHandler OnRelease()
     {
-        currentMode = currentMode.OnRelease(index);
+        currentMode = currentMode.OnRelease();
         return currentMode;
     }
     public IItemIconHandler OnSubmit()
@@ -86,17 +86,20 @@ public class ItemIconHandler : IItemIconHandler
             {
                 selector.Enable();
                 selector.SetSelect(itemIndex.UIPos(index));
+                currentTarget.Resize(1.5f, 0.2f).Play();
                 handler.pressedIndex = index;
             }
 
             return this;
         }
 
-        public virtual IItemIconHandler OnRelease(int index)
+        public virtual IItemIconHandler OnRelease()
         {
             handler.currentSelected = itemIndex.GetItem(handler.pressedIndex);
-            selector.SetRaycast(true);
 
+            if (handler.currentSelected == null) return this;
+
+            selector.SetRaycast(true);
             return handler.selectMode;
         }
 
@@ -104,6 +107,7 @@ public class ItemIconHandler : IItemIconHandler
 
         protected IItemIconHandler CleanUp()
         {
+            handler.currentSelected.Resize(1f, 0.2f).Play();
             handler.currentSelected = null;
             handler.pressedIndex = itemIndex.MAX_ITEMS;
 
@@ -127,13 +131,21 @@ public class ItemIconHandler : IItemIconHandler
             if (currentTarget != null && currentTarget != handler.currentSelected)
             {
                 selector.SetRaycast(false);
+                selector.SetSelect(itemIndex.UIPos(index));
+
+                handler.currentSelected.Resize(1f, 0.2f).Play();
                 handler.currentSelected = null;
+
+                currentTarget.Resize(1.5f, 0.2f).Play();
+                handler.pressedIndex = index;
 
                 return handler.normalMode;
             }
 
             return this;
         }
+
+        public override IItemIconHandler OnRelease() => this;
 
         public override IItemIconHandler OnSubmit()
         {
@@ -156,7 +168,7 @@ public class ItemIconHandler : IItemIconHandler
             return this;
         }
 
-        public override IItemIconHandler OnRelease(int index) => this;
+        public override IItemIconHandler OnRelease() => this;
 
         public override IItemIconHandler OnSubmit()
         {

@@ -10,6 +10,7 @@ public class UITween
     protected bool isValidOnPause;
 
     public Vector2 CurrentPos => rectTransform.anchoredPosition;
+    public Vector2 CurrentScreenPos => rectTransform.position;
     public Vector2 CurrentSize => rectTransform.sizeDelta;
 
     public UITween(GameObject gameObject, bool isValidOnPause = false)

@@ -47,7 +47,7 @@ public class ItemInventory : MonoBehaviour
     void Start()
     {
         Observable.Merge(panels.Select(panel => panel.OnPress)).Subscribe(index => iconHandler.OnPress(index));
-        Observable.Merge(panels.Select(panel => panel.OnRelease)).Subscribe(index => iconHandler.OnRelease(index));
+        Observable.Merge(panels.Select(panel => panel.OnRelease)).Subscribe(index => iconHandler.OnRelease());
         selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos));
         selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit());
     }

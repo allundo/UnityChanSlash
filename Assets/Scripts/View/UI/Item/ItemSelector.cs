@@ -3,14 +3,16 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UniRx;
 using System;
+using DG.Tweening;
 
 public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] private Sprite select = default;
     [SerializeField] private Sprite target = default;
 
-    private RectTransform rectTransform;
     private Image image;
+    private UITween ui;
+    private RaycastHandler raycastHandler;
 
     private ISubject<Vector2> onDrag = new Subject<Vector2>();
     public IObservable<Vector2> OnDragMode => onDrag;
@@ -20,11 +22,17 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     private Vector2 startPos = Vector2.zero;
     private Vector2 dragVec(Vector2 screenPos) => screenPos - startPos;
+    private bool IsOnCircle(Vector2 screenPos)
+        => (ui.CurrentScreenPos - screenPos).magnitude <= ui.CurrentSize.x * 0.5f;
+
+    private bool isDragOn = false;
 
     void Awake()
     {
         image = GetComponent<Image>();
-        rectTransform = GetComponent<RectTransform>();
+
+        ui = new UITween(gameObject);
+        raycastHandler = new RaycastHandler(image);
 
         var OnDragStart = onDrag.Where(pos => dragVec(pos).magnitude > 50f).Select(_ => 0L);
 
@@ -47,25 +55,33 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public ItemSelector SetPosition(Vector2 pos)
     {
-        rectTransform.anchoredPosition = pos;
+        ui.SetPos(pos);
         return this;
     }
 
     public ItemSelector SetTarget(Vector2 pos)
     {
         image.sprite = target;
+        ui.Resize(1f, 0.2f).Play();
 
         return SetPosition(pos);
     }
     public ItemSelector SetSelect(Vector2 pos)
     {
         image.sprite = select;
+        ui.Resize(1.4f, 0.2f).Play();
 
         return SetPosition(pos);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!isDragOn)
+        {
+            raycastHandler.RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
+            return;
+        }
+
         onDrag.OnNext(eventData.position);
     }
 
@@ -89,6 +105,9 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (!CanFire()) return;
 #endif
         startPos = eventData.position;
+        isDragOn = IsOnCircle(startPos);
+
+        if (!isDragOn) raycastHandler.RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -98,6 +117,14 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
         if (!CanFire()) return;
 #endif
+
+        if (!isDragOn)
+        {
+            raycastHandler.RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+            return;
+        }
+
         onReleased.OnNext(Unit.Default);
+        isDragOn = false;
     }
 }

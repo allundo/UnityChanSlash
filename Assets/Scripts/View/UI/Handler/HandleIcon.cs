@@ -154,7 +154,7 @@ public class HandleIcon : FadeEnable
     {
         base.Inactivate();
         return DOTween.Sequence()
-            .AppendCallback(() => itemIcon.ResetSize())
+            .AppendCallback(() => itemIcon.ResetSize(1.5f))
             .AppendCallback(() => itemIcon.SetParent(itemInventory.transform, false))
             .Join(text.Hide());
     }

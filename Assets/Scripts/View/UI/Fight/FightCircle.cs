@@ -2,9 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
-using System.Collections.Generic;
 using UniRx;
 
+[RequireComponent(typeof(MaskableGraphic))]
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] private AttackButton jabButton = default;
@@ -20,7 +20,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public AttackButton KickButton => kickButton;
 
     private RectTransform rectTransform;
-    private Image image;
+    private RaycastHandler raycastHandler;
 
     private float alpha = 0.0f;
     public bool isActive { get; private set; } = false;
@@ -48,7 +48,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        image = GetComponent<Image>();
+
+        raycastHandler = new RaycastHandler(gameObject);
     }
 
     void Start()
@@ -107,7 +108,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!IsPressed && !InCircle(eventData.position))
         {
-            RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+            raycastHandler.RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
             return;
         }
 
@@ -123,7 +124,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!InCircle(eventData.position))
         {
-            RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
+            raycastHandler.RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
             return;
         }
 
@@ -147,7 +148,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!IsPressed)
         {
-            RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
+            raycastHandler.RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
             return;
         }
     }
@@ -194,7 +195,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         var eventData = new PointerEventData(EventSystem.current);
         eventData.pressPosition = pressPos;
-        RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+        raycastHandler.RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
 
         currentButton = null;
         pressPos = Vector2.zero;
@@ -209,28 +210,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         else
         {
             Inactivate();
-        }
-    }
-    private void RaycastEvent<T>(PointerEventData eventData, ExecuteEvents.EventFunction<T> eventFunc) where T : IEventSystemHandler
-    {
-        var objectsHit = new List<RaycastResult>();
-
-        // Exclude this UI object from raycast target
-        image.raycastTarget = false;
-
-        EventSystem.current.RaycastAll(eventData, objectsHit);
-
-        image.raycastTarget = true;
-
-        foreach (var objectHit in objectsHit)
-        {
-            if (!ExecuteEvents.CanHandleEvent<T>(objectHit.gameObject))
-            {
-                continue;
-            }
-
-            ExecuteEvents.Execute<T>(objectHit.gameObject, eventData, eventFunc);
-            break;
         }
     }
 }
