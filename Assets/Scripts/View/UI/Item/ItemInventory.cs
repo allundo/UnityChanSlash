@@ -19,9 +19,9 @@ public class ItemInventory : MonoBehaviour
     private ItemPanel[] panels;
 
     private ItemIconHandler iconHandler = null;
-    public IObservable<ItemIcon> OnPutItem => ItemIconHandler.OnPutItem;
-    public IObservable<ItemIcon> OnPutApply => ItemIconHandler.OnPutApply;
-    public bool IsPutItem => ItemIconHandler.IsPutItem;
+    public IObservable<ItemIcon> OnPutItem => iconHandler.OnPutItem;
+    public IObservable<ItemIcon> OnPutApply => iconHandler.OnPutApply;
+    public bool IsPutItem => iconHandler.IsPutItem;
 
     void Awake()
     {
@@ -41,7 +41,7 @@ public class ItemInventory : MonoBehaviour
 
         selector.transform.SetAsLastSibling(); // Bring selector UI to front
 
-        iconHandler = ItemIconHandler.New(selector, itemIndex);
+        iconHandler = new ItemIconHandler(selector, itemIndex);
     }
 
     void Start()

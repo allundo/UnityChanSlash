@@ -3,164 +3,166 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class ItemIconHandler
+public interface IItemIconHandler
 {
-    private static ItemIconHandler instance = null;
-    protected static NormalMode normalMode = null;
-    protected static SelectMode selectMode = null;
-    protected static DragMode dragMode = null;
-    protected static PutMode putMode = null;
-    private static ItemIconHandler currentMode = null;
+    IItemIconHandler OnPress(int index);
+    IItemIconHandler OnRelease(int index);
+    IItemIconHandler OnSubmit();
+    IItemIconHandler OnDrag(Vector2 screenPos);
+}
 
-    protected static int pressedIndex;
-    protected static ItemIcon currentSelected = null;
+public class ItemIconHandler : IItemIconHandler
+{
+    protected NormalMode normalMode = null;
+    protected SelectMode selectMode = null;
+    protected DragMode dragMode = null;
+    protected PutMode putMode = null;
+    private IItemIconHandler currentMode = null;
 
-    protected ItemSelector selector;
+    protected int pressedIndex;
+    protected ItemIcon currentSelected = null;
+
     protected ItemIndexHandler itemIndex;
+    protected ItemSelector selector;
 
-    public struct ItemPutInfo
-    {
-        public bool isPutActive;
-        public ItemIcon itemIcon;
-    }
+    public IObservable<ItemIcon> OnPutItem => dragMode.onPutItem.DistinctUntilChanged();
+    public IObservable<ItemIcon> OnPutApply => putMode.onPutApply;
+    public bool IsPutItem => currentMode is PutMode;
 
-    public static IObservable<ItemIcon> OnPutItem => dragMode.onPutItem.DistinctUntilChanged();
-    public static IObservable<ItemIcon> OnPutApply => putMode.onPutApply;
-    public static bool IsPutItem => currentMode is PutMode;
-
-    private ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex)
+    public ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex)
     {
         this.selector = selector;
         this.itemIndex = itemIndex;
+
+        pressedIndex = itemIndex.MAX_ITEMS;
+
+        currentMode = normalMode = new NormalMode(this);
+        selectMode = new SelectMode(this);
+        dragMode = new DragMode(this);
+        putMode = new PutMode(this);
     }
 
-    public static ItemIconHandler New(ItemSelector selector, ItemIndexHandler itemIndex)
-    {
-        if (instance == null)
-        {
-            instance = new ItemIconHandler(selector, itemIndex);
-
-            pressedIndex = itemIndex.MAX_ITEMS;
-
-            currentMode = normalMode = new NormalMode(selector, itemIndex);
-            selectMode = new SelectMode(selector, itemIndex);
-            dragMode = new DragMode(selector, itemIndex);
-            putMode = new PutMode(selector, itemIndex);
-        }
-
-        return instance;
-    }
-
-    public virtual ItemIconHandler OnPress(int index)
+    public IItemIconHandler OnPress(int index)
     {
         currentMode = currentMode.OnPress(index);
         return currentMode;
     }
 
-    public virtual ItemIconHandler OnRelease(int index)
+    public IItemIconHandler OnRelease(int index)
     {
         currentMode = currentMode.OnRelease(index);
         return currentMode;
     }
-    public virtual ItemIconHandler OnSubmit()
+    public IItemIconHandler OnSubmit()
     {
         currentMode = currentMode.OnSubmit();
         return currentMode;
     }
 
-    public void OnDrag(Vector2 screenPos)
+    public IItemIconHandler OnDrag(Vector2 screenPos)
     {
-        var vec = itemIndex.ConvertToVec(screenPos);
-        currentMode = itemIndex.IsOnUI(vec) ? currentMode.Drag(vec) : currentMode.Put();
+        currentMode = currentMode.OnDrag(screenPos);
+        return currentMode;
     }
 
-    public virtual ItemIconHandler Drag(Vector2 uiPos) => dragMode.Drag(uiPos);
-    public virtual ItemIconHandler Put() => dragMode.Put();
-
-    protected ItemIconHandler CleanUp()
+    protected class NormalMode : IItemIconHandler
     {
-        currentSelected = null;
-        pressedIndex = itemIndex.MAX_ITEMS;
+        protected ItemIconHandler handler;
+        protected ItemSelector selector;
+        protected ItemIndexHandler itemIndex;
 
-        selector.SetRaycast(false);
-        selector.Disable();
+        public NormalMode(ItemIconHandler handler)
+        {
+            this.handler = handler;
+            selector = handler.selector;
+            itemIndex = handler.itemIndex;
+        }
 
-        return normalMode;
-    }
-
-    protected class NormalMode : ItemIconHandler
-    {
-        public NormalMode(ItemSelector selector, ItemIndexHandler itemIndex) : base(selector, itemIndex)
-        { }
-
-        public override ItemIconHandler OnPress(int index)
+        public virtual IItemIconHandler OnPress(int index)
         {
             var currentTarget = itemIndex.GetItem(index);
 
-            if (currentTarget != null && currentTarget != currentSelected)
+            if (currentTarget != null && currentTarget != handler.currentSelected)
             {
                 selector.Enable();
                 selector.SetSelect(itemIndex.UIPos(index));
-                pressedIndex = index;
+                handler.pressedIndex = index;
             }
 
             return this;
         }
 
-        public override ItemIconHandler OnRelease(int index)
+        public virtual IItemIconHandler OnRelease(int index)
         {
-            currentSelected = itemIndex.GetItem(pressedIndex);
+            handler.currentSelected = itemIndex.GetItem(handler.pressedIndex);
             selector.SetRaycast(true);
 
-            return selectMode;
+            return handler.selectMode;
         }
 
-        public override ItemIconHandler OnSubmit() => null;
+        public virtual IItemIconHandler OnSubmit() => null;
+
+        protected IItemIconHandler CleanUp()
+        {
+            handler.currentSelected = null;
+            handler.pressedIndex = itemIndex.MAX_ITEMS;
+
+            selector.SetRaycast(false);
+            selector.Disable();
+
+            return handler.normalMode;
+        }
+
+        public virtual IItemIconHandler OnDrag(Vector2 screenPos) => handler.dragMode.OnDrag(screenPos);
     }
 
     protected class SelectMode : NormalMode
     {
-        public SelectMode(ItemSelector selector, ItemIndexHandler itemIndex) : base(selector, itemIndex) { }
+        public SelectMode(ItemIconHandler handler) : base(handler) { }
 
-        public override ItemIconHandler OnPress(int index)
+        public override IItemIconHandler OnPress(int index)
         {
-            if (itemIndex.GetItem(index) != currentSelected)
+            var currentTarget = itemIndex.GetItem(index);
+
+            if (currentTarget != null && currentTarget != handler.currentSelected)
             {
                 selector.SetRaycast(false);
-                currentSelected = null;
+                handler.currentSelected = null;
 
-                return normalMode;
+                return handler.normalMode;
             }
 
             return this;
         }
 
-        public override ItemIconHandler OnSubmit()
+        public override IItemIconHandler OnSubmit()
         {
-            itemIndex.UseItem(pressedIndex);
+            itemIndex.UseItem(handler.pressedIndex);
 
             return CleanUp();
         }
     }
 
-    protected class DragMode : ItemIconHandler
+    protected class DragMode : NormalMode
     {
         public ISubject<ItemIcon> onPutItem { get; protected set; } = new Subject<ItemIcon>();
 
-        public DragMode(ItemSelector selector, ItemIndexHandler itemIndex) : base(selector, itemIndex) { }
+        public DragMode(ItemIconHandler handler) : base(handler) { }
 
-        public override ItemIconHandler OnPress(int index)
+        public override IItemIconHandler OnPress(int index)
         {
             selector.SetTarget(itemIndex.UIPos(index));
-            pressedIndex = index;
+            handler.pressedIndex = index;
             return this;
         }
 
-        public override ItemIconHandler OnRelease(int index) => this;
+        public override IItemIconHandler OnRelease(int index) => this;
 
-        public override ItemIconHandler OnSubmit()
+        public override IItemIconHandler OnSubmit()
         {
-            var currentTarget = itemIndex.GetItem(pressedIndex);
+            var pressedIndex = handler.pressedIndex;
+            var currentTarget = itemIndex.GetItem(handler.pressedIndex);
+            var currentSelected = handler.currentSelected;
 
             if (currentTarget != null && currentTarget != currentSelected)
             {
@@ -176,17 +178,23 @@ public class ItemIconHandler
             return CleanUp();
         }
 
-        public override ItemIconHandler Drag(Vector2 uiPos)
+        public override IItemIconHandler OnDrag(Vector2 screenPos)
         {
-            currentSelected.SetPos(uiPos);
-            onPutItem.OnNext(null);
-            return dragMode;
+            var vec = itemIndex.ConvertToVec(screenPos);
+            return itemIndex.IsOnUI(vec) ? Drag(vec) : Put();
         }
 
-        public override ItemIconHandler Put()
+        protected IItemIconHandler Drag(Vector2 uiPos)
         {
-            onPutItem.OnNext(currentSelected);
-            return putMode;
+            handler.currentSelected.SetPos(uiPos);
+            onPutItem.OnNext(null);
+            return handler.dragMode;
+        }
+
+        protected IItemIconHandler Put()
+        {
+            onPutItem.OnNext(handler.currentSelected);
+            return handler.putMode;
         }
     }
 
@@ -194,10 +202,12 @@ public class ItemIconHandler
     {
         public ISubject<ItemIcon> onPutApply { get; protected set; } = new Subject<ItemIcon>();
 
-        public PutMode(ItemSelector selector, ItemIndexHandler itemIndex) : base(selector, itemIndex) { }
+        public PutMode(ItemIconHandler handler) : base(handler) { }
 
-        public override ItemIconHandler OnSubmit()
+        public override IItemIconHandler OnSubmit()
         {
+            var currentSelected = handler.currentSelected;
+
             // Reserve moving back to item inventory
             currentSelected.ResetSize();
             currentSelected.Move(itemIndex.UIPos(currentSelected.index)).Play();
