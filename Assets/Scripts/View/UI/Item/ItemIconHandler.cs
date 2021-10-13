@@ -210,8 +210,8 @@ public class ItemIconHandler : IItemIconHandler
 
             // Reserve moving back to item inventory
             currentSelected.ResetSize();
+            currentSelected.SetParent(selector.transform.parent, true);
             currentSelected.Move(itemIndex.UIPos(currentSelected.index)).Play();
-            currentSelected.SetParent(selector.transform.parent, false);
 
             // Apply put action if possible
             onPutApply.OnNext(currentSelected);

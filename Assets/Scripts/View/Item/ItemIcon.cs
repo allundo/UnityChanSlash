@@ -50,7 +50,6 @@ public class ItemIcon : UISymbol
     }
     public Tween LocalMove(Vector2 destPos, float duration = 0.5f)
     {
-        Debug.Log("LocalMove: " + destPos);
         return rectTransform.DOLocalMove(destPos, duration).SetEase(Ease.OutExpo);
     }
 
