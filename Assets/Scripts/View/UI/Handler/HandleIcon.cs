@@ -144,7 +144,7 @@ public class HandleIcon : FadeEnable
         base.Activate();
         return DOTween.Sequence()
             .AppendCallback(() => fade.SetAlpha(0f))
-            .AppendCallback(() => itemIcon.SetParent(transform))
+            .AppendCallback(() => itemIcon.SetParent(transform, true, true))
             .Join(itemIcon.LocalMove(Vector2.zero, duration))
             .Join(itemIcon.Resize(2f, duration))
             .Join(text.Show("PUT"));

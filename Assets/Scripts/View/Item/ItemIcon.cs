@@ -90,9 +90,10 @@ public class ItemIcon : UISymbol
 
     public Vector2 GetPos() => rectTransform.anchoredPosition;
 
-    public void SetParent(Transform parent, bool worldPositionStays = true)
+    public void SetParent(Transform parent, bool worldPositionStays = true, bool setAsFirstSibling = false)
     {
         transform.SetParent(parent, worldPositionStays);
-        transform.SetAsFirstSibling();
+        if (setAsFirstSibling) transform.SetAsFirstSibling();
     }
+
 }
