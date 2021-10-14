@@ -16,6 +16,7 @@ public abstract class Command
     protected CommandTarget target;
     protected MobAnimator anim;
     protected MobReactor react;
+    protected MobInput input;
     protected MapUtil map;
 
     protected IObserver<bool> onValidateInput;
@@ -30,44 +31,46 @@ public abstract class Command
 
         anim = target.anim;
         react = target.react;
+        input = target.input;
         map = target.map;
     }
 
     protected Tween playingTween = null;
     protected Tween validateTween = null;
-    protected IDisposable onCompleteDisposable = null;
     protected List<Action> onCompleted = new List<Action>();
 
     public virtual void Cancel()
     {
         playingTween?.Kill();
-        onCompleteDisposable?.Dispose();
+        validateTween?.Kill();
+        input.ValidateInput();
         onCompleted.Clear();
     }
 
-    public virtual IObservable<bool> Execute()
+    public virtual IObservable<Unit> Execute()
     {
-        return Action() ? ExecObservable() : Observable.Return(false);
+        validateTween = ValidateTween().Play();
+
+        if (Action())
+        {
+            return ExecOnCompleted(() => playingTween?.Complete());
+        }
+        else
+        {
+            Cancel();
+            return Observable.Empty<Unit>();
+        }
     }
 
-    protected virtual IObservable<bool> ExecObservable()
+    protected virtual Tween ValidateTween()
     {
-        var onValidate = DOTweenTimer(invalidDuration, false);
-
-        return Observable.Merge(onValidate, ExecOnCompleted(() => playingTween?.Complete()));
+        return DOTweenTimer(invalidDuration, () => input.ValidateInput());
     }
 
-    protected virtual IObservable<bool> ExecOnCompleted(params Action[] onCompleted)
+    protected virtual IObservable<Unit> ExecOnCompleted(params Action[] onCompleted)
     {
-        var onCompleteObservable = DOTweenTimer(duration, false);
-
         onCompleted.ForEach(action => SetOnCompleted(action));
-
-        onCompleteDisposable = onCompleteObservable
-            .Subscribe(_ => this.onCompleted.ForEach(action => action()))
-            .AddTo(target);
-
-        return onCompleteObservable.IgnoreElements();
+        return DOTweenCompleted(duration, Unit.Default).IgnoreElements();
     }
 
     /// <summary>
@@ -76,9 +79,18 @@ public abstract class Command
     /// /// </summary>
     /// <param name="dueTimeSec">wait time second for notification</param>
     /// <param name="value">will be notified by OnNext()</param>
-    protected IObservable<T> DOTweenTimer<T>(float dueTimeSec, T value, bool ignoreTimeScale = false)
+    protected IObservable<T> DOTweenCompleted<T>(float dueTimeSec, T value, bool ignoreTimeScale = false)
     {
-        return DOVirtual.DelayedCall(dueTimeSec, null, ignoreTimeScale).OnCompleteAsObservable(value);
+        return DOVirtual.DelayedCall(dueTimeSec, DoOnCompleted, ignoreTimeScale).OnCompleteAsObservable(value);
+    }
+
+    protected Tween DOTweenTimer(float dueTimeSec, TweenCallback callback, bool ignoreTimeScale = false)
+        => DOVirtual.DelayedCall(dueTimeSec, callback, ignoreTimeScale);
+
+    protected void DoOnCompleted()
+    {
+        onCompleted.ForEach(action => action());
+        onCompleted.Clear();
     }
 
     protected virtual bool Action() => false;
@@ -108,7 +120,7 @@ public class DieCommand : Command
 {
     public DieCommand(CommandTarget target, float duration) : base(target, duration) { }
 
-    public override IObservable<bool> Execute()
+    public override IObservable<Unit> Execute()
     {
         map.ResetOnCharacter();
         anim.die.Fire();

@@ -4,6 +4,7 @@ using System;
 
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(PlayerReactor))]
+[RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(HidePlateHandler))]
 public class PlayerCommandTarget : CommandTarget
@@ -36,12 +37,6 @@ public class PlayerCommandTarget : CommandTarget
     /// Hide plate handler to update HidePlate positions at players Move and Turn Command execution.
     /// </summary>
     public HidePlateHandler hidePlateHandler { get; protected set; }
-
-    public ISubject<Unit> onClearAll { get; protected set; } = new Subject<Unit>();
-    public IObservable<Unit> OnClearAll => onClearAll;
-
-    public ISubject<bool> onUIVisible { get; protected set; } = new Subject<bool>();
-    public IObservable<bool> OnUIVisible => onUIVisible;
 
     protected override void Awake()
     {

@@ -39,7 +39,6 @@ public abstract class MobInput : MonoBehaviour
     protected virtual void Start()
     {
         SetCommands();
-        Subscribe();
     }
 
     /// <summary>
@@ -49,16 +48,6 @@ public abstract class MobInput : MonoBehaviour
     protected virtual void SetCommands()
     {
         die = new DieCommand(target, 0.1f);
-    }
-
-    /// <summary>
-    /// This method is called by Start(). Override it to customize commands' behavior.
-    /// </summary>
-    protected virtual void Subscribe()
-    {
-        commander.OnValidateInput
-            .Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly))
-            .AddTo(this);
     }
 
     /// <summary>
@@ -94,7 +83,7 @@ public abstract class MobInput : MonoBehaviour
     public virtual void InputDie()
     {
         // Clear all queuing Commands to execute DieCommand immediately.
-        commander.ClearAll();
+        ClearAll();
 
         ForceEnqueue(die, true);
     }
@@ -102,5 +91,11 @@ public abstract class MobInput : MonoBehaviour
     public virtual void ValidateInput(bool isTriggerOnly = false)
     {
         isCommandValid = true;
+    }
+
+    public virtual void ClearAll(bool isValidInput = false)
+    {
+        commander.ClearAll();
+        isCommandValid = isValidInput;
     }
 }

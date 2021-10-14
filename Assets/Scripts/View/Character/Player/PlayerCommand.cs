@@ -6,6 +6,7 @@ public abstract class PlayerCommand : Command
 {
     protected PlayerCommandTarget playerTarget;
     protected PlayerAnimator playerAnim;
+    protected PlayerInput playerInput;
     protected ThirdPersonCamera mainCamera;
     protected HidePlateHandler hidePlateHandler;
     protected ItemGenerator itemGenerator;
@@ -20,6 +21,7 @@ public abstract class PlayerCommand : Command
         this.triggerInvalidDuration = this.duration * triggerTiming;
 
         playerAnim = anim as PlayerAnimator;
+        playerInput = input as PlayerInput;
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
         itemGenerator = target.itemGenerator;
@@ -27,19 +29,20 @@ public abstract class PlayerCommand : Command
         messageController = target.messageController;
     }
 
-    protected override IObservable<bool> ExecObservable()
+    protected override Tween ValidateTween()
     {
-        var execObservable = base.ExecObservable();
-        if (triggerInvalidDuration >= invalidDuration) return execObservable;
-        return execObservable.Merge(DOTweenTimer(triggerInvalidDuration, true));
+        Tween validateTween = base.ValidateTween();
+        if (triggerInvalidDuration >= invalidDuration) return validateTween;
+
+        return DOTween.Sequence()
+            .Join(DOTweenTimer(triggerInvalidDuration, () => input.ValidateInput(true)))
+            .Join(validateTween);
     }
 
     protected void SetUIInvisible()
     {
-        Action<bool> Visible = playerTarget.onUIVisible.OnNext;
-
-        Visible(false);
-        onCompleted.Add(() => Visible(true));
+        playerInput.SetInputVisible(false);
+        onCompleted.Add(() => playerInput.SetInputVisible(true));
     }
 
     protected void EnterStair(ITile destTile)
@@ -48,8 +51,8 @@ public abstract class PlayerCommand : Command
 
         tweenMove.SetDelayedCall(0.6f, () =>
         {
-            playerTarget.onClearAll.OnNext(Unit.Default);
-            playerTarget.onUIVisible.OnNext(false);
+            playerInput.ClearAll();
+            playerInput.SetInputVisible(false);
             GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
         });
     }
@@ -347,7 +350,7 @@ public class PlayerDie : PlayerCommand
 {
     public PlayerDie(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    public override IObservable<bool> Execute()
+    public override IObservable<Unit> Execute()
     {
         map.ResetOnCharacter();
         playerAnim.dieEx.Fire();

@@ -1,12 +1,11 @@
 using UnityEngine;
-using System;
-using UniRx;
 
 /// <summary>
 /// Keeps attached component used by Command execution.
 /// </summary>
 [RequireComponent(typeof(MobAnimator))]
 [RequireComponent(typeof(MobReactor))]
+[RequireComponent(typeof(MobInput))]
 [RequireComponent(typeof(MapUtil))]
 public class CommandTarget : MonoBehaviour
 {
@@ -21,6 +20,11 @@ public class CommandTarget : MonoBehaviour
     public MobReactor react { get; protected set; }
 
     /// <summary>
+    /// Input handler for Command execution.
+    /// </summary>
+    public MobInput input { get; protected set; }
+
+    /// <summary>
     /// Direction related data for Command execution.
     /// </summary>
     public MapUtil map { get; protected set; } = default;
@@ -29,6 +33,7 @@ public class CommandTarget : MonoBehaviour
     {
         anim = GetComponent<MobAnimator>();
         react = GetComponent<MobReactor>();
+        input = GetComponent<MobInput>();
         map = GetComponent<MapUtil>();
     }
 }

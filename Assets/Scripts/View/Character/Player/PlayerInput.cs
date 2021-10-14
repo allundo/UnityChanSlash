@@ -73,13 +73,6 @@ public class PlayerInput : ShieldInput
         SetInputVisible(isInputVisible);
     }
 
-    protected override void Subscribe()
-    {
-        commander.onValidateInput.Subscribe(isTriggerOnly => ValidateInput(isTriggerOnly)).AddTo(this);
-        playerTarget.OnUIVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
-        playerTarget.OnClearAll.Subscribe(_ => commander.ClearAll()).AddTo(this);
-    }
-
     protected override void Update()
     {
         if (commander.IsDie) return;
@@ -133,6 +126,12 @@ public class PlayerInput : ShieldInput
 
         isTriggerValid = true;
         isCommandValid = !isTriggerOnly;
+    }
+
+    public override void ClearAll(bool isValidInput = false)
+    {
+        commander.ClearAll();
+        isTriggerValid = isCommandValid = isValidInput;
     }
 
     /// <summary>

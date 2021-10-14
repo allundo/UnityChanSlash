@@ -33,13 +33,6 @@ public class Commander
     public Command currentCommand { get; protected set; } = null;
     protected IDisposable execDisposable = null;
 
-    /// <summary>
-    /// Notification for validating input.
-    /// </summary>
-    /// <typeparam name="bool">true: validate, false: invalidate</typeparam>
-    public ISubject<bool> onValidateInput { get; protected set; } = new Subject<bool>();
-    public IObservable<bool> OnValidateInput => onValidateInput;
-
     public void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
 
     /// <summary>
@@ -75,16 +68,11 @@ public class Commander
         return false;
     }
 
-    protected void Subscribe(IObservable<bool> execObservable)
+    protected void Subscribe(IObservable<Unit> execObservable)
     {
         if (execObservable == null) return;
 
-        execDisposable =
-            execObservable.Subscribe(
-                isTriggerOnly => onValidateInput.OnNext(isTriggerOnly),
-                () => DispatchCommand()
-            )
-            .AddTo(targetObject);
+        execDisposable = execObservable.Subscribe(null, () => DispatchCommand()).AddTo(targetObject);
     }
 
     /// <summary>
@@ -93,15 +81,13 @@ public class Commander
     public void ClearAll()
     {
         cmdQueue.Clear();
-        Cancel(false);
+        Cancel();
     }
 
-    public void Cancel(bool isContinue = true)
+    public void Cancel()
     {
         currentCommand?.Cancel();
         execDisposable?.Dispose();
         DispatchCommand();
-
-        if (isContinue) onValidateInput.OnNext(false);
     }
 }
