@@ -17,7 +17,6 @@ public class MobReactor : MonoBehaviour
     protected MobStatus status;
     protected MobEffect effect;
     protected MobInput input;
-    protected CommandTarget target;
 
     protected virtual void Awake()
     {
@@ -28,8 +27,6 @@ public class MobReactor : MonoBehaviour
 
     protected virtual void Start()
     {
-        target = input.target;
-
         status.Life
             .SkipLatestValueOnSubscribe()
             .Subscribe(life => OnLifeChange(life))
@@ -44,10 +41,6 @@ public class MobReactor : MonoBehaviour
 
         status.OnActive
             .Subscribe(duration => ActiveFadeIn(duration));
-
-        target.OnDead
-            .Subscribe(_ => FadeOutToDead())
-            .AddTo(this);
     }
 
     protected void OnLifeChange(float life)

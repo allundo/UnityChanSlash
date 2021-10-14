@@ -3,6 +3,7 @@ using UniRx;
 using System;
 
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(PlayerReactor))]
 [RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(HidePlateHandler))]
 public class PlayerCommandTarget : CommandTarget

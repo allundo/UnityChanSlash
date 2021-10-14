@@ -15,6 +15,7 @@ public abstract class Command
 
     protected CommandTarget target;
     protected MobAnimator anim;
+    protected MobReactor react;
     protected MapUtil map;
 
     protected IObserver<bool> onValidateInput;
@@ -28,6 +29,7 @@ public abstract class Command
         tweenMove = new TweenMove(target.transform, this.duration);
 
         anim = target.anim;
+        react = target.react;
         map = target.map;
     }
 
@@ -96,11 +98,6 @@ public abstract class Command
         return seq;
     }
 
-    /// <summary>
-    /// Notify onDead event.
-    /// </summary>
-    protected void NotifyOnDead() => target.onDead.OnNext(Unit.Default);
-
     protected void SetOnCompleted(Action action)
     {
         this.onCompleted.Add(action);
@@ -116,7 +113,6 @@ public class DieCommand : Command
         map.ResetOnCharacter();
         anim.die.Fire();
 
-        return ExecOnCompleted(NotifyOnDead); // Don't validate input.
-
+        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
     }
 }

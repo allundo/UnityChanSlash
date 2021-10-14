@@ -6,6 +6,7 @@ using UniRx;
 /// Keeps attached component used by Command execution.
 /// </summary>
 [RequireComponent(typeof(MobAnimator))]
+[RequireComponent(typeof(MobReactor))]
 [RequireComponent(typeof(MapUtil))]
 public class CommandTarget : MonoBehaviour
 {
@@ -15,19 +16,19 @@ public class CommandTarget : MonoBehaviour
     public MobAnimator anim { get; protected set; }
 
     /// <summary>
+    /// Reaction handler for Command execution.
+    /// </summary>
+    public MobReactor react { get; protected set; }
+
+    /// <summary>
     /// Direction related data for Command execution.
     /// </summary>
     public MapUtil map { get; protected set; } = default;
 
-    /// <summary>
-    /// Notify the end of DieCommand execution.
-    /// </summary>
-    public ISubject<Unit> onDead { get; protected set; } = new Subject<Unit>();
-    public IObservable<Unit> OnDead => onDead;
-
     protected virtual void Awake()
     {
         anim = GetComponent<MobAnimator>();
+        react = GetComponent<MobReactor>();
         map = GetComponent<MapUtil>();
     }
 }

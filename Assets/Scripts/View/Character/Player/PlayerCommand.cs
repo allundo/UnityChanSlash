@@ -353,7 +353,7 @@ public class PlayerDie : PlayerCommand
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();
 
-        return ExecOnCompleted(NotifyOnDead);
+        return ExecOnCompleted(() => react.FadeOutToDead());
     }
 }
 
