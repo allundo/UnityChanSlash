@@ -285,6 +285,10 @@ public class PlayerInput : ShieldInput
         itemInventory.OnPutApply
             .Subscribe(itemIcon => InputTrigger(putItem.SetItem(itemIcon)))
             .AddTo(this);
+
+        itemInventory.OnUseItem
+            .Subscribe(itemInfo => InputTrigger(new PlayerItem(playerTarget, itemInfo)))
+            .AddTo(this);
     }
 
     /// <summary>

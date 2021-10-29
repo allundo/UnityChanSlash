@@ -27,6 +27,7 @@ public class ItemIconHandler : IItemIconHandler
 
     public IObservable<ItemIcon> OnPutItem => dragMode.onPutItem.DistinctUntilChanged();
     public IObservable<ItemIcon> OnPutApply => putMode.onPutApply;
+    public IObservable<ItemInfo> OnUseItem => selectMode.onUseItem;
     public bool IsPutItem => currentMode is PutMode;
 
     public ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex)
@@ -122,6 +123,8 @@ public class ItemIconHandler : IItemIconHandler
 
     protected class SelectMode : NormalMode
     {
+        public ISubject<ItemInfo> onUseItem { get; protected set; } = new Subject<ItemInfo>();
+
         public SelectMode(ItemIconHandler handler) : base(handler) { }
 
         public override IItemIconHandler OnPress(int index)
@@ -149,7 +152,7 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            itemIndex.UseItem(handler.pressedIndex);
+            onUseItem.OnNext(itemIndex.UseItem(handler.pressedIndex));
 
             return CleanUp();
         }

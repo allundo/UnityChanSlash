@@ -40,12 +40,14 @@ public class MobReactor : MonoBehaviour
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
 
         status.OnActive
-            .Subscribe(duration => ActiveFadeIn(duration));
+            .Subscribe(duration => ActiveFadeIn(duration))
+            .AddTo(this);
     }
 
     protected void OnLifeChange(float life)
     {
         if (life <= 0.0f) OnDie();
+
         lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
     }
 
@@ -59,13 +61,27 @@ public class MobReactor : MonoBehaviour
         if (!status.IsAlive) return;
 
         float damage = CalcDamage(attack, dir);
-        float damageRatio = Mathf.Clamp(damage / status.LifeMax.Value, 0.0f, 1.0f);
+        float damageRatio = LifeRatio(damage);
 
         effect.OnDamage(damageRatio);
         lifeGauge?.OnDamage(damageRatio);
 
         status.Damage(damage);
     }
+
+    public virtual void OnHealRatio(float healRatio = 0f)
+    {
+        if (!status.IsAlive) return;
+
+        float heal = healRatio * status.LifeMax.Value;
+
+        effect.OnHeal(healRatio);
+        lifeGauge?.OnHeal(healRatio, LifeRatio(status.Life.Value + heal));
+
+        status.Heal(heal);
+    }
+
+    private float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);
 
     protected virtual float CalcDamage(float attack, IDirection dir)
     {

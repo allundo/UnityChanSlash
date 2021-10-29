@@ -7,6 +7,7 @@ public class MobEffect : MonoBehaviour
     [SerializeField] private AudioSource dieSound = null;
     [SerializeField] private AudioSource damageSound = null;
     [SerializeField] private AudioSource criticalSound = null;
+    [SerializeField] private AudioSource lifeMaxSound = null;
 
     protected List<Material> flashMaterials = new List<Material>();
 
@@ -32,6 +33,16 @@ public class MobEffect : MonoBehaviour
     {
         DamageSound(damageRatio);
         DamageFlash(damageRatio);
+    }
+
+    public virtual void OnHeal(float healRatio)
+    {
+        HealFlash(healRatio * 0.5f);
+    }
+
+    public virtual void OnLifeMax()
+    {
+        Play(lifeMaxSound);
     }
 
     protected void StoreMaterialColors()
@@ -64,6 +75,17 @@ public class MobEffect : MonoBehaviour
             }
 
             flash.Append(mat.DOColor(Color.black, 2.0f * damageRatio)).Play();
+        }
+    }
+
+    protected void HealFlash(float duration)
+    {
+        foreach (Material mat in flashMaterials)
+        {
+            DOTween.Sequence()
+                .Append(mat.DOColor(new Color(0.5f, 0.5f, 1f), duration * 0.5f))
+                .Append(mat.DOColor(Color.black, duration * 0.5f).SetEase(Ease.InQuad))
+                .Play();
         }
     }
 

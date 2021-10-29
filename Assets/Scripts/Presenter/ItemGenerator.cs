@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class ItemGenerator : Generator<Item>
 {
-    [SerializeField] private Material potion = default;
-    private Dictionary<ItemType, Material> itemMaterials = new Dictionary<ItemType, Material>();
+    [SerializeField] private Material matPotion = default;
+    private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
 
     private WorldMap map;
 
@@ -14,7 +14,7 @@ public class ItemGenerator : Generator<Item>
         spawnPoint = Vector3.zero;
         map = GameManager.Instance.worldMap;
 
-        itemMaterials[ItemType.Potion] = potion;
+        itemInfo[ItemType.Potion] = new PotionInfo(matPotion);
     }
 
     void Start()
@@ -26,9 +26,7 @@ public class ItemGenerator : Generator<Item>
     {
         if (itemInfo == null) return null;
 
-        return base.Spawn(map.WorldPos(pos), dir)
-            .SetItemInfo(itemInfo)
-            .SetMaterial(itemMaterials[itemInfo.type]);
+        return base.Spawn(map.WorldPos(pos), dir).SetItemInfo(itemInfo);
     }
 
     public bool Put(ItemInfo itemInfo, Pos pos, IDirection dir = null)
@@ -41,8 +39,8 @@ public class ItemGenerator : Generator<Item>
         return false;
     }
 
-    public bool Put(ItemType itemType, Pos pos, IDirection dir = null)
-        => Put(new ItemInfo(itemType), pos, dir);
+    public bool Put(ItemType itemType, Pos pos, IDirection dir = null, int numOfItem = 1)
+        => Put(itemInfo[itemType].Clone(numOfItem) as ItemInfo, pos, dir);
 
     public ItemGenerator SetPoolObject(GameObject itemPool)
     {

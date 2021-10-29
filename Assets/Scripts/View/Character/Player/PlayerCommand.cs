@@ -346,6 +346,22 @@ public class PlayerKick : PlayerAttack
     }
 }
 
+public class PlayerItem : PlayerAction
+{
+    protected ItemInfo itemInfo;
+
+    public PlayerItem(PlayerCommandTarget target, ItemInfo itemInfo, float timing = 0.5f) : base(target, itemInfo.duration, timing)
+    {
+        this.itemInfo = itemInfo;
+    }
+
+    protected override bool Action()
+    {
+        playingTween = itemInfo.EffectSequence(playerTarget).Play();
+        return true;
+    }
+}
+
 public class PlayerDie : PlayerCommand
 {
     public PlayerDie(PlayerCommandTarget target, float duration) : base(target, duration) { }

@@ -21,6 +21,7 @@ public class ItemInventory : MonoBehaviour
     private ItemIconHandler iconHandler = null;
     public IObservable<ItemIcon> OnPutItem => iconHandler.OnPutItem;
     public IObservable<ItemIcon> OnPutApply => iconHandler.OnPutApply;
+    public IObservable<ItemInfo> OnUseItem => iconHandler.OnUseItem;
     public bool IsPutItem => iconHandler.IsPutItem;
 
     void Awake()

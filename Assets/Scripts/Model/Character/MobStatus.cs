@@ -55,6 +55,11 @@ public class MobStatus : SpawnObject<MobStatus>
         life.Value -= damage;
     }
 
+    public void Heal(float heal)
+    {
+        life.Value = Mathf.Min(life.Value + heal, lifeMax.Value);
+    }
+
     public virtual float CalcAttack(float attack, IDirection attackDir)
     {
         return attack * ArmorMultiplier * GetDirMultiplier(attackDir);

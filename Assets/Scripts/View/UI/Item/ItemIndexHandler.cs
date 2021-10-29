@@ -70,16 +70,16 @@ public class ItemIndexHandler
         return true;
     }
 
-    public bool UseItem(Pos index) => UseItem(index.x, index.y);
-    public bool UseItem(int x, int y) => UseItem(x + WIDTH * y);
-    public bool UseItem(int index)
+    public ItemInfo UseItem(Pos index) => UseItem(index.x, index.y);
+    public ItemInfo UseItem(int x, int y) => UseItem(x + WIDTH * y);
+    public ItemInfo UseItem(int index)
     {
         var itemIcon = GetItem(index);
 
-        if (itemIcon == null) return false;
+        if (itemIcon == null) return null;
 
         if (itemIcon.UseItem()) items[index] = null;
 
-        return true;
+        return itemIcon.itemInfo;
     }
 }

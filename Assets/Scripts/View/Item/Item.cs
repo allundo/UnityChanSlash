@@ -41,13 +41,8 @@ public class Item : SpawnObject<Item>
 
     public Item SetItemInfo(ItemInfo info)
     {
-        this.itemInfo = info;
-        return this;
-    }
-
-    public Item SetMaterial(Material material)
-    {
-        meshRenderer.material = material;
+        itemInfo = info;
+        meshRenderer.material = info.material;
         return this;
     }
 }
