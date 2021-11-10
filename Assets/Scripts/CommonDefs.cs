@@ -388,5 +388,5 @@ public enum Plate
 
 public enum ItemType
 {
-    Potion
+    Potion = 0,
 }

@@ -30,5 +30,14 @@ public class MobParam
 
     [SerializeField] public float shield = 0.0f;
     [SerializeField] public float armorMultiplier = 1.0f;
+}
 
+[System.Serializable]
+public class ItemSource
+{
+    [SerializeField] public string name = "種別";
+    [SerializeField] public Material material = default;
+    [SerializeField] public ParticleSystem vfx = default;
+    [SerializeField] public AudioSource sfx = default;
+    [SerializeField] public float duration = 0.2f;
 }

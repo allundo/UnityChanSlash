@@ -16604,6 +16604,7 @@ MonoBehaviour:
   prefab: {fileID: 3400831684517067014, guid: ea0ac0796c67846c8ad4583da7318a04, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
   matPotion: {fileID: 2100000, guid: b4d0df5607eb74b15b1bb09440cce67c, type: 2}
+  itemData: {fileID: 11400000, guid: 30971acfce6de46e4bd91f0513725389, type: 2}
 --- !u!4 &1345430766
 Transform:
   m_ObjectHideFlags: 0
@@ -89720,6 +89721,7 @@ MonoBehaviour:
   damageSound: {fileID: 8569190329593005807}
   criticalSound: {fileID: 4657969801869636797}
   lifeMaxSound: {fileID: 0}
+  healVfx: {fileID: 0}
   shieldSound: {fileID: 8102510777999088537}
   jumpSound: {fileID: 935621411994108881}
   jumpLandingSound: {fileID: 142586554753839694}

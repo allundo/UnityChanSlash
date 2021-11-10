@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class ItemGenerator : Generator<Item>
 {
     [SerializeField] private Material matPotion = default;
+    [SerializeField] private ItemData itemData = default;
+
     private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
 
     private WorldMap map;
@@ -14,7 +16,7 @@ public class ItemGenerator : Generator<Item>
         spawnPoint = Vector3.zero;
         map = GameManager.Instance.worldMap;
 
-        itemInfo[ItemType.Potion] = new PotionInfo(matPotion);
+        itemInfo[ItemType.Potion] = new PotionInfo(itemData.Param((int)ItemType.Potion));
     }
 
     void Start()
