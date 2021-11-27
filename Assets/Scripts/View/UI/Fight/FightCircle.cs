@@ -76,6 +76,15 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             .RepeatUntilDestroy(gameObject)
             .Subscribe(life => circle.OnLifeChange(life))
             .AddTo(this);
+
+        StraightButton.Subscribe(_ => kickButton.SetCoolTime(straightButton.CoolTime)).AddTo(this);
+
+        KickButton.Subscribe(_ =>
+        {
+            jabButton.SetCoolTime(kickButton.CoolTime);
+            straightButton.SetCoolTime(kickButton.CoolTime);
+        })
+        .AddTo(this);
     }
 
     void Update()
