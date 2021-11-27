@@ -9,6 +9,7 @@ public class AttackButton : FadeEnable
 
     private Tween expand;
     private Tween shrink;
+    private Tween move;
 
     protected bool isFiring = false;
 
@@ -26,6 +27,7 @@ public class AttackButton : FadeEnable
     {
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
+        move = null;
     }
 
     public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
@@ -44,7 +46,10 @@ public class AttackButton : FadeEnable
 
     public void Press(Vector2 pos)
     {
-        FadeIn(0.1f, () => ui.SetScreenPos(pos)).Play();
+        move?.Kill();
+        expand.Rewind();
+        shrink.Rewind();
+        FadeIn(0.1f, () => ui.SetScreenPos(pos), null, false).Play();
     }
 
     public void Release()
@@ -53,8 +58,8 @@ public class AttackButton : FadeEnable
 
         isFiring = true;
 
-        ui.MoveBackRatio(duration, 0.5f).Play();
-        expand.Restart();
+        move = ui.MoveBackRatio(duration, 0.5f).Play();
+        expand.Play();
         FadeOut(duration, null, null, false).Play();
 
         AttackSubject.OnNext(Unit.Default);
@@ -64,8 +69,8 @@ public class AttackButton : FadeEnable
     {
         isFiring = true;
 
-        ui.MoveBackRatio(duration, 0.25f).Play();
-        shrink.Restart();
-        FadeOut(duration).Play();
+        move = ui.MoveBackRatio(duration, 0.25f).Play();
+        shrink.Play();
+        FadeOut(duration, null, null, false).Play();
     }
 }
