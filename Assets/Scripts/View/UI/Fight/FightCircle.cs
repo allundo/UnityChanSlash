@@ -29,7 +29,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector2 UICenter;
     private Vector2 kickUICenter;
 
-    private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).magnitude < 20.0f;
+    private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).magnitude < 100.0f;
 
     private AttackButton currentButton = null;
     private Vector2 pressPos = Vector2.zero;
@@ -55,7 +55,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Start()
     {
         radius = 260.0f;
-        kickUICenter = new Vector2(0, -(radius - 20.0f));
+        kickUICenter = new Vector2(0, -(radius - 100.0f));
 
         ResetCenterPos();
 
