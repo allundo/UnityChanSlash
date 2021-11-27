@@ -73,10 +73,12 @@ public class FadeTween
     {
         if (isContinuous) return In(duration * (1f - AlphaRatio), delay, onPlay, onComplete);
 
-        return DOTween.Sequence()
+        fadeIn = DOTween.Sequence()
             .AppendCallback(() => SetAlpha(0f))
             .Append(In(duration, delay, onPlay, onComplete))
             .SetUpdate(isValidOnPause);
+
+        return fadeIn;
     }
 
     private Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
@@ -99,10 +101,12 @@ public class FadeTween
     {
         if (isContinuous) return Out(duration * AlphaRatio, delay, onPlay, onComplete);
 
-        return DOTween.Sequence()
+        fadeOut = DOTween.Sequence()
             .AppendCallback(() => SetAlpha(1f))
             .Append(Out(duration, delay, onPlay, onComplete))
             .SetUpdate(isValidOnPause);
+
+        return fadeOut;
     }
 
     private Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
