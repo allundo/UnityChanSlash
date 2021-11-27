@@ -5,6 +5,8 @@ using UniRx;
 public class AttackButton : FadeEnable
 {
     [SerializeField] float duration = 0.2f;
+    [SerializeField] FadeEnable region = default;
+
     protected UITween ui;
 
     private Tween expand;
@@ -14,6 +16,8 @@ public class AttackButton : FadeEnable
     protected bool isFiring = false;
 
     public ISubject<Unit> AttackSubject { get; protected set; } = new Subject<Unit>();
+
+    public float CoolTime => duration * 1.2f;
 
     protected override void Awake()
     {
@@ -25,42 +29,34 @@ public class AttackButton : FadeEnable
 
     protected virtual void Start()
     {
+        region.Activate();
+
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
         move = null;
     }
 
-    public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
-    {
-        onPlay = onPlay ?? (() => { });
-
-        return base.FadeOut(duration,
-            () =>
-            {
-                isFiring = false;
-                onPlay();
-            },
-            onComplete,
-            isContinuous);
-    }
-
     public void Press(Vector2 pos)
     {
+        if (isFiring) return;
+
         move?.Kill();
         expand.Rewind();
         shrink.Rewind();
         FadeIn(0.1f, () => ui.SetScreenPos(pos), null, false).Play();
+
+        Disable();
     }
 
     public void Release()
     {
         if (!isActive) return;
 
-        isFiring = true;
-
         move = ui.MoveBackRatio(duration, 0.5f).Play();
         expand.Play();
         FadeOut(duration, null, null, false).Play();
+
+        StartCoolTime(CoolTime);
 
         AttackSubject.OnNext(Unit.Default);
     }
@@ -72,5 +68,29 @@ public class AttackButton : FadeEnable
         move = ui.MoveBackRatio(duration, 0.25f).Play();
         shrink.Play();
         FadeOut(duration, null, null, false).Play();
+
+        Enable();
     }
+
+    private void Disable()
+    {
+        isFiring = true;
+        region.FadeOut(0.05f).Play();
+    }
+
+    private void Enable()
+    {
+        isFiring = false;
+        region.FadeIn(0.2f).Play();
+    }
+
+    public void SetCoolTime(float coolTime)
+    {
+        Disable();
+        StartCoolTime(coolTime);
+    }
+
+    private Tween StartCoolTime(float coolTime)
+        => DOVirtual.DelayedCall(coolTime, Enable, false).Play();
+
 }
