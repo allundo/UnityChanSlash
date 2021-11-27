@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using UniRx;
+using System;
 
 public class AttackButton : FadeEnable
 {
@@ -15,7 +16,8 @@ public class AttackButton : FadeEnable
 
     protected bool isFiring = false;
 
-    public ISubject<Unit> AttackSubject { get; protected set; } = new Subject<Unit>();
+    private ISubject<Unit> attackSubject = new Subject<Unit>();
+    public IObservable<Unit> ObservableAtk => attackSubject;
 
     public float CoolTime => duration * 1.2f;
 
@@ -58,7 +60,7 @@ public class AttackButton : FadeEnable
 
         StartCoolTime(CoolTime);
 
-        AttackSubject.OnNext(Unit.Default);
+        attackSubject.OnNext(Unit.Default);
     }
 
     public void Cancel(float duration = 0.2f)

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using UniRx;
+using System;
 
 [RequireComponent(typeof(MaskableGraphic))]
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
@@ -15,9 +16,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     [SerializeField] private EnemyLifeGauge circle = default;
 
-    public AttackButton JabButton => jabButton;
-    public AttackButton StraightButton => straightButton;
-    public AttackButton KickButton => kickButton;
+    public IObservable<Unit> JabButton => jabButton.ObservableAtk;
+    public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
+    public IObservable<Unit> KickButton => kickButton.ObservableAtk;
 
     private RectTransform rectTransform;
     private RaycastHandler raycastHandler;

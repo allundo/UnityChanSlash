@@ -242,15 +242,15 @@ public class PlayerInput : ShieldInput
         Command straight = new PlayerStraight(playerTarget, 0.85f);
         Command kick = new PlayerKick(playerTarget, 1.2f);
 
-        fightCircle.JabButton.AttackSubject
+        fightCircle.JabButton
             .Subscribe(_ => InputCommand(jab))
             .AddTo(this);
 
-        fightCircle.StraightButton.AttackSubject
+        fightCircle.StraightButton
             .Subscribe(_ => InputCommand(straight))
             .AddTo(this);
 
-        fightCircle.KickButton.AttackSubject
+        fightCircle.KickButton
             .Subscribe(_ => InputCommand(kick))
             .AddTo(this);
     }
