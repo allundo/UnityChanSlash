@@ -71,66 +71,45 @@ public class FadeTween
 
     public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
-        if (isContinuous) return In(duration * (1f - AlphaRatio), delay, onPlay, onComplete);
-
-        fadeIn = DOTween.Sequence()
-            .AppendCallback(() => SetAlpha(0f))
-            .Append(In(duration, delay, onPlay, onComplete))
-            .SetUpdate(isValidOnPause);
-
-        return fadeIn;
-    }
-
-    private Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
-    {
-        onPlay = onPlay ?? (() => { });
-        onComplete = onComplete ?? (() => { });
-
-        fadeIn = ToAlpha(maxAlpha, duration, delay)
-            .OnPlay(() =>
-            {
-                fadeOut?.Kill();
-                onPlay();
-            })
-            .OnComplete(onComplete);
-
+        fadeIn = FadeFunc(true, duration, delay, onPlay, onComplete, isContinuous);
         return fadeIn;
     }
 
     public virtual Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
-        if (isContinuous) return Out(duration * AlphaRatio, delay, onPlay, onComplete);
-
-        fadeOut = DOTween.Sequence()
-            .AppendCallback(() => SetAlpha(1f))
-            .Append(Out(duration, delay, onPlay, onComplete))
-            .SetUpdate(isValidOnPause);
-
+        fadeOut = FadeFunc(false, duration, delay, onPlay, onComplete, isContinuous);
         return fadeOut;
     }
 
-    private Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
+    private Tween FadeFunc(bool isIn, float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    {
+        if (isContinuous) return FadeFunc(isIn, duration * (isIn ? (1f - AlphaRatio) : AlphaRatio), delay, onPlay, onComplete);
+
+        return DOTween.Sequence()
+            .AppendCallback(() => SetAlpha(isIn ? 0f : 1f))
+            .Append(FadeFunc(isIn, duration, delay, onPlay, onComplete))
+            .SetUpdate(isValidOnPause);
+    }
+
+    private Tween FadeFunc(bool isIn, float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null)
     {
         onPlay = onPlay ?? (() => { });
         onComplete = onComplete ?? (() => { });
 
-        fadeOut = ToAlpha(0, duration, delay)
+        return ToAlpha(isIn ? maxAlpha : 0f, duration, delay)
             .OnPlay(() =>
             {
-                fadeIn?.Kill();
+                (isIn ? fadeOut : fadeIn)?.Kill();
                 onPlay();
             })
             .OnComplete(onComplete);
-
-        return fadeOut;
     }
 
     public Tween ToAlpha(float alpha, float duration = 1f, float delay = 0f)
     {
-        return
-            DOTween
-                .ToAlpha(() => color, value => color = value, alpha, duration)
-                .SetUpdate(isValidOnPause)
-                .SetDelay(delay);
+        return DOTween
+            .ToAlpha(() => color, value => color = value, alpha, duration)
+            .SetUpdate(isValidOnPause)
+            .SetDelay(delay);
     }
 }
