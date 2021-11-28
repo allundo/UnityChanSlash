@@ -77,7 +77,19 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             .Subscribe(life => circle.OnLifeChange(life))
             .AddTo(this);
 
-        StraightButton.Subscribe(_ => kickButton.SetCoolTime(straightButton.CoolTime)).AddTo(this);
+        JabButton.Subscribe(_ =>
+        {
+            straightButton.SetCoolTime(jabButton.CancelTime);
+            kickButton.SetCoolTime(jabButton.CancelTime);
+        })
+        .AddTo(this);
+
+        StraightButton.Subscribe(_ =>
+        {
+            jabButton.SetCoolTime(straightButton.CancelTime);
+            kickButton.SetCoolTime(straightButton.CoolTime);
+        })
+        .AddTo(this);
 
         KickButton.Subscribe(_ =>
         {

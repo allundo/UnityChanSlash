@@ -5,14 +5,17 @@ using System;
 
 public class AttackButton : FadeEnable
 {
-    [SerializeField] float duration = 0.2f;
-    [SerializeField] FadeEnable region = default;
+    [SerializeField] private float duration = 0.2f;
+    [SerializeField] private FadeEnable region = default;
 
     protected UITween ui;
 
     private Tween expand;
     private Tween shrink;
-    private Tween move;
+    private Tween move = null;
+
+    private Tween coolTimer = null;
+    private float countTime = 0f;
 
     protected bool isFiring = false;
 
@@ -20,6 +23,7 @@ public class AttackButton : FadeEnable
     public IObservable<Unit> ObservableAtk => attackSubject;
 
     public float CoolTime => duration * 1.2f;
+    public float CancelTime => duration * 0.4f;
 
     protected override void Awake()
     {
@@ -35,7 +39,6 @@ public class AttackButton : FadeEnable
 
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
-        move = null;
     }
 
     public void Press(Vector2 pos)
@@ -88,11 +91,16 @@ public class AttackButton : FadeEnable
 
     public void SetCoolTime(float coolTime)
     {
+        if (countTime > coolTime) return;
+
         Disable();
-        StartCoolTime(coolTime);
+        coolTimer?.Kill();
+        coolTimer = StartCoolTime(coolTime);
     }
 
     private Tween StartCoolTime(float coolTime)
-        => DOVirtual.DelayedCall(coolTime, Enable, false).Play();
-
+    {
+        countTime = coolTime;
+        return DOTween.To(() => countTime, time => countTime = time, 0f, coolTime).OnComplete(Enable).Play();
+    }
 }

@@ -45065,7 +45065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.18
+  duration: 0.2
   region: {fileID: 1047722392}
 --- !u!114 &2660165013004496605
 MonoBehaviour:

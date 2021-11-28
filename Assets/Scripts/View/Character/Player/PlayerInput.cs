@@ -57,8 +57,11 @@ public class PlayerInput : ShieldInput
 
     protected override void Awake()
     {
-        base.Awake();
+        target = GetComponent<CommandTarget>();
+        map = GetComponent<MapUtil>();
+
         playerTarget = target as PlayerCommandTarget;
+        commander = new PlayerCommander(playerTarget);
     }
 
     protected override void SetCommands()
@@ -238,6 +241,7 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitFightInput()
     {
+        // TODO: Refer duration and cancel time value from AttackButton object
         Command jab = new PlayerJab(playerTarget, 0.6f);
         Command straight = new PlayerStraight(playerTarget, 0.85f);
         Command kick = new PlayerKick(playerTarget, 1.2f);

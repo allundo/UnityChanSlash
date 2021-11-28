@@ -303,46 +303,92 @@ public abstract class PlayerAttack : PlayerAction
     protected MobAttack straight;
     protected MobAttack kick;
 
-    public PlayerAttack(PlayerCommandTarget target, float duration, float timing = 0.5f) : base(target, duration, timing)
+    protected Tween cancelTimer = null;
+    protected float cancelStart;
+
+    public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration)
     {
         jab = target.jab;
         straight = target.straight;
         kick = target.kick;
+
+        this.cancelStart = cancelStart;
+
+        if (cancelStart < 1f)
+        {
+            cancelTimer = DOTween.Sequence()
+                .AppendInterval(cancelStart * duration * DURATION_UNIT)
+                .AppendCallback(() => playerAnim.cancel.Bool = true)
+                .AppendInterval((1 - cancelStart) * duration * DURATION_UNIT)
+                .AppendCallback(() => playerAnim.cancel.Bool = false)
+                .AsReusable(target.gameObject);
+        }
     }
+
+    protected override IObservable<Unit> ExecOnCompleted(params Action[] onCompleted)
+    {
+        onCompleted.ForEach(action => SetOnCompleted(action));
+        return cancelStart < 1f ? DOTweenObservable(duration * cancelStart) : DOTweenCompleted(duration, Unit.Default).IgnoreElements();
+    }
+
+    protected IObservable<Unit> DOTweenObservable(float cancelTime)
+    {
+        return Observable.Create<Unit>(o =>
+        {
+            Tween onNext = DOVirtual.DelayedCall(cancelTime, null, false).OnComplete(() =>
+            {
+                o.OnNext(Unit.Default);
+            }).Play();
+            Tween complete = DOVirtual.DelayedCall(duration, null, false).OnComplete(o.OnCompleted).Play();
+
+            return Disposable.Create(() =>
+            {
+                onNext?.Kill();
+                complete?.Kill();
+            });
+        });
+    }
+
+    protected override bool Action()
+    {
+        cancelTimer?.Restart();
+        Attack();
+        return true;
+    }
+
+    protected abstract void Attack();
 }
 
 public class PlayerJab : PlayerAttack
 {
-    public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration) { }
+    public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f) { }
 
-    protected override bool Action()
+    protected override void Attack()
     {
         playerAnim.jab.Fire();
         playingTween = jab.AttackSequence(duration).Play();
-        return true;
     }
 }
 
 public class PlayerStraight : PlayerAttack
 {
-    public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration) { }
+    public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f) { }
 
-    protected override bool Action()
+    protected override void Attack()
     {
         playerAnim.straight.Fire();
         playingTween = straight.AttackSequence(duration).Play();
-        return true;
     }
 }
+
 public class PlayerKick : PlayerAttack
 {
     public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool Action()
+    protected override void Attack()
     {
         playerAnim.kick.Fire();
         playingTween = kick.AttackSequence(duration).Play();
-        return true;
     }
 }
 

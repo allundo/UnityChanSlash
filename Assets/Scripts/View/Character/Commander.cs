@@ -40,7 +40,7 @@ public class Commander
     /// </summary>
     /// <param name="cmd">Command to enqueue</param>
     /// <param name="dispatch">Dispatch Command immediately if true. TODO: This is not Command interaption for now.</param>
-    public void EnqueueCommand(Command cmd, bool dispatch = false)
+    public virtual void EnqueueCommand(Command cmd, bool dispatch = false)
     {
         cmdQueue.Enqueue(cmd);
 
@@ -68,7 +68,7 @@ public class Commander
         return false;
     }
 
-    protected void Subscribe(IObservable<Unit> execObservable)
+    protected virtual void Subscribe(IObservable<Unit> execObservable)
     {
         if (execObservable == null) return;
 

@@ -18,6 +18,7 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerEx dropFloor { get; protected set; }
     public AnimatorBool rest { get; protected set; }
     public AnimatorBool handOn { get; protected set; }
+    public AnimatorBool cancel { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
 
@@ -42,6 +43,7 @@ public class PlayerAnimator : ShieldAnimator
         dropFloor = new TriggerEx(anim, "DropFloor", 0);
         rest = new AnimatorBool(anim, "Rest");
         handOn = new AnimatorBool(anim, "HandOn");
+        cancel = new AnimatorBool(anim, "Cancel");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 

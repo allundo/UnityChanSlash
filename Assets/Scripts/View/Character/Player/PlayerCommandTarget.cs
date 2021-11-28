@@ -1,6 +1,4 @@
 using UnityEngine;
-using UniRx;
-using System;
 
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(PlayerReactor))]
