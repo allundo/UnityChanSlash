@@ -317,7 +317,7 @@ public class PlayerJab : PlayerAttack
 
     protected override bool Action()
     {
-        playerAnim.attack.Fire();
+        playerAnim.jab.Fire();
         playingTween = jab.AttackSequence(duration).Play();
         return true;
     }

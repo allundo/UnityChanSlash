@@ -11,7 +11,7 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerEx turnR { get; protected set; }
     public TriggerEx handle { get; protected set; }
     public TriggerEx getItem { get; protected set; }
-    public TriggerEx attack { get; protected set; }
+    public TriggerEx jab { get; protected set; }
     public TriggerEx straight { get; protected set; }
     public TriggerEx kick { get; protected set; }
     public TriggerEx dieEx { get; protected set; }
@@ -35,7 +35,7 @@ public class PlayerAnimator : ShieldAnimator
         turnR = new TriggerEx(anim, "TurnR");
         handle = new TriggerEx(anim, "Handle");
         getItem = new TriggerEx(anim, "GetItem");
-        attack = new TriggerEx(anim, "Attack", 5);
+        jab = new TriggerEx(anim, "Jab", 5);
         straight = new TriggerEx(anim, "Straight", 5);
         kick = new TriggerEx(anim, "Kick", 5);
         dieEx = new TriggerEx(anim, "Die", 0);
