@@ -35,7 +35,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private AttackButton currentButton = null;
     private Vector2 pressPos = Vector2.zero;
 
-    private bool IsPressed => currentButton != null;
+    public bool IsPressed => currentButton != null;
 
     private float DrawComponent(Vector2 screenPos) => IsPressed ? Vector2.Dot(UIPos(pressPos).normalized, DragVector(screenPos)) : 0.0f;
     private float radius;
@@ -62,8 +62,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
-
-        // CurrentButton.Subscribe(button => UIMask.SetActive(button != null)).AddTo(this);
 
         EnemyStatus
             .Where(status => status != null)
