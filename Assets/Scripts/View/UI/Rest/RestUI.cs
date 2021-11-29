@@ -17,6 +17,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Image image;
     private FadeTween fade;
     private Tween healTween;
+    private Tween damageTween;
 
     private float healPoint = 0.0f;
     private ISubject<float> healSubject = new Subject<float>();
@@ -38,6 +39,15 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             .AppendCallback(() => healSubject.OnNext(healPoint))
             .AppendInterval(0.1f)
             .SetLoops(-1, LoopType.Restart)
+            .SetUpdate(true)
+            .AsReusable(gameObject);
+
+        damageTween = DOTween.Sequence()
+            .AppendCallback(() => fade.color = Color.white)
+            .AppendCallback(() => fade.SetAlpha(1f))
+            .AppendInterval(0.025f)
+            .AppendCallback(() => fade.color = Color.red)
+            .Append(fade.Out(0.8f, 0f, null, null, false))
             .SetUpdate(true)
             .AsReusable(gameObject);
     }
@@ -102,14 +112,6 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void OnDamage()
     {
         Inactivate();
-
-        DOTween.Sequence()
-            .AppendCallback(() => fade.color = Color.white)
-            .AppendCallback(() => fade.SetAlpha(1f))
-            .AppendInterval(0.025f)
-            .AppendCallback(() => fade.color = Color.red)
-            .Append(fade.Out(0.8f, 0f, null, null, false))
-            .SetUpdate(true)
-            .Play();
+        damageTween.Restart();
     }
 }
