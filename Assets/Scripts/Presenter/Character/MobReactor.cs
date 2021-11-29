@@ -44,7 +44,7 @@ public class MobReactor : MonoBehaviour
             .AddTo(this);
     }
 
-    protected void OnLifeChange(float life)
+    protected virtual void OnLifeChange(float life)
     {
         if (life <= 0.0f) OnDie();
 
@@ -69,14 +69,17 @@ public class MobReactor : MonoBehaviour
         status.Damage(damage);
     }
 
-    public virtual void OnHealRatio(float healRatio = 0f)
+    public virtual void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
     {
         if (!status.IsAlive) return;
 
         float heal = healRatio * status.LifeMax.Value;
 
-        effect.OnHeal(healRatio);
-        lifeGauge?.OnHeal(healRatio, LifeRatio(status.Life.Value + heal));
+        if (isEffectOn)
+        {
+            effect.OnHeal(healRatio);
+            lifeGauge?.OnHeal(healRatio, LifeRatio(status.Life.Value + heal));
+        }
 
         status.Heal(heal);
     }

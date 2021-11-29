@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using UniRx;
+using System;
 
 public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -14,6 +16,11 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private Image image;
     private FadeTween fade;
+    private Tween healTween;
+
+    private float healPoint = 0.0f;
+    private ISubject<float> healSubject = new Subject<float>();
+    public IObservable<float> Heal => healSubject;
 
     public bool isActive { get; protected set; } = false;
 
@@ -25,6 +32,14 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         image = GetComponent<Image>();
         fade = new FadeTween(image);
+
+        healTween = DOTween.Sequence()
+            .AppendCallback(() => healPoint += 0.0005f)
+            .AppendCallback(() => healSubject.OnNext(healPoint))
+            .AppendInterval(0.1f)
+            .SetLoops(-1, LoopType.Restart)
+            .SetUpdate(true)
+            .AsReusable(gameObject);
     }
 
     protected void Start()
@@ -32,31 +47,53 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         restButton.onClick.AddListener(Activate);
         resumeButton.onPush.AddListener(Inactivate);
 
-        Inactivate();
+        HideUIs();
     }
 
     public void Activate()
     {
+        cover.FadeOut(0.01f).Play();
+        GameManager.Instance.TimeScale();
+
+        healSubject.OnNext(0f);
+        healTween.Restart();
+
+        ShowUIs();
+
         isActive = true;
-        restButton.interactable = false;
+    }
+
+    protected void ShowUIs()
+    {
         image.raycastTarget = true;
         restLifeGauge.gameObject.SetActive(true);
         txtRest.gameObject.SetActive(true);
-        cover.FadeOut(0.01f).Play();
         resumeButton.Show().Play();
-        GameManager.Instance.TimeScale();
+
+        restButton.interactable = false;
     }
 
     public void Inactivate()
     {
+        GameManager.Instance.Resume();
+        cover.FadeIn(0.01f).Play();
+
+        healPoint = 0f;
+        healTween.Pause();
+
+        HideUIs();
+
         isActive = false;
-        restButton.interactable = true;
+    }
+
+    protected void HideUIs()
+    {
         image.raycastTarget = false;
         restLifeGauge.gameObject.SetActive(false);
         txtRest.gameObject.SetActive(false);
-        cover.FadeIn(0.01f).Play();
         resumeButton.Hide().Play();
-        GameManager.Instance.Resume();
+
+        restButton.interactable = true;
     }
 
     public void OnLifeChange(float life, float lifeMax)

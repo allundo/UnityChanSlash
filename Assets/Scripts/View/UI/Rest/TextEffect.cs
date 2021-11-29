@@ -40,6 +40,7 @@ public class TextEffect : FadeEnable
         return DOTween.Sequence()
             .Append(text.Resize(ratio, duration * 0.5f).SetEase(Ease.OutQuad))
             .SetLoops(-1, LoopType.Yoyo)
+            .SetUpdate(true)
             .AsReusable(this.gameObject);
     }
 }

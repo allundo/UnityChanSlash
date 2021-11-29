@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
@@ -13,6 +14,29 @@ public class PlayerReactor : MobReactor
     {
         base.Awake();
         playerInput = GetComponent<PlayerInput>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        restUI.Heal.Subscribe(point => OnHealRatio(point, false)).AddTo(this);
+    }
+
+    public override void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
+    {
+        if (healRatio == 0f)
+        {
+            // Update RestUI life gauge
+            restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
+            return;
+        }
+
+        base.OnHealRatio(healRatio, isEffectOn);
+    }
+    protected override void OnLifeChange(float life)
+    {
+        base.OnLifeChange(life);
+        restUI.OnLifeChange(life, status.LifeMax.Value);
     }
 
     public override void OnDamage(float attack, IDirection dir)
