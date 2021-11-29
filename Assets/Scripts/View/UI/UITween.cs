@@ -105,20 +105,19 @@ public class UITween
         rectTransform.anchoredPosition = defaultPos;
     }
 
-    public void SetSize(Vector2 size, bool setDefault = false)
+    public virtual void SetSize(Vector2 size, bool setDefault = false)
     {
         rectTransform.sizeDelta = size;
         if (setDefault) defaultSize = size;
     }
 
-    public void ResetSize(float ratio = 1f)
+    public virtual void ResetSize(float ratio = 1f)
     {
         rectTransform.sizeDelta = defaultSize * ratio;
     }
 
-    public void ResetSize(float ratioX, float ratioY)
+    public virtual void ResetSize(float ratioX, float ratioY)
     {
-
         rectTransform.sizeDelta = new Vector2(defaultSize.x * ratioX, defaultSize.y * ratioY);
     }
 
@@ -127,7 +126,7 @@ public class UITween
         rectTransform.sizeDelta = new Vector2(defaultSize.x * ratio, rectTransform.sizeDelta.y);
     }
 
-    public void ResetSizeY(float ratio = 1f)
+    public virtual void ResetSizeY(float ratio = 1f)
     {
         rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, defaultSize.y * ratio);
     }
@@ -141,7 +140,7 @@ public class UITween
     public Tween ResizeY(float ratioY = 1.5f, float duration = 1f, bool isReusable = false)
         => Resize(new Vector2(1f, ratioY), duration, isReusable);
 
-    public Tween Resize(Vector2 ratio, float duration = 1f, bool isReusable = false)
+    public virtual Tween Resize(Vector2 ratio, float duration = 1f, bool isReusable = false)
     {
         Tween resize =
             rectTransform
