@@ -12,7 +12,7 @@ public class FadeTween
     private Tween fadeIn = null;
     private Tween fadeOut = null;
 
-    protected virtual Color color
+    public virtual Color color
     {
         get
         {

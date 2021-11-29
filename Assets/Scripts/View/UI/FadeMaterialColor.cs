@@ -22,7 +22,7 @@ public class FadeMaterialColor : FadeTween
         this.gameObject = gameObject;
     }
 
-    protected override Color color
+    public override Color color
     {
         get
         {

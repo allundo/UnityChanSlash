@@ -18,6 +18,7 @@ MonoBehaviour:
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
+    restDamageMultiplier: 6
     attack: 1
     shield: 1
     armorMultiplier: 1

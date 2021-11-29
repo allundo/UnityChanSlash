@@ -11,6 +11,7 @@ public class MobStatus : SpawnObject<MobStatus>
     protected virtual float FaceDamageMultiplier => param.faceDamageMultiplier;
     protected virtual float SideDamageMultiplier => param.sideDamageMultiplier;
     protected virtual float BackDamageMultiplier => param.backDamageMultiplier;
+    protected virtual float RestDamageMultiplier => param.restDamageMultiplier;
     protected virtual float DefaultLifeMax => param.defaultLifeMax;
 
     public virtual float Attack => param.attack;
@@ -67,6 +68,8 @@ public class MobStatus : SpawnObject<MobStatus>
 
     protected float GetDirMultiplier(IDirection attackerDir)
     {
+        if (attackerDir == null) return RestDamageMultiplier;
+
         if (attackerDir.IsInverse(dir))
         {
             return FaceDamageMultiplier;

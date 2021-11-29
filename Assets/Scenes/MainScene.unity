@@ -25637,7 +25637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.105882354}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -55521,6 +55521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeGauge: {fileID: 8337679455544452774}
+  restUI: {fileID: 1723596714}
 --- !u!224 &3504755192342045714
 RectTransform:
   m_ObjectHideFlags: 0

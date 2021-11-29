@@ -26,6 +26,8 @@ public class MobParam
 
     [SerializeField] public float backDamageMultiplier = 2.0f;
 
+    [SerializeField] public float restDamageMultiplier = 6.0f;
+
     [SerializeField] public float attack = 1.0f;
 
     [SerializeField] public float shield = 0.0f;

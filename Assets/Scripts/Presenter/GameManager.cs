@@ -16,7 +16,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private DebugEnemyGenerator debugEnemyGenerator = default;
 
     private bool isInitialOrientation = true;
+
     public bool isPaused { get; private set; } = false;
+    public bool isScaled { get; private set; } = false;
 
     public WorldMap worldMap { get; protected set; }
 
@@ -27,16 +29,26 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         if (isHideUIs) HideUIs();
         Time.timeScale = 0f;
 
-        isPaused = true;
+        isPaused = isScaled = true;
     }
+
     public void Resume()
     {
-        if (!isPaused) return;
+        if (!isScaled) return;
 
         DisplayUIs();
         Time.timeScale = 1f;
 
-        isPaused = false;
+        isPaused = isScaled = false;
+    }
+
+    public void TimeScale(float scale = 4f)
+    {
+        if (isPaused) return;
+
+        Time.timeScale = scale;
+
+        isScaled = true;
     }
 
     private void HideUIs() { input.SetInputVisible(false); }
