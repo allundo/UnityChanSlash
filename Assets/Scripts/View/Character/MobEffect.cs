@@ -10,10 +10,17 @@ public class MobEffect : MonoBehaviour
     [SerializeField] private AudioSource lifeMaxSound = null;
 
     protected List<Material> flashMaterials = new List<Material>();
+    protected Tween prevFlash;
 
     protected virtual void Awake()
     {
         StoreMaterialColors();
+    }
+
+    protected void PlayFlash(Tween flash)
+    {
+        prevFlash?.Kill();
+        prevFlash = flash.Play();
     }
 
     protected void Play(AudioSource src)
@@ -64,29 +71,38 @@ public class MobEffect : MonoBehaviour
     {
         if (damageRatio < 0.000001f) return;
 
+        Sequence flash = DOTween.Sequence();
+
         foreach (Material mat in flashMaterials)
         {
-            Sequence flash = DOTween.Sequence().Append(mat.DOColor(Color.white, 0.02f));
+            Sequence flashSub = DOTween.Sequence().Append(mat.DOColor(Color.white, 0.02f));
 
             if (damageRatio > 0.1f)
             {
-                flash.Append(mat.DOColor(Color.black, 0.02f));
-                flash.Append(mat.DOColor(Color.red, 0.02f));
+                flashSub.Append(mat.DOColor(Color.black, 0.02f));
+                flashSub.Append(mat.DOColor(Color.red, 0.02f));
             }
 
-            flash.Append(mat.DOColor(Color.black, 2.0f * damageRatio)).Play();
+            flash.Join(flashSub.Append(mat.DOColor(Color.black, 2.0f * damageRatio)));
         }
+
+        PlayFlash(flash);
     }
 
     protected void HealFlash(float duration)
     {
+        Sequence flash = DOTween.Sequence();
+
         foreach (Material mat in flashMaterials)
         {
-            DOTween.Sequence()
-                .Append(mat.DOColor(new Color(0.5f, 0.5f, 1f), duration * 0.5f))
-                .Append(mat.DOColor(Color.black, duration * 0.5f).SetEase(Ease.InQuad))
-                .Play();
+            flash.Join(
+                DOTween.Sequence()
+                    .Append(mat.DOColor(new Color(0.5f, 0.5f, 1f), duration * 0.5f))
+                    .Append(mat.DOColor(Color.black, duration * 0.5f).SetEase(Ease.InQuad))
+            );
         }
+
+        PlayFlash(flash);
     }
 
     protected void DamageSound(float damageRatio)
@@ -115,6 +131,6 @@ public class MobEffect : MonoBehaviour
             );
         }
 
-        return fade;
+        return fade.OnPlay(() => prevFlash?.Kill());
     }
 }
