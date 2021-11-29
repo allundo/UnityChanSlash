@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UniRx;
 
 /// <summary>
@@ -31,6 +32,8 @@ public class PlayerInput : ShieldInput
     [SerializeField] protected PointerDownUI turnLUI = default;
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
+
+    [SerializeField] protected Button restButton = default;
 
     [SerializeField] protected GameObject uiMask = default;
 
@@ -143,7 +146,14 @@ public class PlayerInput : ShieldInput
     public void SetInputVisible(bool isVisible = true)
     {
         isInputVisible = isVisible;
+        restButton.gameObject.SetActive(isVisible);
         if (!isVisible) InactivateUIs();
+    }
+
+    public override void InputDie()
+    {
+        base.InputDie();
+        SetInputVisible(false);
     }
 
     /// <summary>
