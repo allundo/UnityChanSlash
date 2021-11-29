@@ -1,7 +1,7 @@
 using UniRx;
 using DG.Tweening;
 
-public class GuardStateTemp
+public class GuardState
 {
     private ShieldInput input;
     private ShieldAnimator anim;
@@ -42,7 +42,7 @@ public class GuardStateTemp
 
     public bool IsShieldOn(IDirection attackDir) => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
-    public GuardStateTemp(ShieldInput input, float duration = 0.42f, float timeToReady = 0.16f)
+    public GuardState(ShieldInput input, float duration = 0.42f, float timeToReady = 0.16f)
     {
         this.input = input;
         this.timeToReady = timeToReady;

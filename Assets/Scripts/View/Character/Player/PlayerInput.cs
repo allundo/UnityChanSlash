@@ -67,7 +67,7 @@ public class PlayerInput : ShieldInput
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 8.0f);
-        guardState = new GuardStateTemp(this);
+        guardState = new GuardState(this);
 
         InitFightInput();
         InitHandleInput();

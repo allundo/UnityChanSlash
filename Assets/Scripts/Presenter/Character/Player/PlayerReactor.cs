@@ -6,7 +6,7 @@ public class PlayerReactor : MobReactor
 {
     [SerializeField] protected RestUI restUI = default;
 
-    protected GuardStateTemp guardState => playerInput.guardState;
+    protected GuardState guardState => playerInput.guardState;
     protected PlayerInput playerInput;
 
     protected override void Awake()
