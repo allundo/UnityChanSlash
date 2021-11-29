@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class ItemGenerator : Generator<Item>
 {
-    [SerializeField] private Material matPotion = default;
     [SerializeField] private ItemData itemData = default;
 
     private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
