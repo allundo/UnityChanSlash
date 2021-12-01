@@ -18,8 +18,10 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private FadeTween fade;
     private Tween healTween;
     private Tween damageTween;
+    private Tween cancelValidTween;
 
     private float healPoint = 0.0f;
+
     private ISubject<float> healSubject = new Subject<float>();
     public IObservable<float> Heal => healSubject;
 
@@ -40,6 +42,13 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             .AppendInterval(0.1f)
             .SetLoops(-1, LoopType.Restart)
             .SetUpdate(true)
+            .AsReusable(gameObject);
+
+        // BUG:
+        //   Disable rest canceling by background pointer up 0.5 sec from start resting, since
+        //   unexpected OnPointerUp() is called when player is attacked immediately after start resting.
+        cancelValidTween = DOVirtual
+            .DelayedCall(0.5f, () => image.raycastTarget = true)
             .AsReusable(gameObject);
 
         damageTween = DOTween.Sequence()
@@ -75,7 +84,8 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     protected void ShowUIs()
     {
-        image.raycastTarget = true;
+        cancelValidTween.Restart();
+
         restLifeGauge.gameObject.SetActive(true);
         txtRest.gameObject.SetActive(true);
         resumeButton.Show().Play();
@@ -98,6 +108,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     protected void HideUIs()
     {
+        cancelValidTween.Pause();
         image.raycastTarget = false;
         restLifeGauge.gameObject.SetActive(false);
         txtRest.gameObject.SetActive(false);
