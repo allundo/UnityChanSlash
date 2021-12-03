@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class EnemyAIInput : MobInput
 {
-    private Command turnL;
-    private Command turnR;
-    private Command moveForward;
-    private Command attack;
+    protected Command turnL;
+    protected Command turnR;
+    protected Command moveForward;
+    protected Command attack;
+    protected Command fire;
 
-    private bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
+    protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
     protected override void SetCommands()
     {
@@ -18,6 +19,7 @@ public class EnemyAIInput : MobInput
         turnL = new EnemyTurnL(enemyTarget, 0.2f);
         turnR = new EnemyTurnR(enemyTarget, 0.2f);
         attack = new EnemyAttack(enemyTarget, 2.0f);
+        fire = new EnemyFire(enemyTarget, 3.0f);
     }
 
     protected override Command GetCommand()

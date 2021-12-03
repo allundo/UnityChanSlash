@@ -56,6 +56,7 @@ public class MapUtil : MonoBehaviour
     public Vector3 GetRightVector(int distance = 1) => Quaternion.Euler(0, 90, 0) * dir.LookAt * TILE_UNIT * distance;
     public Vector3 GetLeftVector(int distance = 1) => Quaternion.Euler(0, -90, 0) * dir.LookAt * TILE_UNIT * distance;
 
+    public ITile GetTile(Pos destPos) => map.GetTile(destPos);
     public ITile ForwardTile => map.GetTile(GetForward);
     public ITile BackwardTile => map.GetTile(GetBackward);
     public ITile RightTile => map.GetTile(GetRight);

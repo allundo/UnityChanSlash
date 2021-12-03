@@ -95,3 +95,14 @@ public class EnemyAttack : EnemyCommand
         return true;
     }
 }
+
+public class EnemyFire : EnemyCommand
+{
+    public EnemyFire(EnemyCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        enemyAnim.fire.Fire();
+        return true;
+    }
+}
