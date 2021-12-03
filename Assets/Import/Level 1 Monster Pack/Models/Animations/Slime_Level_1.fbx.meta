@@ -126,6 +126,9 @@ ModelImporter:
   - first:
       137: 13700000
     second: SlimeLevel1 1
+  - first:
+      74: 3510609546532088081
+    second: slime_fire
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -411,6 +414,69 @@ ModelImporter:
       maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: slime_fire
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 60
+      lastFrame: 66
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: MESH
+        weight: 1
+      - path: MESH/SlimeLevel1 1
+        weight: 1
+      - path: RIG
+        weight: 1
+      - path: RIG/SlimeControl
+        weight: 1
+      - path: RIG/SlimeControl/BackArrowControl
+        weight: 1
+      - path: RIG/SlimeControl/BackArrowControl/SlimeBackTailJoint
+        weight: 1
+      - path: RIG/SlimeControl/FrontArrowControl
+        weight: 1
+      - path: RIG/SlimeControl/FrontArrowControl/SlimeFrontTailJoint
+        weight: 1
+      - path: RIG/SlimeControl/LeftArrowControl
+        weight: 1
+      - path: RIG/SlimeControl/LeftArrowControl/SlimeLeftTailJoint
+        weight: 1
+      - path: RIG/SlimeControl/RightArrowControl
+        weight: 1
+      - path: RIG/SlimeControl/RightArrowControl/SlimeRightJoint
+        weight: 1
+      - path: RIG/SlimeControl/SlimeControl1
+        weight: 1
+      - path: RIG/SlimeControl/SlimeRootJoint
+        weight: 1
+      - path: RIG/SlimeControl/SlimeRootJoint/SlimeNeckJoint
+        weight: 1
+      - path: RIG/SlimeControl/SlimeRootJoint/SlimeNeckJoint/SlimeHeadJoint
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -461,7 +527,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.01
+    globalScale: 1
     rootMotionBoneName: SlimeControl
     hasTranslationDoF: 0
     hasExtraRoot: 0
