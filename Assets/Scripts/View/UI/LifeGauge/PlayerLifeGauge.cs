@@ -31,6 +31,11 @@ public class PlayerLifeGauge : MonoBehaviour
         redGauge.UpdateGauge(lifeRatio);
     }
 
+    /// <summary>
+    /// Play life gauge effect on heal
+    /// </summary>
+    /// <param name="healRatio">Normalized heal ratio to the life max</param>
+    /// <param name="lifeRatio">Normalized life ratio after healing to the life max</param>
     public void OnHeal(float healRatio, float lifeRatio)
     {
         if (lifeRatio != 1f) greenGauge.color = new Color(1, 1, 1);

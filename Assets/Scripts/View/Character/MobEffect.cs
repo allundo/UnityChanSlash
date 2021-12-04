@@ -2,7 +2,29 @@ using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
 
-public class MobEffect : MonoBehaviour
+public interface IBodyEffect
+{
+    void OnDie();
+
+    /// <summary>
+    /// Play body effect on damage
+    /// </summary>
+    /// <param name="damageRatio">Normalized damage ratio to the life max</param>
+    void OnDamage(float damageRatio);
+
+    /// <summary>
+    /// Play body effect on heal
+    /// </summary>
+    /// <param name="healRatio">Normalized heal ratio to the life max</param>
+    void OnHeal(float healRatio);
+
+    void OnLifeMax();
+
+    Tween FadeInTween(float duration);
+    Tween FadeOutTween(float duration);
+}
+
+public class MobEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] private AudioSource dieSound = null;
     [SerializeField] private AudioSource damageSound = null;
@@ -114,7 +136,8 @@ public class MobEffect : MonoBehaviour
 
     public Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);
     public Tween FadeOutTween(float duration = 0.5f) => GetFadeTween(false, duration);
-    protected Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
+
+    protected virtual Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
     {
         Sequence fade = DOTween.Sequence();
 

@@ -3,7 +3,7 @@ using UniRx;
 using DG.Tweening;
 
 [RequireComponent(typeof(MobStatus))]
-[RequireComponent(typeof(MobEffect))]
+[RequireComponent(typeof(IBodyEffect))]
 [RequireComponent(typeof(MobInput))]
 public class MobReactor : MonoBehaviour
 {
@@ -15,13 +15,13 @@ public class MobReactor : MonoBehaviour
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
 
     protected MobStatus status;
-    protected MobEffect effect;
+    protected IBodyEffect effect;
     protected MobInput input;
 
     protected virtual void Awake()
     {
         status = GetComponent<MobStatus>();
-        effect = GetComponent<MobEffect>();
+        effect = GetComponent<IBodyEffect>();
         input = GetComponent<MobInput>();
     }
 
@@ -74,11 +74,16 @@ public class MobReactor : MonoBehaviour
         if (!status.IsAlive) return;
 
         float heal = healRatio * status.LifeMax.Value;
+        float lifeRatio = LifeRatio(status.Life.Value + heal);
 
         if (isEffectOn)
         {
             effect.OnHeal(healRatio);
-            lifeGauge?.OnHeal(healRatio, LifeRatio(status.Life.Value + heal));
+            lifeGauge?.OnHeal(healRatio, lifeRatio);
+        }
+        else if (lifeRatio == 1f)
+        {
+            effect.OnLifeMax();
         }
 
         status.Heal(heal);
