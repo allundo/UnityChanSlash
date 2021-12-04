@@ -20,6 +20,12 @@ public class MobParam
 
     [SerializeField] public float defaultLifeMax = 10;
 
+    [SerializeField] public bool isOnGround = true;
+
+    [SerializeField] public float attack = 1.0f;
+
+    [SerializeField] public float shield = 0.0f;
+
     [SerializeField] public float faceDamageMultiplier = 1.0f;
 
     [SerializeField] public float sideDamageMultiplier = 1.5f;
@@ -28,9 +34,6 @@ public class MobParam
 
     [SerializeField] public float restDamageMultiplier = 6.0f;
 
-    [SerializeField] public float attack = 1.0f;
-
-    [SerializeField] public float shield = 0.0f;
     [SerializeField] public float armorMultiplier = 1.0f;
 }
 

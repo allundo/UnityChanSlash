@@ -17,6 +17,8 @@ public class MobStatus : SpawnObject<MobStatus>
     public virtual float Attack => param.attack;
     public virtual float Shield => param.shield;
 
+    public virtual bool IsOnGround => param.isOnGround;
+
     protected virtual float ArmorMultiplier => param.armorMultiplier;
 
     public MapUtil map { get; protected set; }

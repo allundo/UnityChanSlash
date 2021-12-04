@@ -41,7 +41,7 @@ public class Ground : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => !IsCharacterOn;
     public bool IsLeapable => true;
     public bool IsViewOpen => true;
-    public bool IsCharacterOn => status != null;
+    public bool IsCharacterOn => status != null && status.IsOnGround;
     public MobStatus OnCharacter { get { return status; } set { status = value; } }
     public MobStatus status = null;
 }
@@ -62,7 +62,7 @@ public class Door : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
     public bool IsViewOpen => state.IsOpen;
-    public bool IsCharacterOn => state.IsCharactorOn;
+    public bool IsCharacterOn => state.onCharacter != null && state.onCharacter.IsOnGround;
     public MobStatus OnCharacter { get { return state.onCharacter; } set { state.onCharacter = value; } }
 
     public DoorState state { protected get; set; }
