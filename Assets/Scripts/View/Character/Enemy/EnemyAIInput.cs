@@ -14,7 +14,7 @@ public class EnemyAIInput : MobInput
     {
         var enemyTarget = target as EnemyCommandTarget;
 
-        die = new DieCommand(enemyTarget, 2.0f);
+        die = new EnemyDie(enemyTarget, 2.0f);
         moveForward = new EnemyForward(enemyTarget, 2.0f);
         turnL = new EnemyTurnL(enemyTarget, 0.2f);
         turnR = new EnemyTurnR(enemyTarget, 0.2f);

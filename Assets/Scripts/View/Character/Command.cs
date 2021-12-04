@@ -123,7 +123,6 @@ public class DieCommand : Command
     public override IObservable<Unit> Execute()
     {
         map.ResetOnCharacter();
-        anim.die.Fire();
 
         return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
     }

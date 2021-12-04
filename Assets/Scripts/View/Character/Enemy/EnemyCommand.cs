@@ -106,3 +106,16 @@ public class EnemyFire : EnemyCommand
         return true;
     }
 }
+
+public class EnemyDie : EnemyCommand
+{
+    public EnemyDie(EnemyCommandTarget target, float duration) : base(target, duration) { }
+
+    public override IObservable<Unit> Execute()
+    {
+        map.ResetOnCharacter();
+        anim.die.Fire();
+
+        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
+    }
+}

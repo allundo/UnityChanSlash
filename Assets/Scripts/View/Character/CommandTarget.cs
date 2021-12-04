@@ -3,7 +3,6 @@ using UnityEngine;
 /// <summary>
 /// Keeps attached component used by Command execution.
 /// </summary>
-[RequireComponent(typeof(MobAnimator))]
 [RequireComponent(typeof(MobReactor))]
 [RequireComponent(typeof(MobInput))]
 [RequireComponent(typeof(MapUtil))]
