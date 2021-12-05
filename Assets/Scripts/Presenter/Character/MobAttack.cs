@@ -2,12 +2,11 @@ using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(Collider))]
-public class MobAttack : MonoBehaviour
+public class MobAttack : Attack
 {
-    [SerializeField] private AudioSource swingSound = default;
+    [SerializeField] protected AudioSource swingSound = default;
     [SerializeField] protected ParticleSystem vfx = default;
 
-    [SerializeField] protected float attackMultiplier = 1.0f;
     [SerializeField] protected int startFrame = 0;
     [SerializeField] protected int finishFrame = 0;
     [SerializeField] protected int speed = 1;
@@ -15,30 +14,14 @@ public class MobAttack : MonoBehaviour
     [SerializeField] protected float maxPitch = 1.3f;
     [SerializeField] protected int frameRate = 30;
 
-    private Collider attackCollider = default;
-    private MobStatus status;
-
     protected virtual float Pitch => Random.Range(minPitch, maxPitch);
-
-    protected virtual void Awake()
-    {
-        attackCollider = GetComponent<Collider>();
-        status = GetComponentInParent<MobStatus>();
-
-        attackCollider.enabled = false;
-    }
 
     private float FrameToSec(int frame)
     {
         return (float)frame / (float)frameRate / (float)speed;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        OnHitAttack(other);
-    }
-
-    public virtual void OnAttackStart()
+    protected virtual void OnAttackStart()
     {
         if (swingSound != null)
         {
@@ -48,31 +31,12 @@ public class MobAttack : MonoBehaviour
         vfx?.Play();
     }
 
-    public virtual void OnAttackFinished() { }
+    protected virtual void OnAttackFinished() { }
 
-    public virtual void OnHitStart()
-    {
-        attackCollider.enabled = true;
-    }
-
-    public virtual void OnHitAttack(Collider collider)
-    {
-        MobReactor targetMob = collider.GetComponent<MobReactor>();
-
-        if (null == targetMob) return;
-
-        targetMob.OnDamage(status.Attack * attackMultiplier, status.dir);
-    }
-
-    public virtual void OnHitFinished()
-    {
-        attackCollider.enabled = false;
-    }
-
-    public Tween AttackSequence(float attackDuration)
+    public override Tween AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
-            .Join(DOVirtual.DelayedCall(0, OnAttackStart))
+            .AppendCallback(OnAttackStart)
             .Join(DOVirtual.DelayedCall(FrameToSec(startFrame), OnHitStart))
             .Join(DOVirtual.DelayedCall(FrameToSec(finishFrame), OnHitFinished))
             .Join(DOVirtual.DelayedCall(attackDuration, OnAttackFinished))

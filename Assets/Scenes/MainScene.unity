@@ -41037,9 +41037,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51fc77293bc348aba68690350f860d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackMultiplier: 1.5
   swingSound: {fileID: 9133633789574216406}
   vfx: {fileID: 7538767402516665370}
-  attackMultiplier: 1.5
   startFrame: 27
   finishFrame: 30
   speed: 4
@@ -46695,9 +46695,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51fc77293bc348aba68690350f860d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackMultiplier: 1.8
   swingSound: {fileID: 2689703917164988029}
   vfx: {fileID: 6557656093818047807}
-  attackMultiplier: 1.8
   startFrame: 32
   finishFrame: 36
   speed: 4
@@ -57349,9 +57349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51fc77293bc348aba68690350f860d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackMultiplier: 1
   swingSound: {fileID: 5633277022666258016}
   vfx: {fileID: 6218822499274698831}
-  attackMultiplier: 1
   startFrame: 15
   finishFrame: 25
   speed: 6

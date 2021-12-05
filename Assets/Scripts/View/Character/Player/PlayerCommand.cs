@@ -299,9 +299,9 @@ public class PlayerPutItem : PlayerAction
 
 public abstract class PlayerAttack : PlayerAction
 {
-    protected MobAttack jab;
-    protected MobAttack straight;
-    protected MobAttack kick;
+    protected IAttack jab;
+    protected IAttack straight;
+    protected IAttack kick;
 
     protected Tween cancelTimer = null;
     protected float cancelStart;

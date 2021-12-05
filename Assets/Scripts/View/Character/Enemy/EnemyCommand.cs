@@ -82,7 +82,8 @@ public class EnemyTurnR : EnemyCommand
 
 public class EnemyAttack : EnemyCommand
 {
-    private MobAttack enemyAttack;
+    private IAttack enemyAttack;
+
     public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration)
     {
         enemyAttack = target.enemyAttack;
