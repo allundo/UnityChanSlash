@@ -105,6 +105,7 @@ public class MobReactor : MonoBehaviour
     public virtual void ActiveFadeIn(float duration = 0.5f)
     {
         input.ValidateInput(true);
+        effect.OnActive();
         effect.FadeInTween(duration).Play();
     }
 
