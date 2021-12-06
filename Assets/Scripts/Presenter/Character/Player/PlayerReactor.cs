@@ -13,7 +13,7 @@ public class PlayerReactor : MobReactor
     protected override void Awake()
     {
         base.Awake();
-        playerInput = GetComponent<PlayerInput>();
+        playerInput = input as PlayerInput;
     }
 
     protected override void Start()
@@ -59,12 +59,4 @@ public class PlayerReactor : MobReactor
 
         return Mathf.Max(status.CalcAttack(attack, dir) - shield, 0.0f);
     }
-
-    protected override void OnDie()
-    {
-        base.OnDie();
-        playerInput.SetInputVisible(false);
-    }
-
-    protected override void Dead() => base.Inactivate();
 }
