@@ -40,13 +40,13 @@ public class MobReactor : MonoBehaviour
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
 
         status.OnActive
-            .Subscribe(duration => ActiveFadeIn(duration))
+            .Subscribe(_ => OnActive())
             .AddTo(this);
     }
 
     protected virtual void OnLifeChange(float life)
     {
-        if (life <= 0.0f) OnDie();
+        if (life <= 0.0f) Die();
 
         lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
     }
@@ -96,17 +96,16 @@ public class MobReactor : MonoBehaviour
         return status.CalcAttack(attack, dir);
     }
 
-    protected virtual void OnDie()
-    {
-        effect.OnDie();
-        input.InputDie();
-    }
-
-    public virtual void ActiveFadeIn(float duration = 0.5f)
+    protected virtual void OnActive()
     {
         input.ValidateInput(true);
         effect.OnActive();
-        effect.FadeInTween(duration).Play();
+    }
+
+    protected virtual void Die()
+    {
+        input.InputDie();
+        effect.OnDie();
     }
 
     public virtual void FadeOutToDead(float duration = 0.5f)

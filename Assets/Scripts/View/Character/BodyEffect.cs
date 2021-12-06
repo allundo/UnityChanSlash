@@ -52,7 +52,10 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
         }
     }
 
-    public virtual void OnActive() { }
+    public virtual void OnActive()
+    {
+        PlayFlash(FadeInTween());
+    }
 
     public virtual void OnDie()
     {

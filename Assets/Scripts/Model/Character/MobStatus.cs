@@ -33,8 +33,8 @@ public class MobStatus : SpawnObject<MobStatus>
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
 
-    protected ISubject<float> onActive = new Subject<float>();
-    public IObservable<float> OnActive => onActive;
+    protected ISubject<Unit> onActive = new Subject<Unit>();
+    public IObservable<Unit> OnActive => onActive;
 
     public bool isActive { get; protected set; } = false;
 
@@ -103,7 +103,7 @@ public class MobStatus : SpawnObject<MobStatus>
         isActive = true;
         gameObject.SetActive(true);
         ResetStatus();
-        onActive.OnNext(0.5f); // 0.5f: fade-in duration
+        onActive.OnNext(Unit.Default);
     }
 
     public override void Inactivate()
