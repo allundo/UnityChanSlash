@@ -36,7 +36,7 @@ public class MapUtil : MonoBehaviour
         this.dir = dir ?? MapUtil.defaultDir;
         tf.LookAt(this.tf.position + this.dir.LookAt);
 
-        if (isOnCharacter) SetOnCharacter();
+        SetOnCharacter(isOnCharacter);
     }
 
     public Vector3 WorldPos(Pos pos) => map.WorldPos(pos);
@@ -108,26 +108,29 @@ public class MapUtil : MonoBehaviour
     public bool IsPlayerBackward => MapUtil.IsOnPlayer(GetBackward);
 
     /// <summary>
-    /// Set IsCharactorOn flag TRUE to the Tile currently on
+    /// Set current on tile and character status info to the Tile currently on
     /// </summary>
+    /// <param name="isOnCharacter">Doesn't set status info to the Tile if FALSE</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharacter() => SetOnCharacter(tf.position);
+    public Pos SetOnCharacter(bool isOnCharacter = true) => SetOnCharacter(tf.position, isOnCharacter);
 
     /// <summary>
-    /// Set IsCharactorOn flag TRUE to the Tile specified by Vector3 position
+    /// Set current on tile and character status info to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="destPos">Vector3 position of destination Tile</param>
+    /// <param name="isOnCharacter">Doesn't set status info to the Tile if FALSE</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharacter(Vector3 destPos) => SetOnCharacter(map.MapPos(destPos));
+    public Pos SetOnCharacter(Vector3 destPos, bool isOnCharacter = true) => SetOnCharacter(map.MapPos(destPos), isOnCharacter);
 
     /// <summary>
-    /// Set IsCharactorOn flag TRUE to the Tile specified by Pos unit
+    /// Set current on tile and character status info to the Tile specified by Pos unit
     /// </summary>
     /// <param name="destPos">Tile map position of destination</param>
+    /// <param name="isOnCharacter">Doesn't set status info to the Tile if FALSE</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharacter(Pos destPos)
+    public Pos SetOnCharacter(Pos destPos, bool isOnCharacter = true)
     {
-        map.GetTile(destPos).OnCharacter = status;
+        if (isOnCharacter) map.GetTile(destPos).OnCharacter = status;
         onTilePos = destPos;
         return destPos;
     }
