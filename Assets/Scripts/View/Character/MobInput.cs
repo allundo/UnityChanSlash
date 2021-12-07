@@ -32,16 +32,18 @@ public abstract class MobInput : MonoBehaviour
     {
         target = GetComponent<CommandTarget>();
         map = GetComponent<MapUtil>();
-        commander = new Commander(target);
-    }
 
-    protected virtual void Start()
-    {
+        SetCommander();
         SetCommands();
     }
 
+    protected virtual void SetCommander()
+    {
+        commander = new Commander(target);
+    }
+
     /// <summary>
-    /// This method is called by Start(). Override it to customize commands' behavior. <br />
+    /// This method is called by Awake(). Override it to customize commands' behavior. <br />
     /// Mainly used for Commands definition.
     /// </summary>
     protected virtual void SetCommands()
@@ -90,6 +92,11 @@ public abstract class MobInput : MonoBehaviour
     public virtual void ValidateInput(bool isTriggerOnly = false)
     {
         isCommandValid = true;
+    }
+
+    public virtual void OnActive()
+    {
+        ValidateInput();
     }
 
     public virtual void ClearAll(bool isValidInput = false)

@@ -5,9 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(BulletEffect))]
 public class BulletReactor : MobReactor
 {
-    protected override void OnActive()
+    public override MobReactor OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
     {
-        base.OnActive();
-        (input as BulletInput).InputFire();
+        status.SetPosition(pos, dir, false);
+        Activate();
+        return this;
     }
 }

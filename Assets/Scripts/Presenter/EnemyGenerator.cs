@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class EnemyGenerator : Generator<MobStatus>
+public class EnemyGenerator : Generator<MobReactor>
 {
     protected ITile spawnTile;
     protected Collider detectCharacter;

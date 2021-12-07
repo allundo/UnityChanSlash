@@ -8,11 +8,23 @@ public abstract class ShieldInput : MobInput
     protected bool IsShield => commander.currentCommand is ShieldCommand;
     public override bool IsFightValid => IsIdling || IsShield;
 
+    protected virtual void Start()
+    {
+        SetInputs();
+    }
+
     protected override void SetCommands()
     {
-        guardState = new GuardState(this);
-
         die = new DieCommand(target, 0.1f);
+    }
+
+    /// <summary>
+    /// This method is called by Start(). Override it for UniRx subscription. <br />
+    /// Mainly used for input definition.
+    /// </summary>
+    protected virtual void SetInputs()
+    {
+        guardState = new GuardState(this);
     }
 
     public class GuardState

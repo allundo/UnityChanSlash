@@ -1,8 +1,7 @@
 using UnityEngine;
 using UniRx;
-using System;
 
-public class MobStatus : SpawnObject<MobStatus>
+public class MobStatus : MonoBehaviour
 {
     [SerializeField] protected MobData data;
     [SerializeField] protected int dataIndex;
@@ -38,10 +37,10 @@ public class MobStatus : SpawnObject<MobStatus>
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
 
-    protected ISubject<Unit> onActive = new Subject<Unit>();
-    public IObservable<Unit> OnActive => onActive;
-
     public bool isActive { get; protected set; } = false;
+
+    public void SetPosition(Vector3 pos, IDirection dir = null, bool isOnCharacter = true)
+         => map.SetPosition(pos, dir, isOnCharacter);
 
     protected virtual void Awake()
     {
@@ -51,11 +50,6 @@ public class MobStatus : SpawnObject<MobStatus>
 
         life = new ReactiveProperty<float>(DefaultLifeMax);
         lifeMax = new ReactiveProperty<float>(DefaultLifeMax);
-    }
-
-    protected virtual void Start()
-    {
-        Activate();
     }
 
     public void Damage(float damage)
@@ -94,24 +88,17 @@ public class MobStatus : SpawnObject<MobStatus>
     {
         life.Value = LifeMax.Value;
     }
-    public override MobStatus OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
-    {
-        Activate();
-        map.SetPosition(pos, dir);
-        return this;
-    }
 
-    public override void Activate()
+    public virtual void OnActive()
     {
         if (isActive) return;
 
         isActive = true;
         gameObject.SetActive(true);
         ResetStatus();
-        onActive.OnNext(Unit.Default);
     }
 
-    public override void Inactivate()
+    public void OnInactivate()
     {
         if (!isActive) return;
 

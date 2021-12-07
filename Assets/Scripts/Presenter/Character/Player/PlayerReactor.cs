@@ -12,6 +12,8 @@ public class PlayerReactor : MobReactor
 
     protected override void Start()
     {
+        Activate();
+
         base.Start();
         restUI.Heal.Subscribe(point => OnHealRatio(point, false)).AddTo(this);
     }

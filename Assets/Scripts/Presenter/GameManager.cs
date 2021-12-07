@@ -153,7 +153,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     // FIXME
     public Pos GetPlayerInitPos => worldMap.InitPos;
 
-    public BulletStatus FireBall(Vector3 pos, IDirection dir, float attack = 1f)
+    public BulletReactor FireBall(Vector3 pos, IDirection dir, float attack = 1f)
     {
         Debug.Log("FireBall: " + pos);
         return fireBallGenerator.Fire(pos, dir, attack);

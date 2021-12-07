@@ -58,11 +58,8 @@ public class PlayerInput : ShieldInput
     public void EnqueueStartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data), false);
     public void EnqueueRestartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data), true);
 
-    protected override void Awake()
+    protected override void SetCommander()
     {
-        target = GetComponent<CommandTarget>();
-        map = GetComponent<MapUtil>();
-
         playerTarget = target as PlayerCommandTarget;
         commander = new PlayerCommander(playerTarget);
     }
@@ -70,6 +67,10 @@ public class PlayerInput : ShieldInput
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 8.0f);
+    }
+
+    protected override void SetInputs()
+    {
         guardState = new GuardState(this);
 
         InitFightInput();

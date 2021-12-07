@@ -12,7 +12,7 @@ public class PlayerStatus : MobStatus
         hidePlateHandler = GetComponent<HidePlateHandler>();
     }
 
-    public override void Activate()
+    public override void OnActive()
     {
         if (isActive) return;
 

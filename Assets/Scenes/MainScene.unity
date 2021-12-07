@@ -9500,7 +9500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e656e7229a94cd4a9f4e028efd712a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4019047258990873825, guid: d1e29755034d7403d8e962855d764a27, type: 3}
+  prefab: {fileID: 4403947982082489751, guid: d1e29755034d7403d8e962855d764a27, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!4 &477829050
 Transform:
@@ -15220,7 +15220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf189f5ee32946cbb4f37bca96fb7b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3641758036005752700, guid: b339f0237658d495a88baa1d14ea8395, type: 3}
+  prefab: {fileID: 5004978107877230359, guid: b339f0237658d495a88baa1d14ea8395, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!135 &1015295891
 SphereCollider:
