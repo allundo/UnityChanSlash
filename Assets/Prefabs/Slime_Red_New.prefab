@@ -218,6 +218,7 @@ GameObject:
   - component: {fileID: 3797601158476630433}
   - component: {fileID: 7153664908088456530}
   - component: {fileID: 8863631634375908752}
+  - component: {fileID: 120099945420660867}
   m_Layer: 0
   m_Name: Slime_Red_New
   m_TagString: Untagged
@@ -373,6 +374,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa9d66a03332425aa799cdf4b80344b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &120099945420660867
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492718176620911298}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1605351055790362263
 GameObject:
   m_ObjectHideFlags: 0
