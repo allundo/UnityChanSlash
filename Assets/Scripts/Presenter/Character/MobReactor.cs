@@ -5,6 +5,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(IBodyEffect))]
 [RequireComponent(typeof(MobInput))]
+[RequireComponent(typeof(Collider))]
 public class MobReactor : MonoBehaviour
 {
     /// <summary>
@@ -17,12 +18,14 @@ public class MobReactor : MonoBehaviour
     protected MobStatus status;
     protected IBodyEffect effect;
     protected MobInput input;
+    protected Collider bodyCollider;
 
     protected virtual void Awake()
     {
         status = GetComponent<MobStatus>();
         effect = GetComponent<IBodyEffect>();
         input = GetComponent<MobInput>();
+        bodyCollider = GetComponent<Collider>();
     }
 
     protected virtual void Start()
@@ -100,12 +103,14 @@ public class MobReactor : MonoBehaviour
     {
         input.ValidateInput(true);
         effect.OnActive();
+        bodyCollider.enabled = true;
     }
 
     protected virtual void Die()
     {
         input.InputDie();
         effect.OnDie();
+        bodyCollider.enabled = false;
     }
 
     public virtual void FadeOutToDead(float duration = 0.5f)
