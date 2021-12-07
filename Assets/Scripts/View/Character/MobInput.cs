@@ -11,7 +11,7 @@ public abstract class MobInput : MonoBehaviour
     /// Target Commander to input Command.
     /// </summary>
     public Commander commander { get; protected set; }
-    public CommandTarget target { get; protected set; }
+    protected CommandTarget target;
 
     /// <summary>
     /// Stops input Command if false. <br />

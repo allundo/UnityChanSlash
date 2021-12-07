@@ -1,3 +1,5 @@
+using static ShieldInput;
+
 public abstract class ShieldCommand : Command
 {
     protected GuardState guardState;

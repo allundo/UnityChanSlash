@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniRx;
+using static ShieldInput;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
