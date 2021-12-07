@@ -43,7 +43,7 @@ public abstract class Command
     public virtual void Cancel()
     {
         playingTween?.Kill();
-        completeTween?.Complete();
+        completeTween?.Complete(true);
         validateTween?.Kill();
         input.ValidateInput();
         onCompleted.Clear();
@@ -96,8 +96,8 @@ public abstract class Command
 
     protected void DoOnCompleted()
     {
-        playingTween?.Complete();
-        completeTween?.Complete();
+        playingTween?.Complete(true);
+        completeTween?.Complete(true);
 
         onCompleted.ForEach(action => action());
         onCompleted.Clear();
