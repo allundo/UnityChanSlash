@@ -131,6 +131,6 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
             );
         }
 
-        return fade.OnPlay(() => prevFlash?.Kill());
+        return fade;
     }
 }
