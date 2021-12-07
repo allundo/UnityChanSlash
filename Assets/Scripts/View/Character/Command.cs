@@ -55,7 +55,7 @@ public abstract class Command
 
         if (Action())
         {
-            return ExecOnCompleted(() => playingTween?.Complete(), () => completeTween?.Complete());
+            return ObservableComplete();
         }
         else
         {
@@ -72,8 +72,11 @@ public abstract class Command
     protected virtual IObservable<Unit> ExecOnCompleted(params Action[] onCompleted)
     {
         onCompleted.ForEach(action => SetOnCompleted(action));
-        return DOTweenCompleted(duration, Unit.Default).IgnoreElements();
+        return ObservableComplete();
     }
+
+    protected IObservable<Unit> ObservableComplete(float timeScale = 1f)
+        => DOTweenCompleted(duration * timeScale, Unit.Default);
 
     /// <summary>
     /// Since Observable.Timer() has about 25 frames delay on complete compaired to DOVirtual.DelayedCall(), <br />
@@ -83,7 +86,9 @@ public abstract class Command
     /// <param name="value">will be notified by OnNext()</param>
     protected IObservable<T> DOTweenCompleted<T>(float dueTimeSec, T value, bool ignoreTimeScale = false)
     {
-        return DOVirtual.DelayedCall(dueTimeSec, DoOnCompleted, ignoreTimeScale).OnCompleteAsObservable(value);
+        return DOTweenTimer(dueTimeSec, DoOnCompleted, ignoreTimeScale)
+            .OnCompleteAsObservable(value)
+            .IgnoreElements();
     }
 
     protected Tween DOTweenTimer(float dueTimeSec, TweenCallback callback, bool ignoreTimeScale = false)
@@ -91,6 +96,9 @@ public abstract class Command
 
     protected void DoOnCompleted()
     {
+        playingTween?.Complete();
+        completeTween?.Complete();
+
         onCompleted.ForEach(action => action());
         onCompleted.Clear();
     }

@@ -328,18 +328,15 @@ public abstract class PlayerAttack : PlayerAction
     protected override IObservable<Unit> ExecOnCompleted(params Action[] onCompleted)
     {
         onCompleted.ForEach(action => SetOnCompleted(action));
-        return cancelStart < 1f ? DOTweenObservable(duration * cancelStart) : DOTweenCompleted(duration, Unit.Default).IgnoreElements();
+        return cancelStart < 1f ? ObservableCancelComplete() : ObservableComplete();
     }
 
-    protected IObservable<Unit> DOTweenObservable(float cancelTime)
+    protected IObservable<Unit> ObservableCancelComplete()
     {
         return Observable.Create<Unit>(o =>
         {
-            Tween onNext = DOVirtual.DelayedCall(cancelTime, null, false).OnComplete(() =>
-            {
-                o.OnNext(Unit.Default);
-            }).Play();
-            Tween complete = DOVirtual.DelayedCall(duration, null, false).OnComplete(o.OnCompleted).Play();
+            Tween onNext = DOTweenTimer(duration * cancelStart, null).OnComplete(() => o.OnNext(Unit.Default)).Play();
+            Tween complete = DOTweenTimer(duration, null).OnComplete(o.OnCompleted).Play();
 
             return Disposable.Create(() =>
             {
