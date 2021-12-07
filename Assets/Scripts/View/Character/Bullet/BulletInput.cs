@@ -10,14 +10,14 @@ public class BulletInput : MobInput
     {
         var bulletTarget = target as BulletCommandTarget;
 
-        fire = new BulletFire(bulletTarget, 1f);
-        moveForward = new BulletMove(bulletTarget, 1f);
-        die = new BulletDie(bulletTarget, 1f);
+        fire = new BulletFire(bulletTarget, 0.8f);
+        moveForward = new BulletMove(bulletTarget, 0.8f);
+        die = new BulletDie(bulletTarget, 0.8f);
     }
 
     public override void OnActive()
     {
-        ForceEnqueue(fire, false);
+        ForceEnqueue(fire, true);
     }
 
     protected override Command GetCommand() => moveForward;

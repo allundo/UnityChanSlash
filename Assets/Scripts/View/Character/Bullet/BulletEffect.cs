@@ -27,21 +27,24 @@ public class BulletEffect : BodyEffect
         }
 
         defaultScale = meshTf.localScale;
-        rolling = meshTf.DORotate(new Vector3(0f, 0f, 90f), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetRelative().SetLoops(-1, LoopType.Incremental);
+
+        rolling = meshTf.DOLocalRotate(new Vector3(0f, 0f, 90f), 0.25f, RotateMode.FastBeyond360)
+            .SetEase(Ease.Linear)
+            .SetRelative()
+            .SetLoops(-1, LoopType.Incremental);
     }
 
     public override void OnActive()
     {
-        UnityEngine.Debug.Log(System.Reflection.MethodBase.GetCurrentMethod().Name + ": " + gameObject.name, gameObject);
         emitVfx?.Play();
         fireVfx?.Play();
-        PlayFlash(FadeInTween(0.25f));
-        rolling.Restart();
+        PlayFlash(FadeInTween(0.5f));
+        rolling?.Restart();
     }
 
     public override void OnDie()
     {
-        rolling.Pause();
+        rolling?.Pause();
         emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         eraseVfx?.Play();
     }
@@ -56,7 +59,7 @@ public class BulletEffect : BodyEffect
 
     public override void OnLifeMax() { }
 
-    protected override Tween GetFadeTween(bool isFadeIn, float duration = 0.25f)
+    protected override Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
     {
         Sequence fade = DOTween.Sequence();
 

@@ -155,7 +155,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public BulletReactor FireBall(Vector3 pos, IDirection dir, float attack = 1f)
     {
-        Debug.Log("FireBall: " + pos);
         return fireBallGenerator.Fire(pos, dir, attack);
     }
 }

@@ -14,7 +14,7 @@ public class Fire : MonoBehaviour, IAttack
     {
         return
             DOVirtual.DelayedCall(
-                attackDuration * 0.4f,
+                attackDuration * 0.3f,
                 () => GameManager.Instance.FireBall(status.transform.position, status.dir, status.Attack),
                 false
             );

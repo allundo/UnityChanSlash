@@ -4,7 +4,7 @@ using DG.Tweening;
 
 public abstract class BulletCommand : Command
 {
-    public BulletCommand(BulletCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming) { }
+    public BulletCommand(BulletCommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming) { }
 
     protected bool IsMovable => map.ForwardTile.IsViewOpen;
 
@@ -17,15 +17,7 @@ public abstract class BulletCommand : Command
     protected virtual Tween MoveForward(float ratio, bool isSpeedConstant = true)
     {
         if (ratio > 0.5f) map.SetOnCharacter(map.GetForward, false);
-
-        if (isSpeedConstant)
-        {
-            duration *= ratio;
-            invalidDuration *= ratio;
-        }
-
-        var destPos = map.CurrentVec3Pos + map.dir.LookAt * TILE_UNIT * ratio;
-        return tweenMove.GetLinearMove(destPos);
+        return tweenMove.GetLinearMove(map.dir.LookAt * TILE_UNIT * ratio, ratio).SetRelative();
     }
 }
 
@@ -33,19 +25,22 @@ public class BulletFire : BulletCommand
 {
     public BulletFire(BulletCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool Action()
+    public override IObservable<Unit> Execute()
     {
         if (IsMovable)
         {
             playingTween = MoveForward().Play();
+            validateTween = ValidateTween().Play();
+            return ObservableComplete();
         }
         else
         {
             playingTween = MoveForward(0.75f).Play();
-            tweenMove.SetDelayedCall(1.0f, target.input.InputDie).Play();
-        }
 
-        return true;
+            // Call InputDie() independently because it cancels OnComplete Actions during executing them.
+            tweenMove.SetDelayedCall(0.75f, target.input.InputDie).Play();
+            return ObservableComplete(0.75f);
+        }
     }
 }
 
@@ -58,20 +53,22 @@ public class BulletMove : BulletCommand
         attack = target.attack;
     }
 
-    protected override bool Action()
+    public override IObservable<Unit> Execute()
     {
         if (IsMovable)
         {
             playingTween = MoveForward().Play();
             completeTween = attack.AttackSequence(duration).Play();
+            validateTween = ValidateTween().Play();
+            return ObservableComplete();
         }
         else
         {
             playingTween = MoveForward(0.75f).Play();
-            tweenMove.SetDelayedCall(1.0f, target.input.InputDie).Play();
-        }
 
-        return true;
+            tweenMove.SetDelayedCall(0.75f, target.input.InputDie).Play();
+            return ObservableComplete(0.75f);
+        }
     }
 }
 

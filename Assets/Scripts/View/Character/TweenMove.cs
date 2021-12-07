@@ -26,9 +26,9 @@ public class TweenMove
         return seq;
     }
 
-    public Tween GetLinearMove(Vector3 destPos)
+    public Tween GetLinearMove(Vector3 destPos, float timeScale = 1f)
     {
-        return tf.DOMove(destPos, duration).SetEase(Ease.Linear);
+        return tf.DOMove(destPos, duration * timeScale).SetEase(Ease.Linear);
     }
 
     public Tween TurnL => GetRotate(-90);
