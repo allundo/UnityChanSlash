@@ -45,7 +45,8 @@ public class Attack : MonoBehaviour, IAttack
     {
         return DOTween.Sequence()
             .AppendCallback(OnHitStart)
-            .Join(DOVirtual.DelayedCall(attackDuration, OnHitFinished))
+            .AppendInterval(attackDuration)
+            .AppendCallback(OnHitFinished)
             .SetUpdate(false);
     }
 }

@@ -11,4 +11,11 @@ public class BulletReactor : MobReactor
         Activate();
         return this;
     }
+
+    public override void Activate()
+    {
+        status.OnActive();
+        effect.OnActive();
+        input.OnActive();
+    }
 }

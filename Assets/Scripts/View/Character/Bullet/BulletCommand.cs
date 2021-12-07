@@ -4,7 +4,11 @@ using DG.Tweening;
 
 public abstract class BulletCommand : Command
 {
-    public BulletCommand(BulletCommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming) { }
+    protected IAttack attack;
+    public BulletCommand(BulletCommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming)
+    {
+        attack = target.attack;
+    }
 
     protected bool IsMovable => map.ForwardTile.IsViewOpen;
 
@@ -30,6 +34,7 @@ public class BulletFire : BulletCommand
         if (IsMovable)
         {
             playingTween = MoveForward().Play();
+            completeTween = attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f).Play();
             validateTween = ValidateTween().Play();
             return ObservableComplete();
         }
@@ -46,12 +51,8 @@ public class BulletFire : BulletCommand
 
 public class BulletMove : BulletCommand
 {
-    protected IAttack attack;
 
-    public BulletMove(BulletCommandTarget target, float duration) : base(target, duration)
-    {
-        attack = target.attack;
-    }
+    public BulletMove(BulletCommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {
