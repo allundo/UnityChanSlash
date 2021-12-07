@@ -5,7 +5,7 @@ using DG.Tweening;
 public class Attack : MonoBehaviour, IAttack
 {
     private Collider attackCollider = default;
-    private MobStatus status;
+    protected MobStatus status;
 
     [SerializeField] protected float attackMultiplier = 1f;
 

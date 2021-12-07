@@ -82,11 +82,13 @@ public class EnemyTurnR : EnemyCommand
 
 public class EnemyAttack : EnemyCommand
 {
-    private IAttack enemyAttack;
+    protected IAttack enemyAttack;
+    protected IAttack enemyFire;
 
     public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration)
     {
         enemyAttack = target.enemyAttack;
+        enemyFire = target.enemyFire;
     }
 
     protected override bool Action()
@@ -97,13 +99,14 @@ public class EnemyAttack : EnemyCommand
     }
 }
 
-public class EnemyFire : EnemyCommand
+public class EnemyFire : EnemyAttack
 {
     public EnemyFire(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
         enemyAnim.fire.Fire();
+        playingTween = enemyFire?.AttackSequence(duration)?.Play();
         return true;
     }
 }

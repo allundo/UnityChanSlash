@@ -9,6 +9,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private HidePlateHandler hidePlateHandler = default;
     [SerializeField] private PlayerInput input = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
+    [SerializeField] private FireBallGenerator fireBallGenerator = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
@@ -151,4 +152,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     // FIXME
     public Pos GetPlayerInitPos => worldMap.InitPos;
+
+    public BulletStatus FireBall(Vector3 pos, IDirection dir, float attack = 1f)
+    {
+        Debug.Log("FireBall: " + pos);
+        return fireBallGenerator.Fire(pos, dir, attack);
+    }
 }

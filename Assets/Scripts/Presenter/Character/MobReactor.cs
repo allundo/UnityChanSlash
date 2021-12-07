@@ -5,7 +5,6 @@ using DG.Tweening;
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(IBodyEffect))]
 [RequireComponent(typeof(MobInput))]
-[RequireComponent(typeof(Collider))]
 public class MobReactor : MonoBehaviour
 {
     /// <summary>
@@ -25,7 +24,7 @@ public class MobReactor : MonoBehaviour
         status = GetComponent<MobStatus>();
         effect = GetComponent<IBodyEffect>();
         input = GetComponent<MobInput>();
-        bodyCollider = GetComponent<Collider>();
+        bodyCollider = GetComponentInChildren<Collider>();
     }
 
     protected virtual void Start()
@@ -42,9 +41,7 @@ public class MobReactor : MonoBehaviour
 
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
 
-        status.OnActive
-            .Subscribe(_ => OnActive())
-            .AddTo(this);
+        status.OnActive.Subscribe(_ => OnActive()).AddTo(this);
     }
 
     protected virtual void OnLifeChange(float life)

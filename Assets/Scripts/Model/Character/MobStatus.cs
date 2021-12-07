@@ -14,7 +14,12 @@ public class MobStatus : SpawnObject<MobStatus>
     protected virtual float RestDamageMultiplier => param.restDamageMultiplier;
     protected virtual float DefaultLifeMax => param.defaultLifeMax;
 
-    public virtual float Attack => param.attack;
+    public virtual float Attack
+    {
+        get { return param.attack; }
+        set { param.attack = value; }
+    }
+
     public virtual float Shield => param.shield;
 
     public virtual bool IsOnGround => param.isOnGround;
