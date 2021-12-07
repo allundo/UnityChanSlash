@@ -366,7 +366,7 @@ public class PlayerJab : PlayerAttack
     protected override void Attack()
     {
         playerAnim.jab.Fire();
-        playingTween = jab.AttackSequence(duration).Play();
+        completeTween = jab.AttackSequence(duration).Play();
     }
 }
 
@@ -377,7 +377,7 @@ public class PlayerStraight : PlayerAttack
     protected override void Attack()
     {
         playerAnim.straight.Fire();
-        playingTween = straight.AttackSequence(duration).Play();
+        completeTween = straight.AttackSequence(duration).Play();
     }
 }
 
@@ -388,7 +388,7 @@ public class PlayerKick : PlayerAttack
     protected override void Attack()
     {
         playerAnim.kick.Fire();
-        playingTween = kick.AttackSequence(duration).Play();
+        completeTween = kick.AttackSequence(duration).Play();
     }
 }
 

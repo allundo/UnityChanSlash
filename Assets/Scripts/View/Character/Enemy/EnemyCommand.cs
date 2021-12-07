@@ -92,7 +92,7 @@ public class EnemyAttack : EnemyCommand
     protected override bool Action()
     {
         enemyAnim.attack.Fire();
-        playingTween = enemyAttack.AttackSequence(duration).Play();
+        completeTween = enemyAttack.AttackSequence(duration).Play();
         return true;
     }
 }

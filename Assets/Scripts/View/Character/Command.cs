@@ -36,12 +36,14 @@ public abstract class Command
     }
 
     protected Tween playingTween = null;
+    protected Tween completeTween = null;
     protected Tween validateTween = null;
     protected List<Action> onCompleted = new List<Action>();
 
     public virtual void Cancel()
     {
         playingTween?.Kill();
+        completeTween?.Complete();
         validateTween?.Kill();
         input.ValidateInput();
         onCompleted.Clear();
@@ -53,7 +55,7 @@ public abstract class Command
 
         if (Action())
         {
-            return ExecOnCompleted(() => playingTween?.Complete());
+            return ExecOnCompleted(() => playingTween?.Complete(), () => completeTween?.Complete());
         }
         else
         {
