@@ -1,7 +1,7 @@
 using UniRx;
 using System;
 
-public class PlayerCommander : Commander
+public class PlayerCommander : ShieldCommander
 {
     protected PlayerAnimator anim;
 

@@ -12,15 +12,10 @@ public abstract class ShieldCommand : Command
 
 public class GuardCommand : ShieldCommand
 {
-    public GuardCommand(CommandTarget target, GuardState guardState, float duration) : base(target, guardState, duration, 0.95f)
+    public GuardCommand(CommandTarget target, GuardState guardState, float duration) : base(target, guardState, duration, 0.3f)
     { }
 
-    protected override bool Action()
-    {
-        guardState.SetManualGuard(true);
-        SetOnCompleted(() => guardState.SetManualGuard(false));
-        return true;
-    }
+    protected override bool Action() => true;
 }
 
 public class ShieldOnCommand : ShieldCommand

@@ -19,7 +19,6 @@ public class Commander
     protected GameObject targetObject;
 
     public bool IsIdling => currentCommand == null;
-    public bool IsDie => currentCommand is DieCommand;
 
     /// <summary>
     /// Reserve Commands to execute in order.
@@ -30,7 +29,8 @@ public class Commander
     /// <summary>
     /// Executing Command. null if no Command is executing.
     /// </summary>
-    public Command currentCommand { get; protected set; } = null;
+    public virtual Command currentCommand { get; protected set; } = null;
+
     protected IDisposable execDisposable = null;
 
     public void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
@@ -58,9 +58,7 @@ public class Commander
     {
         if (cmdQueue.Count > 0)
         {
-            currentCommand = cmdQueue.Dequeue();
-
-            Subscribe(currentCommand.Execute());
+            SetAndExec(cmdQueue.Dequeue());
             return true;
         }
 
@@ -68,11 +66,28 @@ public class Commander
         return false;
     }
 
+    protected void SetAndExec(Command cmd)
+    {
+        currentCommand = cmd;
+        Subscribe(cmd.Execute());
+    }
+
     protected virtual void Subscribe(IObservable<Unit> execObservable)
     {
         if (execObservable == null) return;
 
         execDisposable = execObservable.Subscribe(null, () => DispatchCommand()).AddTo(targetObject);
+    }
+
+    /// <summary>
+    /// Replace current Command with a new Command and execute immediately.
+    /// </summary>
+    /// <param name="cmd">New Command to execute as interruption</param>
+    public void Interrupt(Command cmd)
+    {
+        Cancel(false);
+        SetAndExec(cmd);
+        if (cmdQueue.Count > 0) cmd.CancelValidate();
     }
 
     /// <summary>
@@ -84,10 +99,15 @@ public class Commander
         Cancel();
     }
 
-    public void Cancel()
+    public void Cancel(bool dispatch = true)
     {
         currentCommand?.Cancel();
         execDisposable?.Dispose();
-        DispatchCommand();
+        if (dispatch) DispatchCommand();
+    }
+
+    public void CancelValidate()
+    {
+        currentCommand?.CancelValidate();
     }
 }

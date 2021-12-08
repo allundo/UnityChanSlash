@@ -82,7 +82,8 @@ public class PlayerInput : ShieldInput
 
     protected override void Update()
     {
-        if (commander.IsDie) return;
+        if (commander.currentCommand is PlayerDie) return;
+
         DisplayInputUIs();
     }
 
@@ -124,7 +125,7 @@ public class PlayerInput : ShieldInput
     /// <param name="isTriggerOnly">Start Trigger only validated mode if true</param>
     public override void ValidateInput(bool isTriggerOnly = false)
     {
-        // Is Trigger input done on Trigger only validated mode?
+        // Is Trigger input already done on Trigger only validated mode?
         if (!isTriggerValid && isCommandValid)
         {
             isCommandValid = false;
@@ -133,6 +134,16 @@ public class PlayerInput : ShieldInput
 
         isTriggerValid = true;
         isCommandValid = !isTriggerOnly;
+    }
+
+    /// <summary>
+    /// Disables both of Normal and Trigger input.
+    /// </summary>
+    /// <param name="isTriggerOnly">Disables only Trigger input if true</param>
+    public override void DisableInput(bool isTriggerOnly = false)
+    {
+        isTriggerValid = false;
+        isCommandValid = isTriggerOnly && isCommandValid;
     }
 
     public override void ClearAll(bool isValidInput = false)
@@ -320,7 +331,8 @@ public class PlayerInput : ShieldInput
         Command turnL = new PlayerTurnL(playerTarget, 0.5f);
         Command jump = new PlayerJump(playerTarget, 2.0f);
 
-        Command guard = new GuardCommand(playerTarget, guardState, 0.03f);
+        // 0.04 * DURATION_UNIT = 0.024 > 0.01667[sec] = 1[frame]
+        Command guard = new GuardCommand(playerTarget, guardState, 0.04f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))

@@ -77,7 +77,20 @@ public abstract class MobInput : MonoBehaviour
     /// <summary>
     /// Shorthand enqueue
     /// </summary>
-    public void ForceEnqueue(Command cmd, bool dispatch) => commander.EnqueueCommand(cmd, dispatch);
+    public void ForceEnqueue(Command cmd, bool interrupt)
+    {
+        DisableInput();
+
+        if (interrupt)
+        {
+            commander.Interrupt(cmd);
+        }
+        else
+        {
+            commander.CancelValidate();
+            commander.EnqueueCommand(cmd, false);
+        }
+    }
 
     protected abstract Command GetCommand();
 
@@ -92,6 +105,11 @@ public abstract class MobInput : MonoBehaviour
     public virtual void ValidateInput(bool isTriggerOnly = false)
     {
         isCommandValid = true;
+    }
+
+    public virtual void DisableInput(bool isTriggerOnly = false)
+    {
+        isCommandValid = false;
     }
 
     public virtual void OnActive()

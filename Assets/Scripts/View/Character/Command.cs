@@ -49,6 +49,15 @@ public abstract class Command
         onCompleted.Clear();
     }
 
+    ///  <summary>
+    /// Cancels validating input on current Command execution. <br />
+    /// Make sure that a Command including input validation like validateTween is queued next. <br />
+    /// </summary>
+    public virtual void CancelValidate()
+    {
+        validateTween?.Kill();
+    }
+
     public virtual IObservable<Unit> Execute()
     {
         validateTween = ValidateTween().Play();

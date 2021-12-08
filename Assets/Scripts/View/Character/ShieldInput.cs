@@ -6,11 +6,17 @@ public abstract class ShieldInput : MobInput
     public GuardState guardState { get; protected set; }
 
     protected bool IsShield => commander.currentCommand is ShieldCommand;
+
     public override bool IsFightValid => IsIdling || IsShield;
 
     protected virtual void Start()
     {
         SetInputs();
+    }
+
+    protected override void SetCommander()
+    {
+        commander = new ShieldCommander(target);
     }
 
     protected override void SetCommands()
@@ -27,6 +33,15 @@ public abstract class ShieldInput : MobInput
         guardState = new GuardState(this);
     }
 
+    public override void InputCommand(Command cmd)
+    {
+        if (!isCommandValid || cmd == null) return;
+
+        isCommandValid = false;
+
+        commander.EnqueueCommand(cmd);
+    }
+
     public class GuardState
     {
         private ShieldInput input;
@@ -37,17 +52,11 @@ public abstract class ShieldInput : MobInput
         public bool isShieldReady = false;
 
         private IReactiveProperty<bool> IsAutoGuard = new ReactiveProperty<bool>(false);
-        private IReactiveProperty<bool> IsManualGuard = new ReactiveProperty<bool>(false);
 
         private bool isAutoGuard
         {
             get { return IsAutoGuard.Value; }
             set { IsAutoGuard.Value = value; }
-        }
-        private bool isManualGuard
-        {
-            get { return IsManualGuard.Value; }
-            set { IsManualGuard.Value = value; }
         }
 
         private Tween readyTween = null;
@@ -81,8 +90,12 @@ public abstract class ShieldInput : MobInput
 
             shieldOn = new ShieldOnCommand(target, this, duration);
 
-            Observable.Merge(IsAutoGuard, IsManualGuard)
-                .Select(_ => isManualGuard || isAutoGuard)
+            var IsShieldObservable = (input.commander as ShieldCommander)
+                .CurrentObservable
+                .Select(cmd => cmd is ShieldCommand);
+
+            Observable.Merge(IsAutoGuard, IsShieldObservable)
+                .Select(_ => isAutoGuard || input.IsShield)
                 .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
                 .AddTo(target);
         }
@@ -92,11 +105,6 @@ public abstract class ShieldInput : MobInput
         public void SetEnemyDetected(bool isDetected)
         {
             isAutoGuard = isDetected;
-        }
-
-        public void SetManualGuard(bool isGuard)
-        {
-            isManualGuard = isGuard;
         }
     }
 }
