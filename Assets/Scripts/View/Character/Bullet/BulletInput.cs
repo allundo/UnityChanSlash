@@ -10,9 +10,9 @@ public class BulletInput : MobInput
     {
         var bulletTarget = target as BulletCommandTarget;
 
-        fire = new BulletFire(bulletTarget, 0.8f);
-        moveForward = new BulletMove(bulletTarget, 0.8f);
-        die = new BulletDie(bulletTarget, 0.8f);
+        fire = new BulletFire(bulletTarget, 28f);
+        moveForward = new BulletMove(bulletTarget, 28f);
+        die = new BulletDie(bulletTarget, 28f);
     }
 
     public override void OnActive()

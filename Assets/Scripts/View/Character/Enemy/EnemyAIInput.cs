@@ -14,12 +14,12 @@ public class EnemyAIInput : MobInput
     {
         var enemyTarget = target as EnemyCommandTarget;
 
-        die = new EnemyDie(enemyTarget, 2.0f);
-        moveForward = new EnemyForward(enemyTarget, 2.0f);
-        turnL = new EnemyTurnL(enemyTarget, 0.2f);
-        turnR = new EnemyTurnR(enemyTarget, 0.2f);
-        attack = new EnemyAttack(enemyTarget, 2.0f);
-        fire = new EnemyFire(enemyTarget, 3.0f);
+        die = new EnemyDie(enemyTarget, 72f);
+        moveForward = new EnemyForward(enemyTarget, 72f);
+        turnL = new EnemyTurnL(enemyTarget, 8f);
+        turnR = new EnemyTurnR(enemyTarget, 8f);
+        attack = new EnemyAttack(enemyTarget, 72f);
+        fire = new EnemyFire(enemyTarget, 108f);
     }
 
     protected override Command GetCommand()

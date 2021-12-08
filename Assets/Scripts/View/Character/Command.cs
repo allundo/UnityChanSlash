@@ -5,7 +5,7 @@ using UniRx;
 
 public abstract class Command
 {
-    public static float DURATION_UNIT = 0.6f;
+    public static float FRAME_UNIT = 0.01666667f;
     protected const float TILE_UNIT = 2.5f;
 
     protected float duration;
@@ -21,11 +21,17 @@ public abstract class Command
 
     protected IObserver<bool> onValidateInput;
 
+    /// <summary>
+    /// Initializes Command infomation.
+    /// </summary>
+    /// <param name="target">Target GameObject to apply Command execution</param>
+    /// <param name="duration">Command duration time with frame unit</param>
+    /// <param name="validateTiming">Normalized input validating timing of command duration</param>
     public Command(CommandTarget target, float duration, float validateTiming = 0.5f)
     {
         this.target = target;
 
-        this.duration = duration * DURATION_UNIT;
+        this.duration = duration * FRAME_UNIT;
         this.invalidDuration = this.duration * validateTiming;
         tweenMove = new TweenMove(target.transform, this.duration);
 

@@ -317,9 +317,9 @@ public abstract class PlayerAttack : PlayerAction
         if (cancelStart < 1f)
         {
             cancelTimer = DOTween.Sequence()
-                .AppendInterval(cancelStart * duration * DURATION_UNIT)
+                .AppendInterval(cancelStart * duration * FRAME_UNIT)
                 .AppendCallback(() => playerAnim.cancel.Bool = true)
-                .AppendInterval((1 - cancelStart) * duration * DURATION_UNIT)
+                .AppendInterval((1 - cancelStart) * duration * FRAME_UNIT)
                 .AppendCallback(() => playerAnim.cancel.Bool = false)
                 .AsReusable(target.gameObject);
         }
@@ -435,7 +435,7 @@ public class PlayerDropFloor : PlayerCommand
 public class PlayerMessage : PlayerAction
 {
     MessageData data;
-    public PlayerMessage(PlayerCommandTarget target, MessageData data) : base(target, 0.1f)
+    public PlayerMessage(PlayerCommandTarget target, MessageData data) : base(target, 3.6f)
     {
         this.data = data;
     }

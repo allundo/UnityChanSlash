@@ -48,7 +48,7 @@ public abstract class MobInput : MonoBehaviour
     /// </summary>
     protected virtual void SetCommands()
     {
-        die = new DieCommand(target, 0.1f);
+        die = new DieCommand(target, 3.6f);
     }
 
     /// <summary>

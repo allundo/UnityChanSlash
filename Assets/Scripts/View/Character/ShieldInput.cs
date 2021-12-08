@@ -77,7 +77,7 @@ public abstract class ShieldInput : MobInput
 
         public bool IsShieldOn(IDirection attackDir) => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
-        public GuardState(ShieldInput input, float duration = 0.42f, float timeToReady = 0.16f)
+        public GuardState(ShieldInput input, float duration = 15f, float timeToReady = 0.16f)
         {
             this.input = input;
             this.timeToReady = timeToReady;

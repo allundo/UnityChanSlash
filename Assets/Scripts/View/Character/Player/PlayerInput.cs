@@ -54,7 +54,7 @@ public class PlayerInput : ShieldInput
 
     // Reserved Command input applied by other classes.
     // FIXME: need to implement game events handling system.
-    public void EnqueueDropFloor() => ForceEnqueue(new PlayerDropFloor(playerTarget, 6.11f), true);
+    public void EnqueueDropFloor() => ForceEnqueue(new PlayerDropFloor(playerTarget, 220f), true);
     public void EnqueueStartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data), false);
     public void EnqueueRestartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data), true);
 
@@ -66,7 +66,7 @@ public class PlayerInput : ShieldInput
 
     protected override void SetCommands()
     {
-        die = new PlayerDie(playerTarget, 8.0f);
+        die = new PlayerDie(playerTarget, 288f);
     }
 
     protected override void SetInputs()
@@ -264,9 +264,9 @@ public class PlayerInput : ShieldInput
     protected void InitFightInput()
     {
         // TODO: Refer duration and cancel time value from AttackButton object
-        Command jab = new PlayerJab(playerTarget, 0.6f);
-        Command straight = new PlayerStraight(playerTarget, 0.85f);
-        Command kick = new PlayerKick(playerTarget, 1.2f);
+        Command jab = new PlayerJab(playerTarget, 21.6f);
+        Command straight = new PlayerStraight(playerTarget, 30f);
+        Command kick = new PlayerKick(playerTarget, 43f);
 
         fightCircle.JabButton
             .Subscribe(_ => InputCommand(jab))
@@ -286,10 +286,10 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitHandleInput()
     {
-        Command forward = new PlayerForward(playerTarget, 1.0f);
-        Command handle = new PlayerHandle(playerTarget, 0.4f);
-        Command getItem = new PlayerGetItem(playerTarget, 0.8f);
-        PlayerPutItem putItem = new PlayerPutItem(playerTarget, 0.4f);
+        Command forward = new PlayerForward(playerTarget, 36f);
+        Command handle = new PlayerHandle(playerTarget, 14.4f);
+        Command getItem = new PlayerGetItem(playerTarget, 28.8f);
+        PlayerPutItem putItem = new PlayerPutItem(playerTarget, 14.4f);
 
         Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
             .Subscribe(_ => InputCommand(forward))
@@ -322,17 +322,16 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitMoveInput()
     {
-        Command forward = new PlayerForward(playerTarget, 1.0f);
-        Command right = new PlayerRight(playerTarget, 1.2f);
-        Command left = new PlayerLeft(playerTarget, 1.2f);
-        Command backward = new PlayerBack(playerTarget, 1.2f);
+        Command forward = new PlayerForward(playerTarget, 36f);
+        Command right = new PlayerRight(playerTarget, 43f);
+        Command left = new PlayerLeft(playerTarget, 43f);
+        Command backward = new PlayerBack(playerTarget, 43f);
 
-        Command turnR = new PlayerTurnR(playerTarget, 0.5f);
-        Command turnL = new PlayerTurnL(playerTarget, 0.5f);
-        Command jump = new PlayerJump(playerTarget, 2.0f);
+        Command turnR = new PlayerTurnR(playerTarget, 18f);
+        Command turnL = new PlayerTurnL(playerTarget, 18f);
+        Command jump = new PlayerJump(playerTarget, 72f);
 
-        // 0.04 * DURATION_UNIT = 0.024 > 0.01667[sec] = 1[frame]
-        Command guard = new GuardCommand(playerTarget, guardState, 0.04f);
+        Command guard = new GuardCommand(playerTarget, guardState, 1.44f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))
