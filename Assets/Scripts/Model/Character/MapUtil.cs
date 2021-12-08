@@ -138,7 +138,7 @@ public class MapUtil : MonoBehaviour
     /// <summary>
     /// Set IsCharactorOn flag FALSE to the Tile currently on
     /// </summary>
-    public void ResetOnCharacter() { ResetOnCharacter(tf.position); }
+    public void ResetOnCharacter() { ResetOnCharacter(onTilePos); }
 
     /// <summary>
     /// Set IsCharactorOn flag FALSE to the Tile specified by Vector3 position
@@ -160,7 +160,7 @@ public class MapUtil : MonoBehaviour
     /// </summary>
     public Pos MoveOnCharacter(Pos destPos)
     {
-        ResetOnCharacter(onTilePos);
+        ResetOnCharacter();
         return SetOnCharacter(destPos);
     }
 
