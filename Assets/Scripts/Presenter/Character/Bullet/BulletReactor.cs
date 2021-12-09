@@ -11,4 +11,10 @@ public class BulletReactor : MobReactor
         effect.OnActive();
         input.OnActive();
     }
+
+    public override void OnDie()
+    {
+        effect.OnDie();
+        FadeOutOnDead(0.5f);
+    }
 }
