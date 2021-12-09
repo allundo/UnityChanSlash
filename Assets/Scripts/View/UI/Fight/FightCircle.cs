@@ -196,7 +196,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Inactivate()
     {
-        if (!isActive) return;
+        if (IsPressed || !isActive) return;
 
         ButtonCancel(true);
         isActive = false;
