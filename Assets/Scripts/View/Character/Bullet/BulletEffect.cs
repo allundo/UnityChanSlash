@@ -45,8 +45,9 @@ public class BulletEffect : BodyEffect
     public override void OnDie()
     {
         rolling?.Pause();
-        emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         eraseVfx?.Play();
+        PlayFlash(FadeOutTween(0.5f));
+        emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     public override void OnDamage(float damageRatio)

@@ -80,7 +80,7 @@ public class BulletDie : BulletCommand
     public override IObservable<Unit> Execute()
     {
         playingTween = MoveForward(0.1f).Play();
-        react.FadeOutToDead(0.25f);
+        react.OnDie();
 
         return ExecOnCompleted(() => playingTween?.Complete()); // Don't validate input.
     }

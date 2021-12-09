@@ -148,7 +148,8 @@ public class DieCommand : Command
     public override IObservable<Unit> Execute()
     {
         map.ResetOnCharacter();
+        react.OnDie();
 
-        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
+        return ExecOnCompleted(() => react.FadeOutOnDead()); // Don't validate input.
     }
 }

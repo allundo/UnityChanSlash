@@ -412,10 +412,11 @@ public class PlayerDie : PlayerCommand
     public override IObservable<Unit> Execute()
     {
         map.ResetOnCharacter();
+        react.OnDie();
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();
 
-        return ExecOnCompleted(() => react.FadeOutToDead());
+        return ExecOnCompleted(() => react.FadeOutOnDead());
     }
 }
 

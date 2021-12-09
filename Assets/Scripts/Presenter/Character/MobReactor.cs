@@ -44,7 +44,7 @@ public class MobReactor : SpawnObject<MobReactor>
 
     protected virtual void OnLifeChange(float life)
     {
-        if (life <= 0.0f) Die();
+        if (life <= 0.0f) input.InputDie();
 
         lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
     }
@@ -94,9 +94,8 @@ public class MobReactor : SpawnObject<MobReactor>
         return status.CalcAttack(attack, dir);
     }
 
-    protected virtual void Die()
+    public virtual void OnDie()
     {
-        input.InputDie();
         effect.OnDie();
         bodyCollider.enabled = false;
     }
@@ -114,7 +113,7 @@ public class MobReactor : SpawnObject<MobReactor>
         return this;
     }
 
-    public virtual void FadeOutToDead(float duration = 0.5f)
+    public virtual void FadeOutOnDead(float duration = 0.5f)
     {
         effect.FadeOutTween(duration)
             .OnComplete(Dead)

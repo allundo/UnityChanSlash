@@ -119,7 +119,8 @@ public class EnemyDie : EnemyCommand
     {
         map.ResetOnCharacter();
         anim.die.Fire();
+        react.OnDie();
 
-        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
+        return ExecOnCompleted(() => react.FadeOutOnDead()); // Don't validate input.
     }
 }
