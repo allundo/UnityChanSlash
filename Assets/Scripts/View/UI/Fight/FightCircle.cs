@@ -26,11 +26,14 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private float alpha = 0.0f;
     public bool isActive { get; private set; } = false;
     private bool isFingerDown = false;
+    public bool isForwardMovable = false;
 
     private Vector2 UICenter;
     private Vector2 kickUICenter;
+    private Vector2 forwardUICenter;
 
     private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).magnitude < 100.0f;
+    private bool InForward(Vector2 screenPos) => (forwardUICenter - UIPos(screenPos)).magnitude < 80.0f;
 
     private AttackButton currentButton = null;
     private Vector2 pressPos = Vector2.zero;
@@ -57,6 +60,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         radius = 260.0f;
         kickUICenter = new Vector2(0, -(radius - 100.0f));
+        forwardUICenter = new Vector2(0, 12f);
 
         ResetCenterPos();
 
@@ -126,10 +130,19 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isFingerDown = false;
 
-        if (!IsPressed && !InCircle(eventData.position))
+        if (!IsPressed)
         {
-            raycastHandler.RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
-            return;
+            if (!InCircle(eventData.position))
+            {
+                raycastHandler.RaycastPointerUp(eventData);
+                return;
+            }
+
+            if (isForwardMovable && InForward(eventData.position))
+            {
+                raycastHandler.RaycastPointerExit(eventData);
+                return;
+            }
         }
 
         if (!isActive) return;
@@ -144,7 +157,13 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!InCircle(eventData.position))
         {
-            raycastHandler.RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
+            raycastHandler.RaycastPointerDown(eventData);
+            return;
+        }
+
+        if (isForwardMovable && InForward(eventData.position))
+        {
+            raycastHandler.RaycastPointerEnter(eventData);
             return;
         }
 
@@ -168,7 +187,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!IsPressed)
         {
-            raycastHandler.RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
+            raycastHandler.RaycastDrag(eventData);
             return;
         }
     }
@@ -215,7 +234,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         var eventData = new PointerEventData(EventSystem.current);
         eventData.pressPosition = pressPos;
-        raycastHandler.RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+        raycastHandler.RaycastPointerUp(eventData);
 
         currentButton = null;
         pressPos = Vector2.zero;

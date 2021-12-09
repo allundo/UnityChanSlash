@@ -182,6 +182,7 @@ public class PlayerInput : ShieldInput
         {
             if (IsFightValid) guardState.SetEnemyDetected(true);
             fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.OnEnemy);
+            fightCircle.isForwardMovable = forwardTile.IsEnterable();
         }
         else
         {

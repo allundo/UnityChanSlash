@@ -78,7 +78,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         if (!isDragOn)
         {
-            raycastHandler.RaycastEvent<IDragHandler>(eventData, (handler, data) => handler.OnDrag(data as PointerEventData));
+            raycastHandler.RaycastDrag(eventData);
             return;
         }
 
@@ -107,7 +107,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         startPos = eventData.position;
         isDragOn = IsOnCircle(startPos);
 
-        if (!isDragOn) raycastHandler.RaycastEvent<IPointerDownHandler>(eventData, (handler, data) => handler.OnPointerDown(data as PointerEventData));
+        if (!isDragOn) raycastHandler.RaycastPointerDown(eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -120,7 +120,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
         if (!isDragOn)
         {
-            raycastHandler.RaycastEvent<IPointerUpHandler>(eventData, (handler, data) => handler.OnPointerUp(data as PointerEventData));
+            raycastHandler.RaycastPointerUp(eventData);
             return;
         }
 
