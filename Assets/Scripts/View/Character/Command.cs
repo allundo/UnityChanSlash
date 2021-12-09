@@ -33,7 +33,7 @@ public abstract class Command
 
         this.duration = duration * FRAME_UNIT;
         this.invalidDuration = this.duration * validateTiming;
-        tweenMove = new TweenMove(target.transform, this.duration);
+        tweenMove = new TweenMove(target.transform, target.map, this.duration);
 
         anim = target.anim;
         react = target.react;
@@ -118,6 +118,14 @@ public abstract class Command
         onCompleted.Clear();
     }
 
+    public Sequence DoFirstAndLast(TweenCallback First = null, TweenCallback Last = null)
+    {
+        var seq = DOTween.Sequence();
+        if (First != null) seq.AppendCallback(First);
+        if (Last != null) seq.AppendInterval(duration).AppendCallback(Last);
+        return seq;
+    }
+
     protected virtual bool Action() => false;
 
     public virtual float Speed => 0.0f;
@@ -147,7 +155,7 @@ public class DieCommand : Command
 
     public override IObservable<Unit> Execute()
     {
-        map.ResetOnCharacter();
+        map.RemoveObjectOn();
         react.OnDie();
 
         return ExecOnCompleted(() => react.FadeOutOnDead()); // Don't validate input.

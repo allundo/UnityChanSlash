@@ -39,8 +39,7 @@ public class MobStatus : MonoBehaviour
 
     public bool isActive { get; protected set; } = false;
 
-    public void SetPosition(Vector3 pos, IDirection dir = null)
-         => map.SetPosition(pos, dir, IsOnGround);
+    public void SetPosition(Vector3 pos, IDirection dir = null) => map.SetPosition(pos, dir);
 
     protected virtual void Awake()
     {

@@ -12,16 +12,12 @@ public abstract class BulletCommand : Command
 
     protected bool IsMovable => map.ForwardTile.IsViewOpen;
 
-    protected virtual Tween MoveForward()
-    {
-        var destPos = map.WorldPos(map.SetOnCharacter(map.GetForward, false));
-        return tweenMove.GetLinearMove(destPos);
-    }
+    protected virtual Tween MoveForward() => tweenMove.GetLinearMove(map.GetForward);
 
     protected virtual Tween MoveForward(float ratio, bool isSpeedConstant = true)
     {
-        if (ratio > 0.5f) map.SetOnCharacter(map.GetForward, false);
-        return tweenMove.GetLinearMove(map.dir.LookAt * TILE_UNIT * ratio, ratio).SetRelative();
+        if (ratio > 0.5f) map.SetObjectOn(map.GetForward);
+        return tweenMove.GetLinearMove(map.CurrentVec3Pos + map.dir.LookAt * TILE_UNIT * ratio, isSpeedConstant ? ratio : 1f);
     }
 }
 
@@ -82,6 +78,6 @@ public class BulletDie : BulletCommand
         playingTween = MoveForward(0.1f).Play();
         react.OnDie();
 
-        return ExecOnCompleted(() => playingTween?.Complete()); // Don't validate input.
+        return ObservableComplete(); // Don't validate input.
     }
 }

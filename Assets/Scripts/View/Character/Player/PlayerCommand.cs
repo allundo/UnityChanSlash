@@ -66,7 +66,6 @@ public abstract class PlayerMove : PlayerCommand
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
     protected abstract ITile DestTile { get; }
-    protected Pos prevPos = new Pos();
 
     protected void SetSpeed()
     {
@@ -89,19 +88,8 @@ public abstract class PlayerMove : PlayerCommand
 
         EnterStair(DestTile);
 
-        prevPos = map.CurrentPos;
-        var destPos = map.MoveOnCharacter(GetDest);
-
-        SetSpeed();
-
-        playingTween =
-            tweenMove.GetLinearMove(map.WorldPos(destPos))
-                .OnComplete(() =>
-                {
-                    hidePlateHandler.Move();
-                    ResetSpeed();
-                })
-                .Play();
+        playingTween = tweenMove.GetLinearMove(GetDest).OnComplete(hidePlateHandler.Move).Play();
+        completeTween = DoFirstAndLast(SetSpeed, ResetSpeed).Play();
 
         return true;
     }
@@ -157,40 +145,29 @@ public class PlayerJump : PlayerCommand
     {
         int distance = 0;
         ITile destTile = null;
-        Pos destPos = prevPos = map.CurrentPos;
 
         if (map.IsJumpable)
         {
             distance = 2;
             destTile = map.JumpTile;
-            destPos = map.GetJump;
         }
         else if (map.IsForwardMovable)
         {
             distance = 1;
             destTile = map.ForwardTile;
-            destPos = map.GetForward;
         }
 
         EnterStair(destTile);
 
-        map.MoveOnCharacter(destPos);
-
         playerAnim.jump.Fire();
 
-        // 2マス進む場合は途中で天井の状態を更新
-        if (distance == 2)
-        {
-            tweenMove.SetDelayedCall(0.4f, () => hidePlateHandler.Move());
-        }
-
-        playingTween =
-            tweenMove.GetJumpSequence(map.GetForwardVector(distance))
-                .OnComplete(() =>
-                {
-                    if (distance > 0) hidePlateHandler.Move();
-                })
-                .Play();
+        playingTween = tweenMove
+            .GetJumpSequence(
+                distance,
+                hidePlateHandler.Move,  // Update HidePlate on entering the next Tile
+                hidePlateHandler.Move   // Update HidePlate on entering the next next Tile
+            )
+            .Play();
 
         return true;
     }
@@ -411,7 +388,7 @@ public class PlayerDie : PlayerCommand
 
     public override IObservable<Unit> Execute()
     {
-        map.ResetOnCharacter();
+        map.RemoveObjectOn();
         react.OnDie();
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();

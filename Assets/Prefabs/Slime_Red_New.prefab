@@ -213,12 +213,12 @@ GameObject:
   - component: {fileID: 3641758036005752700}
   - component: {fileID: 9055337087454508326}
   - component: {fileID: 5004978107877230359}
-  - component: {fileID: 4990566423189981771}
   - component: {fileID: 2007391967010708993}
   - component: {fileID: 3797601158476630433}
   - component: {fileID: 7153664908088456530}
   - component: {fileID: 8863631634375908752}
   - component: {fileID: 120099945420660867}
+  - component: {fileID: 7555550737669645743}
   m_Layer: 0
   m_Name: Slime_Red_New
   m_TagString: Untagged
@@ -311,18 +311,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeGauge: {fileID: 0}
---- !u!114 &4990566423189981771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1492718176620911298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2007391967010708993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +378,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7555550737669645743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492718176620911298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1605351055790362263
 GameObject:
   m_ObjectHideFlags: 0

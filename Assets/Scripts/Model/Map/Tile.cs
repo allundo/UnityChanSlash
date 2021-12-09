@@ -5,9 +5,10 @@ public interface ITile
     bool IsEnterable(IDirection dir = null);
     bool IsLeapable { get; }
     bool IsViewOpen { get; }
-    bool IsCharacterOn { get; }
+    bool IsObjectOn { get; set; }
+    bool IsEnemyOn { get; }
     bool IsItemOn { get; }
-    MobStatus OnCharacter { get; set; }
+    MobStatus OnEnemy { get; set; }
     bool PutItem(Item item);
     Item PickItem();
 }
@@ -38,12 +39,12 @@ public class Tile
 
 public class Ground : Tile, ITile
 {
-    public bool IsEnterable(IDirection dir = null) => !IsCharacterOn;
+    public bool IsEnterable(IDirection dir = null) => !IsObjectOn;
     public bool IsLeapable => true;
     public bool IsViewOpen => true;
-    public bool IsCharacterOn => status != null;
-    public MobStatus OnCharacter { get { return status; } set { status = value; } }
-    public MobStatus status = null;
+    public bool IsObjectOn { get; set; } = false;
+    public bool IsEnemyOn => OnEnemy != null;
+    public MobStatus OnEnemy { get; set; } = null;
 }
 
 public class Wall : Tile, ITile
@@ -51,19 +52,22 @@ public class Wall : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => false;
     public bool IsViewOpen => false;
-    public bool IsCharacterOn => false;
-    public MobStatus OnCharacter { get { return null; } set { } }
+    public bool IsObjectOn { get { return false; } set { } }
+    public bool IsEnemyOn => false;
+    public MobStatus OnEnemy { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
+
 }
 
 public class Door : Tile, ITile
 {
-    public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
+    public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsObjectOn;
     public bool IsLeapable => false;
     public bool IsViewOpen => state.IsOpen;
-    public bool IsCharacterOn => state.onCharacter != null;
-    public MobStatus OnCharacter { get { return state.onCharacter; } set { state.onCharacter = value; } }
+    public bool IsObjectOn { get { return state.isObjectOn; } set { state.isObjectOn = value; } }
+    public bool IsEnemyOn => OnEnemy != null;
+    public MobStatus OnEnemy { get; set; } = null;
 
     public DoorState state { protected get; set; }
     public bool IsOpen => state.IsOpen;
@@ -78,8 +82,9 @@ public class Stair : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => enterDir.IsInverse(dir);
     public bool IsLeapable => false;
     public bool IsViewOpen => true;
-    public bool IsCharacterOn => false;
-    public MobStatus OnCharacter { get { return null; } set { } }
+    public bool IsObjectOn { get { return false; } set { } }
+    public bool IsEnemyOn => false;
+    public MobStatus OnEnemy { get { return null; } set { } }
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(BulletReactor))]
 [RequireComponent(typeof(BulletInput))]
-[RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(EnemyMapUtil))]
 public class BulletCommandTarget : CommandTarget
 {
 

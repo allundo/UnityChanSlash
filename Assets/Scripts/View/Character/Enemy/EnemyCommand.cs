@@ -5,10 +5,12 @@ using DG.Tweening;
 public abstract class EnemyCommand : Command
 {
     protected EnemyAnimator enemyAnim;
+    protected EnemyMapUtil enemyMap;
 
     public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
         enemyAnim = anim as EnemyAnimator;
+        enemyMap = map as EnemyMapUtil;
     }
 }
 
@@ -18,7 +20,6 @@ public abstract class EnemyMove : EnemyCommand
 
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
-    protected Pos prevPos = new Pos();
 
     protected void SetSpeed()
     {
@@ -37,11 +38,11 @@ public abstract class EnemyMove : EnemyCommand
             return false;
         }
 
-        prevPos = map.CurrentPos;
-        var destPos = map.MoveOnCharacter(GetDest);
+        playingTween = tweenMove.GetLinearMove(GetDest)
+            .Join(tweenMove.SetDelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
+            .Play();
 
-        SetSpeed();
-        playingTween = tweenMove.GetLinearMove(map.WorldPos(destPos)).OnComplete(ResetSpeed).Play();
+        completeTween = DoFirstAndLast(SetSpeed, ResetSpeed).Play();
 
         return true;
     }
@@ -117,7 +118,8 @@ public class EnemyDie : EnemyCommand
 
     public override IObservable<Unit> Execute()
     {
-        map.ResetOnCharacter();
+        enemyMap.RemoveOnEnemy();
+        enemyMap.RemoveObjectOn();
         anim.die.Fire();
         react.OnDie();
 

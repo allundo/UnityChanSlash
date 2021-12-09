@@ -40,7 +40,7 @@ public class EnemyGenerator : Generator<MobReactor>
         yield return new WaitForSeconds(1);
 
         detectCharacter.enabled = false;
-        if (!spawnTile.IsCharacterOn) Spawn();
+        if (!spawnTile.IsObjectOn) Spawn();
     }
 
     public void OnTriggerEnter(Collider other)

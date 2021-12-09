@@ -7,9 +7,14 @@ using UnityEngine;
 public class MapUtil : MonoBehaviour
 {
     protected WorldMap map;
-    private Transform tf;
+    protected Transform tf;
     public IDirection dir { get; protected set; }
+
+    /// <summary>
+    /// Tile position of destination for moving
+    /// </summary>
     protected Pos onTilePos;
+
     protected MobStatus status;
     public static readonly float TILE_UNIT = 2.5f;
 
@@ -23,20 +28,20 @@ public class MapUtil : MonoBehaviour
         status = GetComponent<MobStatus>();
     }
 
-    public virtual void SetPosition(bool isOnCharacter = true)
-        => SetPosition(defaultPos, defaultDir, isOnCharacter);
+    public virtual void SetPosition()
+        => SetPosition(defaultPos, defaultDir);
 
-    public void SetPosition(Pos pos, IDirection dir = null, bool isOnCharacter = true)
-        => SetPosition(map.WorldPos(pos), dir, isOnCharacter);
+    public void SetPosition(Pos pos, IDirection dir = null)
+        => SetPosition(map.WorldPos(pos), dir);
 
-    public void SetPosition(Vector3 pos, IDirection dir = null, bool isOnCharacter = true)
+    public virtual void SetPosition(Vector3 pos, IDirection dir = null)
     {
         this.tf.position = pos;
 
         this.dir = dir ?? MapUtil.defaultDir;
         tf.LookAt(this.tf.position + this.dir.LookAt);
 
-        SetOnCharacter(isOnCharacter);
+        SetObjectOn();
     }
 
     public Vector3 WorldPos(Pos pos) => map.WorldPos(pos);
@@ -63,7 +68,7 @@ public class MapUtil : MonoBehaviour
     public ITile LeftTile => map.GetTile(GetLeft);
     public ITile JumpTile => map.GetTile(GetJump);
 
-    public bool IsCharactorOn(Pos destPos) => map.GetTile(destPos).IsCharacterOn;
+    public bool IsObjectOn(Pos destPos) => map.GetTile(destPos).IsObjectOn;
     public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
@@ -108,60 +113,61 @@ public class MapUtil : MonoBehaviour
     public bool IsPlayerBackward => MapUtil.IsOnPlayer(GetBackward);
 
     /// <summary>
-    /// Set current on tile and character status info to the Tile currently on
+    /// Set current on tile and IsObjectOn flag to the Tile currently on
     /// </summary>
-    /// <param name="isOnCharacter">Doesn't set status info to the Tile if FALSE</param>
-    /// <returns>destPos</returns>
-    public Pos SetOnCharacter(bool isOnCharacter = true) => SetOnCharacter(tf.position, isOnCharacter);
+    /// <returns>Current map Pos</returns>
+    public Pos SetObjectOn() => SetObjectOn(tf.position);
 
     /// <summary>
-    /// Set current on tile and character status info to the Tile specified by Vector3 position
+    /// Set current on tile and IsObjectOn flag to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="destPos">Vector3 position of destination Tile</param>
-    /// <param name="isOnCharacter">Doesn't set status info to the Tile if FALSE</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharacter(Vector3 destPos, bool isOnCharacter = true) => SetOnCharacter(map.MapPos(destPos), isOnCharacter);
+    public Pos SetObjectOn(Vector3 destPos) => SetObjectOn(map.MapPos(destPos));
 
     /// <summary>
-    /// Set current on tile and character status info to the Tile specified by Pos unit
+    /// Set current on tile and IsObjectOn flag to the Tile specified by Pos unit
     /// </summary>
     /// <param name="destPos">Tile map position of destination</param>
-    /// <param name="isOnCharacter">Doesn't set status info to the Tile if FALSE</param>
     /// <returns>destPos</returns>
-    public Pos SetOnCharacter(Pos destPos, bool isOnCharacter = true)
+    public Pos SetObjectOn(Pos destPos)
     {
-        if (isOnCharacter) map.GetTile(destPos).OnCharacter = status;
+        if (status.IsOnGround) map.GetTile(destPos).IsObjectOn = true;
         onTilePos = destPos;
         return destPos;
     }
 
     /// <summary>
-    /// Set IsCharactorOn flag FALSE to the Tile currently on
+    /// Set IsObjectOn flag FALSE to the Tile currently on
     /// </summary>
-    public void ResetOnCharacter() { ResetOnCharacter(onTilePos); }
+    public void RemoveObjectOn() => RemoveObjectOn(onTilePos);
 
     /// <summary>
-    /// Set IsCharactorOn flag FALSE to the Tile specified by Vector3 position
+    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="pos">Vector3 Tile position</param>
-    public void ResetOnCharacter(Vector3 pos) { ResetOnCharacter(map.MapPos(pos)); }
+    public void RemoveObjectOn(Vector3 pos) => RemoveObjectOn(map.MapPos(pos));
 
     /// <summary>
-    /// Set IsCharactorOn flag FALSE to the Tile specified by Vector3 position
+    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="pos">Pos unit Tile position</param>
-    public void ResetOnCharacter(Pos pos)
+    public void RemoveObjectOn(Pos pos)
     {
-        map.GetTile(pos).OnCharacter = null;
+        if (status.IsOnGround) map.GetTile(pos).IsObjectOn = false;
     }
 
     /// <summary>
-    /// Apply ResetOnCharacter at current Tile and SetOnCharacter to the dest Pos.
+    /// Apply RemoveObjectOn at current Tile and SetObjectOn to the dest Pos.
     /// </summary>
-    public Pos MoveOnCharacter(Pos destPos)
-    {
-        ResetOnCharacter();
-        return SetOnCharacter(destPos);
-    }
+    public Pos MoveObjectOn(Vector3 destPos) => MoveObjectOn(map.MapPos(destPos));
 
+    /// <summary>
+    /// Apply RemoveObjectOn at current Tile and SetObjectOn to the dest Pos.
+    /// </summary>
+    public Pos MoveObjectOn(Pos destPos)
+    {
+        RemoveObjectOn();
+        return SetObjectOn(destPos);
+    }
 }
