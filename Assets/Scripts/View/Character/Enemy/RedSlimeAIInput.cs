@@ -5,12 +5,11 @@ public class RedSlimeAIInput : EnemyAIInput
     protected override Command GetCommand()
     {
         var currentCommand = commander.currentCommand;
-        Pos pos = map.CurrentPos;
 
-        Pos forward = map.dir.GetForward(pos);
-        Pos backward = map.dir.GetBackward(pos);
-        Pos left = map.dir.GetLeft(pos);
-        Pos right = map.dir.GetRight(pos);
+        Pos forward = map.GetForward;
+        Pos backward = map.GetBackward;
+        Pos left = map.GetLeft;
+        Pos right = map.GetRight;
 
         bool isForwardMovable = map.IsMovable(forward);
         bool isBackwardMovable = map.IsMovable(backward);

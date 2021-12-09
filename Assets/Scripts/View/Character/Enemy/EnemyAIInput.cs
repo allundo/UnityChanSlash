@@ -25,16 +25,15 @@ public class EnemyAIInput : MobInput
     protected override Command GetCommand()
     {
         var currentCommand = commander.currentCommand;
-        Pos pos = map.CurrentPos;
 
         // Turn if player found at left, right or backward
-        Pos left = map.dir.GetLeft(pos);
-        Pos right = map.dir.GetRight(pos);
+        Pos left = map.GetLeft;
+        Pos right = map.GetRight;
 
         if (IsOnPlayer(left)) return turnL;
         if (IsOnPlayer(right)) return turnR;
 
-        Pos backward = map.dir.GetBackward(pos);
+        Pos backward = map.GetBackward;
 
         if (IsOnPlayer(backward))
         {
@@ -42,7 +41,7 @@ public class EnemyAIInput : MobInput
         }
 
         // Attack if player found at forward
-        Pos forward = map.dir.GetForward(pos);
+        Pos forward = map.GetForward;
         if (IsOnPlayer(forward)) return attack;
 
         // Move forward if player found in front
