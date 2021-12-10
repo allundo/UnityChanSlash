@@ -3,6 +3,23 @@ using System;
 
 // UnityEngine.Debug.Log(System.Reflection.MethodBase.GetCurrentMethod().Name + ": " + gameObject.name, gameObject);
 
+#if UNITY_EDITOR
+using UniRx;
+
+// Handles event double firing issue on Editor.
+public class InputControl
+{
+    private bool isFired = false;
+    public bool CanFire()
+    {
+        if (isFired) return false;
+        isFired = true;
+        Observable.NextFrame().Subscribe(_ => isFired = false);
+        return true;
+    }
+}
+#endif
+
 public enum Terrain
 {
     Path = 0,

@@ -8,21 +8,14 @@ public class PointerDown : MoveButton, IPointerDownHandler
 
 #if UNITY_EDITOR
     // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private bool isFired = false;
-    private bool CanFire()
-    {
-        if (isFired) return false;
-        isFired = true;
-        Observable.NextFrame().Subscribe(_ => isFired = false);
-        return true;
-    }
+    private InputControl ic = new InputControl();
 #endif
 
     public void OnPointerDown(PointerEventData eventData)
     {
 #if UNITY_EDITOR
         // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!CanFire()) return;
+        if (!ic.CanFire()) return;
 #endif
         ReleaseButton();
     }

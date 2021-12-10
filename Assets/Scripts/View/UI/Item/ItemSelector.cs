@@ -87,14 +87,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
 #if UNITY_EDITOR
     // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private bool isFired = false;
-    private bool CanFire()
-    {
-        if (isFired) return false;
-        isFired = true;
-        Observable.NextFrame().Subscribe(_ => isFired = false);
-        return true;
-    }
+    private InputControl ic = new InputControl();
 #endif
 
     public void OnPointerDown(PointerEventData eventData)
@@ -102,7 +95,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
 #if UNITY_EDITOR
         // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!CanFire()) return;
+        if (!ic.CanFire()) return;
 #endif
         startPos = eventData.position;
         isDragOn = IsOnCircle(startPos);
@@ -115,7 +108,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
 #if UNITY_EDITOR
         // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!CanFire()) return;
+        if (!ic.CanFire()) return;
 #endif
 
         if (!isDragOn)
