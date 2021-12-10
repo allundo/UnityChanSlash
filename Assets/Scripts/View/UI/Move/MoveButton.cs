@@ -43,33 +43,8 @@ public class MoveButton : FadeEnable
         moveDefault = ui.MoveBack(0.2f, true);
     }
 
-    public override Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
-    {
-        onPlay = onPlay ?? (() => { });
-
-        return base.FadeIn(duration,
-            () =>
-            {
-                ui.ResetSize();
-                onPlay();
-            },
-            onComplete,
-            isContinuous);
-    }
-
-    public override Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
-    {
-        onPlay = onPlay ?? (() => { });
-
-        return base.FadeOut(duration,
-            () =>
-            {
-                isPressed.Value = false;
-                onPlay();
-            },
-            onComplete,
-            isContinuous);
-    }
+    protected override void OnFadeIn() => ui.ResetSize();
+    protected override void OnFadeOut() => isPressed.Value = false;
 
     public virtual void PressButton()
     {

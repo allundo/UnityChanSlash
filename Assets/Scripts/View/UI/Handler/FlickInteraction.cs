@@ -81,6 +81,9 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         Drag = Merge(flick => flick.Drag);
     }
 
+    /// <summary>
+    /// Fade-out flicking button but reactivate again on complete.
+    /// </summary>
     public Tween FadeOutActive(float duration = 0.2f)
     {
         fadeOutActive = fade.ToAlpha(0, duration)
@@ -166,40 +169,10 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         base.Inactivate();
     }
 
-    public override Tween FadeIn(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
-    {
-        onPlay = onPlay ?? (() => { });
-
-        return base.FadeIn(duration,
-            () =>
-            {
-                InitImage();
-                onPlay();
-            },
-            onComplete,
-            isContinuous
-        );
-    }
-
+    protected override void OnFadeIn() => InitImage();
+    protected override void OnFadeOut() => fadeOutActive?.Kill();
     public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
-    {
-        onPlay = onPlay ?? (() => { });
-        onComplete = onComplete ?? (() => { });
-
-        return base.FadeOut(duration,
-            () =>
-            {
-                fadeOutActive?.Kill();
-                onPlay();
-            },
-            () =>
-            {
-                Clear();
-                onComplete();
-            },
-            isContinuous
-        );
-    }
+        => base.FadeOut(duration, onPlay, Clear, isContinuous);
 
     public void UpdateImage(Vector2 dragVector)
     {

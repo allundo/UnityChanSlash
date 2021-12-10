@@ -31,6 +31,9 @@ public class FadeEnable : MonoBehaviour
         Inactivator();
     }
 
+    protected virtual void OnFadeIn() { }
+    protected virtual void OnFadeOut() { }
+
     public virtual Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
         onPlay = onPlay ?? (() => { });
@@ -41,6 +44,7 @@ public class FadeEnable : MonoBehaviour
             {
                 Activator();
                 isActive = true;
+                OnFadeIn();
                 onPlay();
             },
             onComplete,
@@ -56,6 +60,7 @@ public class FadeEnable : MonoBehaviour
             () =>
             {
                 isActive = false;
+                OnFadeOut();
                 onPlay();
             },
             () =>
