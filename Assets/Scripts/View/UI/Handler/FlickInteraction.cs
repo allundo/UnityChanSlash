@@ -298,7 +298,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
             flickSubject.OnNext(Unit.Default);
         }
 
-        public void SetSprite() => fade.SetSprite(sprite);
+        public void SetSprite() => fade.sprite = sprite;
 
         /// <summary>
         /// Change sprite, move by drag directional factor and set alpha according to drag directional ratio.
@@ -306,7 +306,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         /// <param name="dragVector"></param>
         public void UpdateImage(Vector2 dragVector)
         {
-            fade.SetSprite(sprite);
+            SetSprite();
 
             Vector2 limitedVec = LimitedVec(dragVector);
 

@@ -55,7 +55,7 @@ public class HandleIcon : FadeEnable
     {
         if (isActive) return;
 
-        fade.SetSprite(sprite);
+        fade.sprite = sprite;
         base.Activate();
     }
 
@@ -84,7 +84,7 @@ public class HandleIcon : FadeEnable
     private Tween Show(FlickInteraction.FlickDirection flick, float duration = 0.4f)
     {
         return DOTween.Sequence()
-            .AppendCallback(() => fade.SetSprite(flick.sprite))
+            .AppendCallback(() => fade.sprite = flick.sprite)
             .AppendCallback(() => ui.ResetSize(2f))
             .Join(base.FadeIn(duration))
             .Join(ui.Resize(1.5f, duration))
@@ -94,7 +94,7 @@ public class HandleIcon : FadeEnable
     private Tween Switch(FlickInteraction.FlickDirection flick, float duration = 0.4f)
     {
         return DOTween.Sequence()
-            .AppendCallback(() => fade.SetSprite(flick.sprite))
+            .AppendCallback(() => fade.sprite = flick.sprite)
             .AppendCallback(() => ui.ResetSize(2f))
             .Join(base.FadeIn(duration, null, null, false))
             .Join(ui.Resize(1.5f, duration))

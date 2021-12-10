@@ -24,6 +24,25 @@ public class FadeTween
         }
     }
 
+    public Sprite sprite
+    {
+        get
+        {
+            CheckImage();
+            return (image as Image).sprite;
+        }
+        set
+        {
+            CheckImage();
+            (image as Image).sprite = value;
+        }
+    }
+
+    private void CheckImage()
+    {
+        if (!(image is Image)) throw new TypeAccessException("Failed to set Sprite. Target is not an Image.");
+    }
+
     protected float AlphaRatio => color.a / maxAlpha;
 
     public FadeTween(MaskableGraphic image, float maxAlpha = 1f, bool isValidOnPause = false)
@@ -44,13 +63,6 @@ public class FadeTween
     public void SetAlpha(float alpha, bool isScaledByMaxAlpha = true)
     {
         color = new Color(color.r, color.g, color.b, isScaledByMaxAlpha ? alpha * maxAlpha : alpha);
-    }
-
-    public void SetSprite(Sprite sprite)
-    {
-        if (!(image is Image)) throw new TypeAccessException("Failed to set Sprite. Target is not an Image.");
-
-        (image as Image).sprite = sprite;
     }
 
     public void SetEnabled(bool isEnable = true)
