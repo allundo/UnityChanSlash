@@ -4,9 +4,9 @@ using UniRx;
 
 public class MoveButton : FadeEnable
 {
-    [SerializeField] float maxAlpha = DEFAULT_ALPHA;
-    [SerializeField] Vector2 defaultSize = new Vector2(100f, 100f);
-    [SerializeField] Vector2 fightingOffset = default;
+    [SerializeField] protected float maxAlpha = DEFAULT_ALPHA;
+    [SerializeField] protected Vector2 defaultSize = new Vector2(100f, 100f);
+    [SerializeField] protected Vector2 fightingOffset = default;
 
     private static readonly float DEFAULT_ALPHA = 0.4f;
 

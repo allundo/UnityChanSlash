@@ -56448,6 +56448,7 @@ MonoBehaviour:
   maxAlpha: 1
   attackCancelThreshold: 2
   circle: {fileID: 3065396877610318412}
+  isForwardMovable: 0
 --- !u!1 &4750493034323304158
 GameObject:
   m_ObjectHideFlags: 0
@@ -56945,12 +56946,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5335086370429315491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70000108535cd4773b1ae77ecb0e18d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c6d76b360dc548bd9517ceff06d90bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
+  dash: {fileID: 21300000, guid: 74e7793ca482d42f3b336f3ca7c5ddce, type: 3}
+  duration: 0.2
 --- !u!1 &5335086371177449361
 GameObject:
   m_ObjectHideFlags: 0
@@ -57036,7 +57039,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5335086371177449361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dcb82dfe160d458698b2023f6310174, type: 3}
+  m_Script: {fileID: 11500000, guid: 1300a333a2a8a4fdfb4066cfc477d62c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveButton: {fileID: 5335086370429315495}

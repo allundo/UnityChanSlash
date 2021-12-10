@@ -2,12 +2,12 @@
 
 public class PointerEnter : MoveButton, IPointerEnterHandler, IPointerExitHandler
 {
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if (isActive) PressButton();
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         ReleaseButton();
     }

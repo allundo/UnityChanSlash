@@ -6,13 +6,16 @@ using System;
 
 public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
 {
-    public IObservable<Unit> EnterObservable { get; private set; }
+    public IObservable<Unit> EnterObservable { get; protected set; }
 
     protected override void Awake()
     {
         base.Awake();
+        InitObservable();
+    }
 
-
+    protected virtual void InitObservable()
+    {
         // To be observed every frame when IsPressed is true
         EnterObservable =
             moveButton.IsPressed

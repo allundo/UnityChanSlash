@@ -21,7 +21,7 @@ public class PlayerInput : ShieldInput
 
     // Moving UIs: Normal type input
     // Those type of moving Commands are inputted continuously by long push on UI.
-    [SerializeField] protected PointerEnterUI forwardUI = default;
+    [SerializeField] protected ForwardUI forwardUI = default;
     [SerializeField] protected PointerEnterUI rightUI = default;
     [SerializeField] protected PointerEnterUI leftUI = default;
     [SerializeField] protected PointerEnterUI backwardUI = default;
@@ -335,6 +335,10 @@ public class PlayerInput : ShieldInput
         Command guard = new GuardCommand(playerTarget, guardState, 1.44f);
 
         forwardUI.EnterObservable
+            .Subscribe(_ => InputCommand(forward))
+            .AddTo(this);
+
+        forwardUI.DashObservable
             .Subscribe(_ => InputCommand(forward))
             .AddTo(this);
 
