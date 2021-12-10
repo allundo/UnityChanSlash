@@ -32,7 +32,7 @@ public class CharacterUI : MonoBehaviour
 
         if (faceID == FaceID.NONE) return;
 
-        fade.SetSprite(face[(int)faceID]);
+        fade.sprite = face[(int)faceID];
 
         faceTween =
             DOTween.Sequence()
