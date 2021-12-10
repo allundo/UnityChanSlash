@@ -12,6 +12,7 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
     {
         base.Awake();
 
+
         // To be observed every frame when IsPressed is true
         EnterObservable =
             moveButton.IsPressed
@@ -28,11 +29,11 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
 #endif
 
         if (!isActive) return;
-        Execute<IPointerEnterHandler>(eventData, (handler, data) => handler.OnPointerEnter(data as PointerEventData));
+        raycastMoveButton.ExecutePointerEnter(eventData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Execute<IPointerExitHandler>(eventData, (handler, data) => handler.OnPointerExit(data as PointerEventData));
+        raycastMoveButton.ExecutePointerExit(eventData);
     }
 }

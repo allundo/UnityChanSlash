@@ -9,6 +9,8 @@ public class MoveUI : MonoBehaviour
     protected RectTransform rectTransform;
     protected Vector2 defaultSize;
 
+    protected RaycastHandler raycastMoveButton;
+
     protected bool isActive = false;
     private Tween buttonFade = null;
 
@@ -16,6 +18,7 @@ public class MoveUI : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         defaultSize = rectTransform.sizeDelta;
+        raycastMoveButton = new RaycastHandler(moveButton.gameObject);
     }
 
     protected virtual void Start()
@@ -65,10 +68,5 @@ public class MoveUI : MonoBehaviour
             Inactivate(isFighting);
         }
 
-    }
-
-    protected void Execute<T>(PointerEventData eventData, ExecuteEvents.EventFunction<T> eventFunc) where T : IEventSystemHandler
-    {
-        ExecuteEvents.Execute<T>(moveButton.gameObject, eventData, eventFunc);
     }
 }
