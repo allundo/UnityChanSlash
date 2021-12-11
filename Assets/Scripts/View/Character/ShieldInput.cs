@@ -100,7 +100,7 @@ public abstract class ShieldInput : MobInput
                 .AddTo(target);
         }
 
-        public void SetShield() => input.ForceEnqueue(shieldOn, true);
+        public void SetShield() => input.Interrupt(shieldOn);
 
         public void SetEnemyDetected(bool isDetected)
         {

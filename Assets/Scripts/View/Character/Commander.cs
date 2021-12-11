@@ -24,7 +24,7 @@ public class Commander
     /// Reserve Commands to execute in order.
     /// </summary>
     /// <typeparam name="Command">Command that Execute() method is implemented </typeparam>
-    protected Queue<Command> cmdQueue = new Queue<Command>();
+    protected LinkedList<Command> cmdQueue = new LinkedList<Command>();
 
     /// <summary>
     /// Executing Command. null if no Command is executing.
@@ -33,18 +33,16 @@ public class Commander
 
     protected IDisposable execDisposable = null;
 
-    public void EnqueueCommand(Command cmd) => EnqueueCommand(cmd, IsIdling);
-
     /// <summary>
     /// Enqueue a Command and invalidate following input.
     /// </summary>
     /// <param name="cmd">Command to enqueue</param>
     /// <param name="dispatch">Dispatch Command immediately if true. TODO: This is not Command interaption for now.</param>
-    public virtual void EnqueueCommand(Command cmd, bool dispatch = false)
+    public virtual void EnqueueCommand(Command cmd)
     {
         cmdQueue.Enqueue(cmd);
 
-        if (dispatch)
+        if (IsIdling)
         {
             DispatchCommand();
         }
@@ -80,14 +78,22 @@ public class Commander
     }
 
     /// <summary>
-    /// Replace current Command with a new Command and execute immediately.
+    /// Reserve new Command at first of command queue to execute immediately.
     /// </summary>
     /// <param name="cmd">New Command to execute as interruption</param>
-    public void Interrupt(Command cmd)
+    /// <param name="isCancel">Cancels current executing command if TRUE</param>
+    public void Interrupt(Command cmd, bool isCancel = true)
     {
-        Cancel(false);
-        SetAndExec(cmd);
-        if (cmdQueue.Count > 0) cmd.CancelValidate();
+        cmdQueue.AddFirst(cmd);
+
+        if (isCancel) Cancel();
+
+        if (cmdQueue.Count > 0) currentCommand.CancelValidate();
+    }
+
+    public void ReplaceNext(Command cmd)
+    {
+        cmdQueue.ReplaceFirstWith(cmd);
     }
 
     /// <summary>
@@ -99,11 +105,11 @@ public class Commander
         Cancel();
     }
 
-    public void Cancel(bool dispatch = true)
+    public void Cancel()
     {
         currentCommand?.Cancel();
         execDisposable?.Dispose();
-        if (dispatch) DispatchCommand();
+        DispatchCommand();
     }
 
     public void CancelValidate()

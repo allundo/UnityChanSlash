@@ -10,9 +10,9 @@ public class PlayerCommander : ShieldCommander
         anim = target.anim as PlayerAnimator;
     }
 
-    public override void EnqueueCommand(Command cmd, bool dispatch = false)
+    public override void EnqueueCommand(Command cmd)
     {
-        base.EnqueueCommand(cmd, dispatch);
+        base.EnqueueCommand(cmd);
         if (anim.cancel.Bool) CheckCancel();
     }
 
@@ -25,7 +25,7 @@ public class PlayerCommander : ShieldCommander
 
     protected void CheckCancel()
     {
-        if (cmdQueue.Count > 0 && cmdQueue.Peek() is PlayerAttack)
+        if (cmdQueue.First?.Value is PlayerAttack)
         {
             Cancel();
         }

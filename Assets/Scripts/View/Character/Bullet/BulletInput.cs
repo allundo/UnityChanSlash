@@ -17,7 +17,7 @@ public class BulletInput : MobInput
 
     public override void OnActive()
     {
-        ForceEnqueue(fire, true);
+        Interrupt(fire);
     }
 
     protected override Command GetCommand() => moveForward;

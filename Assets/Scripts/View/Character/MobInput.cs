@@ -77,19 +77,15 @@ public abstract class MobInput : MonoBehaviour
     /// <summary>
     /// Shorthand enqueue
     /// </summary>
-    public void ForceEnqueue(Command cmd, bool interrupt)
+    public void ForceEnqueue(Command cmd) => commander.EnqueueCommand(cmd);
+
+    /// <summary>
+    /// Execute command immediately without queuing
+    /// </summary>
+    public void Interrupt(Command cmd, bool isCancel = true)
     {
         DisableInput();
-
-        if (interrupt)
-        {
-            commander.Interrupt(cmd);
-        }
-        else
-        {
-            commander.CancelValidate();
-            commander.EnqueueCommand(cmd, false);
-        }
+        commander.Interrupt(cmd, isCancel);
     }
 
     protected abstract Command GetCommand();
@@ -99,7 +95,7 @@ public abstract class MobInput : MonoBehaviour
         // Clear all queuing Commands to execute DieCommand immediately.
         ClearAll();
 
-        ForceEnqueue(die, true);
+        Interrupt(die);
     }
 
     public virtual void ValidateInput(bool isTriggerOnly = false)
