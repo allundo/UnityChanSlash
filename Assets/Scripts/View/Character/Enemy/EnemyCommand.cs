@@ -9,8 +9,8 @@ public abstract class EnemyCommand : Command
 
     public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
-        enemyAnim = anim as EnemyAnimator;
-        enemyMap = map as EnemyMapUtil;
+        enemyAnim = target.anim as EnemyAnimator;
+        enemyMap = target.map as EnemyMapUtil;
     }
 }
 
