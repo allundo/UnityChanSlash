@@ -38,8 +38,8 @@ public abstract class EnemyMove : EnemyCommand
             return false;
         }
 
-        playingTween = tweenMove.GetLinearMove(GetDest)
-            .Join(tweenMove.SetDelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
+        playingTween = tweenMove.Linear(GetDest)
+            .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
             .Play();
 
         completeTween = DoFirstAndLast(SetSpeed, ResetSpeed).Play();

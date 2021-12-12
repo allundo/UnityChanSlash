@@ -10,17 +10,13 @@ public abstract class BulletCommand : Command
         attack = target.attack;
     }
 
-    protected bool IsMovable => map.ForwardTile.IsViewOpen;
-
-    protected virtual Tween MoveForward() => tweenMove.GetLinearMove(map.GetForward);
+    protected virtual Tween MoveForward() => tweenMove.Linear(map.GetForward);
 
     protected virtual Tween MoveForward(float ratio, bool isSpeedConstant = true)
     {
         if (ratio > 0.5f) map.SetObjectOn(map.GetForward);
-        return tweenMove.GetLinearMove(map.CurrentVec3Pos + map.dir.LookAt * TILE_UNIT * ratio, isSpeedConstant ? ratio : 1f);
+        return tweenMove.Linear(map.CurrentVec3Pos + map.dir.LookAt * TILE_UNIT * ratio, isSpeedConstant ? ratio : 1f);
     }
-
-
 }
 
 public class BulletMove : BulletCommand
@@ -44,7 +40,7 @@ public class BulletMove : BulletCommand
             playingTween = MoveForward(0.75f).Play();
 
             // Call InputDie() independently because it cancels OnComplete Actions during executing them.
-            tweenMove.SetDelayedCall(0.75f, target.input.InputDie).Play();
+            tweenMove.DelayedCall(0.75f, target.input.InputDie).Play();
             return ObservableComplete(0.75f);
         }
     }

@@ -49,7 +49,7 @@ public abstract class PlayerCommand : Command
     {
         if (!(destTile is Stair)) return;
 
-        tweenMove.SetDelayedCall(0.6f, () =>
+        tweenMove.DelayedCall(0.6f, () =>
         {
             playerInput.ClearAll();
             playerInput.SetInputVisible(false);
@@ -88,7 +88,7 @@ public abstract class PlayerMove : PlayerCommand
 
         EnterStair(DestTile);
 
-        playingTween = tweenMove.GetLinearMove(GetDest).OnComplete(hidePlateHandler.Move).Play();
+        playingTween = tweenMove.Linear(GetDest).OnComplete(hidePlateHandler.Move).Play();
         completeTween = DoFirstAndLast(SetSpeed, ResetSpeed).Play();
 
         return true;
@@ -162,7 +162,7 @@ public class PlayerJump : PlayerCommand
         playerAnim.jump.Fire();
 
         playingTween = tweenMove
-            .GetJumpSequence(
+            .Jump(
                 distance,
                 hidePlateHandler.Move,  // Update HidePlate on entering the next Tile
                 hidePlateHandler.Move   // Update HidePlate on entering the next next Tile
@@ -405,7 +405,7 @@ public class PlayerDropFloor : PlayerCommand
     {
         SetUIInvisible();
         playerAnim.dropFloor.Fire();
-        playingTween = tweenMove.GetDropMove(25.0f, 0f, 0.66f, 1.34f).Play();
+        playingTween = tweenMove.Drop(25.0f, 0f, 0.66f, 1.34f).Play();
         return true;
     }
 }
