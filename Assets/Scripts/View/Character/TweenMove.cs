@@ -75,7 +75,7 @@ public class TweenMove
 
     public Sequence BrakeAndBack(float timeScale = 1f)
     {
-        var moveVec = map.dir.LookAt * TILE_UNIT * 0.5f;
+        var moveVec = map.dir.LookAt * TILE_UNIT * 0.2f;
 
         return DOTween.Sequence()
             .Append(Move(moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative())

@@ -7,6 +7,7 @@ using UnityChan;
 public class PlayerAnimator : ShieldAnimator
 {
     public TriggerJump jump { get; protected set; }
+    public TriggerBrakeAndBackStep brakeAndBackStep { get; protected set; }
 
     public TriggerEx turnL { get; protected set; }
     public TriggerEx turnR { get; protected set; }
@@ -22,6 +23,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorBool handOn { get; protected set; }
     public AnimatorBool cancel { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
+    public AnimatorFloat brakeOverRun { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
 
     private PlayerBodyCollider bodyCollider;
@@ -48,25 +50,27 @@ public class PlayerAnimator : ShieldAnimator
         handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
+        brakeOverRun = new AnimatorFloat(anim, "BrakeOverRun");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
         randomWind = GetComponent<RandomWind>();
 
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
+        brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
     }
 
-    public class TriggerJump : TriggerEx
+    public abstract class TriggerUpdate : TriggerEx
     {
         protected IDisposable updateCollider = null;
-        protected AnimatorFloat jumpHeight;
+        protected AnimatorFloat animatorFloat;
         protected PlayerBodyCollider bodyCollider;
         protected PlayerAnimator playerAnim;
 
-        public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider) : base(playerAnim.anim, "Jump")
+        public TriggerUpdate(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider, string varName) : base(playerAnim.anim, varName)
         {
             this.playerAnim = playerAnim;
-            this.jumpHeight = jumpHeight;
+            this.animatorFloat = animatorFloat;
             this.bodyCollider = bodyCollider;
 
             // Disable the updateing collider when exiting state "Jump"
@@ -80,14 +84,30 @@ public class PlayerAnimator : ShieldAnimator
                 .AddTo(playerAnim);
         }
 
+        protected abstract void Update(float value);
+
         public override void Execute()
         {
             anim.SetTrigger(hashedVar);
 
             // Start updating collider every frame
             updateCollider = playerAnim.UpdateAsObservable()
-                .Subscribe(_ => bodyCollider.JumpCollider(jumpHeight.Float))
+                .Subscribe(_ => Update(animatorFloat.Float))
                 .AddTo(playerAnim);
         }
+    }
+
+    public class TriggerJump : TriggerUpdate
+    {
+        public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider)
+            : base(playerAnim, jumpHeight, bodyCollider, "Jump") { }
+        protected override void Update(float value) => bodyCollider.JumpCollider(value);
+    }
+
+    public class TriggerBrakeAndBackStep : TriggerUpdate
+    {
+        public TriggerBrakeAndBackStep(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider)
+            : base(playerAnim, jumpHeight, bodyCollider, "BrakeAndBackStep") { }
+        protected override void Update(float value) => bodyCollider.OverRunCollider(value);
     }
 }

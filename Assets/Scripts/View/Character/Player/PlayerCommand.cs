@@ -194,7 +194,7 @@ public class PlayerDash : PlayerCommand
 
             playerAnim.speed.Float = TILE_UNIT / duration;
             completeTween = DOTween.Sequence()
-                .AppendCallback(playerAnim.brake.Fire)
+                .AppendCallback(playerAnim.brakeAndBackStep.Fire)
                 .Append(DOTween.To(() => playerAnim.speed.Float, value => playerAnim.speed.Float = value, 0, duration))
                 .Play();
 
@@ -234,7 +234,7 @@ public class PlayerBrake : PlayerCommand
             playingTween = tweenMove.BrakeAndBack(2f).Play();
 
             completeTween = DOTween.Sequence()
-                .AppendCallback(playerAnim.brake.Fire)
+                .AppendCallback(playerAnim.brakeAndBackStep.Fire)
                 .Append(DOTween.To(() => playerAnim.speed.Float, value => playerAnim.speed.Float = value, 0, duration))
                 .Play();
 
