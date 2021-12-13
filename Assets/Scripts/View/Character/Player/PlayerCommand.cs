@@ -137,6 +137,112 @@ public class PlayerLeft : PlayerMove
     public override float RSpeed => -TILE_UNIT / duration;
 }
 
+public class PlayerDashStart : PlayerDash
+{
+    protected Command dash;
+    public PlayerDashStart(PlayerCommandTarget target, float duration) : base(target, duration)
+    {
+        dash = new PlayerDash(target, duration);
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        var dest = map.DestVec;
+        var timeScale = dest.magnitude / TILE_UNIT;
+
+        playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale).OnComplete(hidePlateHandler.Move).Play();
+
+        playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
+        completeTween = DOTween.Sequence()
+            .Append(DOTween.To(() => playerAnim.speed.Float, value => playerAnim.speed.Float = value, TILE_UNIT / duration, duration * 0.25f))
+            .AppendInterval(duration * (timeScale - 0.25f))
+            .AppendCallback(() => playerAnim.speed.Float = 0f)
+            .Play();
+
+        target.input.Interrupt(dash, false);
+
+        // EnterStair(map.GetTile(map.CurrentPos));
+
+        return ObservableComplete(timeScale);
+    }
+}
+
+public class PlayerDash : PlayerCommand
+{
+    public PlayerDash(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f) { }
+
+    public override IObservable<Unit> Execute()
+    {
+        if (map.IsForwardMovable)
+        {
+            playingTween = tweenMove.Linear(map.GetForward).OnComplete(hidePlateHandler.Move).Play();
+
+            playerAnim.speed.Float = TILE_UNIT / duration;
+            completeTween = tweenMove.FinallyCall(() => playerAnim.speed.Float = 0).Play();
+
+            target.input.Interrupt(this, false);
+
+            // EnterStair(map.GetTile(map.ForwardPos));
+
+            return ObservableComplete();
+        }
+        else
+        {
+            playingTween = tweenMove.BrakeAndBack(2f).Play();
+
+            validateTween = ValidateTween().Play();
+
+            playerAnim.speed.Float = TILE_UNIT / duration;
+            completeTween = DOTween.Sequence()
+                .AppendCallback(playerAnim.brake.Fire)
+                .Append(DOTween.To(() => playerAnim.speed.Float, value => playerAnim.speed.Float = value, 0, duration))
+                .Play();
+
+            return ObservableComplete(2f);
+        }
+    }
+}
+
+public class PlayerBrake : PlayerCommand
+{
+    public PlayerBrake(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f) { }
+
+    public override IObservable<Unit> Execute()
+    {
+        validateTween = ValidateTween().Play();
+        playerAnim.speed.Float = TILE_UNIT / duration * 2f;
+
+        if (map.IsForwardMovable)
+        {
+            playingTween = tweenMove.Brake(map.GetForward, 0.6f).OnComplete(hidePlateHandler.Move).Play();
+
+            completeTween = DOTween.Sequence()
+                .AppendInterval(duration * 0.2f)
+                .AppendCallback(playerAnim.brake.Fire)
+                .Append(DOTween.To(
+                    () => playerAnim.speed.Float,
+                    value => playerAnim.speed.Float = value,
+                    0,
+                    duration * 0.5f
+                ))
+                .Play();
+
+            return ObservableComplete();
+        }
+        else
+        {
+            playingTween = tweenMove.BrakeAndBack(2f).Play();
+
+            completeTween = DOTween.Sequence()
+                .AppendCallback(playerAnim.brake.Fire)
+                .Append(DOTween.To(() => playerAnim.speed.Float, value => playerAnim.speed.Float = value, 0, duration))
+                .Play();
+
+            return ObservableComplete(2f);
+        }
+    }
+}
+
 public class PlayerJump : PlayerCommand
 {
     public PlayerJump(PlayerCommandTarget target, float duration) : base(target, duration) { }

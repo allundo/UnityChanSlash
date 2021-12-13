@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class TweenMove
 {
+    protected const float TILE_UNIT = 2.5f;
+
     protected float duration;
     protected MapUtil map;
     protected Transform tf;
@@ -58,6 +60,26 @@ public class TweenMove
         return DOTween.Sequence()
              .AppendCallback(() => map.MoveObjectOn(destPos))
              .Join(Move(destPos, timeScale));
+    }
+
+    public Sequence Brake(Pos destPos, float timeScale = 1f)
+    {
+        var toDestVec3 = map.WorldPos(destPos) - map.CurrentVec3Pos;
+
+        return DOTween.Sequence()
+            .AppendCallback(() => map.MoveObjectOn(destPos))
+            // Set distances of (Linear : OutQuart) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
+            .Append(Move(toDestVec3 * 0.666667f, timeScale * 0.5f).SetRelative())
+            .Append(Move(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad).SetRelative());
+    }
+
+    public Sequence BrakeAndBack(float timeScale = 1f)
+    {
+        var moveVec = map.dir.LookAt * TILE_UNIT * 0.5f;
+
+        return DOTween.Sequence()
+            .Append(Move(moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative())
+            .Append(Move(-moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative());
     }
 
     public Tween TurnL => Rotate(-90);

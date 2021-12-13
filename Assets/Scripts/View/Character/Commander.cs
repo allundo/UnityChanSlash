@@ -31,6 +31,11 @@ public class Commander
     /// </summary>
     public virtual Command currentCommand { get; protected set; } = null;
 
+    /// <summary>
+    /// Command reserved next. null if no Command is queued.
+    /// </summary>
+    public virtual Command NextCommand => cmdQueue.First?.Value;
+
     protected IDisposable execDisposable = null;
 
     /// <summary>

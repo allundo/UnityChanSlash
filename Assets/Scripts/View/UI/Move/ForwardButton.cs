@@ -16,6 +16,7 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
     public IReadOnlyReactiveProperty<bool> IsDash => isDash;
 
     private bool isWalking = false;
+    private bool isDashValid = false;
 
     protected override void Awake()
     {
@@ -23,14 +24,14 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         forward = fade.sprite;
 
         dashTimer = DOTween.Sequence()
-            .AppendCallback(() => fade.sprite = dash)
+            .AppendCallback(EnableDash)
             .AppendInterval(duration)
-            .AppendCallback(() => fade.sprite = forward)
+            .AppendCallback(DisableDash)
             .AsReusable(gameObject);
 
         walkTimer = DOTween.Sequence()
             .AppendCallback(() => isWalking = false)
-            .AppendInterval(duration)
+            .AppendInterval(duration * 2f)
             .AppendCallback(() => isWalking = true)
             .AsReusable(gameObject);
 
@@ -49,8 +50,12 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
 #endif
         if (!isActive) return;
 
-        dashTimer.Pause();
-        isDash.Value = true;
+        if (isDashValid)
+        {
+            dashTimer.Pause();
+            isDash.Value = true;
+            isDashValid = false;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -64,21 +69,35 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         dashTimer.Restart();
     }
 
+    public override void PressButton()
+    {
+        if (isPressed.Value) return;
+
+        isPressed.Value = true;
+        shrink?.Kill();
+        ui.ResetSize(1.5f);
+        alphaTween?.Kill();
+        alphaTween = fade.ToAlpha(1.0f, 0.1f).Play();
+
+        walkTimer.Restart();
+    }
+
     public override void ReleaseButton()
     {
+        isDash.Value = false;
+        DisableDash();
+
         if (!isPressed.Value) return;
 
         isPressed.Value = false;
-        isDash.Value = false;
 
         shrink = ui.Resize(1f, 0.2f).Play();
         alphaTween = fade.ToAlpha(maxAlpha, 0.3f).Play();
-        fade.sprite = forward;
     }
 
     protected override void OnFadeIn()
     {
-        fade.sprite = forward;
+        DisableDash();
         ui.ResetSize();
     }
 
@@ -86,5 +105,17 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
     {
         isDash.Value = false;
         isPressed.Value = false;
+    }
+
+    protected void EnableDash()
+    {
+        fade.sprite = dash;
+        isDashValid = true;
+    }
+
+    protected void DisableDash()
+    {
+        fade.sprite = forward;
+        isDashValid = false;
     }
 }

@@ -74,6 +74,8 @@ public class MapUtil : MonoBehaviour
 
     public Vector3 CurrentVec3Pos => tf.position;
     public Pos CurrentPos => onTilePos;
+    public Vector3 DestVec => WorldPos(onTilePos) - tf.position;
+
     public Pos GetForward => dir.GetForward(onTilePos);
     public Pos GetLeft => dir.GetLeft(onTilePos);
     public Pos GetRight => dir.GetRight(onTilePos);

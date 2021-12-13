@@ -16,6 +16,7 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerEx kick { get; protected set; }
     public TriggerEx dieEx { get; protected set; }
     public TriggerEx dropFloor { get; protected set; }
+    public TriggerEx brake { get; protected set; }
     public AnimatorBool rest { get; protected set; }
     public AnimatorBool handOn { get; protected set; }
     public AnimatorBool cancel { get; protected set; }
@@ -41,6 +42,7 @@ public class PlayerAnimator : ShieldAnimator
         kick = new TriggerEx(anim, "Kick", 5);
         dieEx = new TriggerEx(anim, "Die", 0);
         dropFloor = new TriggerEx(anim, "DropFloor", 0);
+        brake = new TriggerEx(anim, "Brake");
         rest = new AnimatorBool(anim, "Rest");
         handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");

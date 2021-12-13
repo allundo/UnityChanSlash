@@ -68,16 +68,13 @@ public class MoveButton : FadeEnable
 
     public override void Activate()
     {
-        fade.Enable();
-        isActive = true;
-        fade.KillTweens();
-        fade.SetAlpha(1f);
-        ui.ResetSize();
+        base.Activate();
+        OnFadeIn();
     }
 
     public override void Inactivate()
     {
-        isPressed.Value = false;
+        OnFadeOut();
         shrink?.Kill();
         alphaTween?.Kill();
         base.Inactivate();

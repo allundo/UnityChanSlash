@@ -6,7 +6,10 @@ using System;
 public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
 {
     protected ForwardButton forwardButton;
-    public IObservable<Unit> DashObservable { get; protected set; }
+
+    public bool IsActive => forwardButton.isActive;
+
+    public IObservable<bool> DashObservable => forwardButton.IsDash.SkipLatestValueOnSubscribe();
 
     protected override void InitObservable()
     {
@@ -17,12 +20,6 @@ public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
                 .Where(_ => forwardButton.IsPressed.Value && !forwardButton.IsDash.Value)
                 .SelectMany(_ => moveButton.UpdateAsObservable())
                 .TakeUntil(forwardButton.IsPressed.Where(x => !x))
-                .RepeatUntilDestroy(forwardButton);
-
-        DashObservable =
-            forwardButton.IsDash.Where(x => x)
-                .SelectMany(_ => forwardButton.UpdateAsObservable())
-                .TakeUntil(forwardButton.IsDash.Where(x => !x))
                 .RepeatUntilDestroy(forwardButton);
     }
 
