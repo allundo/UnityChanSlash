@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniRx;
+using UniRx.Triggers;
 using System;
 using UnityChan;
 
@@ -84,8 +85,7 @@ public class PlayerAnimator : ShieldAnimator
             anim.SetTrigger(hashedVar);
 
             // Start updating collider every frame
-            updateCollider = Observable
-                .IntervalFrame(1)
+            updateCollider = playerAnim.UpdateAsObservable()
                 .Subscribe(_ => bodyCollider.JumpCollider(jumpHeight.Float))
                 .AddTo(playerAnim);
         }
