@@ -42,7 +42,8 @@ public abstract class EnemyMove : EnemyCommand
             .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
             .Play();
 
-        completeTween = DoFirstAndLast(SetSpeed, ResetSpeed).Play();
+        SetSpeed();
+        completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
         return true;
     }

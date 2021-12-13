@@ -89,7 +89,9 @@ public abstract class PlayerMove : PlayerCommand
         EnterStair(DestTile);
 
         playingTween = tweenMove.Linear(GetDest).OnComplete(hidePlateHandler.Move).Play();
-        completeTween = DoFirstAndLast(SetSpeed, ResetSpeed).Play();
+
+        SetSpeed();
+        completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
         return true;
     }

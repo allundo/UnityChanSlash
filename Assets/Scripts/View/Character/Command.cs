@@ -118,14 +118,6 @@ public abstract class Command
         onCompleted.Clear();
     }
 
-    public Sequence DoFirstAndLast(TweenCallback First = null, TweenCallback Last = null)
-    {
-        var seq = DOTween.Sequence();
-        if (First != null) seq.AppendCallback(First);
-        if (Last != null) seq.AppendInterval(duration).AppendCallback(Last);
-        return seq;
-    }
-
     protected virtual bool Action() => false;
 
     public virtual float Speed => 0.0f;
