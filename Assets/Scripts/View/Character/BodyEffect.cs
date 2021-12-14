@@ -44,14 +44,6 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
         prevFlash = flash.Play();
     }
 
-    protected void Play(AudioSource src)
-    {
-        if (src != null)
-        {
-            src.Play();
-        }
-    }
-
     public virtual void OnActive()
     {
         PlayFlash(FadeInTween());
@@ -59,7 +51,7 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
 
     public virtual void OnDie()
     {
-        Play(dieSound);
+        dieSound.PlayEx();
     }
 
     public virtual void OnDamage(float damageRatio)
@@ -87,7 +79,7 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
         }
     }
 
-    protected virtual void DamageSound(float damageRatio) => Play(damageSound);
+    protected virtual void DamageSound(float damageRatio) => damageSound.PlayEx();
 
     protected virtual void DamageFlash(float damageRatio)
     {

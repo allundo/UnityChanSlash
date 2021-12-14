@@ -13,7 +13,7 @@ public class MobEffect : BodyEffect
 
     public override void OnLifeMax()
     {
-        Play(lifeMaxSound);
+        lifeMaxSound.PlayEx();
     }
 
     protected void HealFlash(float duration)
@@ -36,6 +36,6 @@ public class MobEffect : BodyEffect
     {
         if (damageRatio < 0.000001f) return;
 
-        Play(damageRatio > 0.1f ? criticalSound : damageSound);
+        (damageRatio > 0.1f ? criticalSound : damageSound).PlayEx();
     }
 }

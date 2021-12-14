@@ -7,18 +7,19 @@ public class PlayerEffect : MobEffect
     [SerializeField] private AudioSource jumpLandingSound = null;
     [SerializeField] protected ParticleSystem shieldVfx = default;
 
+    // Called as Animation Event functions
     public void OnShield()
     {
-        Play(shieldSound);
+        shieldSound.PlayEx();
         shieldVfx?.Play();
     }
     public void OnJump()
     {
-        Play(jumpSound);
+        jumpSound.PlayEx();
     }
 
     public void OnJumpLanding()
     {
-        Play(jumpLandingSound);
+        jumpLandingSound.PlayEx();
     }
 }
