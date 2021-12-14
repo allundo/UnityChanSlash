@@ -144,7 +144,7 @@ public class PlayerDash : PlayerCommand
 
     protected IObservable<Unit> BrakeAndBackStep(float timeScale = 2f)
     {
-        playingTween = tweenMove.BrakeAndBack(timeScale).Play();
+        playingTween = tweenMove.BrakeAndBack(timeScale);
         validateTween = ValidateTween().Play();
         completeTween = ChangeSpeed(2f / timeScale, 0f, 1f, playerAnim.brakeAndBackStep.Fire);
 
@@ -187,7 +187,7 @@ public class PlayerStartRunning : PlayerRun
         var dest = map.DestVec;
         var timeScale = dest.magnitude / TILE_UNIT;
 
-        playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale).OnComplete(hidePlateHandler.Move).Play();
+        playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
 
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
         completeTween = DOTween.Sequence()
@@ -212,7 +212,7 @@ public class PlayerRun : PlayerDash
     {
         if (map.IsForwardMovable)
         {
-            playingTween = tweenMove.Linear(map.GetForward).OnComplete(hidePlateHandler.Move).Play();
+            playingTween = tweenMove.Linear(map.GetForward, 1f, hidePlateHandler.Move);
 
             playerAnim.speed.Float = TILE_UNIT / duration;
             completeTween = tweenMove.FinallyCall(() => playerAnim.speed.Float = 0).Play();
@@ -239,7 +239,7 @@ public class PlayerBrake : PlayerDash
 
         if (map.IsForwardMovable)
         {
-            playingTween = tweenMove.Brake(map.GetForward, 0.75f).OnComplete(hidePlateHandler.Move).Play();
+            playingTween = tweenMove.Brake(map.GetForward, 0.75f, hidePlateHandler.Move);
             validateTween = ValidateTween().Play();
             completeTween = ChangeSpeed(2f, 0f, 0.5f, playerAnim.brake.Fire, 0.3f);
 

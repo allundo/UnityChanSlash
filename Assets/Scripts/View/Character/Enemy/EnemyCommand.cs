@@ -31,6 +31,17 @@ public abstract class EnemyMove : EnemyCommand
         enemyAnim.speed.Float = 0.0f;
     }
 
+    protected Tween LinearMove(Pos destPos)
+    {
+        map.MoveObjectOn(destPos);
+
+        return DOTween.Sequence()
+            .Join(tweenMove.Move(destPos))
+            .AppendInterval(0.51f)
+            .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .Play();
+    }
+
     protected override bool Action()
     {
         if (!IsMovable)
@@ -38,10 +49,7 @@ public abstract class EnemyMove : EnemyCommand
             return false;
         }
 
-        playingTween = tweenMove.Linear(GetDest)
-            .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
-            .Play();
-
+        playingTween = LinearMove(GetDest);
         SetSpeed();
         completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 

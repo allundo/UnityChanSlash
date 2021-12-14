@@ -41,12 +41,11 @@ public class TweenMove
     /// </summary>
     /// <param name="destPos">Destination Vector3 postion</param>
     /// <param name="timeScale">Normalized time scale of the move Command duration</param>
-    /// <returns>Sequence can be joined or appended another behavior</returns>
-    public Sequence Linear(Vector3 destPos, float timeScale = 1f)
+    /// <returns>Playing tween for handling</returns>
+    public Tween Linear(Vector3 destPos, float timeScale = 1f, TweenCallback onComplete = null)
     {
-        return DOTween.Sequence()
-             .AppendCallback(() => map.MoveObjectOn(destPos))
-             .Join(Move(destPos, timeScale));
+        map.MoveObjectOn(destPos);
+        return Move(destPos, timeScale).OnComplete(onComplete).Play();
     }
 
     /// <summary>
@@ -54,32 +53,39 @@ public class TweenMove
     /// </summary>
     /// <param name="destPos">Destination map postion</param>
     /// <param name="timeScale">Normalized time scale of the move Command duration</param>
-    /// <returns>Sequence can be joined or appended another behavior</returns>
-    public Sequence Linear(Pos destPos, float timeScale = 1f)
+    /// <returns>Playing tween for handling</returns>
+    public Tween Linear(Pos destPos, float timeScale = 1f, TweenCallback onComplete = null)
     {
-        return DOTween.Sequence()
-             .AppendCallback(() => map.MoveObjectOn(destPos))
-             .Join(Move(destPos, timeScale));
+        map.MoveObjectOn(destPos);
+        return Move(destPos, timeScale).OnComplete(onComplete).Play();
     }
 
-    public Sequence Brake(Pos destPos, float timeScale = 1f)
+    /// <summary>
+    /// DOTween brake with updating IsObjectOn flag to destination Tile
+    /// </summary>
+    /// <returns>Playing tween for handling</returns>
+    public Tween Brake(Pos destPos, float timeScale = 1f, TweenCallback onComplete = null)
     {
         var toDestVec3 = map.WorldPos(destPos) - map.CurrentVec3Pos;
 
+        map.MoveObjectOn(destPos);
         return DOTween.Sequence()
-            .AppendCallback(() => map.MoveObjectOn(destPos))
             // Set distances of (Linear : OutQuart) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
             .Append(Move(toDestVec3 * 0.666667f, timeScale * 0.5f).SetRelative())
-            .Append(Move(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad).SetRelative());
+            .Append(Move(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad).SetRelative())
+            .AppendCallback(onComplete)
+            .Play();
     }
 
-    public Sequence BrakeAndBack(float timeScale = 1f)
+    public Tween BrakeAndBack(float timeScale = 1f, TweenCallback onComplete = null)
     {
         var moveVec = map.dir.LookAt * TILE_UNIT * 0.2f;
 
         return DOTween.Sequence()
             .Append(Move(moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative())
-            .Append(Move(-moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative());
+            .Append(Move(-moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative())
+            .AppendCallback(onComplete)
+            .Play();
     }
 
     public Tween TurnL => Rotate(-90);

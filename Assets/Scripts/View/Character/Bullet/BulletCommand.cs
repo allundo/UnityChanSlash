@@ -30,14 +30,14 @@ public class BulletMove : BulletCommand
         // Forward movable?
         if (map.ForwardTile.IsViewOpen)
         {
-            playingTween = MoveForward().Play();
+            playingTween = MoveForward();
             completeTween = AttackSequence.Play();
             validateTween = ValidateTween().Play();
             return ObservableComplete();
         }
         else
         {
-            playingTween = MoveForward(0.75f).Play();
+            playingTween = MoveForward(0.75f);
 
             // Call InputDie() independently because it cancels OnComplete Actions during executing them.
             tweenMove.DelayedCall(0.75f, target.input.InputDie).Play();
@@ -59,7 +59,7 @@ public class BulletDie : BulletCommand
 
     public override IObservable<Unit> Execute()
     {
-        playingTween = MoveForward(0.1f).Play();
+        playingTween = MoveForward(0.1f);
         react.OnDie();
 
         return ObservableComplete(); // Don't validate input.
