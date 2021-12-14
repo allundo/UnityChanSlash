@@ -327,8 +327,8 @@ public class PlayerInput : ShieldInput
         Command right = new PlayerRight(playerTarget, 43f);
         Command left = new PlayerLeft(playerTarget, 43f);
         Command backward = new PlayerBack(playerTarget, 43f);
-        Command dash = new PlayerDash(playerTarget, 24f);
-        Command dashStart = new PlayerDashStart(playerTarget, 24f);
+        Command run = new PlayerRun(playerTarget, 24f);
+        Command startRunning = new PlayerStartRunning(playerTarget, 24f);
         var brake = new PlayerBrake(playerTarget, 48f);
 
         Command turnR = new PlayerTurnR(playerTarget, 18f);
@@ -351,24 +351,24 @@ public class PlayerInput : ShieldInput
                     if (commander.currentCommand is PlayerForward)
                     {
                         // Cancel forward command and start dash
-                        Interrupt(dashStart);
+                        Interrupt(startRunning);
                         return;
                     }
 
-                    if (commander.currentCommand is PlayerDash)
+                    if (commander.currentCommand is PlayerRun)
                     {
                         // Reserve dash command to continue dash state
-                        commander.ReplaceNext(dash);
+                        commander.ReplaceNext(run);
                         return;
                     }
 
                     // Reserve dash on command queue
-                    InputCommand(dash);
+                    InputCommand(run);
                     return;
                 }
 
                 // Stop dash
-                if (commander.NextCommand is PlayerDash && forwardUI.IsActive)
+                if (commander.NextCommand is PlayerRun && forwardUI.IsActive)
                 {
                     // Replace reserved dash command with brake command
                     commander.ReplaceNext(brake);
