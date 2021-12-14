@@ -142,11 +142,11 @@ public class PlayerDash : PlayerCommand
     public PlayerDash(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f)
     { }
 
-    protected IObservable<Unit> BrakeAndBackStep(float startSpeedRate = 1f, float timeScale = 2f)
+    protected IObservable<Unit> BrakeAndBackStep(float timeScale = 2f)
     {
         playingTween = tweenMove.BrakeAndBack(timeScale).Play();
         validateTween = ValidateTween().Play();
-        completeTween = ChangeSpeed(startSpeedRate, 0f, 1f, playerAnim.brakeAndBackStep.Fire);
+        completeTween = ChangeSpeed(2f / timeScale, 0f, 1f, playerAnim.brakeAndBackStep.Fire);
 
         return ObservableComplete(timeScale);
     }
@@ -247,7 +247,7 @@ public class PlayerBrake : PlayerDash
         }
         else
         {
-            return BrakeAndBackStep(2f);
+            return BrakeAndBackStep(1f);
         }
     }
 }
