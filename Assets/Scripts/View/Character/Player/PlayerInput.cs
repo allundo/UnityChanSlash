@@ -39,6 +39,7 @@ public class PlayerInput : ShieldInput
 
     protected PlayerCommandTarget playerTarget;
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
+    protected bool IsDash => commander.currentCommand is PlayerDash;
 
     /// <summary>
     /// Stops Trigger type input if false.
@@ -190,7 +191,7 @@ public class PlayerInput : ShieldInput
             fightCircle.Inactivate();
         }
 
-        bool isFaceToDoor = !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
+        bool isFaceToDoor = !IsDash && !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
 
         if (isFaceToDoor)
         {
@@ -204,7 +205,7 @@ public class PlayerInput : ShieldInput
             doorHandler.Inactivate();
         }
 
-        bool isFaceToItem = !fightCircle.isActive && forwardTile.IsItemOn;
+        bool isFaceToItem = !IsDash && !fightCircle.isActive && forwardTile.IsItemOn;
         if (isFaceToItem)
         {
             itemHandler.Activate();
