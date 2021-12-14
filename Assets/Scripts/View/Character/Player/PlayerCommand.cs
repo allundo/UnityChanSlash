@@ -214,10 +214,10 @@ public class PlayerBrake : PlayerCommand
 
         if (map.IsForwardMovable)
         {
-            playingTween = tweenMove.Brake(map.GetForward, 0.6f).OnComplete(hidePlateHandler.Move).Play();
+            playingTween = tweenMove.Brake(map.GetForward, 0.75f).OnComplete(hidePlateHandler.Move).Play();
 
             completeTween = DOTween.Sequence()
-                .AppendInterval(duration * 0.2f)
+                .AppendInterval(duration * 0.3f)
                 .AppendCallback(playerAnim.brake.Fire)
                 .Append(DOTween.To(
                     () => playerAnim.speed.Float,
