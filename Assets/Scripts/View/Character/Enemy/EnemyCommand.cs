@@ -37,8 +37,7 @@ public abstract class EnemyMove : EnemyCommand
 
         return DOTween.Sequence()
             .Join(tweenMove.Move(destPos))
-            .AppendInterval(0.51f)
-            .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
             .Play();
     }
 
