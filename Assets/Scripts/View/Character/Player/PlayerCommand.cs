@@ -335,8 +335,13 @@ public class PlayerHandle : PlayerAction
 
     protected override bool Action()
     {
-        playerAnim.handle.Fire();
-        return true;
+        if (playerAnim.handOn.Bool)
+        {
+            playerAnim.handle.Fire();
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -349,7 +354,7 @@ public class PlayerGetItem : PlayerAction
         ITile tile = map.ForwardTile;
         Item item = tile.PickItem();
 
-        if (itemInventory.PickUp(item))
+        if (playerAnim.handOn.Bool && itemInventory.PickUp(item))
         {
             playerAnim.getItem.Fire();
         }
@@ -375,7 +380,7 @@ public class PlayerPutItem : PlayerAction
 
     protected override bool Action()
     {
-        if (itemGenerator.Put(itemIcon.itemInfo, map.GetForward, map.dir))
+        if (playerAnim.handOn.Bool && itemGenerator.Put(itemIcon.itemInfo, map.GetForward, map.dir))
         {
             itemInventory.Remove(itemIcon);
             playerAnim.handle.Fire();
