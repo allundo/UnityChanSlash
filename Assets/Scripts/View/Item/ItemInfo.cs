@@ -12,13 +12,8 @@ public abstract class ItemInfo : ICloneable
     protected AudioSource sfx;
     protected ParticleSystem vfx;
 
-    protected static T Instantiate<T>(T prefab) where T : UnityEngine.Object
-    {
-        return prefab != null ? UnityEngine.Object.Instantiate(prefab) : null;
-    }
-
     public ItemInfo(ItemSource itemSource, int numOfItem = 1)
-        : this(itemSource.material, numOfItem, Instantiate(itemSource.vfx), Instantiate(itemSource.sfx), itemSource.duration)
+        : this(itemSource.material, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
     { }
 
     public ItemInfo(Material material, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
