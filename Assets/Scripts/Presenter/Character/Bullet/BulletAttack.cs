@@ -16,7 +16,7 @@ public class BulletAttack : Attack
 
         if (null == targetMob) return;
 
-        targetMob.OnDamage(status.Attack * attackMultiplier, status.dir);
-        reactor.OnDamage(status.LifeMax.Value, null);
+        targetMob.OnDamage(status.Attack * attackMultiplier, status.dir, attackType);
+        reactor.OnDamage(status.LifeMax.Value, null, AttackType.None);
     }
 }

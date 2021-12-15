@@ -46,3 +46,12 @@ public class ItemSource
     [SerializeField] public AudioSource sfx = default;
     [SerializeField] public float duration = 0.2f;
 }
+
+[System.Serializable]
+public class DamageSndSource
+{
+    [SerializeField] public string name = "攻撃タイプ";
+    [SerializeField] public AudioSource damage = default;
+    [SerializeField] public AudioSource critical = default;
+    [SerializeField] public AudioSource guard = default;
+}

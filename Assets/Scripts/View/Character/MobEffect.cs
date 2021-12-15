@@ -1,10 +1,14 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class MobEffect : BodyEffect
 {
-    [SerializeField] private AudioSource criticalSound = null;
     [SerializeField] private AudioSource lifeMaxSound = null;
+
+    protected AudioSource SndCritical(AttackType type) => Util.Instantiate(data.Param((int)type).critical, transform);
+    protected Dictionary<AttackType, AudioSource> criticalSndSource = new Dictionary<AttackType, AudioSource>();
+    protected void PlayCritical(AttackType type) => criticalSndSource.LazyLoad(type, SndCritical).PlayEx();
 
     public override void OnHeal(float healRatio)
     {
@@ -32,10 +36,17 @@ public class MobEffect : BodyEffect
         PlayFlash(flash);
     }
 
-    protected override void DamageSound(float damageRatio)
+    protected override void DamageSound(float damageRatio, AttackType type = AttackType.None)
     {
         if (damageRatio < 0.000001f) return;
 
-        (damageRatio > 0.1f ? criticalSound : damageSound).PlayEx();
+        if (damageRatio > 0.1f)
+        {
+            PlayCritical(type);
+        }
+        else
+        {
+            PlayDamage(type);
+        }
     }
 }

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-static public class LinkedListExtensions
+static public class CollectionsExtensions
 {
+    // LinkedList
     static public void Enqueue<T>(this LinkedList<T> linkedList, T value)
     {
         linkedList.AddLast(value);
@@ -25,5 +26,19 @@ static public class LinkedListExtensions
     {
         if (linkedList.First == null) throw new InvalidOperationException("LinkedList is empty.");
         return linkedList.First.Value;
+    }
+
+    // Dictionary
+    static public V LazyLoad<K, V>(this Dictionary<K, V> dictionary, K key, Func<K, V> loader)
+    {
+        V value;
+
+        if (!dictionary.TryGetValue(key, out value))
+        {
+            value = loader(key);
+            dictionary.Add(key, value);
+        }
+
+        return value;
     }
 }

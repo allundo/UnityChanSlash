@@ -35,9 +35,9 @@ public class PlayerReactor : MobReactor
         restUI.OnLifeChange(life, status.LifeMax.Value);
     }
 
-    public override void OnDamage(float attack, IDirection dir)
+    public override void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
     {
-        base.OnDamage(attack, dir);
+        base.OnDamage(attack, dir, type);
         if (restUI.isActive) restUI.OnDamage();
     }
 

@@ -7,6 +7,9 @@ public class BulletEffect : BodyEffect
     [SerializeField] protected ParticleSystem fireVfx = default;
     [SerializeField] protected ParticleSystem hitVfx = default;
     [SerializeField] protected ParticleSystem eraseVfx = default;
+
+    [SerializeField] protected AudioSource fireSound = default;
+
     [SerializeField] protected Transform meshTf;
 
     protected Vector3 defaultScale;
@@ -36,6 +39,7 @@ public class BulletEffect : BodyEffect
 
     public override void OnActive()
     {
+        fireSound.PlayEx();
         emitVfx?.Play();
         fireVfx?.Play();
         PlayFlash(FadeInTween(0.5f));
@@ -50,9 +54,9 @@ public class BulletEffect : BodyEffect
         emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
-    public override void OnDamage(float damageRatio)
+    public override void OnDamage(float damageRatio, AttackType type = AttackType.None)
     {
-        base.OnDamage(damageRatio);
+        base.OnDamage(damageRatio, type);
         hitVfx?.Play();
     }
 

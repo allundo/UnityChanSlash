@@ -54,14 +54,14 @@ public class MobReactor : SpawnObject<MobReactor>
         lifeGauge?.OnLifeChange(status.Life.Value, lifeMax);
     }
 
-    public virtual void OnDamage(float attack, IDirection dir)
+    public virtual void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
     {
         if (!status.IsAlive) return;
 
         float damage = CalcDamage(attack, dir);
         float damageRatio = LifeRatio(damage);
 
-        effect.OnDamage(damageRatio);
+        effect.OnDamage(damageRatio, type);
         lifeGauge?.OnDamage(damageRatio);
 
         status.Damage(damage);

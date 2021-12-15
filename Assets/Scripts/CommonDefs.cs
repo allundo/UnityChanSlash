@@ -407,3 +407,12 @@ public enum ItemType
 {
     Potion = 0,
 }
+public enum AttackType
+{
+    None = 0,
+    Smash,
+    Slash,
+    Sting,
+    Bite,
+    Burn = 10,
+}

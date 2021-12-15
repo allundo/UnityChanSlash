@@ -11,7 +11,7 @@ public interface IBodyEffect
     /// Play body effect on damage
     /// </summary>
     /// <param name="damageRatio">Normalized damage ratio to the life max</param>
-    void OnDamage(float damageRatio);
+    void OnDamage(float damageRatio, AttackType type);
 
     /// <summary>
     /// Play body effect on heal
@@ -28,7 +28,11 @@ public interface IBodyEffect
 public abstract class BodyEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected AudioSource dieSound = null;
-    [SerializeField] protected AudioSource damageSound = null;
+    [SerializeField] protected DamageSndData data;
+
+    protected AudioSource SndDamage(AttackType type) => Util.Instantiate(data.Param((int)type).damage, transform);
+    protected Dictionary<AttackType, AudioSource> damageSndSource = new Dictionary<AttackType, AudioSource>();
+    protected void PlayDamage(AttackType type) => damageSndSource.LazyLoad(type, SndDamage).PlayEx();
 
     protected List<Material> flashMaterials = new List<Material>();
     protected Tween prevFlash;
@@ -54,9 +58,9 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
         dieSound.PlayEx();
     }
 
-    public virtual void OnDamage(float damageRatio)
+    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None)
     {
-        DamageSound(damageRatio);
+        DamageSound(damageRatio, type);
         DamageFlash(damageRatio);
     }
 
@@ -79,7 +83,7 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
         }
     }
 
-    protected virtual void DamageSound(float damageRatio) => damageSound.PlayEx();
+    protected virtual void DamageSound(float damageRatio, AttackType type) => PlayDamage(type);
 
     protected virtual void DamageFlash(float damageRatio)
     {

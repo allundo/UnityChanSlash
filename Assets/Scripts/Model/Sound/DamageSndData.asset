@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8094c71e0ca4b43c590efb2dbd0f9508, type: 3}
+  m_Name: DamageSndData
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: None
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: Smash
+    damage: {fileID: 8125909828012618652, guid: 9be4708c687da40fab19017ba29ce778,
+      type: 3}
+    critical: {fileID: 1636219528001972363, guid: 4d523f77ff5684536bb7f8d3692c0aef,
+      type: 3}
+    guard: {fileID: 0}
+  - name: Slash
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: Sting
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: Bite
+    damage: {fileID: 8125909828012618652, guid: 9be4708c687da40fab19017ba29ce778,
+      type: 3}
+    critical: {fileID: 1636219528001972363, guid: 4d523f77ff5684536bb7f8d3692c0aef,
+      type: 3}
+    guard: {fileID: 0}
+  - name: "\u653B\u6483\u30BF\u30A4\u30D7"
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: "\u653B\u6483\u30BF\u30A4\u30D7"
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: "\u653B\u6483\u30BF\u30A4\u30D7"
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: "\u653B\u6483\u30BF\u30A4\u30D7"
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: "\u653B\u6483\u30BF\u30A4\u30D7"
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}
+  - name: Burn
+    damage: {fileID: 0}
+    critical: {fileID: 0}
+    guard: {fileID: 0}

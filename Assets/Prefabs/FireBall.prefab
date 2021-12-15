@@ -4869,6 +4869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5fa0d9cddefb4e87aceec8b38ec4b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackType: 10
   attackMultiplier: 1
 --- !u!1 &2653024233606061206
 GameObject:
@@ -38263,11 +38264,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
-  damageSound: {fileID: 0}
+  data: {fileID: 0}
   emitVfx: {fileID: 2805387921336131200}
   fireVfx: {fileID: 7175566729394513956}
   hitVfx: {fileID: 332635480921310000}
   eraseVfx: {fileID: 8114496825619606693}
+  fireSound: {fileID: 0}
   meshTf: {fileID: 2406052561114265406}
 --- !u!114 &1900991498281850552
 MonoBehaviour:
