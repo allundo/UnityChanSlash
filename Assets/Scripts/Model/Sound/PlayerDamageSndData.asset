@@ -22,21 +22,21 @@ MonoBehaviour:
       type: 3}
     critical: {fileID: 9018223286817358365, guid: bcdfdd9d6ebac491a8275e1957ab5a70,
       type: 3}
-    guard: {fileID: 0}
+    guard: {fileID: 8153764810146711806, guid: 3f89ae31db30d4acf946f9ca5a8c0b6e, type: 3}
   - name: Slash
     damage: {fileID: 0}
     critical: {fileID: 0}
     guard: {fileID: 0}
-  - name: Bite
-    damage: {fileID: 6863403767537054293, guid: de9c01a0a4ca44dc08cdc869aa9b3743,
-      type: 3}
-    critical: {fileID: 9018223286817358365, guid: bcdfdd9d6ebac491a8275e1957ab5a70,
-      type: 3}
-    guard: {fileID: 0}
-  - name: "\u653B\u6483\u30BF\u30A4\u30D74"
+  - name: Sting
     damage: {fileID: 0}
     critical: {fileID: 0}
     guard: {fileID: 0}
+  - name: Bite
+    damage: {fileID: 1495889092723307483, guid: d753d60f771ba473e8a63036e3359fe8,
+      type: 3}
+    critical: {fileID: 8317160905736561072, guid: 50780b8db0acb4aebaa869d04fd77d29,
+      type: 3}
+    guard: {fileID: 6328208369918078447, guid: a4ab2ee7c6da74ec881c5a280b4ee7c6, type: 3}
   - name: "\u653B\u6483\u30BF\u30A4\u30D75"
     damage: {fileID: 0}
     critical: {fileID: 0}
@@ -58,6 +58,8 @@ MonoBehaviour:
     critical: {fileID: 0}
     guard: {fileID: 0}
   - name: Burn
-    damage: {fileID: 0}
-    critical: {fileID: 0}
-    guard: {fileID: 0}
+    damage: {fileID: 6251247139474727949, guid: 6d805e2695bf344df930df2ea9d18e73,
+      type: 3}
+    critical: {fileID: 1160854579032595622, guid: fc2aefdfbdb834b47a95e8fc58e2eff1,
+      type: 3}
+    guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}

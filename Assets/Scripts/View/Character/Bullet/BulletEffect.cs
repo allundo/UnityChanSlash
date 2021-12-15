@@ -56,7 +56,7 @@ public class BulletEffect : BodyEffect
 
     public override void OnDamage(float damageRatio, AttackType type = AttackType.None)
     {
-        base.OnDamage(damageRatio, type);
+        DamageFlash(damageRatio);
         hitVfx?.Play();
     }
 
