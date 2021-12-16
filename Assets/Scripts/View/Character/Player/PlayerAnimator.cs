@@ -22,6 +22,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorBool rest { get; protected set; }
     public AnimatorBool handOn { get; protected set; }
     public AnimatorBool cancel { get; protected set; }
+    public AnimatorBool damage { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat brakeOverRun { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
@@ -46,7 +47,6 @@ public class PlayerAnimator : ShieldAnimator
         dieEx = new TriggerEx(anim, "Die", 0);
         dropFloor = new TriggerEx(anim, "DropFloor", 0);
         brake = new TriggerEx(anim, "Brake");
-        rest = new AnimatorBool(anim, "Rest");
         handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
@@ -55,6 +55,8 @@ public class PlayerAnimator : ShieldAnimator
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
         randomWind = GetComponent<RandomWind>();
+
+        rest = new BoolRest(this);
 
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
@@ -109,5 +111,17 @@ public class PlayerAnimator : ShieldAnimator
         public TriggerBrakeAndBackStep(PlayerAnimator playerAnim, AnimatorFloat brakeOverRun, PlayerBodyCollider bodyCollider)
             : base(playerAnim, brakeOverRun, bodyCollider, "BrakeAndBackStep", "Base Layer.Move.BrakeAndBackStep") { }
         protected override void Update(float value) => bodyCollider.OverRunCollider(value);
+    }
+
+    public class BoolRest : AnimatorBool
+    {
+        public BoolRest(PlayerAnimator playerAnim) : base(playerAnim.anim, "Rest")
+        {
+            playerAnim.StateEnter
+                .Where(x => x.StateInfo.fullPathHash == Animator.StringToHash("Base Layer.Stand.Rest"))
+                .Subscribe(_ => Bool = true)
+                .AddTo(playerAnim);
+        }
+
     }
 }
