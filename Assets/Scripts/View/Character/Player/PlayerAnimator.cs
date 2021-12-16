@@ -67,15 +67,15 @@ public class PlayerAnimator : ShieldAnimator
         protected PlayerBodyCollider bodyCollider;
         protected PlayerAnimator playerAnim;
 
-        public TriggerUpdate(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider, string varName) : base(playerAnim.anim, varName)
+        public TriggerUpdate(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider, string varName, string fullPathStateName) : base(playerAnim.anim, varName)
         {
             this.playerAnim = playerAnim;
             this.animatorFloat = animatorFloat;
             this.bodyCollider = bodyCollider;
 
-            // Disable the updateing collider when exiting state "Jump"
+            // Disable the updateing collider when exiting trigger entered state
             playerAnim.StateExit
-                .Where(x => x.StateInfo.fullPathHash == hashedVar)
+                .Where(x => x.StateInfo.fullPathHash == Animator.StringToHash(fullPathStateName))
                 .Subscribe(_ =>
                 {
                     updateCollider?.Dispose();
@@ -100,14 +100,14 @@ public class PlayerAnimator : ShieldAnimator
     public class TriggerJump : TriggerUpdate
     {
         public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider)
-            : base(playerAnim, jumpHeight, bodyCollider, "Jump") { }
+            : base(playerAnim, jumpHeight, bodyCollider, "Jump", "Base Layer.Jump") { }
         protected override void Update(float value) => bodyCollider.JumpCollider(value);
     }
 
     public class TriggerBrakeAndBackStep : TriggerUpdate
     {
-        public TriggerBrakeAndBackStep(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider)
-            : base(playerAnim, jumpHeight, bodyCollider, "BrakeAndBackStep") { }
+        public TriggerBrakeAndBackStep(PlayerAnimator playerAnim, AnimatorFloat brakeOverRun, PlayerBodyCollider bodyCollider)
+            : base(playerAnim, brakeOverRun, bodyCollider, "BrakeAndBackStep", "Base Layer.Move.BrakeAndBackStep") { }
         protected override void Update(float value) => bodyCollider.OverRunCollider(value);
     }
 }
