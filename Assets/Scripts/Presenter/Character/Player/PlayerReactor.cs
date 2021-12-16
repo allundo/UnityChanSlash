@@ -10,7 +10,6 @@ public class PlayerReactor : MobReactor
 
     protected GuardState guardState => (input as PlayerInput).guardState;
 
-
     protected override void Start()
     {
         Activate();

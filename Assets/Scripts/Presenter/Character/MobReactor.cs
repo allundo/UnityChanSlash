@@ -79,9 +79,10 @@ public class MobReactor : SpawnObject<MobReactor>
             effect.OnHeal(healRatio);
             lifeGauge?.OnHeal(healRatio, lifeRatio);
         }
-        else if (status.Life.Value < status.LifeMax.Value && lifeRatio == 1f)
+        else if (status.Life.Value < status.LifeMax.Value)
         {
-            effect.OnLifeMax();
+            lifeGauge?.OnNoEffectHeal(heal, status.Life.Value);
+            if (lifeRatio == 1f) lifeGauge?.OnLifeMax();
         }
 
         status.Heal(heal);

@@ -11,6 +11,9 @@ public class PlayerLifeGauge : MonoBehaviour
     [SerializeField] private SkewedImage healImage = default;
     [SerializeField] private UIParticle healVfx = default;
 
+    [SerializeField] private AudioSource lifeMaxSound = null;
+    [SerializeField] private AudioSource smallHealSound = null;
+
     private RectTransform rectTransform;
     private HealEffect healEffect;
 
@@ -42,6 +45,17 @@ public class PlayerLifeGauge : MonoBehaviour
         healEffect.PlayEffect(healRatio * 0.5f, lifeRatio);
     }
 
+    public void OnNoEffectHeal(float heal, float life)
+    {
+        bool isHealVisible = (int)((heal + life) * 10f) > (int)(life * 10f);
+        if (isHealVisible) smallHealSound.PlayEx();
+    }
+
+    public void OnLifeMax()
+    {
+        lifeMaxSound.PlayEx();
+    }
+
     public void OnDamage(float damageRatio)
     {
         if (damageRatio < 0.000001f) return;
@@ -63,13 +77,5 @@ public class PlayerLifeGauge : MonoBehaviour
     {
         if (damageRatio <= 0.0f) return null;
         return rectTransform.DOShakeAnchorPos(2 * damageRatio, 100 * damageRatio, (int)(300 * damageRatio)).Play();
-    }
-
-    protected void Play(AudioSource src)
-    {
-        if (src != null)
-        {
-            src.Play();
-        }
     }
 }

@@ -19,8 +19,6 @@ public interface IBodyEffect
     /// <param name="healRatio">Normalized heal ratio to the life max</param>
     void OnHeal(float healRatio);
 
-    void OnLifeMax();
-
     Tween FadeInTween(float duration);
     Tween FadeOutTween(float duration);
 }
@@ -65,8 +63,6 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
     }
 
     public abstract void OnHeal(float healRatio);
-
-    public abstract void OnLifeMax();
 
     protected virtual void StoreMaterialColors()
     {

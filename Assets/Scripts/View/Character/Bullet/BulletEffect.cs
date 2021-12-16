@@ -62,8 +62,6 @@ public class BulletEffect : BodyEffect
 
     public override void OnHeal(float healRatio) { }
 
-    public override void OnLifeMax() { }
-
     protected override Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
     {
         Sequence fade = DOTween.Sequence();
