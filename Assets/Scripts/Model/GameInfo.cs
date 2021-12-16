@@ -34,7 +34,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         base.Awake();
 
-        DOTween.SetTweensCapacity(500, 100);
+        DOTween.SetTweensCapacity(500, 200);
 
         ClearMaps();
 

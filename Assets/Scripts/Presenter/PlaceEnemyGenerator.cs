@@ -9,13 +9,24 @@ public class PlaceEnemyGenerator : MonoBehaviour
     {
         enemyPool = new GameObject("Enemy Pool");
 
-        int division = (int)Mathf.Log(prefabEnemyGenerators.Length, 4);
+        int counter = 0;
+        GameManager.Instance.worldMap.roomCenterPos.ForEach(pos =>
+        {
+            if (counter >= prefabEnemyGenerators.Length) return;
+            Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(pos), Quaternion.identity).Init(enemyPool, map.GetTile(pos));
+        });
+
+        int remains = prefabEnemyGenerators.Length - counter;
+
+        if (remains < 4) return;
+
+        int division = (int)Mathf.Log(remains, 4);
 
         var regions = GetRegions(new Pos(0, 0), new Pos(map.Width - 1, map.Height - 1), division);
 
-        for (int counter = 0; counter < prefabEnemyGenerators.Length; counter++)
+        while (counter < prefabEnemyGenerators.Length)
         {
-            (Pos leftTop, Pos rightBottom) region = regions[counter % regions.Length];
+            (Pos leftTop, Pos rightBottom) region = regions[remains % regions.Length];
 
             int x = Random.Range(region.leftTop.x, region.rightBottom.x + 1);
             int y = Random.Range(region.leftTop.y, region.rightBottom.y + 1);
@@ -24,7 +35,7 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
             if (ground == null) continue;
 
-            Instantiate(prefabEnemyGenerators[counter], map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground);
+            Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground);
         }
     }
 

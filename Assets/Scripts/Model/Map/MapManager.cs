@@ -8,6 +8,7 @@ public class MapManager
     public int height { get; private set; }
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
+    public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
 
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
@@ -26,6 +27,7 @@ public class MapManager
 
         matrix = maze.Matrix.Clone() as Terrain[,];
         deadEndPos = new Dictionary<Pos, IDirection>(maze.deadEndPos);
+        roomCenterPos = new List<Pos>(maze.roomCenterPos);
 
         CreateDirMap();
     }
@@ -35,6 +37,7 @@ public class MapManager
         this.width = width;
         this.height = matrix.Length / width;
         this.deadEndPos = deadEndPos ?? new Dictionary<Pos, IDirection>();
+        this.roomCenterPos = new List<Pos>();
 
         this.matrix = new Terrain[width, height];
 
@@ -152,6 +155,8 @@ public class MapManager
 
         public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
             = new Dictionary<Pos, IDirection>();
+
+        public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
 
         // コンストラクタ
         public MazeCreator(int width = 49, int height = 49, Random rnd = null)
@@ -400,6 +405,8 @@ public class MapManager
             // Extends room size 1 block if touches outer wall
             if (pos.x + w > Width - 1) w = Width - 1 - pos.x;
             if (pos.y + h > Height - 1) h = Height - 1 - pos.y;
+
+            roomCenterPos.Add(pos + new Pos(w / 2, h / 2));
 
             // Set inner surface as ground
             for (int i = pos.x + 1; i < pos.x + w; i++)

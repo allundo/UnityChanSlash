@@ -13,11 +13,12 @@ public class WorldMap
     public List<Pos> currentViewOpen { get; protected set; } = new List<Pos>();
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
+    public List<Pos> roomCenterPos { get; private set; }
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
     public Dir[,] CloneDirMap() => map.dirMap.Clone() as Dir[,];
-    public Dictionary<Pos, IDirection> CopyDeadEndPos() => new Dictionary<Pos, IDirection>(map.deadEndPos);
+
     public Dir GetPallDir(int x, int y) => map.GetPallDir(x, y);
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
@@ -56,7 +57,10 @@ public class WorldMap
     public WorldMap(MapManager map = null)
     {
         this.map = map ?? new MapManager().SetStair();
-        deadEndPos = CopyDeadEndPos();
+        deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
+        roomCenterPos = new List<Pos>(this.map.roomCenterPos);
+
+        Debug.Log("num of room:" + roomCenterPos.Count());
 
         Width = this.map.width;
         Height = this.map.height;
