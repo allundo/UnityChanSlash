@@ -32,6 +32,7 @@ public class EnemyLifeGauge : MonoBehaviour
     {
         float lifeRatio = Mathf.Max(life, 0f) / lifeMax;
 
+        greenGauge.color = new Color(1, 1, 1);
         greenGauge.UpdateGauge(lifeRatio);
         redGauge.UpdateGauge(lifeRatio);
         blackGauge.SetGauge(lifeRatio);
