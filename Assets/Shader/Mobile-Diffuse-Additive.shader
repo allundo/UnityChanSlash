@@ -7,7 +7,7 @@
 Shader "Custom/Mobile/Diffuse-Additive" {
     Properties {
         _MainTex ("Base (RGB)", 2D) = "white" {}
-        [MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 0)
+        [MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 1)
     }
 
     SubShader {
