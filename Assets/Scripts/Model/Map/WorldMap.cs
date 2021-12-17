@@ -60,8 +60,6 @@ public class WorldMap
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
 
-        Debug.Log("num of room:" + roomCenterPos.Count());
-
         Width = this.map.width;
         Height = this.map.height;
 
