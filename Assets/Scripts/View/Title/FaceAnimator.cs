@@ -7,38 +7,75 @@ public class FaceAnimator : MobAnimator
     [SerializeField] private AnimationClip faceAngry = default;
     [SerializeField] private AnimationClip faceEyeClose = default;
     [SerializeField] private AnimationClip faceSmile = default;
-    [SerializeField] private AnimationClip faceSuprise = default;
+    [SerializeField] private AnimationClip faceSurprise = default;
 
+    public FaceSwitch normal { get; protected set; }
+    public FaceSwitch angry { get; protected set; }
+    public FaceSwitch eyeClose { get; protected set; }
+    public FaceSwitch smile { get; protected set; }
+    public FaceSwitch surprise { get; protected set; }
 
     public TriggerFace drop { get; protected set; }
+
+    protected Tween faceLayerCanceler;
+    protected int faceLayerIndex;
+
+    public Tween applyFaceLayer(float duration = 1f)
+    {
+        faceLayerCanceler?.Kill();
+        anim.SetLayerWeight(faceLayerIndex, 1);
+        faceLayerCanceler = DOVirtual.DelayedCall(duration, () => anim.SetLayerWeight(faceLayerIndex, 0)).Play();
+
+        return faceLayerCanceler;
+    }
 
     protected override void Awake()
     {
         anim = GetComponent<Animator>();
-        drop = new TriggerFace(anim, "Drop", faceSuprise.name, 1.0f);
+        faceLayerIndex = anim.GetLayerIndex("Face");
 
+        normal = new FaceSwitch(this, faceNormal.name, 1.0f);
+        angry = new FaceSwitch(this, faceAngry.name, 1.0f);
+        eyeClose = new FaceSwitch(this, faceEyeClose.name, 1.0f);
+        smile = new FaceSwitch(this, faceSmile.name, 1.0f);
+        surprise = new FaceSwitch(this, faceSurprise.name, 1.0f);
+
+        drop = new TriggerFace("Drop", surprise);
     }
 
     public class TriggerFace : AnimatorParam
     {
-        protected int hashedFaceVar;
-        protected int faceLayerIndex;
-        protected string faceName;
-        protected float duration;
-
-        public TriggerFace(Animator anim, string varName, string faceName, float duration) : base(anim, varName)
+        FaceSwitch faceSwitch;
+        public TriggerFace(string varName, FaceSwitch faceSwitch) : base(faceSwitch.faceAnim.anim, varName)
         {
-            hashedFaceVar = Animator.StringToHash(faceName);
-            faceLayerIndex = anim.GetLayerIndex("Face");
-            this.duration = duration;
+            this.faceSwitch = faceSwitch;
         }
 
         public override void Fire()
         {
             anim.SetTrigger(hashedVar);
-            anim.CrossFade(hashedFaceVar, 0.05f);
-            anim.SetLayerWeight(faceLayerIndex, 1);
-            DOVirtual.DelayedCall(duration, () => anim.SetLayerWeight(faceLayerIndex, 0)).Play();
+            faceSwitch.Fire();
+        }
+    }
+
+    public class FaceSwitch
+    {
+        public FaceAnimator faceAnim { get; protected set; }
+        protected int hashedFaceVar;
+        protected float duration;
+
+        public FaceSwitch(FaceAnimator faceAnim, string faceName, float duration)
+        {
+
+            this.faceAnim = faceAnim;
+            hashedFaceVar = Animator.StringToHash(faceName);
+            this.duration = duration;
+        }
+
+        public void Fire()
+        {
+            faceAnim.anim.CrossFade(hashedFaceVar, 0.05f);
+            faceAnim.applyFaceLayer(duration);
         }
     }
 }

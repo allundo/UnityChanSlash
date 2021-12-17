@@ -6,7 +6,7 @@ using System;
 [RequireComponent(typeof(Animator))]
 public class MobAnimator : MonoBehaviour
 {
-    protected Animator anim;
+    public Animator anim { get; protected set; }
     protected ObservableStateMachineTrigger Trigger;
     protected IObservable<OnStateInfo> StateEnter => Trigger.OnStateEnterAsObservable();
     protected IObservable<OnStateInfo> StateExit => Trigger.OnStateExitAsObservable();
