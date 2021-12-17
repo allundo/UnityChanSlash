@@ -15220,7 +15220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf189f5ee32946cbb4f37bca96fb7b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5004978107877230359, guid: b339f0237658d495a88baa1d14ea8395, type: 3}
+  prefab: {fileID: 3704639056935836849, guid: 47c856b7bb6814862b0278bedeb3fe19, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!135 &1015295891
 SphereCollider:
@@ -53861,7 +53861,7 @@ Animator:
   m_GameObject: {fileID: 3442943665555868988}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
-  m_Controller: {fileID: 9100000, guid: 8d5a0e0d58f4e4176a844a1a03976c19, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5fb70c28f206b44039484ce6b1e0d056, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

@@ -3,7 +3,7 @@ using UniRx;
 using DG.Tweening;
 
 [RequireComponent(typeof(MobStatus))]
-[RequireComponent(typeof(IBodyEffect))]
+[RequireComponent(typeof(BodyEffect))]
 [RequireComponent(typeof(MobInput))]
 public class MobReactor : SpawnObject<MobReactor>
 {
@@ -22,7 +22,7 @@ public class MobReactor : SpawnObject<MobReactor>
     protected virtual void Awake()
     {
         status = GetComponent<MobStatus>();
-        effect = GetComponent<IBodyEffect>();
+        effect = GetComponent<BodyEffect>();
         input = GetComponent<MobInput>();
         bodyCollider = GetComponentInChildren<Collider>();
     }

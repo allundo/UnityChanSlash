@@ -15,10 +15,31 @@ MonoBehaviour:
   setParams:
   - name: "\u30B9\u30E9\u30A4\u30E0"
     defaultLifeMax: 10
+    isOnGround: 1
+    attack: 1
+    shield: 0
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
     restDamageMultiplier: 6
+    armorMultiplier: 1
+  - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
+    defaultLifeMax: 10
+    isOnGround: 1
     attack: 1
     shield: 0
+    faceDamageMultiplier: 1
+    sideDamageMultiplier: 1.5
+    backDamageMultiplier: 2
+    restDamageMultiplier: 6
+    armorMultiplier: 1
+  - name: "\u30B4\u30D6\u30EA\u30F3"
+    defaultLifeMax: 10
+    isOnGround: 1
+    attack: 1
+    shield: 0
+    faceDamageMultiplier: 1
+    sideDamageMultiplier: 1.5
+    backDamageMultiplier: 2
+    restDamageMultiplier: 6
     armorMultiplier: 1

@@ -73,7 +73,7 @@ public class EnemyTurnL : EnemyCommand
     {
         playingTween = tweenMove.TurnL.Play();
         map.TurnLeft();
-        return true; ;
+        return true;
     }
 }
 
