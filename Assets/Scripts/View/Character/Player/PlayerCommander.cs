@@ -1,9 +1,21 @@
 using UniRx;
 using System;
 
-public class PlayerCommander : ShieldCommander
+public class PlayerCommander : Commander
 {
     protected PlayerAnimator anim;
+
+    /// <summary>
+    /// Executing Command. null if no Command is executing.
+    /// </summary>
+    public override Command currentCommand
+    {
+        get { return CurrentCommand.Value; }
+        protected set { CurrentCommand.Value = value; }
+    }
+
+    private IReactiveProperty<Command> CurrentCommand = new ReactiveProperty<Command>(null);
+    public IObservable<Command> CurrentObservable => CurrentCommand;
 
     public PlayerCommander(PlayerCommandTarget target) : base(target)
     {

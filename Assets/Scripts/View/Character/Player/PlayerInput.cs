@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using System;
+using DG.Tweening;
 
 /// <summary>
 /// Convert player input UIs operation into a Command and enqueue it to PlayerCommander.<br />
@@ -41,6 +43,9 @@ public class PlayerInput : ShieldInput
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
     protected bool IsDash => commander.currentCommand is PlayerDash;
 
+    private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
+    public IReadOnlyReactiveProperty<bool> IsEnemyDetected => isEnemyDetected;
+
     /// <summary>
     /// Stops Trigger type input if false.
     /// Trigger type input is validated earlyer than Normal type input<br />
@@ -72,7 +77,7 @@ public class PlayerInput : ShieldInput
 
     protected override void SetInputs()
     {
-        guardState = new GuardState(this);
+        guardState = new PlayerGuardState(this);
 
         InitFightInput();
         InitHandleInput();
@@ -181,13 +186,13 @@ public class PlayerInput : ShieldInput
         // Is face to enemy
         if (forwardTile.IsEnemyOn)
         {
-            if (IsFightValid) guardState.SetEnemyDetected(true);
+            if (IsFightValid) isEnemyDetected.Value = true;
             fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.OnEnemy);
             fightCircle.isForwardMovable = forwardTile.IsEnterable();
         }
         else
         {
-            guardState.SetEnemyDetected(false);
+            isEnemyDetected.Value = false;
             fightCircle.Inactivate();
         }
 
@@ -336,7 +341,7 @@ public class PlayerInput : ShieldInput
         Command turnL = new PlayerTurnL(playerTarget, 18f);
         Command jump = new PlayerJump(playerTarget, 72f);
 
-        Command guard = new GuardCommand(playerTarget, guardState, 1.44f);
+        Command guard = new GuardCommand(playerTarget, 1.44f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))
@@ -404,5 +409,50 @@ public class PlayerInput : ShieldInput
         guardUI.EnterObservable
             .Subscribe(_ => InputTrigger(guard))
             .AddTo(this);
+    }
+
+    public class PlayerGuardState : GuardState
+    {
+        private PlayerInput playerInput;
+        private ShieldAnimator anim;
+        private float timeToReady;
+        public bool isShieldReady = false;
+
+        private IObservable<bool> IsAutoGuardObservable => playerInput.IsEnemyDetected.SkipLatestValueOnSubscribe();
+        private bool isAutoGuard => playerInput.IsEnemyDetected.Value;
+
+        private Tween readyTween = null;
+        private void SetShieldReady(bool isGuardOn)
+        {
+            anim.guard.Bool = isGuardOn;
+
+            if (isGuardOn)
+            {
+                readyTween = DOVirtual.DelayedCall(timeToReady, () => isShieldReady = true, false).Play();
+            }
+            else
+            {
+                readyTween?.Kill();
+                isShieldReady = false;
+            }
+        }
+
+        public override bool IsShieldOn(IDirection attackDir) => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
+
+        public PlayerGuardState(PlayerInput input, float duration = 15f, float timeToReady = 0.16f) : base(input, duration)
+        {
+            playerInput = input;
+            this.timeToReady = timeToReady;
+            anim = input.target.anim as ShieldAnimator;
+
+            var IsShieldObservable = (input.commander as PlayerCommander)
+                .CurrentObservable
+                .Select(cmd => cmd is ShieldCommand);
+
+            Observable.Merge(IsAutoGuardObservable, IsShieldObservable)
+                .Select(_ => isAutoGuard || input.IsShield)
+                .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
+                .AddTo(input.target);
+        }
     }
 }
