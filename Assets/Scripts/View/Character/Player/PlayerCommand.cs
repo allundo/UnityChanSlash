@@ -283,8 +283,7 @@ public class PlayerJump : PlayerCommand
                 distance,
                 hidePlateHandler.Move,  // Update HidePlate on entering the next Tile
                 hidePlateHandler.Move   // Update HidePlate on entering the next next Tile
-            )
-            .Play();
+            );
 
         return true;
     }

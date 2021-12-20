@@ -103,8 +103,8 @@ public class TweenMove
     /// <param name="distance">Tile unit distance to jump to</param>
     /// <param name="DoMiddle">Called on entering next Tile if the jump distance is 2</param>
     /// <param name="DoDest">Called on entering destination Tile</param>
-    /// <returns>Sequence can be joined or appended another behavior</returns>
-    public Sequence Jump(int distance, TweenCallback DoMiddle = null, TweenCallback DoDest = null, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
+    /// <returns>Playing Tween for handling</returns>
+    public Tween Jump(int distance, TweenCallback DoMiddle = null, TweenCallback DoDest = null, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
     {
         Vector3 moveVector = map.GetForwardVector(distance);
         float middleTime = duration - 1.5f * edgeTime;
@@ -112,18 +112,17 @@ public class TweenMove
 
         var seq = DOTween.Sequence();
 
-        if (distance > 0)
+        if (distance == 1)
         {
-            seq.AppendCallback(() => map.MoveObjectOn(map.GetForward));
+            map.MoveObjectOn(map.GetForward);
             seq.Join(DelayedCall(0.8f, DoDest));
         }
 
         if (distance == 2)
         {
-            DoMiddle = DoMiddle ?? (() => { });
-
-            seq.InsertCallback(0f, () => map.MoveObjectOn(map.GetForward));
+            map.MoveObjectOn(map.GetJump);
             seq.Join(DelayedCall(0.4f, DoMiddle));
+            seq.Join(DelayedCall(0.8f, DoDest));
         }
 
         var jumpSeq = DOTween.Sequence()
@@ -135,7 +134,7 @@ public class TweenMove
             )
             .AppendInterval(edgeTime);
 
-        return seq.Join(jumpSeq);
+        return seq.Join(jumpSeq).Play();
     }
 
     public Sequence Drop(float startY, float endY, float stunDuration = 0.0f, float wakeUpDuration = 0.65f)
