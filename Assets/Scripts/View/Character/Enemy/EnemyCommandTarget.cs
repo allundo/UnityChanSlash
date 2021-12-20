@@ -1,8 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyAnimator))]
 [RequireComponent(typeof(EnemyReactor))]
-[RequireComponent(typeof(EnemyAIInput))]
 [RequireComponent(typeof(EnemyMapUtil))]
 public class EnemyCommandTarget : CommandTarget
 {

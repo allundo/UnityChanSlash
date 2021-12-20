@@ -4,12 +4,12 @@ using DG.Tweening;
 
 public abstract class EnemyCommand : Command
 {
-    protected EnemyAnimator enemyAnim;
+    protected IEnemyAnimator enemyAnim;
     protected EnemyMapUtil enemyMap;
 
     public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
-        enemyAnim = target.anim as EnemyAnimator;
+        enemyAnim = target.anim as IEnemyAnimator;
         enemyMap = target.map as EnemyMapUtil;
     }
 }

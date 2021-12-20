@@ -1,6 +1,3 @@
-using UnityEngine;
-
-[RequireComponent(typeof(ShieldAnimator))]
 public abstract class ShieldInput : MobInput
 {
     public GuardState guardState { get; protected set; }

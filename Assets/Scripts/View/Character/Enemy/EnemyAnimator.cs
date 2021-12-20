@@ -1,4 +1,12 @@
-public class EnemyAnimator : MobAnimator
+public interface IEnemyAnimator
+{
+    MobAnimator.AnimatorFloat speed { get; }
+    MobAnimator.AnimatorTrigger die { get; }
+    MobAnimator.AnimatorTrigger attack { get; }
+    MobAnimator.AnimatorTrigger fire { get; }
+}
+
+public class EnemyAnimator : MobAnimator, IEnemyAnimator
 {
     public AnimatorTrigger attack { get; protected set; }
     public AnimatorTrigger fire { get; protected set; }

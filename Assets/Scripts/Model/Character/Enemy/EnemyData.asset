@@ -37,7 +37,7 @@ MonoBehaviour:
     defaultLifeMax: 10
     isOnGround: 1
     attack: 1
-    shield: 0
+    shield: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
