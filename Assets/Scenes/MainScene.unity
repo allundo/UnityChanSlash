@@ -46555,18 +46555,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2725077916719206235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3442943665555868988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 000a15f472f284a4099786a8d3df7bda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2768496894937402215
 GameObject:
   m_ObjectHideFlags: 0
@@ -48347,10 +48335,10 @@ GameObject:
   - component: {fileID: 3442943665555868991}
   - component: {fileID: 960599170}
   - component: {fileID: 1770598731873372927}
-  - component: {fileID: 2725077916719206235}
   - component: {fileID: 6564763891086522510}
   - component: {fileID: 3501423711393589678}
   - component: {fileID: 5069071868951529207}
+  - component: {fileID: 3442943665555868993}
   m_Layer: 8
   m_Name: unitychan_dynamic_v2
   m_TagString: Player
@@ -48437,6 +48425,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &3442943665555868993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442943665555868988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3442943665555868994
 GameObject:
   m_ObjectHideFlags: 0
