@@ -382,7 +382,7 @@ public class PlayerPutItem : PlayerAction
         if (playerAnim.handOn.Bool && itemGenerator.Put(itemIcon.itemInfo, map.GetForward, map.dir))
         {
             itemInventory.Remove(itemIcon);
-            playerAnim.handle.Fire();
+            playerAnim.putItem.Fire();
         }
         else
         {
