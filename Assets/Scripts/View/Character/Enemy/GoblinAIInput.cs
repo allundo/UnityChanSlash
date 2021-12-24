@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyCommandTarget))]
 public class GoblinAIInput : ShieldInput
 {
+    protected ShieldEnemyAnimator shieldAnim;
+
+    protected Command idle;
     protected Command moveForward;
     protected Command run;
     protected Command turnL;
@@ -19,17 +22,29 @@ public class GoblinAIInput : ShieldInput
         var enemyTarget = target as EnemyCommandTarget;
 
         die = new EnemyDie(enemyTarget, 72f);
+        idle = new GoblinIdle(enemyTarget, 72f);
         moveForward = new EnemyForward(enemyTarget, 72f);
         run = new EnemyForward(enemyTarget, 36f);
         turnL = new GoblinTurnL(enemyTarget, 16f);
         turnR = new GoblinTurnR(enemyTarget, 16f);
         guard = new GoblinGuard(enemyTarget, 36f);
-        attack = new EnemyAttack(enemyTarget, 72f);
+        attack = new EnemyAttack(enemyTarget, 60f);
+    }
+
+    protected override void SetInputs()
+    {
+        guardState = new GuardState(this);
+        shieldAnim = target.anim as ShieldEnemyAnimator;
     }
 
     protected override Command GetCommand()
     {
         var currentCommand = commander.currentCommand;
+
+        // Fighting start if player found at forward
+        Pos forward = map.GetForward;
+        shieldAnim.fighting.Bool = IsOnPlayer(forward);
+        shieldAnim.guard.Bool &= shieldAnim.fighting.Bool;
 
         // Turn if player found at left, right or backward
         Pos left = map.GetLeft;
@@ -45,11 +60,18 @@ public class GoblinAIInput : ShieldInput
             return Random.Range(0, 2) == 0 ? turnL : turnR;
         }
 
-        // Attack if player found at forward
-        Pos forward = map.GetForward;
-        if (IsOnPlayer(forward))
+        // Attack or Guard if fighting
+        if (shieldAnim.fighting.Bool)
         {
-            return Random.Range(0, 2) == 0 ? attack : guard;
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    return attack;
+                case 1:
+                    return guard;
+                default:
+                    return idle;
+            }
         }
 
         // Move forward if player found in front
