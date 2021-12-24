@@ -23,7 +23,7 @@ public interface IBodyEffect
     Tween FadeOutTween(float duration);
 }
 
-public abstract class BodyEffect : MonoBehaviour, IBodyEffect
+public class BodyEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected AudioSource dieSound = null;
     [SerializeField] protected DamageSndData data;
@@ -62,7 +62,7 @@ public abstract class BodyEffect : MonoBehaviour, IBodyEffect
         DamageFlash(damageRatio);
     }
 
-    public abstract void OnHeal(float healRatio);
+    public virtual void OnHeal(float healRatio) { }
 
     protected virtual void StoreMaterialColors()
     {

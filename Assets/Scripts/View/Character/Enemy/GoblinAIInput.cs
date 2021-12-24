@@ -1,6 +1,8 @@
 using UnityEngine;
 
 [RequireComponent(typeof(ShieldEnemyReactor))]
+[RequireComponent(typeof(ShieldEnemyAnimator))]
+[RequireComponent(typeof(EnemyCommandTarget))]
 public class GoblinAIInput : ShieldInput
 {
     protected Command moveForward;
@@ -18,7 +20,7 @@ public class GoblinAIInput : ShieldInput
 
         die = new EnemyDie(enemyTarget, 72f);
         moveForward = new EnemyForward(enemyTarget, 72f);
-        run = new EnemyForward(enemyTarget, 48f);
+        run = new EnemyForward(enemyTarget, 36f);
         turnL = new GoblinTurnL(enemyTarget, 16f);
         turnR = new GoblinTurnR(enemyTarget, 16f);
         guard = new GoblinGuard(enemyTarget, 36f);

@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(MobReactor))]
 [RequireComponent(typeof(MobInput))]
 [RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(MobAnimator))]
 public class CommandTarget : MonoBehaviour
 {
     /// <summary>
