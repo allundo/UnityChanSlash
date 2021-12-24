@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5271602245355338802}
   - component: {fileID: 1636219528001972363}
   m_Layer: 9
-  m_Name: SND_CRITICAL
+  m_Name: SND_CRITICAL_SMASH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3c596e65ebb864ea88274c532b213044, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 2b305fd794f4f4a7b8118945dbf12a20, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.523
   m_Pitch: 1
