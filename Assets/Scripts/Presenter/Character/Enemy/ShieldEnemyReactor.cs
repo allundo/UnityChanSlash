@@ -1,7 +1,6 @@
 using UnityEngine;
 using static ShieldInput;
 
-[RequireComponent(typeof(MobStatus))]
 public class ShieldEnemyReactor : EnemyReactor
 {
     protected GuardState guardState => (input as ShieldInput).guardState;
