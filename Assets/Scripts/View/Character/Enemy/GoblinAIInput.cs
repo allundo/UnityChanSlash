@@ -22,13 +22,13 @@ public class GoblinAIInput : ShieldInput
         var enemyTarget = target as EnemyCommandTarget;
 
         die = new EnemyDie(enemyTarget, 72f);
-        idle = new GoblinIdle(enemyTarget, 72f);
+        idle = new GoblinIdle(enemyTarget, 36f);
         moveForward = new EnemyForward(enemyTarget, 72f);
         run = new EnemyForward(enemyTarget, 36f);
         turnL = new GoblinTurnL(enemyTarget, 16f);
         turnR = new GoblinTurnR(enemyTarget, 16f);
         guard = new GoblinGuard(enemyTarget, 36f);
-        attack = new EnemyAttack(enemyTarget, 60f);
+        attack = new EnemyAttack(enemyTarget, 48f);
     }
 
     protected override void SetInputs()
@@ -66,7 +66,7 @@ public class GoblinAIInput : ShieldInput
             switch (Random.Range(0, 3))
             {
                 case 0:
-                    return attack;
+                    return currentCommand is GoblinIdle ? attack : idle;
                 case 1:
                     return guard;
                 default:
