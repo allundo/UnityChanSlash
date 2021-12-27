@@ -21007,7 +21007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51fc77293bc348aba68690350f860d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 4
+  attackType: 2
   attackMultiplier: 1
   startFrame: 23
   finishFrame: 28
