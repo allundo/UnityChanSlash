@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 8863631634375908752}
   - component: {fileID: 120099945420660867}
   - component: {fileID: 7555550737669645743}
+  - component: {fileID: 9176746837554675662}
   m_Layer: 0
   m_Name: Slime_Red_New
   m_TagString: Untagged
@@ -167,7 +168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 4063173348115986246}
   data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
-  lifeMaxSound: {fileID: 0}
 --- !u!114 &5004978107877230359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,6 +260,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9176746837554675662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492718176620911298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaee1f5f0643d41acbb49fb3fe254d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSfx: {fileID: 4761234064582553532}
+  attackVfx: {fileID: 8293706713913879607}
 --- !u!1 &1605351055790362263
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +315,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 283da183903a942048e1c75e06005f7a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c6d44e1f0ef6948c88fc05f37bc3ffba, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.65
   m_Pitch: 1.2
@@ -446,13 +460,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 4
   attackMultiplier: 1
-  swingSound: {fileID: 4761234064582553532}
-  vfx: {fileID: 8293706713913879607}
   startFrame: 6
   finishFrame: 10
   speed: 2
-  minPitch: 1.15
-  maxPitch: 1.25
   frameRate: 30
 --- !u!1 &2929163879410733172
 GameObject:

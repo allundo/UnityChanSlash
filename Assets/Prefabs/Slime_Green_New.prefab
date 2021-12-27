@@ -556,13 +556,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 4
   attackMultiplier: 1
-  swingSound: {fileID: 4088157469999499920}
-  vfx: {fileID: 699864408521394459}
   startFrame: 6
   finishFrame: 10
   speed: 2
-  minPitch: 1.15
-  maxPitch: 1.25
   frameRate: 30
 --- !u!1 &7847551965883952059
 GameObject:
@@ -605,7 +601,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 283da183903a942048e1c75e06005f7a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c6d44e1f0ef6948c88fc05f37bc3ffba, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.65
   m_Pitch: 1.2
@@ -710,6 +706,7 @@ GameObject:
   - component: {fileID: 1867213726471065726}
   - component: {fileID: 7646930436761287342}
   - component: {fileID: 2985910597201624646}
+  - component: {fileID: 2371523530875487701}
   m_Layer: 0
   m_Name: Slime_Green_New
   m_TagString: Untagged
@@ -784,7 +781,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 4813233136152941162}
   data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
-  lifeMaxSound: {fileID: 0}
 --- !u!114 &4600991870278017595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -877,6 +873,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2371523530875487701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933218205718462446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaee1f5f0643d41acbb49fb3fe254d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSfx: {fileID: 4088157469999499920}
+  attackVfx: {fileID: 699864408521394459}
 --- !u!1 &8160939513619371127
 GameObject:
   m_ObjectHideFlags: 0

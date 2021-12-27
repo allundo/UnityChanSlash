@@ -4,6 +4,8 @@ using static ShieldInput;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
+[RequireComponent(typeof(PlayerEffect))]
+[RequireComponent(typeof(PlayerAnimFX))]
 public class PlayerReactor : MobReactor
 {
     [SerializeField] protected RestUI restUI = default;

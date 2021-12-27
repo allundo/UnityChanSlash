@@ -1,10 +1,5 @@
-using UnityEngine;
-
-public class PlayerEffect : ShieldEffect
+public class PlayerEffect : MobEffect
 {
-    [SerializeField] private AudioSource jumpSound = null;
-    [SerializeField] private AudioSource jumpLandingSound = null;
-
     protected PlayerAnimator anim;
 
     protected override void Awake()
@@ -17,16 +12,5 @@ public class PlayerEffect : ShieldEffect
     {
         base.OnDamage(damageRatio, type);
         anim.rest.Bool = false;
-    }
-
-    // Called as Animation Event functions
-    public void OnJump()
-    {
-        jumpSound.PlayEx();
-    }
-
-    public void OnJumpLanding()
-    {
-        jumpLandingSound.PlayEx();
     }
 }

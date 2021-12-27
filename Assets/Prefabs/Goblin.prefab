@@ -213,7 +213,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.35
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -20960,7 +20960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2481307593755831493}
   - component: {fileID: 878753863940238518}
-  - component: {fileID: 1773885056310751581}
+  - component: {fileID: 2403063317694708766}
   m_Layer: 9
   m_Name: GoblinSlashDetector
   m_TagString: Untagged
@@ -20995,7 +20995,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1773885056310751581
+--- !u!114 &2403063317694708766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21009,13 +21009,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 4
   attackMultiplier: 1
-  swingSound: {fileID: 7943787677606610456}
-  vfx: {fileID: 2015424130838018509}
   startFrame: 23
   finishFrame: 28
   speed: 2
-  minPitch: 1.15
-  maxPitch: 1.25
   frameRate: 30
 --- !u!1 &6470061236134861792
 GameObject:
@@ -21755,6 +21751,7 @@ GameObject:
   - component: {fileID: 8063722928130327235}
   - component: {fileID: 2912508218859128867}
   - component: {fileID: 2294706201877116597}
+  - component: {fileID: 9115243691216282568}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Untagged
@@ -21865,7 +21862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAttack: {fileID: 1773885056310751581}
+  enemyAttack: {fileID: 2403063317694708766}
   enemyFire: {fileID: 0}
 --- !u!114 &-3272271529243201706
 MonoBehaviour:
@@ -21918,12 +21915,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 8562706072200817450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0dd793f21cc445c8a0774d205a7487e, type: 3}
+  m_Script: {fileID: 11500000, guid: ffc5b9d1049634c6abf3718d8879654a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
   data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
-  shieldSound: {fileID: 194488253165002756}
+--- !u!114 &9115243691216282568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562706072200817450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bed1ca8e84614a2b977c560aaa61d06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSfx: {fileID: 7943787677606610456}
+  attackVfx: {fileID: 2015424130838018509}
+  shieldSfx: {fileID: 194488253165002756}
   shieldVfx: {fileID: 3388010962005948006}
 --- !u!1 &8597520986466673423
 GameObject:

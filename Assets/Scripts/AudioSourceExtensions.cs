@@ -14,4 +14,17 @@ static public class AudioSourceExtensions
 
         source.Play(delay);
     }
+
+    static public void SetPitch(this AudioSource source, float pitch = 1f)
+    {
+        if (source == null)
+        {
+#if UNITY_EDITOR
+            Debug.Log("SetPitch: AudioSource is unassigned.");
+#endif
+            return;
+        }
+
+        source.pitch = pitch;
+    }
 }
