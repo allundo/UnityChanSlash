@@ -13,9 +13,16 @@ public class EnemyReactor : MobReactor
     protected override void Dead()
     {
         // Force TriggerExit from enemy detecting collider
+        bodyCollider.enabled = true;
         transform.position = OUT_OF_SCREEN;
 
         // Wait for the TriggerExit event firing before inactivating the enemy
         DOVirtual.DelayedCall(0.01f, Inactivate, false).Play();
+    }
+
+    public override void Inactivate()
+    {
+        bodyCollider.enabled = false;
+        base.Inactivate();
     }
 }
