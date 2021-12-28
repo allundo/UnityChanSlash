@@ -67,7 +67,7 @@ public class EnemyForward : EnemyMove
 
 public class EnemyTurnL : EnemyCommand
 {
-    public EnemyTurnL(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public EnemyTurnL(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected override bool Action()
     {
@@ -79,7 +79,7 @@ public class EnemyTurnL : EnemyCommand
 
 public class EnemyTurnR : EnemyCommand
 {
-    public EnemyTurnR(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public EnemyTurnR(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected override bool Action()
     {
