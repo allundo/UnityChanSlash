@@ -110,17 +110,19 @@ public class MiniMap : MonoBehaviour
 
     public PlayerSymbol Turn(IDirection dir) => playerSymbol.SetDir(dir);
 
+    // Called as an event of enemy detecting Collider:Enter on Player
     public void OnEnemyFind(Collider col)
     {
         var enemy = col.GetComponent<EnemyReactor>();
 
-        if (enemy != null)
+        if (enemy != null && !enemies.ContainsKey(enemy))
         {
             Vector2 uiOffset = UIOffset(enemy.transform.position);
             enemies[enemy] = enemyPointGenerator.Spawn(uiOffset).SetSize(uiTileUnit);
         }
     }
 
+    // Called as an event of enemy detecting Collider:Exit on Player
     public void OnEnemyLeft(Collider col)
     {
         var enemy = col.GetComponent<EnemyReactor>();
