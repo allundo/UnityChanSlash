@@ -95,7 +95,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Inactivate()
     {
-        GameManager.Instance.Resume();
+        GameManager.Instance.TimeScale(1f);
         cover.FadeIn(0.01f).Play();
 
         healPoint = 0f;
