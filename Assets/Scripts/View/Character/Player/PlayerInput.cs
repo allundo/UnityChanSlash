@@ -42,6 +42,7 @@ public class PlayerInput : ShieldInput
     protected PlayerCommandTarget playerTarget;
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
     protected bool IsDash => commander.currentCommand is PlayerDash;
+    protected bool IsForward => commander.currentCommand is PlayerForward;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsEnemyDetected => isEnemyDetected;
@@ -238,6 +239,7 @@ public class PlayerInput : ShieldInput
 
         bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield;
 
+        forwardUI.SetDashInputActive(IsForward || IsDash || isTriggerActive);
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
         jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
@@ -369,7 +371,7 @@ public class PlayerInput : ShieldInput
                     }
 
                     // Reserve dash on command queue
-                    InputCommand(run);
+                    InputTrigger(run);
                     return;
                 }
 

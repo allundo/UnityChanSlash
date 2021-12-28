@@ -9,6 +9,11 @@ public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
 
     public bool IsActive => forwardButton.isActive;
 
+    public void SetDashInputActive(bool isForwardingOrTrigger)
+    {
+        forwardButton.isDashInputActive = isForwardingOrTrigger;
+    }
+
     public IObservable<bool> DashObservable => forwardButton.IsDash.SkipLatestValueOnSubscribe();
 
     protected override void InitObservable()

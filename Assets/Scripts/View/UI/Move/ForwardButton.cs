@@ -17,6 +17,7 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
 
     private bool isWalking = false;
     private bool isDashValid = false;
+    public bool isDashInputActive = false;
 
     protected override void Awake()
     {
@@ -65,7 +66,7 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         if (!ic.CanFire()) return;
 #endif
 
-        if (!isActive || isWalking) return;
+        if (!isActive || !isDashInputActive || isWalking) return;
         dashTimer.Restart();
     }
 
