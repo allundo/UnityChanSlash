@@ -39,12 +39,9 @@ public class MapRenderer : MonoBehaviour
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
-    private Mesh[] upStairMesh = new Mesh[0b10000];
-    private Dictionary<IDirection, GameObject> upStairPrefabs;
 
     private Mesh wallVMesh;
     private Mesh wallHMesh;
-    private GameObject[] plate = new GameObject[0b10000];
 
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
 
