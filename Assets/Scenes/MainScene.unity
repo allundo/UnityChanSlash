@@ -15220,7 +15220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf189f5ee32946cbb4f37bca96fb7b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5439195606211933518, guid: 47c856b7bb6814862b0278bedeb3fe19, type: 3}
+  prefab: {fileID: 5624331691699974636, guid: 47c856b7bb6814862b0278bedeb3fe19, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!135 &1015295891
 SphereCollider:
@@ -56871,6 +56871,7 @@ MonoBehaviour:
   fightingOffset: {x: 0, y: 0}
   dash: {fileID: 21300000, guid: 74e7793ca482d42f3b336f3ca7c5ddce, type: 3}
   duration: 0.2
+  isDashInputActive: 0
 --- !u!1 &5335086371177449361
 GameObject:
   m_ObjectHideFlags: 0

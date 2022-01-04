@@ -134,7 +134,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[0].lastFrame
-    value: 25
+    value: 26
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[0].wrapMode
@@ -954,7 +954,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[5].lastFrame
-    value: 195
+    value: 196
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[5].wrapMode

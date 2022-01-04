@@ -94,7 +94,7 @@ public class EnemyAttack : EnemyCommand
     protected IAttack enemyAttack;
     protected IAttack enemyFire;
 
-    public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration)
+    public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f)
     {
         enemyAttack = target.enemyAttack;
         enemyFire = target.enemyFire;

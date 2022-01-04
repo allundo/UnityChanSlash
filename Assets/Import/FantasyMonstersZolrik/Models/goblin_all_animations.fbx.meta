@@ -1,17 +1,20 @@
 fileFormatVersion: 2
-guid: 886bd7a5b0a064d3d9cb2935fac8b4c7
+guid: 07942665d3ec6418cb0fd13493249b71
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: 4781951162920444690
-    second: Goblin_RUN
+    second: Armature|ArmatureAction
   - first:
       74: -3097080235374818791
     second: Goblin_IDLE
   - first:
       74: -6462486354200717446
     second: Goblin_WALK
+  - first:
+      74: -2090154352826970143
+    second: Goblin_RUN
   - first:
       74: -135457708555329117
     second: Goblin_TURN_R
