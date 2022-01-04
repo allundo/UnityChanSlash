@@ -10,7 +10,7 @@ public class PlaceEnemyGenerator : MonoBehaviour
         enemyPool = new GameObject("Enemy Pool");
 
         int counter = 0;
-        GameManager.Instance.worldMap.roomCenterPos.ForEach(pos =>
+        map.roomCenterPos.ForEach(pos =>
         {
             if (counter >= prefabEnemyGenerators.Length) return;
             Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(pos), Quaternion.identity).Init(enemyPool, map.GetTile(pos));
