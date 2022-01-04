@@ -85,7 +85,6 @@ GameObject:
   - component: {fileID: 5268313528314337794}
   - component: {fileID: 3641758036005752700}
   - component: {fileID: 9055337087454508326}
-  - component: {fileID: 5004978107877230359}
   - component: {fileID: 2007391967010708993}
   - component: {fileID: 3797601158476630433}
   - component: {fileID: 7153664908088456530}
@@ -93,6 +92,7 @@ GameObject:
   - component: {fileID: 120099945420660867}
   - component: {fileID: 7555550737669645743}
   - component: {fileID: 9176746837554675662}
+  - component: {fileID: 7729996783884072463}
   m_Layer: 0
   m_Name: Slime_Red_New
   m_TagString: Untagged
@@ -168,19 +168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 4063173348115986246}
   data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
---- !u!114 &5004978107877230359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1492718176620911298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 486a8e43da56544a6aa8263baf6c61ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
 --- !u!114 &2007391967010708993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +261,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackSfx: {fileID: 4761234064582553532}
   attackVfx: {fileID: 8293706713913879607}
+--- !u!114 &7729996783884072463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492718176620911298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a24e2ada49a41999aa5513c1933da8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeGauge: {fileID: 0}
 --- !u!1 &1605351055790362263
 GameObject:
   m_ObjectHideFlags: 0

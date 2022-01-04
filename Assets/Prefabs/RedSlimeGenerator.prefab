@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7cf73b9c51b0488b98b9305e6033c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5004978107877230359, guid: b339f0237658d495a88baa1d14ea8395, type: 3}
+  prefab: {fileID: 7729996783884072463, guid: b339f0237658d495a88baa1d14ea8395, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!135 &1661478021584679057
 SphereCollider:
