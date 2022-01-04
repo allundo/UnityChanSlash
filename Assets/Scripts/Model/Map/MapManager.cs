@@ -53,13 +53,13 @@ public class MapManager
         CreateDirMap();
     }
 
-    public MapManager SetStair()
+    public MapManager SetDownStair()
     {
-        var deadend = deadEndPos.First();
-        Pos pos = deadend.Key;
-        IDirection dir = deadend.Value;
+        var downStair = deadEndPos.First();
+        Pos pos = downStair.Key;
+        IDirection dir = downStair.Value;
 
-        matrix[pos.x, pos.y] = Terrain.Stair;
+        matrix[pos.x, pos.y] = Terrain.DownStair;
         dirMap[pos.x, pos.y] = dir.Enum;
 
         deadEndPos.Remove(pos);

@@ -56,7 +56,7 @@ public class WorldMap
 
     public WorldMap(MapManager map = null)
     {
-        this.map = map ?? new MapManager().SetStair();
+        this.map = map ?? new MapManager().SetDownStair();
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
 
@@ -91,7 +91,7 @@ public class WorldMap
                         pixels[i + Width * j] = Color.red;
                         break;
 
-                    case Terrain.Stair:
+                    case Terrain.DownStair:
                         tileInfo[i, j] = new Stair();
                         pixels[i + Width * j] = Color.blue;
                         break;

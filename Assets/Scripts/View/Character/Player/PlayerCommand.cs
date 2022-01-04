@@ -53,7 +53,7 @@ public abstract class PlayerCommand : Command
         {
             playerInput.ClearAll();
             playerInput.SetInputVisible(false);
-            GameManager.Instance.EnterStair((destTile as Stair).isUpStair);
+            GameManager.Instance.EnterStair((destTile as Stair).isDownStair);
         });
     }
 }

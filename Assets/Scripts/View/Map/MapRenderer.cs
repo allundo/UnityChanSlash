@@ -95,7 +95,7 @@ public class MapRenderer : MonoBehaviour
 
         Stair tileStair = map.GetTile(pos) as Stair;
         tileStair.enterDir = dir;
-        tileStair.isUpStair = true;
+        tileStair.isDownStair = true;
     }
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
@@ -146,7 +146,7 @@ public class MapRenderer : MonoBehaviour
                         terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pallDir], new Pos(i, j)));
                         break;
 
-                    case Terrain.Stair:
+                    case Terrain.DownStair:
                         SetStair(new Pos(i, j), Direction.Convert(dirMap[i, j]));
                         break;
                 }

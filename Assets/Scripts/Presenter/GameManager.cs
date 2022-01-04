@@ -144,9 +144,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
 
-    public void EnterStair(bool isUpStair)
+    public void EnterStair(bool isDownStair)
     {
-        Debug.Log("Stair" + (isUpStair ? "UP" : "DOWN"));
+        Debug.Log("Stair" + (isDownStair ? "DOWN" : "UP"));
         Pause();
     }
 

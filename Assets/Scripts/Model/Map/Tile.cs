@@ -90,5 +90,5 @@ public class Stair : Tile, ITile
     public override Item PickItem() => null;
 
     public IDirection enterDir { protected get; set; }
-    public bool isUpStair;
+    public bool isDownStair;
 }

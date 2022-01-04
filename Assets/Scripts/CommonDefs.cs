@@ -27,7 +27,7 @@ public enum Terrain
     Wall,
     Pall, // Gate or Pall
     Door,
-    Stair,
+    DownStair,
 }
 
 public struct Pos
