@@ -1,14 +1,11 @@
 using UnityEngine;
 using DG.Tweening;
 using UniRx;
-using System.Collections.Generic;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] private MapRenderer mapRenderer = default;
-    [SerializeField] private Transform playerTransform = default;
-    [SerializeField] private HidePlateHandler hidePlateHandler = default;
-    [SerializeField] private PlayerInput input = default;
+    [SerializeField] private GameObject player = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private FireBallGenerator fireBallGenerator = default;
     [SerializeField] private CoverScreen cover = default;
@@ -16,6 +13,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private DebugEnemyGenerator debugEnemyGenerator = default;
+
+    // Player info
+    private Transform playerTransform = default;
+    private HidePlateHandler hidePlateHandler = default;
+    private PlayerInput input = default;
+    private PlayerStatus status = default;
 
     private bool isInitialOrientation = true;
 
@@ -60,6 +63,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
+        playerTransform = player.transform;
+        input = player.GetComponent<PlayerInput>();
+        status = player.GetComponent<PlayerStatus>();
+        hidePlateHandler = player.GetComponent<HidePlateHandler>();
+
         worldMap = GameInfo.Instance.NextFloorMap();
         mapRenderer.Render(worldMap);
     }
@@ -72,6 +80,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void DropStart()
     {
         placeEnemyGenerator.Place(worldMap);
+
+        status.SetPosition();
+        hidePlateHandler.Init();
 
         cover.FadeIn(1.5f, 1.0f, false).Play();
         input.EnqueueDropFloor();
@@ -96,6 +107,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         placeEnemyGenerator.Place(worldMap);
 
+        status.SetPosition();
+        hidePlateHandler.Init();
+
         cover.FadeIn(1.0f, 0, false).Play();
         input.EnqueueRestartMessage(
             new MessageData
@@ -118,6 +132,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         Debug.Log("DEBUG MODE");
         debugEnemyGenerator.gameObject.SetActive(true);
+
+        status.SetPosition();
+        hidePlateHandler.Init();
+
         cover.SetAlpha(0f);
         input.SetInputVisible(true);
     }
@@ -150,8 +168,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Debug.Log("Stair" + (isDownStair ? "DOWN" : "UP"));
         Pause();
     }
-
-    public KeyValuePair<Pos, IDirection> GetPlayerInitPos => worldMap.InitPos;
 
     public BulletReactor FireBall(Vector3 pos, IDirection dir, float attack = 1f)
     {

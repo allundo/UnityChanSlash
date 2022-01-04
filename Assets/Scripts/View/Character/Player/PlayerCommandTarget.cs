@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(PlayerReactor))]
 [RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(PlayerMapUtil))]
 [RequireComponent(typeof(HidePlateHandler))]
 public class PlayerCommandTarget : CommandTarget
 {

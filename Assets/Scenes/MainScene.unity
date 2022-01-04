@@ -1750,9 +1750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistent: 0
   mapRenderer: {fileID: 170570286}
-  playerTransform: {fileID: 3442943665555902726}
-  hidePlateHandler: {fileID: 5069071868951529207}
-  input: {fileID: 3442943665555868989}
+  player: {fileID: 3442943665555868988}
   placeEnemyGenerator: {fileID: 1196509789}
   fireBallGenerator: {fileID: 477829049}
   cover: {fileID: 6691234942917525759}
@@ -48328,8 +48326,8 @@ GameObject:
   - component: {fileID: 6564763891086522510}
   - component: {fileID: 3501423711393589678}
   - component: {fileID: 5069071868951529207}
-  - component: {fileID: 3442943665555868993}
   - component: {fileID: 3442943665555868995}
+  - component: {fileID: 3442943665555868993}
   m_Layer: 8
   m_Name: unitychan_dynamic_v2
   m_TagString: Player
@@ -48425,7 +48423,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3442943665555868988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
+  m_Script: {fileID: 11500000, guid: ecfb66b854e874e4db008721b7ff5246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3442943665555868994
