@@ -9,6 +9,7 @@ public class MapManager
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
+    public KeyValuePair<Pos, IDirection> initPos { get; private set; }
 
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
@@ -63,6 +64,22 @@ public class MapManager
         dirMap[pos.x, pos.y] = dir.Enum;
 
         deadEndPos.Remove(pos);
+
+        return this;
+    }
+
+    public MapManager SetUpStair()
+    {
+        var upStair = deadEndPos.Last();
+        Pos pos = upStair.Key;
+        IDirection dir = upStair.Value;
+
+        matrix[pos.x, pos.y] = Terrain.UpStair;
+        dirMap[pos.x, pos.y] = dir.Enum;
+
+        deadEndPos.Remove(pos);
+
+        initPos = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
 
         return this;
     }

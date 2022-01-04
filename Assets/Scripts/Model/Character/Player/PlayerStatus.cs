@@ -19,7 +19,7 @@ public class PlayerStatus : MobStatus
         isActive = true;
         gameObject.SetActive(true);
         ResetStatus();
-        map.SetPosition(GameManager.Instance.GetPlayerInitPos, new South());
+        map.SetPosition(GameManager.Instance.GetPlayerInitPos);
         hidePlateHandler.Init();
     }
 }

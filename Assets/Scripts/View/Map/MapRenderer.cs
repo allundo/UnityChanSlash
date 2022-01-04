@@ -147,6 +147,7 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.DownStair:
+                    case Terrain.UpStair:
                         SetStair(new Pos(i, j), Direction.Convert(dirMap[i, j]));
                         break;
                 }

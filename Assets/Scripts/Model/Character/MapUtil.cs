@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Map の Tile の状態を更新するメソッドを公開 <br>
@@ -19,7 +20,7 @@ public class MapUtil : MonoBehaviour
     public static readonly float TILE_UNIT = 2.5f;
 
     private static readonly Pos defaultPos = new Pos(20, 20);
-    private static readonly IDirection defaultDir = new North();
+    private static readonly IDirection defaultDir = new South();
 
     protected virtual void Awake()
     {
@@ -30,6 +31,9 @@ public class MapUtil : MonoBehaviour
 
     public virtual void SetPosition()
         => SetPosition(defaultPos, defaultDir);
+
+    public void SetPosition(KeyValuePair<Pos, IDirection> initPos)
+        => SetPosition(initPos.Key, initPos.Value);
 
     public void SetPosition(Pos pos, IDirection dir = null)
         => SetPosition(map.WorldPos(pos), dir);

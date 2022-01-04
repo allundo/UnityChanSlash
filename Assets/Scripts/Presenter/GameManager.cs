@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UniRx;
+using System.Collections.Generic;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -59,7 +60,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         base.Awake();
 
-        worldMap = GameInfo.Instance.Map(1);
+        worldMap = GameInfo.Instance.NextFloorMap();
         mapRenderer.Render(worldMap);
     }
 
@@ -150,8 +151,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Pause();
     }
 
-    // FIXME
-    public Pos GetPlayerInitPos => worldMap.InitPos;
+    public KeyValuePair<Pos, IDirection> GetPlayerInitPos => worldMap.InitPos;
 
     public BulletReactor FireBall(Vector3 pos, IDirection dir, float attack = 1f)
     {

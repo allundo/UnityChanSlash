@@ -7,6 +7,7 @@ public class WorldMap
 {
     public static readonly float TILE_UNIT = 2.5f;
 
+    public int floor { get; protected set; } = 0;
     public ITile[,] tileInfo { get; protected set; }
     public Texture2D texMap { get; protected set; }
     public bool[,] discovered { get; protected set; }
@@ -54,9 +55,12 @@ public class WorldMap
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 
-    public WorldMap(MapManager map = null)
+    public WorldMap(MapManager map = null, int floor = 1)
     {
         this.map = map ?? new MapManager().SetDownStair();
+        if (floor > 1) initPos = this.map.SetUpStair().initPos;
+        this.floor = floor;
+
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
 
@@ -92,6 +96,7 @@ public class WorldMap
                         break;
 
                     case Terrain.DownStair:
+                    case Terrain.UpStair:
                         tileInfo[i, j] = new Stair();
                         pixels[i + Width * j] = Color.blue;
                         break;
@@ -189,12 +194,11 @@ public class WorldMap
         return pixels;
     }
 
-    // FIXME
-    public Pos InitPos
+    public KeyValuePair<Pos, IDirection> InitPos
     {
         get
         {
-            if (!initPos.IsNull) return initPos;
+            if (!initPos.Key.IsNull) return initPos;
 
             for (int j = 1; j < Height - 1; j++)
             {
@@ -202,7 +206,7 @@ public class WorldMap
                 {
                     if (tileInfo[i, j] is Ground)
                     {
-                        initPos = new Pos(i, j);
+                        initPos = new KeyValuePair<Pos, IDirection>(new Pos(i, j), null);
                         return initPos;
                     }
                 }
@@ -212,8 +216,5 @@ public class WorldMap
         }
         set { initPos = value; }
     }
-    private Pos initPos = new Pos();
-
-    // FIXME
-    public IDirection InitDir => new South();
+    private KeyValuePair<Pos, IDirection> initPos = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 }
