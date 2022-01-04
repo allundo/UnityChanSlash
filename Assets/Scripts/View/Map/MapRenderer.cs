@@ -113,7 +113,7 @@ public class MapRenderer : MonoBehaviour
         var dirMap = map.CloneDirMap();
         var matrix = map.CloneMatrix();
 
-        var terrainMeshes = new Stack<CombineInstance>();
+        var terrainMeshes = new List<CombineInstance>();
 
         InitMeshes();
 
@@ -127,7 +127,7 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.Pall:
-                        terrainMeshes.Push(GetMeshInstance(gateMesh[(int)dirMap[i, j]], new Pos(i, j)));
+                        terrainMeshes.Add(GetMeshInstance(gateMesh[(int)dirMap[i, j]], new Pos(i, j)));
                         break;
 
                     case Terrain.Door:
@@ -139,11 +139,11 @@ public class MapRenderer : MonoBehaviour
                         Dir pallDir = map.GetPallDir(i, j);
                         if (pallDir == Dir.NONE)
                         {
-                            if (dirMap[i, j] == Dir.NS) terrainMeshes.Push(GetMeshInstance(wallVMesh, new Pos(i, j)));
-                            if (dirMap[i, j] == Dir.EW) terrainMeshes.Push(GetMeshInstance(wallHMesh, new Pos(i, j)));
+                            if (dirMap[i, j] == Dir.NS) terrainMeshes.Add(GetMeshInstance(wallVMesh, new Pos(i, j)));
+                            if (dirMap[i, j] == Dir.EW) terrainMeshes.Add(GetMeshInstance(wallHMesh, new Pos(i, j)));
                             break;
                         }
-                        terrainMeshes.Push(GetMeshInstance(wallMesh[(int)pallDir], new Pos(i, j)));
+                        terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pallDir], new Pos(i, j)));
                         break;
 
                     case Terrain.Stair:
@@ -164,7 +164,7 @@ public class MapRenderer : MonoBehaviour
         };
     }
 
-    private void GenerateTerrain(Stack<CombineInstance> meshes)
+    private void GenerateTerrain(List<CombineInstance> meshes)
     {
         Mesh combinedMesh = new Mesh();
         combinedMesh.name = "Wall";
@@ -173,5 +173,7 @@ public class MapRenderer : MonoBehaviour
         // ProBuilder managed Mesh needs MeshUtility.CopyTo() to apply another Mesh object
         MeshUtility.CopyTo(combinedMesh, wallParent.GetComponent<MeshFilter>().sharedMesh);
         wallParent.SetActive(true);
+
+        Destroy(combinedMesh);
     }
 }
