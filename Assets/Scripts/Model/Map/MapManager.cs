@@ -67,6 +67,7 @@ public class MapManager
         deadEndPos.Remove(pos);
 
         stairsTop = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
+        matrix[stairsTop.Key.x, stairsTop.Key.y] = Terrain.Ground;
 
         return this;
     }
@@ -83,6 +84,7 @@ public class MapManager
         deadEndPos.Remove(pos);
 
         stairsBottom = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
+        matrix[stairsBottom.Key.x, stairsBottom.Key.y] = Terrain.Ground;
 
         return this;
     }
