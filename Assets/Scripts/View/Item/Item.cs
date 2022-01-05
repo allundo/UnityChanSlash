@@ -10,10 +10,6 @@ public class Item : SpawnObject<Item>
 
     public ItemInfo itemInfo { get; protected set; }
 
-    public enum ItemTypeEnum
-    {
-    }
-
     protected virtual void Awake()
     {
         meshRenderer = GetComponent<Renderer>();
