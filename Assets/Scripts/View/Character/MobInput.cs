@@ -58,7 +58,7 @@ public abstract class MobInput : MonoBehaviour
     {
         if (GameManager.Instance.isPaused) return;
 
-        InputCommand(GetCommand());
+        if (isCommandValid) InputCommand(GetCommand());
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public abstract class MobInput : MonoBehaviour
     /// <param name="cmd">Command to input</param>
     public virtual void InputCommand(Command cmd)
     {
-        if (!isCommandValid || cmd == null) return;
+        if (cmd == null) return;
 
         isCommandValid = false;
 
