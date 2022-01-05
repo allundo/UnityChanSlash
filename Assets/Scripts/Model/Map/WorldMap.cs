@@ -50,6 +50,17 @@ public class WorldMap
         return null;
     }
 
+    public void ForEachTiles(Action<ITile> action)
+    {
+        for (int j = 0; j < Height; j++)
+        {
+            for (int i = 0; i < Width; i++)
+            {
+                action(tileInfo[i, j]);
+            }
+        }
+    }
+
     public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
 
     public int Width { get; protected set; } = 49;
@@ -58,9 +69,10 @@ public class WorldMap
     public WorldMap(MapManager map = null, int floor = 1)
     {
         this.map = map ?? new MapManager().SetDownStair();
-        if (floor > 1) initPos = this.map.SetUpStair().initPos;
+        if (floor > 1) stairsBottom = this.map.SetUpStair().stairsBottom;
         this.floor = floor;
 
+        stairsTop = this.map.stairsTop;
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
 
@@ -97,7 +109,7 @@ public class WorldMap
 
                     case Terrain.DownStair:
                     case Terrain.UpStair:
-                        tileInfo[i, j] = new Stair();
+                        tileInfo[i, j] = new Stairs();
                         pixels[i + Width * j] = Color.blue;
                         break;
 
@@ -198,7 +210,7 @@ public class WorldMap
     {
         get
         {
-            if (!initPos.Key.IsNull) return initPos;
+            if (!stairsBottom.Key.IsNull) return stairsBottom;
 
             for (int j = 1; j < Height - 1; j++)
             {
@@ -206,15 +218,16 @@ public class WorldMap
                 {
                     if (tileInfo[i, j] is Ground)
                     {
-                        initPos = new KeyValuePair<Pos, IDirection>(new Pos(i, j), null);
-                        return initPos;
+                        stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(i, j), null);
+                        return stairsBottom;
                     }
                 }
             }
 
-            return initPos;
+            return stairsBottom;
         }
-        set { initPos = value; }
+        set { stairsBottom = value; }
     }
-    private KeyValuePair<Pos, IDirection> initPos = new KeyValuePair<Pos, IDirection>(new Pos(), null);
+    public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
+    public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 }

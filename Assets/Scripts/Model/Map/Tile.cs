@@ -77,7 +77,7 @@ public class Door : Tile, ITile
     public override Item PickItem() => IsOpen ? base.PickItem() : null;
 }
 
-public class Stair : Tile, ITile
+public class Stairs : Tile, ITile
 {
     public bool IsEnterable(IDirection dir = null) => enterDir.IsInverse(dir);
     public bool IsLeapable => false;
@@ -90,5 +90,5 @@ public class Stair : Tile, ITile
     public override Item PickItem() => null;
 
     public IDirection enterDir { protected get; set; }
-    public bool isDownStair;
+    public bool isDownStairs;
 }

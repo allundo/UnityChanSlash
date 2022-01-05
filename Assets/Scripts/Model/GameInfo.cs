@@ -15,10 +15,11 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
 #if UNITY_EDITOR
 
-        if (maps[MAX_FLOOR] != null)
+        if (floor == 1 && maps[MAX_FLOOR] != null)
         {
             startActionID = 2;
-            return maps[MAX_FLOOR];
+            currentFloor = 2;
+            return (maps[1] = maps[MAX_FLOOR]);
         }
 
 #endif
@@ -37,7 +38,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         base.Awake();
 
-        DOTween.SetTweensCapacity(500, 200);
+        DOTween.SetTweensCapacity(500, 500);
 
         ClearMaps();
 
@@ -80,5 +81,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public void ClearMaps()
     {
         maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR + 1).ToArray();
+        currentFloor = 0;
     }
 }

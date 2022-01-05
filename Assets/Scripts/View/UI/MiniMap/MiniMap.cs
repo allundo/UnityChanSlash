@@ -66,6 +66,13 @@ public class MiniMap : MonoBehaviour
         playerSymbol.SetSize(uiTileUnit);
     }
 
+    public void SwitchWorldMap(WorldMap map)
+    {
+        this.map = map;
+        enemies.Clear();
+        UpdateMiniMap();
+    }
+
     void Update()
     {
         MoveEnemySymbols();

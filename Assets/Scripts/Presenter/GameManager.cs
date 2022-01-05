@@ -7,6 +7,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private MapRenderer mapRenderer = default;
     [SerializeField] private GameObject player = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
+    [SerializeField] private ItemGenerator itemGenerator = default;
     [SerializeField] private FireBallGenerator fireBallGenerator = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
@@ -79,7 +80,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void DropStart()
     {
-        placeEnemyGenerator.Place(worldMap);
+        placeEnemyGenerator.Place();
 
         status.SetPosition();
         hidePlateHandler.Init();
@@ -105,7 +106,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void Restart()
     {
-        placeEnemyGenerator.Place(worldMap);
+        placeEnemyGenerator.Place();
 
         status.SetPosition();
         hidePlateHandler.Init();
@@ -163,10 +164,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
 
-    public void EnterStair(bool isDownStair)
+    public void EnterStair(bool isDownStairs)
     {
-        Debug.Log("Stair" + (isDownStair ? "DOWN" : "UP"));
-        Pause();
+        debugEnemyGenerator.DestroyAllEnemies();
+        debugEnemyGenerator.gameObject.SetActive(false);
+
+        worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
+
+        mapRenderer.Render(worldMap);
+
+        placeEnemyGenerator.SwitchWorldMap(worldMap);
+        itemGenerator.SwitchWorldMap(worldMap);
+
+        status.SetPosition(isDownStairs);
+        hidePlateHandler.SwitchWorldMap(worldMap);
+
+        input.ValidateInput();
+        input.SetInputVisible(true);
     }
 
     public BulletReactor FireBall(Vector3 pos, IDirection dir, float attack = 1f)

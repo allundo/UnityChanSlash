@@ -45,16 +45,16 @@ public abstract class PlayerCommand : Command
         onCompleted.Add(() => playerInput.SetInputVisible(true));
     }
 
-    protected void EnterStair(ITile destTile)
+    protected void EnterStairs(ITile destTile)
     {
-        if (!(destTile is Stair)) return;
+        if (!(destTile is Stairs)) return;
 
         tweenMove.DelayedCall(0.6f, () =>
         {
             playerInput.ClearAll();
             playerInput.SetInputVisible(false);
-            GameManager.Instance.EnterStair((destTile as Stair).isDownStair);
-        });
+            GameManager.Instance.EnterStair((destTile as Stairs).isDownStairs);
+        }).Play();
     }
 }
 
@@ -86,7 +86,7 @@ public abstract class PlayerMove : PlayerCommand
             return false;
         }
 
-        EnterStair(DestTile);
+        EnterStairs(DestTile);
 
         playingTween = tweenMove.Linear(GetDest).OnComplete(hidePlateHandler.Move).Play();
 
@@ -187,6 +187,8 @@ public class PlayerStartRunning : PlayerRun
         var dest = map.DestVec;
         var timeScale = dest.magnitude / TILE_UNIT;
 
+        EnterStairs(map.ForwardTile);
+
         playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
 
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
@@ -197,8 +199,6 @@ public class PlayerStartRunning : PlayerRun
             .Play();
 
         target.input.Interrupt(run, false);
-
-        // EnterStair(map.GetTile(map.CurrentPos));
 
         return ObservableComplete(timeScale);
     }
@@ -212,6 +212,8 @@ public class PlayerRun : PlayerDash
     {
         if (map.IsForwardMovable)
         {
+            EnterStairs(map.ForwardTile);
+
             playingTween = tweenMove.Linear(map.GetForward, 1f, hidePlateHandler.Move);
 
             playerAnim.speed.Float = TILE_UNIT / duration;
@@ -239,6 +241,8 @@ public class PlayerBrake : PlayerDash
 
         if (map.IsForwardMovable)
         {
+            EnterStairs(map.ForwardTile);
+
             playingTween = tweenMove.Brake(map.GetForward, 0.75f, hidePlateHandler.Move);
             validateTween = ValidateTween().Play();
             completeTween = ChangeSpeed(2f, 0f, 0.5f, playerAnim.brake.Fire, 0.3f);
@@ -274,7 +278,7 @@ public class PlayerJump : PlayerCommand
             destTile = map.ForwardTile;
         }
 
-        EnterStair(destTile);
+        EnterStairs(destTile);
 
         playerAnim.jump.Fire();
 

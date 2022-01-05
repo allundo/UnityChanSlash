@@ -44,4 +44,9 @@ public class HidePlatePool : MonoBehaviour
     {
         return generator[(int)plate]?.Spawn(map.WorldPos(pos), rotate[(int)plate], duration)?.SetPlate(plate);
     }
+
+    public void SwitchWorldMap(WorldMap map)
+    {
+        this.map = map;
+    }
 }

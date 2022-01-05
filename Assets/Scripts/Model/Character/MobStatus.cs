@@ -1,6 +1,5 @@
 using UnityEngine;
 using UniRx;
-using System.Collections.Generic;
 
 public class MobStatus : MonoBehaviour
 {
@@ -41,8 +40,7 @@ public class MobStatus : MonoBehaviour
     public bool isActive { get; protected set; } = false;
 
     public virtual void SetPosition() => map.SetPosition();
-
-    public void SetPosition(Vector3 pos, IDirection dir = null) => map.SetPosition(pos, dir);
+    public virtual void SetPosition(Vector3 pos, IDirection dir = null) => map.SetPosition(pos, dir);
 
     protected virtual void Awake()
     {

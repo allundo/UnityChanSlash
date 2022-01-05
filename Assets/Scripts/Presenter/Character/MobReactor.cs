@@ -135,4 +135,10 @@ public class MobReactor : SpawnObject<MobReactor>
     {
         status.OnInactivate();
     }
+
+    public void Destroy()
+    {
+        input.ClearAll();
+        Destroy(gameObject);
+    }
 }

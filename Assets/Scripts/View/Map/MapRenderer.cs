@@ -35,7 +35,7 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject pall = default;
     [SerializeField] private GameObject doorV = default;
     [SerializeField] private GameObject doorH = default;
-    [SerializeField] private GameObject upStairN = default;
+    [SerializeField] private GameObject upStairsN = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -86,19 +86,30 @@ public class MapRenderer : MonoBehaviour
         tileDoor.state = door.GetComponent<DoorState>();
     }
 
-    public void SetStair(Pos pos, IDirection dir)
+    public void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
     {
-        PlacePrefab(pos, upStairN, dir.Rotate);
+        PlacePrefab(pos, upStairsN, dir.Rotate);
 
-        Stair tileStair = map.GetTile(pos) as Stair;
-        tileStair.enterDir = dir;
-        tileStair.isDownStair = true;
+        Stairs tileStairs = map.GetTile(pos) as Stairs;
+        tileStairs.enterDir = dir;
+        tileStairs.isDownStairs = isDownStairs;
     }
+
+    private Stack<GameObject> objectPool = new Stack<GameObject>();
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
         => PlacePrefab(pos, prefab, Quaternion.identity);
     private GameObject PlacePrefab(Pos pos, GameObject prefab, Quaternion rotation)
-        => Instantiate(prefab, map.WorldPos(pos), rotation, transform);
+    {
+        objectPool.Push(Instantiate(prefab, map.WorldPos(pos), rotation, transform));
+        return objectPool.Peek();
+    }
+
+    private void DestroyObjects()
+    {
+        objectPool.ForEach(obj => Destroy(obj));
+        objectPool.Clear();
+    }
 
     public void Render(WorldMap map)
     {
@@ -112,6 +123,7 @@ public class MapRenderer : MonoBehaviour
 
         var terrainMeshes = new List<CombineInstance>();
 
+        DestroyObjects();
         InitMeshes();
 
         for (int j = 0; j < height; j++)
@@ -144,8 +156,11 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.DownStair:
+                        SetStairs(new Pos(i, j), Direction.Convert(dirMap[i, j]), true);
+                        break;
+
                     case Terrain.UpStair:
-                        SetStair(new Pos(i, j), Direction.Convert(dirMap[i, j]));
+                        SetStairs(new Pos(i, j), Direction.Convert(dirMap[i, j]), false);
                         break;
                 }
             }

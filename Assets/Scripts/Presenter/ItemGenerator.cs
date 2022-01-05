@@ -20,6 +20,17 @@ public class ItemGenerator : Generator<Item>
 
     void Start()
     {
+        PlaceItems(map);
+    }
+
+    public void SwitchWorldMap(WorldMap map)
+    {
+        this.map = map;
+        PlaceItems(map);
+    }
+
+    private void PlaceItems(WorldMap map)
+    {
         map.deadEndPos.ForEach(kvp => Put(ItemType.Potion, kvp.Key, kvp.Value.Backward));
     }
 
@@ -42,12 +53,6 @@ public class ItemGenerator : Generator<Item>
 
     public bool Put(ItemType itemType, Pos pos, IDirection dir = null, int numOfItem = 1)
         => Put(itemInfo[itemType].Clone(numOfItem) as ItemInfo, pos, dir);
-
-    public ItemGenerator SetPoolObject(GameObject itemPool)
-    {
-        pool = itemPool.transform;
-        return this;
-    }
 
     public void Turn(IDirection dir)
     {

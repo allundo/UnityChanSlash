@@ -1,11 +1,21 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlaceEnemyGenerator : MonoBehaviour
 {
     [SerializeField] private EnemyGenerator[] prefabEnemyGenerators = default;
+
+    private WorldMap map;
     private GameObject enemyPool;
 
-    public void Place(WorldMap map)
+    private Stack<EnemyGenerator> generatorPool = new Stack<EnemyGenerator>();
+
+    void Awake()
+    {
+        map = GameManager.Instance.worldMap;
+    }
+
+    public void Place()
     {
         enemyPool = new GameObject("Enemy Pool");
 
@@ -13,7 +23,9 @@ public class PlaceEnemyGenerator : MonoBehaviour
         map.roomCenterPos.ForEach(pos =>
         {
             if (counter >= prefabEnemyGenerators.Length) return;
-            Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(pos), Quaternion.identity).Init(enemyPool, map.GetTile(pos));
+
+            generatorPool.Push(Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(pos), Quaternion.identity));
+            generatorPool.Peek().Init(enemyPool, map.GetTile(pos));
         });
 
         int remains = prefabEnemyGenerators.Length - counter;
@@ -35,7 +47,8 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
             if (ground == null) continue;
 
-            Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(x, y), Quaternion.identity).Init(enemyPool, ground);
+            generatorPool.Push(Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(x, y), Quaternion.identity));
+            generatorPool.Peek().Init(enemyPool, ground);
         }
     }
 
@@ -60,5 +73,31 @@ public class PlaceEnemyGenerator : MonoBehaviour
         GetRegions(new Pos(center.x + 1, center.y + 1), rightBottom, division - 1, offset + offsetUnit * 3, regions);
 
         return regions;
+    }
+
+    public void SwitchWorldMap(WorldMap map)
+    {
+        this.map.ForEachTiles(tile =>
+        {
+            tile.IsObjectOn = false;
+            tile.OnEnemy = null;
+        });
+
+        DestroyAllEnemies();
+        DestroyAllEnemyGenerators();
+
+        this.map = map;
+        Place();
+    }
+
+    public void DestroyAllEnemies()
+    {
+        enemyPool?.transform?.ForEach(t => t.GetComponent<MobReactor>().Destroy());
+    }
+
+    public void DestroyAllEnemyGenerators()
+    {
+        generatorPool.ForEach(generator => Destroy(generator));
+        generatorPool.Clear();
     }
 }

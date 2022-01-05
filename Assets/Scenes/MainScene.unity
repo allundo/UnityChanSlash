@@ -1752,6 +1752,7 @@ MonoBehaviour:
   mapRenderer: {fileID: 170570286}
   player: {fileID: 3442943665555868988}
   placeEnemyGenerator: {fileID: 1196509789}
+  itemGenerator: {fileID: 1345430765}
   fireBallGenerator: {fileID: 477829049}
   cover: {fileID: 6691234942917525759}
   uiPosition: {fileID: 3530082429098461079}
@@ -2305,7 +2306,7 @@ MonoBehaviour:
   pall: {fileID: 322688804}
   doorV: {fileID: 7630895998581611993, guid: 752f66cf1eab8491485d085e1fcd90e2, type: 3}
   doorH: {fileID: 5376730180583771968, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb, type: 3}
-  upStairN: {fileID: 2970738456269347428, guid: c4e746f0d2d7e4354b8596d4a2660257,
+  upStairsN: {fileID: 2970738456269347428, guid: c4e746f0d2d7e4354b8596d4a2660257,
     type: 3}
 --- !u!1 &233540038
 GameObject:

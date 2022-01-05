@@ -9,7 +9,8 @@ public class MapManager
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
-    public KeyValuePair<Pos, IDirection> initPos { get; private set; }
+    public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; }
+    public KeyValuePair<Pos, IDirection> stairsTop { get; private set; }
 
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
@@ -65,6 +66,8 @@ public class MapManager
 
         deadEndPos.Remove(pos);
 
+        stairsTop = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
+
         return this;
     }
 
@@ -79,7 +82,7 @@ public class MapManager
 
         deadEndPos.Remove(pos);
 
-        initPos = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
+        stairsBottom = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
 
         return this;
     }

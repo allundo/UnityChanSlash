@@ -35,4 +35,9 @@ public class Generator<T> : MonoBehaviour
     protected T GetPooledObj() => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<T>();
 
     protected T GetInstance() => GetPooledObj() ?? Instantiate(prefab, pool, false);
+
+    public void DestroyAll()
+    {
+        pool.ForEach(t => Destroy(t.gameObject));
+    }
 }

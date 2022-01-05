@@ -79,7 +79,7 @@ public class HidePlateHandler : MonoBehaviour
     void Awake()
     {
         map = GameManager.Instance.worldMap;
-        mapUtil = GetComponent<MapUtil>();
+        mapUtil = GetComponent<PlayerMapUtil>();
 
         plateFront = Instantiate(plateFrontPrefab, Vector3.zero, Quaternion.identity);
 
@@ -210,6 +210,21 @@ public class HidePlateHandler : MonoBehaviour
         Draw();
     }
 
+    public void SwitchWorldMap(WorldMap map)
+    {
+        this.map = map;
+
+        miniMap.SwitchWorldMap(map);
+
+        currentUpdater?.ClearRange(prevPos);
+
+        hidePlatePool.SwitchWorldMap(map);
+        landscape.ResetWorldMapRange();
+        portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
+
+        Turn();
+    }
+
     protected abstract class PlateUpdater
     {
         /// <summary>
@@ -260,13 +275,17 @@ public class HidePlateHandler : MonoBehaviour
             this.hidePlateHandler = hidePlateHandler;
             this.hidePlatePool = hidePlateHandler.hidePlatePool;
 
-            map = hidePlateHandler.map;
-
-            int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
-            plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
-
             this.width = width;
             this.height = height;
+
+            ResetWorldMapRange();
+        }
+
+        public void ResetWorldMapRange()
+        {
+            map = hidePlateHandler.map;
+            int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
+            plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
         }
 
         /// <summary>
