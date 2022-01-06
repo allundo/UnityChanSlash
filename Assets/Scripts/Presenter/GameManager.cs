@@ -169,14 +169,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void EnterStair(bool isDownStairs)
     {
-        debugEnemyGenerator.DestroyAll();
-        debugEnemyGenerator.gameObject.SetActive(false);
-
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
 
         mapRenderer.Render(worldMap);
 
         placeEnemyGenerator.SwitchWorldMap(worldMap);
+        debugEnemyGenerator.DestroyAll();
+        debugEnemyGenerator.gameObject.SetActive(false);
+
         itemGenerator.SwitchWorldMap(worldMap);
 
         status.SetPosition(isDownStairs);

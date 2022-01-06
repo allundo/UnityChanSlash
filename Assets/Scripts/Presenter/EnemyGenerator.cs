@@ -1,58 +1,33 @@
 using UnityEngine;
-using System.Collections;
 
-[RequireComponent(typeof(Collider))]
-public class EnemyGenerator : MobGenerator<MobStatus>
+public class EnemyGenerator : Generator<MobStatus>
 {
-    protected ITile spawnTile;
-    protected Collider detectCharacter;
+    /// <summary>
+    /// Instantiate on default object pool
+    /// </summary>
+    public virtual MobStatus Spawn(MobParam param, Vector3 pos, IDirection dir = null, float life = 0f)
+        => GetInstance(param.prefab).InitParam(param, life).OnSpawn(pos, dir);
 
-    protected Coroutine searchCharacter = null;
+    /// <summary>
+    /// Instantiate on the object pool specified by 'pool' parameter
+    /// </summary>
+    public virtual MobStatus Spawn(Transform pool, MobParam param, Vector3 pos, IDirection dir = null, float life = 0f)
+        => GetInstance(pool, param.prefab).InitParam(param, life).OnSpawn(pos, dir);
 
-    protected virtual void Start()
+    public virtual MobStatus GetInstance(Transform pool, MobStatus prefab)
+        => GetPooledObj(pool) ?? Instantiate(prefab, pool, false);
+
+    protected virtual MobStatus GetPooledObj(Transform pool)
+        => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<MobStatus>();
+
+    public virtual EnemyGenerator Init(GameObject enemyPool)
     {
-        detectCharacter = GetComponent<Collider>();
-
-        detectCharacter.enabled = false;
-        StartCoroutine(SpawnLoop());
-    }
-
-    public void Init(GameObject enemyPool, ITile tile)
-    {
-        // Set another parent since Collider cannot detect self child GameObjects.
         pool = enemyPool.transform;
-        spawnTile = tile;
+        return this;
     }
 
-    public IEnumerator SpawnLoop()
+    public override void DestroyAll()
     {
-        while (true)
-        {
-            searchCharacter = StartCoroutine(SearchCharacter());
-            yield return new WaitForSeconds(10);
-        }
-    }
-
-    private IEnumerator SearchCharacter()
-    {
-        detectCharacter.enabled = true;
-
-        yield return new WaitForSeconds(1);
-
-        detectCharacter.enabled = false;
-        if (!spawnTile.IsObjectOn) Spawn();
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        MobStatus status = other.GetComponent<MobStatus>();
-
-        // Cancel spawning when enemy or player is detected nearby
-        if (status != null)
-        {
-            detectCharacter.enabled = false;
-            StopCoroutine(searchCharacter);
-        }
-
+        pool.ForEach(t => t.GetComponent<MobReactor>().Destroy());
     }
 }

@@ -4,11 +4,19 @@ using System;
 public class DataAsset<T> : ScriptableObject
 {
     [SerializeField] protected T[] setParams;
+
+    public int Length => setParams.Length;
+
     public T Param(int index)
     {
         if (index >= setParams.Length) throw new IndexOutOfRangeException("Parameter number " + index + "is not found.");
 
         return setParams[index];
+    }
+
+    public void ForEach(Action<T> action)
+    {
+        setParams.ForEach(param => action(param));
     }
 }
 
@@ -16,7 +24,7 @@ public class DataAsset<T> : ScriptableObject
 [System.Serializable]
 public class MobParam
 {
-    [SerializeField] public string name = "キャラクター";
+    [SerializeField] public EnemyType type = EnemyType.None;
 
     [SerializeField] public float defaultLifeMax = 10;
 
@@ -35,6 +43,8 @@ public class MobParam
     [SerializeField] public float restDamageMultiplier = 6.0f;
 
     [SerializeField] public float armorMultiplier = 1.0f;
+
+    [SerializeField] public MobStatus prefab = default;
 }
 
 [System.Serializable]
@@ -54,4 +64,11 @@ public class DamageSndSource
     [SerializeField] public AudioSource damage = default;
     [SerializeField] public AudioSource critical = default;
     [SerializeField] public AudioSource guard = default;
+}
+
+
+[System.Serializable]
+public class EnemyTypesSource
+{
+    [SerializeField] public EnemyType[] types;
 }

@@ -4,8 +4,6 @@ using System;
 
 public class MobStatus : SpawnObject<MobStatus>
 {
-    [SerializeField] protected MobData data;
-    [SerializeField] protected int dataIndex;
     protected MobParam param;
 
     protected virtual float FaceDamageMultiplier => param.faceDamageMultiplier;
@@ -28,6 +26,7 @@ public class MobStatus : SpawnObject<MobStatus>
 
     public MapUtil map { get; protected set; }
     public IDirection dir => map.dir;
+    public EnemyType type => param.type;
 
     protected IReactiveProperty<float> life;
     public IReadOnlyReactiveProperty<float> Life => life;
@@ -47,10 +46,8 @@ public class MobStatus : SpawnObject<MobStatus>
     {
         map = GetComponent<MapUtil>();
 
-        param = data.Param(dataIndex);
-
-        life = new ReactiveProperty<float>(DefaultLifeMax);
-        lifeMax = new ReactiveProperty<float>(DefaultLifeMax);
+        life = new ReactiveProperty<float>(0f);
+        lifeMax = new ReactiveProperty<float>(0f);
     }
 
     public void Damage(float damage)
@@ -87,7 +84,7 @@ public class MobStatus : SpawnObject<MobStatus>
 
     public virtual void ResetStatus()
     {
-        life.Value = LifeMax.Value;
+        life.Value = lifeMax.Value = DefaultLifeMax;
     }
 
     public virtual void Active()
@@ -96,7 +93,6 @@ public class MobStatus : SpawnObject<MobStatus>
 
         isActive = true;
         gameObject.SetActive(true);
-        ResetStatus();
     }
 
     public override void Inactivate()
@@ -115,9 +111,12 @@ public class MobStatus : SpawnObject<MobStatus>
         return this;
     }
 
-    public void InitParam(MobParam param, float life = 0f)
+    public MobStatus InitParam(MobParam param, float life = 0f)
     {
         this.param = param;
+        ResetStatus();
+
         if (life > 0f) this.life.Value = life;
+        return this;
     }
 }

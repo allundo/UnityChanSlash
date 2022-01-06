@@ -35,7 +35,7 @@ public class Generator<T> : MonoBehaviour
 
     protected T GetInstance(T prefab) => GetPooledObj() ?? Instantiate(prefab, pool, false);
 
-    public void DestroyAll()
+    public virtual void DestroyAll()
     {
         pool.ForEach(t => Destroy(t.gameObject));
     }

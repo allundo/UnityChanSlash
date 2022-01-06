@@ -1,44 +1,62 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
-public class PlaceEnemyGenerator : MonoBehaviour
+public class PlaceEnemyGenerator : EnemyGenerator
 {
-    [SerializeField] private EnemyGenerator[] prefabEnemyGenerators = default;
+    [SerializeField] private EnemyAutoGenerator prefabEnemyGenerator = default;
+
+    [SerializeField] private MobData enemyData = default;
+    [SerializeField] private EnemyTypesData enemyTypesData = default;
+
+    [SerializeField] private int numOfRandomSpawn = 12;
+
+    private EnemyType[] enemyTypes;
+    private EnemyType RandomEnemyType => enemyTypes[Random.Range(0, enemyTypes.Length)];
 
     private WorldMap map;
-    private GameObject enemyPool;
-
-    private Stack<EnemyGenerator> generatorPool = new Stack<EnemyGenerator>();
-
-    void Awake()
+    private void SetWorldMap(WorldMap map)
     {
-        map = GameManager.Instance.worldMap;
+        this.map = map;
+        enemyTypes = enemyTypesData.Param(map.floor - 1).types;
+
+        enemyTypes.ForEach(type =>
+        {
+            if (!enemyPool.ContainsKey(type)) enemyPool[type] = new GameObject("Enemy Pool: " + type);
+        });
+    }
+
+    private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
+
+    private List<EnemyAutoGenerator> generatorPool = new List<EnemyAutoGenerator>();
+    private List<RespawnData>[] respawnData;
+
+    protected override void Awake()
+    {
+        SetWorldMap(GameManager.Instance.worldMap);
+        respawnData = new List<RespawnData>[enemyTypesData.Length].Select(_ => new List<RespawnData>()).ToArray();
     }
 
     public void Place()
     {
-        enemyPool = new GameObject("Enemy Pool");
-
-        int counter = 0;
         map.roomCenterPos.ForEach(pos =>
         {
-            if (counter >= prefabEnemyGenerators.Length) return;
-
-            generatorPool.Push(Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(pos), Quaternion.identity));
-            generatorPool.Peek().Init(enemyPool, map.GetTile(pos));
+            var enemyType = RandomEnemyType;
+            generatorPool.Add(
+                Instantiate(prefabEnemyGenerator, map.WorldPos(pos), Quaternion.identity)
+                    .Init(enemyPool[enemyType], map.GetTile(pos), enemyData.Param((int)enemyType))
+            );
         });
 
-        int remains = prefabEnemyGenerators.Length - counter;
+        if (numOfRandomSpawn < 4) return;
 
-        if (remains < 4) return;
-
-        int division = (int)Mathf.Log(remains, 4);
+        int division = (int)Mathf.Log(numOfRandomSpawn, 4);
 
         var regions = GetRegions(new Pos(0, 0), new Pos(map.Width - 1, map.Height - 1), division);
 
-        while (counter < prefabEnemyGenerators.Length)
+        for (int i = 0; i < numOfRandomSpawn; i++)
         {
-            (Pos leftTop, Pos rightBottom) region = regions[remains % regions.Length];
+            (Pos leftTop, Pos rightBottom) region = regions[numOfRandomSpawn % regions.Length];
 
             int x = Random.Range(region.leftTop.x, region.rightBottom.x + 1);
             int y = Random.Range(region.leftTop.y, region.rightBottom.y + 1);
@@ -47,8 +65,12 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
             if (ground == null) continue;
 
-            generatorPool.Push(Instantiate(prefabEnemyGenerators[counter++], map.WorldPos(x, y), Quaternion.identity));
-            generatorPool.Peek().Init(enemyPool, ground);
+            var enemyType = RandomEnemyType;
+
+            generatorPool.Add(
+                Instantiate(prefabEnemyGenerator, map.WorldPos(x, y), Quaternion.identity)
+                    .Init(enemyPool[enemyType], ground, enemyData.Param((int)enemyType))
+            );
         }
     }
 
@@ -77,27 +99,58 @@ public class PlaceEnemyGenerator : MonoBehaviour
 
     public void SwitchWorldMap(WorldMap map)
     {
-        this.map.ForEachTiles(tile =>
+        var store = respawnData[this.map.floor - 1];
+        var restore = respawnData[map.floor - 1];
+
+        this.map.ForEachTiles((tile, pos) =>
         {
             tile.IsObjectOn = false;
-            tile.OnEnemy = null;
+            if (tile.OnEnemy != null)
+            {
+                store.Add(new RespawnData(tile.OnEnemy, pos));
+                tile.OnEnemy = null;
+            }
         });
 
         DestroyAllEnemies();
         DestroyAllEnemyGenerators();
 
-        this.map = map;
+        SetWorldMap(map);
+        restore.ForEach(data => Respawn(data));
+        restore.Clear();
+
         Place();
     }
 
     public void DestroyAllEnemies()
     {
-        enemyPool?.transform?.ForEach(t => t.GetComponent<MobReactor>().Destroy());
+        enemyPool.ForEach(
+            kv => kv.Value.transform?.ForEach(t => t.GetComponent<MobReactor>().Destroy())
+        );
     }
 
     public void DestroyAllEnemyGenerators()
     {
         generatorPool.ForEach(generator => Destroy(generator));
         generatorPool.Clear();
+    }
+
+    private MobStatus Respawn(RespawnData data)
+        => Spawn(enemyPool[data.type].transform, enemyData.Param((int)data.type), map.WorldPos(data.pos), data.dir, data.life);
+
+    private struct RespawnData
+    {
+        public RespawnData(MobStatus status, Pos pos)
+        {
+            this.type = status.type;
+            this.pos = pos;
+            this.dir = status.dir;
+            this.life = status.Life.Value;
+        }
+
+        public EnemyType type;
+        public Pos pos;
+        public IDirection dir;
+        public float life;
     }
 }

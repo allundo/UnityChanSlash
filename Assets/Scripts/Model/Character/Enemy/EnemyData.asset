@@ -13,7 +13,18 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: Assembly-CSharp::MobData
   setParams:
-  - name: "\u30B9\u30E9\u30A4\u30E0"
+  - type: 0
+    defaultLifeMax: 0
+    isOnGround: 1
+    attack: 0
+    shield: 0
+    faceDamageMultiplier: 0
+    sideDamageMultiplier: 0
+    backDamageMultiplier: 0
+    restDamageMultiplier: 0
+    armorMultiplier: 0
+    prefab: {fileID: 0}
+  - type: 1
     defaultLifeMax: 10
     isOnGround: 1
     attack: 1
@@ -23,7 +34,9 @@ MonoBehaviour:
     backDamageMultiplier: 2
     restDamageMultiplier: 6
     armorMultiplier: 1
-  - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
+    prefab: {fileID: 5198665846805539408, guid: 07d0b5236129543e5a459a629a0b34ba,
+      type: 3}
+  - type: 2
     defaultLifeMax: 10
     isOnGround: 1
     attack: 1
@@ -33,7 +46,9 @@ MonoBehaviour:
     backDamageMultiplier: 2
     restDamageMultiplier: 6
     armorMultiplier: 1
-  - name: "\u30B4\u30D6\u30EA\u30F3"
+    prefab: {fileID: 3641758036005752700, guid: b339f0237658d495a88baa1d14ea8395,
+      type: 3}
+  - type: 3
     defaultLifeMax: 10
     isOnGround: 1
     attack: 1
@@ -43,3 +58,5 @@ MonoBehaviour:
     backDamageMultiplier: 2
     restDamageMultiplier: 6
     armorMultiplier: 1
+    prefab: {fileID: 5624331691699974639, guid: 47c856b7bb6814862b0278bedeb3fe19,
+      type: 3}

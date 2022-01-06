@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class DebugEnemyGenerator : EnemyGenerator
+public class DebugEnemyGenerator : EnemyAutoGenerator
 {
+    [SerializeField] private MobData enemyData = default;
+    [SerializeField] private EnemyType type = default;
 
     protected override void Awake()
     {
@@ -14,6 +16,6 @@ public class DebugEnemyGenerator : EnemyGenerator
         base.Start();
         Vector3 pos = transform.position;
         WorldMap map = GameManager.Instance.worldMap;
-        Init(gameObject, map.GetTile(pos));
+        Init(gameObject, map.GetTile(pos), enemyData.Param((int)type));
     }
 }

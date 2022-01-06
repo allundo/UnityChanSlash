@@ -69,6 +69,7 @@ public class MiniMap : MonoBehaviour
     public void SwitchWorldMap(WorldMap map)
     {
         this.map = map;
+        enemies.ForEach(kv => kv.Value.Inactivate());
         enemies.Clear();
         UpdateMiniMap();
     }

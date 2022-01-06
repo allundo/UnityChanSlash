@@ -417,3 +417,11 @@ public enum AttackType
     Bite,
     Burn = 10,
 }
+
+public enum EnemyType
+{
+    None = 0,
+    Slime,
+    RedSlime,
+    Goblin,
+}
