@@ -357,7 +357,7 @@ public class PlayerGetItem : PlayerAction
         ITile tile = map.ForwardTile;
         Item item = tile.PickItem();
 
-        if (playerAnim.handOn.Bool && itemInventory.PickUp(item))
+        if (playerAnim.handOn.Bool && itemInventory.PickUp(item.itemInfo))
         {
             playerAnim.getItem.Fire();
         }

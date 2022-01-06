@@ -12,12 +12,12 @@ public class ItemIconGenerator : Generator<UISymbol>
         pool = parentTransform;
     }
 
-    public ItemIcon Spawn(Vector2 pos, Item item = null)
+    public ItemIcon Spawn(Vector2 pos, ItemInfo itemInfo = null)
     {
         var itemIcon = base.Spawn(pos) as ItemIcon;
 
-        if (item == null) return itemIcon;
+        if (itemInfo == null) return itemIcon;
 
-        return itemIcon.CopyInfo(item);
+        return itemIcon.CopyInfo(itemInfo);
     }
 }

@@ -35,8 +35,8 @@ public class ItemIcon : UISymbol
         Move(pos, duration).Play();
     }
 
-    public ItemIcon CopyInfo(Item item)
-        => SetItemInfo(item.itemInfo).SetMaterial(item.material);
+    public ItemIcon CopyInfo(ItemInfo itemInfo)
+        => SetItemInfo(itemInfo).SetMaterial();
 
     public ItemIcon SetItemInfo(ItemInfo info)
     {
@@ -64,9 +64,9 @@ public class ItemIcon : UISymbol
         rectTransform.sizeDelta = defaultSize * ratio;
     }
 
-    public ItemIcon SetMaterial(Material material)
+    public ItemIcon SetMaterial()
     {
-        image.material = material;
+        image.material = itemInfo.material;
         return this;
     }
 

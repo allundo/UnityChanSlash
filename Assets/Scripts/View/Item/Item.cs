@@ -6,8 +6,6 @@ public class Item : SpawnObject<Item>
 {
     private Renderer meshRenderer;
 
-    public Material material => meshRenderer.material;
-
     public ItemInfo itemInfo { get; protected set; }
 
     protected virtual void Awake()

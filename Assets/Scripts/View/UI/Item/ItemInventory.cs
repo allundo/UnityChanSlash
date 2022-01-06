@@ -53,11 +53,11 @@ public class ItemInventory : MonoBehaviour
         selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit());
     }
 
-    public bool PickUp(Item item)
+    public bool PickUp(ItemInfo itemInfo)
     {
         for (int index = 0; index < MAX_ITEMS; index++)
         {
-            if (SetItem(index, item)) return true;
+            if (SetItem(index, itemInfo)) return true;
         }
 
         return false;
@@ -65,11 +65,11 @@ public class ItemInventory : MonoBehaviour
 
     public bool Remove(ItemIcon itemIcon) => itemIndex.RemoveItem(itemIcon);
 
-    private bool SetItem(int index, Item item)
+    private bool SetItem(int index, ItemInfo itemInfo)
     {
         if (itemIndex.GetItem(index) != null) return false;
 
-        itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), item).SetIndex(index));
+        itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), itemInfo).SetIndex(index));
         return true;
     }
 }
