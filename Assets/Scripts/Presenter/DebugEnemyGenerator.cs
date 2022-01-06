@@ -16,9 +16,4 @@ public class DebugEnemyGenerator : EnemyGenerator
         WorldMap map = GameManager.Instance.worldMap;
         Init(gameObject, map.GetTile(pos));
     }
-
-    public void DestroyAllEnemies()
-    {
-        transform.ForEach(t => t.GetComponent<MobReactor>()?.Destroy());
-    }
 }

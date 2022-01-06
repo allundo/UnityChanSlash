@@ -5,7 +5,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(BodyEffect))]
 [RequireComponent(typeof(MobInput))]
-public class MobReactor : SpawnObject<MobReactor>
+public class MobReactor : MonoBehaviour
 {
     /// <summary>
     /// Reaction to life gauge is only supported for player for now.<br />
@@ -25,6 +25,9 @@ public class MobReactor : SpawnObject<MobReactor>
         effect = GetComponent<BodyEffect>();
         input = GetComponent<MobInput>();
         bodyCollider = GetComponentInChildren<Collider>();
+
+        // Subscribe just after instantiated to detect MobStatus.OnSpawn()
+        status.Spawn.Subscribe(_ => OnSpawn()).AddTo(this);
     }
 
     protected virtual void Start()
@@ -101,17 +104,11 @@ public class MobReactor : SpawnObject<MobReactor>
         bodyCollider.enabled = false;
     }
 
-    public override MobReactor OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
+    public virtual void OnSpawn()
     {
-        status.SetPosition(pos, dir);
-        Activate();
-        return this;
-    }
-
-    public MobReactor SetAttack(float attack)
-    {
-        status.Attack = attack;
-        return this;
+        effect.OnActive();
+        input.OnActive();
+        bodyCollider.enabled = true;
     }
 
     public virtual void FadeOutOnDead(float duration = 0.5f)
@@ -121,23 +118,11 @@ public class MobReactor : SpawnObject<MobReactor>
             .Play();
     }
 
-    protected virtual void Dead() => Inactivate();
-
-    public override void Activate()
-    {
-        status.OnActive();
-        effect.OnActive();
-        input.OnActive();
-        bodyCollider.enabled = true;
-    }
-
-    public override void Inactivate()
-    {
-        status.OnInactivate();
-    }
+    protected virtual void Dead() => status.Inactivate();
 
     public void Destroy()
     {
+        // Stop all tweens before destroying
         input.ClearAll();
         Destroy(gameObject);
     }

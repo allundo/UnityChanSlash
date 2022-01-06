@@ -20,9 +20,9 @@ public class EnemyReactor : MobReactor
         DOVirtual.DelayedCall(0.01f, Inactivate, false).Play();
     }
 
-    public override void Inactivate()
+    private void Inactivate()
     {
         bodyCollider.enabled = false;
-        base.Inactivate();
+        status.Inactivate();
     }
 }

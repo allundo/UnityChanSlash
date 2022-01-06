@@ -5,9 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(BulletEffect))]
 public class BulletReactor : MobReactor
 {
-    public override void Activate()
+    public override void OnSpawn()
     {
-        status.OnActive();
         effect.OnActive();
         input.OnActive();
     }

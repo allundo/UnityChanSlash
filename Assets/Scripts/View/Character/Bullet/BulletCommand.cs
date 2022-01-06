@@ -50,6 +50,7 @@ public class BulletFire : BulletMove
 {
     public BulletFire(BulletCommandTarget target, float duration) : base(target, duration) { }
 
+    // Enable attack collider after a half duration
     protected override Tween AttackSequence => attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f);
 }
 

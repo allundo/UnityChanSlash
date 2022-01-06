@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FireBallGenerator : Generator<MobReactor>
+public class FireBallGenerator : Generator<MobStatus>
 {
     protected override void Awake()
     {
@@ -8,10 +8,11 @@ public class FireBallGenerator : Generator<MobReactor>
         spawnPoint = Vector3.zero;
     }
 
-    public BulletReactor Fire(Vector3 pos, IDirection dir, float attack = 1f)
+    public BulletStatus Fire(Vector3 pos, IDirection dir, float attack = 1f)
     {
-        var bullet = base.Spawn(pos, dir).SetAttack(attack);
+        var bullet = base.Spawn(pos, dir) as BulletStatus;
+        bullet.Attack = attack;
 
-        return bullet as BulletReactor;
+        return bullet;
     }
 }

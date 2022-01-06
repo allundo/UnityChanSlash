@@ -166,7 +166,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void EnterStair(bool isDownStairs)
     {
-        debugEnemyGenerator.DestroyAllEnemies();
+        debugEnemyGenerator.DestroyAll();
         debugEnemyGenerator.gameObject.SetActive(false);
 
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
@@ -183,7 +183,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         input.SetInputVisible(true);
     }
 
-    public BulletReactor FireBall(Vector3 pos, IDirection dir, float attack = 1f)
+    public BulletStatus FireBall(Vector3 pos, IDirection dir, float attack = 1f)
     {
         return fireBallGenerator.Fire(pos, dir, attack);
     }
