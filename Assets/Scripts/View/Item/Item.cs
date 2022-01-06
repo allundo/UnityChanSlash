@@ -39,4 +39,9 @@ public class Item : SpawnObject<Item>
         meshRenderer.material = info.material;
         return this;
     }
+
+    public void SetDisplay(bool isShown = true)
+    {
+        meshRenderer.enabled = isShown;
+    }
 }

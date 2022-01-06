@@ -25,6 +25,9 @@ public class ItemGenerator : Generator<Item>
 
     public void SwitchWorldMap(WorldMap map)
     {
+        this.map.ForEachTiles(tile => tile.DisplayItems(false));
+        map.ForEachTiles(tile => tile.DisplayItems(true));
+
         this.map = map;
         PlaceItems(map);
     }
@@ -32,6 +35,7 @@ public class ItemGenerator : Generator<Item>
     private void PlaceItems(WorldMap map)
     {
         map.deadEndPos.ForEach(kvp => Put(ItemType.Potion, kvp.Key, kvp.Value.Backward));
+        map.deadEndPos.Clear();
     }
 
     private Item Spawn(ItemInfo itemInfo, Pos pos, IDirection dir = null)
