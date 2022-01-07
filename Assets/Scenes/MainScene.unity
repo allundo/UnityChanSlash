@@ -1349,8 +1349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8e806fd39d74df7bc70a314c58eb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1552117585309394, guid: 9d3bc43090dc14066ab3e4f379cfa453, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 1552117585309394, guid: 9d3bc43090dc14066ab3e4f379cfa453,
+    type: 3}
 --- !u!4 &115396364
 Transform:
   m_ObjectHideFlags: 0
@@ -2447,8 +2448,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8e806fd39d74df7bc70a314c58eb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2722669056549137111, guid: ee96b3fd5a39b4262a9638482675d46c, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 2722669056549137111, guid: ee96b3fd5a39b4262a9638482675d46c,
+    type: 3}
 --- !u!1 &267412730
 GameObject:
   m_ObjectHideFlags: 0
@@ -9499,8 +9501,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e656e7229a94cd4a9f4e028efd712a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4403947982082489751, guid: d1e29755034d7403d8e962855d764a27, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 4019047258990873825, guid: d1e29755034d7403d8e962855d764a27,
+    type: 3}
 --- !u!4 &477829050
 Transform:
   m_ObjectHideFlags: 0
@@ -9680,8 +9683,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454c59c07b83d49a282bd919dc38b399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1791801608721531251, guid: dc67222b3c203493c87862d2d4c676a9, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 1791801608721531251, guid: dc67222b3c203493c87862d2d4c676a9,
+    type: 3}
 --- !u!114 &528637052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11043,8 +11047,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8e806fd39d74df7bc70a314c58eb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4087802739460902518, guid: 0b47c1faf1f7a434e928acc211c1c345, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 4087802739460902518, guid: 0b47c1faf1f7a434e928acc211c1c345,
+    type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -12137,8 +12142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8e806fd39d74df7bc70a314c58eb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6564821034560026579, guid: ba3cec72ce6934453adc055758b43c17, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 6564821034560026579, guid: ba3cec72ce6934453adc055758b43c17,
+    type: 3}
 --- !u!1 &850793368
 GameObject:
   m_ObjectHideFlags: 0
@@ -15219,8 +15225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf189f5ee32946cbb4f37bca96fb7b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5624331691699974636, guid: 47c856b7bb6814862b0278bedeb3fe19, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 3641758036005752700, guid: b339f0237658d495a88baa1d14ea8395,
+    type: 3}
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -17368,8 +17375,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8e806fd39d74df7bc70a314c58eb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2902906711996319371, guid: 3b8e28e6e0c26409b85dd0ebcbc0a2d4, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 2902906711996319371, guid: 3b8e28e6e0c26409b85dd0ebcbc0a2d4,
+    type: 3}
 --- !u!43 &1339146139
 Mesh:
   m_ObjectHideFlags: 0
@@ -17562,8 +17570,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c463a24e0a7f48aabd228f8e30c83f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3400831684517067014, guid: ea0ac0796c67846c8ad4583da7318a04, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 3400831684517067014, guid: ea0ac0796c67846c8ad4583da7318a04,
+    type: 3}
   itemData: {fileID: 11400000, guid: 30971acfce6de46e4bd91f0513725389, type: 2}
 --- !u!4 &1345430766
 Transform:
@@ -56445,8 +56454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f308998509214d5181b2eccb77dab72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6922161111149463326, guid: 48620f54d1a3c41dfb86f44c94318aae, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 6922161111149463326, guid: 48620f54d1a3c41dfb86f44c94318aae,
+    type: 3}
 --- !u!222 &4959160246455812964
 CanvasRenderer:
   m_ObjectHideFlags: 0

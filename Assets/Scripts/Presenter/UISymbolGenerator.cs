@@ -1,2 +1,2 @@
-public class UISymbolGenerator : Generator<UISymbol>
+public class UISymbolGenerator : MobGenerator<UISymbol>
 { }

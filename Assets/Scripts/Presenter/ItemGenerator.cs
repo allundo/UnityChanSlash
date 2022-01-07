@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ItemGenerator : Generator<Item>
+public class ItemGenerator : MobGenerator<Item>
 {
     [SerializeField] private ItemData itemData = default;
 

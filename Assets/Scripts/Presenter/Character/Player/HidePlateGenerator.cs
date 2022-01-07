@@ -1,1 +1,1 @@
-public class HidePlateGenerator : Generator<HidePlate> { }
+public class HidePlateGenerator : MobGenerator<HidePlate> { }

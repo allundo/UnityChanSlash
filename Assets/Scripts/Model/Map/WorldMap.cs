@@ -60,6 +60,16 @@ public class WorldMap
             }
         }
     }
+    public void ForEachTiles(Action<ITile, Pos> action)
+    {
+        for (int j = 0; j < Height; j++)
+        {
+            for (int i = 0; i < Width; i++)
+            {
+                action(tileInfo[i, j], new Pos(i, j));
+            }
+        }
+    }
 
     public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
 

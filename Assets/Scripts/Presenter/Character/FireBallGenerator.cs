@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class FireBallGenerator : Generator<MobStatus>
+public class FireBallGenerator : MobGenerator<MobStatus>
 {
     protected override void Awake()
     {
-        pool = transform;
+        base.Awake();
         spawnPoint = Vector3.zero;
     }
 

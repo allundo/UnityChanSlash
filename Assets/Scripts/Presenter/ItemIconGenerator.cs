@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemIconGenerator : Generator<UISymbol>
+public class ItemIconGenerator : MobGenerator<UISymbol>
 {
     protected override void Awake()
     {
