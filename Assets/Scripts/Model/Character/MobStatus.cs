@@ -99,6 +99,8 @@ public class MobStatus : SpawnObject<MobStatus>
     {
         if (!isActive) return;
 
+        map.ResetTile();
+
         isActive = false;
         gameObject.SetActive(false);
     }

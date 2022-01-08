@@ -15,6 +15,12 @@ public class EnemyMapUtil : MapUtil
         SetOnEnemy(onTilePos);
     }
 
+    public override void ResetTile()
+    {
+        RemoveObjectOn();
+        RemoveOnEnemy();
+    }
+
     /// <summary>
     /// Set enemy status info to the Tile currently on
     /// </summary>

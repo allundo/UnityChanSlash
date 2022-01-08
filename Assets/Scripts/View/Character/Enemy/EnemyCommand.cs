@@ -126,8 +126,7 @@ public class EnemyDie : EnemyCommand
 
     public override IObservable<Unit> Execute()
     {
-        enemyMap.RemoveOnEnemy();
-        enemyMap.RemoveObjectOn();
+        enemyMap.ResetTile();
         anim.die.Fire();
         react.OnDie();
 

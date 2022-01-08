@@ -4,7 +4,7 @@ using System.Linq;
 
 public class PlaceEnemyGenerator : EnemyGenerator
 {
-    [SerializeField] private EnemyAutoGenerator prefabEnemyGenerator = default;
+    [SerializeField] private EnemySpawnPoint prefabEnemySpawnPoint = default;
 
     [SerializeField] private MobData enemyData = default;
     [SerializeField] private EnemyTypesData enemyTypesData = default;
@@ -28,7 +28,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
 
-    private List<EnemyAutoGenerator> generatorPool = new List<EnemyAutoGenerator>();
+    private List<EnemySpawnPoint> generatorPool = new List<EnemySpawnPoint>();
     private List<RespawnData>[] respawnData;
 
     protected override void Awake()
@@ -43,7 +43,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         {
             var enemyType = RandomEnemyType;
             generatorPool.Add(
-                Instantiate(prefabEnemyGenerator, map.WorldPos(pos), Quaternion.identity)
+                Instantiate(prefabEnemySpawnPoint, map.WorldPos(pos), Quaternion.identity)
                     .Init(enemyPool[enemyType], map.GetTile(pos), enemyData.Param((int)enemyType))
             );
         });
@@ -68,7 +68,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
             var enemyType = RandomEnemyType;
 
             generatorPool.Add(
-                Instantiate(prefabEnemyGenerator, map.WorldPos(x, y), Quaternion.identity)
+                Instantiate(prefabEnemySpawnPoint, map.WorldPos(x, y), Quaternion.identity)
                     .Init(enemyPool[enemyType], ground, enemyData.Param((int)enemyType))
             );
         }

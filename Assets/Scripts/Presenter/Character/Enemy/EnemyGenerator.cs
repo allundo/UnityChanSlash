@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class EnemyGenerator : Generator<MobStatus>
 {
+    protected override void Awake()
+    {
+        pool = transform;
+        spawnPoint = transform.position;
+    }
+
     /// <summary>
     /// Instantiate on default object pool
     /// </summary>

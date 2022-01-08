@@ -22,6 +22,7 @@ public class EnemyReactor : MobReactor
 
     private void Inactivate()
     {
+        input.ClearAll();
         bodyCollider.enabled = false;
         status.Inactivate();
     }

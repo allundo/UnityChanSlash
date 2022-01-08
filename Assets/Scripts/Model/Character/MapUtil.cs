@@ -48,6 +48,8 @@ public class MapUtil : MonoBehaviour
         SetObjectOn();
     }
 
+    public virtual void ResetTile() => RemoveObjectOn();
+
     public Vector3 WorldPos(Pos pos) => map.WorldPos(pos);
 
     public virtual void TurnLeft()
