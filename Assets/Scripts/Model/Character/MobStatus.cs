@@ -87,7 +87,7 @@ public class MobStatus : SpawnObject<MobStatus>
         life.Value = lifeMax.Value = DefaultLifeMax;
     }
 
-    public virtual void Active()
+    public override void Activate()
     {
         if (isActive) return;
 
