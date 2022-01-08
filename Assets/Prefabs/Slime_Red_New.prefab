@@ -30,49 +30,6 @@ Transform:
   m_Father: {fileID: 1660673968090926965}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1245753452172574080
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 880436995426545235}
-  - component: {fileID: 8744298227131325051}
-  m_Layer: 0
-  m_Name: FireSequence
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &880436995426545235
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245753452172574080}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2304967700280131704}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8744298227131325051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245753452172574080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba5e4b8ab3f24a9ab94842add9d0b04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1492718176620911298
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,6 +50,7 @@ GameObject:
   - component: {fileID: 7555550737669645743}
   - component: {fileID: 9176746837554675662}
   - component: {fileID: 7729996783884072463}
+  - component: {fileID: 5519707695576385173}
   m_Layer: 0
   m_Name: Slime_Red_New
   m_TagString: Untagged
@@ -117,7 +75,6 @@ Transform:
   - {fileID: 8943000934828472251}
   - {fileID: 8507736598084684117}
   - {fileID: 860486273111538739}
-  - {fileID: 880436995426545235}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -152,8 +109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c50a0e85150543a0ae77ca69f894b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: c2797916bebe04356964d7cb1dd71661, type: 2}
-  dataIndex: 0
 --- !u!114 &9055337087454508326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +148,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAttack: {fileID: 8716552068685204701}
-  enemyFire: {fileID: 8744298227131325051}
 --- !u!135 &7153664908088456530
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -274,6 +228,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeGauge: {fileID: 0}
+--- !u!114 &5519707695576385173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492718176620911298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba5e4b8ab3f24a9ab94842add9d0b04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1605351055790362263
 GameObject:
   m_ObjectHideFlags: 0

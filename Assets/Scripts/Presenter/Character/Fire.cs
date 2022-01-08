@@ -4,10 +4,12 @@ using DG.Tweening;
 public class Fire : MonoBehaviour, IAttack
 {
     protected MobStatus status;
+    protected FireBallGenerator fireBallGenerator;
 
     protected virtual void Awake()
     {
-        status = GetComponentInParent<MobStatus>();
+        status = GetComponent<MobStatus>();
+        fireBallGenerator = GameManager.Instance.GetFireBallGenerator;
     }
 
     public virtual Tween AttackSequence(float attackDuration)
@@ -15,7 +17,7 @@ public class Fire : MonoBehaviour, IAttack
         return
             DOVirtual.DelayedCall(
                 attackDuration * 0.3f,
-                () => GameManager.Instance.FireBall(status.transform.position, status.dir, status.Attack),
+                () => fireBallGenerator.Fire(status.transform.position, status.dir, status.Attack),
                 false
             );
     }

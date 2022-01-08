@@ -21,12 +21,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private PlayerInput input = default;
     private PlayerStatus status = default;
 
+
     private bool isInitialOrientation = true;
 
     public bool isPaused { get; private set; } = false;
     public bool isScaled { get; private set; } = false;
 
     public WorldMap worldMap { get; protected set; }
+
+    public FireBallGenerator GetFireBallGenerator => fireBallGenerator;
 
     public void Pause(bool isHideUIs = false)
     {
@@ -181,10 +184,5 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         input.ValidateInput();
         input.SetInputVisible(true);
-    }
-
-    public BulletStatus FireBall(Vector3 pos, IDirection dir, float attack = 1f)
-    {
-        return fireBallGenerator.Fire(pos, dir, attack);
     }
 }

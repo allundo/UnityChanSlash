@@ -8,5 +8,4 @@ public class EnemyCommandTarget : CommandTarget
     /// Enemy attack handler for EnemyCommand execution.
     /// </summary>
     [SerializeField] public MobAttack enemyAttack = default;
-    [SerializeField] public Fire enemyFire = default;
 }

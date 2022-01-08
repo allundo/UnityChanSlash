@@ -27,7 +27,12 @@ public class CommandTarget : MonoBehaviour
     /// <summary>
     /// Direction related data for Command execution.
     /// </summary>
-    public MapUtil map { get; protected set; } = default;
+    public MapUtil map { get; protected set; }
+
+    /// <summary>
+    /// Bullet attack source. Not imperative.
+    /// </summary>
+    public Fire fire { get; protected set; }
 
     protected virtual void Awake()
     {
@@ -35,5 +40,6 @@ public class CommandTarget : MonoBehaviour
         react = GetComponent<MobReactor>();
         input = GetComponent<MobInput>();
         map = GetComponent<MapUtil>();
+        fire = GetComponent<Fire>();
     }
 }

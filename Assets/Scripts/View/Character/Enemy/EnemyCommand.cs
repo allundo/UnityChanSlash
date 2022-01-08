@@ -97,7 +97,7 @@ public class EnemyAttack : EnemyCommand
     public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f)
     {
         enemyAttack = target.enemyAttack;
-        enemyFire = target.enemyFire;
+        enemyFire = target.fire;
     }
 
     protected override bool Action()
