@@ -22,7 +22,12 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         enemyTypes.ForEach(type =>
         {
-            if (!enemyPool.ContainsKey(type)) enemyPool[type] = new GameObject("Enemy Pool: " + type);
+            if (!enemyPool.ContainsKey(type))
+            {
+                var pool = new GameObject("Enemy Pool: " + type);
+                pool.transform.SetParent(transform);
+                enemyPool[type] = pool;
+            }
         });
     }
 
@@ -39,14 +44,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     public void Place()
     {
-        map.roomCenterPos.ForEach(pos =>
-        {
-            var enemyType = RandomEnemyType;
-            generatorPool.Add(
-                Instantiate(prefabEnemySpawnPoint, map.WorldPos(pos), Quaternion.identity)
-                    .Init(enemyPool[enemyType], map.GetTile(pos), enemyData.Param((int)enemyType))
-            );
-        });
+        map.roomCenterPos.ForEach(pos => PlaceGenerator(pos));
 
         if (numOfRandomSpawn < 4) return;
 
@@ -65,13 +63,26 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
             if (ground == null) continue;
 
-            var enemyType = RandomEnemyType;
-
-            generatorPool.Add(
-                Instantiate(prefabEnemySpawnPoint, map.WorldPos(x, y), Quaternion.identity)
-                    .Init(enemyPool[enemyType], ground, enemyData.Param((int)enemyType))
-            );
+            PlaceGenerator(map.WorldPos(x, y), ground);
         }
+    }
+
+    private EnemySpawnPoint PlaceGenerator(Pos pos, EnemyType type = EnemyType.None)
+        => PlaceGenerator(map.WorldPos(pos), map.GetTile(pos), type);
+
+    private EnemySpawnPoint PlaceGenerator(Vector3 pos, ITile spawnTile, EnemyType type = EnemyType.None)
+    {
+        var enemyType = (type == EnemyType.None) ? RandomEnemyType : type;
+
+        var generator =
+            Instantiate(prefabEnemySpawnPoint, pos, Quaternion.identity)
+                .Init(enemyPool[enemyType], spawnTile, enemyData.Param((int)enemyType));
+
+        generator.transform.SetParent(transform);
+
+        generatorPool.Add(generator);
+
+        return generator;
     }
 
     private (Pos leftTop, Pos rightBottom)[] GetRegions(Pos leftTop, Pos rightBottom, int division = 1, int offset = 0, (Pos, Pos)[] regions = null)
