@@ -20,6 +20,12 @@ public class InputControl
 }
 #endif
 
+public class Constants
+{
+    public static readonly float FRAME_SEC_UNIT = 0.01666667f;
+    public static readonly float TILE_UNIT = 2.5f;
+}
+
 public enum Terrain
 {
     Path = 0,

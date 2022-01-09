@@ -5,8 +5,8 @@ using UniRx;
 
 public abstract class Command
 {
-    public static float FRAME_UNIT = 0.01666667f;
-    protected const float TILE_UNIT = 2.5f;
+    public static readonly float FRAME_UNIT = Constants.FRAME_SEC_UNIT;
+    public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
     protected float duration;
     protected float invalidDuration;

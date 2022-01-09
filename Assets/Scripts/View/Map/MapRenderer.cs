@@ -6,8 +6,6 @@ public class MapRenderer : MonoBehaviour
 {
     public WorldMap map { get; private set; }
 
-    private float TILE_UNIT => WorldMap.TILE_UNIT;
-
     [SerializeField] private GameObject wallParent = default;
     [SerializeField] private GameObject wallV = default;
     [SerializeField] private GameObject wallH = default;

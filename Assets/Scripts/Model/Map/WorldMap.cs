@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WorldMap
 {
-    public static readonly float TILE_UNIT = 2.5f;
+    public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
     public int floor { get; protected set; } = 0;
     public ITile[,] tileInfo { get; protected set; }

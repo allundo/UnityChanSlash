@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class TweenMove
 {
-    protected const float TILE_UNIT = 2.5f;
+    public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
     protected float duration;
     protected MapUtil map;

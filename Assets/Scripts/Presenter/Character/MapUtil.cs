@@ -18,7 +18,7 @@ public class MapUtil : MonoBehaviour
     /// </summary>
     protected Pos onTilePos;
 
-    public static readonly float TILE_UNIT = 2.5f;
+    public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
     protected virtual void Awake()
     {
