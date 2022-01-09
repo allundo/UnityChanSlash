@@ -171,7 +171,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
 
-        mapRenderer.Render(worldMap);
+        mapRenderer.SwitchWorldMap(worldMap);
 
         placeEnemyGenerator.SwitchWorldMap(worldMap);
         debugEnemyGenerator.DestroyAll();

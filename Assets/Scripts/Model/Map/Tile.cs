@@ -76,6 +76,7 @@ public class Door : Tile, ITile
     public EnemyStatus OnEnemy { get; set; } = null;
 
     public DoorState state { protected get; set; }
+    public void Handle() => state.Handle();
     public bool IsOpen => state.IsOpen;
     public bool IsControllable => state.IsControllable;
 

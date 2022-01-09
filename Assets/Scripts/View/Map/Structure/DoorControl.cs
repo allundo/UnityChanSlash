@@ -15,7 +15,7 @@ public class DoorControl : MonoBehaviour
     protected Material materialR;
     protected Material materialL;
 
-    void Start()
+    void Awake()
     {
         doorState = GetComponent<DoorState>();
         doorState.State.Subscribe(state => OnStateChange(state)).AddTo(this);
@@ -26,7 +26,10 @@ public class DoorControl : MonoBehaviour
         materialGate = GetComponent<Renderer>().material;
         materialR = doorR.GetComponent<Renderer>().material;
         materialL = doorL.GetComponent<Renderer>().material;
+    }
 
+    void Start()
+    {
         ResetAlpha();
     }
 

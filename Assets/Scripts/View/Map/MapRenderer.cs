@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
 public class MapRenderer : MonoBehaviour
 {
+    // FIXME: only used to get num of floors
+    [SerializeField] private EnemyTypesData enemyTypesData = default;
+    private List<Pos>[] doorOpenData;
+
     public WorldMap map { get; private set; }
 
     [SerializeField] private GameObject wallParent = default;
@@ -42,6 +47,11 @@ public class MapRenderer : MonoBehaviour
     private Mesh wallHMesh;
 
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
+
+    void Awake()
+    {
+        doorOpenData = new List<Pos>[enemyTypesData.Length].Select(_ => new List<Pos>()).ToArray();
+    }
 
     ///  <summary>
     /// Initiate meshes to combine. This method must be called before rendering.
@@ -164,6 +174,22 @@ public class MapRenderer : MonoBehaviour
             }
         }
         GenerateTerrain(terrainMeshes);
+    }
+
+    public void SwitchWorldMap(WorldMap map)
+    {
+        var store = doorOpenData[this.map.floor - 1];
+        var restore = doorOpenData[map.floor - 1];
+
+        this.map.ForEachTiles((tile, pos) =>
+        {
+            if (tile is Door && (tile as Door).IsOpen) store.Add(pos);
+        });
+
+        Render(map);
+
+        restore.ForEach(pos => (map.GetTile(pos) as Door).Handle());
+        restore.Clear();
     }
 
     private CombineInstance GetMeshInstance(Mesh src, Pos pos)

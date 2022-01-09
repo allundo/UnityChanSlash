@@ -2280,6 +2280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fbebe962b5146059a1165bc0d9f4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyTypesData: {fileID: 11400000, guid: 6f2267db779624b399b8dd6c0f104298, type: 2}
   wallParent: {fileID: 1669232644}
   wallV: {fileID: 671906690}
   wallH: {fileID: 1022731393}
