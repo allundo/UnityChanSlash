@@ -177,10 +177,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         debugEnemyGenerator.DestroyAll();
         debugEnemyGenerator.gameObject.SetActive(false);
 
-        itemGenerator.SwitchWorldMap(worldMap);
 
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
+
+        itemGenerator.SwitchWorldMap(worldMap);
+        itemGenerator.Turn(map.dir);
 
         input.ValidateInput();
         input.SetInputVisible(true);
