@@ -19,7 +19,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private Transform playerTransform = default;
     private HidePlateHandler hidePlateHandler = default;
     private PlayerInput input = default;
-    private PlayerStatus status = default;
+    private PlayerMapUtil map = default;
 
 
     private bool isInitialOrientation = true;
@@ -69,7 +69,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         playerTransform = player.transform;
         input = player.GetComponent<PlayerInput>();
-        status = player.GetComponent<PlayerStatus>();
+        map = player.GetComponent<PlayerMapUtil>();
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
         worldMap = GameInfo.Instance.NextFloorMap();
@@ -85,7 +85,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         placeEnemyGenerator.Place();
 
-        status.SetPosition();
+        map.SetPosition(worldMap);
         hidePlateHandler.Init();
 
         cover.FadeIn(1.5f, 1.0f, false).Play();
@@ -111,7 +111,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         placeEnemyGenerator.Place();
 
-        status.SetPosition();
+        map.SetPosition(worldMap);
         hidePlateHandler.Init();
 
         cover.FadeIn(1.0f, 0, false).Play();
@@ -137,7 +137,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Debug.Log("DEBUG MODE");
         debugEnemyGenerator.gameObject.SetActive(true);
 
-        status.SetPosition();
+        map.SetPosition(worldMap);
         hidePlateHandler.Init();
 
         cover.SetAlpha(0f);
@@ -179,7 +179,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         itemGenerator.SwitchWorldMap(worldMap);
 
-        status.SetPosition(isDownStairs);
+        map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
 
         input.ValidateInput();

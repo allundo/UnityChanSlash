@@ -25,5 +25,6 @@ public class EnemyReactor : MobReactor
         input.ClearAll();
         bodyCollider.enabled = false;
         status.Inactivate();
+        map.ResetTile();
     }
 }

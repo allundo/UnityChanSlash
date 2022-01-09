@@ -8,14 +8,11 @@ public class EnemyMapUtil : MapUtil
     /// </summary>
     protected Pos onTileEnemyPos;
 
-    public override void SetPosition(Vector3 pos, IDirection dir = null)
+    public override void OnActive()
     {
-        base.SetPosition(pos, dir);
-
-        // Initialize enemy body collider position by the Tile position currently on
         SetOnEnemy(onTilePos);
+        SetObjectOn();
     }
-
     public override void ResetTile()
     {
         RemoveObjectOn();

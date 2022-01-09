@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// Map の Tile の状態を更新するメソッドを公開 <br>
@@ -8,20 +7,18 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MobStatus))]
 public class MapUtil : MonoBehaviour
 {
+    protected MobStatus status;
     protected WorldMap map;
     protected Transform tf;
-    public IDirection dir { get; protected set; }
+
+    public IDirection dir { get { return status.dir; } set { status.SetDir(value); } }
 
     /// <summary>
     /// Tile position of destination for moving
     /// </summary>
     protected Pos onTilePos;
 
-    protected MobStatus status;
     public static readonly float TILE_UNIT = 2.5f;
-
-    private static readonly Pos defaultPos = new Pos(20, 20);
-    private static readonly IDirection defaultDir = new South();
 
     protected virtual void Awake()
     {
@@ -30,24 +27,7 @@ public class MapUtil : MonoBehaviour
         status = GetComponent<MobStatus>();
     }
 
-    public virtual void SetPosition()
-        => SetPosition(defaultPos, defaultDir);
-
-    public void SetPosition(KeyValuePair<Pos, IDirection> initPos)
-        => SetPosition(initPos.Key, initPos.Value);
-
-    public void SetPosition(Pos pos, IDirection dir = null)
-        => SetPosition(map.WorldPos(pos), dir);
-
-    public virtual void SetPosition(Vector3 pos, IDirection dir = null)
-    {
-        this.tf.position = pos;
-
-        this.dir = dir ?? MapUtil.defaultDir;
-        tf.LookAt(this.tf.position + this.dir.LookAt);
-
-        SetObjectOn();
-    }
+    public virtual void OnActive() => SetObjectOn();
 
     public virtual void ResetTile() => RemoveObjectOn();
 
@@ -139,7 +119,7 @@ public class MapUtil : MonoBehaviour
     /// </summary>
     /// <param name="destPos">Tile map position of destination</param>
     /// <returns>destPos</returns>
-    public Pos SetObjectOn(Pos destPos)
+    public virtual Pos SetObjectOn(Pos destPos)
     {
         if (status.IsOnGround) map.GetTile(destPos).IsObjectOn = true;
         onTilePos = destPos;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerStatus : MobStatus
 {
@@ -10,7 +11,9 @@ public class PlayerStatus : MobStatus
         base.Awake();
     }
 
-    public void SetPosition() => (map as PlayerMapUtil).SetPosition();
-    public void SetPosition(bool isDownStairs) => (map as PlayerMapUtil).SetPosition(isDownStairs);
-
+    public void SetPosition(KeyValuePair<Pos, IDirection> initPos)
+    {
+        var map = GameManager.Instance.worldMap;
+        SetPosition(map.WorldPos(initPos.Key), initPos.Value);
+    }
 }

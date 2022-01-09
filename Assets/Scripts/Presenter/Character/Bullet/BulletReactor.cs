@@ -5,9 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(BulletEffect))]
 public class BulletReactor : MobReactor
 {
-    public override void OnSpawn()
+    public override void OnActive()
     {
         effect.OnActive();
+        // Need to set MapUtil.onTilePos before input moving Command
+        map.OnActive();
         input.OnActive();
     }
 

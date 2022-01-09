@@ -24,8 +24,10 @@ public class MobStatus : SpawnObject<MobStatus>
 
     protected virtual float ArmorMultiplier => param.armorMultiplier;
 
-    public MapUtil map { get; protected set; }
-    public IDirection dir => map.dir;
+    public IDirection dir { get; protected set; }
+    public void SetDir(IDirection dir) => this.dir = dir;
+
+    private static readonly IDirection defaultDir = new South();
 
     protected IReactiveProperty<float> life;
     public IReadOnlyReactiveProperty<float> Life => life;
@@ -33,8 +35,8 @@ public class MobStatus : SpawnObject<MobStatus>
     protected IReactiveProperty<float> lifeMax;
     public IReadOnlyReactiveProperty<float> LifeMax => lifeMax;
 
-    protected ISubject<Unit> spawnSubject = new Subject<Unit>();
-    public IObservable<Unit> Spawn => spawnSubject;
+    protected ISubject<Unit> activeSubject = new BehaviorSubject<Unit>(Unit.Default);
+    public IObservable<Unit> Active => activeSubject;
 
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
@@ -43,12 +45,8 @@ public class MobStatus : SpawnObject<MobStatus>
 
     protected virtual void Awake()
     {
-        map = GetComponent<MapUtil>();
-
         life = new ReactiveProperty<float>(0f);
         lifeMax = new ReactiveProperty<float>(0f);
-
-        Activate();
     }
 
     public void Damage(float damage)
@@ -95,14 +93,18 @@ public class MobStatus : SpawnObject<MobStatus>
         isActive = true;
         gameObject.SetActive(true);
 
+        OnActive();
+    }
+
+    protected virtual void OnActive()
+    {
         ResetStatus();
+        activeSubject.OnNext(Unit.Default);
     }
 
     public override void Inactivate()
     {
         if (!isActive) return;
-
-        map.ResetTile();
 
         isActive = false;
         gameObject.SetActive(false);
@@ -110,10 +112,17 @@ public class MobStatus : SpawnObject<MobStatus>
 
     public override MobStatus OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
     {
-        map.SetPosition(pos, dir);
+        SetPosition(pos, dir);
         Activate();
-        spawnSubject.OnNext(Unit.Default);
         return this;
+    }
+
+    public void SetPosition(Vector3 pos, IDirection dir = null)
+    {
+        transform.position = pos;
+
+        this.dir = dir ?? MobStatus.defaultDir;
+        transform.LookAt(transform.position + this.dir.LookAt);
     }
 
     public virtual MobStatus InitParam(MobParam param, float life = 0f)

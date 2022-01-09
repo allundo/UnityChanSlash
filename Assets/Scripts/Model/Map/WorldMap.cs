@@ -216,7 +216,7 @@ public class WorldMap
         return pixels;
     }
 
-    public KeyValuePair<Pos, IDirection> InitPos
+    public KeyValuePair<Pos, IDirection> StairsBottom
     {
         get
         {
@@ -238,6 +238,6 @@ public class WorldMap
         }
         set { stairsBottom = value; }
     }
-    public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
+    private KeyValuePair<Pos, IDirection> stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(), null);
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 }

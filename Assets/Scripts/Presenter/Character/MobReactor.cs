@@ -5,6 +5,7 @@ using DG.Tweening;
 [RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(BodyEffect))]
 [RequireComponent(typeof(MobInput))]
+[RequireComponent(typeof(MapUtil))]
 public class MobReactor : MonoBehaviour
 {
     /// <summary>
@@ -15,6 +16,7 @@ public class MobReactor : MonoBehaviour
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
 
     protected MobStatus status;
+    protected MapUtil map;
     protected IBodyEffect effect;
     protected MobInput input;
     protected Collider bodyCollider;
@@ -24,10 +26,8 @@ public class MobReactor : MonoBehaviour
         status = GetComponent<MobStatus>();
         effect = GetComponent<BodyEffect>();
         input = GetComponent<MobInput>();
+        map = GetComponent<MapUtil>();
         bodyCollider = GetComponentInChildren<Collider>();
-
-        // Subscribe just after instantiated to detect MobStatus.OnSpawn()
-        status.Spawn.Subscribe(_ => OnSpawn()).AddTo(this);
     }
 
     protected virtual void Start()
@@ -41,6 +41,8 @@ public class MobReactor : MonoBehaviour
             .SkipLatestValueOnSubscribe()
             .Subscribe(lifeMax => OnLifeMaxChange(lifeMax))
             .AddTo(this);
+
+        status.Active.Subscribe(_ => OnActive()).AddTo(this);
 
         lifeGauge?.UpdateLifeText(status.Life.Value, status.LifeMax.Value);
     }
@@ -104,9 +106,10 @@ public class MobReactor : MonoBehaviour
         bodyCollider.enabled = false;
     }
 
-    public virtual void OnSpawn()
+    public virtual void OnActive()
     {
         effect.OnActive();
+        map.OnActive();
         input.OnActive();
         bodyCollider.enabled = true;
     }
@@ -118,7 +121,11 @@ public class MobReactor : MonoBehaviour
             .Play();
     }
 
-    protected virtual void Dead() => status.Inactivate();
+    protected virtual void Dead()
+    {
+        status.Inactivate();
+        map.ResetTile();
+    }
 
     public void Destroy()
     {
