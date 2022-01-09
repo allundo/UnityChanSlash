@@ -42,7 +42,7 @@ public class BulletEffect : BodyEffect
         fireSound.PlayEx();
         emitVfx?.Play();
         fireVfx?.Play();
-        PlayFlash(FadeInTween(0.5f));
+        PlayFlash(FadeInTween(0.25f));
         rolling?.Restart();
     }
 
