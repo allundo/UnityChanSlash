@@ -5,6 +5,7 @@ using System.Collections.Generic;
 /// Map の Tile の状態を更新するメソッドを公開 <br>
 /// Map の状態とキャラクターの位置・向きに応じた情報を提供するメソッドを公開
 /// </summary>
+[RequireComponent(typeof(MobStatus))]
 public class MapUtil : MonoBehaviour
 {
     protected WorldMap map;

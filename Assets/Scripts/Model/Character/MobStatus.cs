@@ -26,7 +26,6 @@ public class MobStatus : SpawnObject<MobStatus>
 
     public MapUtil map { get; protected set; }
     public IDirection dir => map.dir;
-    public EnemyType type => param.type;
 
     protected IReactiveProperty<float> life;
     public IReadOnlyReactiveProperty<float> Life => life;
@@ -48,6 +47,8 @@ public class MobStatus : SpawnObject<MobStatus>
 
         life = new ReactiveProperty<float>(0f);
         lifeMax = new ReactiveProperty<float>(0f);
+
+        Activate();
     }
 
     public void Damage(float damage)
@@ -93,6 +94,8 @@ public class MobStatus : SpawnObject<MobStatus>
 
         isActive = true;
         gameObject.SetActive(true);
+
+        ResetStatus();
     }
 
     public override void Inactivate()
@@ -113,7 +116,7 @@ public class MobStatus : SpawnObject<MobStatus>
         return this;
     }
 
-    public MobStatus InitParam(MobParam param, float life = 0f)
+    public virtual MobStatus InitParam(MobParam param, float life = 0f)
     {
         this.param = param;
         ResetStatus();

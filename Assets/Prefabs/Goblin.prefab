@@ -1032,9 +1032,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5298232772262024718}
   - component: {fileID: 2262837218705869940}
+  - component: {fileID: 3338548787817563740}
   - component: {fileID: 5624331691699974633}
   - component: {fileID: 5624331691699974638}
-  - component: {fileID: 5624331691699974639}
   - component: {fileID: 5624331691699974636}
   - component: {fileID: 5624331691699974637}
   - component: {fileID: 5624331691699974626}
@@ -1089,6 +1089,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3338548787817563740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4813444263275826356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5624331691699974633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1119,20 +1131,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
   data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
---- !u!114 &5624331691699974639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4813444263275826356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c50a0e85150543a0ae77ca69f894b4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: c2797916bebe04356964d7cb1dd71661, type: 2}
-  dataIndex: 2
 --- !u!114 &5624331691699974636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1183,7 +1181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAttack: {fileID: 5624331689992523025}
-  enemyFire: {fileID: 0}
 --- !u!114 &5624331691699974624
 MonoBehaviour:
   m_ObjectHideFlags: 0

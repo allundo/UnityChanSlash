@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyStatus))]
 public class EnemyMapUtil : MapUtil
 {
     /// <summary>
@@ -41,7 +42,7 @@ public class EnemyMapUtil : MapUtil
     /// <returns>destPos</returns>
     public Pos SetOnEnemy(Pos destPos)
     {
-        map.GetTile(destPos).OnEnemy = status;
+        map.GetTile(destPos).OnEnemy = status as EnemyStatus;
         onTileEnemyPos = destPos;
         return destPos;
     }

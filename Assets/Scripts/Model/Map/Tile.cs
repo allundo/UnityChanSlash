@@ -8,7 +8,7 @@ public interface ITile
     bool IsObjectOn { get; set; }
     bool IsEnemyOn { get; }
     bool IsItemOn { get; }
-    MobStatus OnEnemy { get; set; }
+    EnemyStatus OnEnemy { get; set; }
     bool PutItem(Item item);
     Item PickItem();
     void DisplayItems(bool isShown = true);
@@ -50,7 +50,7 @@ public class Ground : Tile, ITile
     public bool IsViewOpen => true;
     public bool IsObjectOn { get; set; } = false;
     public bool IsEnemyOn => OnEnemy != null;
-    public MobStatus OnEnemy { get; set; } = null;
+    public EnemyStatus OnEnemy { get; set; } = null;
 }
 
 public class Wall : Tile, ITile
@@ -60,7 +60,7 @@ public class Wall : Tile, ITile
     public bool IsViewOpen => false;
     public bool IsObjectOn { get { return false; } set { } }
     public bool IsEnemyOn => false;
-    public MobStatus OnEnemy { get { return null; } set { } }
+    public EnemyStatus OnEnemy { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
 
@@ -73,7 +73,7 @@ public class Door : Tile, ITile
     public bool IsViewOpen => state.IsOpen;
     public bool IsObjectOn { get { return state.isObjectOn; } set { state.isObjectOn = value; } }
     public bool IsEnemyOn => OnEnemy != null;
-    public MobStatus OnEnemy { get; set; } = null;
+    public EnemyStatus OnEnemy { get; set; } = null;
 
     public DoorState state { protected get; set; }
     public bool IsOpen => state.IsOpen;
@@ -90,7 +90,7 @@ public class Stairs : Tile, ITile
     public bool IsViewOpen => true;
     public bool IsObjectOn { get { return false; } set { } }
     public bool IsEnemyOn => false;
-    public MobStatus OnEnemy { get { return null; } set { } }
+    public EnemyStatus OnEnemy { get { return null; } set { } }
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;

@@ -697,7 +697,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7301358922868385108}
   - component: {fileID: 3725479187051396910}
-  - component: {fileID: 5198665846805539408}
+  - component: {fileID: 6806135843735641528}
   - component: {fileID: 505605690554175498}
   - component: {fileID: 2541051171018419898}
   - component: {fileID: 7022502647330896685}
@@ -753,7 +753,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5198665846805539408
+--- !u!114 &6806135843735641528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -762,11 +762,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7933218205718462446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c50a0e85150543a0ae77ca69f894b4f, type: 3}
+  m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: c2797916bebe04356964d7cb1dd71661, type: 2}
-  dataIndex: 0
 --- !u!114 &505605690554175498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,7 +816,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAttack: {fileID: 168930359519291889}
-  enemyFire: {fileID: 0}
 --- !u!135 &1867213726471065726
 SphereCollider:
   m_ObjectHideFlags: 0

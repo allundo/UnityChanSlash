@@ -24,7 +24,7 @@ public class DataAsset<T> : ScriptableObject
 [System.Serializable]
 public class MobParam
 {
-    [SerializeField] public EnemyType type = EnemyType.None;
+    [SerializeField] public string name = "キャラクター";
 
     [SerializeField] public float defaultLifeMax = 10;
 
@@ -45,6 +45,12 @@ public class MobParam
     [SerializeField] public float armorMultiplier = 1.0f;
 
     [SerializeField] public MobStatus prefab = default;
+}
+
+[System.Serializable]
+public class EnemyParam : MobParam
+{
+    [SerializeField] public EnemyType type = EnemyType.None;
 }
 
 [System.Serializable]

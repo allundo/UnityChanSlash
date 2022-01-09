@@ -6,8 +6,8 @@ public class PlayerStatus : MobStatus
 
     protected override void Awake()
     {
+        param = data.Param(0);
         base.Awake();
-        InitParam(data.Param(0));
     }
 
     public void SetPosition() => (map as PlayerMapUtil).SetPosition();

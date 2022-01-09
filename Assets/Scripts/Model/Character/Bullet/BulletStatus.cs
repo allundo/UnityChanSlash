@@ -7,8 +7,8 @@ public class BulletStatus : MobStatus
 
     protected override void Awake()
     {
+        param = data.Param(dataIndex);
         base.Awake();
-        InitParam(data.Param(dataIndex));
     }
 
     public override float CalcAttack(float attack, IDirection attackDir) => attack;

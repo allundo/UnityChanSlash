@@ -6,7 +6,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 {
     [SerializeField] private EnemySpawnPoint prefabEnemySpawnPoint = default;
 
-    [SerializeField] private MobData enemyData = default;
+    [SerializeField] private EnemyData enemyData = default;
     [SerializeField] private EnemyTypesData enemyTypesData = default;
 
     [SerializeField] private int numOfRandomSpawn = 12;
@@ -151,7 +151,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     private struct RespawnData
     {
-        public RespawnData(MobStatus status, Pos pos)
+        public RespawnData(EnemyStatus status, Pos pos)
         {
             this.type = status.type;
             this.pos = pos;

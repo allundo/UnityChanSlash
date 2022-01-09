@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DebugEnemyGenerator : EnemyAutoGenerator
 {
-    [SerializeField] private MobData enemyData = default;
+    [SerializeField] private EnemyData enemyData = default;
     [SerializeField] private EnemyType type = default;
 
     protected override void Awake()
