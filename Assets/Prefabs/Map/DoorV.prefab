@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7630895998581611991}
   - component: {fileID: 7630895998581611990}
   - component: {fileID: 5675944928044116139}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DoorV
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1022,6 +1022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021c5378499a947458ca1b7c90e49f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isObjectOn: 0
 --- !u!1 &7630895998845448115
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,7 +1036,7 @@ GameObject:
   - component: {fileID: 7630895998845448079}
   - component: {fileID: 7630895998845448078}
   - component: {fileID: 7630895998845448077}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DoorL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1676,7 +1677,7 @@ GameObject:
   - component: {fileID: 7630895999622785758}
   - component: {fileID: 7630895999622785757}
   - component: {fileID: 7630895999622785756}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DoorR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
