@@ -15,4 +15,8 @@ public class FireBallGenerator : MobGenerator<MobStatus>
 
         return bullet;
     }
+    public override void DestroyAll()
+    {
+        pool.ForEach(t => t.GetComponent<MobReactor>().Destroy());
+    }
 }

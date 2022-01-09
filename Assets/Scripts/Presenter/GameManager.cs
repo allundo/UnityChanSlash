@@ -177,6 +177,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         debugEnemyGenerator.DestroyAll();
         debugEnemyGenerator.gameObject.SetActive(false);
 
+        fireBallGenerator.DestroyAll();
 
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
