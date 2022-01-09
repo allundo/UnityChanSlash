@@ -8,14 +8,13 @@ public class EnemyAutoGenerator : EnemyGenerator
     protected ITile spawnTile;
     protected Collider detectCharacter;
 
+    protected Coroutine spawnLoop = null;
     protected Coroutine searchCharacter = null;
 
-    protected virtual void Start()
+    protected override void Awake()
     {
+        base.Awake();
         detectCharacter = GetComponent<Collider>();
-
-        detectCharacter.enabled = false;
-        StartCoroutine(SpawnLoop());
     }
 
     public MobStatus Spawn(IDirection dir = null, float life = 0f)
@@ -52,14 +51,27 @@ public class EnemyAutoGenerator : EnemyGenerator
 
     public void OnTriggerEnter(Collider other)
     {
-        MobStatus status = other.GetComponent<MobStatus>();
-
         // Cancel spawning when enemy or player is detected nearby
-        if (status != null)
-        {
-            detectCharacter.enabled = false;
-            StopCoroutine(searchCharacter);
-        }
+        if (other.GetComponent<MobStatus>() != null) StopSearchCharacter();
+    }
 
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+        detectCharacter.enabled = false;
+        spawnLoop = StartCoroutine(SpawnLoop());
+    }
+
+    public void Inactivate()
+    {
+        StopCoroutine(spawnLoop);
+        StopSearchCharacter();
+        gameObject.SetActive(false);
+    }
+
+    private void StopSearchCharacter()
+    {
+        detectCharacter.enabled = false;
+        StopCoroutine(searchCharacter);
     }
 }

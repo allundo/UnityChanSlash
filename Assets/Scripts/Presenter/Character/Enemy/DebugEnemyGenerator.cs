@@ -11,11 +11,12 @@ public class DebugEnemyGenerator : EnemyAutoGenerator
         gameObject.SetActive(false);
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         Vector3 pos = transform.position;
         WorldMap map = GameManager.Instance.worldMap;
         Init(gameObject, map.GetTile(pos), enemyData.Param((int)type));
+
+        Activate();
     }
 }

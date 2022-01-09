@@ -28,7 +28,7 @@ public class EnemySpawnPoint : MonoBehaviour
         // Activate generator when the player is detected nearby
         if (other.GetComponent<EnemySpawnController>() != null)
         {
-            enemyAutoGenerator.gameObject.SetActive(true);
+            enemyAutoGenerator.Activate();
         }
     }
 
@@ -37,7 +37,7 @@ public class EnemySpawnPoint : MonoBehaviour
         // Inactivate generator when the player leaves
         if (other.GetComponent<EnemySpawnController>() != null)
         {
-            enemyAutoGenerator.gameObject.SetActive(false);
+            enemyAutoGenerator.Inactivate();
         }
     }
 }
