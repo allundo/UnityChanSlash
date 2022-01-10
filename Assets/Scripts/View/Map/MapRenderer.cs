@@ -36,8 +36,8 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject gateS = default;
     [SerializeField] private GameObject gateW = default;
     [SerializeField] private GameObject pall = default;
-    [SerializeField] private GameObject doorV = default;
-    [SerializeField] private GameObject doorH = default;
+    [SerializeField] private DoorControl doorV = default;
+    [SerializeField] private DoorControl doorH = default;
     [SerializeField] private GameObject upStairsN = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
@@ -86,12 +86,14 @@ public class MapRenderer : MonoBehaviour
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
     }
 
-    private void SetDoor(Pos pos, GameObject doorPrefab)
+    private void SetDoor(Pos pos, DoorControl doorPrefab)
     {
-        GameObject door = PlacePrefab(pos, doorPrefab);
+        var door = PlacePrefab(pos, doorPrefab.gameObject);
 
         Door tileDoor = map.GetTile(pos) as Door;
         tileDoor.state = door.GetComponent<DoorState>();
+
+        doorsPool.Add(door.GetComponent<DoorControl>());
     }
 
     public void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
@@ -104,6 +106,7 @@ public class MapRenderer : MonoBehaviour
     }
 
     private Stack<GameObject> objectPool = new Stack<GameObject>();
+    private List<DoorControl> doorsPool = new List<DoorControl>();
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
         => PlacePrefab(pos, prefab, Quaternion.identity);
@@ -115,6 +118,9 @@ public class MapRenderer : MonoBehaviour
 
     private void DestroyObjects()
     {
+        doorsPool.ForEach(door => door.KillTween());
+        doorsPool.Clear();
+
         objectPool.ForEach(obj => Destroy(obj));
         objectPool.Clear();
     }

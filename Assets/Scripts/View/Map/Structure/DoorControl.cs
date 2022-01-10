@@ -15,6 +15,12 @@ public class DoorControl : MonoBehaviour
     protected Material materialR;
     protected Material materialL;
 
+    protected Tween doorMove;
+    public void KillTween()
+    {
+        doorMove?.Kill();
+    }
+
     void Awake()
     {
         doorState = GetComponent<DoorState>();
@@ -56,11 +62,11 @@ public class DoorControl : MonoBehaviour
         switch (state)
         {
             case DoorState.StateEnum.OPENING:
-                OpenTween.Play();
+                doorMove = OpenTween.Play();
                 break;
 
             case DoorState.StateEnum.CLOSING:
-                CloseTween.Play();
+                doorMove = CloseTween.Play();
                 break;
         }
     }

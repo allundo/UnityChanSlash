@@ -1787,8 +1787,8 @@ MonoBehaviour:
   gateS: {fileID: 1352475922}
   gateW: {fileID: 420251380}
   pall: {fileID: 322688804}
-  doorV: {fileID: 7630895998581611993, guid: 752f66cf1eab8491485d085e1fcd90e2, type: 3}
-  doorH: {fileID: 5376730180583771968, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb, type: 3}
+  doorV: {fileID: 7630895998581611990, guid: 752f66cf1eab8491485d085e1fcd90e2, type: 3}
+  doorH: {fileID: 2790598104398771217, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb, type: 3}
   upStairsN: {fileID: 2970738456269347428, guid: c4e746f0d2d7e4354b8596d4a2660257,
     type: 3}
 --- !u!1 &233540038
