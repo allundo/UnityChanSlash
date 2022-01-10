@@ -71,7 +71,6 @@ public class MiniMap : MonoBehaviour
         this.map = map;
         enemies.ForEach(kv => kv.Value.Inactivate());
         enemies.Clear();
-        UpdateMiniMap();
     }
 
     void Update()

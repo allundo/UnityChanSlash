@@ -18,7 +18,7 @@ public class HidePlateHandler : MonoBehaviour
     /// <summary>
     /// Turn PlayerSymbol direction with player's turn and update discovered area when calcurating visible area.
     /// </summary>
-    [SerializeField] private MiniMap miniMap = default;
+    [SerializeField] private MiniMapHandler miniMap = default;
 
     protected GameObject plateFront;
 
@@ -221,7 +221,11 @@ public class HidePlateHandler : MonoBehaviour
         hidePlatePool.SwitchWorldMap(map);
         landscape.ResetWorldMapRange();
         portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
+    }
 
+    public void OnStartFloor()
+    {
+        miniMap.OnStartFloor();
         Turn();
     }
 

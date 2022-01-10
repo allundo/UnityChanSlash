@@ -32325,7 +32325,7 @@ GameObject:
   - component: {fileID: 2010569136}
   - component: {fileID: 2010569135}
   m_Layer: 8
-  m_Name: EnemyDetector
+  m_Name: MiniMapHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32354,40 +32354,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2010569133}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96e6959577f2946c4b32a3ff73b577cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b2335713c9c54701a5d85403f6ff6d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8337679454959986929}
-        m_MethodName: OnEnemyFind
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8337679454959986929}
-        m_MethodName: OnEnemyLeft
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  miniMap: {fileID: 8337679454959986929}
 --- !u!135 &2010569136
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -54860,7 +54830,7 @@ MonoBehaviour:
   hidePlatePool: {fileID: 1669641516}
   plateFrontPrefab: {fileID: 3009684819150035271, guid: 27aaebf1280af48638468e9f9e004434,
     type: 3}
-  miniMap: {fileID: 8337679454959986929}
+  miniMap: {fileID: 2010569135}
 --- !u!114 &5079078183111436766
 MonoBehaviour:
   m_ObjectHideFlags: 0
