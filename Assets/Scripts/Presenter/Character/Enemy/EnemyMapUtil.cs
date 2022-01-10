@@ -10,8 +10,8 @@ public class EnemyMapUtil : MapUtil
 
     public override void OnActive()
     {
-        SetOnEnemy(onTilePos);
         SetObjectOn();
+        SetOnEnemy(onTilePos);
     }
     public override void ResetTile()
     {
