@@ -95,4 +95,10 @@ public class BulletEffect : BodyEffect
 
         return fade;
     }
+
+    public override void KillAllTweens()
+    {
+        prevFlash?.Kill();
+        rolling?.Kill();
+    }
 }

@@ -40,7 +40,8 @@ public class BulletMove : BulletCommand
             playingTween = MoveForward(0.75f);
 
             // Call InputDie() independently because it cancels OnComplete Actions during executing them.
-            tweenMove.DelayedCall(0.75f, target.input.InputDie).Play();
+            // FIXME: currently handling it as validate tween to make it cancelable
+            validateTween = tweenMove.DelayedCall(0.75f, target.input.InputDie).Play();
             return ObservableComplete(0.75f);
         }
     }

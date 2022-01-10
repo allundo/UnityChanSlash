@@ -133,6 +133,7 @@ public class MobReactor : MonoBehaviour
         // Stop all tweens before destroying
         input.ClearAll();
         fadeOut?.Kill();
+        effect.KillAllTweens();
 
         bodyCollider.enabled = false;
         map.ResetTile();

@@ -21,6 +21,7 @@ public interface IBodyEffect
 
     Tween FadeInTween(float duration);
     Tween FadeOutTween(float duration);
+    void KillAllTweens();
 }
 
 public class BodyEffect : MonoBehaviour, IBodyEffect
@@ -124,5 +125,10 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
         }
 
         return fade;
+    }
+
+    public virtual void KillAllTweens()
+    {
+        prevFlash?.Kill();
     }
 }
