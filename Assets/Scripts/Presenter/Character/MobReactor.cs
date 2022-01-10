@@ -20,6 +20,7 @@ public class MobReactor : MonoBehaviour
     protected IBodyEffect effect;
     protected MobInput input;
     protected Collider bodyCollider;
+    protected Tween fadeOut;
 
     protected virtual void Awake()
     {
@@ -116,21 +117,26 @@ public class MobReactor : MonoBehaviour
 
     public virtual void FadeOutOnDead(float duration = 0.5f)
     {
-        effect.FadeOutTween(duration)
-            .OnComplete(Dead)
+        fadeOut = effect.FadeOutTween(duration)
+            .OnComplete(OnDead)
             .Play();
     }
 
-    protected virtual void Dead()
+    protected virtual void OnDead()
     {
         status.Inactivate();
         map.ResetTile();
     }
 
-    public void Destroy()
+    public virtual void Destroy()
     {
         // Stop all tweens before destroying
         input.ClearAll();
+        fadeOut?.Kill();
+
+        bodyCollider.enabled = false;
+        map.ResetTile();
+
         Destroy(gameObject);
     }
 }
