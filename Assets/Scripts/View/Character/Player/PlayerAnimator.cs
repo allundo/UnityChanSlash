@@ -23,7 +23,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorBool rest { get; protected set; }
     public AnimatorBool handOn { get; protected set; }
     public AnimatorBool cancel { get; protected set; }
-    public AnimatorBool damage { get; protected set; }
+    public AnimatorFloat lifeRatio { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat brakeOverRun { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
@@ -51,6 +51,7 @@ public class PlayerAnimator : ShieldAnimator
         brake = new TriggerEx(anim, "Brake");
         handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");
+        lifeRatio = new AnimatorFloat(anim, "LifeRatio");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
         brakeOverRun = new AnimatorFloat(anim, "BrakeOverRun");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
@@ -119,8 +120,11 @@ public class PlayerAnimator : ShieldAnimator
     {
         public BoolRest(PlayerAnimator playerAnim) : base(playerAnim.anim, "Rest")
         {
+            int waitHash = Animator.StringToHash("Base Layer.Stand.Wait");
+            int exhaustionHash = Animator.StringToHash("Base Layer.Stand.Exhaustion");
+
             playerAnim.StateEnter
-                .Where(x => x.StateInfo.fullPathHash == Animator.StringToHash("Base Layer.Stand.Rest"))
+                .Where(x => x.StateInfo.fullPathHash == waitHash || x.StateInfo.fullPathHash == exhaustionHash)
                 .Subscribe(_ => Bool = true)
                 .AddTo(playerAnim);
         }

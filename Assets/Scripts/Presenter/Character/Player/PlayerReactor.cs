@@ -6,15 +6,25 @@ using static ShieldInput;
 [RequireComponent(typeof(PlayerStatus))]
 [RequireComponent(typeof(PlayerEffect))]
 [RequireComponent(typeof(PlayerAnimFX))]
+[RequireComponent(typeof(PlayerAnimator))]
 public class PlayerReactor : MobReactor
 {
     [SerializeField] protected RestUI restUI = default;
 
+    protected PlayerAnimator anim;
+
     protected GuardState guardState => (input as PlayerInput).guardState;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        anim = GetComponent<PlayerAnimator>();
+    }
 
     protected override void Start()
     {
         status.Activate();
+        anim.lifeRatio.Float = 1f;
 
         base.Start();
         restUI.Heal.Subscribe(point => OnHealRatio(point, false)).AddTo(this);
@@ -35,6 +45,7 @@ public class PlayerReactor : MobReactor
     {
         base.OnLifeChange(life);
         restUI.OnLifeChange(life, status.LifeMax.Value);
+        anim.lifeRatio.Float = LifeRatio(life);
     }
 
     public override void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)

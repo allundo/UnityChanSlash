@@ -94,7 +94,7 @@ public class MobReactor : MonoBehaviour
         status.Heal(heal);
     }
 
-    private float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);
+    protected float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);
 
     protected virtual float CalcDamage(float attack, IDirection dir)
     {
