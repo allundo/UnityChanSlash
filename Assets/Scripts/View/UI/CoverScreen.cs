@@ -39,27 +39,31 @@ public class CoverScreen : FadeScreen
 
     public Tween CoverOff(float duration = 1f, float delay = 0f)
     {
-        fade?.SetAlpha(0f);
-        // Fade out black image to display screen
-        return fadeMC.Out(duration, delay).SetEase(Ease.InQuad);
+        return DOTween.Sequence()
+            .AppendCallback(() => fade?.SetAlpha(0f))
+            // Fade out black image to display screen
+            .Append(fadeMC.Out(duration, delay).SetEase(Ease.InQuad));
     }
 
     public Tween CoverOn(float duration = 1f, float delay = 0f)
     {
-        fade?.SetAlpha(0f);
-        // Fade out black image to display screen
-        return fadeMC.In(duration, delay).SetEase(Ease.OutQuad);
+        return DOTween.Sequence()
+            .AppendCallback(() => fade?.SetAlpha(0f))
+            // Fade out black image to display screen
+            .Append(fadeMC.In(duration, delay).SetEase(Ease.OutQuad));
     }
 
     public override Tween FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true)
     {
-        fadeMC.SetAlpha(0f);
-        return base.FadeIn(duration, delay, isContinuous);
+        return DOTween.Sequence()
+            .AppendCallback(() => fadeMC.SetAlpha(0f))
+            .Append(base.FadeIn(duration, delay, isContinuous));
     }
 
     public override Tween FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true)
     {
-        fadeMC.SetAlpha(0f);
-        return base.FadeOut(duration, delay, isContinuous);
+        return DOTween.Sequence()
+            .AppendCallback(() => fadeMC.SetAlpha(0f))
+            .Append(base.FadeOut(duration, delay, isContinuous));
     }
 }
