@@ -217,6 +217,7 @@ public class HidePlateHandler : MonoBehaviour
         miniMap.SwitchWorldMap(map);
 
         currentUpdater?.ClearRange(prevPos);
+        currentUpdater?.DispRange(prevPos);
 
         hidePlatePool.SwitchWorldMap(map);
         landscape.ResetWorldMapRange();
@@ -346,6 +347,12 @@ public class HidePlateHandler : MonoBehaviour
                     plateData[playerPos.x + i, playerPos.y + j]?.Remove(0.25f);
                 }
             }
+        }
+
+        public void DispRange(Pos playerPos)
+        {
+            int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
+            Debug.Log("PlateRange: " + (maxRange + map.Width) + " | width = " + width + ", height = " + height + " | PlayerPos: x = " + playerPos.x + ", y = " + playerPos.y);
         }
 
         private void RedrawXShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 1, 0);

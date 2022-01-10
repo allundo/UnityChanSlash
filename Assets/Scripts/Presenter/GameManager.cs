@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UniRx;
+using System.Collections;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -169,23 +170,47 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void EnterStair(bool isDownStairs)
     {
+
+        Observable
+            .Merge(
+                cover.CoverOn().OnCompleteAsObservable().Select(t => Unit.Default),
+                Observable.FromCoroutine(() => MoveFloor(isDownStairs))
+            )
+            .IgnoreElements()
+            .Subscribe(null, StartFloor);
+    }
+
+    private void StartFloor()
+    {
+        hidePlateHandler.OnStartFloor();
+        mainCamera.ResetCamera();
+
+        cover.FadeIn(1f, 0f, false).Play();
+        input.ValidateInput();
+        input.SetInputVisible(true);
+    }
+
+    private IEnumerator MoveFloor(bool isDownStairs)
+    {
+        mainCamera.StopScreen();
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
+        yield return new WaitForEndOfFrame();
 
         mapRenderer.SwitchWorldMap(worldMap);
+        yield return new WaitForEndOfFrame();
 
-        placeEnemyGenerator.SwitchWorldMap(worldMap);
         debugEnemyGenerator.DestroyAll();
         debugEnemyGenerator.gameObject.SetActive(false);
 
+        placeEnemyGenerator.SwitchWorldMap(worldMap);
         fireBallGenerator.DestroyAll();
 
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
+        yield return new WaitForEndOfFrame();
 
         itemGenerator.SwitchWorldMap(worldMap);
         itemGenerator.Turn(map.dir);
-
-        input.ValidateInput();
-        input.SetInputVisible(true);
+        yield return new WaitForEndOfFrame();
     }
 }

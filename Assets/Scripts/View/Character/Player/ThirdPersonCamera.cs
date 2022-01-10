@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UniRx;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -115,5 +116,13 @@ public class ThirdPersonCamera : MonoBehaviour
         SetFadeAlpha(1.0f);
 
         sideCamera.Disable();
+    }
+
+    public void StopScreen()
+    {
+        cam.targetTexture = renderTexture;
+        crossFade.enabled = true;
+        sideCamera.Enable();
+        Observable.NextFrame().Subscribe(_ => cam.targetTexture = null);
     }
 }
