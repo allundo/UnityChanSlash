@@ -39,6 +39,7 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private DoorControl doorV = default;
     [SerializeField] private DoorControl doorH = default;
     [SerializeField] private GameObject upStairsN = default;
+    [SerializeField] private GameObject downStairsN = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -98,7 +99,7 @@ public class MapRenderer : MonoBehaviour
 
     public void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
     {
-        PlacePrefab(pos, upStairsN, dir.Rotate);
+        PlacePrefab(pos, isDownStairs ? downStairsN : upStairsN, dir.Rotate);
 
         Stairs tileStairs = map.GetTile(pos) as Stairs;
         tileStairs.enterDir = dir;
