@@ -104,10 +104,18 @@ public class Commander
     /// <summary>
     /// Clear all Command queue and cancel current executing Command.
     /// </summary>
-    public void ClearAll()
+    public void ClearAll(bool isQueueOnly = false, bool isValidInput = false)
     {
         cmdQueue.Clear();
-        Cancel();
+
+        if (isQueueOnly)
+        {
+            if (!isValidInput) currentCommand?.CancelValidate();
+        }
+        else
+        {
+            Cancel();
+        }
     }
 
     public void Cancel()

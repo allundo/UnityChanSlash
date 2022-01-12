@@ -113,9 +113,9 @@ public abstract class MobInput : MonoBehaviour
         ValidateInput();
     }
 
-    public virtual void ClearAll(bool isValidInput = false)
+    public virtual void ClearAll(bool isQueueOnly = false, bool isValidInput = false)
     {
-        commander.ClearAll();
+        commander.ClearAll(isQueueOnly, isValidInput);
         isCommandValid = isValidInput;
     }
 }

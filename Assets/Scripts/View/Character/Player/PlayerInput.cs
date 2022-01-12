@@ -153,9 +153,9 @@ public class PlayerInput : ShieldInput
         isCommandValid = isTriggerOnly && isCommandValid;
     }
 
-    public override void ClearAll(bool isValidInput = false)
+    public override void ClearAll(bool isQueOnly = false, bool isValidInput = false)
     {
-        commander.ClearAll();
+        commander.ClearAll(isQueOnly, isValidInput);
         isTriggerValid = isCommandValid = isValidInput;
     }
 

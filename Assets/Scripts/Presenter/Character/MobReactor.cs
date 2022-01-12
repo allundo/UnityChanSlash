@@ -104,6 +104,7 @@ public class MobReactor : MonoBehaviour
     public virtual void OnDie()
     {
         effect.OnDie();
+        map.ResetTile();
         bodyCollider.enabled = false;
     }
 
@@ -115,18 +116,14 @@ public class MobReactor : MonoBehaviour
         bodyCollider.enabled = true;
     }
 
-    public virtual void FadeOutOnDead(float duration = 0.5f)
+    public virtual void FadeOutToDead(float duration = 0.5f)
     {
         fadeOut = effect.FadeOutTween(duration)
             .OnComplete(OnDead)
             .Play();
     }
 
-    protected virtual void OnDead()
-    {
-        status.Inactivate();
-        map.ResetTile();
-    }
+    protected virtual void OnDead() => status.Inactivate();
 
     public virtual void Destroy()
     {

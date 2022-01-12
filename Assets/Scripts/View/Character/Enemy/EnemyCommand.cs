@@ -126,10 +126,9 @@ public class EnemyDie : EnemyCommand
 
     public override IObservable<Unit> Execute()
     {
-        enemyMap.ResetTile();
         anim.die.Fire();
         react.OnDie();
 
-        return ExecOnCompleted(() => react.FadeOutOnDead()); // Don't validate input.
+        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
     }
 }

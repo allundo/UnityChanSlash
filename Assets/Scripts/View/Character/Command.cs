@@ -150,6 +150,6 @@ public class DieCommand : Command
         map.RemoveObjectOn();
         react.OnDie();
 
-        return ExecOnCompleted(() => react.FadeOutOnDead()); // Don't validate input.
+        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
     }
 }

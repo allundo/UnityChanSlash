@@ -28,7 +28,13 @@ public class EnemyReactor : MobReactor
         input.ClearAll();
         bodyCollider.enabled = false;
         status.Inactivate();
+    }
+
+    public void Disappear()
+    {
+        input.ClearAll(true, false);
         map.ResetTile();
+        FadeOutToDead();
     }
 
     public override void Destroy()

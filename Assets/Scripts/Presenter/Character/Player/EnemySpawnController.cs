@@ -19,7 +19,7 @@ public class EnemySpawnController : MonoBehaviour
         // Activate generator when the player is detected nearby
         if (enemy != null)
         {
-            enemy.FadeOutOnDead();
+            enemy.Disappear();
         }
     }
 }
