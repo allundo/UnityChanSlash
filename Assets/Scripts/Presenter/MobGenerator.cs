@@ -12,5 +12,5 @@ public class MobGenerator<T> : Generator<T>
     public virtual T Spawn(Vector3 offset, Quaternion rotation, float duration = 0.5f)
         => Spawn(fixedPrefab, offset, rotation, duration);
 
-    protected T GetInstance() => GetInstance(fixedPrefab);
+    protected virtual T GetInstance() => GetInstance(fixedPrefab);
 }

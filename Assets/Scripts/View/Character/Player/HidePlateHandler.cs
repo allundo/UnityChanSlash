@@ -11,15 +11,13 @@ public class HidePlateHandler : MonoBehaviour
     [SerializeField] private HidePlatePool hidePlatePool = default;
 
     /// <summary>
-    /// Large hiding plate that hides far front area.
-    /// </summary>
-    [SerializeField] private GameObject plateFrontPrefab = default;
-
-    /// <summary>
     /// Turn PlayerSymbol direction with player's turn and update discovered area when calcurating visible area.
     /// </summary>
     [SerializeField] private MiniMapHandler miniMap = default;
 
+    /// <summary>
+    /// Large hiding plate that hides far front area.
+    /// </summary>
     protected GameObject plateFront;
 
     // Sub classes having methods for updating HidePlates position.
@@ -81,7 +79,7 @@ public class HidePlateHandler : MonoBehaviour
         map = GameManager.Instance.worldMap;
         mapUtil = GetComponent<PlayerMapUtil>();
 
-        plateFront = Instantiate(plateFrontPrefab, Vector3.zero, Quaternion.identity);
+        plateFront = hidePlatePool.PlateFront(map);
 
         landscape = new LandscapeUpdater(this, RANGE);
         portrait[Direction.north] = new PortraitNUpdater(this, WIDTH, HEIGHT);
@@ -216,10 +214,10 @@ public class HidePlateHandler : MonoBehaviour
 
         miniMap.SwitchWorldMap(map);
 
-        currentUpdater?.ClearRange(prevPos);
-        currentUpdater?.DispRange(prevPos);
+        currentUpdater?.ClearRangeImmediately(prevPos);
 
         hidePlatePool.SwitchWorldMap(map);
+        plateFront = hidePlatePool.PlateFront(map);
         landscape.ResetWorldMapRange();
         portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
     }
@@ -338,22 +336,21 @@ public class HidePlateHandler : MonoBehaviour
         /// <summary>
         /// Clear all plates drawing inside the range.<br />
         /// </summary>
-        public void ClearRange(Pos playerPos)
+        public void ClearRange(Pos playerPos, Action<HidePlate> deleteAction = null)
         {
+            deleteAction = deleteAction ?? (plate => plate?.Remove(0.25f));
+
             for (int j = 0; j < height; j++)
             {
                 for (int i = 0; i < width; i++)
                 {
-                    plateData[playerPos.x + i, playerPos.y + j]?.Remove(0.25f);
+                    deleteAction(plateData[playerPos.x + i, playerPos.y + j]);
                 }
             }
         }
 
-        public void DispRange(Pos playerPos)
-        {
-            int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
-            Debug.Log("PlateRange: " + (maxRange + map.Width) + " | width = " + width + ", height = " + height + " | PlayerPos: x = " + playerPos.x + ", y = " + playerPos.y);
-        }
+        public void ClearRangeImmediately(Pos playerPos)
+            => ClearRange(playerPos, plate => plate?.Inactivate());
 
         private void RedrawXShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 1, 0);
         private void RedrawYShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 0, 1);

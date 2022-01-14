@@ -31,9 +31,9 @@ public class Generator<T> : MonoBehaviour
     /// Returns inactivated but instantiated object to respawn.
     /// </summary>
     /// <returns>SpawnObject; null if there is no inactivated(pooled) object</returns>
-    protected T GetPooledObj() => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<T>();
+    protected virtual T GetPooledObj() => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<T>();
 
-    protected T GetInstance(T prefab) => GetPooledObj() ?? Instantiate(prefab, pool, false);
+    protected virtual T GetInstance(T prefab) => GetPooledObj() ?? Instantiate(prefab, pool, false);
 
     public virtual void DestroyAll()
     {

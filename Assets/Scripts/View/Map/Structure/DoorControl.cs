@@ -15,7 +15,12 @@ public class DoorControl : MonoBehaviour
     protected Material materialR;
     protected Material materialL;
 
+    protected Renderer gateRenderer;
+    protected Renderer doorRRenderer;
+    protected Renderer doorLRenderer;
+
     protected Tween doorMove;
+
     public void KillTween()
     {
         doorMove?.Kill();
@@ -29,15 +34,23 @@ public class DoorControl : MonoBehaviour
         doorR = this.transform.GetChild(0);
         doorL = this.transform.GetChild(1);
 
-        materialGate = GetComponent<Renderer>().material;
-        materialR = doorR.GetComponent<Renderer>().material;
-        materialL = doorL.GetComponent<Renderer>().material;
+        gateRenderer = GetComponent<Renderer>();
+        doorRRenderer = doorR.GetComponent<Renderer>();
+        doorLRenderer = doorL.GetComponent<Renderer>();
     }
 
     void Start()
     {
         ResetAlpha();
     }
+
+    public void SetMaterials(Material materialGate, Material materialDoor)
+    {
+        this.materialGate = Util.SwitchMaterial(gateRenderer, materialGate);
+        this.materialR = Util.SwitchMaterial(doorRRenderer, materialDoor);
+        this.materialL = Util.SwitchMaterial(doorLRenderer, materialDoor);
+    }
+
 
     public void SetAlpha(float distance)
     {

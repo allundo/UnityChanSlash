@@ -88,4 +88,5 @@ public class FloorMaterialsSource
     [SerializeField] public Material door = default;
     [SerializeField] public Material stairs = default;
     [SerializeField] public Material hidePlate = default;
+    [SerializeField] public Material plateFront = default;
 }

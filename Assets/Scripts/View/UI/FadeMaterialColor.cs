@@ -16,8 +16,8 @@ public class FadeMaterialColor : FadeTween
     public FadeMaterialColor(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
         : base(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause)
     {
-        material = gameObject.GetComponent<Renderer>()?.material
-            ?? gameObject.GetComponent<MaskableGraphic>().material;
+        material = gameObject.GetComponent<Renderer>()?.sharedMaterial
+            ?? gameObject.GetComponent<MaskableGraphic>()?.material;
 
         this.gameObject = gameObject;
     }
@@ -37,5 +37,21 @@ public class FadeMaterialColor : FadeTween
     public override void SetActive(bool isActive = true)
     {
         gameObject.SetActive(isActive);
+    }
+
+    public void SetMaterial(Material material)
+    {
+        KillTweens();
+
+        var renderer = gameObject.GetComponent<Renderer>();
+
+        if (renderer != null)
+        {
+            this.material = Util.SwitchMaterial(renderer, material);
+        }
+        else
+        {
+            this.material = Util.SwitchMaterial(gameObject.GetComponent<MaskableGraphic>(), material);
+        }
     }
 }

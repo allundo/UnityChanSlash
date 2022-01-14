@@ -16,6 +16,12 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         fade = new FadeMaterialColor(gameObject, 1f);
     }
 
+    public HidePlate SetMaterial(Material material)
+    {
+        (fade as FadeMaterialColor).SetMaterial(material);
+        return this;
+    }
+
     public HidePlate OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.01f)
     {
         transform.position = pos;
@@ -43,5 +49,12 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         fadeInTween?.Kill();
 
         removeTween = FadeOut(duration).SetEase(Ease.Linear).Play();
+    }
+
+    public void RemoveImmediately()
+    {
+        fadeInTween?.Kill();
+        removeTween?.Kill();
+        Inactivate();
     }
 }

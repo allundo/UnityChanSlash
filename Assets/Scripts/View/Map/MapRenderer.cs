@@ -5,8 +5,9 @@ using UnityEngine.ProBuilder;
 
 public class MapRenderer : MonoBehaviour
 {
-    // FIXME: only used to get num of floors
-    [SerializeField] private EnemyTypesData enemyTypesData = default;
+    [SerializeField] private FloorMaterialsData floorMaterialsData = default;
+    private FloorMaterialsSource floorMaterials;
+
     private List<Pos>[] doorOpenData;
 
     public WorldMap map { get; private set; }
@@ -38,8 +39,9 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject pall = default;
     [SerializeField] private DoorControl doorV = default;
     [SerializeField] private DoorControl doorH = default;
-    [SerializeField] private GameObject upStairsN = default;
-    [SerializeField] private GameObject downStairsN = default;
+    [SerializeField] private StairsControl upStairsN = default;
+    [SerializeField] private StairsControl downStairsN = default;
+    [SerializeField] private GameObject ground = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -51,7 +53,7 @@ public class MapRenderer : MonoBehaviour
 
     void Awake()
     {
-        doorOpenData = new List<Pos>[enemyTypesData.Length].Select(_ => new List<Pos>()).ToArray();
+        doorOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
     }
 
     ///  <summary>
@@ -94,20 +96,23 @@ public class MapRenderer : MonoBehaviour
         Door tileDoor = map.GetTile(pos) as Door;
         tileDoor.state = door.GetComponent<DoorState>();
 
-        doorsPool.Add(door.GetComponent<DoorControl>());
+        doorsPool.Push(door.GetComponent<DoorControl>());
+        doorsPool.Peek().SetMaterials(floorMaterials.gate, floorMaterials.door);
     }
 
     public void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
     {
-        PlacePrefab(pos, isDownStairs ? downStairsN : upStairsN, dir.Rotate);
+        var stairs = PlacePrefab(pos, (isDownStairs ? downStairsN : upStairsN).gameObject, dir.Rotate);
 
         Stairs tileStairs = map.GetTile(pos) as Stairs;
         tileStairs.enterDir = dir;
         tileStairs.isDownStairs = isDownStairs;
+
+        stairs.GetComponent<StairsControl>().SetMaterials(floorMaterials.stairs, isDownStairs ? floorMaterials.wall : null);
     }
 
     private Stack<GameObject> objectPool = new Stack<GameObject>();
-    private List<DoorControl> doorsPool = new List<DoorControl>();
+    private Stack<DoorControl> doorsPool = new Stack<DoorControl>();
 
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
         => PlacePrefab(pos, prefab, Quaternion.identity);
@@ -135,6 +140,9 @@ public class MapRenderer : MonoBehaviour
 
         var dirMap = map.CloneDirMap();
         var matrix = map.CloneMatrix();
+
+        floorMaterials = floorMaterialsData.Param(map.floor - 1);
+        Util.SwitchMaterial(ground.GetComponent<Renderer>(), floorMaterials.ground);
 
         var terrainMeshes = new List<CombineInstance>();
 
@@ -216,6 +224,7 @@ public class MapRenderer : MonoBehaviour
 
         // ProBuilder managed Mesh needs MeshUtility.CopyTo() to apply another Mesh object
         MeshUtility.CopyTo(combinedMesh, wallParent.GetComponent<MeshFilter>().sharedMesh);
+        Util.SwitchMaterial(wallParent.GetComponent<Renderer>(), floorMaterials.wall);
         wallParent.SetActive(true);
 
         Destroy(combinedMesh);

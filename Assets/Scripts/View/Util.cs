@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Util
 {
@@ -19,4 +20,19 @@ public class Util
 
     public static T Instantiate<T>(T prefab, Transform parent = null, bool instantiateInWorldSpace = false) where T : UnityEngine.Object
         => IsNull(prefab) ? prefab : UnityEngine.Object.Instantiate(prefab, parent, instantiateInWorldSpace);
+
+    public static Material SwitchMaterial(Renderer renderer, Material matSrc)
+    {
+        var matPrev = renderer.sharedMaterial;
+        renderer.material = new Material(matSrc);
+        if (matPrev != null) UnityEngine.Object.Destroy(matPrev);
+        return renderer.sharedMaterial;
+    }
+
+    public static Material SwitchMaterial(MaskableGraphic image, Material matSrc)
+    {
+        var matPrev = image.material;
+        if (matPrev != null) UnityEngine.Object.Destroy(matPrev);
+        return image.material = new Material(matSrc);
+    }
 }

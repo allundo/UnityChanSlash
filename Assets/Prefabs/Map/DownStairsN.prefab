@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1780277762034702524}
   - component: {fileID: 1780277762034702525}
   - component: {fileID: 1780277762034702522}
+  - component: {fileID: 4578704803065865090}
   m_Layer: 0
   m_Name: DownStairsN
   m_TagString: Untagged
@@ -31,8 +32,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8030132754119977834}
   - {fileID: 3829987005421692534}
+  - {fileID: 8030132754119977834}
   - {fileID: 3829987005976661753}
   - {fileID: 8602821305350071153}
   m_Father: {fileID: 0}
@@ -1028,7 +1029,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1071,6 +1072,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &4578704803065865090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780277762034702520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f25fb8fdcc547c2a4cecd3e1b3b164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rendererWalls: {fileID: 3829987005421692532}
 --- !u!1 &3829987005421692537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +1117,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1780277762034702523}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3829987005421692533
 MonoBehaviour:
@@ -1252,7 +1266,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1489,7 +1503,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1780277762034702523}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &263445331335677517
 MonoBehaviour:

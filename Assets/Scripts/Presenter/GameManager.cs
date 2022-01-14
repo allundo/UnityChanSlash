@@ -22,7 +22,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private PlayerInput input = default;
     private PlayerMapUtil map = default;
 
-
     private bool isInitialOrientation = true;
 
     public bool isPaused { get; private set; } = false;
