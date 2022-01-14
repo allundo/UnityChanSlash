@@ -72,9 +72,20 @@ public class DamageSndSource
     [SerializeField] public AudioSource guard = default;
 }
 
-
 [System.Serializable]
 public class EnemyTypesSource
 {
     [SerializeField] public EnemyType[] types;
+}
+
+[System.Serializable]
+public class FloorMaterialsSource
+{
+    [SerializeField] public string name = "通常ダンジョン";
+    [SerializeField] public Material ground = default;
+    [SerializeField] public Material wall = default;
+    [SerializeField] public Material gate = default;
+    [SerializeField] public Material door = default;
+    [SerializeField] public Material stairs = default;
+    [SerializeField] public Material hidePlate = default;
 }
