@@ -43,6 +43,7 @@ public class ShieldAnimator : MobAnimator
 
         triggers.RemoveAll(trigger => trigger.order == minOrder);
     }
+
     public void ClearTriggers()
     {
         triggers.Clear();
@@ -83,7 +84,5 @@ public class ShieldAnimator : MobAnimator
             if (order == other.order) return 0;
             return order > other.order ? 1 : -1;
         }
-
-
     }
 }
