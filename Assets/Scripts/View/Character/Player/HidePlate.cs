@@ -11,14 +11,25 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
     private Tween fadeInTween = null;
     private Tween removeTween = null;
 
+    private Material material;
+    private Renderer plateRenderer;
+
+    private float[] angle = new float[0b10000];
     protected override void Awake()
     {
+        plateRenderer = GetComponent<Renderer>();
         fade = new FadeMaterialColor(gameObject, 1f);
+
+        angle[(int)Plate.A] = angle[(int)Plate.AB] = angle[(int)Plate.ABC] = angle[(int)Plate.ABCD] = angle[(int)Plate.AD] = 0f;
+        angle[(int)Plate.B] = angle[(int)Plate.BD] = angle[(int)Plate.ABD] = angle[(int)Plate.BC] = 90f;
+        angle[(int)Plate.D] = angle[(int)Plate.CD] = angle[(int)Plate.BCD] = 180f;
+        angle[(int)Plate.C] = angle[(int)Plate.AC] = angle[(int)Plate.ACD] = -90f;
     }
 
     public HidePlate SetMaterial(Material material)
     {
-        (fade as FadeMaterialColor).SetMaterial(material);
+        this.material = Util.SwitchMaterial(plateRenderer, material);
+        (fade as FadeMaterialColor).SetMaterial(this.material);
         return this;
     }
 
@@ -33,9 +44,10 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         return this;
     }
 
-    public HidePlate SetPlate(Plate plate)
+    public HidePlate SetPlateType(Plate plate, float angle = 0f)
     {
         this.plate = plate;
+        material.SetFloat("_Angle", -angle / 360f);
         return this;
     }
 

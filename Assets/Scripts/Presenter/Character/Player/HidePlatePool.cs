@@ -23,7 +23,6 @@ public class HidePlatePool : MonoBehaviour
     GameObject plateFront;
 
     private HidePlateGenerator[] generator = new HidePlateGenerator[0b10000];
-    private Quaternion[] rotate = new Quaternion[0b10000];
 
     private WorldMap map;
 
@@ -47,11 +46,6 @@ public class HidePlatePool : MonoBehaviour
         plateFullGenerator = generator[(int)Plate.ABCD] = InstantiateGenerator(prefabHidePlateFull, mat);
         plateCrossGenerator = generator[(int)Plate.AD] = generator[(int)Plate.BC] = InstantiateGenerator(prefabHidePlateCross, mat);
         generator[(int)Plate.NONE] = null;
-
-        rotate[(int)Plate.A] = rotate[(int)Plate.AB] = rotate[(int)Plate.ABC] = rotate[(int)Plate.ABCD] = rotate[(int)Plate.AD] = Quaternion.identity;
-        rotate[(int)Plate.B] = rotate[(int)Plate.BD] = rotate[(int)Plate.ABD] = rotate[(int)Plate.BC] = Quaternion.Euler(0, 90, 0);
-        rotate[(int)Plate.D] = rotate[(int)Plate.CD] = rotate[(int)Plate.BCD] = Quaternion.Euler(0, 180, 0);
-        rotate[(int)Plate.C] = rotate[(int)Plate.AC] = rotate[(int)Plate.ACD] = Quaternion.Euler(0, -90, 0);
     }
 
     private HidePlateGenerator InstantiateGenerator(HidePlate prefabHidePlate, Material mat)
@@ -70,7 +64,7 @@ public class HidePlatePool : MonoBehaviour
     /// <returns>One of pooled HidePlate or newly instantiated if not pooled</returns>
     public HidePlate SpawnPlate(Plate plate, Pos pos, float duration = 0.01f)
     {
-        return generator[(int)plate]?.Spawn(map.WorldPos(pos), rotate[(int)plate], duration)?.SetPlate(plate);
+        return generator[(int)plate]?.Spawn(map.WorldPos(pos), plate, duration);
     }
 
     public void SwitchWorldMap(WorldMap map)

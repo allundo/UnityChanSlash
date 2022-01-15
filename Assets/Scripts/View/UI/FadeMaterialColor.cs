@@ -42,16 +42,6 @@ public class FadeMaterialColor : FadeTween
     public void SetMaterial(Material material)
     {
         KillTweens();
-
-        var renderer = gameObject.GetComponent<Renderer>();
-
-        if (renderer != null)
-        {
-            this.material = Util.SwitchMaterial(renderer, material);
-        }
-        else
-        {
-            this.material = Util.SwitchMaterial(gameObject.GetComponent<MaskableGraphic>(), material);
-        }
+        this.material = material;
     }
 }

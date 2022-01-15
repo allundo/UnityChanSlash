@@ -150,7 +150,6 @@ public class HidePlateHandler : MonoBehaviour
         UpdateRange((playerPos, plateMap) => currentUpdater.MoveRange(playerPos, plateMap));
     }
 
-
     /// <summary>
     /// Turn the HidePlates with player's turning. <br />
     /// </summary>
@@ -188,7 +187,7 @@ public class HidePlateHandler : MonoBehaviour
     /// <param name="orientation"></param>
     public void ReformHidePlates(DeviceOrientation orientation)
     {
-        currentUpdater?.ClearRange(CurrentPos);
+        currentUpdater?.ClearRangeImmediately(CurrentPos);
 
         switch (orientation)
         {
@@ -206,6 +205,8 @@ public class HidePlateHandler : MonoBehaviour
         }
 
         Draw();
+        // Debug.Log("####### Check Angles #############");
+        // hidePlatePool.CheckAngles();
     }
 
     public void SwitchWorldMap(WorldMap map)
@@ -215,8 +216,8 @@ public class HidePlateHandler : MonoBehaviour
         miniMap.SwitchWorldMap(map);
 
         currentUpdater?.ClearRangeImmediately(prevPos);
-
         hidePlatePool.SwitchWorldMap(map);
+
         plateFront = hidePlatePool.PlateFront(map);
         landscape.ResetWorldMapRange();
         portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
@@ -306,6 +307,7 @@ public class HidePlateHandler : MonoBehaviour
                     int x = playerPos.x + i;
                     int y = playerPos.y + j;
                     plateData[x, y] = SpawnPlate(plateMap[i, j], startPos.Add(i, j));
+                    // plateData[x, y]?.CheckAngle();
                 }
             }
         }

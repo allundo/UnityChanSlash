@@ -222,10 +222,8 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 16
-    b: 18
-  m_SelectedVertices: 1000000012000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!23 &3316402585005141040
 MeshRenderer:
   m_ObjectHideFlags: 0
