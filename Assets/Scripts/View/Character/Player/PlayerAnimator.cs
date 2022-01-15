@@ -38,17 +38,17 @@ public class PlayerAnimator : ShieldAnimator
     {
         base.Awake();
 
-        turnL = new TriggerEx(anim, "TurnL");
-        turnR = new TriggerEx(anim, "TurnR");
-        handle = new TriggerEx(anim, "Handle");
-        putItem = new TriggerEx(anim, "PutItem");
-        getItem = new TriggerEx(anim, "GetItem");
-        jab = new TriggerEx(anim, "Jab", 5);
-        straight = new TriggerEx(anim, "Straight", 5);
-        kick = new TriggerEx(anim, "Kick", 5);
-        dieEx = new TriggerEx(anim, "Die", 0);
-        dropFloor = new TriggerEx(anim, "DropFloor", 0);
-        brake = new TriggerEx(anim, "Brake");
+        turnL = new TriggerEx(triggers, anim, "TurnL");
+        turnR = new TriggerEx(triggers, anim, "TurnR");
+        handle = new TriggerEx(triggers, anim, "Handle");
+        putItem = new TriggerEx(triggers, anim, "PutItem");
+        getItem = new TriggerEx(triggers, anim, "GetItem");
+        jab = new TriggerEx(triggers, anim, "Jab", 5);
+        straight = new TriggerEx(triggers, anim, "Straight", 5);
+        kick = new TriggerEx(triggers, anim, "Kick", 5);
+        dieEx = new TriggerEx(triggers, anim, "Die", 0);
+        dropFloor = new TriggerEx(triggers, anim, "DropFloor", 0);
+        brake = new TriggerEx(triggers, anim, "Brake");
         handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");
         lifeRatio = new AnimatorFloat(anim, "LifeRatio");
@@ -72,7 +72,8 @@ public class PlayerAnimator : ShieldAnimator
         protected PlayerBodyCollider bodyCollider;
         protected PlayerAnimator playerAnim;
 
-        public TriggerUpdate(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider, string varName, string fullPathStateName) : base(playerAnim.anim, varName)
+        public TriggerUpdate(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider, string varName, string fullPathStateName)
+            : base(playerAnim.triggers, playerAnim.anim, varName)
         {
             this.playerAnim = playerAnim;
             this.animatorFloat = animatorFloat;

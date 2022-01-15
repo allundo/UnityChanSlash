@@ -9,10 +9,10 @@ public class ShieldEnemyAnimator : ShieldAnimator, IEnemyAnimator
     protected override void Awake()
     {
         base.Awake();
-        attack = new TriggerEx(anim, "Attack");
-        fire = new TriggerEx(anim, "Fire");
+        attack = new TriggerEx(triggers, anim, "Attack");
+        fire = new TriggerEx(triggers, anim, "Fire");
         fighting = new AnimatorBool(anim, "Fighting");
-        turnL = new TriggerEx(anim, "TurnL");
-        turnR = new TriggerEx(anim, "TurnR");
+        turnL = new TriggerEx(triggers, anim, "TurnL");
+        turnR = new TriggerEx(triggers, anim, "TurnR");
     }
 }

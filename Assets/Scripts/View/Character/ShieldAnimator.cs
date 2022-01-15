@@ -4,48 +4,53 @@ using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 
-public abstract class ShieldAnimator : MobAnimator
+public class ShieldAnimator : MobAnimator
 {
+    protected List<TriggerEx> triggers = new List<TriggerEx>();
+
     public AnimatorBool guard { get; protected set; }
     public TriggerEx shield { get; protected set; }
 
     protected override void Awake()
     {
         base.Awake();
-        shield = new TriggerEx(anim, "Shield", 1);
+        shield = new TriggerEx(triggers, anim, "Shield", 1);
         guard = new AnimatorBool(anim, "Guard");
     }
 
     protected virtual void Update()
     {
-        TriggerEx.SetOrderedTriggers();
+        SetOrderedTriggers();
+    }
+
+    /// <summary>
+    /// Fires stocked triggers having the minimum order(highest priority)
+    /// </summary>
+    public void SetOrderedTriggers()
+    {
+        if (triggers.Count == 0) return;
+
+        triggers.Sort();
+
+        int minOrder = triggers.First().order;
+
+        foreach (TriggerEx trigger in triggers)
+        {
+            if (trigger.order > minOrder) break;
+
+            trigger.Execute();
+        }
+
+        triggers.RemoveAll(trigger => trigger.order == minOrder);
+    }
+    public void ClearTriggers()
+    {
+        triggers.Clear();
     }
 
     public class TriggerEx : AnimatorTrigger, IComparable<TriggerEx>
     {
-        protected static List<TriggerEx> triggers = new List<TriggerEx>();
-
-        /// <summary>
-        /// Fires stocked triggers having the minimum order(highest priority)
-        /// </summary>
-        public static void SetOrderedTriggers()
-        {
-            if (triggers.Count == 0) return;
-
-            triggers.Sort();
-
-            int minOrder = triggers.First().order;
-
-            foreach (TriggerEx trigger in triggers)
-            {
-                if (trigger.order > minOrder) break;
-
-                trigger.Execute();
-            }
-
-            triggers.RemoveAll(trigger => trigger.order == minOrder);
-
-        }
+        protected List<TriggerEx> triggers;
 
         public int order;
 
@@ -54,8 +59,9 @@ public abstract class ShieldAnimator : MobAnimator
         /// </summary>
         /// <param name="order">Sort order; lower order has higher priority</param>
         /// <returns></returns>
-        public TriggerEx(Animator anim, string varName, int order = 10) : base(anim, varName)
+        public TriggerEx(List<TriggerEx> triggers, Animator anim, string varName, int order = 10) : base(anim, varName)
         {
+            this.triggers = triggers;
             this.order = order;
         }
 
@@ -77,5 +83,7 @@ public abstract class ShieldAnimator : MobAnimator
             if (order == other.order) return 0;
             return order > other.order ? 1 : -1;
         }
+
+
     }
 }
