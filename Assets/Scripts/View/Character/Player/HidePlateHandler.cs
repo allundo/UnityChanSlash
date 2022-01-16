@@ -49,7 +49,7 @@ public class HidePlateHandler : MonoBehaviour
     /// <summary>
     /// Player's direction related data for Turn.
     /// </summary>
-    private MapUtil mapUtil;
+    private IMapUtil mapUtil;
 
     protected const int RANGE = 11;
     protected const int WIDTH = 7;

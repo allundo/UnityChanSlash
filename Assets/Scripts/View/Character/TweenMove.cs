@@ -6,10 +6,10 @@ public class TweenMove
     public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
     protected float duration;
-    protected MapUtil map;
+    protected IMapUtil map;
     protected Transform tf;
 
-    public TweenMove(Transform tf, MapUtil map, float duration)
+    public TweenMove(Transform tf, IMapUtil map, float duration)
     {
         this.tf = tf;
         this.map = map;

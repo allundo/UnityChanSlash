@@ -41,7 +41,7 @@ public abstract class MobInput : MonoBehaviour, IInput
 
     protected ICommand die = null;
 
-    protected MapUtil map;
+    protected IMapUtil map;
 
     protected virtual void Awake()
     {

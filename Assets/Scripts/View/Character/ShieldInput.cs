@@ -23,7 +23,7 @@ public abstract class ShieldInput : MobInput
     public class GuardState
     {
         protected ShieldInput input;
-        protected MapUtil map;
+        protected IMapUtil map;
         private ICommand shieldOn;
 
         public virtual bool IsShieldOn(IDirection attackDir) => input.IsShield && map.dir.IsInverse(attackDir);

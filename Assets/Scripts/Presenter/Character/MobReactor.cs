@@ -16,7 +16,7 @@ public class MobReactor : MonoBehaviour
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
 
     protected MobStatus status;
-    protected MapUtil map;
+    protected IMapUtil map;
     protected IBodyEffect effect;
     protected IInput input;
     protected Collider bodyCollider;

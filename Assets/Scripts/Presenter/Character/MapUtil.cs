@@ -5,7 +5,7 @@ using UnityEngine;
 /// Map の状態とキャラクターの位置・向きに応じた情報を提供するメソッドを公開
 /// </summary>
 [RequireComponent(typeof(MobStatus))]
-public class MapUtil : MonoBehaviour
+public class MapUtil : MonoBehaviour, IMapUtil
 {
     protected MobStatus status;
     protected WorldMap map;

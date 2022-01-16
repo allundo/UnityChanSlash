@@ -27,7 +27,7 @@ public class CommandTarget : MonoBehaviour
     /// <summary>
     /// Direction related data for Command execution.
     /// </summary>
-    public MapUtil map { get; protected set; }
+    public IMapUtil map { get; protected set; }
 
     /// <summary>
     /// Bullet attack source. Not imperative.
