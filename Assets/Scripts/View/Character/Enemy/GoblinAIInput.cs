@@ -7,13 +7,13 @@ public class GoblinAIInput : ShieldInput
 {
     protected ShieldEnemyAnimator shieldAnim;
 
-    protected Command idle;
-    protected Command moveForward;
-    protected Command run;
-    protected Command turnL;
-    protected Command turnR;
-    protected Command guard;
-    protected Command attack;
+    protected ICommand idle;
+    protected ICommand moveForward;
+    protected ICommand run;
+    protected ICommand turnL;
+    protected ICommand turnR;
+    protected ICommand guard;
+    protected ICommand attack;
 
     protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
@@ -37,7 +37,7 @@ public class GoblinAIInput : ShieldInput
         shieldAnim = target.anim as ShieldEnemyAnimator;
     }
 
-    protected override Command GetCommand()
+    protected override ICommand GetCommand()
     {
         var currentCommand = commander.currentCommand;
 

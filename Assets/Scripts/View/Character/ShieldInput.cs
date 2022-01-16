@@ -24,7 +24,7 @@ public abstract class ShieldInput : MobInput
     {
         protected ShieldInput input;
         protected MapUtil map;
-        private Command shieldOn;
+        private ICommand shieldOn;
 
         public virtual bool IsShieldOn(IDirection attackDir) => input.IsShield && map.dir.IsInverse(attackDir);
 

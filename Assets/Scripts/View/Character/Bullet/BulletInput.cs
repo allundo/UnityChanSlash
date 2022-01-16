@@ -3,8 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(BulletCommandTarget))]
 public class BulletInput : MobInput
 {
-    protected Command fire;
-    protected Command moveForward;
+    protected ICommand fire;
+    protected ICommand moveForward;
 
     protected override void SetCommands()
     {
@@ -20,5 +20,5 @@ public class BulletInput : MobInput
         Interrupt(fire);
     }
 
-    protected override Command GetCommand() => moveForward;
+    protected override ICommand GetCommand() => moveForward;
 }

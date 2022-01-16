@@ -5,7 +5,7 @@ using System;
 using DG.Tweening;
 
 /// <summary>
-/// Convert player input UIs operation into a Command and enqueue it to PlayerCommander.<br />
+/// Convert player input UIs operation into a ICommand and enqueue it to PlayerCommander.<br />
 /// In addition to MobInput, there is 'Trigger type' input implemented to improve usability.<br />
 /// </summary>
 [RequireComponent(typeof(PlayerCommandTarget))]
@@ -59,7 +59,7 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected bool isInputVisible = false;
 
-    // Reserved Command input applied by other classes.
+    // Reserved ICommand input applied by other classes.
     // FIXME: need to implement game events handling system.
     public void EnqueueDropFloor() => Interrupt(new PlayerDropFloor(playerTarget, 220f));
     public void EnqueueStartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data));
@@ -94,14 +94,14 @@ public class PlayerInput : ShieldInput
         DisplayInputUIs();
     }
 
-    protected override Command GetCommand() => null;
+    protected override ICommand GetCommand() => null;
 
     /// <summary>
-    /// Input a Command to PlayerCommander. <br />
+    /// Input a ICommand to PlayerCommander. <br />
     /// When Normal input is applied, Trigger input is invalidated.
     /// </summary>
     /// <param name="cmd">Command to input</param>
-    public override void InputCommand(Command cmd)
+    public override void InputCommand(ICommand cmd)
     {
         bool isTriggerValid = this.isTriggerValid;
         this.isTriggerValid = false; // Disable Trigger input UI
@@ -114,9 +114,9 @@ public class PlayerInput : ShieldInput
     }
 
     /// <summary>
-    /// Input a Command to PlayerCommander while isTriggerValid flag allows.
+    /// Input a ICommand to PlayerCommander while isTriggerValid flag allows.
     /// </summary>
-    public void InputTrigger(Command cmd)
+    public void InputTrigger(ICommand cmd)
     {
         if (!isTriggerValid || cmd == null) return;
 
@@ -273,9 +273,9 @@ public class PlayerInput : ShieldInput
     protected void InitFightInput()
     {
         // TODO: Refer duration and cancel time value from AttackButton object
-        Command jab = new PlayerJab(playerTarget, 21.6f);
-        Command straight = new PlayerStraight(playerTarget, 30f);
-        Command kick = new PlayerKick(playerTarget, 43f);
+        ICommand jab = new PlayerJab(playerTarget, 21.6f);
+        ICommand straight = new PlayerStraight(playerTarget, 30f);
+        ICommand kick = new PlayerKick(playerTarget, 43f);
 
         fightCircle.JabButton
             .Subscribe(_ => InputCommand(jab))
@@ -295,9 +295,9 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitHandleInput()
     {
-        Command forward = new PlayerForward(playerTarget, 36f);
-        Command handle = new PlayerHandle(playerTarget, 14.4f);
-        Command getItem = new PlayerGetItem(playerTarget, 28.8f);
+        ICommand forward = new PlayerForward(playerTarget, 36f);
+        ICommand handle = new PlayerHandle(playerTarget, 14.4f);
+        ICommand getItem = new PlayerGetItem(playerTarget, 28.8f);
         PlayerPutItem putItem = new PlayerPutItem(playerTarget, 14.4f);
 
         Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
@@ -331,19 +331,19 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected void InitMoveInput()
     {
-        Command forward = new PlayerForward(playerTarget, 36f);
-        Command right = new PlayerRight(playerTarget, 43f);
-        Command left = new PlayerLeft(playerTarget, 43f);
-        Command backward = new PlayerBack(playerTarget, 43f);
-        Command run = new PlayerRun(playerTarget, 24f);
-        Command startRunning = new PlayerStartRunning(playerTarget, 24f);
+        ICommand forward = new PlayerForward(playerTarget, 36f);
+        ICommand right = new PlayerRight(playerTarget, 43f);
+        ICommand left = new PlayerLeft(playerTarget, 43f);
+        ICommand backward = new PlayerBack(playerTarget, 43f);
+        ICommand run = new PlayerRun(playerTarget, 24f);
+        ICommand startRunning = new PlayerStartRunning(playerTarget, 24f);
         var brake = new PlayerBrake(playerTarget, 48f);
 
-        Command turnR = new PlayerTurnR(playerTarget, 18f);
-        Command turnL = new PlayerTurnL(playerTarget, 18f);
-        Command jump = new PlayerJump(playerTarget, 72f);
+        ICommand turnR = new PlayerTurnR(playerTarget, 18f);
+        ICommand turnL = new PlayerTurnL(playerTarget, 18f);
+        ICommand jump = new PlayerJump(playerTarget, 72f);
 
-        Command guard = new GuardCommand(playerTarget, 1.44f);
+        ICommand guard = new GuardCommand(playerTarget, 1.44f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))

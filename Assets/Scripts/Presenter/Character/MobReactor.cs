@@ -18,7 +18,7 @@ public class MobReactor : MonoBehaviour
     protected MobStatus status;
     protected MapUtil map;
     protected IBodyEffect effect;
-    protected MobInput input;
+    protected IInput input;
     protected Collider bodyCollider;
     protected Tween fadeOut;
 

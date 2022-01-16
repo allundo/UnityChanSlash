@@ -3,7 +3,27 @@ using System;
 using System.Collections.Generic;
 using UniRx;
 
-public abstract class Command
+public interface ICommand
+{
+    /// <summary>
+    /// Cancel all behavior of the Command.
+    /// </summary>
+    void Cancel();
+
+    /// <summary>
+    /// Cancels validating input on current Command execution. <br />
+    /// Make sure that a Command including input validation like validateTween is queued next. <br />
+    /// </summary>
+    void CancelValidate();
+
+    /// <summary>
+    /// Execute command mainly to apply something to CommandTarget.
+    /// </summary>
+    /// <returns>Observable notifies Command completion.</returns>
+    IObservable<Unit> Execute();
+}
+
+public abstract class Command : ICommand
 {
     public static readonly float FRAME_UNIT = Constants.FRAME_SEC_UNIT;
     public static readonly float TILE_UNIT = Constants.TILE_UNIT;
@@ -16,7 +36,7 @@ public abstract class Command
     protected CommandTarget target;
     protected MobAnimator anim;
     protected MobReactor react;
-    protected MobInput input;
+    protected IInput input;
     protected MapUtil map;
 
     protected IObserver<bool> onValidateInput;
@@ -120,8 +140,8 @@ public abstract class Command
 
     protected virtual bool Action() => false;
 
-    public virtual float Speed => 0.0f;
-    public virtual float RSpeed => 0.0f;
+    protected virtual float Speed => 0.0f;
+    protected virtual float RSpeed => 0.0f;
 
     protected Sequence JoinTweens(params Tween[] tweens)
     {

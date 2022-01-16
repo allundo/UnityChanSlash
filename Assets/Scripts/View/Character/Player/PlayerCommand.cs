@@ -15,7 +15,8 @@ public abstract class PlayerCommand : Command
 
     protected float triggerInvalidDuration;
 
-    public PlayerCommand(PlayerCommandTarget target, float duration, float validateTiming = 0.5f, float triggerTiming = 0.5f) : base(target, duration, validateTiming)
+    public PlayerCommand(PlayerCommandTarget target, float duration, float validateTiming = 0.5f, float triggerTiming = 0.5f)
+        : base(target, duration, validateTiming)
     {
         playerTarget = target;
         this.triggerInvalidDuration = this.duration * triggerTiming;
@@ -104,7 +105,7 @@ public class PlayerForward : PlayerMove
     protected override bool IsMovable => map.IsForwardMovable;
     protected override ITile DestTile => map.ForwardTile;
     protected override Pos GetDest => map.GetForward;
-    public override float Speed => TILE_UNIT / duration;
+    protected override float Speed => TILE_UNIT / duration;
 }
 
 public class PlayerBack : PlayerMove
@@ -114,7 +115,7 @@ public class PlayerBack : PlayerMove
     protected override bool IsMovable => map.IsBackwardMovable;
     protected override ITile DestTile => map.BackwardTile;
     protected override Pos GetDest => map.GetBackward;
-    public override float Speed => -TILE_UNIT / duration;
+    protected override float Speed => -TILE_UNIT / duration;
 }
 
 public class PlayerRight : PlayerMove
@@ -124,7 +125,7 @@ public class PlayerRight : PlayerMove
     protected override bool IsMovable => map.IsRightMovable;
     protected override ITile DestTile => map.RightTile;
     protected override Pos GetDest => map.GetRight;
-    public override float RSpeed => TILE_UNIT / duration;
+    protected override float RSpeed => TILE_UNIT / duration;
 }
 
 public class PlayerLeft : PlayerMove
@@ -134,7 +135,7 @@ public class PlayerLeft : PlayerMove
     protected override bool IsMovable => map.IsLeftMovable;
     protected override ITile DestTile => map.LeftTile;
     protected override Pos GetDest => map.GetLeft;
-    public override float RSpeed => -TILE_UNIT / duration;
+    protected override float RSpeed => -TILE_UNIT / duration;
 }
 
 public class PlayerDash : PlayerCommand

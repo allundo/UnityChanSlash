@@ -24,17 +24,17 @@ public class Commander
     /// Reserve Commands to execute in order.
     /// </summary>
     /// <typeparam name="Command">Command that Execute() method is implemented </typeparam>
-    protected LinkedList<Command> cmdQueue = new LinkedList<Command>();
+    protected LinkedList<ICommand> cmdQueue = new LinkedList<ICommand>();
 
     /// <summary>
     /// Executing Command. null if no Command is executing.
     /// </summary>
-    public virtual Command currentCommand { get; protected set; } = null;
+    public virtual ICommand currentCommand { get; protected set; } = null;
 
     /// <summary>
     /// Command reserved next. null if no Command is queued.
     /// </summary>
-    public virtual Command NextCommand => cmdQueue.First?.Value;
+    public virtual ICommand NextCommand => cmdQueue.First?.Value;
 
     protected IDisposable execDisposable = null;
 
@@ -43,7 +43,7 @@ public class Commander
     /// </summary>
     /// <param name="cmd">Command to enqueue</param>
     /// <param name="dispatch">Dispatch Command immediately if true. TODO: This is not Command interaption for now.</param>
-    public virtual void EnqueueCommand(Command cmd)
+    public virtual void EnqueueCommand(ICommand cmd)
     {
         cmdQueue.Enqueue(cmd);
 
@@ -69,7 +69,7 @@ public class Commander
         return false;
     }
 
-    protected void SetAndExec(Command cmd)
+    protected void SetAndExec(ICommand cmd)
     {
         currentCommand = cmd;
         Subscribe(cmd.Execute());
@@ -87,7 +87,7 @@ public class Commander
     /// </summary>
     /// <param name="cmd">New Command to execute as interruption</param>
     /// <param name="isCancel">Cancels current executing command if TRUE</param>
-    public void Interrupt(Command cmd, bool isCancel = true)
+    public void Interrupt(ICommand cmd, bool isCancel = true)
     {
         cmdQueue.AddFirst(cmd);
 
@@ -96,7 +96,7 @@ public class Commander
         if (cmdQueue.Count > 0) currentCommand.CancelValidate();
     }
 
-    public void ReplaceNext(Command cmd)
+    public void ReplaceNext(ICommand cmd)
     {
         cmdQueue.ReplaceFirstWith(cmd);
     }

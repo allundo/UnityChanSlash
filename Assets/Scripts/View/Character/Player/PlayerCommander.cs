@@ -8,21 +8,21 @@ public class PlayerCommander : Commander
     /// <summary>
     /// Executing Command. null if no Command is executing.
     /// </summary>
-    public override Command currentCommand
+    public override ICommand currentCommand
     {
         get { return CurrentCommand.Value; }
         protected set { CurrentCommand.Value = value; }
     }
 
-    private IReactiveProperty<Command> CurrentCommand = new ReactiveProperty<Command>(null);
-    public IObservable<Command> CurrentObservable => CurrentCommand;
+    private IReactiveProperty<ICommand> CurrentCommand = new ReactiveProperty<ICommand>(null);
+    public IObservable<ICommand> CurrentObservable => CurrentCommand;
 
     public PlayerCommander(PlayerCommandTarget target) : base(target)
     {
         anim = target.anim as PlayerAnimator;
     }
 
-    public override void EnqueueCommand(Command cmd)
+    public override void EnqueueCommand(ICommand cmd)
     {
         base.EnqueueCommand(cmd);
         if (anim.cancel.Bool) CheckCancel(); // Cancel current cancelable Attack if newly enqueued command is Attack

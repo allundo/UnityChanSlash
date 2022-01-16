@@ -1,11 +1,26 @@
 using UnityEngine;
 
+public interface IInput
+{
+    Commander commander { get; }
+    bool isCommandValid { get; }
+    bool IsFightValid { get; }
+    void InputCommand(ICommand cmd);
+    void ForceEnqueue(ICommand cmd);
+    void Interrupt(ICommand cmd, bool isCancel = true);
+    void InputDie();
+    void ValidateInput(bool isTriggerOnly = false);
+    void DisableInput(bool isTriggerOnly = false);
+    void OnActive();
+    void ClearAll(bool isQueueOnly = false, bool isValidInput = false);
+}
+
 /// <summary>
-/// Inputs Command to Command queue in Commander. <br />
+/// Inputs ICommand to ICommand queue in Commander. <br />
 /// </summary>
 [RequireComponent(typeof(CommandTarget))]
 [RequireComponent(typeof(MapUtil))]
-public abstract class MobInput : MonoBehaviour
+public abstract class MobInput : MonoBehaviour, IInput
 {
     /// <summary>
     /// Target Commander to input Command.
@@ -14,9 +29,9 @@ public abstract class MobInput : MonoBehaviour
     protected CommandTarget target;
 
     /// <summary>
-    /// Stops input Command if false. <br />
+    /// Stops input ICommand if false. <br />
     /// Set this validate flag via commander.OnValidateInput notification.<br />
-    /// This is invalidated at executing Command and validated again<br />
+    /// This is invalidated at executing ICommand and validated again<br />
     /// on the middle of the execution.
     /// </summary>
     public bool isCommandValid { get; protected set; } = true;
@@ -24,7 +39,7 @@ public abstract class MobInput : MonoBehaviour
     protected bool IsIdling => commander.IsIdling;
     public virtual bool IsFightValid => IsIdling;
 
-    protected Command die = null;
+    protected ICommand die = null;
 
     protected MapUtil map;
 
@@ -62,10 +77,10 @@ public abstract class MobInput : MonoBehaviour
     }
 
     /// <summary>
-    /// Input a Command to MobCommander while isCommandValid flag allows.
+    /// Input a ICommand to MobCommander while isCommandValid flag allows.
     /// </summary>
     /// <param name="cmd">Command to input</param>
-    public virtual void InputCommand(Command cmd)
+    public virtual void InputCommand(ICommand cmd)
     {
         if (cmd == null) return;
 
@@ -77,18 +92,18 @@ public abstract class MobInput : MonoBehaviour
     /// <summary>
     /// Shorthand enqueue
     /// </summary>
-    public void ForceEnqueue(Command cmd) => commander.EnqueueCommand(cmd);
+    public void ForceEnqueue(ICommand cmd) => commander.EnqueueCommand(cmd);
 
     /// <summary>
     /// Execute command immediately without queuing
     /// </summary>
-    public void Interrupt(Command cmd, bool isCancel = true)
+    public void Interrupt(ICommand cmd, bool isCancel = true)
     {
         DisableInput();
         commander.Interrupt(cmd, isCancel);
     }
 
-    protected abstract Command GetCommand();
+    protected abstract ICommand GetCommand();
 
     public virtual void InputDie()
     {

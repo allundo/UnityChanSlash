@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Fire))]
 public class RedSlimeAIInput : EnemyAIInput
 {
-    protected override Command GetCommand()
+    protected override ICommand GetCommand()
     {
         var currentCommand = commander.currentCommand;
 

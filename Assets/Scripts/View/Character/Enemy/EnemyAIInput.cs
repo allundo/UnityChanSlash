@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class EnemyAIInput : MobInput
 {
-    protected Command turnL;
-    protected Command turnR;
-    protected Command moveForward;
-    protected Command attack;
-    protected Command fire;
+    protected ICommand turnL;
+    protected ICommand turnR;
+    protected ICommand moveForward;
+    protected ICommand attack;
+    protected ICommand fire;
 
     protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
@@ -22,7 +22,7 @@ public class EnemyAIInput : MobInput
         fire = new EnemyFire(enemyTarget, 108f);
     }
 
-    protected override Command GetCommand()
+    protected override ICommand GetCommand()
     {
         var currentCommand = commander.currentCommand;
 

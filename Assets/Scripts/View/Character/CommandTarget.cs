@@ -22,7 +22,7 @@ public class CommandTarget : MonoBehaviour
     /// <summary>
     /// Input handler for Command execution.
     /// </summary>
-    public MobInput input { get; protected set; }
+    public IInput input { get; protected set; }
 
     /// <summary>
     /// Direction related data for Command execution.

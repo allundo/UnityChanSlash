@@ -62,7 +62,7 @@ public class EnemyForward : EnemyMove
 
     protected override bool IsMovable => map.IsForwardMovable;
     protected override Pos GetDest => map.GetForward;
-    public override float Speed => TILE_UNIT / duration;
+    protected override float Speed => TILE_UNIT / duration;
 }
 
 public class EnemyTurnL : EnemyCommand
