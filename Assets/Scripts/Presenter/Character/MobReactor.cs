@@ -2,11 +2,21 @@ using UnityEngine;
 using UniRx;
 using DG.Tweening;
 
-[RequireComponent(typeof(MobStatus))]
+public interface IReactor
+{
+    Vector3 position { get; }
+    void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None);
+    void OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
+    void OnDie();
+    void OnActive();
+    void FadeOutToDead(float duration = 0.5f);
+    void Destroy();
+}
+
 [RequireComponent(typeof(BodyEffect))]
 [RequireComponent(typeof(MobInput))]
 [RequireComponent(typeof(MapUtil))]
-public class MobReactor : MonoBehaviour
+public class MobReactor : MonoBehaviour, IReactor
 {
     /// <summary>
     /// Reaction to life gauge is only supported for player for now.<br />
@@ -21,6 +31,8 @@ public class MobReactor : MonoBehaviour
     protected IInput input;
     protected Collider bodyCollider;
     protected Tween fadeOut;
+
+    public Vector3 position => transform.position;
 
     protected virtual void Awake()
     {

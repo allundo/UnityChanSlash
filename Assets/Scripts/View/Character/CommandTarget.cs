@@ -17,7 +17,7 @@ public class CommandTarget : MonoBehaviour
     /// <summary>
     /// Reaction handler for Command execution.
     /// </summary>
-    public MobReactor react { get; protected set; }
+    public IReactor react { get; protected set; }
 
     /// <summary>
     /// Input handler for Command execution.

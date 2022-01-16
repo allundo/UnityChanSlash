@@ -35,7 +35,7 @@ public abstract class Command : ICommand
 
     protected CommandTarget target;
     protected MobAnimator anim;
-    protected MobReactor react;
+    protected IReactor react;
     protected IInput input;
     protected IMapUtil map;
 

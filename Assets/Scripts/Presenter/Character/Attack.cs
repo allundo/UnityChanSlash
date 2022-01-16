@@ -30,7 +30,7 @@ public class Attack : MonoBehaviour, IAttack
 
     protected virtual void OnHitAttack(Collider collider)
     {
-        MobReactor targetMob = collider.GetComponent<MobReactor>();
+        IReactor targetMob = collider.GetComponent<MobReactor>();
 
         if (null == targetMob) return;
 

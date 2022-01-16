@@ -51,7 +51,7 @@ public abstract class ItemInfo : ICloneable
         }
     }
 
-    protected virtual void OnAction(MobReactor react, MobAnimator anim) { }
+    protected virtual void OnAction(IReactor react, MobAnimator anim) { }
 
     public virtual Tween EffectSequence(CommandTarget target)
     {

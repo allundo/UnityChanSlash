@@ -12,7 +12,7 @@ public class BulletAttack : Attack
 
     protected override void OnHitAttack(Collider collider)
     {
-        MobReactor targetMob = collider.GetComponent<MobReactor>();
+        IReactor targetMob = collider.GetComponent<MobReactor>();
 
         if (null == targetMob) return;
 
