@@ -8280,7 +8280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
   enemyData: {fileID: 11400000, guid: 732b3c01315aa4f52819045e2acc8bed, type: 2}
-  type: 2
+  type: 3
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -15925,7 +15925,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh179424
+  m_Name: pb_Mesh60292
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -47163,6 +47163,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GateES
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487659527629217094, guid: 9f2762c629780461fa7c5a0c0c252d2f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5487659527629217095, guid: 9f2762c629780461fa7c5a0c0c252d2f,
         type: 3}

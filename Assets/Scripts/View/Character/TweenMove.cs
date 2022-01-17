@@ -92,9 +92,7 @@ public class TweenMove
     public Tween TurnR => Rotate(90);
     public Tween Rotate(int angle = 90)
     {
-        return tf.DORotate(new Vector3(0, angle, 0), duration)
-            .SetRelative()
-            .SetEase(Ease.InCubic);
+        return tf.DORotate(new Vector3(0, angle, 0), duration).SetRelative();
     }
 
     /// <summary>

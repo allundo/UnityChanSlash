@@ -306,7 +306,7 @@ public class PlayerTurnL : PlayerCommand
         hidePlateHandler.Turn();
         itemGenerator.Turn(map.dir);
 
-        playingTween = tweenMove.TurnL.OnComplete(mainCamera.ResetCamera).Play();
+        playingTween = tweenMove.TurnL.SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
     }
 }
@@ -323,7 +323,7 @@ public class PlayerTurnR : PlayerCommand
         hidePlateHandler.Turn();
         itemGenerator.Turn(map.dir);
 
-        playingTween = tweenMove.TurnR.OnComplete(mainCamera.ResetCamera).Play();
+        playingTween = tweenMove.TurnR.SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
     }
 }

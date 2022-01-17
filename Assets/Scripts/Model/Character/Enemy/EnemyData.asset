@@ -61,6 +61,6 @@ MonoBehaviour:
     backDamageMultiplier: 2
     restDamageMultiplier: 6
     armorMultiplier: 1
-    prefab: {fileID: 3338548787817563740, guid: 47c856b7bb6814862b0278bedeb3fe19,
+    prefab: {fileID: 7026800704296965620, guid: ff99ea07affb94dfea946d8b36d43fdf,
       type: 3}
     type: 3
