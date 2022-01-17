@@ -1,11 +1,17 @@
 using UnityEngine;
+using System.Linq;
 using System.Collections.Generic;
 
 public class ItemGenerator : MobGenerator<Item>
 {
     [SerializeField] private ItemData itemData = default;
 
+    // FIXME: Use only the number of floors for now
+    [SerializeField] private EnemyTypesData enemyTypesData = default;
+
     private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
+
+    private Stack<RespawnData>[] respawnData;
 
     private WorldMap map;
 
@@ -16,6 +22,7 @@ public class ItemGenerator : MobGenerator<Item>
         map = GameManager.Instance.worldMap;
 
         itemInfo[ItemType.Potion] = new PotionInfo(itemData.Param((int)ItemType.Potion));
+        respawnData = new Stack<RespawnData>[enemyTypesData.Length].Select(_ => new Stack<RespawnData>()).ToArray();
     }
 
     void Start()
@@ -25,11 +32,24 @@ public class ItemGenerator : MobGenerator<Item>
 
     public void SwitchWorldMap(WorldMap map)
     {
-        this.map.ForEachTiles(tile => tile.DisplayItems(false));
-        map.ForEachTiles(tile => tile.DisplayItems(true));
+        var store = respawnData[this.map.floor - 1];
+        var restore = respawnData[map.floor - 1];
+
+        this.map.ForEachTiles((tile, pos) =>
+        {
+            for (Item item = tile.PickItem(); item != null; item = tile.PickItem())
+            {
+                store.Push(new RespawnData(item.itemInfo, pos));
+            }
+        });
 
         this.map = map;
         PlaceItems(map);
+
+        while (restore.Count > 0)
+        {
+            Respawn(restore.Pop());
+        }
     }
 
     private void PlaceItems(WorldMap map)
@@ -42,6 +62,7 @@ public class ItemGenerator : MobGenerator<Item>
     {
         if (itemInfo == null) return null;
 
+        dir = dir ?? Direction.north;
         return base.Spawn(map.WorldPos(pos), dir).SetItemInfo(itemInfo);
     }
 
@@ -61,5 +82,18 @@ public class ItemGenerator : MobGenerator<Item>
     public void Turn(IDirection dir)
     {
         transform.ForEach(tf => tf.GetComponent<Item>().SetDir(dir));
+    }
+    private bool Respawn(RespawnData data) => Put(data.info, data.pos);
+
+    private struct RespawnData
+    {
+        public RespawnData(ItemInfo info, Pos pos)
+        {
+            this.info = info;
+            this.pos = pos;
+        }
+
+        public ItemInfo info;
+        public Pos pos;
     }
 }

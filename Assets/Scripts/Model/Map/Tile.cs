@@ -11,7 +11,6 @@ public interface ITile
     EnemyStatus OnEnemy { get; set; }
     bool PutItem(Item item);
     Item PickItem();
-    void DisplayItems(bool isShown = true);
 }
 
 public class Tile
@@ -35,11 +34,6 @@ public class Tile
         item.Inactivate();
 
         return item;
-    }
-
-    public void DisplayItems(bool isShown = true)
-    {
-        items.ForEach(item => item.SetDisplay(isShown));
     }
 }
 
