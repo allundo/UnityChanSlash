@@ -28,7 +28,7 @@ public class GoblinAIInput : ShieldInput
         turnL = new GoblinTurnL(enemyTarget, 16f);
         turnR = new GoblinTurnR(enemyTarget, 16f);
         guard = new GoblinGuard(enemyTarget, 36f);
-        attack = new EnemyAttack(enemyTarget, 48f);
+        attack = new EnemyAttack(enemyTarget, 60f);
     }
 
     protected override void SetInputs()
