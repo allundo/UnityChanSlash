@@ -90,7 +90,7 @@ public abstract class Command : ICommand
 
         if (Action())
         {
-            return ObservableComplete();
+            return ExecOnCompleted();
         }
         else
         {
