@@ -15,6 +15,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private float attackCancelThreshold = 2.0f;
 
     [SerializeField] private EnemyLifeGauge circle = default;
+    [SerializeField] private Target enemyTarget = default;
 
     public IObservable<Unit> JabButton => jabButton.ObservableAtk;
     public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
@@ -47,7 +48,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
 
-    private IReactiveProperty<MobStatus> EnemyStatus = new ReactiveProperty<MobStatus>(null);
+    private IReactiveProperty<EnemyStatus> EnemyStatus = new ReactiveProperty<EnemyStatus>(null);
 
     void Awake()
     {
@@ -203,7 +204,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
 
-    public void Activate(MobStatus status)
+    public void Activate(EnemyStatus status)
     {
         EnemyStatus.Value = status;
 
@@ -211,6 +212,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isActive = true;
         gameObject.SetActive(true);
+        enemyTarget.FadeActivate(status);
     }
 
     public void Inactivate()
@@ -219,6 +221,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         ButtonCancel(true);
         isActive = false;
+        enemyTarget.FadeInactivate();
     }
 
     private void ButtonCancel(bool isFadeOnly = false)
@@ -240,7 +243,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = Vector2.zero;
     }
 
-    public void SetActive(bool value, MobStatus status)
+    public void SetActive(bool value, EnemyStatus status)
     {
         if (value)
         {

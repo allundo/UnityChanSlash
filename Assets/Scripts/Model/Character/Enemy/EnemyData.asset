@@ -25,6 +25,7 @@ MonoBehaviour:
     armorMultiplier: 0
     prefab: {fileID: 0}
     type: 0
+    enemyCore: {x: 0, y: 0, z: 0}
   - name: "\u30B9\u30E9\u30A4\u30E0"
     defaultLifeMax: 10
     isOnGround: 1
@@ -38,6 +39,7 @@ MonoBehaviour:
     prefab: {fileID: 6806135843735641528, guid: 07d0b5236129543e5a459a629a0b34ba,
       type: 3}
     type: 1
+    enemyCore: {x: 0, y: 0.3, z: 0}
   - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
     defaultLifeMax: 10
     isOnGround: 1
@@ -51,6 +53,7 @@ MonoBehaviour:
     prefab: {fileID: 4648225818197331777, guid: b339f0237658d495a88baa1d14ea8395,
       type: 3}
     type: 2
+    enemyCore: {x: 0, y: 0.3, z: 0}
   - name: "\u30B4\u30D6\u30EA\u30F3"
     defaultLifeMax: 10
     isOnGround: 1
@@ -64,3 +67,4 @@ MonoBehaviour:
     prefab: {fileID: 7026800704296965620, guid: ff99ea07affb94dfea946d8b36d43fdf,
       type: 3}
     type: 3
+    enemyCore: {x: 0, y: 1.05, z: 0}

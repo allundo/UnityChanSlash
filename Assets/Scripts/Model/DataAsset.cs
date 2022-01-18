@@ -51,6 +51,7 @@ public class MobParam
 public class EnemyParam : MobParam
 {
     [SerializeField] public EnemyType type = EnemyType.None;
+    [SerializeField] public Vector3 enemyCore = Vector3.zero;
 }
 
 [System.Serializable]
