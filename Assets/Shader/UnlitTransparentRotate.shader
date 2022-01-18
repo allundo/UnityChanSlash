@@ -31,14 +31,13 @@
             float4 _MainTex_ST;
             fixed4 _Color;
             float _Angle;
-            #define PI 3.1415926536
 
             v2f vert(appdata_base v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
 
-                float angle = _Angle * 2 * PI;
+                float angle = _Angle * UNITY_TWO_PI;
 
                 // Pivot
                 float2 pivot = float2(0.5, 0.5);
