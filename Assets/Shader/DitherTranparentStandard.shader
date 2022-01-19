@@ -98,7 +98,7 @@ Shader "Custom/Standard/DitherTransparent"
 
             #pragma vertex vertBase
             #pragma fragment fragBase
-            #include "UnityStandardCoreForwardCustom.cginc"
+            #include "./CGIncludes/UnityStandardCoreForwardCustom.cginc"
 
             ENDCG
         }
@@ -135,7 +135,7 @@ Shader "Custom/Standard/DitherTransparent"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "UnityStandardCoreForwardCustom.cginc"
+            #include "./CGIncludes/UnityStandardCoreForwardCustom.cginc"
 
             ENDCG
         }
@@ -195,7 +195,7 @@ Shader "Custom/Standard/DitherTransparent"
             #pragma vertex vertDeferred
             #pragma fragment fragDeferred
 
-            #include "UnityStandardCoreCustom.cginc"
+            #include "./CGIncludes/UnityStandardCoreCustom.cginc"
 
             ENDCG
         }
@@ -267,7 +267,7 @@ Shader "Custom/Standard/DitherTransparent"
 
             #pragma vertex vertBase
             #pragma fragment fragBase
-            #include "UnityStandardCoreForwardCustom.cginc"
+            #include "./CGIncludes/UnityStandardCoreForwardCustom.cginc"
 
             ENDCG
         }
@@ -300,7 +300,7 @@ Shader "Custom/Standard/DitherTransparent"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "UnityStandardCoreForwardCustom.cginc"
+            #include "./CGIncludes/UnityStandardCoreForwardCustom.cginc"
 
             ENDCG
         }
