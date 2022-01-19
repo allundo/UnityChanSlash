@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TargetCenter
-  m_Shader: {fileID: 4800000, guid: 7dbb4376124294c509a26669af10e358, type: 3}
+  m_Name: down_stair_direction
+  m_Shader: {fileID: 4800000, guid: 2447d291313e14c1b995f54ff5a0498f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9a0557f6acc1547cf96b97e77f1263ef, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8122275f191464afda8efe8a2a303c7c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -63,8 +63,8 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Glow: 1.2
-    - _InvFade: 1
+    - _Glow: 1
+    - _InvFade: 3
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -75,6 +75,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.95, b: 0.5, a: 0.21605782}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _TintColor: {r: 0.6544118, g: 0.6544118, b: 0.6544118, a: 0.5}
+    - _TintColor: {r: 1, g: 1, b: 1, a: 0.5}
