@@ -118,6 +118,12 @@ public struct Pos
         return DecX();
     }
 
+    public float Distance(Pos dest)
+    {
+        Pos vector = dest - this;
+        return Mathf.Sqrt(vector.x * vector.x + vector.y * vector.y);
+    }
+
     public bool IsNull => this.x == 0 && this.y == 0;
 
     public override int GetHashCode()

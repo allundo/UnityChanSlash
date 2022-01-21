@@ -9,8 +9,8 @@ public class MapManager
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
-    public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; }
-    public KeyValuePair<Pos, IDirection> stairsTop { get; private set; }
+    public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
+    public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
@@ -74,9 +74,11 @@ public class MapManager
 
     public MapManager SetUpStair()
     {
-        var upStair = deadEndPos.Last();
-        Pos pos = upStair.Key;
-        IDirection dir = upStair.Value;
+        var pos = GetUpStairsPos();
+
+        IDirection dir;
+        deadEndPos.TryGetValue(pos, out dir);
+        dir = dir ?? stairsTop.Value.Backward;
 
         matrix[pos.x, pos.y] = Terrain.UpStair;
         dirMap[pos.x, pos.y] = dir.Enum;
@@ -87,6 +89,35 @@ public class MapManager
         matrix[stairsBottom.Key.x, stairsBottom.Key.y] = Terrain.Ground;
 
         return this;
+    }
+
+    private Pos GetUpStairsPos()
+    {
+        if (stairsTop.Key.IsNull) return deadEndPos.Last().Key;
+
+        float further = 0f;
+
+        Pos upStairsPos = new Pos();
+
+        deadEndPos.ForEach(kv =>
+        {
+            float distance = stairsTop.Key.Distance(kv.Key);
+            if (distance > further)
+            {
+                upStairsPos = kv.Key;
+                further = distance;
+                if (further > Math.Min(width, height)) return false;
+            }
+            return true;
+        });
+
+        if (upStairsPos.IsNull)
+        {
+            upStairsPos = roomCenterPos.Last();
+            roomCenterPos.Remove(upStairsPos);
+        }
+
+        return upStairsPos;
     }
 
     private void CreateDirMap()

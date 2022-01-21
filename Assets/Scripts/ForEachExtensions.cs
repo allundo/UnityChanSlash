@@ -27,6 +27,28 @@ static public class ForEachExtensions
         sequence.ForEach(action);
     }
 
+    static public void ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func)
+    {
+        foreach (T elem in sequence) if (!func(elem)) break;
+    }
+
+    static public void ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor)
+    {
+        Filter(sequence, exceptFor).ForEach(func);
+    }
+
+    static public void ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor, params T[] filters)
+    {
+        sequence = Filter(sequence, exceptFor);
+
+        foreach (T e in filters)
+        {
+            sequence = Filter(sequence, e);
+        }
+
+        sequence.ForEach(func);
+    }
+
     static private IEnumerable<T> Filter<T>(IEnumerable<T> sequence, T exceptFor)
         => sequence.Where(elem => !EqualityComparer<T>.Default.Equals(elem, exceptFor));
 
