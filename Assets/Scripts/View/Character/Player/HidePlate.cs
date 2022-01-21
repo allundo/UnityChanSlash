@@ -44,10 +44,10 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         return this;
     }
 
-    public HidePlate SetPlateType(Plate plate, float angle = 0f)
+    public HidePlate SetPlateType(Plate plate, Vector4 rotationMatrix)
     {
         this.plate = plate;
-        material.SetFloat("_Angle", -angle / 360f);
+        material.SetVector("_Rotate", rotationMatrix);
         return this;
     }
 

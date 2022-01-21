@@ -87,8 +87,6 @@ public class HidePlateFront : MonoBehaviour
         {
             transform.rotation = currentRotation;
             transform.position = map.WorldPos(pos + currentOffset);
-            Debug.Log("GetVector: " + material.GetVector("_Rotate"));
-            Debug.Log("CurrentTexRotate: " + currentTexRotate);
             material.SetVector("_Rotate", currentTexRotate);
         })
         .Play();
