@@ -16698,7 +16698,7 @@ MonoBehaviour:
     type: 3}
   prefabHidePlateCross: {fileID: 1552117585309394, guid: 9d3bc43090dc14066ab3e4f379cfa453,
     type: 3}
-  plateFrontPrefab: {fileID: 3009684819150035271, guid: 27aaebf1280af48638468e9f9e004434,
+  plateFrontPrefab: {fileID: 6882625021751139374, guid: 27aaebf1280af48638468e9f9e004434,
     type: 3}
   floorMaterialsData: {fileID: 11400000, guid: 09156dd13c32e45a89b6023354979c09, type: 2}
 --- !u!4 &1669641517

@@ -18,22 +18,11 @@ public class HidePlateHandler : MonoBehaviour
     /// <summary>
     /// Large hiding plate that hides far front area.
     /// </summary>
-    protected GameObject plateFront;
+    protected HidePlateFront plateFront => hidePlatePool.plateFront;
 
     // Sub classes having methods for updating HidePlates position.
     protected LandscapeUpdater landscape = null;
     protected Dictionary<IDirection, PlateUpdater> portrait = new Dictionary<IDirection, PlateUpdater>();
-
-
-    /// <summary>
-    /// Quaternion rotations applies to PlateFront for each direction.
-    /// </summary>
-    protected Dictionary<IDirection, Quaternion> rotatePlateFront = new Dictionary<IDirection, Quaternion>();
-
-    /// <summary>
-    /// Normalized tile vectors expresses direction.
-    /// </summary>
-    protected Dictionary<IDirection, Pos> vecPlateFront = new Dictionary<IDirection, Pos>();
 
     /// <summary>
     /// Set proper updater from variants.
@@ -65,37 +54,16 @@ public class HidePlateHandler : MonoBehaviour
     /// </summary>
     private Pos CurrentPos => map.MapPos(transform.position);
 
-    /// <summary>
-    /// Current tile map offset position of PlateFront from player position.
-    /// </summary>
-    private Pos currentOffset = new Pos();
-    /// <summary>
-    /// Current rotation of PlateFront decided by player's direction.
-    /// </summary>
-    private Quaternion currentRotate = Quaternion.identity;
-
     void Awake()
     {
         map = GameManager.Instance.worldMap;
         mapUtil = GetComponent<PlayerMapUtil>();
-
-        plateFront = hidePlatePool.PlateFront(map);
 
         landscape = new LandscapeUpdater(this, RANGE);
         portrait[Direction.north] = new PortraitNUpdater(this, WIDTH, HEIGHT);
         portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH);
         portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT);
         portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH);
-
-        rotatePlateFront[Direction.north] = Quaternion.identity;
-        rotatePlateFront[Direction.east] = Quaternion.Euler(0f, 90f, 0f);
-        rotatePlateFront[Direction.south] = Quaternion.identity;
-        rotatePlateFront[Direction.west] = Quaternion.Euler(0f, 90f, 0f);
-
-        vecPlateFront[Direction.north] = new Pos(0, -1);
-        vecPlateFront[Direction.east] = new Pos(1, 0);
-        vecPlateFront[Direction.south] = new Pos(0, 1);
-        vecPlateFront[Direction.west] = new Pos(-1, 0);
     }
 
     private void UpdateRange(Action<Pos, Plate[,]> DrawAction)
@@ -107,20 +75,9 @@ public class HidePlateHandler : MonoBehaviour
         miniMap.UpdateMiniMap();
 
         DrawAction(playerPos, plateMap);
-        MovePlateFront(playerPos);
+        plateFront.Move(playerPos);
 
         prevPos = playerPos;
-    }
-
-    private void MovePlateFront(Pos pos)
-    {
-        // Move with delay
-        DOVirtual.DelayedCall(0.1f, () =>
-        {
-            plateFront.transform.rotation = currentRotate;
-            plateFront.transform.position = map.WorldPos(pos + currentOffset);
-        })
-        .Play();
     }
 
     /// <summary>
@@ -155,17 +112,17 @@ public class HidePlateHandler : MonoBehaviour
     /// </summary>
     public void Turn()
     {
-        currentRotate = rotatePlateFront[mapUtil.dir];
+        plateFront.SetRotation(mapUtil.dir);
         miniMap.Turn(mapUtil.dir);
 
         if (currentUpdater == landscape)
         {
-            currentOffset = vecPlateFront[mapUtil.dir] * (RANGE * 3 / 2 + 1);
-            MovePlateFront(prevPos);
+            plateFront.SetLandscapeOffset(mapUtil.dir);
+            plateFront.Move(prevPos);
             return;
         }
 
-        currentOffset = vecPlateFront[mapUtil.dir] * (2 * HEIGHT - WIDTH);
+        plateFront.SetPortraitOffset(mapUtil.dir);
 
         currentUpdater?.ClearRange(CurrentPos);
         currentUpdater = portrait[mapUtil.dir];
@@ -177,6 +134,7 @@ public class HidePlateHandler : MonoBehaviour
     /// </summary>
     public void Init()
     {
+        plateFront.InitPlateSize(RANGE, WIDTH, HEIGHT);
         ReformHidePlates(DeviceOrientation.Portrait);
         miniMap.Turn(mapUtil.dir);
     }
@@ -188,25 +146,22 @@ public class HidePlateHandler : MonoBehaviour
     public void ReformHidePlates(DeviceOrientation orientation)
     {
         currentUpdater?.ClearRangeImmediately(CurrentPos);
+        plateFront.SetRotation(mapUtil.dir);
 
         switch (orientation)
         {
             case DeviceOrientation.Portrait:
                 currentUpdater = portrait[mapUtil.dir];
-                currentRotate = rotatePlateFront[mapUtil.dir];
-                currentOffset = vecPlateFront[mapUtil.dir] * (2 * HEIGHT - WIDTH);
+                plateFront.SetPortraitOffset(mapUtil.dir);
                 break;
 
             case DeviceOrientation.LandscapeRight:
                 currentUpdater = landscape;
-                currentRotate = rotatePlateFront[mapUtil.dir];
-                currentOffset = vecPlateFront[mapUtil.dir] * (RANGE * 3 / 2 + 1);
+                plateFront.SetLandscapeOffset(mapUtil.dir);
                 break;
         }
 
         Draw();
-        // Debug.Log("####### Check Angles #############");
-        // hidePlatePool.CheckAngles();
     }
 
     public void SwitchWorldMap(WorldMap map)
@@ -218,7 +173,6 @@ public class HidePlateHandler : MonoBehaviour
         currentUpdater?.ClearRangeImmediately(prevPos);
         hidePlatePool.SwitchWorldMap(map);
 
-        plateFront = hidePlatePool.PlateFront(map);
         landscape.ResetWorldMapRange();
         portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
     }

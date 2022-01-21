@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3009684819150035264}
   - component: {fileID: 3009684819150035267}
   - component: {fileID: 3009684819150035266}
+  - component: {fileID: 6882625021751139374}
   m_Layer: 0
   m_Name: PlateFront
   m_TagString: Untagged
@@ -167,3 +168,15 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3009684819150035271}
   m_Mesh: {fileID: 0}
+--- !u!114 &6882625021751139374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3009684819150035271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eca08a24ad904669b02ceaedd428abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

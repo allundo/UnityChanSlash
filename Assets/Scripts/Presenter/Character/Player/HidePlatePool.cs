@@ -11,7 +11,7 @@ public class HidePlatePool : MonoBehaviour
     [SerializeField] private HidePlate prefabHidePlate3 = default;
     [SerializeField] private HidePlate prefabHidePlateFull = default;
     [SerializeField] private HidePlate prefabHidePlateCross = default;
-    [SerializeField] private GameObject plateFrontPrefab = default;
+    [SerializeField] private HidePlateFront plateFrontPrefab = default;
     [SerializeField] private FloorMaterialsData floorMaterialsData = default;
 
     private HidePlateGenerator plate1Generator;
@@ -19,8 +19,7 @@ public class HidePlatePool : MonoBehaviour
     private HidePlateGenerator plate3Generator;
     private HidePlateGenerator plateFullGenerator;
     private HidePlateGenerator plateCrossGenerator;
-    private FloorMaterialsSource floorMaterialsSource;
-    GameObject plateFront;
+    public HidePlateFront plateFront { get; private set; }
 
     private HidePlateGenerator[] generator = new HidePlateGenerator[0b10000];
 
@@ -28,17 +27,13 @@ public class HidePlatePool : MonoBehaviour
 
     private FloorMaterialsSource FloorMaterialSource(WorldMap map) => floorMaterialsData.Param(map.floor - 1);
 
-    public GameObject PlateFront(WorldMap map)
-    {
-        plateFront = plateFront ?? Instantiate(plateFrontPrefab, Vector3.zero, Quaternion.identity);
-        Util.SwitchMaterial(plateFront.GetComponent<Renderer>(), FloorMaterialSource(map).plateFront);
-        return plateFront;
-    }
-
     void Awake()
     {
         map = GameManager.Instance.worldMap;
         Material mat = FloorMaterialSource(map).hidePlate;
+
+        plateFront = Instantiate(plateFrontPrefab, transform);
+        plateFront.SetFloorMaterials(floorMaterialsData).SwitchWorldMap(map);
 
         plate1Generator = generator[(int)Plate.A] = generator[(int)Plate.B] = generator[(int)Plate.D] = generator[(int)Plate.C] = InstantiateGenerator(prefabHidePlate1, mat);
         plate2Generator = generator[(int)Plate.AB] = generator[(int)Plate.BD] = generator[(int)Plate.CD] = generator[(int)Plate.AC] = InstantiateGenerator(prefabHidePlate2, mat);
@@ -74,5 +69,7 @@ public class HidePlatePool : MonoBehaviour
 
         new HidePlateGenerator[] { plate1Generator, plate2Generator, plate3Generator, plateCrossGenerator, plateFullGenerator }
             .ForEach(generator => generator.SetMaterial(mat));
+
+        plateFront.SwitchWorldMap(map);
     }
 }
