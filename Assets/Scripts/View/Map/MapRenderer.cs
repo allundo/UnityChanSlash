@@ -178,11 +178,11 @@ public class MapRenderer : MonoBehaviour
                         terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pallDir], new Pos(i, j)));
                         break;
 
-                    case Terrain.DownStair:
+                    case Terrain.DownStairs:
                         SetStairs(new Pos(i, j), Direction.Convert(dirMap[i, j]), true);
                         break;
 
-                    case Terrain.UpStair:
+                    case Terrain.UpStairs:
                         SetStairs(new Pos(i, j), Direction.Convert(dirMap[i, j]), false);
                         break;
                 }

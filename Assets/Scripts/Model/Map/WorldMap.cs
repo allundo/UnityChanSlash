@@ -78,8 +78,8 @@ public class WorldMap
 
     public WorldMap(MapManager map = null, int floor = 1)
     {
-        this.map = map ?? new MapManager().SetDownStair();
-        if (floor > 1) stairsBottom = this.map.SetUpStair().stairsBottom;
+        this.map = map ?? new MapManager().SetDownStairs();
+        if (floor > 1) stairsBottom = this.map.SetUpStairs().stairsBottom;
         this.floor = floor;
 
         stairsTop = this.map.stairsTop;
@@ -117,8 +117,8 @@ public class WorldMap
                         pixels[i + Width * j] = Color.red;
                         break;
 
-                    case Terrain.DownStair:
-                    case Terrain.UpStair:
+                    case Terrain.DownStairs:
+                    case Terrain.UpStairs:
                         tileInfo[i, j] = new Stairs();
                         pixels[i + Width * j] = Color.blue;
                         break;

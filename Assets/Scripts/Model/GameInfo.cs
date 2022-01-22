@@ -72,7 +72,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             {new Pos(1, 1), Direction.south},
         };
 
-        maps[MAX_FLOOR] = new WorldMap(new MapManager(matrix, 15, deadEndPos).SetDownStair().SetUpStair(deadEndPos.Last().Key), 2);
+        maps[MAX_FLOOR] = new WorldMap(new MapManager(matrix, 15, deadEndPos).SetDownStairs().SetUpStairs(deadEndPos.Last().Key), 2);
 
 #endif
 
