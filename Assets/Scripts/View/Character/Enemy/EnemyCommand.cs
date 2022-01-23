@@ -102,7 +102,7 @@ public class EnemyAttack : EnemyCommand
 
     public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f)
     {
-        enemyAttack = target.enemyAttack;
+        enemyAttack = target.enemyAttack[0];
         enemyFire = target.fire;
     }
 

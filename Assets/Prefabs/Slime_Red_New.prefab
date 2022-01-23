@@ -147,7 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAttack: {fileID: 8716552068685204701}
+  enemyAttack:
+  - {fileID: 8716552068685204701}
 --- !u!135 &7153664908088456530
 SphereCollider:
   m_ObjectHideFlags: 0
