@@ -8,8 +8,6 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerJump jump { get; protected set; }
     public TriggerBrakeAndBackStep brakeAndBackStep { get; protected set; }
 
-    public TriggerEx turnL { get; protected set; }
-    public TriggerEx turnR { get; protected set; }
     public TriggerEx handle { get; protected set; }
     public TriggerEx putItem { get; protected set; }
     public TriggerEx getItem { get; protected set; }

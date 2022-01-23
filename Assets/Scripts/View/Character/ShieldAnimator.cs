@@ -9,13 +9,17 @@ public class ShieldAnimator : MobAnimator
     protected List<TriggerEx> triggers = new List<TriggerEx>();
 
     public AnimatorBool guard { get; protected set; }
-    public TriggerEx shield { get; protected set; }
+    public AnimatorTrigger shield { get; protected set; }
+    public AnimatorTrigger turnR { get; protected set; }
+    public AnimatorTrigger turnL { get; protected set; }
 
     protected override void Awake()
     {
         base.Awake();
         shield = new TriggerEx(triggers, anim, "Shield", 1);
         guard = new AnimatorBool(anim, "Guard");
+        turnR = new TriggerEx(triggers, anim, "TurnR");
+        turnL = new TriggerEx(triggers, anim, "TurnL");
     }
 
     protected virtual void Update()
