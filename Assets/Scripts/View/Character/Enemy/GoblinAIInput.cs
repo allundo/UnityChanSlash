@@ -22,7 +22,7 @@ public class GoblinAIInput : ShieldInput
         var enemyTarget = target as EnemyCommandTarget;
 
         die = new EnemyDie(enemyTarget, 72f);
-        idle = new GoblinIdle(enemyTarget, 36f);
+        idle = new EnemyIdle(enemyTarget, 36f);
         moveForward = new EnemyForward(enemyTarget, 72f);
         run = new EnemyForward(enemyTarget, 36f);
         turnL = new GoblinTurnL(enemyTarget, 16f);
@@ -66,7 +66,7 @@ public class GoblinAIInput : ShieldInput
             switch (Random.Range(0, 3))
             {
                 case 0:
-                    return currentCommand is GoblinIdle ? attack : idle;
+                    return currentCommand is EnemyIdle ? attack : idle;
                 case 1:
                     return guard;
                 default:

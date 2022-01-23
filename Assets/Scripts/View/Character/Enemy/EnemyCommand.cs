@@ -14,6 +14,12 @@ public abstract class EnemyCommand : Command
     }
 }
 
+public class EnemyIdle : EnemyCommand
+{
+    public EnemyIdle(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    protected override bool Action() => true;
+}
+
 public abstract class EnemyMove : EnemyCommand
 {
     public EnemyMove(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }

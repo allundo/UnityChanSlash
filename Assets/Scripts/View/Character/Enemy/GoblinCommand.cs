@@ -1,11 +1,5 @@
 using DG.Tweening;
 
-public class GoblinIdle : EnemyCommand
-{
-    public GoblinIdle(EnemyCommandTarget target, float duration) : base(target, duration) { }
-    protected override bool Action() => true;
-}
-
 public class GoblinTurnL : EnemyTurnL
 {
     public GoblinTurnL(EnemyCommandTarget target, float duration) : base(target, duration) { }
