@@ -16,7 +16,7 @@ public class EnemySpawnController : MonoBehaviour
     {
         EnemyReactor enemy = other.GetComponent<EnemyReactor>();
 
-        // Activate generator when the player is detected nearby
+        // Inactivate the enemy getting out of player's view range
         if (enemy != null)
         {
             enemy.Disappear();

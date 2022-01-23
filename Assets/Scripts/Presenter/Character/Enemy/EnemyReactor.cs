@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using System;
+using DG.Tweening;
 
 [RequireComponent(typeof(MobEffect))]
 public class EnemyReactor : MobReactor
@@ -32,14 +33,28 @@ public class EnemyReactor : MobReactor
 
     public void Disappear()
     {
-        input.ClearAll(true, false);
-        map.ResetTile();
-        FadeOutToDead();
+        fadeOut = effect.FadeOutTween(0.5f)
+            .OnComplete(() =>
+            {
+                input.ClearAll();
+                map.ResetTile();
+                OnDead();
+            })
+            .Play();
     }
 
     public override void Destroy()
     {
+        // Stop all tweens before destroying
+        input.ClearAll();
+        fadeOut?.Complete();
+        effect.KillAllTweens();
+
         inactiveNextFrame?.Dispose();
-        base.Destroy();
+
+        bodyCollider.enabled = false;
+        map.ResetTile();
+
+        Destroy(gameObject);
     }
 }
