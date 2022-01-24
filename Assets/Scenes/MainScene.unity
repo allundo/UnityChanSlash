@@ -8371,7 +8371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
   enemyData: {fileID: 11400000, guid: 732b3c01315aa4f52819045e2acc8bed, type: 2}
-  type: 3
+  type: 4
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -68,3 +68,17 @@ MonoBehaviour:
       type: 3}
     type: 3
     enemyCore: {x: 0, y: 1.05, z: 0}
+  - name: "\u9EC4\u3046\u3055\u304E"
+    defaultLifeMax: 10
+    isOnGround: 1
+    attack: 1
+    shield: 1
+    faceDamageMultiplier: 1
+    sideDamageMultiplier: 1.5
+    backDamageMultiplier: 2
+    restDamageMultiplier: 6
+    armorMultiplier: 1
+    prefab: {fileID: 4710703816869286453, guid: 793feef66f23249d0887b342eb836577,
+      type: 3}
+    type: 4
+    enemyCore: {x: 0, y: 0.5, z: 0}

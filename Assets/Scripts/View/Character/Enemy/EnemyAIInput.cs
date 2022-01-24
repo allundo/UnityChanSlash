@@ -22,6 +22,8 @@ public class EnemyAIInput : MobInput
         fire = new EnemyFire(enemyTarget, 108f);
     }
 
+    protected T RandomChoice<T>(params T[] choices) => choices[Random.Range(0, choices.Length)];
+
     protected override ICommand GetCommand()
     {
         var currentCommand = commander.currentCommand;
@@ -37,7 +39,7 @@ public class EnemyAIInput : MobInput
 
         if (IsOnPlayer(backward))
         {
-            return Random.Range(0, 2) == 0 ? turnL : turnR;
+            return RandomChoice(turnL, turnR);
         }
 
         // Attack if player found at forward
@@ -82,7 +84,7 @@ public class EnemyAIInput : MobInput
             // Turn if backward movable
             if (map.IsMovable(backward))
             {
-                return Random.Range(0, 2) == 0 ? turnL : turnR;
+                return RandomChoice(turnL, turnR);
             }
         }
 

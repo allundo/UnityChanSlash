@@ -436,4 +436,5 @@ public enum EnemyType
     Slime,
     RedSlime,
     Goblin,
+    YellowRabbit,
 }

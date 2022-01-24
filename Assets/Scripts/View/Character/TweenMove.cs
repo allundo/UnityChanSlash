@@ -135,6 +135,12 @@ public class TweenMove
         return seq.Join(jumpSeq).Play();
     }
 
+    public Tween Jump(Vector3 moveVec, float timeScale = 1f, float jumpPower = 1.0f)
+        => tf.DOJump(moveVec, jumpPower, 1, duration * timeScale).SetRelative();
+
+    public Tween Jump(Pos moveVec, float timeScale = 1f, float jumpPower = 1.0f)
+        => Jump(map.WorldPos(moveVec), timeScale, jumpPower);
+
     public Sequence Drop(float startY, float endY, float stunDuration = 0.0f, float wakeUpDuration = 0.65f)
     {
         float fallDuration = duration - stunDuration - wakeUpDuration;

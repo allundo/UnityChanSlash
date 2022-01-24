@@ -11,10 +11,29 @@ public interface IMapUtil
     void TurnLeft();
     void TurnRight();
 
-    Vector3 GetForwardVector(int distance = 1);
-    Vector3 GetBackwardVector(int distance = 1);
-    Vector3 GetRightVector(int distance = 1);
-    Vector3 GetLeftVector(int distance = 1);
+    /// <summary>
+    /// Vector3 to Forward from current direction
+    /// </summary>
+    /// <param name="distance">magnitude by TILE_UNIT</param>
+    Vector3 GetForwardVector(float distance = 1f);
+
+    /// <summary>
+    /// Vector3 to Backward from current direction
+    /// </summary>
+    /// <param name="distance">magnitude by TILE_UNIT</param>
+
+    Vector3 GetBackwardVector(float distance = 1f);
+    /// <summary>
+    /// Vector3 to Right from current direction
+    /// </summary>
+    /// <param name="distance">magnitude by TILE_UNIT</param>
+
+    Vector3 GetRightVector(float distance = 1f);
+    /// <summary>
+    /// Vector3 to Left from current direction
+    /// </summary>
+    /// <param name="distance">magnitude by TILE_UNIT</param>
+    Vector3 GetLeftVector(float distance = 1f);
 
     ITile GetTile(Pos destPos);
     ITile ForwardTile { get; }
