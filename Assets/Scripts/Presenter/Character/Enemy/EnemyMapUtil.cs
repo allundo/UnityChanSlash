@@ -61,7 +61,8 @@ public class EnemyMapUtil : MapUtil
     /// <param name="pos">Pos unit Tile position</param>
     public void RemoveOnEnemy(Pos pos)
     {
-        map.GetTile(pos).OnEnemy = null;
+        ITile tile = map.GetTile(pos);
+        if (tile.OnEnemy == status) tile.OnEnemy = null;
     }
 
     /// <summary>
