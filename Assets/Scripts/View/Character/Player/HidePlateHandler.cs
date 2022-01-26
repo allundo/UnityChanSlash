@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using DG.Tweening;
 
 /// <summary>
 /// Hides invisible area for player character using HidePlate(hides 1 Tile)s. <br />

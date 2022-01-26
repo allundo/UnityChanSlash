@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using UniRx;
+using System.Collections;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -20,6 +20,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public Vector3 cameraPosition { get; private set; }
 
     private RenderTexture renderTexture;
+    private Texture2D screenShot;
 
     private Camera cam = default;
 
@@ -75,6 +76,9 @@ public class ThirdPersonCamera : MonoBehaviour
         renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
         crossFade.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         crossFade.texture = renderTexture;
+
+        if (screenShot != null) Destroy(screenShot);
+        screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
     }
 
     public void TurnRight()
@@ -112,17 +116,36 @@ public class ThirdPersonCamera : MonoBehaviour
     public void ResetCamera()
     {
         cam.targetTexture = null;
-        crossFade.enabled = false;
-        SetFadeAlpha(1.0f);
-
+        ResetCrossFade();
         sideCamera.Disable();
     }
 
-    public void StopScreen()
+    public void ResetCrossFade()
     {
-        cam.targetTexture = renderTexture;
+        crossFade.texture = renderTexture;
+        crossFade.enabled = false;
+        SetFadeAlpha(1.0f);
+        crossFade.transform.SetSiblingIndex(1);
+    }
+
+    public void StopScreen(int screenCoverIndex = 8)
+    {
+        StartCoroutine(DisplayScreenShot(screenCoverIndex));
+    }
+
+    private IEnumerator DisplayScreenShot(int screenCoverIndex = 8)
+    {
+        // Wait for rendering before read pixels
+        yield return new WaitForEndOfFrame();
+
+        screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenShot.Apply();
+        yield return new WaitForEndOfFrame();
+
+        crossFade.texture = screenShot;
         crossFade.enabled = true;
-        sideCamera.Enable();
-        Observable.NextFrame().Subscribe(_ => cam.targetTexture = null);
+
+        // Set cross fade Image to forefront
+        crossFade.transform.SetSiblingIndex(screenCoverIndex - 1);
     }
 }

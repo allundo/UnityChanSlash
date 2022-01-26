@@ -51,11 +51,8 @@ public abstract class PlayerCommand : Command
         if (!(destTile is Stairs)) return;
 
         tweenMove.DelayedCall(0.6f, () =>
-        {
-            playerInput.ClearAll();
-            playerInput.SetInputVisible(false);
-            GameManager.Instance.EnterStair((destTile as Stairs).isDownStairs);
-        }).Play();
+            GameManager.Instance.EnterStair((destTile as Stairs).isDownStairs)
+        ).Play();
     }
 }
 

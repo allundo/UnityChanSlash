@@ -166,6 +166,7 @@ public class PlayerInput : ShieldInput
     {
         isInputVisible = isVisible;
         restButton.gameObject.SetActive(isVisible);
+        itemInventory.enabled = isVisible;
         if (!isVisible) InactivateUIs();
     }
 

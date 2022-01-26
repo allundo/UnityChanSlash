@@ -8,13 +8,13 @@ public class MiniMapHandler : MonoBehaviour
     public void SwitchWorldMap(WorldMap map)
     {
         miniMap.SwitchWorldMap(map);
-        gameObject.SetActive(false);
+        miniMap.enabled = false;
     }
 
     public void OnStartFloor()
     {
-        gameObject.SetActive(true);
         miniMap.UpdateMiniMap();
+        miniMap.enabled = true;
     }
 
     public void UpdateMiniMap() => miniMap.UpdateMiniMap();

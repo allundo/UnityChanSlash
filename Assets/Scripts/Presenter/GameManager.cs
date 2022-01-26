@@ -172,6 +172,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void EnterStair(bool isDownStairs)
     {
 
+        input.ClearAll();
+        input.SetInputVisible(false);
+        mainCamera.StopScreen(cover.transform.GetSiblingIndex());
+
         Observable
             .Merge(
                 cover.CoverOn().OnCompleteAsObservable().Select(t => Unit.Default),
@@ -184,7 +188,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private void StartFloor()
     {
         hidePlateHandler.OnStartFloor();
-        mainCamera.ResetCamera();
+        mainCamera.ResetCrossFade();
 
         cover.FadeIn(1f, 0f, false).Play();
         input.ValidateInput();
@@ -193,7 +197,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     private IEnumerator MoveFloor(bool isDownStairs)
     {
-        mainCamera.StopScreen();
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 
