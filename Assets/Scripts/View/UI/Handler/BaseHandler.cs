@@ -21,6 +21,8 @@ public class BaseHandler : MonoBehaviour
     protected bool isActive = false;
     public bool isPressed { get; protected set; } = false;
 
+    protected InputControl ic = new InputControl();
+
     protected Image image;
 
     protected HandleUI[] handleUIs;
@@ -50,6 +52,9 @@ public class BaseHandler : MonoBehaviour
 
     protected void SetPressActive(bool isActive, HandleUI otherHandleUI, bool isOtherActive)
     {
+        // Forbid L & R double pressing
+        if (!ic.CanFire()) return;
+
         image.raycastTarget = isActive;
         isPressed = isActive;
         otherHandleUI?.SetActive(isOtherActive);

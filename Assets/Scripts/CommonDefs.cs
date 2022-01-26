@@ -1,12 +1,10 @@
 using UnityEngine;
 using System;
+using UniRx;
 
 // UnityEngine.Debug.Log(System.Reflection.MethodBase.GetCurrentMethod().Name + ": " + gameObject.name, gameObject);
 
-#if UNITY_EDITOR
-using UniRx;
-
-// Handles event double firing issue on Editor.
+// Mainly used to forbid double firing on UI
 public class InputControl
 {
     private bool isFired = false;
@@ -18,7 +16,6 @@ public class InputControl
         return true;
     }
 }
-#endif
 
 public class Constants
 {
