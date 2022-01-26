@@ -26,6 +26,8 @@ public class Commander
     /// <typeparam name="Command">Command that Execute() method is implemented </typeparam>
     protected LinkedList<ICommand> cmdQueue = new LinkedList<ICommand>();
 
+    public int QueueCount => cmdQueue.Count;
+
     /// <summary>
     /// Executing Command. null if no Command is executing.
     /// </summary>

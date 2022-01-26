@@ -115,7 +115,8 @@ public abstract class MobInput : MonoBehaviour, IInput
 
     public virtual void ValidateInput(bool isTriggerOnly = false)
     {
-        isCommandValid = true;
+        // Don't allow multiple Command queuing for now
+        if (commander.QueueCount == 0) isCommandValid = true;
     }
 
     public virtual void DisableInput(bool isTriggerOnly = false)
