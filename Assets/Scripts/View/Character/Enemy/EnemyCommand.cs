@@ -114,6 +114,24 @@ public class EnemyAttack : EnemyCommand
     }
 }
 
+public class EnemyDoubleAttack : EnemyAttack
+{
+    public EnemyDoubleAttack(EnemyCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        completeTween = DOTween.Sequence()
+            .AppendCallback(enemyAnim.attack.Fire)
+            .Join(enemyAttack.AttackSequence(duration))
+            .AppendInterval(duration * 0.12f)
+            .AppendCallback(enemyAnim.attack.Fire)
+            .Join(enemyAttack.AttackSequence(duration))
+            .Play();
+
+        return true;
+    }
+}
+
 public class EnemyFire : EnemyAttack
 {
     public EnemyFire(EnemyCommandTarget target, float duration) : base(target, duration) { }

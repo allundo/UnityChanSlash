@@ -6,6 +6,7 @@ public class EnemyAIInput : MobInput
     protected ICommand turnR;
     protected ICommand moveForward;
     protected ICommand attack;
+    protected ICommand doubleAttack;
     protected ICommand fire;
 
     protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
@@ -16,9 +17,10 @@ public class EnemyAIInput : MobInput
 
         die = new EnemyDie(enemyTarget, 72f);
         moveForward = new EnemyForward(enemyTarget, 72f);
-        turnL = new EnemyTurnL(enemyTarget, 8f);
-        turnR = new EnemyTurnR(enemyTarget, 8f);
-        attack = new EnemyAttack(enemyTarget, 72f);
+        turnL = new EnemyTurnL(enemyTarget, 16f);
+        turnR = new EnemyTurnR(enemyTarget, 16f);
+        attack = new EnemyAttack(enemyTarget, 100f);
+        doubleAttack = new EnemyDoubleAttack(enemyTarget, 100f);
         fire = new EnemyFire(enemyTarget, 108f);
     }
 
@@ -44,7 +46,7 @@ public class EnemyAIInput : MobInput
 
         // Attack if player found at forward
         Pos forward = map.GetForward;
-        if (IsOnPlayer(forward)) return attack;
+        if (IsOnPlayer(forward)) return RandomChoice(attack, doubleAttack);
 
         // Move forward if player found in front
         if (map.IsPlayerFound(forward)) return moveForward;
