@@ -45,9 +45,19 @@ public class RabbitAIInput : EnemyAIInput
         bool isRightMovable = map.IsMovable(right);
         bool isBackwardMovable = map.IsMovable(backward);
 
-        // Turn to player if able to somersault or forward isn't movable
-        if (IsOnPlayer(left) && (isRightMovable || !isForwardMovable)) return turnL;
-        if (IsOnPlayer(right) && (isLeftMovable || !isForwardMovable)) return turnR;
+        if (IsOnPlayer(left))
+        {
+            // Turn left to player if player found at left and not cowering
+            if (currentCommand != turnR) return turnL;
+            else if (isForwardMovable) return moveForward;
+        }
+
+        if (IsOnPlayer(right))
+        {
+            // Turn right to player if player found at right and not cowering
+            if (currentCommand != turnL) return turnR;
+            else if (isForwardMovable) return moveForward;
+        }
 
         // Try cowering if player is on backward
         if (IsOnPlayer(backward)) return isForwardMovable ? moveForward : RandomChoice(turnL, turnR);
