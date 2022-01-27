@@ -27,7 +27,7 @@ public class GoblinAIInput : ShieldInput
         run = new EnemyForward(enemyTarget, 36f);
         turnL = new GoblinTurnL(enemyTarget, 16f);
         turnR = new GoblinTurnR(enemyTarget, 16f);
-        guard = new GoblinGuard(enemyTarget, 36f);
+        guard = new GuardCommand(enemyTarget, 36f, 0.95f);
         attack = new EnemyAttack(enemyTarget, 60f);
     }
 

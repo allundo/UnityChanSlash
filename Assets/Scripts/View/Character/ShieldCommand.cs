@@ -6,7 +6,7 @@ public abstract class ShieldCommand : Command
 
 public class GuardCommand : ShieldCommand
 {
-    public GuardCommand(CommandTarget target, float duration) : base(target, duration, 0.3f)
+    public GuardCommand(CommandTarget target, float duration, float validateTiming = 0.3f) : base(target, duration, validateTiming)
     { }
 
     protected override bool Action() => true;
@@ -14,7 +14,7 @@ public class GuardCommand : ShieldCommand
 
 public class ShieldOnCommand : ShieldCommand
 {
-    public ShieldOnCommand(CommandTarget target, float duration) : base(target, duration, 0.1f)
+    public ShieldOnCommand(CommandTarget target, float duration, float validateTiming = 0.1f) : base(target, duration, validateTiming)
     { }
 
     protected override bool Action()
