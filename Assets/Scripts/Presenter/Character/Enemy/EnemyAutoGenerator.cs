@@ -46,7 +46,7 @@ public class EnemyAutoGenerator : EnemyGenerator
         yield return new WaitForSeconds(1);
 
         detectCharacter.enabled = false;
-        if (!spawnTile.IsObjectOn) Spawn();
+        if (!spawnTile.IsCharacterOn) Spawn();
     }
 
     public void OnTriggerEnter(Collider other)

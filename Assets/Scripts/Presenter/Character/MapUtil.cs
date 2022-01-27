@@ -55,7 +55,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     public ITile LeftTile => map.GetTile(GetLeft);
     public ITile JumpTile => map.GetTile(GetJump);
 
-    public bool IsObjectOn(Pos destPos) => map.GetTile(destPos).IsObjectOn;
+    public bool IsObjectOn(Pos destPos) => map.GetTile(destPos).IsCharacterOn;
     public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
@@ -121,7 +121,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// <returns>destPos</returns>
     public virtual Pos SetObjectOn(Pos destPos)
     {
-        if (status.IsOnGround) map.GetTile(destPos).IsObjectOn = true;
+        if (status.IsOnGround) map.GetTile(destPos).OnCharacterDest = status;
         onTilePos = destPos;
         return destPos;
     }
@@ -143,7 +143,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// <param name="pos">Pos unit Tile position</param>
     public void RemoveObjectOn(Pos pos)
     {
-        if (status.IsOnGround) map.GetTile(pos).IsObjectOn = false;
+        if (status.IsOnGround) map.GetTile(pos).OnCharacterDest = null;
     }
 
     /// <summary>
