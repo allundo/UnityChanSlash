@@ -9,6 +9,12 @@
     SubShader
     {
         Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout"}
+        LOD 200
+
+        Pass{
+  	        ZWrite ON
+  	        ColorMask 0
+        }
 
         CGPROGRAM
         #pragma surface surf Lambert
