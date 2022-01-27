@@ -88,7 +88,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
 
-        cover.FadeIn(1.5f, 1.0f, false).Play();
+        cover.FadeIn(1.5f, 1.5f, false).Play();
         input.EnqueueDropFloor();
         input.EnqueueStartMessage(
             new MessageData
@@ -114,7 +114,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
 
-        cover.FadeIn(1.0f, 0, false).Play();
+        cover.FadeIn(1f, 0.5f, false).Play();
         input.EnqueueRestartMessage(
             new MessageData
             {
