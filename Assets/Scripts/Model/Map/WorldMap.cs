@@ -36,6 +36,9 @@ public class WorldMap
         {
             for (int i = x - 1; i < x + 1; i++)
             {
+                Pos pos = new Pos(i, j);
+                if (pos == stairsTop.Key || pos == stairsBottom.Key) continue;
+
                 tile = GetTile(i, j);
 
                 if (tile is Ground)

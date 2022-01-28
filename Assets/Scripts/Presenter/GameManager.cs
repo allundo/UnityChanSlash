@@ -203,14 +203,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         mapRenderer.SwitchWorldMap(worldMap);
         yield return new WaitForEndOfFrame();
 
+        map.SetPosition(worldMap, isDownStairs);
+        hidePlateHandler.SwitchWorldMap(worldMap);
+
         debugEnemyGenerator.DestroyAll();
         debugEnemyGenerator.gameObject.SetActive(false);
 
-        placeEnemyGenerator.SwitchWorldMap(worldMap);
+        placeEnemyGenerator.SwitchWorldMap(worldMap, map.CurrentPos);
         fireBallGenerator.DestroyAll();
 
-        map.SetPosition(worldMap, isDownStairs);
-        hidePlateHandler.SwitchWorldMap(worldMap);
         yield return new WaitForEndOfFrame();
 
         itemGenerator.SwitchWorldMap(worldMap);

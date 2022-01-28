@@ -108,7 +108,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         return regions;
     }
 
-    public void SwitchWorldMap(WorldMap map)
+    public void SwitchWorldMap(WorldMap map, Pos playerPos)
     {
         var store = respawnData[this.map.floor - 1];
         var restore = respawnData[map.floor - 1];
@@ -118,7 +118,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
             tile.OnCharacterDest = null;
             if (tile.OnEnemy != null)
             {
-                store.Add(new RespawnData(tile.OnEnemy, pos));
+                if (pos != playerPos) store.Add(new RespawnData(tile.OnEnemy, pos));
                 tile.OnEnemy = null;
             }
         });
