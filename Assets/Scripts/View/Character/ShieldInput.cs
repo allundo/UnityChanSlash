@@ -32,7 +32,7 @@ public abstract class ShieldInput : MobInput
     {
         protected ShieldInput input;
         protected IMapUtil map;
-        private ShieldAnimator anim;
+        protected ShieldAnimator anim;
         private ICommand shieldOn;
         protected float timeToReady;
         public bool isShieldReady = false;
@@ -50,6 +50,11 @@ public abstract class ShieldInput : MobInput
             shieldOn = new ShieldOnCommand(input.target, duration);
             anim = input.target.anim as ShieldAnimator;
 
+            Subscribe(input);
+        }
+
+        protected virtual void Subscribe(ShieldInput input)
+        {
             IsShieldObservable
                 .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
                 .AddTo(input.target);
@@ -58,8 +63,8 @@ public abstract class ShieldInput : MobInput
         public virtual bool IsShieldOn(IDirection attackDir) => isShieldReady && map.dir.IsInverse(attackDir);
         public void SetShield() => input.Interrupt(shieldOn);
 
-        private Tween readyTween = null;
-        protected void SetShieldReady(bool isGuardOn)
+        protected Tween readyTween = null;
+        protected virtual void SetShieldReady(bool isGuardOn)
         {
             anim.guard.Bool = isGuardOn;
 

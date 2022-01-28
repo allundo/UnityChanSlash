@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using System;
+using DG.Tweening;
 
 /// <summary>
 /// Convert player input UIs operation into a ICommand and enqueue it to PlayerCommander.<br />
@@ -420,21 +421,35 @@ public class PlayerInput : ShieldInput
         private IObservable<bool> IsAutoGuardObservable => playerInput.IsEnemyDetected.SkipLatestValueOnSubscribe();
         private bool isAutoGuard => playerInput.IsEnemyDetected.Value;
 
-        public override bool IsShieldOn(IDirection attackDir) => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
+        public override bool IsShieldOn(IDirection attackDir)
+            => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
         public PlayerGuardState(PlayerInput input, float duration = 15f, float timeToReady = 0.15f) : base(input, duration, timeToReady)
-        {
-            playerInput = input;
-            this.timeToReady = timeToReady;
+        { }
 
-            var IsShieldObservable = (input.commander as PlayerCommander)
-                .CurrentObservable
-                .Select(cmd => cmd is ShieldCommand);
+        protected override void Subscribe(ShieldInput input)
+        {
+            playerInput = input as PlayerInput;
 
             Observable.Merge(IsAutoGuardObservable, IsShieldObservable)
-                .Select(_ => isAutoGuard || input.IsShield)
+                .Select(_ => isAutoGuard || playerInput.IsShield)
                 .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
-                .AddTo(input.target);
+                .AddTo(playerInput.target);
+        }
+
+        protected override void SetShieldReady(bool isGuardOn)
+        {
+            anim.guard.Bool = isGuardOn;
+
+            if (isGuardOn)
+            {
+                readyTween = DOVirtual.DelayedCall(timeToReady, () => isShieldReady = true, false).Play();
+            }
+            else
+            {
+                readyTween?.Kill();
+                isShieldReady = false;
+            }
         }
     }
 }
