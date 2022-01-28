@@ -12,6 +12,9 @@ public class PlayerCommander : ShieldCommander
 
     public override void EnqueueCommand(ICommand cmd)
     {
+        // Don't allow over queuing of GuardCommand
+        if (cmdQueue.First?.Value is GuardCommand) cmdQueue.Dequeue();
+
         base.EnqueueCommand(cmd);
         if (anim.cancel.Bool) CheckCancel(); // Cancel current cancelable Attack if newly enqueued command is Attack
     }
