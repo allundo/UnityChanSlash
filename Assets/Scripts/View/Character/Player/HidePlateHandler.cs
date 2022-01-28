@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 
@@ -260,7 +261,6 @@ public class HidePlateHandler : MonoBehaviour
                     int x = playerPos.x + i;
                     int y = playerPos.y + j;
                     plateData[x, y] = SpawnPlate(plateMap[i, j], startPos.Add(i, j));
-                    // plateData[x, y]?.CheckAngle();
                 }
             }
         }
@@ -279,10 +279,47 @@ public class HidePlateHandler : MonoBehaviour
                     int x = playerPos.x + i;
                     int y = playerPos.y + j;
 
-                    if (plateMap[i, j] != (plateData[x, y]?.plate ?? Plate.NONE))
+                    Plate src = plateMap[i, j];
+                    Plate dst = plateData[x, y]?.plate ?? Plate.NONE;
+
+                    if (src != dst)
                     {
-                        plateData[x, y]?.Remove(0.4f);
-                        plateData[x, y] = SpawnPlate(plateMap[i, j], startPos.Add(i, j), 0.1f);
+                        // Remove the old plate simply if the new plate is NONE
+                        if (src == Plate.NONE)
+                        {
+                            plateData[x, y]?.Remove(0.4f);
+                            plateData[x, y] = null;
+                            continue;
+                        }
+
+                        Pos pos = startPos.Add(i, j);
+                        HidePlate plate = SpawnPlate(src, pos, 0f);
+
+                        // If the new plate expands the old plate,
+                        // spawn a dummy plate of expansion part and
+                        // replace them with the new plate later.
+                        Plate expand = src & ~dst;
+                        if (expand != Plate.NONE)
+                        {
+                            plate.SetAlpha(0f);
+                            SpawnPlate(expand, pos, 0.2f).RemoveTimer(0.2f).OnComplete(() => plate.SetAlpha(1f)).Play();
+
+                            plateData[x, y]?.RemoveTimer(0.2f)?.Play();
+                            plateData[x, y] = plate;
+                            continue;
+                        }
+
+                        // If the new plate shrinks the old plate,
+                        // replace the old plate with the new plate immediately and
+                        // spawn and remove a dummy plate of shrink part.
+                        Plate remove = dst & ~src;
+                        if (remove != Plate.NONE)
+                        {
+                            SpawnPlate(remove, pos, 0f).Remove(0.4f);
+                            plateData[x, y]?.Inactivate();
+                            plateData[x, y] = plate;
+                            continue;
+                        }
                     }
                 }
             }

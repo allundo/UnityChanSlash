@@ -39,10 +39,20 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
 
         gameObject.SetActive(true);
         removeTween?.Kill();
-        fadeInTween = FadeIn(duration).SetEase(Ease.Linear).Play();
+
+        if (duration > 0f)
+        {
+            fadeInTween = FadeIn(duration, null, null, false).SetEase(Ease.Linear).Play();
+        }
+        else
+        {
+            fade.SetAlpha(1f);
+        }
 
         return this;
     }
+
+    public void SetAlpha(float alpha) => fade.SetAlpha(alpha);
 
     public HidePlate SetPlateType(Plate plate, Vector4 rotationMatrix)
     {
@@ -61,6 +71,16 @@ public class HidePlate : FadeActivate, ISpawnObject<HidePlate>
         fadeInTween?.Kill();
 
         removeTween = FadeOut(duration).SetEase(Ease.Linear).Play();
+    }
+
+    public Tween RemoveTimer(float timeSec)
+    {
+        return DOVirtual.DelayedCall(timeSec, () =>
+        {
+            fade.KillTweens();
+            fadeInTween?.Kill();
+            Inactivate();
+        }, false);
     }
 
     public void RemoveImmediately()
