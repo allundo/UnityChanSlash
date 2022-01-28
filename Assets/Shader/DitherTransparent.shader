@@ -9,7 +9,7 @@
     SubShader
     {
         Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout"}
-        LOD 200
+        LOD 100
 
         CGPROGRAM
         #pragma surface surf Lambert

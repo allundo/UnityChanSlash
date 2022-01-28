@@ -9,7 +9,7 @@
     SubShader
     {
         Tags {"Queue"="Transparent+1" "RenderType"="TransparentCutout"}
-        LOD 200
+        LOD 100
 
         Pass{
   	        ZWrite ON

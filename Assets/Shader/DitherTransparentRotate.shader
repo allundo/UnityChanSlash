@@ -10,6 +10,7 @@
     SubShader
     {
         Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout"}
+        LOD 100
 
         Pass
         {
