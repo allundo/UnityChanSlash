@@ -1,4 +1,4 @@
-﻿Shader "Custom/Mobile/DitherTransparent"
+﻿Shader "Custom/Mobile/DitherTransparentZWrite"
 {
     Properties
     {
@@ -8,8 +8,13 @@
 
     SubShader
     {
-        Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout"}
+        Tags {"Queue"="Transparent+1" "RenderType"="TransparentCutout"}
         LOD 200
+
+        Pass{
+  	        ZWrite ON
+  	        ColorMask 0
+        }
 
         CGPROGRAM
         #pragma surface surf Lambert
