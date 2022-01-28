@@ -200,8 +200,9 @@ public class ItemIconHandler : IItemIconHandler
             return itemIndex.IsOnUI(vec) ? Drag(vec) : Put();
         }
 
-        protected IItemIconHandler Drag(Vector2 uiPos)
+        protected virtual IItemIconHandler Drag(Vector2 uiPos)
         {
+            handler.currentSelected.Display(true);
             handler.currentSelected.SetPos(uiPos);
             onPutItem.OnNext(null);
             return handler.dragMode;
@@ -232,6 +233,13 @@ public class ItemIconHandler : IItemIconHandler
             // Apply put action if possible
             onPutApply.OnNext(currentSelected);
             return CleanUp();
+        }
+
+        protected override IItemIconHandler Drag(Vector2 uiPos)
+        {
+            handler.currentSelected.Display(false);
+            onPutItem.OnNext(null);
+            return handler.dragMode;
         }
     }
 }

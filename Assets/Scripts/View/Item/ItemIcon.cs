@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using DG.Tweening;
 
 public class ItemIcon : UISymbol
@@ -95,4 +96,5 @@ public class ItemIcon : UISymbol
         if (setAsFirstSibling) transform.SetAsFirstSibling();
     }
 
+    public void Display(bool isShow = true) => image.material.color = new Color(1, 1, 1, Convert.ToInt32(isShow));
 }
