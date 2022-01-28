@@ -40,7 +40,7 @@ public class HidePlateHandler : MonoBehaviour
     private IMapUtil mapUtil;
 
     protected const int RANGE = 11;
-    protected const int WIDTH = 7;
+    protected const int WIDTH = 9;
     protected const int HEIGHT = 15;
 
     /// <summary>
