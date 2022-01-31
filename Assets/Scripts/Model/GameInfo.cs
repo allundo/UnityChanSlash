@@ -1,3 +1,4 @@
+using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 using System.Collections.Generic;
@@ -13,16 +14,13 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     public WorldMap Map(int floor)
     {
-#if UNITY_EDITOR
-
-        if (floor == 1 && maps[MAX_FLOOR] != null)
+        // DEBUG ONLY
+        if (Debug.isDebugBuild && floor == 1 && maps[MAX_FLOOR] != null)
         {
             startActionID = 2;
             currentFloor = 2;
             return (maps[1] = maps[MAX_FLOOR]);
         }
-
-#endif
 
         if (floor > 0 && floor <= MAX_FLOOR)
         {
@@ -42,39 +40,40 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         ClearMaps();
 
-#if UNITY_EDITOR
-
-        int[] matrix = new[]
+        // DEBUG ONLY
+        if (Debug.isDebugBuild)
         {
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 2, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 0, 4, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 1, 1, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
-        };
 
-        var deadEndPos = new Dictionary<Pos, IDirection>()
-        {
-            {new Pos(5, 5), Direction.west},
-            {new Pos(1, 3), Direction.north},
-            {new Pos(1, 5), Direction.north},
-            {new Pos(13, 13), Direction.north},
-            {new Pos(1, 1), Direction.south},
-        };
+            int[] matrix = new[]
+            {
+                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                2, 0, 2, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 0, 4, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 1, 1, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+            };
 
-        maps[MAX_FLOOR] = new WorldMap(new MapManager(matrix, 15, deadEndPos).SetDownStairs().SetUpStairs(deadEndPos.Last().Key), 2);
+            var deadEndPos = new Dictionary<Pos, IDirection>()
+            {
+                {new Pos(5, 5), Direction.west},
+                {new Pos(1, 3), Direction.north},
+                {new Pos(1, 5), Direction.north},
+                {new Pos(13, 13), Direction.north},
+                {new Pos(1, 1), Direction.south},
+            };
 
-#endif
+            maps[MAX_FLOOR] = new WorldMap(new MapManager(matrix, 15, deadEndPos).SetDownStairs().SetUpStairs(deadEndPos.Last().Key), 2);
+        }
 
     }
 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using UniRx;
@@ -13,6 +14,7 @@ public class TitleUIHandler : MonoBehaviour
     [SerializeField] private SelectButtons selectButtons = default;
     [SerializeField] private FaceAnimator unityChanAnim = default;
     [SerializeField] private FadeScreen fade = default;
+    [SerializeField] public Button debugStart = default;
 
     private Transform tfUnityChan;
 
@@ -20,12 +22,15 @@ public class TitleUIHandler : MonoBehaviour
 
     void Awake()
     {
+        // DEBUG ONLY
+        debugStart.gameObject.SetActive(Debug.isDebugBuild);
+
         tfUnityChan = unityChanAnim.GetComponent<Transform>();
 
         TransitSignal =
             selectButtons.startButton
                 .OnClickAsObservable()
-                .SelectMany(_ => StartSequence().OnCompleteAsObservable());
+                .ContinueWith(_ => StartSequence().OnCompleteAsObservable());
 
         fade.SetAlpha(1f);
     }

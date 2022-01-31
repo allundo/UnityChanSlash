@@ -1,9 +1,12 @@
 using UnityEngine;
 using UniRx;
+using System;
 
 public class TitleSceneMediator : SceneMediator
 {
     [SerializeField] TitleUIHandler titleUIHandler = default;
+
+    private IDisposable logoDisposable;
 
     protected override void InitBeforeStart()
     {
@@ -12,12 +15,21 @@ public class TitleSceneMediator : SceneMediator
         titleUIHandler.TransitSignal
             .Subscribe(_ => SceneTransition(0, GameInfo.Instance.ClearMaps))
             .AddTo(this);
+
+        // DEBUG ONLY
+        if (Debug.isDebugBuild)
+        {
+            titleUIHandler.debugStart
+                .OnClickAsObservable()
+                .Subscribe(_ => DebugStart())
+                .AddTo(this);
+        }
     }
 
     private void Logo()
     {
-        titleUIHandler.Logo()
-            .SelectMany(_ => sceneLoader.LoadSceneAsync(1, 3f))
+        logoDisposable = titleUIHandler.Logo()
+            .ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f))
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.ToTitle)
             .AddTo(this);
@@ -29,5 +41,13 @@ public class TitleSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.SkipLogo)
             .AddTo(this);
+    }
+
+    private void DebugStart()
+    {
+        logoDisposable.Dispose();
+        titleUIHandler.debugStart.gameObject.SetActive(false);
+        sceneLoader.StartLoadScene(1);
+        SceneTransition(2);
     }
 }
