@@ -22,9 +22,6 @@ public class TitleUIHandler : MonoBehaviour
 
     void Awake()
     {
-        // DEBUG ONLY
-        debugStart.gameObject.SetActive(Debug.isDebugBuild);
-
         tfUnityChan = unityChanAnim.GetComponent<Transform>();
 
         TransitSignal =
@@ -33,6 +30,9 @@ public class TitleUIHandler : MonoBehaviour
                 .ContinueWith(_ => StartSequence().OnCompleteAsObservable());
 
         fade.SetAlpha(1f);
+
+        // DEBUG ONLY
+        debugStart.gameObject.SetActive(Debug.isDebugBuild);
     }
 
     public IObservable<Tween> Logo()

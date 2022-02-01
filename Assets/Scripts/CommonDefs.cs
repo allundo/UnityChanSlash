@@ -434,4 +434,5 @@ public enum EnemyType
     RedSlime,
     Goblin,
     YellowRabbit,
+    SkeletonSoldier,
 }

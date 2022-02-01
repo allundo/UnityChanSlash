@@ -56,6 +56,10 @@ sampler2D   _EmissionMap;
 sampler2D   _DitherMaskLOD2D;
 #endif
 
+#ifdef _ADDITIVE_COLOR
+half4       _AdditiveColor;
+#endif
+
 //-------------------------------------------------------------------------------------
 // Input functions
 
@@ -116,6 +120,8 @@ half Alpha(float2 uv)
 {
 #if defined(_SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A)
     return _Color.a;
+#elif defined(_ADDITIVE_COLOR)
+    return tex2D(_MainTex, uv).a * _AdditiveColor.a;
 #else
     return tex2D(_MainTex, uv).a * _Color.a;
 #endif

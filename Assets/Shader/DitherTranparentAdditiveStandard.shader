@@ -2,14 +2,15 @@
 // ## Dither transparent is available with "Cutoff" Rendering Mode set on material editor
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Custom/Standard/DitherTransparent"
+Shader "Custom/Standard/DitherTransparentAdditive"
 {
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
         _MainTex("Albedo", 2D) = "white" {}
 
-        [HideInInspector] _AdditiveColor("Additive Color", Color) = (0,0,0,1)
+        // This parameter can be editted only via Material.color in scripts
+        [MainColor] _AdditiveColor("Additive Color", Color) = (0,0,0,1)
 
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 
@@ -84,6 +85,7 @@ Shader "Custom/Standard/DitherTransparent"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
             #pragma shader_feature _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local _DETAIL_MULX2
@@ -124,6 +126,7 @@ Shader "Custom/Standard/DitherTransparent"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
             #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
@@ -182,6 +185,7 @@ Shader "Custom/Standard/DitherTransparent"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
             #pragma shader_feature _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
@@ -254,6 +258,7 @@ Shader "Custom/Standard/DitherTransparent"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
             #pragma shader_feature _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
@@ -290,6 +295,7 @@ Shader "Custom/Standard/DitherTransparent"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
             #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF

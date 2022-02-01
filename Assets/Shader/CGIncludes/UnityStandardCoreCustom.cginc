@@ -483,6 +483,10 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG(_unity_fogCoord, c.rgb);
 
+    #ifdef _ADDITIVE_COLOR
+        c.rgb += _AdditiveColor.rgb;
+    #endif
+
     return OutputForward (c, s.alpha);
 }
 
@@ -581,6 +585,11 @@ half4 fragForwardAddInternal (VertexOutputForwardAdd i)
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG_COLOR(_unity_fogCoord, c.rgb, half4(0,0,0,0)); // fog towards black in additive pass
+
+    #ifdef _ADDITIVE_COLOR
+        c.rgb += _AdditiveColor.rgb;
+    #endif
+
     return OutputForward (c, s.alpha);
 }
 

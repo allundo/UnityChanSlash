@@ -128,9 +128,9 @@ VertexOutputBaseSimple vertForwardBaseSimple (VertexInput v)
     #endif
 
     UNITY_TRANSFER_FOG(o, o.pos);
+
     return o;
 }
-
 
 FragmentCommonData FragmentSetupSimple(VertexOutputBaseSimple i)
 {
@@ -238,6 +238,10 @@ half4 fragForwardBaseSimpleInternal (VertexOutputBaseSimple i)
     c += Emission(i.tex.xy);
 
     UNITY_APPLY_FOG(i.fogCoord, c);
+
+    #ifdef _ADDITIVE_COLOR
+        c.rgb += _AdditiveColor.rgb;
+    #endif
 
     return OutputForward (half4(c, 1), s.alpha);
 }
@@ -376,6 +380,11 @@ half4 fragForwardAddSimpleInternal (VertexOutputForwardAddSimple i)
     c *= atten * saturate(dot(LightSpaceNormal(i, s), i.lightDir));
 
     UNITY_APPLY_FOG_COLOR(i.fogCoord, c.rgb, half4(0,0,0,0)); // fog towards black in additive pass
+
+    #ifdef _ADDITIVE_COLOR
+        c.rgb += _AdditiveColor.rgb;
+    #endif
+
     return OutputForward (half4(c, 1), s.alpha);
 }
 
