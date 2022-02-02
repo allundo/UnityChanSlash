@@ -15,6 +15,11 @@ public interface IInput
     void ClearAll(bool isQueueOnly = false, bool isValidInput = false);
 }
 
+public interface IUndeadInput : IInput
+{
+    void InputSleep();
+}
+
 /// <summary>
 /// Inputs ICommand to ICommand queue in Commander. <br />
 /// </summary>
@@ -107,9 +112,7 @@ public abstract class MobInput : MonoBehaviour, IInput
 
     public virtual void InputDie()
     {
-        // Clear all queuing Commands to execute DieCommand immediately.
         ClearAll();
-
         Interrupt(die);
     }
 

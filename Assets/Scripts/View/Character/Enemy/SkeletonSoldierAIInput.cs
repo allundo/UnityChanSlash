@@ -1,40 +1,23 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ShieldEnemyReactor))]
-[RequireComponent(typeof(ShieldEnemyAnimator))]
-[RequireComponent(typeof(EnemyCommandTarget))]
-public class GoblinAIInput : ShieldInput
+[RequireComponent(typeof(SkeletonSoldierAnimator))]
+[RequireComponent(typeof(SkeletonSoldierReactor))]
+public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
 {
-    protected ShieldEnemyAnimator shieldAnim;
-
-    protected ICommand idle;
-    protected ICommand moveForward;
-    protected ICommand run;
-    protected ICommand turnL;
-    protected ICommand turnR;
-    protected ICommand guard;
-    protected ICommand attack;
-
-    protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
+    protected ICommand sleep;
 
     protected override void SetCommands()
     {
         var enemyTarget = target as EnemyCommandTarget;
+        sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 60f));
 
-        die = new EnemyDie(enemyTarget, 72f);
-        idle = new EnemyIdle(enemyTarget, 36f);
-        moveForward = new EnemyForward(enemyTarget, 72f);
-        run = new EnemyForward(enemyTarget, 36f);
-        turnL = new ShieldEnemyTurnL(enemyTarget, 16f);
-        turnR = new ShieldEnemyTurnR(enemyTarget, 16f);
-        guard = new GuardCommand(enemyTarget, 36f, 0.95f);
-        attack = new EnemyAttack(enemyTarget, 60f);
+        base.SetCommands();
     }
 
-    protected override void SetInputs()
+    public void InputSleep()
     {
-        guardState = new GuardState(this);
-        shieldAnim = target.anim as ShieldEnemyAnimator;
+        ClearAll();
+        Interrupt(sleep);
     }
 
     protected override ICommand GetCommand()

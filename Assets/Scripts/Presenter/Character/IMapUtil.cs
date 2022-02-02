@@ -36,6 +36,7 @@ public interface IMapUtil
     Vector3 GetLeftVector(float distance = 1f);
 
     ITile GetTile(Pos destPos);
+    ITile OnTile { get; }
     ITile ForwardTile { get; }
     ITile BackwardTile { get; }
     ITile RightTile { get; }

@@ -427,6 +427,16 @@ public enum AttackType
     Burn = 10,
 }
 
+public enum AttackAttr
+{
+    None = 0,
+    Fire,
+    Ice,
+    Thunder,
+    Light,
+    Dark,
+}
+
 public enum EnemyType
 {
     None = 0,

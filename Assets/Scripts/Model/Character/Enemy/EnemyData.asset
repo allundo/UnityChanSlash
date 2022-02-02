@@ -92,7 +92,7 @@ MonoBehaviour:
     backDamageMultiplier: 2
     restDamageMultiplier: 6
     armorMultiplier: 1
-    prefab: {fileID: 4481575936643373937, guid: 2a77346479df447fdbc8731795f33d55,
+    prefab: {fileID: 3421093751725662690, guid: 2a77346479df447fdbc8731795f33d55,
       type: 3}
     type: 5
     enemyCore: {x: 0, y: 0.75, z: 0}

@@ -5,12 +5,17 @@ using DG.Tweening;
 public interface IReactor
 {
     Vector3 position { get; }
-    void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None);
-    void OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
+    float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None);
+    float OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
     void OnDie();
     void OnActive();
     void FadeOutToDead(float duration = 0.5f);
     void Destroy();
+}
+
+public interface IUndeadReactor : IReactor
+{
+    void OnResurrection();
 }
 
 [RequireComponent(typeof(BodyEffect))]
@@ -72,9 +77,9 @@ public class MobReactor : MonoBehaviour, IReactor
         lifeGauge?.OnLifeChange(status.Life.Value, lifeMax);
     }
 
-    public virtual void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
+    public virtual float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
     {
-        if (!status.IsAlive) return;
+        if (!status.IsAlive) return 0f;
 
         float damage = CalcDamage(attack, dir);
         float damageRatio = LifeRatio(damage);
@@ -83,11 +88,12 @@ public class MobReactor : MonoBehaviour, IReactor
         lifeGauge?.OnDamage(damageRatio);
 
         status.Damage(damage);
+        return damage;
     }
 
-    public virtual void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
+    public virtual float OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
     {
-        if (!status.IsAlive) return;
+        if (!status.IsAlive) return 0f;
 
         float heal = healRatio * status.LifeMax.Value;
         float lifeRatio = LifeRatio(status.Life.Value + heal);
@@ -104,6 +110,7 @@ public class MobReactor : MonoBehaviour, IReactor
         }
 
         status.Heal(heal);
+        return heal;
     }
 
     protected float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);

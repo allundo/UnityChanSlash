@@ -30,16 +30,16 @@ public class PlayerReactor : MobReactor
         restUI.Heal.Subscribe(point => OnHealRatio(point, false)).AddTo(this);
     }
 
-    public override void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
+    public override float OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
     {
         if (healRatio == 0f)
         {
             // Update RestUI life gauge
             restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
-            return;
+            return 0f;
         }
 
-        base.OnHealRatio(healRatio, isEffectOn);
+        return base.OnHealRatio(healRatio, isEffectOn);
     }
     protected override void OnLifeChange(float life)
     {
@@ -48,10 +48,11 @@ public class PlayerReactor : MobReactor
         anim.lifeRatio.Float = LifeRatio(life);
     }
 
-    public override void OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
+    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
     {
-        base.OnDamage(attack, dir, type);
+        float damage = base.OnDamage(attack, dir, type);
         if (restUI.isActive) restUI.OnDamage();
+        return damage;
     }
 
     protected override float CalcDamage(float attack, IDirection dir)

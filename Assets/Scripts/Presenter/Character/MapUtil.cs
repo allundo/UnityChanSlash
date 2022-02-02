@@ -49,6 +49,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     public Vector3 GetLeftVector(float distance = 1f) => Quaternion.Euler(0, -90, 0) * dir.LookAt * TILE_UNIT * distance;
 
     public ITile GetTile(Pos destPos) => map.GetTile(destPos);
+    public ITile OnTile => map.GetTile(onTilePos);
     public ITile ForwardTile => map.GetTile(GetForward);
     public ITile BackwardTile => map.GetTile(GetBackward);
     public ITile RightTile => map.GetTile(GetRight);
