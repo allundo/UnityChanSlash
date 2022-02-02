@@ -78,7 +78,6 @@ public class RabbitAIInput : EnemyAIInput
         Pos left2 = map.dir.GetLeft(left);
         Pos right2 = map.dir.GetRight(right);
 
-
         // Turn to player if player is found in 2 tile distance if able to reach player
         if (IsOnPlayer(backward2) && isBackwardMovable) return RandomChoice(turnL, turnR);
         if (IsOnPlayer(left2) && isLeftMovable) return RandomChoice(turnL, moveForward);

@@ -16,6 +16,7 @@ public class GoblinAIInput : ShieldInput
     protected ICommand attack;
 
     protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
+    protected T RandomChoice<T>(params T[] choices) => choices[Random.Range(0, choices.Length)];
 
     protected override void SetCommands()
     {
@@ -57,7 +58,7 @@ public class GoblinAIInput : ShieldInput
 
         if (IsOnPlayer(backward))
         {
-            return Random.Range(0, 2) == 0 ? turnL : turnR;
+            return RandomChoice(turnL, turnR);
         }
 
         // Attack or Guard if fighting
@@ -112,7 +113,7 @@ public class GoblinAIInput : ShieldInput
             // Turn if backward movable
             if (map.IsMovable(backward))
             {
-                return Random.Range(0, 2) == 0 ? turnL : turnR;
+                return RandomChoice(turnL, turnR);
             }
         }
 
