@@ -71,11 +71,15 @@ public class StartMoving : UndeadCommand
 
         playingTween.Play();
 
+        anim.speed.Float = Speed;
+        completeTween = tweenMove.DelayedCall(timeScale, () => anim.speed.Float = 0f).Play();
+
         validateTween = DOVirtual.DelayedCall(timeScale * invalidDuration, () => input.ValidateInput()).Play();
 
         return ObservableComplete(timeScale);
     }
 }
+
 public class UndeadSleep : UndeadCommand
 {
     ICommand resurrection;
