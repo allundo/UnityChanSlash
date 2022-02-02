@@ -5,16 +5,17 @@ public class MiniMapHandler : MonoBehaviour
 {
     [SerializeField] private MiniMap miniMap = default;
 
-    public void SwitchWorldMap(WorldMap map)
-    {
-        miniMap.SwitchWorldMap(map);
-        miniMap.enabled = false;
-    }
+    public void SwitchWorldMap(WorldMap map) => miniMap.SwitchWorldMap(map);
 
     public void OnStartFloor()
     {
         miniMap.UpdateMiniMap();
         miniMap.enabled = true;
+    }
+
+    public void OnMoveFloor()
+    {
+        miniMap.enabled = false;
     }
 
     public void UpdateMiniMap() => miniMap.UpdateMiniMap();

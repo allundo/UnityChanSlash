@@ -177,6 +177,7 @@ public class HidePlateHandler : MonoBehaviour
         portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
     }
 
+    public void OnMoveFloor() => miniMap.OnMoveFloor();
     public void OnStartFloor()
     {
         miniMap.OnStartFloor();

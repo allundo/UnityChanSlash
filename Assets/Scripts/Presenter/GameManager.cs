@@ -197,10 +197,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     private IEnumerator MoveFloor(bool isDownStairs)
     {
-        worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
-        yield return new WaitForEndOfFrame();
+        hidePlateHandler.OnMoveFloor();
 
-        mapRenderer.SwitchWorldMap(worldMap);
+        worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 
         map.SetPosition(worldMap, isDownStairs);
@@ -212,6 +211,36 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.CurrentPos);
         fireBallGenerator.DestroyAll();
 
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.StoreMapData();
+        yield return new WaitForSeconds(0.5f);
+
+        mapRenderer.SetActiveTerrains(false);
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.DestroyObjects();
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.LoadFloorMaterials(worldMap);
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.InitMeshes();
+        yield return new WaitForEndOfFrame();
+
+        var terrainMeshes = mapRenderer.SetUpTerrainMeshes(worldMap);
+        yield return new WaitForSeconds(0.5f);
+
+        mapRenderer.GenerateTerrain(terrainMeshes);
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.SwitchTerrainMaterials(worldMap);
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.SetActiveTerrains(true);
+        yield return new WaitForEndOfFrame();
+
+        mapRenderer.RestoreMapData(worldMap);
         yield return new WaitForEndOfFrame();
 
         itemGenerator.SwitchWorldMap(worldMap);

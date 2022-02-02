@@ -59,7 +59,7 @@ public class MapRenderer : MonoBehaviour
     ///  <summary>
     /// Initiate meshes to combine. This method must be called before rendering.
     /// </summary>
-    private void InitMeshes()
+    public void InitMeshes()
     {
         wallVMesh = GetMeshFromObject(wallV);
         wallHMesh = GetMeshFromObject(wallH);
@@ -122,7 +122,7 @@ public class MapRenderer : MonoBehaviour
         return objectPool.Peek();
     }
 
-    private void DestroyObjects()
+    public void DestroyObjects()
     {
         doorsPool.ForEach(door => door.KillTween());
         doorsPool.Clear();
@@ -133,21 +133,30 @@ public class MapRenderer : MonoBehaviour
 
     public void Render(WorldMap map)
     {
-        this.map = map;
+        SetActiveTerrains(false);
+        DestroyObjects();
+        LoadFloorMaterials(map);
+        InitMeshes();
+        GenerateTerrain(SetUpTerrainMeshes(map));
+        SwitchTerrainMaterials(map);
+        SetActiveTerrains(true);
+    }
 
+    public void LoadFloorMaterials(WorldMap map)
+    {
+        this.map = map;
+        floorMaterials = floorMaterialsData.Param(map.floor - 1);
+    }
+
+    public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
+    {
         int width = map.Width;
         int height = map.Height;
 
         var dirMap = map.CloneDirMap();
         var matrix = map.CloneMatrix();
 
-        floorMaterials = floorMaterialsData.Param(map.floor - 1);
-        Util.SwitchMaterial(ground.GetComponent<Renderer>(), floorMaterials.ground);
-
         var terrainMeshes = new List<CombineInstance>();
-
-        DestroyObjects();
-        InitMeshes();
 
         for (int j = 0; j < height; j++)
         {
@@ -188,7 +197,7 @@ public class MapRenderer : MonoBehaviour
                 }
             }
         }
-        GenerateTerrain(terrainMeshes);
+        return terrainMeshes;
     }
 
     public void SwitchWorldMap(WorldMap map)
@@ -207,6 +216,23 @@ public class MapRenderer : MonoBehaviour
         restore.Clear();
     }
 
+    public void StoreMapData()
+    {
+        var store = doorOpenData[this.map.floor - 1];
+
+        this.map.ForEachTiles((tile, pos) =>
+        {
+            if (tile is Door && (tile as Door).IsOpen) store.Add(pos);
+        });
+    }
+
+    public void RestoreMapData(WorldMap map)
+    {
+        var restore = doorOpenData[map.floor - 1];
+        restore.ForEach(pos => (map.GetTile(pos) as Door).Handle());
+        restore.Clear();
+    }
+
     private CombineInstance GetMeshInstance(Mesh src, Pos pos)
     {
         return new CombineInstance()
@@ -216,7 +242,7 @@ public class MapRenderer : MonoBehaviour
         };
     }
 
-    private void GenerateTerrain(List<CombineInstance> meshes)
+    public void GenerateTerrain(List<CombineInstance> meshes)
     {
         Mesh combinedMesh = new Mesh();
         combinedMesh.name = "Wall";
@@ -224,9 +250,19 @@ public class MapRenderer : MonoBehaviour
 
         // ProBuilder managed Mesh needs MeshUtility.CopyTo() to apply another Mesh object
         MeshUtility.CopyTo(combinedMesh, wallParent.GetComponent<MeshFilter>().sharedMesh);
-        Util.SwitchMaterial(wallParent.GetComponent<Renderer>(), floorMaterials.wall);
-        wallParent.SetActive(true);
 
         Destroy(combinedMesh);
+    }
+
+    public void SwitchTerrainMaterials(WorldMap map)
+    {
+        Util.SwitchMaterial(ground.GetComponent<Renderer>(), floorMaterials.ground);
+        Util.SwitchMaterial(wallParent.GetComponent<Renderer>(), floorMaterials.wall);
+    }
+
+    public void SetActiveTerrains(bool isActive)
+    {
+        wallParent.SetActive(isActive);
+        ground.gameObject.SetActive(isActive);
     }
 }
