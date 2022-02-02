@@ -7,7 +7,10 @@ using UniRx;
 public class GameInfo : SingletonMonoBehaviour<GameInfo>
 {
     private static readonly int MAX_FLOOR = 10;
+
     private WorldMap[] maps;
+    private int[] mapSize;
+
     private int currentFloor = 0;
 
     public int startActionID = 0;
@@ -24,7 +27,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         if (floor > 0 && floor <= MAX_FLOOR)
         {
-            return (maps[floor - 1] = maps[floor - 1] ?? new WorldMap(null, floor));
+            int size = mapSize[floor - 1];
+            return (maps[floor - 1] = maps[floor - 1] ?? new WorldMap(null, floor, size, size));
         }
 
         return null;
@@ -80,6 +84,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public void ClearMaps()
     {
         maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR + 1).ToArray();
+        mapSize = Enumerable.Repeat(49, MAX_FLOOR + 1).ToArray();
         currentFloor = 0;
+
+        mapSize[0] = 19;
+        mapSize[1] = 35;
     }
 }

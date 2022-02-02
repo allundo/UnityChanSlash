@@ -79,9 +79,9 @@ public class WorldMap
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 
-    public WorldMap(MapManager map = null, int floor = 1)
+    public WorldMap(MapManager map = null, int floor = 1, int w = 49, int h = 49)
     {
-        this.map = map ?? new MapManager().SetDownStairs();
+        this.map = map ?? new MapManager(w, h).SetDownStairs();
         if (floor > 1) stairsBottom = this.map.SetUpStairs().stairsBottom;
         this.floor = floor;
 
