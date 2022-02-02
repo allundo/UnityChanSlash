@@ -5,16 +5,19 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -8718967029479517697
+    second: Armature|ArmatureAction.006
+  - first:
+      74: 1786047867232622282
     second: Skeleton_IDLE
   - first:
       74: 7409977065409188938
     second: Skeleton_WALK
   - first:
-      74: -716947630824892448
+      74: 4887775653716311588
     second: Skeleton_RUN
   - first:
       74: -7091276109724718864
-    second: Skeleton_TURN_R
+    second: Skeleton_TUNR_R
   - first:
       74: -1132350528831090827
     second: Skeleton_TURN_L
@@ -158,7 +161,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Skeleton_TURN_R
+      name: Skeleton_TUNR_R
       takeName: Armature|ArmatureAction.006
       internalID: 0
       firstFrame: 144

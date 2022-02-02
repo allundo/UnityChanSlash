@@ -9,7 +9,7 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
     protected override void SetCommands()
     {
         var enemyTarget = target as EnemyCommandTarget;
-        sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 60f));
+        sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
 
         base.SetCommands();
     }
