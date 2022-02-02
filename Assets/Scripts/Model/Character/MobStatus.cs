@@ -49,7 +49,7 @@ public class MobStatus : SpawnObject<MobStatus>
         lifeMax = new ReactiveProperty<float>(0f);
     }
 
-    public void Damage(float damage)
+    public virtual void Damage(float damage, AttackAttr attr = AttackAttr.None)
     {
         life.Value -= damage;
     }

@@ -30,12 +30,6 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
 
         lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
     }
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
-    {
-        float damage = base.OnDamage(attack, dir, type);
-        undeadStatus.CurseDamage(damage);
-        return damage;
-    }
 
     public void OnResurrection()
     {

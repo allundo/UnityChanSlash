@@ -28,8 +28,9 @@ public class UndeadStatus : EnemyStatus
         life.Value = lifeMax.Value = curse = curseMax = DefaultLifeMax;
     }
 
-    public void CurseDamage(float damage, AttackAttr attr = AttackAttr.None)
+    public override void Damage(float damage, AttackAttr attr = AttackAttr.None)
     {
         curse = Mathf.Clamp(curse - damage * curseMultiplier[attr], 0f, curseMax);
+        life.Value -= damage;
     }
 }
