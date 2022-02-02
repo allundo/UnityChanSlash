@@ -22,7 +22,7 @@ public class Resurrection : UndeadCommand
         startMoving = new StartMoving(target, 72f);
     }
 
-    protected override bool Action()
+    public override IObservable<Unit> Execute()
     {
         if (map.OnTile.IsCharacterOn)
         {
@@ -33,12 +33,21 @@ public class Resurrection : UndeadCommand
             undeadAnim.resurrection.Fire();
             undeadAnim.sleep.Bool = false;
             undeadReact.OnResurrection();
-            if (map.DestVec.magnitude > 0f) input.Interrupt(startMoving, false);
             map.SetObjectOn();
             enemyMap.SetOnEnemy();
+
+            if (map.DestVec.magnitude > 0f)
+            {
+                input.Interrupt(startMoving, false);
+            }
+            else
+            {
+                // Validate input if no Command is reserved.
+                validateTween = ValidateTween().Play();
+            }
         }
 
-        return true;
+        return ObservableComplete();
     }
 }
 
@@ -75,13 +84,13 @@ public class UndeadSleep : UndeadCommand
         this.resurrection = resurrection;
     }
 
-    protected override bool Action()
+    public override IObservable<Unit> Execute()
     {
         undeadAnim.sleep.Bool = true;
         undeadAnim.die.Fire();
         enemyMap.ResetTile();
         input.Interrupt(resurrection, false);
 
-        return true;
+        return ObservableComplete(); // Don't validate input
     }
 }
