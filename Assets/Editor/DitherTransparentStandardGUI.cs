@@ -1,3 +1,4 @@
+// CUSTOMIZED
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
 using System;
