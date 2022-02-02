@@ -22,6 +22,12 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
     }
 
+    protected override void SetInputs()
+    {
+        guardState = new GuardState(this, 19f);
+        shieldAnim = target.anim as SkeletonSoldierAnimator;
+    }
+
     public void InputSleep()
     {
         ClearAll();
