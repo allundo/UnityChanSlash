@@ -216,6 +216,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 
+        // Wait for screenshot is applied to forefront Image
+        yield return new WaitForEndOfFrame();
+
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
         yield return new WaitForEndOfFrame();
