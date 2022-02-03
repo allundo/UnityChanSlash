@@ -83,12 +83,26 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void DropStart()
     {
-        placeEnemyGenerator.Place();
+        input.SetInputVisible(false);
+        cover.SetAlpha(1f);
 
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
 
-        cover.FadeIn(1.5f, 1.5f, false).Play();
+        player.SetActive(false);
+
+        StartCoroutine(DropStartWithDelay());
+    }
+
+    private IEnumerator DropStartWithDelay(float delay = 0.6f)
+    {
+        yield return new WaitForSeconds(delay);
+
+        placeEnemyGenerator.Place();
+        yield return new WaitForEndOfFrame();
+
+        player.SetActive(true);
+        cover.FadeIn(1.5f, 0.6f, false).Play();
         input.EnqueueDropFloor();
         input.EnqueueStartMessage(
             new MessageData
