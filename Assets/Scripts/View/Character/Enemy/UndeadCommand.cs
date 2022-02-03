@@ -24,11 +24,7 @@ public class Resurrection : UndeadCommand
 
     public override IObservable<Unit> Execute()
     {
-        if (map.OnTile.IsCharacterOn)
-        {
-            input.Interrupt(this, false);
-        }
-        else
+        if (map.OnTile.IsEnterable())
         {
             undeadAnim.resurrection.Fire();
             undeadAnim.sleep.Bool = false;
@@ -45,6 +41,10 @@ public class Resurrection : UndeadCommand
                 // Validate input if no Command is reserved.
                 validateTween = ValidateTween().Play();
             }
+        }
+        else
+        {
+            input.Interrupt(this, false);
         }
 
         return ObservableComplete();
