@@ -4,6 +4,12 @@
 public class MiniMapHandler : MonoBehaviour
 {
     [SerializeField] private MiniMap miniMap = default;
+    private Collider enemyDetector;
+
+    void Awake()
+    {
+        enemyDetector = GetComponent<Collider>();
+    }
 
     public void SwitchWorldMap(WorldMap map) => miniMap.SwitchWorldMap(map);
 
@@ -11,11 +17,13 @@ public class MiniMapHandler : MonoBehaviour
     {
         miniMap.UpdateMiniMap();
         miniMap.enabled = true;
+        enemyDetector.enabled = true;
     }
 
     public void OnMoveFloor()
     {
         miniMap.enabled = false;
+        enemyDetector.enabled = false;
     }
 
     public void UpdateMiniMap() => miniMap.UpdateMiniMap();
