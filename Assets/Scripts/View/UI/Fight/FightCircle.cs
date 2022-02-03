@@ -154,6 +154,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (isFingerDown) return;
+
         isFingerDown = true;
 
         if (!InCircle(eventData.position))
