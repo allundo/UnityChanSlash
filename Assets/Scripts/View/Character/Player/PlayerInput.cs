@@ -324,7 +324,7 @@ public class PlayerInput : ShieldInput
             .AddTo(this);
 
         itemInventory.OnUseItem
-            .Subscribe(itemInfo => InputTrigger(new PlayerItem(playerTarget, itemInfo)))
+            .Subscribe(itemInfo => Interrupt(new PlayerItem(playerTarget, itemInfo), false))
             .AddTo(this);
     }
 
