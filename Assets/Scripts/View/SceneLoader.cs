@@ -8,7 +8,7 @@ using DG.Tweening;
 public class SceneLoader : MonoBehaviour
 {
     private AsyncOperation asyncLoad;
-    private int currentLoading = 0;
+    private int currentLoading = -1;
 
     public IObservable<Unit> LoadSceneAsync(int sceneBuildIndex, float waitSec = 0f)
         => Observable.FromCoroutine(() => LoadScene(sceneBuildIndex, waitSec));
@@ -33,7 +33,13 @@ public class SceneLoader : MonoBehaviour
             asyncLoad = SceneManager.LoadSceneAsync(sceneBuildIndex);
         }
 
-        asyncLoad.allowSceneActivation = allowSceneActivation;
+        if (allowSceneActivation)
+        {
+            SceneTransition();
+            return;
+        }
+
+        asyncLoad.allowSceneActivation = false;
     }
 
     /// <summary>
@@ -48,5 +54,6 @@ public class SceneLoader : MonoBehaviour
     {
         DOTween.KillAll();
         asyncLoad.allowSceneActivation = true;
+        currentLoading = -1;
     }
 }
