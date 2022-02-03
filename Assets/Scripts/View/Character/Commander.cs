@@ -93,14 +93,16 @@ public class Commander
     {
         cmdQueue.AddFirst(cmd);
 
-        if (isCancel)
+        if (currentCommand != null)
         {
-            Cancel();
+            currentCommand?.CancelValidate();
+            if (isCancel) Cancel();
         }
-        else if (cmdQueue.Count > 0)
+        else
         {
-            currentCommand.CancelValidate();
+            DispatchCommand();
         }
+
     }
 
     public void ReplaceNext(ICommand cmd)
