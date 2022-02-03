@@ -254,6 +254,7 @@ public class PlayerInput : ShieldInput
     private void InactivateUIs()
     {
         doorHandler.Inactivate();
+        itemHandler.Inactivate();
         fightCircle.Inactivate();
 
         forwardUI.Inactivate();
