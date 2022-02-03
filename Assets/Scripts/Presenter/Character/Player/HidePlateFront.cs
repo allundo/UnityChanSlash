@@ -1,7 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
-using System.Linq;
 
 public class HidePlateFront : MonoBehaviour
 {
@@ -36,8 +35,9 @@ public class HidePlateFront : MonoBehaviour
     protected Material material;
 
     protected int Range = 11;
-    protected int Width = 7;
     protected int Height = 15;
+    protected int Rear = 3;
+    protected const int PLATE_HEIGHT = 23;
 
     void Awake()
     {
@@ -74,11 +74,11 @@ public class HidePlateFront : MonoBehaviour
         return this;
     }
 
-    public void InitPlateSize(int range, int width, int height)
+    public void InitPlateSize(int range, int height, int rear)
     {
         this.Range = range;
-        this.Width = width;
         this.Height = height;
+        this.Rear = rear;
     }
     public void Move(Pos pos)
     {
@@ -101,12 +101,12 @@ public class HidePlateFront : MonoBehaviour
 
     public void SetPortraitOffset(IDirection dir)
     {
-        currentOffset = vec[dir] * (2 * Height - Width);
+        currentOffset = vec[dir] * (Height - Rear + PLATE_HEIGHT / 2);
     }
 
     public void SetLandscapeOffset(IDirection dir)
     {
-        currentOffset = vec[dir] * (Range * 3 / 2 + 1);
+        currentOffset = vec[dir] * ((Range + PLATE_HEIGHT) / 2);
     }
 
     public void SetRotation(IDirection dir)

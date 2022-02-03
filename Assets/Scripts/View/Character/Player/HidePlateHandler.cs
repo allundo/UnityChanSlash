@@ -43,6 +43,7 @@ public class HidePlateHandler : MonoBehaviour
     protected const int RANGE = 11;
     protected const int WIDTH = 9;
     protected const int HEIGHT = 15;
+    protected const int REAR = 3;
 
     /// <summary>
     /// Previous player position for calcurate moved direction and distance.
@@ -60,10 +61,10 @@ public class HidePlateHandler : MonoBehaviour
         mapUtil = GetComponent<PlayerMapUtil>();
 
         landscape = new LandscapeUpdater(this, RANGE);
-        portrait[Direction.north] = new PortraitNUpdater(this, WIDTH, HEIGHT);
-        portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH);
-        portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT);
-        portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH);
+        portrait[Direction.north] = new PortraitNUpdater(this, WIDTH, HEIGHT, REAR);
+        portrait[Direction.east] = new PortraitEUpdater(this, HEIGHT, WIDTH, REAR);
+        portrait[Direction.south] = new PortraitSUpdater(this, WIDTH, HEIGHT, REAR);
+        portrait[Direction.west] = new PortraitWUpdater(this, HEIGHT, WIDTH, REAR);
     }
 
     private void UpdateRange(Action<Pos, Plate[,]> DrawAction)
@@ -134,7 +135,7 @@ public class HidePlateHandler : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        plateFront.InitPlateSize(RANGE, WIDTH, HEIGHT);
+        plateFront.InitPlateSize(RANGE, HEIGHT, REAR);
         ReformHidePlates(DeviceOrientation.Portrait);
         miniMap.Turn(mapUtil.dir);
     }
@@ -567,31 +568,31 @@ public class HidePlateHandler : MonoBehaviour
     }
     protected class PortraitNUpdater : PlateUpdater
     {
-        public PortraitNUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitNUpdater(HidePlateHandler hidePool, int width, int height, int rear) : base(hidePool, width, height)
         {
-            playerOffsetPos = new Pos(width / 2, height - width / 2 - 1);
+            playerOffsetPos = new Pos(width / 2, height - rear - 1);
         }
     }
     protected class PortraitSUpdater : PlateUpdater
     {
-        public PortraitSUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitSUpdater(HidePlateHandler hidePool, int width, int height, int rear) : base(hidePool, width, height)
         {
-            playerOffsetPos = new Pos(width / 2, width / 2);
+            playerOffsetPos = new Pos(width / 2, rear);
         }
     }
     protected class PortraitEUpdater : PlateUpdater
     {
-        public PortraitEUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitEUpdater(HidePlateHandler hidePool, int width, int height, int rear) : base(hidePool, width, height)
         {
-            playerOffsetPos = new Pos(height / 2, height / 2);
+            playerOffsetPos = new Pos(rear, height / 2);
         }
     }
 
     protected class PortraitWUpdater : PlateUpdater
     {
-        public PortraitWUpdater(HidePlateHandler hidePool, int width, int height) : base(hidePool, width, height)
+        public PortraitWUpdater(HidePlateHandler hidePool, int width, int height, int rear) : base(hidePool, width, height)
         {
-            playerOffsetPos = new Pos(width - height / 2 - 1, height / 2);
+            playerOffsetPos = new Pos(width - rear - 1, height / 2);
         }
     }
 }
