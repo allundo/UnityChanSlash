@@ -9,6 +9,7 @@ public interface IItemIconHandler
     IItemIconHandler OnRelease();
     IItemIconHandler OnSubmit();
     IItemIconHandler OnDrag(Vector2 screenPos);
+    IItemIconHandler CleanUp();
 }
 
 public class ItemIconHandler : IItemIconHandler
@@ -66,6 +67,12 @@ public class ItemIconHandler : IItemIconHandler
         return currentMode;
     }
 
+    public IItemIconHandler CleanUp()
+    {
+        currentMode = currentMode.CleanUp();
+        return currentMode;
+    }
+
     protected class NormalMode : IItemIconHandler
     {
         protected ItemIconHandler handler;
@@ -106,9 +113,9 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler OnSubmit() => null;
 
-        protected IItemIconHandler CleanUp()
+        public IItemIconHandler CleanUp()
         {
-            handler.currentSelected.Resize(1f, 0.2f).Play();
+            handler.currentSelected?.Resize(1f, 0.2f)?.Play();
             handler.currentSelected = null;
             handler.pressedIndex = itemIndex.MAX_ITEMS;
 

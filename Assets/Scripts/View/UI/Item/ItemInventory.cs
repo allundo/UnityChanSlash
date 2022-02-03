@@ -72,4 +72,11 @@ public class ItemInventory : MonoBehaviour
         itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), itemInfo).SetIndex(index));
         return true;
     }
+
+    public void SetEnable(bool isEnable)
+    {
+        panels.ForEach(panel => panel.enabled = isEnable);
+        if (!isEnable) iconHandler.CleanUp();
+        enabled = isEnable;
+    }
 }
