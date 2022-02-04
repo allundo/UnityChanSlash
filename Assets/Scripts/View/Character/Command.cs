@@ -21,6 +21,10 @@ public interface ICommand
     /// </summary>
     /// <returns>Observable notifies Command completion.</returns>
     IObservable<Unit> Execute();
+
+    int priority { get; }
+    bool IsPriorTo(int target);
+    bool IsPriorTo(ICommand cmd);
 }
 
 public abstract class Command : ICommand
@@ -159,6 +163,10 @@ public abstract class Command : ICommand
     {
         this.onCompleted.Add(action);
     }
+
+    public virtual int priority => 0;
+    public bool IsPriorTo(int target) => priority > target;
+    public bool IsPriorTo(ICommand cmd) => IsPriorTo(cmd.priority);
 }
 
 public class DieCommand : Command

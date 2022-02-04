@@ -63,7 +63,7 @@ public abstract class ShieldInput : MobInput
         public virtual bool IsShieldOn(IDirection attackDir) => isShieldReady && map.dir.IsInverse(attackDir);
         public void SetShield()
         {
-            input.ClearAll(true);
+            input.ClearAll(true, false, 9);
             input.Interrupt(shieldOn);
         }
 

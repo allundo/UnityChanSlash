@@ -1,5 +1,7 @@
 using UniRx;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 public class PlayerCommander : ShieldCommander
 {
@@ -36,6 +38,43 @@ public class PlayerCommander : ShieldCommander
         if (cmdQueue.First?.Value is PlayerAttack)
         {
             Cancel();
+        }
+    }
+
+    protected override void InsertQueue(ICommand cmd)
+    {
+        for (var node = cmdQueue.First; node != null; node = node.Next)
+        {
+            if (!node.Value.IsPriorTo(cmd))
+            {
+                cmdQueue.AddBefore(node, new LinkedListNode<ICommand>(cmd));
+                return;
+            }
+        }
+
+        cmdQueue.AddLast(cmd);
+    }
+
+    /// <summary>
+    /// Clear less prioritized Commands queue and cancel current executing Command.
+    /// </summary>
+    /// <param name="isQueueOnly">Doesn't cancel current Command if true</param>
+    /// <param name="isValidInput">Cancels validate tween of current Command if false</param>
+    /// <param name="threshold">Clears Commands having equal or less priority than this value</param>
+    public override void ClearAll(bool isQueueOnly = false, bool isValidInput = false, int threshold = 100)
+    {
+        cmdQueue = new LinkedList<ICommand>(cmdQueue.Where(cmd => cmd.IsPriorTo(threshold)));
+
+        if (currentCommand != null)
+        {
+            if (isQueueOnly || currentCommand.IsPriorTo(threshold) && !isValidInput)
+            {
+                currentCommand.CancelValidate();
+            }
+            else
+            {
+                Cancel();
+            }
         }
     }
 }

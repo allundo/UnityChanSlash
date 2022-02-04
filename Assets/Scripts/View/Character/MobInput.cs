@@ -12,7 +12,7 @@ public interface IInput
     void ValidateInput(bool isTriggerOnly = false);
     void DisableInput(bool isTriggerOnly = false);
     void OnActive();
-    void ClearAll(bool isQueueOnly = false, bool isValidInput = false);
+    void ClearAll(bool isQueueOnly = false, bool isValidInput = false, int threshold = 100);
 }
 
 public interface IUndeadInput : IInput
@@ -132,7 +132,7 @@ public abstract class MobInput : MonoBehaviour, IInput
         ValidateInput();
     }
 
-    public virtual void ClearAll(bool isQueueOnly = false, bool isValidInput = false)
+    public virtual void ClearAll(bool isQueueOnly = false, bool isValidInput = false, int threshold = 100)
     {
         commander.ClearAll(isQueueOnly, isValidInput);
         isCommandValid = isValidInput;

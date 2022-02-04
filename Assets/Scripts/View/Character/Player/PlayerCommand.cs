@@ -137,6 +137,7 @@ public class PlayerLeft : PlayerMove
 
 public class PlayerDash : PlayerCommand
 {
+    public override int priority => 10;
     public PlayerDash(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f)
     { }
 
@@ -492,6 +493,7 @@ public class PlayerKick : PlayerAttack
 public class PlayerItem : PlayerAction
 {
     protected ItemInfo itemInfo;
+    public override int priority => 5;
 
     public PlayerItem(PlayerCommandTarget target, ItemInfo itemInfo, float timing = 0.5f) : base(target, itemInfo.duration, timing)
     {
@@ -507,6 +509,7 @@ public class PlayerItem : PlayerAction
 
 public class PlayerDie : PlayerCommand
 {
+    public override int priority => 100;
     public PlayerDie(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()

@@ -91,19 +91,20 @@ public class Commander
     /// <param name="isCancel">Cancels current executing command if TRUE</param>
     public void Interrupt(ICommand cmd, bool isCancel = true)
     {
-        cmdQueue.AddFirst(cmd);
+        InsertQueue(cmd);
 
-        if (currentCommand != null)
+        if (IsIdling)
+        {
+            DispatchCommand();
+        }
+        else
         {
             currentCommand?.CancelValidate();
             if (isCancel) Cancel();
         }
-        else
-        {
-            DispatchCommand();
-        }
-
     }
+
+    protected virtual void InsertQueue(ICommand cmd) => cmdQueue.AddFirst(cmd);
 
     public void ReplaceNext(ICommand cmd)
     {
@@ -113,7 +114,10 @@ public class Commander
     /// <summary>
     /// Clear all Command queue and cancel current executing Command.
     /// </summary>
-    public void ClearAll(bool isQueueOnly = false, bool isValidInput = false)
+    /// <param name="isQueueOnly">Doesn't cancel current Command if true</param>
+    /// <param name="isValidInput">Cancels validate tween of current Command if false</param>
+    /// <param name="threshold">Not used. Used only by PlayerCommander for now.</param>
+    public virtual void ClearAll(bool isQueueOnly = false, bool isValidInput = false, int threshold = 100)
     {
         cmdQueue.Clear();
 
