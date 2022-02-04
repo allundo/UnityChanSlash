@@ -6,7 +6,7 @@ public class TitleSceneMediator : SceneMediator
 {
     [SerializeField] TitleUIHandler titleUIHandler = default;
 
-    private IDisposable logoDisposable;
+    private IDisposable disposable;
 
     protected override void InitBeforeStart()
     {
@@ -28,7 +28,7 @@ public class TitleSceneMediator : SceneMediator
 
     private void Logo()
     {
-        logoDisposable = titleUIHandler.Logo()
+        disposable = titleUIHandler.Logo()
             .ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f))
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.ToTitle)
@@ -37,7 +37,7 @@ public class TitleSceneMediator : SceneMediator
 
     private void SkipLogo()
     {
-        sceneLoader.LoadSceneAsync(1)
+        disposable = sceneLoader.LoadSceneAsync(1)
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.SkipLogo)
             .AddTo(this);
@@ -45,7 +45,9 @@ public class TitleSceneMediator : SceneMediator
 
     private void DebugStart()
     {
-        logoDisposable.Dispose();
+        GameInfo.Instance.CreateDebugMap();
+
+        disposable.Dispose();
         titleUIHandler.debugStart.gameObject.SetActive(false);
         sceneLoader.StartLoadScene(1);
         SceneTransition(2);
