@@ -58,7 +58,7 @@ public class FlyingAttackStart : FlyingAttack
 
         playingTween = DOTween.Sequence()
             .Join(tweenMove.Move(dest, attackTimeScale))
-            .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
+            .Join(tweenMove.DelayedCall(0.75f, () => enemyMap.MoveOnEnemy()))
             .Play();
 
         completeTween = flyingAttack.AttackSequence(duration).Play();
@@ -90,28 +90,28 @@ public class FlyingAttackEnd : FlyingAttack
 
         if (IsForwardMovable)
         {
-            map.MoveObjectOn(map.GetForward);
+            enemyMap.MoveObjectOn(map.GetForward);
         }
         else if (IsLeftMovable)
         {
-            map.TurnLeft();
-            map.MoveObjectOn(map.GetForward);
+            enemyMap.TurnLeft();
+            enemyMap.MoveObjectOn(map.GetForward);
 
             flyingAnim.turnL.Fire();
             seq.Join(tweenMove.TurnL);
         }
         else if (IsRightMovable)
         {
-            map.TurnRight();
-            map.MoveObjectOn(map.GetForward);
+            enemyMap.TurnRight();
+            enemyMap.MoveObjectOn(map.GetForward);
 
             flyingAnim.turnR.Fire();
             seq.Join(tweenMove.TurnR);
         }
         else if (IsBackwardMovable)
         {
-            map.TurnBack();
-            map.MoveObjectOn(map.GetForward);
+            enemyMap.TurnBack();
+            enemyMap.MoveObjectOn(map.GetForward);
 
             flyingAnim.turnL.Fire();
             seq.Join(tweenMove.TurnLB);
@@ -130,7 +130,12 @@ public class FlyingAttackLeave : FlyingAttack
     public FlyingAttackLeave(EnemyCommandTarget target, float duration) : base(target, duration) { }
     protected override bool Action()
     {
-        playingTween = tweenMove.Move(map.CurrentPos, 1f, Ease.OutQuad).Play(); ;
+        playingTween = DOTween.Sequence()
+            .Join(tweenMove.Move(map.CurrentPos, 1f, Ease.OutQuad))
+            .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
+            .SetUpdate(false)
+            .Play();
+
         return true;
     }
 }

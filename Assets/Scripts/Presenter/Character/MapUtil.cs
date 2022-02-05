@@ -147,7 +147,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
     /// <param name="pos">Pos unit Tile position</param>
-    public void RemoveObjectOn(Pos pos)
+    public virtual void RemoveObjectOn(Pos pos)
     {
         if (status.IsOnGround) map.GetTile(pos).OnCharacterDest = null;
     }

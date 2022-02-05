@@ -82,4 +82,40 @@ public class EnemyMapUtil : MapUtil
         RemoveOnEnemy();
         return SetOnEnemy(destPos);
     }
+
+    /// <summary>
+    /// Set current on tile and IsObjectOn flag to the Tile specified by Pos unit
+    /// </summary>
+    /// <param name="destPos">Tile map position of destination</param>
+    /// <returns>destPos</returns>
+    public override Pos SetObjectOn(Pos destPos)
+    {
+        if (status.IsOnGround)
+        {
+            map.GetTile(destPos).OnCharacterDest = status;
+        }
+        else
+        {
+            map.GetTile(destPos).AboveEnemy = status as EnemyStatus;
+        }
+
+        onTilePos = destPos;
+        return destPos;
+    }
+
+    /// <summary>
+    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
+    /// </summary>
+    /// <param name="pos">Pos unit Tile position</param>
+    public override void RemoveObjectOn(Pos pos)
+    {
+        if (status.IsOnGround)
+        {
+            map.GetTile(pos).OnCharacterDest = null;
+        }
+        else
+        {
+            map.GetTile(pos).AboveEnemy = null;
+        }
+    }
 }

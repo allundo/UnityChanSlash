@@ -115,7 +115,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         this.map.ForEachTiles((tile, pos) =>
         {
-            tile.OnCharacterDest = null;
+            tile.OnCharacterDest = tile.AboveEnemy = null;
             if (tile.OnEnemy != null)
             {
                 if (pos != playerPos) store.Add(new RespawnData(tile.OnEnemy, pos));
