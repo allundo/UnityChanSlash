@@ -46,10 +46,6 @@ public class FlyingAIInput : EnemyAIInput
         bool isRightMovable = map.RightTile.IsViewOpen;
         if (IsOnPlayer(right2) && isRightMovable) return turnR;
 
-        Pos backward2 = map.dir.GetBackward(backward);
-        bool isBackwardMovable = map.BackwardTile.IsViewOpen;
-        if (IsOnPlayer(backward2) && isBackwardMovable) return RandomChoice(turnL, turnR);
-
         if (isForwardMovable)
         {
             // Turn 50% if left or right movable
@@ -79,7 +75,7 @@ public class FlyingAIInput : EnemyAIInput
             if (isRightMovable) return turnR;
 
             // Turn if backward movable
-            if (isBackwardMovable)
+            if (map.BackwardTile.IsViewOpen)
             {
                 return RandomChoice(turnL, turnR);
             }
