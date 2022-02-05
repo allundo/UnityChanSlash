@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5609429767599716806}
   - component: {fileID: 1793934058752212553}
   - component: {fileID: 1919566054664988659}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4823,7 +4823,7 @@ GameObject:
   - component: {fileID: 7776984636270831514}
   - component: {fileID: 7713001475001169743}
   - component: {fileID: 7690376341311500384}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: AttackDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4882,7 +4882,7 @@ GameObject:
   - component: {fileID: 6108146726224379826}
   - component: {fileID: 7175566729394513956}
   - component: {fileID: 6368096554348011138}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: FX_ Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9640,7 +9640,7 @@ GameObject:
   - component: {fileID: 2805387919517853911}
   - component: {fileID: 2805387919517853909}
   - component: {fileID: 2805387919517853908}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: FlareBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14394,7 +14394,7 @@ GameObject:
   - component: {fileID: 2805387919850414515}
   - component: {fileID: 2805387919850414513}
   - component: {fileID: 2805387919850414512}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Tail02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19148,7 +19148,7 @@ GameObject:
   - component: {fileID: 2805387920061404602}
   - component: {fileID: 2805387920061404600}
   - component: {fileID: 2805387920061404603}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Flare01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23902,7 +23902,7 @@ GameObject:
   - component: {fileID: 2805387920448657377}
   - component: {fileID: 2805387920448657383}
   - component: {fileID: 2805387920448657382}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Tail01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28656,7 +28656,7 @@ GameObject:
   - component: {fileID: 2805387921132898810}
   - component: {fileID: 2805387921132898808}
   - component: {fileID: 2805387921132898811}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Flare02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33410,7 +33410,7 @@ GameObject:
   - component: {fileID: 2805387921336131202}
   - component: {fileID: 2805387921336131200}
   - component: {fileID: 2805387921336131203}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: FX_Burn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38173,7 +38173,7 @@ GameObject:
   - component: {fileID: 4403947982082489751}
   - component: {fileID: 527099848321554971}
   - component: {fileID: 1900991498281850552}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38295,7 +38295,7 @@ GameObject:
   - component: {fileID: 4974054252250251379}
   - component: {fileID: 3699863136889268820}
   - component: {fileID: 7583617403799001301}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43107,7 +43107,7 @@ GameObject:
   - component: {fileID: 2406052561114265406}
   - component: {fileID: 1642652346962770075}
   - component: {fileID: 3544096317732916305}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43187,7 +43187,7 @@ GameObject:
   - component: {fileID: 8793983368143198116}
   - component: {fileID: 1896130697109239839}
   - component: {fileID: 452142254278394087}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Fog02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47941,7 +47941,7 @@ GameObject:
   - component: {fileID: 2620370494596208510}
   - component: {fileID: 3761724896293553799}
   - component: {fileID: 1524720351576963432}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Ring02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52753,7 +52753,7 @@ GameObject:
   - component: {fileID: 5586000936603225080}
   - component: {fileID: 2822612706059485724}
   - component: {fileID: 5043837272445288394}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57565,7 +57565,7 @@ GameObject:
   - component: {fileID: 4998948710165378181}
   - component: {fileID: 2946700041566110757}
   - component: {fileID: 7954349664682258037}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62377,7 +62377,7 @@ GameObject:
   - component: {fileID: 8634033727134553816}
   - component: {fileID: 6768285625627674219}
   - component: {fileID: 4873159190728462541}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Ring01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67189,7 +67189,7 @@ GameObject:
   - component: {fileID: 3163307086182045866}
   - component: {fileID: 8626838752286222789}
   - component: {fileID: 9079054870765949264}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Fog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72001,7 +72001,7 @@ GameObject:
   - component: {fileID: 1815678132973619994}
   - component: {fileID: 145429905627757074}
   - component: {fileID: 412924988750402592}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Fog01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76813,7 +76813,7 @@ GameObject:
   - component: {fileID: 180649387574943457}
   - component: {fileID: 332635480921310000}
   - component: {fileID: 3193571220681172903}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: FX_Explode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81570,7 +81570,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4511546058773399483}
   - component: {fileID: 2294812715281089802}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: SND_FIRE_FIREBALL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81698,7 +81698,7 @@ GameObject:
   - component: {fileID: 2713174962676614}
   - component: {fileID: 9186486281694983135}
   - component: {fileID: 3437910487010393660}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86510,7 +86510,7 @@ GameObject:
   - component: {fileID: 1078191672378061123}
   - component: {fileID: 8114496825619606693}
   - component: {fileID: 7806960900274219955}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: FX_ Erase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
