@@ -95,7 +95,7 @@ MonoBehaviour:
     prefab: {fileID: 2735492676472821120, guid: fdeecbb6ad9bc4095b516a4cefc5010a,
       type: 3}
     type: 5
-    enemyCore: {x: 0, y: 0.75, z: 0}
+    enemyCore: {x: 0, y: 1.5, z: 0}
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u5175"
     defaultLifeMax: 10
     isOnGround: 1
