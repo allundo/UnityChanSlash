@@ -61,6 +61,7 @@ public class FlyingAttackStart : FlyingAttack
             .Join(tweenMove.DelayedCall(0.75f, () => enemyMap.MoveOnEnemy()))
             .Play();
 
+        flyingAnim.attack.Fire();
         completeTween = flyingAttack.AttackSequence(duration).Play();
 
         target.input.Interrupt(attackEnd, false);
