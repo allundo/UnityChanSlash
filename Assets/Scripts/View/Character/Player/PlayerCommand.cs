@@ -220,8 +220,6 @@ public class PlayerRun : PlayerDash
 
             target.input.Interrupt(this, false);
 
-            // EnterStair(map.GetTile(map.ForwardPos));
-
             return ObservableComplete();
         }
         else

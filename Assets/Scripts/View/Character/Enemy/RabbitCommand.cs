@@ -149,29 +149,3 @@ public class RabbitWondering : RabbitCommand
         return true;
     }
 }
-
-public class RabbitTurnL : RabbitCommand
-{
-    public RabbitTurnL(EnemyCommandTarget target, float duration) : base(target, duration) { }
-
-    protected override bool Action()
-    {
-        playingTween = tweenMove.TurnL.Play();
-        rabbitAnim.turnL.Fire();
-        map.TurnLeft();
-        return true;
-    }
-}
-
-public class RabbitTurnR : RabbitCommand
-{
-    public RabbitTurnR(EnemyCommandTarget target, float duration) : base(target, duration) { }
-
-    protected override bool Action()
-    {
-        playingTween = tweenMove.TurnR.Play();
-        rabbitAnim.turnR.Fire();
-        map.TurnRight();
-        return true;
-    }
-}

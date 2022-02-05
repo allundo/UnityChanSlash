@@ -43,6 +43,11 @@ public class MapUtil : MonoBehaviour, IMapUtil
         dir = dir.Right;
     }
 
+    public virtual void TurnBack()
+    {
+        dir = dir.Backward;
+    }
+
     public Vector3 GetForwardVector(float distance = 1f) => dir.LookAt * TILE_UNIT * distance;
     public Vector3 GetBackwardVector(float distance = 1f) => -dir.LookAt * TILE_UNIT * distance;
     public Vector3 GetRightVector(float distance = 1f) => Quaternion.Euler(0, 90, 0) * dir.LookAt * TILE_UNIT * distance;

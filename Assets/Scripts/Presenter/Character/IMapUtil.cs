@@ -10,6 +10,7 @@ public interface IMapUtil
 
     void TurnLeft();
     void TurnRight();
+    void TurnBack();
 
     /// <summary>
     /// Vector3 to Forward from current direction

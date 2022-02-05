@@ -19,8 +19,8 @@ public class RabbitAIInput : EnemyAIInput
         idle = new EnemyIdle(enemyTarget, 32f);
         wondering = new RabbitWondering(enemyTarget, 64f);
         moveForward = new EnemyForward(enemyTarget, 40f);
-        turnL = new RabbitTurnL(enemyTarget, 8f);
-        turnR = new RabbitTurnR(enemyTarget, 8f);
+        turnL = new EnemyTurnAnimL(enemyTarget, 8f);
+        turnR = new EnemyTurnAnimR(enemyTarget, 8f);
         attack = new RabbitJumpAttack(enemyTarget, 80f);
         jumpAttack = new RabbitLongJumpAttack(enemyTarget, 80f);
         somersault = new RabbitSomersault(enemyTarget, 80f);
