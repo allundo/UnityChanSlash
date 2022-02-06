@@ -133,7 +133,7 @@ public class FlyingAttackLeave : FlyingAttack
     protected override bool Action()
     {
         playingTween = DOTween.Sequence()
-            .Join(tweenMove.Move(map.CurrentPos, 1f, Ease.OutQuad))
+            .Join(tweenMove.Move(map.onTilePos, 1f, Ease.OutQuad))
             .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
             .SetUpdate(false)
             .Play();
@@ -148,7 +148,7 @@ public class FlyingDie : FlyingCommand
 
     public override IObservable<Unit> Execute()
     {
-        playingTween = tweenMove.Move(map.DestVec, 0.5f, Ease.InQuad).Play();
+        playingTween = tweenMove.Move(map.DestVec3Pos, 0.5f, Ease.InQuad).Play();
         anim.die.Fire();
         react.OnDie();
 

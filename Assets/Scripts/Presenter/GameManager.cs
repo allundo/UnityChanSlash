@@ -180,7 +180,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
-    public bool IsOnPlayerTile(Pos pos) => playerTransform.gameObject.activeSelf && map.CurrentPos == pos;
+    public bool IsOnPlayerTile(Pos pos) => playerTransform.gameObject.activeSelf && map.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
 
     public void EnterStair(bool isDownStairs)
@@ -226,7 +226,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         debugEnemyGenerator.DestroyAll();
         debugEnemyGenerator.gameObject.SetActive(false);
 
-        placeEnemyGenerator.SwitchWorldMap(worldMap, map.CurrentPos);
+        placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
         fireBallGenerator.DestroyAll();
 
         yield return new WaitForEndOfFrame();

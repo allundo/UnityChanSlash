@@ -16,7 +16,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// <summary>
     /// Tile position of destination for moving
     /// </summary>
-    protected Pos onTilePos;
+    public Pos onTilePos { get; protected set; }
 
     public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
@@ -66,8 +66,8 @@ public class MapUtil : MonoBehaviour, IMapUtil
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
     public Vector3 CurrentVec3Pos => tf.position;
-    public Pos CurrentPos => onTilePos;
     public Vector3 DestVec => WorldPos(onTilePos) - tf.position;
+    public Vector3 DestVec3Pos => WorldPos(onTilePos);
 
     public Pos GetForward => dir.GetForward(onTilePos);
     public Pos GetLeft => dir.GetLeft(onTilePos);

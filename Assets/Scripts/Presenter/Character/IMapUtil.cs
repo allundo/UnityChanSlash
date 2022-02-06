@@ -3,6 +3,7 @@ using UnityEngine;
 public interface IMapUtil
 {
     IDirection dir { get; }
+    Pos onTilePos { get; }
 
     void OnActive();
     void ResetTile();
@@ -49,8 +50,8 @@ public interface IMapUtil
     bool IsLeapable(Pos destPos);
 
     Vector3 CurrentVec3Pos { get; }
-    Pos CurrentPos { get; }
     Vector3 DestVec { get; }
+    Vector3 DestVec3Pos { get; }
 
     Pos GetForward { get; }
     Pos GetLeft { get; }
