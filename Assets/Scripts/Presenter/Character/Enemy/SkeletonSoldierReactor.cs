@@ -35,4 +35,9 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
     {
         status.ResetStatus();
     }
+    public void OnSleep()
+    {
+        effect.OnDie();
+        map.ResetTile();
+    }
 }

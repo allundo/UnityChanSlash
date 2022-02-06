@@ -16,6 +16,7 @@ public interface IReactor
 public interface IUndeadReactor : IReactor
 {
     void OnResurrection();
+    void OnSleep();
 }
 
 [RequireComponent(typeof(BodyEffect))]

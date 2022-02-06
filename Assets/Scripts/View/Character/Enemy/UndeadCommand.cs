@@ -92,7 +92,7 @@ public class UndeadSleep : UndeadCommand
     {
         undeadAnim.sleep.Bool = true;
         undeadAnim.die.Fire();
-        enemyMap.ResetTile();
+        undeadReact.OnSleep();
         input.Interrupt(resurrection, false);
 
         return ObservableComplete(); // Don't validate input
