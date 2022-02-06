@@ -7,7 +7,7 @@ public class FlyingAIInput : EnemyAIInput
     {
         var enemyTarget = target as EnemyCommandTarget;
 
-        die = new FlyingDie(enemyTarget, 72f);
+        die = new FlyingDie(enemyTarget, 118f);
         moveForward = new FlyingForward(enemyTarget, 45f);
         turnL = new EnemyTurnAnimL(enemyTarget, 7f);
         turnR = new EnemyTurnAnimR(enemyTarget, 7f);
