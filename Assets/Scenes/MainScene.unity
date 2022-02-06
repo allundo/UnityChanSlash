@@ -8371,7 +8371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
   enemyData: {fileID: 11400000, guid: 732b3c01315aa4f52819045e2acc8bed, type: 2}
-  type: 5
+  type: 6
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -47244,6 +47244,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 170570285}
     m_Modifications:
+    - target: {fileID: 5411086374825413569, guid: ac866355074454fd99cd2dc1c7ac5357,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5411086374825413571, guid: ac866355074454fd99cd2dc1c7ac5357,
         type: 3}
       propertyPath: m_LocalPosition.x
