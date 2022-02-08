@@ -445,5 +445,6 @@ public enum EnemyType
     Goblin,
     YellowRabbit,
     VioletBat,
+    VioletGhost,
     SkeletonSoldier,
 }

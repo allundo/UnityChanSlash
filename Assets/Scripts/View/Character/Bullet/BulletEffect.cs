@@ -62,22 +62,9 @@ public class BulletEffect : BodyEffect
 
     public override void OnHeal(float healRatio) { }
 
-    protected override Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
+    protected override Sequence GetFadeTween(bool isFadeIn, float duration = 0.5f)
     {
-        Sequence fade = DOTween.Sequence();
-
-        foreach (Material mat in flashMaterials)
-        {
-            fade.Join(
-                DOTween.ToAlpha(
-                    () => mat.color,
-                    color => mat.color = color,
-                    isFadeIn ? 1.0f : 0.0f,
-                    duration
-                )
-                .SetEase(Ease.InSine)
-            );
-        }
+        Sequence fade = base.GetFadeTween(isFadeIn, duration);
 
         fade.Join(meshTf.DOScale(isFadeIn ? defaultScale : Vector3.zero, duration));
 

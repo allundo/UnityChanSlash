@@ -127,7 +127,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// <returns>destPos</returns>
     public virtual Pos SetObjectOn(Pos destPos)
     {
-        if (status.IsOnGround) map.GetTile(destPos).OnCharacterDest = status;
+        if (status.isOnGround) map.GetTile(destPos).OnCharacterDest = status;
         onTilePos = destPos;
         return destPos;
     }
@@ -149,7 +149,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// <param name="pos">Pos unit Tile position</param>
     public virtual void RemoveObjectOn(Pos pos)
     {
-        if (status.IsOnGround) map.GetTile(pos).OnCharacterDest = null;
+        if (status.isOnGround) map.GetTile(pos).OnCharacterDest = null;
     }
 
     /// <summary>

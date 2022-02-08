@@ -25,12 +25,14 @@ public abstract class FlyingAttack : FlyingCommand
     protected readonly float attackTimeScale = 0.9f;
 
     public override int priority => 5;
+    protected float decentVec;
 
-    protected bool IsForwardMovable => map.ForwardTile.IsViewOpen;
+    protected virtual bool IsForwardMovable => map.ForwardTile.IsViewOpen;
 
-    public FlyingAttack(EnemyCommandTarget target, float duration) : base(target, duration)
+    public FlyingAttack(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration)
     {
         flyingAttack = target.enemyAttack[0];
+        this.decentVec = decentVec;
     }
 }
 
@@ -38,9 +40,12 @@ public class FlyingAttackStart : FlyingAttack
 {
     protected ICommand attackEnd;
 
-    public FlyingAttackStart(EnemyCommandTarget target, float duration) : base(target, duration)
+    protected virtual FlyingAttackEnd AttackEndCommand(EnemyCommandTarget target, float duration)
+        => new FlyingAttackEnd(target, duration);
+
+    public FlyingAttackStart(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration, decentVec)
     {
-        attackEnd = new FlyingAttackEnd(target, duration * (1f - attackTimeScale));
+        attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
     }
 
     public override IObservable<Unit> Execute()
@@ -52,7 +57,7 @@ public class FlyingAttackStart : FlyingAttack
             return Observable.Empty(Unit.Default);
         }
 
-        Vector3 dest = map.CurrentVec3Pos + (map.GetForwardVector() + new Vector3(0f, -0.5f, 0f)) * attackTimeScale;
+        Vector3 dest = map.CurrentVec3Pos + (map.GetForwardVector() + new Vector3(0f, decentVec, 0f)) * attackTimeScale;
 
         map.MoveObjectOn(map.GetForward);
 
@@ -74,11 +79,11 @@ public class FlyingAttackEnd : FlyingAttack
 {
     public ICommand leave;
 
-    protected bool IsBackwardMovable => map.BackwardTile.IsViewOpen;
-    protected bool IsRightMovable => map.RightTile.IsViewOpen;
-    protected bool IsLeftMovable => map.LeftTile.IsViewOpen;
+    protected virtual bool IsBackwardMovable => map.BackwardTile.IsViewOpen;
+    protected virtual bool IsRightMovable => map.RightTile.IsViewOpen;
+    protected virtual bool IsLeftMovable => map.LeftTile.IsViewOpen;
 
-    public FlyingAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration)
+    public FlyingAttackEnd(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration, decentVec)
     {
         leave = new FlyingAttackLeave(target, duration / (1f - attackTimeScale) * 2f);
     }
@@ -86,7 +91,7 @@ public class FlyingAttackEnd : FlyingAttack
     public override IObservable<Unit> Execute()
     {
         Vector3 destTileVec = map.DestVec;
-        Vector3 dest = map.CurrentVec3Pos + new Vector3(destTileVec.x, -0.5f * (1f - attackTimeScale), destTileVec.z);
+        Vector3 dest = map.CurrentVec3Pos + new Vector3(destTileVec.x, decentVec * (1f - attackTimeScale), destTileVec.z);
         var seq = DOTween.Sequence().Join(tweenMove.Move(dest));
 
         if (IsForwardMovable)

@@ -43,7 +43,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
 
     protected void PlayFlash(Tween flash)
     {
-        prevFlash?.Kill();
+        prevFlash?.Complete();
         prevFlash = flash.Play();
     }
 
@@ -107,7 +107,9 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
     public virtual Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);
     public virtual Tween FadeOutTween(float duration = 0.5f) => GetFadeTween(false, duration);
 
-    protected virtual Tween GetFadeTween(bool isFadeIn, float duration = 0.5f)
+    protected virtual Sequence GetFadeTween(bool isFadeIn, float duration = 0.5f) => GetFadeTween(isFadeIn ? 1f : 0f, duration);
+
+    protected virtual Sequence GetFadeTween(float endValue, float duration = 0.5f)
     {
         Sequence fade = DOTween.Sequence();
 
@@ -117,7 +119,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
                 DOTween.ToAlpha(
                     () => mat.color,
                     color => mat.color = color,
-                    isFadeIn ? 1.0f : 0.0f,
+                    endValue,
                     duration
                 )
                 .SetEase(Ease.InSine)

@@ -20,7 +20,7 @@ public class MobStatus : SpawnObject<MobStatus>
 
     public virtual float Shield => param.shield;
 
-    public virtual bool IsOnGround => param.isOnGround;
+    public bool isOnGround { get; protected set; }
 
     protected virtual float ArmorMultiplier => param.armorMultiplier;
 
@@ -84,6 +84,7 @@ public class MobStatus : SpawnObject<MobStatus>
     public virtual void ResetStatus()
     {
         life.Value = lifeMax.Value = DefaultLifeMax;
+        isOnGround = param.isOnGround;
     }
 
     public override void Activate()
