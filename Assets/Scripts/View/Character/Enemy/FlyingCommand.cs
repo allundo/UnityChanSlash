@@ -43,6 +43,8 @@ public class FlyingAttackStart : FlyingAttack
     protected virtual FlyingAttackEnd AttackEndCommand(EnemyCommandTarget target, float duration)
         => new FlyingAttackEnd(target, duration);
 
+    protected virtual ICommand PlayNext() => attackEnd;
+
     public FlyingAttackStart(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration, decentVec)
     {
         attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
@@ -69,7 +71,7 @@ public class FlyingAttackStart : FlyingAttack
         flyingAnim.attack.Fire();
         completeTween = flyingAttack.AttackSequence(duration).Play();
 
-        target.input.Interrupt(attackEnd, false);
+        target.input.Interrupt(PlayNext(), false);
 
         return ObservableComplete(attackTimeScale);
     }
