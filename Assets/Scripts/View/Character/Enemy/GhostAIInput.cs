@@ -52,6 +52,9 @@ public class GhostAIInput : EnemyAIInput
         Pos forward3 = map.dir.GetForward(forward2);
         if (IsOnPlayer(forward3) && isForwardMovable) return moveForward;
 
+        Pos backward = map.GetBackward;
+        if (IsOnPlayer(backward) && Random.Range(0, 3) == 0) return RandomChoice(turnL, turnR);
+
         if (isForwardMovable)
         {
             // Turn 50%
@@ -77,7 +80,7 @@ public class GhostAIInput : EnemyAIInput
             // Turn if forward unmovable and left or right movable
             if (map.IsMovable(left)) return turnL;
             if (map.IsMovable(right)) return turnR;
-            if (map.IsBackwardMovable) return RandomChoice(turnL, turnR);
+            if (map.IsMovable(backward)) return RandomChoice(turnL, turnR);
         }
 
         // Idle if unmovable
