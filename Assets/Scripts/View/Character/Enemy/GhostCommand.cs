@@ -1,3 +1,4 @@
+using UnityEngine;
 using UniRx;
 using System;
 using DG.Tweening;
@@ -60,18 +61,24 @@ public class GhostThroughEnd : EnemyForward
 
 public class GhostAttackStart : FlyingAttackStart
 {
+    protected ICommand attackKeep;
+
     protected override bool IsForwardMovable => map.ForwardTile.IsViewOpen;
 
-    protected override FlyingAttackEnd AttackEndCommand(EnemyCommandTarget target, float duration)
-        => new GhostAttackEnd(target, duration);
+    protected override ICommand AttackEndCommand(EnemyCommandTarget target, float duration)
+        => attackEnd ?? new GhostAttackEnd(target, duration);
 
     protected override ICommand PlayNext()
-        => MapUtil.IsOnPlayer(map.GetForward) ? this : attackEnd;
+        => MapUtil.IsOnPlayer(map.GetForward) ? attackKeep : attackEnd;
 
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
 
-    public GhostAttackStart(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public GhostAttackStart(EnemyCommandTarget target, float duration) : base(target, duration)
+    {
+        attackEnd = AttackEndCommand(target, duration);
+        attackKeep = new GhostAttackKeep(target, duration, attackEnd);
+    }
 
     public override IObservable<Unit> Execute()
     {
@@ -87,9 +94,47 @@ public class GhostAttackStart : FlyingAttackStart
     }
 }
 
+public class GhostAttackKeep : FlyingAttack
+{
+    protected ICommand attackEnd;
+
+    protected ICommand PlayNext() => MapUtil.IsOnPlayer(map.GetForward) ? this : attackEnd;
+
+    public GhostAttackKeep(EnemyCommandTarget target, float duration, ICommand attackEnd) : base(target, duration)
+    {
+        this.attackEnd = attackEnd;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        if (!IsForwardMovable)
+        {
+            // Execute AttackEnd
+            input.Interrupt(attackEnd, false);
+            return Observable.Empty(Unit.Default);
+        }
+
+        Vector3 dest = map.CurrentVec3Pos + map.GetForwardVector();
+
+        map.MoveObjectOn(map.GetForward);
+
+        playingTween = DOTween.Sequence()
+            .Join(tweenMove.Move(dest))
+            .Join(tweenMove.DelayedCall(0.75f, () => enemyMap.MoveOnEnemy()))
+            .Play();
+
+        flyingAnim.attack.Fire();
+        completeTween = flyingAttack.AttackSequence(duration).Play();
+
+        target.input.Interrupt(PlayNext(), false);
+
+        return ObservableComplete();
+    }
+}
+
 public class GhostAttackEnd : FlyingAttackEnd
 {
-    protected override bool IsForwardMovable => map.IsForwardMovable;
+    protected override bool IsForwardMovable => map.ForwardTile.IsViewOpen;
     protected override bool IsBackwardMovable => map.IsBackwardMovable;
     protected override bool IsRightMovable => map.IsRightMovable;
     protected override bool IsLeftMovable => map.IsLeftMovable;
@@ -104,7 +149,7 @@ public class GhostAttackEnd : FlyingAttackEnd
     public override IObservable<Unit> Execute()
     {
         (react as GhostReactor).OnAttackEnd();
-        if (IsForwardMovable || IsBackwardMovable || IsRightMovable || IsLeftMovable)
+        if (map.IsForwardMovable || IsBackwardMovable || IsRightMovable || IsLeftMovable)
         {
             (react as GhostReactor).OnAppear();
         }

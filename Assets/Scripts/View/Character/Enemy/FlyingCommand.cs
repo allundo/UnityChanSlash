@@ -40,7 +40,7 @@ public class FlyingAttackStart : FlyingAttack
 {
     protected ICommand attackEnd;
 
-    protected virtual FlyingAttackEnd AttackEndCommand(EnemyCommandTarget target, float duration)
+    protected virtual ICommand AttackEndCommand(EnemyCommandTarget target, float duration)
         => new FlyingAttackEnd(target, duration);
 
     protected virtual ICommand PlayNext() => attackEnd;
