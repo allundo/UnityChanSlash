@@ -7,5 +7,5 @@ public class EnemyAnimFX : AnimationFX
 
     // Called as Animation Event functions
     public virtual void OnAttack() => Play(attackSfx, attackVfx);
-    public virtual void OnAttackEnd() => Stop(attackSfx, attackVfx);
+    public virtual void OnAttackEnd() => attackVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 }
