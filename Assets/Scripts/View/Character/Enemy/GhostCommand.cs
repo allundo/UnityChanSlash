@@ -68,7 +68,10 @@ public class GhostAttackStart : FlyingAttackStart
     protected override ICommand PlayNext()
         => MapUtil.IsOnPlayer(map.GetForward) ? this : attackEnd;
 
-    public GhostAttackStart(EnemyCommandTarget target, float duration) : base(target, duration, -0.1f) { }
+    protected override float attackTimeScale => 0.75f;
+    protected override float decentVec => -0.1f;
+
+    public GhostAttackStart(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {
@@ -79,7 +82,7 @@ public class GhostAttackStart : FlyingAttackStart
             return Observable.Empty(Unit.Default);
         }
 
-        (react as GhostReactor).OnHide();
+        (react as GhostReactor).OnAttackStart();
         return base.Execute();
     }
 }
@@ -91,14 +94,30 @@ public class GhostAttackEnd : FlyingAttackEnd
     protected override bool IsRightMovable => map.IsRightMovable;
     protected override bool IsLeftMovable => map.IsLeftMovable;
 
-    public GhostAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration, -0.1f) { }
+    protected override float attackTimeScale => 0.75f;
+    protected override float decentVec => -0.1f;
+
+    protected override FlyingAttackLeave AttackLeaveCommand(EnemyCommandTarget target, float duration)
+        => new GhostAttackLeave(target, duration);
+    public GhostAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {
+        (react as GhostReactor).OnAttackEnd();
         if (IsForwardMovable || IsBackwardMovable || IsRightMovable || IsLeftMovable)
         {
             (react as GhostReactor).OnAppear();
         }
         return base.Execute();
+    }
+}
+
+public class GhostAttackLeave : FlyingAttackLeave
+{
+    public GhostAttackLeave(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    protected override bool Action()
+    {
+        // completeTween = tweenMove.DelayedCall(0.1f, (react as GhostReactor).OnAttackEnd).Play();
+        return base.Action();
     }
 }

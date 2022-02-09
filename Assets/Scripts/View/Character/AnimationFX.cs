@@ -24,4 +24,15 @@ public class AnimationFX : MonoBehaviour
         Play(sfx, minPitch, maxPitch);
         vfx?.Play();
     }
+
+    protected void Stop(AudioSource sfx)
+    {
+        sfx.StopEx();
+    }
+
+    protected void Stop(AudioSource sfx, ParticleSystem vfx)
+    {
+        sfx.StopEx();
+        vfx?.Stop();
+    }
 }

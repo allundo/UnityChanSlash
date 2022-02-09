@@ -22,17 +22,17 @@ public class FlyingForward : EnemyForward
 public abstract class FlyingAttack : FlyingCommand
 {
     protected IAttack flyingAttack;
-    protected readonly float attackTimeScale = 0.9f;
 
     public override int priority => 5;
-    protected float decentVec;
+
+    protected virtual float attackTimeScale => 0.9f;
+    protected virtual float decentVec => -0.5f;
 
     protected virtual bool IsForwardMovable => map.ForwardTile.IsViewOpen;
 
-    public FlyingAttack(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration)
+    public FlyingAttack(EnemyCommandTarget target, float duration) : base(target, duration)
     {
         flyingAttack = target.enemyAttack[0];
-        this.decentVec = decentVec;
     }
 }
 
@@ -45,7 +45,7 @@ public class FlyingAttackStart : FlyingAttack
 
     protected virtual ICommand PlayNext() => attackEnd;
 
-    public FlyingAttackStart(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration, decentVec)
+    public FlyingAttackStart(EnemyCommandTarget target, float duration) : base(target, duration)
     {
         attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
     }
@@ -85,9 +85,12 @@ public class FlyingAttackEnd : FlyingAttack
     protected virtual bool IsRightMovable => map.RightTile.IsViewOpen;
     protected virtual bool IsLeftMovable => map.LeftTile.IsViewOpen;
 
-    public FlyingAttackEnd(EnemyCommandTarget target, float duration, float decentVec = -0.5f) : base(target, duration, decentVec)
+    protected virtual FlyingAttackLeave AttackLeaveCommand(EnemyCommandTarget target, float duration)
+        => new FlyingAttackLeave(target, duration);
+
+    public FlyingAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration)
     {
-        leave = new FlyingAttackLeave(target, duration / (1f - attackTimeScale) * 2f);
+        leave = AttackLeaveCommand(target, duration / (1f - attackTimeScale) * 2f);
     }
 
     public override IObservable<Unit> Execute()

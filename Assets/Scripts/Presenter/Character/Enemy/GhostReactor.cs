@@ -4,6 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(GhostStatus))]
 public class GhostReactor : EnemyReactor
 {
+    protected GhostEffect ghostEffect;
+    protected GhostStatus ghostStatus;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        ghostEffect = effect as GhostEffect;
+        ghostStatus = status as GhostStatus;
+
+    }
     public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
     {
         if (!status.isOnGround) return 0f;
@@ -15,17 +25,24 @@ public class GhostReactor : EnemyReactor
         if (!status.isOnGround) return;
 
         map.RemoveObjectOn();
-        (status as GhostStatus).SetOnGround(false);
-        (effect as GhostEffect).OnHide();
+        ghostStatus.SetOnGround(false);
+        ghostEffect.OnHide();
     }
+    public void OnAttackStart()
+    {
+        OnHide();
+        ghostEffect.OnAttackStart();
+    }
+
+    public void OnAttackEnd() => ghostEffect.OnAttackEnd();
 
     public void OnAppear()
     {
         if (status.isOnGround) return;
 
         map.RemoveObjectOn();
-        (status as GhostStatus).SetOnGround(true);
+        ghostStatus.SetOnGround(true);
         map.SetObjectOn(map.onTilePos);
-        (effect as GhostEffect).OnAppear();
+        ghostEffect.OnAppear();
     }
 }
