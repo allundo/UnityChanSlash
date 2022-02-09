@@ -130,7 +130,7 @@ public class FlyingAttackEnd : FlyingAttack
 
         input.Interrupt(leave, false);
 
-        return ObservableComplete(attackTimeScale);
+        return ObservableComplete();
     }
 }
 
