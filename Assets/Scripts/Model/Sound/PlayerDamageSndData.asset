@@ -65,3 +65,27 @@ MonoBehaviour:
     critical: {fileID: 1160854579032595622, guid: fc2aefdfbdb834b47a95e8fc58e2eff1,
       type: 3}
     guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}
+  - name: Ice
+    damage: {fileID: 6251247139474727949, guid: 6d805e2695bf344df930df2ea9d18e73,
+      type: 3}
+    critical: {fileID: 1160854579032595622, guid: fc2aefdfbdb834b47a95e8fc58e2eff1,
+      type: 3}
+    guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}
+  - name: Thunder
+    damage: {fileID: 6251247139474727949, guid: 6d805e2695bf344df930df2ea9d18e73,
+      type: 3}
+    critical: {fileID: 1160854579032595622, guid: fc2aefdfbdb834b47a95e8fc58e2eff1,
+      type: 3}
+    guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}
+  - name: Light
+    damage: {fileID: 6251247139474727949, guid: 6d805e2695bf344df930df2ea9d18e73,
+      type: 3}
+    critical: {fileID: 1160854579032595622, guid: fc2aefdfbdb834b47a95e8fc58e2eff1,
+      type: 3}
+    guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}
+  - name: Dark
+    damage: {fileID: 4984405102884961118, guid: 9e6cb6f3c877b497c80be66fe9694403,
+      type: 3}
+    critical: {fileID: 1775521994369615968, guid: a2674d5e7daf04262bd083d21067c808,
+      type: 3}
+    guard: {fileID: 8413207324182607953, guid: 68ca07a1e5fc24008a8838040f6081b7, type: 3}

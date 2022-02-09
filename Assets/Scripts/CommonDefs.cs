@@ -425,6 +425,10 @@ public enum AttackType
     Sting,
     Bite,
     Burn = 10,
+    Ice,
+    Thunder,
+    Light,
+    Dark,
 }
 
 public enum AttackAttr
