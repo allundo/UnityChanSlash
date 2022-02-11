@@ -24,7 +24,7 @@ public class BulletReactor : MobReactor
     {
         fadeOut = DOTween.Sequence()
             .Join(effect.FadeOutTween(duration))
-            .AppendInterval(1.5f)
+            .AppendInterval(1.5f) // Wait for explode effect end
             .AppendCallback(OnDead)
             .Play();
     }

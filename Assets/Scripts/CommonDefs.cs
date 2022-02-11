@@ -452,3 +452,9 @@ public enum EnemyType
     VioletGhost,
     SkeletonSoldier,
 }
+
+public enum BulletType
+{
+    FireBall = 0,
+    IceBullet,
+}

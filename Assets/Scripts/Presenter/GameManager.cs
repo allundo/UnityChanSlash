@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using UniRx;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -9,7 +10,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private GameObject player = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private ItemGenerator itemGenerator = default;
-    [SerializeField] private FireBallGenerator fireBallGenerator = default;
+    [SerializeField] private BulletGenerator fireBallGenerator = default;
+    [SerializeField] private BulletGenerator iceBulletGenerator = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
@@ -29,7 +31,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public WorldMap worldMap { get; protected set; }
 
-    public FireBallGenerator GetFireBallGenerator => fireBallGenerator;
+    public BulletGenerator GetBulletGenerator(BulletType type) => bulletGenerators[type];
+    private Dictionary<BulletType, BulletGenerator> bulletGenerators;
 
     public void Pause(bool isHideUIs = false)
     {
@@ -74,6 +77,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         worldMap = GameInfo.Instance.NextFloorMap();
         mapRenderer.Render(worldMap);
+
+        bulletGenerators = new Dictionary<BulletType, BulletGenerator>()
+        {
+            { BulletType.FireBall, fireBallGenerator },
+            { BulletType.IceBullet, iceBulletGenerator },
+        };
     }
 
     void Start()
@@ -227,7 +236,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         debugEnemyGenerator.gameObject.SetActive(false);
 
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
-        fireBallGenerator.DestroyAll();
+        bulletGenerators.ForEach(kv => kv.Value.DestroyAll());
 
         yield return new WaitForEndOfFrame();
 

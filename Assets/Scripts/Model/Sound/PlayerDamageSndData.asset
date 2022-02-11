@@ -66,11 +66,11 @@ MonoBehaviour:
       type: 3}
     guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}
   - name: Ice
-    damage: {fileID: 6251247139474727949, guid: 6d805e2695bf344df930df2ea9d18e73,
+    damage: {fileID: 4290104979540979707, guid: b8e85c33bab694cbdb6cdec3ee426aec,
       type: 3}
-    critical: {fileID: 1160854579032595622, guid: fc2aefdfbdb834b47a95e8fc58e2eff1,
+    critical: {fileID: 4290104979540979707, guid: b8e85c33bab694cbdb6cdec3ee426aec,
       type: 3}
-    guard: {fileID: 5350457905646589821, guid: 863d2953f03fb44e6917d9ebd4e029ad, type: 3}
+    guard: {fileID: 1480949852039588962, guid: e81c8911e2b60476d953202c3483e806, type: 3}
   - name: Thunder
     damage: {fileID: 6251247139474727949, guid: 6d805e2695bf344df930df2ea9d18e73,
       type: 3}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FireBallGenerator : MobGenerator<MobStatus>
+public class BulletGenerator : MobGenerator<MobStatus>
 {
     protected override void Awake()
     {

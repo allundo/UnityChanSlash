@@ -3,11 +3,11 @@ using UnityEngine;
 public class BulletStatus : MobStatus
 {
     [SerializeField] protected MobData data;
-    [SerializeField] protected int dataIndex = 0;
+    [SerializeField] protected BulletType type;
 
     protected override void Awake()
     {
-        param = data.Param(dataIndex);
+        param = data.Param((int)type);
         base.Awake();
     }
 
