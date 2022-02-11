@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(EnemyReactor))]
 [RequireComponent(typeof(EnemyMapUtil))]
+[RequireComponent(typeof(MobAnimator))]
 public class EnemyCommandTarget : CommandTarget
 {
     /// <summary>
