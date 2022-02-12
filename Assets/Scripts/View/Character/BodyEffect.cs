@@ -6,12 +6,13 @@ public interface IBodyEffect
 {
     void OnActive();
     void OnDie();
+    void OnMelt(bool isBroken = false);
 
     /// <summary>
     /// Play body effect on damage
     /// </summary>
     /// <param name="damageRatio">Normalized damage ratio to the life max</param>
-    void OnDamage(float damageRatio, AttackType type);
+    void OnDamage(float damageRatio, AttackType type, AttackAttr attr);
 
     /// <summary>
     /// Play body effect on heal
@@ -47,6 +48,13 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
         prevFlash = flash.Play();
     }
 
+    protected void PlayFlash(Color color, float duration)
+    {
+        Sequence flash = DOTween.Sequence();
+        flashMaterials.ForEach(mat => flash.Join(mat.DOColor(color, duration)));
+        PlayFlash(flash);
+    }
+
     public virtual void OnActive()
     {
         PlayFlash(FadeInTween());
@@ -57,10 +65,10 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
         dieSound.PlayEx();
     }
 
-    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None)
+    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         DamageSound(damageRatio, type);
-        DamageFlash(damageRatio);
+        DamageFlash(damageRatio, attr);
     }
 
     public virtual void OnHeal(float healRatio) { }
@@ -82,9 +90,15 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
 
     protected virtual void DamageSound(float damageRatio, AttackType type) => PlayDamage(type);
 
-    protected virtual void DamageFlash(float damageRatio)
+    protected virtual void DamageFlash(float damageRatio, AttackAttr attr)
     {
         if (damageRatio < 0.000001f) return;
+
+        if (attr == AttackAttr.Ice)
+        {
+            OnIced();
+            return;
+        }
 
         Sequence flash = DOTween.Sequence();
 
@@ -102,6 +116,15 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
         }
 
         PlayFlash(flash);
+    }
+
+    protected virtual void OnIced()
+    {
+        PlayFlash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
+    }
+    public virtual void OnMelt(bool isBroken = false)
+    {
+        PlayFlash(Color.black, 0.5f);
     }
 
     public virtual Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);

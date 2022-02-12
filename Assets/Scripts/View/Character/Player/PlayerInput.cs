@@ -71,9 +71,12 @@ public class PlayerInput : ShieldInput
         commander = new PlayerCommander(playerTarget);
     }
 
+    protected ICommand wakeUp;
+
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 288f);
+        wakeUp = new PlayerWakeUp(playerTarget, 120f);
     }
 
     protected override void SetInputs()
@@ -174,6 +177,19 @@ public class PlayerInput : ShieldInput
     {
         base.InputDie();
         SetInputVisible(false);
+    }
+    public override void InputIced(float duration)
+    {
+        var current = commander.currentCommand;
+        if (current is PlayerJump || current is PlayerRun)
+        {
+            ClearAll();
+            Interrupt(new PlayerIcedFall(playerTarget, duration, 36f));
+            commander.EnqueueCommand(wakeUp);
+            return;
+        }
+
+        base.InputIced(duration);
     }
 
     /// <summary>
@@ -339,7 +355,7 @@ public class PlayerInput : ShieldInput
         ICommand backward = new PlayerBack(playerTarget, 43f);
         ICommand run = new PlayerRun(playerTarget, 24f);
         ICommand startRunning = new PlayerStartRunning(playerTarget, 24f);
-        var brake = new PlayerBrake(playerTarget, 48f);
+        var brake = new PlayerBrakeStop(playerTarget, 48f);
 
         ICommand turnR = new PlayerTurnR(playerTarget, 18f);
         ICommand turnL = new PlayerTurnL(playerTarget, 18f);

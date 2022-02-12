@@ -18,5 +18,5 @@ public class BulletStatus : MobStatus
         return this;
     }
 
-    public override float CalcAttack(float attack, IDirection attackDir) => attack;
+    public override float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None) => attack;
 }

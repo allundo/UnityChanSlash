@@ -14,7 +14,7 @@ public class GhostReactor : EnemyReactor
         ghostStatus = status as GhostStatus;
 
     }
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
+    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.isOnGround) return 0f;
         return base.OnDamage(attack, dir, type);

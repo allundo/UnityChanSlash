@@ -25,9 +25,10 @@ public interface ICommand
     int priority { get; }
     bool IsPriorTo(int target);
     bool IsPriorTo(ICommand cmd);
+    ICommand GetContinuation();
 }
 
-public abstract class Command : ICommand
+public class Command : ICommand
 {
     public static readonly float FRAME_UNIT = Constants.FRAME_SEC_UNIT;
     public static readonly float TILE_UNIT = Constants.TILE_UNIT;
@@ -65,10 +66,24 @@ public abstract class Command : ICommand
         map = target.map;
     }
 
-    protected Tween playingTween = null;
+    public Command(IInput input, Tween playing, Tween complete, List<Action> onCompleted)
+    {
+        this.input = input;
+        this.playingTween = Pause(playing);
+        this.completeTween = Pause(complete);
+        this.onCompleted = onCompleted;
+        this.duration = playing == null ? 0f : playing.Duration() - playing.fullPosition;
+        this.invalidDuration = this.duration * 0.95f;
+    }
+
+    private static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
+
+    public Tween playingTween { get; protected set; } = null;
     protected Tween completeTween = null;
     protected Tween validateTween = null;
     protected List<Action> onCompleted = new List<Action>();
+
+    public ICommand GetContinuation() => new Command(input, playingTween, completeTween, onCompleted);
 
     public virtual void Cancel()
     {
@@ -142,7 +157,13 @@ public abstract class Command : ICommand
         onCompleted.Clear();
     }
 
-    protected virtual bool Action() => false;
+    protected virtual bool Action()
+    {
+        if (duration == 0f) return false;
+        playingTween?.Play();
+        completeTween?.Play();
+        return true;
+    }
 
     protected virtual float Speed => 0.0f;
     protected virtual float RSpeed => 0.0f;
@@ -179,5 +200,20 @@ public class DieCommand : Command
         react.OnDie();
 
         return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
+    }
+}
+
+public class IcedCommand : Command
+{
+    public override int priority => 20;
+    public IcedCommand(CommandTarget target, float duration) : base(target, duration, 0.98f) { }
+
+    protected override bool Action()
+    {
+        anim.Pause();
+
+        completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
+        SetOnCompleted(() => react.OnMelt());
+        return true;
     }
 }

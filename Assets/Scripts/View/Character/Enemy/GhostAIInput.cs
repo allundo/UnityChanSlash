@@ -86,4 +86,14 @@ public class GhostAIInput : EnemyAIInput
         // Idle if unmovable
         return null;
     }
+
+    // Doesn't fall by ice
+    public override void InputIced(float duration)
+    {
+        // Delete Command queue only
+        ClearAll(true);
+        ICommand continuation = commander.PostponeCurrent();
+        InputCommand(new IcedCommand(target, duration));
+        if (continuation != null) ForceEnqueue(continuation);
+    }
 }

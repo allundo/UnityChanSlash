@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 using UniRx;
 using DG.Tweening;
@@ -141,15 +142,6 @@ public class PlayerDash : PlayerCommand
     public PlayerDash(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f)
     { }
 
-    protected IObservable<Unit> BrakeAndBackStep(float timeScale = 2f)
-    {
-        playingTween = tweenMove.BrakeAndBack(timeScale);
-        validateTween = ValidateTween().Play();
-        completeTween = ChangeSpeed(2f / timeScale, 0f, 1f, playerAnim.brakeAndBackStep.Fire);
-
-        return ObservableComplete(timeScale);
-    }
-
     protected Tween ToSpeed(float endValue, float timeScale = 1f)
         => DOTween.To(
             () => playerAnim.speed.Float,
@@ -157,20 +149,6 @@ public class PlayerDash : PlayerCommand
             endValue,
             duration * timeScale
         );
-
-    protected Tween ChangeSpeed(float startRate = 1f, float endRate = 0f, float timeScale = 1f, TweenCallback startCallback = null, float delayRate = 0f)
-    {
-        float baseSpeed = TILE_UNIT / duration;
-        playerAnim.speed.Float = baseSpeed * startRate;
-
-        var seq = DOTween.Sequence();
-
-        if (delayRate > 0f) seq.AppendInterval(duration * delayRate);
-
-        if (startCallback != null) seq.AppendCallback(startCallback);
-
-        return seq.Append(ToSpeed(baseSpeed * endRate)).Play();
-    }
 }
 
 public class PlayerStartRunning : PlayerRun
@@ -205,7 +183,11 @@ public class PlayerStartRunning : PlayerRun
 
 public class PlayerRun : PlayerDash
 {
-    public PlayerRun(PlayerCommandTarget target, float duration) : base(target, duration) { }
+    protected ICommand brakeAndBackStep;
+    public PlayerRun(PlayerCommandTarget target, float duration) : base(target, duration)
+    {
+        brakeAndBackStep = new PlayerBrakeAndBackStep(target, duration * 2f);
+    }
 
     public override IObservable<Unit> Execute()
     {
@@ -224,7 +206,8 @@ public class PlayerRun : PlayerDash
         }
         else
         {
-            return BrakeAndBackStep();
+            input.Interrupt(brakeAndBackStep, false);
+            return Observable.Empty<Unit>();
         }
     }
 }
@@ -232,6 +215,28 @@ public class PlayerRun : PlayerDash
 public class PlayerBrake : PlayerDash
 {
     public PlayerBrake(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected Tween DampenSpeed(TweenCallback startCallback = null, float timeScale = 1f, float delayRate = 0f)
+    {
+        playerAnim.speed.Float = TILE_UNIT / duration * 2f;
+
+        var seq = DOTween.Sequence();
+
+        if (delayRate > 0f) seq.AppendInterval(duration * delayRate);
+
+        if (startCallback != null) seq.AppendCallback(startCallback);
+
+        return seq.Append(ToSpeed(0f, timeScale)).Play();
+    }
+}
+
+public class PlayerBrakeStop : PlayerBrake
+{
+    protected ICommand brakeAndBackStep;
+    public PlayerBrakeStop(PlayerCommandTarget target, float duration) : base(target, duration)
+    {
+        brakeAndBackStep = new PlayerBrakeAndBackStep(target, duration);
+    }
 
     public override IObservable<Unit> Execute()
     {
@@ -242,14 +247,33 @@ public class PlayerBrake : PlayerDash
 
             playingTween = tweenMove.Brake(map.GetForward, 0.75f, hidePlateHandler.Move);
             validateTween = ValidateTween().Play();
-            completeTween = ChangeSpeed(2f, 0f, 0.5f, playerAnim.brake.Fire, 0.3f);
+            completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, 0.3f);
 
             return ObservableComplete();
         }
         else
         {
-            return BrakeAndBackStep(1f);
+            input.Interrupt(brakeAndBackStep, false);
+            return Observable.Empty<Unit>();
         }
+    }
+}
+
+public class PlayerBrakeAndBackStep : PlayerBrake
+{
+    protected float startSpeedRate;
+    public PlayerBrakeAndBackStep(PlayerCommandTarget target, float duration, float startSpeedRate = 2f) : base(target, duration)
+    {
+        this.startSpeedRate = startSpeedRate;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        playingTween = tweenMove.BrakeAndBack();
+        validateTween = ValidateTween().Play();
+        completeTween = DampenSpeed(playerAnim.brakeAndBackStep.Fire);
+
+        return ObservableComplete();
     }
 }
 
@@ -285,6 +309,59 @@ public class PlayerJump : PlayerCommand
                 hidePlateHandler.Move,  // Update HidePlate on entering the next Tile
                 hidePlateHandler.Move   // Update HidePlate on entering the next next Tile
             );
+
+        return true;
+    }
+}
+
+public class PlayerIcedFall : PlayerCommand
+{
+    public override int priority => 20;
+    protected float meltFrameTimer;
+    public PlayerIcedFall(PlayerCommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    {
+        meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        playerAnim.speed.Float = 0f;
+        playerAnim.icedFall.Bool = true;
+
+        playingTween = DOTween.Sequence()
+            .AppendCallback(react.OnFall)
+            .Append(tweenMove.JumpCurrentOnTile(1f, 0f).SetEase(Ease.Linear))
+            .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
+            .SetUpdate(false)
+            .Play();
+
+        completeTween = DOTween.Sequence()
+            .Join(tweenMove.DelayedCall(1f, () => playerAnim.icedFall.Bool = false))
+            .AppendInterval(meltFrameTimer)
+            .AppendCallback(() => react.OnMelt())
+            .SetUpdate(false)
+            .Play();
+
+        return ObservableComplete();
+    }
+}
+
+public class PlayerWakeUp : PlayerCommand
+{
+    public override int priority => 20;
+    protected float wakeUpTiming;
+    public PlayerWakeUp(PlayerCommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
+    {
+        this.wakeUpTiming = wakeUpTiming;
+    }
+
+    protected override bool Action()
+    {
+        completeTween = tweenMove.DelayedCall(wakeUpTiming, () =>
+        {
+            playerAnim.icedFall.Bool = false;
+            react.OnWakeUp();
+        }).Play();
 
         return true;
     }

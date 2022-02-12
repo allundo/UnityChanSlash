@@ -14,7 +14,7 @@ public class ShieldEnemyReactor : EnemyReactor
         base.Awake();
     }
 
-    protected override float CalcDamage(float attack, IDirection dir)
+    protected override float CalcDamage(float attack, IDirection dir, AttackAttr attr = AttackAttr.None)
     {
         float shield = 0.0f;
 
@@ -24,7 +24,7 @@ public class ShieldEnemyReactor : EnemyReactor
             guardState.SetShield();
         }
 
-        return Mathf.Max(status.CalcAttack(attack, dir) - shield, 0.0f);
+        return Mathf.Max(status.CalcAttack(attack, dir, attr) - shield, 0.0f);
     }
     public override void Destroy()
     {

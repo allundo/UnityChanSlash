@@ -109,6 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIced: 0
 --- !u!114 &9055337087454508326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,6 +428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 4
+  attackAttr: 0
   attackMultiplier: 1
   startFrame: 6
   finishFrame: 10

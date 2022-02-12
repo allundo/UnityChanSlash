@@ -5,6 +5,9 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
+    second: ICED_FALL
+  - first:
+      74: 3227230039308557110
     second: DROP
   - first:
       74: 957054535369391249
@@ -107,6 +110,35 @@ ModelImporter:
       internalID: 0
       firstFrame: 80
       lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: ICED_FALL
+      takeName: Character1_Reference|Character1_ReferenceAction
+      internalID: 0
+      firstFrame: 124
+      lastFrame: 148
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

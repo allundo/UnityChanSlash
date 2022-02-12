@@ -151,7 +151,63 @@ public class FlyingAttackLeave : FlyingAttack
         return true;
     }
 }
+public class FlyingIcedFall : FlyingCommand
+{
+    protected float meltFrameTimer;
+    public FlyingIcedFall(EnemyCommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    {
+        meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
+    }
 
+    public override IObservable<Unit> Execute()
+    {
+        flyingAnim.speed.Float = 0f;
+        flyingAnim.icedFall.Bool = true;
+
+
+        playingTween = DOTween.Sequence()
+            .AppendCallback(react.OnFall)
+            .Append(tweenMove.Jump(map.DestVec + new Vector3(0f, -1.25f, 0f), 1f, 0f).SetEase(Ease.Linear))
+            .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
+            .SetUpdate(false)
+            .Play();
+
+        completeTween = DOTween.Sequence()
+            .Join(tweenMove.DelayedCall(1f, () => flyingAnim.icedFall.Bool = false))
+            .AppendInterval(meltFrameTimer)
+            .AppendCallback(() => react.OnMelt())
+            .SetUpdate(false)
+            .Play();
+
+        return ObservableComplete();
+    }
+}
+
+public class FlyingWakeUp : FlyingCommand
+{
+    protected float wakeUpTiming;
+    public FlyingWakeUp(EnemyCommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
+    {
+        this.wakeUpTiming = wakeUpTiming;
+    }
+
+    protected override bool Action()
+    {
+        playingTween = DOTween.Sequence()
+            .AppendInterval(duration * wakeUpTiming)
+            .Append(tweenMove.Move(map.DestVec3Pos, 1f - wakeUpTiming))
+            .SetUpdate(false)
+            .Play();
+
+        completeTween = tweenMove.DelayedCall(wakeUpTiming, () =>
+        {
+            flyingAnim.icedFall.Bool = false;
+            react.OnWakeUp();
+        }).Play();
+
+        return true;
+    }
+}
 public class FlyingDie : FlyingCommand
 {
     public FlyingDie(EnemyCommandTarget target, float duration) : base(target, duration) { }

@@ -44,7 +44,6 @@ public class Commander
     /// Enqueue a Command and invalidate following input.
     /// </summary>
     /// <param name="cmd">Command to enqueue</param>
-    /// <param name="dispatch">Dispatch Command immediately if true. TODO: This is not Command interaption for now.</param>
     public virtual void EnqueueCommand(ICommand cmd)
     {
         cmdQueue.Enqueue(cmd);
@@ -102,6 +101,14 @@ public class Commander
             currentCommand?.CancelValidate();
             if (isCancel) Cancel();
         }
+    }
+
+    public ICommand PostponeCurrent()
+    {
+        ICommand continuation = currentCommand?.GetContinuation();
+        execDisposable?.Dispose();
+        DispatchCommand();
+        return continuation;
     }
 
     protected virtual void InsertQueue(ICommand cmd) => cmdQueue.AddFirst(cmd);

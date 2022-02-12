@@ -8,6 +8,7 @@ public interface IInput
     void InputCommand(ICommand cmd);
     void ForceEnqueue(ICommand cmd);
     void Interrupt(ICommand cmd, bool isCancel = true);
+    void InputIced(float duration);
     void InputDie();
     void ValidateInput(bool isTriggerOnly = false);
     void DisableInput(bool isTriggerOnly = false);
@@ -114,6 +115,16 @@ public abstract class MobInput : MonoBehaviour, IInput
     {
         ClearAll();
         Interrupt(die);
+    }
+
+    public virtual void InputIced(float duration)
+    {
+        // Delete Command queue only
+        ClearAll(true);
+        ICommand continuation = commander.PostponeCurrent();
+        ForceEnqueue(new IcedCommand(target, duration));
+        if (continuation != null) ForceEnqueue(continuation);
+        DisableInput();
     }
 
     public virtual void ValidateInput(bool isTriggerOnly = false)

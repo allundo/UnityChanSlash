@@ -14,6 +14,9 @@ public class MobAnimator : MonoBehaviour
     public AnimatorFloat speed { get; protected set; }
     public AnimatorTrigger die { get; protected set; }
 
+    public void Pause() => anim.speed = 0f;
+    public void Resume() => anim.speed = 1f;
+
     protected virtual void Awake()
     {
         anim = GetComponent<Animator>();

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using System;
+using System.Collections.Generic;
 
 public class MobStatus : SpawnObject<MobStatus>
 {
@@ -12,6 +13,17 @@ public class MobStatus : SpawnObject<MobStatus>
     protected virtual float RestDamageMultiplier => param.restDamageMultiplier;
     protected virtual float DefaultLifeMax => param.defaultLifeMax;
 
+    protected static Dictionary<AttackAttr, float> attrDamageMultiplier
+        = new Dictionary<AttackAttr, float>()
+        {
+            { AttackAttr.None,        1f },
+            { AttackAttr.Fire,        1f },
+            { AttackAttr.Ice,         1f },
+            { AttackAttr.Thunder,     1f },
+            { AttackAttr.Light,       1f },
+            { AttackAttr.Dark,        1f },
+        };
+
     public virtual float Attack
     {
         get { return param.attack; }
@@ -21,6 +33,7 @@ public class MobStatus : SpawnObject<MobStatus>
     public virtual float Shield => param.shield;
 
     public bool isOnGround { get; protected set; }
+    public bool isIced;
 
     protected virtual float ArmorMultiplier => param.armorMultiplier;
 
@@ -59,9 +72,9 @@ public class MobStatus : SpawnObject<MobStatus>
         life.Value = Mathf.Min(life.Value + heal, lifeMax.Value);
     }
 
-    public virtual float CalcAttack(float attack, IDirection attackDir)
+    public virtual float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None)
     {
-        return attack * ArmorMultiplier * GetDirMultiplier(attackDir);
+        return attack * ArmorMultiplier * GetDirMultiplier(isIced ? null : attackDir) * attrDamageMultiplier[attr];
     }
 
     protected float GetDirMultiplier(IDirection attackerDir)
@@ -85,6 +98,7 @@ public class MobStatus : SpawnObject<MobStatus>
     {
         life.Value = lifeMax.Value = DefaultLifeMax;
         isOnGround = param.isOnGround;
+        isIced = false;
     }
 
     public override void Activate()

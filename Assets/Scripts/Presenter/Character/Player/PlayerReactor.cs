@@ -48,16 +48,16 @@ public class PlayerReactor : MobReactor
         anim.lifeRatio.Float = LifeRatio(life);
     }
 
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
+    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        float damage = base.OnDamage(attack, dir, type);
+        float damage = base.OnDamage(attack, dir, type, attr);
         if (restUI.isActive) restUI.OnDamage();
         return damage;
     }
 
-    protected override float CalcDamage(float attack, IDirection dir)
+    protected override float CalcDamage(float attack, IDirection dir, AttackAttr attr = AttackAttr.None)
     {
-        if (restUI.isActive) return Mathf.Max(status.CalcAttack(attack, null), 0.0f);
+        if (restUI.isActive) return Mathf.Max(status.CalcAttack(attack, null, attr), 0.0f);
 
         float shield = 0.0f;
 
@@ -67,6 +67,6 @@ public class PlayerReactor : MobReactor
             guardState.SetShield();
         }
 
-        return Mathf.Max(status.CalcAttack(attack, dir) - shield, 0.0f);
+        return Mathf.Max(status.CalcAttack(attack, dir, attr) - shield, 0.0f);
     }
 }

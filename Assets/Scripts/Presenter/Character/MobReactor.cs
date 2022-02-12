@@ -5,9 +5,12 @@ using DG.Tweening;
 public interface IReactor
 {
     Vector3 position { get; }
-    float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None);
+    float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
     float OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
+    void OnFall();
+    void OnWakeUp();
     void OnDie();
+    void OnMelt(bool isBroken = false);
     void OnActive();
     void FadeOutToDead(float duration = 0.5f);
     void Destroy();
@@ -78,14 +81,29 @@ public class MobReactor : MonoBehaviour, IReactor
         lifeGauge?.OnLifeChange(status.Life.Value, lifeMax);
     }
 
-    public virtual float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None)
+    public virtual float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;
 
-        float damage = CalcDamage(attack, dir);
+        float damage = CalcDamage(attack, dir, attr);
         float damageRatio = LifeRatio(damage);
 
-        effect.OnDamage(damageRatio, type);
+        if (attr == AttackAttr.Ice)
+        {
+            if (!status.isIced)
+            {
+                effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
+                input.InputIced(damage * 100f);
+                status.isIced = true;
+            }
+            return 0f;
+        }
+        else if (status.isIced)
+        {
+            OnMelt(true);
+        }
+
+        effect.OnDamage(damageRatio, type, attr);
         lifeGauge?.OnDamage(damageRatio);
 
         status.Damage(damage);
@@ -116,9 +134,19 @@ public class MobReactor : MonoBehaviour, IReactor
 
     protected float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);
 
-    protected virtual float CalcDamage(float attack, IDirection dir)
+    protected virtual float CalcDamage(float attack, IDirection dir, AttackAttr attr)
     {
-        return status.CalcAttack(attack, dir);
+        return status.CalcAttack(attack, dir, attr);
+    }
+
+    public virtual void OnFall()
+    {
+        bodyCollider.enabled = false;
+    }
+
+    public virtual void OnWakeUp()
+    {
+        bodyCollider.enabled = true;
     }
 
     public virtual void OnDie()
@@ -126,6 +154,14 @@ public class MobReactor : MonoBehaviour, IReactor
         effect.OnDie();
         map.ResetTile();
         bodyCollider.enabled = false;
+    }
+
+    public virtual void OnMelt(bool isBroken = false)
+    {
+        if (!status.isIced) return;
+
+        effect.OnMelt(isBroken);
+        status.isIced = false;
     }
 
     public virtual void OnActive()

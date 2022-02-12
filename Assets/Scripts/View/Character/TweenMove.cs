@@ -135,7 +135,7 @@ public class TweenMove
             )
             .AppendInterval(edgeTime);
 
-        return seq.Join(jumpSeq).Play();
+        return seq.Join(jumpSeq).SetUpdate(false).Play();
     }
 
     public Tween Jump(Vector3 moveVec, float timeScale = 1f, float jumpPower = 1.0f)
@@ -143,6 +143,9 @@ public class TweenMove
 
     public Tween Jump(Pos moveVec, float timeScale = 1f, float jumpPower = 1.0f)
         => Jump(map.WorldPos(moveVec), timeScale, jumpPower);
+
+    public Tween JumpCurrentOnTile(float timeScale = 1f, float jumpPower = 1.0f)
+        => tf.DOJump(map.DestVec3Pos, jumpPower, 1, duration * timeScale);
 
     public Sequence Drop(float startY, float endY, float stunDuration = 0.0f, float wakeUpDuration = 0.65f)
     {

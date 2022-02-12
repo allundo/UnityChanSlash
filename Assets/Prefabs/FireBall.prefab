@@ -4870,6 +4870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 10
+  attackAttr: 1
   attackMultiplier: 1
 --- !u!1 &2653024233606061206
 GameObject:
@@ -38212,8 +38213,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5083e69d48e6847218e2d3e5f1dbef1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIced: 0
   data: {fileID: 11400000, guid: b6abfe22fb88e41c2ab8d1d730b9a054, type: 2}
-  dataIndex: 0
+  type: 0
 --- !u!114 &290249210931567040
 MonoBehaviour:
   m_ObjectHideFlags: 0

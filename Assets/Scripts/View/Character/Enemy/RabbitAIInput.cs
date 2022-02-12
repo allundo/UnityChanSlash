@@ -10,12 +10,14 @@ public class RabbitAIInput : EnemyAIInput
     protected ICommand wondering;
     protected ICommand jumpAttack;
     protected ICommand somersault;
+    protected ICommand wakeUp;
 
     protected override void SetCommands()
     {
         var enemyTarget = target as EnemyCommandTarget;
 
         die = new EnemyDie(enemyTarget, 56f);
+        wakeUp = new RabbitWakeUp(enemyTarget, 80f);
         idle = new EnemyIdle(enemyTarget, 32f);
         wondering = new RabbitWondering(enemyTarget, 64f);
         moveForward = new EnemyForward(enemyTarget, 40f);
@@ -138,5 +140,18 @@ public class RabbitAIInput : EnemyAIInput
 
         // Wonder if unmovable
         return wondering;
+    }
+
+    public override void InputIced(float duration)
+    {
+        if (commander.currentCommand is RabbitAttack)
+        {
+            ClearAll();
+            Interrupt(new RabbitIcedFall(target as EnemyCommandTarget, duration, 36f));
+            commander.EnqueueCommand(wakeUp);
+            return;
+        }
+
+        base.InputIced(duration);
     }
 }

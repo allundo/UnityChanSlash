@@ -3,11 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(FlyingAnimator))]
 public class FlyingAIInput : EnemyAIInput
 {
+    protected ICommand wakeUp;
     protected override void SetCommands()
     {
         var enemyTarget = target as EnemyCommandTarget;
 
         die = new FlyingDie(enemyTarget, 118f);
+        wakeUp = new FlyingWakeUp(enemyTarget, 120f);
         moveForward = new FlyingForward(enemyTarget, 45f);
         turnL = new EnemyTurnAnimL(enemyTarget, 7f);
         turnR = new EnemyTurnAnimR(enemyTarget, 7f);
@@ -83,5 +85,13 @@ public class FlyingAIInput : EnemyAIInput
 
         // Idle if unmovable
         return null;
+    }
+
+    public override void InputIced(float duration)
+    {
+        ClearAll();
+        Interrupt(new FlyingIcedFall(target as EnemyCommandTarget, duration, 60f));
+        commander.EnqueueCommand(wakeUp);
+        return;
     }
 }

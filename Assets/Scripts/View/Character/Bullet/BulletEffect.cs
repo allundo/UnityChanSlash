@@ -54,9 +54,9 @@ public class BulletEffect : BodyEffect
         emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
-    public override void OnDamage(float damageRatio, AttackType type = AttackType.None)
+    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        DamageFlash(damageRatio);
+        DamageFlash(damageRatio, attr);
         hitVfx?.Play();
     }
 

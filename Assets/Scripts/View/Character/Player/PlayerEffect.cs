@@ -8,9 +8,9 @@ public class PlayerEffect : MobEffect
         anim = GetComponent<PlayerAnimator>();
     }
 
-    public override void OnDamage(float damageRatio, AttackType type = AttackType.None)
+    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        base.OnDamage(damageRatio, type);
+        base.OnDamage(damageRatio, type, attr);
         anim.rest.Bool = false;
     }
 }

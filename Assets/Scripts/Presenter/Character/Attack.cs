@@ -5,6 +5,8 @@ using DG.Tweening;
 public class Attack : MonoBehaviour, IAttack
 {
     [SerializeField] protected AttackType attackType = default;
+    [SerializeField] protected AttackAttr attackAttr = default;
+
     private Collider attackCollider = default;
     protected MobStatus status;
 
@@ -34,7 +36,7 @@ public class Attack : MonoBehaviour, IAttack
 
         if (null == targetMob) return;
 
-        targetMob.OnDamage(status.Attack * attackMultiplier, status.dir, attackType);
+        targetMob.OnDamage(status.Attack * attackMultiplier, status.dir, attackType, attackAttr);
     }
 
     protected virtual void OnHitFinished()

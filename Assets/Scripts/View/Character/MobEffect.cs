@@ -49,4 +49,11 @@ public class MobEffect : BodyEffect
 
         PlayCritical(type);
     }
+
+    public override void OnMelt(bool isBroken = false)
+    {
+        if (isBroken) PlayCritical(AttackType.Ice);
+        PlayFlash(Color.black, 0.5f);
+    }
+
 }
