@@ -55,5 +55,4 @@ public class MobEffect : BodyEffect
         if (isBroken) PlayCritical(AttackType.Ice);
         PlayFlash(Color.black, 0.5f);
     }
-
 }

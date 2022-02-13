@@ -36,34 +36,34 @@ public abstract class RabbitAttack : RabbitCommand
         {
             case 1:
                 map.MoveObjectOn(map.GetForward);
-                seq.Append(tweenMove.Jump(map.GetForwardVector(0.8f), 0.65f))
+                seq.Append(tweenMove.JumpRelative(map.GetForwardVector(0.8f), 0.65f))
                     .AppendCallback(() => enemyMap.MoveOnEnemy());
                 break;
 
             case 2:
                 Pos forward = map.GetForward;
                 map.MoveObjectOn(forward);
-                seq.Append(tweenMove.Jump(map.GetForwardVector(1.5f), 0.3f))
+                seq.Append(tweenMove.JumpRelative(map.GetForwardVector(1.5f), 0.3f))
                     .AppendCallback(() => enemyMap.MoveOnEnemy(forward))
-                    .Append(tweenMove.Jump(map.GetBackwardVector(0.7f), 0.35f, 0.5f));
+                    .Append(tweenMove.JumpRelative(map.GetBackwardVector(0.7f), 0.35f, 0.5f));
                 break;
 
             case 3:
                 map.MoveObjectOn(map.GetJump);
-                seq.Append(tweenMove.Jump(map.GetForwardVector(1.8f), 0.3f))
+                seq.Append(tweenMove.JumpRelative(map.GetForwardVector(1.8f), 0.3f))
                     .AppendCallback(() => enemyMap.MoveOnEnemy())
-                    .Append(tweenMove.Jump(map.GetBackwardVector(0.7f), 0.35f, 0.5f));
+                    .Append(tweenMove.JumpRelative(map.GetBackwardVector(0.7f), 0.35f, 0.5f));
                 break;
 
 
             case 0:
             default:
-                seq.Append(tweenMove.Jump(map.GetForwardVector(0.5f), 0.3f))
-                    .Append(tweenMove.Jump(map.GetBackwardVector(0.7f), 0.35f, 0.5f));
+                seq.Append(tweenMove.JumpRelative(map.GetForwardVector(0.5f), 0.3f))
+                    .Append(tweenMove.JumpRelative(map.GetBackwardVector(0.7f), 0.35f, 0.5f));
                 break;
         }
 
-        return seq.Append(tweenMove.Jump(map.GetForwardVector(0.2f), 0.25f, 0.25f)
+        return seq.Append(tweenMove.Jump(map.DestVec3Pos, 0.25f, 0.25f)
             .SetEase(Ease.InQuad))
             .SetUpdate(false)
             .Play();
@@ -135,7 +135,7 @@ public class RabbitSomersault : RabbitAttack
         map.MoveObjectOn(backward);
         playingTween = DOTween.Sequence()
             .AppendInterval(0.1f * duration)
-            .Join(tweenMove.Jump(map.GetBackwardVector(), 0.4f).SetEase(Ease.InQuart))
+            .Join(tweenMove.JumpRelative(map.GetBackwardVector(), 0.4f).SetEase(Ease.InQuart))
             .AppendInterval(0.15f * duration)
             .AppendCallback(() => enemyMap.MoveOnEnemy(backward))
             .AppendInterval(0.5f * duration)
@@ -170,17 +170,12 @@ public class RabbitIcedFall : RabbitCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(react.OnFall)
-            .Append(tweenMove.Jump(map.DestVec + map.GetBackwardVector(0.2f), 1f, 0f).SetEase(Ease.Linear))
+            .Append(tweenMove.Jump(map.DestVec3Pos + map.GetBackwardVector(0.2f), 1f, 0f).SetEase(Ease.Linear))
             .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOTween.Sequence()
-            .Join(tweenMove.DelayedCall(1f, () => rabbitAnim.icedFall.Bool = false))
-            .AppendInterval(meltFrameTimer * 0.05f)
-            .AppendCallback(() => react.OnMelt())
-            .SetUpdate(false)
-            .Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => react.OnMelt(), false).Play();
 
         return ObservableComplete();
     }
@@ -196,13 +191,15 @@ public class RabbitWakeUp : RabbitCommand
 
     protected override bool Action()
     {
-        playingTween = tweenMove.Jump(map.GetForwardVector(0.2f), 0.25f, 0.25f).SetEase(Ease.InQuad).Play();
+        playingTween = tweenMove.Jump(map.DestVec3Pos, 0.25f, 0.25f).SetEase(Ease.InQuad).SetDelay(duration * wakeUpTiming).Play();
 
-        completeTween = tweenMove.DelayedCall(wakeUpTiming, () =>
-        {
-            rabbitAnim.icedFall.Bool = false;
-            react.OnWakeUp();
-        }).Play();
+        completeTween = DOTween.Sequence()
+            .AppendInterval(duration * wakeUpTiming)
+            .AppendCallback(() => rabbitAnim.icedFall.Bool = false)
+            .AppendInterval(duration * (1f - wakeUpTiming) * 0.5f)
+            .AppendCallback(() => react.OnWakeUp())
+            .SetUpdate(false)
+            .Play();
 
         return true;
     }

@@ -330,17 +330,12 @@ public class PlayerIcedFall : PlayerCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(react.OnFall)
-            .Append(tweenMove.JumpCurrentOnTile(1f, 0f).SetEase(Ease.Linear))
+            .Append(tweenMove.Jump(map.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
             .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOTween.Sequence()
-            .Join(tweenMove.DelayedCall(1f, () => playerAnim.icedFall.Bool = false))
-            .AppendInterval(meltFrameTimer)
-            .AppendCallback(() => react.OnMelt())
-            .SetUpdate(false)
-            .Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => react.OnMelt(), false).Play();
 
         return ObservableComplete();
     }
@@ -357,11 +352,13 @@ public class PlayerWakeUp : PlayerCommand
 
     protected override bool Action()
     {
-        completeTween = tweenMove.DelayedCall(wakeUpTiming, () =>
-        {
-            playerAnim.icedFall.Bool = false;
-            react.OnWakeUp();
-        }).Play();
+        completeTween = DOTween.Sequence()
+            .AppendInterval(duration * wakeUpTiming)
+            .AppendCallback(() => playerAnim.icedFall.Bool = false)
+            .AppendInterval(duration * (1f - wakeUpTiming) * 0.5f)
+            .AppendCallback(() => react.OnWakeUp())
+            .SetUpdate(false)
+            .Play();
 
         return true;
     }
