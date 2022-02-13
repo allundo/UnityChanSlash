@@ -184,7 +184,7 @@ public class PlayerInput : ShieldInput
         if (current is PlayerJump || current is PlayerRun)
         {
             ClearAll();
-            Interrupt(new PlayerIcedFall(playerTarget, duration, 36f));
+            Interrupt(new PlayerIcedFall(playerTarget, duration, 30f));
             commander.EnqueueCommand(wakeUp);
             return;
         }

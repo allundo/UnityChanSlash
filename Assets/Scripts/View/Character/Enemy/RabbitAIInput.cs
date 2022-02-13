@@ -144,10 +144,10 @@ public class RabbitAIInput : EnemyAIInput
 
     public override void InputIced(float duration)
     {
-        if (commander.currentCommand is RabbitAttack)
+        if (commander.currentCommand is RabbitAttack && commander.currentCommand.RemainingTimeScale > 0.3f)
         {
             ClearAll();
-            Interrupt(new RabbitIcedFall(target as EnemyCommandTarget, duration, 36f));
+            Interrupt(new RabbitIcedFall(target as EnemyCommandTarget, duration, 25f));
             commander.EnqueueCommand(wakeUp);
             return;
         }

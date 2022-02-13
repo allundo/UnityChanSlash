@@ -26,6 +26,8 @@ public interface ICommand
     bool IsPriorTo(int target);
     bool IsPriorTo(ICommand cmd);
     ICommand GetContinuation();
+    float RemainingDuration { get; }
+    float RemainingTimeScale { get; }
 }
 
 public class Command : ICommand
@@ -72,11 +74,13 @@ public class Command : ICommand
         this.playingTween = Pause(playing);
         this.completeTween = Pause(complete);
         this.onCompleted = onCompleted;
-        this.duration = playing == null ? 0f : playing.Duration() - playing.fullPosition;
+        this.duration = RemainingDuration;
         this.invalidDuration = this.duration * 0.95f;
     }
 
     private static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
+    public float RemainingDuration => playingTween == null ? 0 : playingTween.Duration() - playingTween.fullPosition;
+    public float RemainingTimeScale => RemainingDuration / duration;
 
     public Tween playingTween { get; protected set; } = null;
     protected Tween completeTween = null;
