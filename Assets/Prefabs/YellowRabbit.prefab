@@ -24385,6 +24385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
+  attackAttr: 0
   attackMultiplier: 1
   startFrame: 14
   finishFrame: 18
@@ -24959,7 +24960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 7883246141361873954}
-  data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
 --- !u!114 &4710703816869286450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24985,6 +24986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIced: 0
 --- !u!114 &4710703816869286452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25127,6 +25129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
+  attackAttr: 0
   attackMultiplier: 1.5
   startFrame: 12
   finishFrame: 14

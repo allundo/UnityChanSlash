@@ -18,6 +18,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private DebugEnemyGenerator debugEnemyGenerator = default;
 
+
     // Player info
     private Transform playerTransform = default;
     private HidePlateHandler hidePlateHandler = default;
@@ -33,6 +34,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public BulletGenerator GetBulletGenerator(BulletType type) => bulletGenerators[type];
     private Dictionary<BulletType, BulletGenerator> bulletGenerators;
+
+    public ParticleSystem GetPrefabVFX(VFXType type) => prefabVFXs[type];
+    private Dictionary<VFXType, ParticleSystem> prefabVFXs;
 
     public void Pause(bool isHideUIs = false)
     {
@@ -80,8 +84,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         bulletGenerators = new Dictionary<BulletType, BulletGenerator>()
         {
-            { BulletType.FireBall, fireBallGenerator },
-            { BulletType.IceBullet, iceBulletGenerator },
+            { BulletType.FireBall,  fireBallGenerator   },
+            { BulletType.IceBullet, iceBulletGenerator  },
+        };
+
+        prefabVFXs = new Dictionary<VFXType, ParticleSystem>()
+        {
+            { VFXType.Iced,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICED")        },
+            { VFXType.IceCrash, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")   },
         };
     }
 

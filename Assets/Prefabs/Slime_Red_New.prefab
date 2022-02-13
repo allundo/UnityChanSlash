@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 4063173348115986246}
-  data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
 --- !u!114 &2007391967010708993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba5e4b8ab3f24a9ab94842add9d0b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
 --- !u!1 &1605351055790362263
 GameObject:
   m_ObjectHideFlags: 0

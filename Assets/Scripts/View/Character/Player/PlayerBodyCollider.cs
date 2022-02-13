@@ -9,9 +9,14 @@ public class PlayerBodyCollider : BodyCollider
     public void OverRunCollider(float brakeOverRun)
         => TransformCollider(brakeOverRun, -0.25f, new Vector3(0f, -0.5f, 0.75f), 0.3f);
 
+    public void IcedFallCollider(float fallHeight)
+    {
+        TransformCollider(fallHeight, 1.25f, new Vector3(0f, 0.625f, 0f), -0.5f);
+    }
+
     protected void TransformCollider(float value, float stretchRate, Vector3 moveRate, float radiusRate = 0f)
     {
-        if (value < 0.0001f)
+        if (value == 0f)
         {
             ResetCollider();
             return;

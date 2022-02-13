@@ -6,7 +6,9 @@ public interface IBodyEffect
 {
     void OnActive();
     void OnDie();
-    void OnMelt(bool isBroken = false);
+    void OnMelt();
+    void OnIced(Vector3 pos);
+    void OnIceCrash(Vector3 pos);
 
     /// <summary>
     /// Play body effect on damage
@@ -28,11 +30,23 @@ public interface IBodyEffect
 public class BodyEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected AudioSource dieSound = null;
-    [SerializeField] protected DamageSndData data;
+    [SerializeField] protected DamageSndData sndData;
 
-    protected AudioSource SndDamage(AttackType type) => Util.Instantiate(data.Param((int)type).damage, transform);
+    protected AudioSource SndDamage(AttackType type) => Util.Instantiate(sndData.Param((int)type).damage, transform);
     protected Dictionary<AttackType, AudioSource> damageSndSource = new Dictionary<AttackType, AudioSource>();
     protected void PlayDamage(AttackType type) => damageSndSource.LazyLoad(type, SndDamage).PlayEx();
+
+    protected ParticleSystem LoadBodyVfx(VFXType type) => Util.Instantiate(GameManager.Instance.GetPrefabVFX(type));
+    protected Dictionary<VFXType, ParticleSystem> crashVfxSource = new Dictionary<VFXType, ParticleSystem>();
+    protected void PlayBodyVFX(VFXType type, Vector3 pos)
+    {
+        var vfx = crashVfxSource.LazyLoad(type, LoadBodyVfx);
+        if (vfx == null) return;
+
+        vfx.transform.position = pos;
+        vfx.Play();
+    }
+    protected void StopBodyVFX(VFXType type) => crashVfxSource.LazyLoad(type, LoadBodyVfx)?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
     protected List<Material> flashMaterials = new List<Material>();
     protected Tween prevFlash;
@@ -63,12 +77,13 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
     public virtual void OnDie()
     {
         dieSound.PlayEx();
+        StopBodyVFX(VFXType.Iced);
     }
 
     public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         DamageSound(damageRatio, type);
-        DamageFlash(damageRatio, attr);
+        if (attr != AttackAttr.Ice) DamageFlash(damageRatio);
     }
 
     public virtual void OnHeal(float healRatio) { }
@@ -90,15 +105,9 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
 
     protected virtual void DamageSound(float damageRatio, AttackType type) => PlayDamage(type);
 
-    protected virtual void DamageFlash(float damageRatio, AttackAttr attr)
+    protected virtual void DamageFlash(float damageRatio)
     {
         if (damageRatio < 0.000001f) return;
-
-        if (attr == AttackAttr.Ice)
-        {
-            OnIced();
-            return;
-        }
 
         Sequence flash = DOTween.Sequence();
 
@@ -118,14 +127,18 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
         PlayFlash(flash);
     }
 
-    protected virtual void OnIced()
+    public virtual void OnIced(Vector3 pos)
     {
+        PlayBodyVFX(VFXType.Iced, pos);
         PlayFlash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
     }
-    public virtual void OnMelt(bool isBroken = false)
+    public virtual void OnMelt()
     {
+        StopBodyVFX(VFXType.Iced);
         PlayFlash(Color.black, 0.5f);
     }
+
+    public virtual void OnIceCrash(Vector3 pos) { }
 
     public virtual Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);
     public virtual Tween FadeOutTween(float duration = 0.5f) => GetFadeTween(false, duration);

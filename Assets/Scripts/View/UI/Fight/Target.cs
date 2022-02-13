@@ -21,7 +21,7 @@ public class Target : FadeActivate
     {
         if (status != null)
         {
-            rectTransform.position = Camera.main.WorldToScreenPoint(status.enemyCorePos);
+            rectTransform.position = Camera.main.WorldToScreenPoint(status.corePos);
         }
     }
 

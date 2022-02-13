@@ -12,6 +12,7 @@ public class PlayerReactor : MobReactor
     [SerializeField] protected RestUI restUI = default;
 
     protected PlayerAnimator anim;
+    protected ParticleSystem iceCrashVFX;
 
     protected GuardState guardState => (input as PlayerInput).guardState;
 
@@ -19,6 +20,7 @@ public class PlayerReactor : MobReactor
     {
         base.Awake();
         anim = GetComponent<PlayerAnimator>();
+        iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
     protected override void Start()

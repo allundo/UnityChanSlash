@@ -26,6 +26,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorFloat lifeRatio { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat brakeOverRun { get; protected set; }
+    public AnimatorFloat fallHeight { get; protected set; }
     public AnimatorFloat rSpeed { get; protected set; }
 
     private PlayerBodyCollider bodyCollider;
@@ -48,10 +49,10 @@ public class PlayerAnimator : ShieldAnimator
         brake = new TriggerEx(triggers, anim, "Brake");
         handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");
-        icedFall = new AnimatorBool(anim, "IcedFall");
         lifeRatio = new AnimatorFloat(anim, "LifeRatio");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
         brakeOverRun = new AnimatorFloat(anim, "BrakeOverRun");
+        fallHeight = new AnimatorFloat(anim, "FallHeight");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
@@ -60,6 +61,7 @@ public class PlayerAnimator : ShieldAnimator
 
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
+        icedFall = new BoolIcedFall(this, fallHeight, bodyCollider);
 
         randomWind = GetComponent<RandomWind>();
     }
@@ -141,5 +143,45 @@ public class PlayerAnimator : ShieldAnimator
                 .AddTo(playerAnim);
         }
 
+    }
+
+    public class BoolIcedFall : AnimatorBool
+    {
+        protected IDisposable updateCollider = null;
+        protected AnimatorFloat animatorFloat;
+        protected PlayerBodyCollider bodyCollider;
+        protected PlayerAnimator playerAnim;
+
+        public BoolIcedFall(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider)
+            : base(playerAnim.anim, "IcedFall")
+        {
+            this.playerAnim = playerAnim;
+            this.animatorFloat = animatorFloat;
+            this.bodyCollider = bodyCollider;
+        }
+
+        public override bool Bool
+        {
+            get
+            {
+                return anim.GetBool(hashedVar);
+            }
+            set
+            {
+                if (value)
+                {
+                    updateCollider = playerAnim.UpdateAsObservable()
+                        .Subscribe(_ => bodyCollider.IcedFallCollider(animatorFloat.Float))
+                        .AddTo(playerAnim);
+                }
+                else
+                {
+                    updateCollider?.Dispose();
+                    bodyCollider.ResetCollider();
+                }
+
+                anim.SetBool(hashedVar, value);
+            }
+        }
     }
 }

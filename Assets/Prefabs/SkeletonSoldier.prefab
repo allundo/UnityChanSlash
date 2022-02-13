@@ -309,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b794f662fb846f1bde4a70b825d2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIced: 0
 --- !u!114 &6998507933134959645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 8626003820171309201}
-  data: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
 --- !u!114 &5934634380934516988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40292,6 +40293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 2
+  attackAttr: 0
   attackMultiplier: 1
   startFrame: 23
   finishFrame: 28

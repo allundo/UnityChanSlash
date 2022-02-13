@@ -6,7 +6,7 @@ public class EnemyStatus : MobStatus
     protected EnemyParam enemyParam;
 
     public EnemyType type => enemyParam.type;
-    public Vector3 enemyCorePos => enemyParam.enemyCore + transform.position;
+    public override Vector3 corePos => enemyParam.enemyCore + transform.position;
 
     public override MobStatus InitParam(MobParam param, float life = 0f)
     {

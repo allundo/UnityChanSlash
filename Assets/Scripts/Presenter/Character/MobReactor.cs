@@ -94,6 +94,7 @@ public class MobReactor : MonoBehaviour, IReactor
             {
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
                 input.InputIced(damage * 100f);
+                effect.OnIced(status.corePos);
                 status.isIced = true;
             }
             return 0f;
@@ -160,7 +161,8 @@ public class MobReactor : MonoBehaviour, IReactor
     {
         if (!status.isIced) return;
 
-        effect.OnMelt(isBroken);
+        effect.OnMelt();
+        if (isBroken) effect.OnIceCrash(status.corePos);
         status.isIced = false;
     }
 

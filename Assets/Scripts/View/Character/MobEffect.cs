@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class MobEffect : BodyEffect
 {
-    protected AudioSource SndCritical(AttackType type) => Util.Instantiate(data.Param((int)type).critical, transform);
+    protected AudioSource SndCritical(AttackType type) => Util.Instantiate(sndData.Param((int)type).critical, transform);
     protected Dictionary<AttackType, AudioSource> criticalSndSource = new Dictionary<AttackType, AudioSource>();
     protected void PlayCritical(AttackType type) => criticalSndSource.LazyLoad(type, SndCritical).PlayEx();
 
-    protected AudioSource SndGuard(AttackType type) => Util.Instantiate(data.Param((int)type).guard, transform);
+    protected AudioSource SndGuard(AttackType type) => Util.Instantiate(sndData.Param((int)type).guard, transform);
     protected Dictionary<AttackType, AudioSource> guardSndSource = new Dictionary<AttackType, AudioSource>();
     protected void PlayGuard(AttackType type) => guardSndSource.LazyLoad(type, SndGuard).PlayEx();
 
@@ -50,9 +50,9 @@ public class MobEffect : BodyEffect
         PlayCritical(type);
     }
 
-    public override void OnMelt(bool isBroken = false)
+    public override void OnIceCrash(Vector3 pos)
     {
-        if (isBroken) PlayCritical(AttackType.Ice);
-        PlayFlash(Color.black, 0.5f);
+        PlayCritical(AttackType.Ice);
+        PlayBodyVFX(VFXType.IceCrash, pos);
     }
 }

@@ -56,6 +56,8 @@ public class MobStatus : SpawnObject<MobStatus>
 
     public bool isActive { get; protected set; } = false;
 
+    public virtual Vector3 corePos => transform.position;
+
     protected virtual void Awake()
     {
         life = new ReactiveProperty<float>(0f);
