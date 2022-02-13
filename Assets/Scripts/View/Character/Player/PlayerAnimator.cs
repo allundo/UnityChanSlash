@@ -2,7 +2,9 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System;
+using UnityChan;
 
+[RequireComponent(typeof(RandomWind))]
 public class PlayerAnimator : ShieldAnimator
 {
     public TriggerJump jump { get; protected set; }
@@ -27,6 +29,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorFloat rSpeed { get; protected set; }
 
     private PlayerBodyCollider bodyCollider;
+    private RandomWind randomWind;
 
     protected override void Awake()
     {
@@ -57,6 +60,20 @@ public class PlayerAnimator : ShieldAnimator
 
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
+
+        randomWind = GetComponent<RandomWind>();
+    }
+
+    public override void Pause()
+    {
+        anim.speed = 0f;
+        randomWind.isWindActive = false;
+    }
+
+    public override void Resume()
+    {
+        anim.speed = 1f;
+        randomWind.isWindActive = true;
     }
 
     public abstract class TriggerUpdate : TriggerEx
