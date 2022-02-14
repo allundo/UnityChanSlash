@@ -77,8 +77,8 @@ public class EnemyTurnL : EnemyCommand
 
     protected override bool Action()
     {
-        playingTween = tweenMove.TurnL.Play();
         map.TurnLeft();
+        playingTween = tweenMove.TurnToDir.Play();
         return true;
     }
 }
@@ -89,8 +89,8 @@ public class EnemyTurnR : EnemyCommand
 
     protected override bool Action()
     {
-        playingTween = tweenMove.TurnR.Play();
         map.TurnRight();
+        playingTween = tweenMove.TurnToDir.Play();
         return true;
     }
 }

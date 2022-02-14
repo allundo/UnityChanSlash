@@ -110,7 +110,7 @@ public class FlyingAttackEnd : FlyingAttack
             enemyMap.MoveObjectOn(map.GetForward);
 
             flyingAnim.leaveL.Fire();
-            seq.Join(tweenMove.TurnL);
+            seq.Join(tweenMove.TurnToDir);
         }
         else if (IsRightMovable)
         {
@@ -118,7 +118,7 @@ public class FlyingAttackEnd : FlyingAttack
             enemyMap.MoveObjectOn(map.GetForward);
 
             flyingAnim.leaveR.Fire();
-            seq.Join(tweenMove.TurnR);
+            seq.Join(tweenMove.TurnToDir);
         }
         else if (IsBackwardMovable)
         {

@@ -16,9 +16,9 @@ public class EnemyTurnAnimL : EnemyTurnCommand
 
     protected override bool Action()
     {
-        playingTween = tweenMove.TurnL.Play();
         turnAnim.turnL.Fire();
         map.TurnLeft();
+        playingTween = tweenMove.TurnToDir.Play();
         return true;
     }
 }
@@ -29,9 +29,9 @@ public class EnemyTurnAnimR : EnemyTurnCommand
 
     protected override bool Action()
     {
-        playingTween = tweenMove.TurnR.Play();
         turnAnim.turnR.Fire();
         map.TurnRight();
+        playingTween = tweenMove.TurnToDir.Play();
         return true;
     }
 }

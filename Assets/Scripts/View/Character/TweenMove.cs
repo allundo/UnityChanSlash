@@ -88,8 +88,6 @@ public class TweenMove
             .Play();
     }
 
-    public Tween TurnL => Rotate(-90);
-    public Tween TurnR => Rotate(90);
     public Tween TurnLB => Rotate(-180);
     public Tween TurnRB => Rotate(180);
 
@@ -97,6 +95,8 @@ public class TweenMove
     {
         return tf.DORotate(new Vector3(0, angle, 0), duration).SetRelative();
     }
+
+    public Tween TurnToDir => tf.DORotate(map.dir.Angle, duration);
 
     /// <summary>
     /// DOTween jump with updating IsObjectOn flag to destination Tile
