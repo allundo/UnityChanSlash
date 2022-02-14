@@ -4,7 +4,7 @@ public class PlayerBodyCollider : BodyCollider
     public PlayerBodyCollider(CapsuleCollider col) : base(col) { }
 
     public void JumpCollider(float jumpHeight)
-        => TransformCollider(jumpHeight, -1f, new Vector3(0f, 1f, 0f));
+        => TransformCollider(jumpHeight, -0.5f, new Vector3(0f, 1f, 0f));
 
     public void OverRunCollider(float brakeOverRun)
         => TransformCollider(brakeOverRun, -0.25f, new Vector3(0f, -0.5f, 0.75f), 0.3f);

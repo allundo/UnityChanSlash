@@ -181,7 +181,7 @@ public class PlayerInput : ShieldInput
     public override void InputIced(float duration)
     {
         var current = commander.currentCommand;
-        if (current is PlayerJump || current is PlayerRun)
+        if (current is PlayerJump && current.RemainingTimeScale > 0.25f || current is PlayerRun)
         {
             ClearAll();
             Interrupt(new PlayerIcedFall(playerTarget, duration, 30f));
