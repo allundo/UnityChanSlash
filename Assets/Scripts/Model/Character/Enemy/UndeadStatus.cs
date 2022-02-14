@@ -25,7 +25,8 @@ public class UndeadStatus : EnemyStatus
 
     public override void ResetStatus()
     {
-        life.Value = lifeMax.Value = curse = curseMax = DefaultLifeMax;
+        curse = curseMax = DefaultLifeMax;
+        base.ResetStatus();
     }
 
     public override void Damage(float damage, AttackAttr attr = AttackAttr.None)
