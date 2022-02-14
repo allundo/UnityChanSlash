@@ -98,7 +98,7 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 1.5, z: 0}
   - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
     defaultLifeMax: 10
-    isOnGround: 0
+    isOnGround: 1
     attack: 1
     shield: 1
     faceDamageMultiplier: 1
