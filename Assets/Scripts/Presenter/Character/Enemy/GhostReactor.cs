@@ -47,7 +47,7 @@ public class GhostReactor : EnemyReactor, IGhostReactor
 
     public void OnAppear()
     {
-        if (status.isOnGround) return;
+        if (status.isOnGround || map.OnTile.OnCharacterDest != null) return;
 
         map.RemoveObjectOn();
         ghostStatus.SetOnGround(true);

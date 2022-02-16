@@ -8418,7 +8418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
   enemyData: {fileID: 11400000, guid: 732b3c01315aa4f52819045e2acc8bed, type: 2}
-  type: 2
+  type: 8
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -30593,6 +30593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
+  attackAttr: 0
   attackMultiplier: 1.5
   startFrame: 27
   finishFrame: 30
@@ -36556,6 +36557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
+  attackAttr: 0
   attackMultiplier: 1.8
   startFrame: 32
   finishFrame: 36
@@ -47901,6 +47903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
+  attackAttr: 0
   attackMultiplier: 1
   startFrame: 15
   finishFrame: 25
@@ -82432,7 +82435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
-  data: {fileID: 11400000, guid: 54b92d68979b44a208819d854e8229b3, type: 2}
+  sndData: {fileID: 11400000, guid: 54b92d68979b44a208819d854e8229b3, type: 2}
 --- !u!222 &7263179161030713676
 CanvasRenderer:
   m_ObjectHideFlags: 0

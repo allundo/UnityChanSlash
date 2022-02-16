@@ -85,12 +85,9 @@ public class FlyingAttackEnd : FlyingAttack
     protected virtual bool IsRightMovable => map.RightTile.IsViewOpen;
     protected virtual bool IsLeftMovable => map.LeftTile.IsViewOpen;
 
-    protected virtual FlyingAttackLeave AttackLeaveCommand(EnemyCommandTarget target, float duration)
-        => new FlyingAttackLeave(target, duration);
-
     public FlyingAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration)
     {
-        leave = AttackLeaveCommand(target, duration / (1f - attackTimeScale) * 2f);
+        leave = new FlyingAttackLeave(target, duration / (1f - attackTimeScale) * 2f);
     }
 
     public override IObservable<Unit> Execute()

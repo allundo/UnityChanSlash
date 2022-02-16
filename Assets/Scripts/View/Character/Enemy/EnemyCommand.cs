@@ -98,12 +98,10 @@ public class EnemyTurnR : EnemyCommand
 public class EnemyAttack : EnemyCommand
 {
     protected IAttack enemyAttack;
-    protected IAttack enemyFire;
 
     public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f)
     {
         enemyAttack = target.enemyAttack[0];
-        enemyFire = target.fire;
     }
 
     protected override bool Action()
@@ -134,12 +132,16 @@ public class EnemyDoubleAttack : EnemyAttack
 
 public class EnemyFire : EnemyAttack
 {
-    public EnemyFire(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    protected BulletType type;
+    public EnemyFire(EnemyCommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
+    {
+        this.type = type;
+    }
 
     protected override bool Action()
     {
         enemyAnim.fire.Fire();
-        playingTween = enemyFire?.AttackSequence(duration)?.Play();
+        playingTween = target.magic?.MagicSequence(type, duration)?.Play();
         return true;
     }
 }

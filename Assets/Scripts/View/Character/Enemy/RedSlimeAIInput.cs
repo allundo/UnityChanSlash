@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Fire))]
+[RequireComponent(typeof(Magic))]
 public class RedSlimeAIInput : EnemyAIInput
 {
     protected override ICommand GetCommand()

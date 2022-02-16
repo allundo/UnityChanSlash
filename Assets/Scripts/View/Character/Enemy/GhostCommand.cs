@@ -142,8 +142,6 @@ public class GhostAttackEnd : FlyingAttackEnd
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
 
-    protected override FlyingAttackLeave AttackLeaveCommand(EnemyCommandTarget target, float duration)
-        => new GhostAttackLeave(target, duration);
     public GhostAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
@@ -154,15 +152,5 @@ public class GhostAttackEnd : FlyingAttackEnd
             (react as IGhostReactor).OnAppear();
         }
         return base.Execute();
-    }
-}
-
-public class GhostAttackLeave : FlyingAttackLeave
-{
-    public GhostAttackLeave(EnemyCommandTarget target, float duration) : base(target, duration) { }
-    protected override bool Action()
-    {
-        // completeTween = tweenMove.DelayedCall(0.1f, (react as GhostReactor).OnAttackEnd).Play();
-        return base.Action();
     }
 }

@@ -31,7 +31,7 @@ public class CommandTarget : MonoBehaviour
     /// <summary>
     /// Bullet attack source. Not imperative.
     /// </summary>
-    public Fire fire { get; protected set; }
+    public Magic magic { get; protected set; }
 
     protected virtual void Awake()
     {
@@ -39,6 +39,6 @@ public class CommandTarget : MonoBehaviour
         react = GetComponent<MobReactor>();
         input = GetComponent<MobInput>();
         map = GetComponent<MapUtil>();
-        fire = GetComponent<Fire>();
+        magic = GetComponent<Magic>();
     }
 }

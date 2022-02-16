@@ -451,6 +451,7 @@ public enum EnemyType
     VioletBat,
     VioletGhost,
     SkeletonSoldier,
+    Witch,
 }
 
 public enum BulletType

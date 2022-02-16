@@ -1,15 +1,13 @@
-using UnityEngine;
 using DG.Tweening;
 
-public class Fire : MonoBehaviour, IAttack
+public class Launcher : IAttack
 {
-    [SerializeField] protected BulletType type;
     protected BulletGenerator bulletGenerator;
     protected IStatus status;
 
-    protected virtual void Awake()
+    public Launcher(IStatus status, BulletType type)
     {
-        status = GetComponent<MobStatus>();
+        this.status = status;
         bulletGenerator = GameManager.Instance.GetBulletGenerator(type);
     }
 
