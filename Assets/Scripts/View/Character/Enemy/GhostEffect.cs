@@ -15,8 +15,8 @@ public class GhostEffect : MobEffect
 
     protected virtual void FixedUpdate()
     {
-        trailStrength = 0.1f * trailTarget + 0.9f * trailStrength;
-        var dir = transform.InverseTransformDirection((prevPos - transform.position)).normalized * trailStrength;
+        trailStrength = 0.04f * trailTarget + 0.96f * trailStrength;
+        var dir = (prevPos - transform.position).normalized * trailStrength;
         flashMaterials.ForEach(mat => mat.SetVector(propID, dir));
         prevPos = transform.position;
     }
@@ -33,7 +33,7 @@ public class GhostEffect : MobEffect
 
     public void OnAttackStart()
     {
-        trailTarget = 1.0f;
+        trailTarget = 1.8f;
     }
 
     public void OnAttackEnd()

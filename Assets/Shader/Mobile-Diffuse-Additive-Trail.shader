@@ -34,10 +34,11 @@ Shader "Custom/Mobile/Diffuse-Additive-Trail" {
         {
             UNITY_INITIALIZE_OUTPUT(Input, o);
 
-            float weight = clamp(dot(v.normal, _TrailDir), 0, 1);
+            half3 trailObjDir = mul(unity_WorldToObject, _TrailDir);
+            float weight = clamp(dot(v.normal, trailObjDir), 0, 1);
             float noise = 1 + tex2Dlod(_NoiseTex, v.texcoord).r * 0.5;
-            fixed4 trail = _TrailDir * weight * noise;
-            v.vertex.xyz += trail.xyz;
+            fixed3 trail = trailObjDir * weight * noise;
+            v.vertex.xyz += trail;
         }
 
         void surf (Input IN, inout SurfaceOutput o) {
