@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(GhostReactor))]
 public class GhostAIInput : EnemyAIInput
 {
-    ICommand throughForward;
+    protected ICommand throughForward;
 
     protected override void SetCommands()
     {

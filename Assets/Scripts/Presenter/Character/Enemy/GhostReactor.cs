@@ -1,8 +1,17 @@
 using UnityEngine;
 
+
+public interface IGhostReactor : IReactor
+{
+    void OnHide();
+    void OnAppear();
+    void OnAttackStart();
+    void OnAttackEnd();
+}
+
 [RequireComponent(typeof(GhostEffect))]
 [RequireComponent(typeof(GhostStatus))]
-public class GhostReactor : EnemyReactor
+public class GhostReactor : EnemyReactor, IGhostReactor
 {
     protected GhostEffect ghostEffect;
     protected IGhostStatus ghostStatus;

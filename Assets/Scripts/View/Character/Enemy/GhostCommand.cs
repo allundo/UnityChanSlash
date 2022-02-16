@@ -34,7 +34,7 @@ public class GhostThrough : EnemyForward
         completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
         SetSpeed();
-        (react as GhostReactor).OnHide();
+        (react as IGhostReactor).OnHide();
 
         input.Interrupt(MapUtil.IsOnPlayer(map.GetForward) ? attack : throughEnd, false);
 
@@ -49,7 +49,7 @@ public class GhostThroughEnd : EnemyForward
     protected override bool Action()
     {
         if (!map.ForwardTile.IsViewOpen) return false;
-        if (map.IsForwardMovable) (react as GhostReactor).OnAppear();
+        if (map.IsForwardMovable) (react as IGhostReactor).OnAppear();
 
         playingTween = LinearMove(GetDest);
         SetSpeed();
@@ -89,7 +89,7 @@ public class GhostAttackStart : FlyingAttackStart
             return Observable.Empty(Unit.Default);
         }
 
-        (react as GhostReactor).OnAttackStart();
+        (react as IGhostReactor).OnAttackStart();
         return base.Execute();
     }
 }
@@ -148,10 +148,10 @@ public class GhostAttackEnd : FlyingAttackEnd
 
     public override IObservable<Unit> Execute()
     {
-        (react as GhostReactor).OnAttackEnd();
+        (react as IGhostReactor).OnAttackEnd();
         if (map.IsForwardMovable || IsBackwardMovable || IsRightMovable || IsLeftMovable)
         {
-            (react as GhostReactor).OnAppear();
+            (react as IGhostReactor).OnAppear();
         }
         return base.Execute();
     }
