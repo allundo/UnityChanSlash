@@ -1,0 +1,805 @@
+fileFormatVersion: 2
+guid: 2352be243a08b4a3da4d90b2e1024273
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: 4781951162920444690
+    second: Witch_DOUBLE_ATTACK_LEAVE
+  - first:
+      74: -997398342910362704
+    second: Witch_IDLE
+  - first:
+      74: 5099679180219713299
+    second: Witch_MOVE
+  - first:
+      74: -1931850113455060129
+    second: Witch_TURN_R
+  - first:
+      74: 4563983068834287148
+    second: Witch_TURN_L
+  - first:
+      74: 1229228930897920433
+    second: Witch_WALL_THROUGH
+  - first:
+      74: -7926541207575988154
+    second: Witch_BACK_STEP
+  - first:
+      74: -132612885704529079
+    second: Witch_DOUBLE_ATTACK_START
+  - first:
+      74: 7113269048872500512
+    second: Witch_FIRE
+  - first:
+      74: -6063516505853774835
+    second: Witch_TARGET_ATTACK
+  - first:
+      74: 1107033991534011938
+    second: Witch_MAGIC
+  - first:
+      74: -2745442455338995226
+    second: Witch_DIE
+  - first:
+      74: 4284192101605381056
+    second: Witch_RESURRECTION
+  - first:
+      74: 7020107555820543903
+    second: Witch_DOUBLE_ATTACK_KEEP
+  externalObjects: {}
+  materials:
+    materialImportMode: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Witch_IDLE
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 10
+      lastFrame: 41
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_MOVE
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 44
+      lastFrame: 75
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_TURN_R
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 76
+      lastFrame: 92
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_TURN_L
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 92
+      lastFrame: 108
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_WALL_THROUGH
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 108
+      lastFrame: 138
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_BACK_STEP
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 140
+      lastFrame: 156
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_DOUBLE_ATTACK_START
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 156
+      lastFrame: 171
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_FIRE
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 192
+      lastFrame: 260
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_TARGET_ATTACK
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 260
+      lastFrame: 372
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_MAGIC
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 372
+      lastFrame: 426
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_DIE
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 426
+      lastFrame: 456
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_RESURRECTION
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 456
+      lastFrame: 488
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_DOUBLE_ATTACK_LEAVE
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 181
+      lastFrame: 192
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_DOUBLE_ATTACK_KEEP
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 172
+      lastFrame: 180
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton:
+    - name: witch_all_animations(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature
+      parentName: witch_all_animations(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Hips
+      parentName: Armature
+      position: {x: -0, y: -0.00016057248, z: 0.0015917454}
+      rotation: {x: 0.6746373, y: -0.00000008799425, z: -0.000000080423035, w: 0.7381494}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: Skirt.Bk.001
+      parentName: Hips
+      position: {x: -1.8154801e-10, y: 0.0004146098, z: -0.00076146756}
+      rotation: {x: 0.9597051, y: 1.4210855e-14, z: -0.00000022881169, w: -0.281009}
+      scale: {x: 1, y: 1.0000001, z: 1.0000006}
+    - name: Skirt.Bk.002.L
+      parentName: Hips
+      position: {x: -0.0012113804, y: 0.00046583495, z: -0.00042103464}
+      rotation: {x: 0.9376923, y: -0.26842758, z: -0.0700672, w: -0.20921399}
+      scale: {x: 0.9999995, y: 1.0000004, z: 1.0000006}
+    - name: Skirt.Bk.002.R
+      parentName: Hips
+      position: {x: 0.0012113802, y: 0.0004658351, z: -0.00042103525}
+      rotation: {x: 0.93769234, y: 0.2684275, z: 0.07006681, w: -0.20921391}
+      scale: {x: 0.99999917, y: 1.0000004, z: 1.0000001}
+    - name: Skirt.Fr.001
+      parentName: Hips
+      position: {x: 2.5634647e-10, y: 0.0003832147, z: 0.001075195}
+      rotation: {x: 0.9822964, y: -0.000000022331845, z: -0.0000003512965, w: 0.18733345}
+      scale: {x: 1, y: 1.0000002, z: 0.9999997}
+    - name: Skirt.Fr.002.L
+      parentName: Hips
+      position: {x: -0.00076876045, y: 0.00042176165, z: 0.0007064269}
+      rotation: {x: 0.97319007, y: -0.20744687, z: 0.05133731, w: 0.085038}
+      scale: {x: 0.9999989, y: 1.0000006, z: 1.0000007}
+    - name: Skirt.Fr.002.R
+      parentName: Hips
+      position: {x: 0.00076876074, y: 0.00042176165, z: 0.0007064267}
+      rotation: {x: 0.97319, y: 0.20744708, z: -0.051337693, w: 0.0850379}
+      scale: {x: 0.9999993, y: 0.99999976, z: 1}
+    - name: Skirt.Side.L
+      parentName: Hips
+      position: {x: -0.001223028, y: 0.0004532212, z: 0.00016251716}
+      rotation: {x: -0.16866244, y: 0.0030763731, z: 0.9416251, w: 0.2913514}
+      scale: {x: 1.0000004, y: 1.0000002, z: 0.99999994}
+    - name: Skirt.Side.R
+      parentName: Hips
+      position: {x: 0.0012230282, y: 0.0004532212, z: 0.00016251655}
+      rotation: {x: 0.16866261, y: 0.0030762563, z: 0.9416252, w: -0.29135126}
+      scale: {x: 1.0000008, y: 1.0000002, z: 1}
+    - name: Spine
+      parentName: Hips
+      position: {x: -0, y: 0.00059650827, z: 0}
+      rotation: {x: 0.0029686093, y: -1.4210855e-14, z: -7.0773964e-10, w: 0.9999956}
+      scale: {x: 1, y: 0.99999994, z: 0.9999998}
+    - name: LowerChest
+      parentName: Spine
+      position: {x: -9.024754e-14, y: 0.00084696984, z: -0.00000037852442}
+      rotation: {x: 0.012852108, y: -7.571151e-15, z: -0.0000000030641996, w: 0.99991745}
+      scale: {x: 1, y: 1.0000001, z: 1.0000002}
+    - name: MuneRoot
+      parentName: LowerChest
+      position: {x: -3.6665285e-18, y: 0.0005246282, z: -1.2223608e-11}
+      rotation: {x: 0.4767809, y: -0.000000104787624, z: -0.00000017051012, w: 0.87902224}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Mune.001.L
+      parentName: MuneRoot
+      position: {x: -0.00049559394, y: 0.00026795582, z: 0.00006277831}
+      rotation: {x: 0.21901888, y: 0.15791276, z: 0.09633695, w: 0.9580258}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: Mune.002.L
+      parentName: Mune.001.L
+      position: {x: -7.916242e-11, y: 0.000982172, z: -4.842877e-10}
+      rotation: {x: -0.97503746, y: -0.023331866, z: -0.22024524, w: -0.015800526}
+      scale: {x: 1.0000014, y: 1.0000001, z: 1.000002}
+    - name: Mune.001.R
+      parentName: MuneRoot
+      position: {x: 0.00049559394, y: 0.00026795582, z: 0.00006277783}
+      rotation: {x: 0.21901882, y: -0.1579123, z: -0.096337214, w: 0.95802593}
+      scale: {x: 1.0000002, y: 1.0000005, z: 1}
+    - name: Mune.002.R
+      parentName: Mune.001.R
+      position: {x: -1.2572854e-10, y: 0.0009821719, z: -1.11758706e-10}
+      rotation: {x: -0.97503746, y: 0.023331778, z: 0.22024518, w: -0.015800515}
+      scale: {x: 1.000001, y: 1, z: 1.0000019}
+    - name: MuneRoot.001
+      parentName: MuneRoot
+      position: {x: 3.0978036e-11, y: 0.0003753569, z: 0.00006496565}
+      rotation: {x: 0.26542988, y: -0.0000010344228, z: -0.00000041134862, w: 0.96413016}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: UpperChest
+      parentName: LowerChest
+      position: {x: -3.6665285e-18, y: 0.0005246282, z: -1.2223608e-11}
+      rotation: {x: -0.009171701, y: 7.351418e-15, z: 0.0000000021867115, w: 0.999958}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: Neck
+      parentName: UpperChest
+      position: {x: -4.7114287e-12, y: 0.0010813366, z: -0.000019761164}
+      rotation: {x: 0.011583107, y: -1.4552143e-14, z: -0.0000000027616425, w: 0.99993294}
+      scale: {x: 1, y: 0.9999998, z: 0.9999998}
+    - name: Head
+      parentName: Neck
+      position: {x: 2.598672e-19, y: 0.000585169, z: 0}
+      rotation: {x: 0.032210615, y: 3.5395545e-14, z: -0.000000007679604, w: 0.99948114}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: HatRoot
+      parentName: Head
+      position: {x: -8.7042644e-11, y: 0.0031102677, z: -0.00036508337}
+      rotation: {x: -0.012520996, y: -4.2438106e-14, z: 0.00000000298524, w: 0.9999216}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Hat.Bk.001
+      parentName: HatRoot
+      position: {x: -4.714037e-10, y: 0.000024545443, z: -0.0019772106}
+      rotation: {x: 0.9975432, y: -4.277711e-15, z: -0.00000023783291, w: -0.070054516}
+      scale: {x: 1, y: 1.0000001, z: 1.0000006}
+    - name: Hat.Bk.002
+      parentName: Hat.Bk.001
+      position: {x: 5.566377e-17, y: 0.0021660214, z: 0}
+      rotation: {x: -0.09418399, y: -8.641902e-16, z: 0.000000022455202, w: 0.9955548}
+      scale: {x: 1, y: 1.0000001, z: 0.9999999}
+    - name: Hat.Fr
+      parentName: HatRoot
+      position: {x: 1.5158216e-10, y: 0.0012206475, z: 0.00063578173}
+      rotation: {x: 0.5997159, y: -0.0000004769618, z: -0.00000050044025, w: 0.80021304}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: HatSide.L
+      parentName: HatRoot
+      position: {x: -0.001983775, y: -0.0008819229, z: -0.00006998018}
+      rotation: {x: -0.023122942, y: -0.053170323, z: 0.9613361, w: 0.26920506}
+      scale: {x: 0.99999976, y: 1.0000001, z: 0.99999994}
+    - name: HatSide.R
+      parentName: HatRoot
+      position: {x: 0.001983775, y: -0.0008819229, z: -0.000069981135}
+      rotation: {x: 0.023123117, y: -0.053170346, z: 0.961336, w: -0.269205}
+      scale: {x: 1.0000007, y: 1.0000011, z: 0.99999994}
+    - name: HatTop.L
+      parentName: HatRoot
+      position: {x: -0.0010144021, y: 0.001529318, z: -0.00037439945}
+      rotation: {x: -0.1207425, y: -0.11264603, z: 0.6538915, w: 0.73834825}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: HatTop.R
+      parentName: HatRoot
+      position: {x: 0.001014402, y: 0.001529318, z: -0.0003743999}
+      rotation: {x: -0.12074271, y: 0.11264624, z: -0.65389144, w: 0.7383482}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: Sideburn.001.L
+      parentName: Head
+      position: {x: -0.0018103288, y: 0.0013869578, z: 0.0006753463}
+      rotation: {x: 0.0045781103, y: 0.03194498, z: 0.9993405, w: -0.016649697}
+      scale: {x: 1.0000019, y: 1.0000001, z: 1.0000054}
+    - name: Sideburn.002.L
+      parentName: Sideburn.001.L
+      position: {x: 1.10594554e-10, y: 0.001262492, z: 3.0267983e-11}
+      rotation: {x: 0.12460486, y: 0.061160773, z: 0.32089847, w: 0.936887}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.9999998}
+    - name: Sideburn.001.R
+      parentName: Head
+      position: {x: 0.001810329, y: 0.0013869578, z: 0.0006753454}
+      rotation: {x: -0.0045778877, y: 0.031944983, z: 0.9993405, w: 0.016649706}
+      scale: {x: 1.000002, y: 1.0000001, z: 1.0000054}
+    - name: Sideburn.002.R
+      parentName: Sideburn.001.R
+      position: {x: 5.820766e-11, y: 0.0012624919, z: 7.21775e-11}
+      rotation: {x: 0.124604814, y: -0.061160736, z: -0.3208985, w: 0.93688697}
+      scale: {x: 1.0000002, y: 1.0000001, z: 0.9999997}
+    - name: Shoulder.L
+      parentName: UpperChest
+      position: {x: -0.00042898487, y: 0.0007226168, z: 0.000009739236}
+      rotation: {x: -0.043913618, y: 0.015557744, z: 0.77816004, w: 0.62633586}
+      scale: {x: 1.0000002, y: 1.0000002, z: 0.99999976}
+    - name: Arm.L
+      parentName: Shoulder.L
+      position: {x: -1.3969838e-10, y: 0.00038965108, z: -3.259629e-11}
+      rotation: {x: 0.028266653, y: 0.000617681, z: -0.06666655, w: 0.99737465}
+      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000002}
+    - name: ForeArm.L
+      parentName: Arm.L
+      position: {x: -1.862645e-10, y: 0.0009588779, z: 1.7462297e-11}
+      rotation: {x: -0.0007558241, y: -0.0009057691, z: -0.021711968, w: 0.9997636}
+      scale: {x: 1.0000005, y: 1.0000004, z: 0.9999999}
+    - name: Hand.L
+      parentName: ForeArm.L
+      position: {x: 0.000009259226, y: 0.0006492562, z: -0.0000002801302}
+      rotation: {x: -0.021540811, y: -0.00010589887, z: -0.000675378, w: 0.9997677}
+      scale: {x: 1.0000002, y: 0.99999994, z: 0.99999976}
+    - name: Shoulder.R
+      parentName: UpperChest
+      position: {x: 0.00042898487, y: 0.0007226168, z: 0.000009739031}
+      rotation: {x: -0.043913797, y: -0.015557598, z: -0.77816004, w: 0.62633586}
+      scale: {x: 1.0000002, y: 1.0000004, z: 0.99999976}
+    - name: Arm.R
+      parentName: Shoulder.R
+      position: {x: 1.0244548e-10, y: 0.00038965116, z: -3.259629e-11}
+      rotation: {x: 0.028266652, y: -0.000617695, z: 0.06666655, w: 0.99737465}
+      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000002}
+    - name: ForeArm.R
+      parentName: Arm.R
+      position: {x: -1.3969838e-10, y: 0.00095887785, z: 2.561137e-11}
+      rotation: {x: -0.00075580354, y: 0.000905703, z: 0.02171196, w: 0.9997636}
+      scale: {x: 1.0000005, y: 1.0000005, z: 1}
+    - name: Hand.R
+      parentName: ForeArm.R
+      position: {x: -0.000009258928, y: 0.0006492562, z: -0.00000028013366}
+      rotation: {x: -0.021540835, y: 0.00010596459, z: 0.0006753948, w: 0.9997678}
+      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999964}
+    - name: Wand
+      parentName: Hand.R
+      position: {x: -0.000100888574, y: 0.00030830601, z: -0.0005558358}
+      rotation: {x: -0.70104957, y: 0.0013777226, z: 0.13642818, w: -0.69993937}
+      scale: {x: 1.0000001, y: 1, z: 0.99999976}
+    - name: UpperLeg.L
+      parentName: Hips
+      position: {x: -0.0007189363, y: 0.00017023699, z: -0.00005004645}
+      rotation: {x: 0.9913078, y: -0.12917852, z: -0.01696017, w: 0.018279895}
+      scale: {x: 0.99999774, y: 0.9999997, z: 0.99999994}
+    - name: LowerLeg.L
+      parentName: UpperLeg.L
+      position: {x: 1.3533281e-11, y: 0.00087049924, z: -3.259629e-11}
+      rotation: {x: 0.28707132, y: -0.027465098, z: -0.15738197, w: 0.9444929}
+      scale: {x: 0.99999976, y: 1.0000002, z: 1.0000001}
+    - name: Foot.L
+      parentName: LowerLeg.L
+      position: {x: -1.0266376e-10, y: 0.0009279343, z: -7.566996e-12}
+      rotation: {x: -0.7885734, y: -0.022812352, z: 0.04536257, w: 0.6128409}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1.0000005}
+    - name: Toe.L
+      parentName: Foot.L
+      position: {x: -6.4246705e-11, y: 0.00024055612, z: 6.984919e-12}
+      rotation: {x: -0.029498607, y: -0.000000027474016, z: 0.0012668408, w: 0.9995641}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000002}
+    - name: UpperLeg.R
+      parentName: Hips
+      position: {x: 0.0007189363, y: 0.00017023699, z: -0.00005004679}
+      rotation: {x: 0.9913078, y: 0.12917863, z: 0.016959386, w: 0.018279837}
+      scale: {x: 0.9999995, y: 1, z: 0.99999964}
+    - name: LowerLeg.R
+      parentName: UpperLeg.R
+      position: {x: -1.06228975e-11, y: 0.0008704991, z: 3.7252902e-11}
+      rotation: {x: 0.28707147, y: 0.027465142, z: 0.15738152, w: 0.9444929}
+      scale: {x: 0.99999994, y: 1.0000002, z: 0.99999994}
+    - name: Foot.R
+      parentName: LowerLeg.R
+      position: {x: 8.6729415e-11, y: 0.00092793413, z: 3.899913e-11}
+      rotation: {x: -0.7885735, y: 0.022812366, z: -0.045362778, w: 0.6128407}
+      scale: {x: 0.9999998, y: 1.0000005, z: 1.0000001}
+    - name: Toe.R
+      parentName: Foot.R
+      position: {x: -8.614734e-11, y: 0.00024055605, z: 2.3283064e-12}
+      rotation: {x: -0.029498603, y: 0.000000010244547, z: -0.0012668151, w: 0.99956405}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000002}
+    - name: Model
+      parentName: witch_all_animations(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: Hips
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
