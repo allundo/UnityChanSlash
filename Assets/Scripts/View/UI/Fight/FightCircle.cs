@@ -48,7 +48,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
     private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
 
-    private IReactiveProperty<EnemyStatus> EnemyStatus = new ReactiveProperty<EnemyStatus>(null);
+    private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
 
     void Awake()
     {
@@ -206,7 +206,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
 
-    public void Activate(EnemyStatus status)
+    public void Activate(IEnemyStatus status)
     {
         EnemyStatus.Value = status;
 
@@ -245,7 +245,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         pressPos = Vector2.zero;
     }
 
-    public void SetActive(bool value, EnemyStatus status)
+    public void SetActive(bool value, IEnemyStatus status)
     {
         if (value)
         {

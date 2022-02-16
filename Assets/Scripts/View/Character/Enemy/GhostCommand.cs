@@ -11,7 +11,7 @@ public class GhostForward : EnemyForward
     {
         if (base.Action())
         {
-            (react as GhostReactor).OnAppear();
+            (react as IGhostReactor).OnAppear();
             return true;
         }
         return false;

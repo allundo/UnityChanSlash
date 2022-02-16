@@ -17,7 +17,7 @@ public class EnemyAutoGenerator : EnemyGenerator
         detectCharacter = GetComponent<Collider>();
     }
 
-    public MobStatus Spawn(IDirection dir = null, float life = 0f)
+    public IStatus Spawn(IDirection dir = null, float life = 0f)
         => base.Spawn(param, spawnPoint, dir, life);
 
     public EnemyAutoGenerator Init(GameObject enemyPool, ITile tile, MobParam param)

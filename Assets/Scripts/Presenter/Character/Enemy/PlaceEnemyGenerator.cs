@@ -146,12 +146,12 @@ public class PlaceEnemyGenerator : EnemyGenerator
         generatorPool.Clear();
     }
 
-    private MobStatus Respawn(RespawnData data)
+    private IStatus Respawn(RespawnData data)
         => Spawn(enemyPool[data.type].transform, enemyData.Param((int)data.type), map.WorldPos(data.pos), data.dir, data.life);
 
     private struct RespawnData
     {
-        public RespawnData(EnemyStatus status, Pos pos)
+        public RespawnData(IEnemyStatus status, Pos pos)
         {
             this.type = status.type;
             this.pos = pos;

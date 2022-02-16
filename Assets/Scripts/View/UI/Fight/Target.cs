@@ -6,7 +6,7 @@ public class Target : FadeActivate
     [SerializeField] TargetCenter center = default;
     [SerializeField] TargetCorner corner = default;
 
-    private EnemyStatus status;
+    private IEnemyStatus status;
     private RectTransform rectTransform;
     public Vector2 screenPos => rectTransform.position;
 
@@ -25,7 +25,7 @@ public class Target : FadeActivate
         }
     }
 
-    public void FadeActivate(EnemyStatus status)
+    public void FadeActivate(IEnemyStatus status)
     {
         this.status = status;
         FadeIn(0.5f).Play();

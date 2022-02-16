@@ -8,12 +8,12 @@ public interface ITile
     bool IsCharacterOn { get; }
     bool IsEnemyOn { get; }
     bool IsItemOn { get; }
-    EnemyStatus OnEnemy { get; set; }
-    EnemyStatus AboveEnemy { get; set; }
-    MobStatus OnCharacterDest { get; set; }
+    IEnemyStatus OnEnemy { get; set; }
+    IEnemyStatus AboveEnemy { get; set; }
+    IStatus OnCharacterDest { get; set; }
     bool PutItem(Item item);
     Item PickItem();
-    EnemyStatus GetEnemyStatus();
+    IEnemyStatus GetEnemyStatus();
 }
 
 public class Tile
@@ -21,12 +21,12 @@ public class Tile
     protected Stack<Item> items = new Stack<Item>();
     public virtual bool IsItemOn => items.Count > 0;
 
-    public virtual EnemyStatus OnEnemy { get; set; } = null;
-    public virtual EnemyStatus AboveEnemy { get; set; } = null;
-    public virtual MobStatus OnCharacterDest { get; set; } = null;
+    public virtual IEnemyStatus OnEnemy { get; set; } = null;
+    public virtual IEnemyStatus AboveEnemy { get; set; } = null;
+    public virtual IStatus OnCharacterDest { get; set; } = null;
 
     public virtual bool IsCharacterOn => OnCharacterDest != null;
-    public virtual bool IsEnemyOn => OnEnemy != null || OnCharacterDest is EnemyStatus || AboveEnemy != null;
+    public virtual bool IsEnemyOn => OnEnemy != null || OnCharacterDest is IEnemyStatus || AboveEnemy != null;
 
     public virtual bool PutItem(Item item)
     {
@@ -46,8 +46,8 @@ public class Tile
         return item;
     }
 
-    public virtual EnemyStatus GetEnemyStatus()
-        => OnEnemy ?? (OnCharacterDest is EnemyStatus ? OnCharacterDest as EnemyStatus : null) ?? AboveEnemy;
+    public virtual IEnemyStatus GetEnemyStatus()
+        => OnEnemy ?? (OnCharacterDest is IEnemyStatus ? OnCharacterDest as IEnemyStatus : null) ?? AboveEnemy;
 }
 
 public class Ground : Tile, ITile
@@ -64,9 +64,9 @@ public class Wall : Tile, ITile
     public bool IsViewOpen => false;
     public override bool IsCharacterOn => false;
     public override bool IsEnemyOn => false;
-    public override EnemyStatus OnEnemy { get { return null; } set { } }
-    public override EnemyStatus AboveEnemy { get { return null; } set { } }
-    public override MobStatus OnCharacterDest { get { return null; } set { } }
+    public override IEnemyStatus OnEnemy { get { return null; } set { } }
+    public override IEnemyStatus AboveEnemy { get { return null; } set { } }
+    public override IStatus OnCharacterDest { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
 
@@ -78,7 +78,7 @@ public class Door : Tile, ITile
     public bool IsLeapable => false;
     public bool IsViewOpen => state.IsOpen;
     public override bool IsCharacterOn => state.IsCharacterOn;
-    public override MobStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
+    public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
 
     public DoorState state { protected get; set; }
     public void Handle() => state.Handle();
@@ -96,8 +96,8 @@ public class Stairs : Tile, ITile
     public bool IsViewOpen => true;
     public override bool IsCharacterOn => false;
     public override bool IsEnemyOn => AboveEnemy != null;
-    public override EnemyStatus OnEnemy { get { return null; } set { } }
-    public override MobStatus OnCharacterDest { get { return null; } set { } }
+    public override IEnemyStatus OnEnemy { get { return null; } set { } }
+    public override IStatus OnCharacterDest { get { return null; } set { } }
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;

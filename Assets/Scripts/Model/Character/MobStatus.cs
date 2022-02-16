@@ -3,7 +3,44 @@ using UniRx;
 using System;
 using System.Collections.Generic;
 
-public class MobStatus : SpawnObject<MobStatus>
+public interface IStatus
+{
+    float Attack { get; }
+    float Shield { get; }
+    bool IsAlive { get; }
+
+    Vector3 Position { get; }
+
+    bool isOnGround { get; }
+    bool isIced { get; }
+    void SetIsIced(bool isIced);
+
+    IDirection dir { get; }
+    void SetDir(IDirection dir);
+
+    IObservable<Unit> Active { get; }
+    IReadOnlyReactiveProperty<float> Life { get; }
+    IReadOnlyReactiveProperty<float> LifeMax { get; }
+    float LifeRatio { get; }
+    Vector3 corePos { get; }
+
+    void Damage(float damage, AttackAttr attr = AttackAttr.None);
+
+    void Heal(float heal);
+    float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None);
+
+    void ResetStatus();
+
+    void Activate();
+    void Inactivate();
+
+    MobStatus OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f);
+
+    void SetPosition(Vector3 pos, IDirection dir = null);
+    IStatus InitParam(MobParam param, float life = 0f);
+}
+
+public class MobStatus : SpawnObject<MobStatus>, IStatus
 {
     protected MobParam param;
 
@@ -33,7 +70,12 @@ public class MobStatus : SpawnObject<MobStatus>
     public virtual float Shield => param.shield;
 
     public bool isOnGround { get; protected set; }
-    public bool isIced;
+    public bool isIced { get; protected set; }
+
+    public void SetIsIced(bool isIced)
+    {
+        this.isIced = isIced;
+    }
 
     protected virtual float ArmorMultiplier => param.armorMultiplier;
 
@@ -41,6 +83,9 @@ public class MobStatus : SpawnObject<MobStatus>
     public void SetDir(IDirection dir) => this.dir = dir;
 
     private static readonly IDirection defaultDir = new South();
+
+
+    public Vector3 Position => transform.position;
 
     protected IReactiveProperty<float> life;
     public IReadOnlyReactiveProperty<float> Life => life;
@@ -54,7 +99,7 @@ public class MobStatus : SpawnObject<MobStatus>
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
 
-    public bool isActive { get; protected set; } = false;
+    protected bool isActive = false;
 
     public virtual Vector3 corePos => transform.position;
 
@@ -142,7 +187,7 @@ public class MobStatus : SpawnObject<MobStatus>
         transform.LookAt(transform.position + this.dir.LookAt);
     }
 
-    public virtual MobStatus InitParam(MobParam param, float life = 0f)
+    public virtual IStatus InitParam(MobParam param, float life = 0f)
     {
         this.param = param;
         ResetStatus();

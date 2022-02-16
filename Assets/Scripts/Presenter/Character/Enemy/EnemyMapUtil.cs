@@ -39,7 +39,7 @@ public class EnemyMapUtil : MapUtil
     /// <returns>destPos</returns>
     public Pos SetOnEnemy(Pos destPos)
     {
-        map.GetTile(destPos).OnEnemy = status as EnemyStatus;
+        map.GetTile(destPos).OnEnemy = status as IEnemyStatus;
         onTileEnemyPos = destPos;
         return destPos;
     }
@@ -96,7 +96,7 @@ public class EnemyMapUtil : MapUtil
         }
         else
         {
-            map.GetTile(destPos).AboveEnemy = status as EnemyStatus;
+            map.GetTile(destPos).AboveEnemy = status as IEnemyStatus;
         }
 
         onTilePos = destPos;

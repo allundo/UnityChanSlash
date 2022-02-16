@@ -34,7 +34,7 @@ public class MobReactor : MonoBehaviour, IReactor
     /// </summary>
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
 
-    protected MobStatus status;
+    protected IStatus status;
     protected IMapUtil map;
     protected IBodyEffect effect;
     protected IInput input;
@@ -95,7 +95,7 @@ public class MobReactor : MonoBehaviour, IReactor
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
                 input.InputIced(damage * 100f);
                 effect.OnIced(status.corePos);
-                status.isIced = true;
+                status.SetIsIced(true);
             }
             return 0f;
         }
@@ -163,7 +163,7 @@ public class MobReactor : MonoBehaviour, IReactor
 
         effect.OnMelt();
         if (isBroken) effect.OnIceCrash(status.corePos);
-        status.isIced = false;
+        status.SetIsIced(false);
     }
 
     public virtual void OnActive()

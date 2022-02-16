@@ -5,7 +5,7 @@ public class Fire : MonoBehaviour, IAttack
 {
     [SerializeField] protected BulletType type;
     protected BulletGenerator bulletGenerator;
-    protected MobStatus status;
+    protected IStatus status;
 
     protected virtual void Awake()
     {
@@ -18,7 +18,7 @@ public class Fire : MonoBehaviour, IAttack
         return
             DOVirtual.DelayedCall(
                 attackDuration * 0.3f,
-                () => bulletGenerator.Fire(status.transform.position, status.dir, status.Attack),
+                () => bulletGenerator.Fire(status.Position, status.dir, status.Attack),
                 false
             );
     }

@@ -8,7 +8,7 @@ public class Attack : MonoBehaviour, IAttack
     [SerializeField] protected AttackAttr attackAttr = default;
 
     private Collider attackCollider = default;
-    protected MobStatus status;
+    protected IStatus status;
 
     [SerializeField] protected float attackMultiplier = 1f;
 

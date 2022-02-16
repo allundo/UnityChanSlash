@@ -5,13 +5,13 @@ using UnityEngine;
 public class GhostReactor : EnemyReactor
 {
     protected GhostEffect ghostEffect;
-    protected GhostStatus ghostStatus;
+    protected IGhostStatus ghostStatus;
 
     protected override void Awake()
     {
         base.Awake();
         ghostEffect = effect as GhostEffect;
-        ghostStatus = status as GhostStatus;
+        ghostStatus = status as IGhostStatus;
 
     }
     public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)

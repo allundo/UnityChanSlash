@@ -1,7 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class UndeadStatus : EnemyStatus
+public interface IUndeadStatus : IEnemyStatus
+{
+    float curse { get; }
+}
+
+public class UndeadStatus : EnemyStatus, IUndeadStatus
 {
     public float curse { get; protected set; }
     protected float curseMax;

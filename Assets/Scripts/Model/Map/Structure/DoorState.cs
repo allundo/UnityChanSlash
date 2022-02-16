@@ -19,7 +19,7 @@ public class DoorState : MonoBehaviour
     public bool IsControllable => State.Value == StateEnum.OPEN && !IsCharacterOn || State.Value == StateEnum.CLOSE;
 
     public bool IsCharacterOn => onCharacterDest != null;
-    public MobStatus onCharacterDest = null;
+    public IStatus onCharacterDest = null;
 
     public void TransitionNext()
     {

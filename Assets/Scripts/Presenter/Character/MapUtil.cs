@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(MobStatus))]
 public class MapUtil : MonoBehaviour, IMapUtil
 {
-    protected MobStatus status;
+    protected IStatus status;
     protected WorldMap map;
     protected Transform tf;
 

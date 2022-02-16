@@ -1,14 +1,19 @@
 using UniRx;
 using UnityEngine;
 
-public class EnemyStatus : MobStatus
+public interface IEnemyStatus : IStatus
+{
+    EnemyType type { get; }
+}
+
+public class EnemyStatus : MobStatus, IEnemyStatus
 {
     protected EnemyParam enemyParam;
 
     public EnemyType type => enemyParam.type;
     public override Vector3 corePos => enemyParam.enemyCore + transform.position;
 
-    public override MobStatus InitParam(MobParam param, float life = 0f)
+    public override IStatus InitParam(MobParam param, float life = 0f)
     {
         enemyParam = param as EnemyParam;
         return base.InitParam(param, life);
