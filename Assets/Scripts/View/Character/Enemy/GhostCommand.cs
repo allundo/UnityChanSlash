@@ -20,8 +20,21 @@ public class GhostForward : EnemyForward
 
 public class GhostThrough : EnemyForward
 {
-    ICommand throughEnd;
-    ICommand attack;
+    protected ICommand throughEnd;
+    protected ICommand attack;
+
+    protected override void SetSpeed()
+    {
+        base.SetSpeed();
+        (anim as GhostAnimator).wallThrough.Bool = true;
+    }
+
+    protected override void ResetSpeed()
+    {
+        base.ResetSpeed();
+        (anim as GhostAnimator).wallThrough.Bool = false;
+    }
+
     public GhostThrough(EnemyCommandTarget target, float duration, ICommand attack) : base(target, duration)
     {
         throughEnd = new GhostThroughEnd(target, duration);

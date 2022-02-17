@@ -1,4 +1,4 @@
-public class WitchAnimator : FlyingAnimator, IUndeadAnimator
+public class WitchAnimator : GhostAnimator, IUndeadAnimator
 {
     public AnimatorTrigger backStep { get; protected set; }
     public AnimatorTrigger jump { get; protected set; }

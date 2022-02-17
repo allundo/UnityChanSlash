@@ -27,12 +27,12 @@ public abstract class EnemyMove : EnemyCommand
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
 
-    protected void SetSpeed()
+    protected virtual void SetSpeed()
     {
         enemyAnim.speed.Float = Speed;
     }
 
-    protected void ResetSpeed()
+    protected virtual void ResetSpeed()
     {
         enemyAnim.speed.Float = 0.0f;
     }
