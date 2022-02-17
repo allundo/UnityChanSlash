@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class GhostEffect : MobEffect
 {
+    [SerializeField] protected ParticleSystem emitVfx = default;
+    [SerializeField] protected AudioSource attackSnd = default;
+
     protected Vector3 prevPos;
     protected float trailStrength = 0f;
     protected float trailTarget = 0f;
     protected int propID;
+
 
     protected override void Awake()
     {
@@ -33,11 +37,14 @@ public class GhostEffect : MobEffect
 
     public void OnAttackStart()
     {
+        emitVfx?.Play();
+        attackSnd.PlayEx();
         trailTarget = 1.8f;
     }
 
     public void OnAttackEnd()
     {
+        emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         trailTarget = 0f;
     }
 

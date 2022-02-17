@@ -5269,7 +5269,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4805512589294190827}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 0.8
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -5344,7 +5344,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.8
       minScalar: 0.24
       maxCurve:
         serializedVersion: 2
@@ -6524,7 +6524,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -6549,8 +6549,8 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 65535
-        atime2: 0
+        atime1: 49344
+        atime2: 65535
         atime3: 0
         atime4: 0
         atime5: 0
@@ -6558,7 +6558,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
+        m_NumAlphaKeys: 3
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -6705,7 +6705,7 @@ ParticleSystem:
     tilesY: 1
     animationType: 0
     rowIndex: 0
-    cycles: 6
+    cycles: 5
     uvChannelMask: -1
     rowMode: 1
     sprites:
@@ -10156,7 +10156,6 @@ GameObject:
   - component: {fileID: 6037122337985102315}
   - component: {fileID: 5367982663961441733}
   - component: {fileID: 6299658109764173939}
-  - component: {fileID: 2956032470844712617}
   - component: {fileID: 3526103026299736497}
   m_Layer: 9
   m_Name: VioletGhost
@@ -10273,6 +10272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 8965305710852680509}
   sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  emitVfx: {fileID: 8407344189817049972}
+  attackSnd: {fileID: 8058817155851483271}
 --- !u!114 &6037122337985102315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10310,20 +10311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d619fe0cec4c54d2dbf5dfb9140cc51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2956032470844712617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5835761410320476130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaee1f5f0643d41acbb49fb3fe254d42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackSfx: {fileID: 8058817155851483271}
-  attackVfx: {fileID: 8407344189817049972}
 --- !u!114 &3526103026299736497
 MonoBehaviour:
   m_ObjectHideFlags: 0
