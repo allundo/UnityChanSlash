@@ -1102,7 +1102,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[6].name
-    value: Witch_DOUBLE_ATTACK
+    value: Witch_DOUBLE_ATTACK_START
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[6].takeName
@@ -1118,7 +1118,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[6].lastFrame
-    value: 180
+    value: 171
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[6].wrapMode
@@ -2266,7 +2266,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[13].lastFrame
-    value: 180
+    value: 179
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_ClipAnimations.Array.data[13].wrapMode

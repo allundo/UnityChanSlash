@@ -39,6 +39,57 @@ public class WitchTargetAttack : WitchCommand
     }
 }
 
+public class WitchJumpOver : WitchCommand
+{
+    public WitchJumpOver(EnemyCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        if (!map.IsJumpable) return false;
+
+        witchReact.OnAppear();
+        witchAnim.jump.Fire();
+
+        Pos destPos = map.GetJump;
+
+        enemyMap.MoveObjectOn(destPos);
+        enemyMap.TurnBack();
+
+        playingTween = DOTween.Sequence()
+            .Join(tweenMove.Jump(destPos, 1f, 1.6f))
+            .Join(tweenMove.TurnLB.SetEase(Ease.Linear))
+            .AppendInterval(0.4f * duration)
+            .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .AppendInterval(0.4f * duration)
+            .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .SetUpdate(false)
+            .Play();
+
+        return true;
+    }
+}
+public class WitchJumpOverAttack : WitchJumpOver
+{
+    protected ICommand doubleAttack;
+
+    public WitchJumpOverAttack(EnemyCommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
+    {
+        this.doubleAttack = doubleAttack;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        if (!base.Action())
+        {
+            // Cancel attack
+            input.ValidateInput();
+            return Observable.Empty(Unit.Default);
+        }
+
+        input.Interrupt(doubleAttack, false);
+        return ObservableComplete();
+    }
+}
 public class WitchBackStep : WitchCommand
 {
     public WitchBackStep(EnemyCommandTarget target, float duration) : base(target, duration) { }
@@ -174,6 +225,7 @@ public class WitchDoubleAttackLaunch : FlyingAttack
             return Observable.Empty(Unit.Default);
         }
 
+        (anim as WitchAnimator).attackStart.Fire();
         input.Interrupt(doubleAttackStart, false);
         return ObservableComplete();
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class WitchAIInput : GhostAIInput, IUndeadInput
 {
     protected ICommand sleep;
+    protected ICommand backAttack;
     protected ICommand targetAttack;
     protected ICommand backStep;
     protected ICommand ice;
@@ -15,8 +16,11 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     {
         var enemyTarget = target as EnemyCommandTarget;
 
+        var doubleAttack = new WitchDoubleAttackLaunch(enemyTarget, 32f);
+        attack = new WitchBackStepAttack(enemyTarget, 32f, doubleAttack);
+        backAttack = new WitchJumpOverAttack(enemyTarget, 32f, doubleAttack);
+
         die = new EnemyDie(enemyTarget, 72f);
-        attack = new WitchBackStepAttack(enemyTarget, 32f, new WitchDoubleAttackLaunch(enemyTarget, 32f));
         targetAttack = new WitchTargetAttack(enemyTarget, 75f);
         moveForward = new GhostForward(enemyTarget, 48f);
         backStep = new WitchBackStep(enemyTarget, 32f);
@@ -43,7 +47,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         Pos forward = map.GetForward;
 
         // Start attack if player found at forward
-        if (IsOnPlayer(forward)) return RandomChoice(attack, targetAttack, backStep);
+        if (IsOnPlayer(forward)) return RandomChoice(attack, backAttack, targetAttack, backStep);
 
         // Turn if player found at left, right or backward
         Pos left = map.GetLeft;

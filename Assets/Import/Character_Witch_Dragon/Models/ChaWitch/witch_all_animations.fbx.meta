@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: 4781951162920444690
-    second: Witch_DOUBLE_ATTACK_LEAVE
+    second: Witch_MOON_SAULT
   - first:
       74: -997398342910362704
     second: Witch_IDLE
@@ -25,7 +25,7 @@ ModelImporter:
       74: -7926541207575988154
     second: Witch_BACK_STEP
   - first:
-      74: -132612885704529079
+      74: -1087395824519607316
     second: Witch_DOUBLE_ATTACK_START
   - first:
       74: 7113269048872500512
@@ -42,6 +42,9 @@ ModelImporter:
   - first:
       74: 4284192101605381056
     second: Witch_RESURRECTION
+  - first:
+      74: -8593596188084835664
+    second: Witch_DOUBLE_ATTACK_LEAVE
   - first:
       74: 7020107555820543903
     second: Witch_DOUBLE_ATTACK_KEEP
@@ -464,6 +467,35 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Witch_MOON_SAULT
+      takeName: Armature|ArmatureAction
+      internalID: 0
+      firstFrame: 488
+      lastFrame: 524
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
