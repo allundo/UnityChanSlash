@@ -38449,7 +38449,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.25
+  m_Radius: 0.5
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &6710468429364292472
 MonoBehaviour:
@@ -91114,7 +91114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
-  data: {fileID: 0}
+  sndData: {fileID: 0}
   emitVfx: {fileID: 6710468429374038461}
   fireVfx: {fileID: 6710468430495437047}
   hitVfx: {fileID: 6710468428935615954}
@@ -91183,7 +91183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5083e69d48e6847218e2d3e5f1dbef1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isIced: 0
   data: {fileID: 11400000, guid: b6abfe22fb88e41c2ab8d1d730b9a054, type: 2}
   type: 1
 --- !u!1 &6710468430955627237
