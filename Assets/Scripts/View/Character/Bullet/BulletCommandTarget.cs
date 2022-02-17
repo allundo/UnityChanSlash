@@ -6,5 +6,5 @@ public class BulletCommandTarget : CommandTarget
 {
 
     // Bullet attack handler for BulletAttack Command execution.
-    [SerializeField] public Attack attack = default;
+    [SerializeField] public Attack[] attack = default;
 }

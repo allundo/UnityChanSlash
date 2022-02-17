@@ -7,7 +7,7 @@ public abstract class BulletCommand : Command
     protected IAttack attack;
     public BulletCommand(BulletCommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming)
     {
-        attack = target.attack;
+        attack = target.attack[0];
     }
 
     protected virtual Tween MoveForward() => tweenMove.Linear(map.GetForward);
