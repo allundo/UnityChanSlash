@@ -13,7 +13,7 @@ public class GhostEffect : MobEffect
 
     protected override void Awake()
     {
-        StoreMaterialColors();
+        base.Awake();
         propID = Shader.PropertyToID("_TrailDir");
     }
 

@@ -1,10 +1,13 @@
+using UnityEngine;
+
 public class PlayerEffect : MobEffect
 {
     protected PlayerAnimator anim;
 
     protected override void Awake()
     {
-        base.Awake();
+        StoreMaterialColors();
+        sndData = Resources.Load<PlayerDamageSndData>("DataAssets/Sound/PlayerDamageSndData");
         anim = GetComponent<PlayerAnimator>();
     }
 

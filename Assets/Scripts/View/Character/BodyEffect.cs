@@ -30,7 +30,7 @@ public interface IBodyEffect
 public class BodyEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected AudioSource dieSound = null;
-    [SerializeField] protected DamageSndData sndData;
+    protected DamageSndData sndData;
 
     protected AudioSource SndDamage(AttackType type) => Util.Instantiate(sndData.Param((int)type).damage, transform);
     protected Dictionary<AttackType, AudioSource> damageSndSource = new Dictionary<AttackType, AudioSource>();
@@ -54,6 +54,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
     protected virtual void Awake()
     {
         StoreMaterialColors();
+        sndData = Resources.Load<DamageSndData>("DataAssets/Sound/DamageSndData");
     }
 
     protected void PlayFlash(Tween flash)
