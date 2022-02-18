@@ -6,11 +6,13 @@ public class WitchCommand : EnemyTurnCommand
 {
     protected WitchAnimator witchAnim;
     protected WitchReactor witchReact;
+    protected MagicAndDouble magicAndDouble;
 
     public WitchCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         witchAnim = target.anim as WitchAnimator;
         witchReact = target.react as WitchReactor;
+        magicAndDouble = target.magic as MagicAndDouble;
     }
 }
 
@@ -79,12 +81,15 @@ public class WitchJumpOverAttack : WitchJumpOver
 
     public override IObservable<Unit> Execute()
     {
-        if (!base.Action())
+        if (!map.IsJumpable)
         {
             // Cancel attack
             input.ValidateInput();
             return Observable.Empty(Unit.Default);
         }
+
+        magicAndDouble.backStepWitchLauncher.Fire();
+        base.Action();
 
         input.Interrupt(doubleAttack, false);
         return ObservableComplete();
@@ -127,12 +132,15 @@ public class WitchBackStepAttack : WitchBackStep
 
     public override IObservable<Unit> Execute()
     {
-        if (!base.Action())
+        if (!map.IsBackwardMovable)
         {
             // Cancel attack
             input.ValidateInput();
             return Observable.Empty(Unit.Default);
         }
+
+        magicAndDouble.jumpOverWitchLauncher.Fire();
+        base.Action();
 
         input.Interrupt(doubleAttack, false);
         return ObservableComplete();
@@ -141,11 +149,7 @@ public class WitchBackStepAttack : WitchBackStep
 
 public class WitchTripleFire : WitchCommand
 {
-    protected IAttack fire;
-    public WitchTripleFire(EnemyCommandTarget target, float duration) : base(target, duration)
-    {
-        fire = target.magic.launcher[BulletType.FireBall];
-    }
+    public WitchTripleFire(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -155,6 +159,7 @@ public class WitchTripleFire : WitchCommand
         witchReact.OnAppear();
         witchAnim.fire.Fire();
 
+        ILauncher fire = target.magic.launcher[BulletType.FireBall];
         playingTween = DOTween.Sequence()
             .Join(fire.AttackSequence(fireDuration))
             .AppendInterval(interval)
@@ -170,11 +175,7 @@ public class WitchTripleFire : WitchCommand
 
 public class WitchDoubleIce : WitchCommand
 {
-    protected IAttack ice;
-    public WitchDoubleIce(EnemyCommandTarget target, float duration) : base(target, duration)
-    {
-        ice = target.magic.launcher[BulletType.IceBullet];
-    }
+    public WitchDoubleIce(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -183,6 +184,8 @@ public class WitchDoubleIce : WitchCommand
 
         witchReact.OnAppear();
         witchAnim.fire.Fire();
+
+        ILauncher ice = target.magic.launcher[BulletType.IceBullet];
 
         playingTween = DOTween.Sequence()
             .Join(ice.AttackSequence(fireDuration))

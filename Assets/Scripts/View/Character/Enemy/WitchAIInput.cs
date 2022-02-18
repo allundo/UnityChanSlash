@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(WitchAnimator))]
 [RequireComponent(typeof(WitchReactor))]
-[RequireComponent(typeof(Magic))]
+[RequireComponent(typeof(MagicAndDouble))]
 public class WitchAIInput : GhostAIInput, IUndeadInput
 {
     protected ICommand sleep;

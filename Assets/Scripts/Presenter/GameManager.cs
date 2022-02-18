@@ -10,8 +10,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private GameObject player = default;
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private ItemGenerator itemGenerator = default;
-    [SerializeField] private BulletGenerator fireBallGenerator = default;
-    [SerializeField] private BulletGenerator iceBulletGenerator = default;
+    [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
@@ -32,8 +31,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public WorldMap worldMap { get; protected set; }
 
-    public BulletGenerator GetBulletGenerator(BulletType type) => bulletGenerators[type];
-    private Dictionary<BulletType, BulletGenerator> bulletGenerators;
+    public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
 
     public ParticleSystem GetPrefabVFX(VFXType type) => prefabVFXs[type];
     private Dictionary<VFXType, ParticleSystem> prefabVFXs;
@@ -81,12 +79,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         worldMap = GameInfo.Instance.NextFloorMap();
         mapRenderer.Render(worldMap);
-
-        bulletGenerators = new Dictionary<BulletType, BulletGenerator>()
-        {
-            { BulletType.FireBall,  fireBallGenerator   },
-            { BulletType.IceBullet, iceBulletGenerator  },
-        };
 
         prefabVFXs = new Dictionary<VFXType, ParticleSystem>()
         {
@@ -246,7 +238,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         debugEnemyGenerator.gameObject.SetActive(false);
 
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
-        bulletGenerators.ForEach(kv => kv.Value.DestroyAll());
+        bulletGeneratorLoader.DestroyAll();
 
         yield return new WaitForEndOfFrame();
 

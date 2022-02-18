@@ -37,3 +37,15 @@ MonoBehaviour:
     armorMultiplier: 1
     prefab: {fileID: 6710468430858598547, guid: e332a9fe601cc4e34a7878a7a09f3039,
       type: 3}
+  - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093\u5206\u8EAB"
+    defaultLifeMax: 1
+    isOnGround: 0
+    attack: 1
+    shield: 0
+    faceDamageMultiplier: 1
+    sideDamageMultiplier: 1
+    backDamageMultiplier: 1
+    restDamageMultiplier: 1
+    armorMultiplier: 1
+    prefab: {fileID: 3304856090153155562, guid: 0d050dfd465784fc4ac75d77162a3ea9,
+      type: 3}

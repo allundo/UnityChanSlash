@@ -458,6 +458,7 @@ public enum BulletType
 {
     FireBall = 0,
     IceBullet,
+    WitchDouble,
 }
 
 public enum VFXType
