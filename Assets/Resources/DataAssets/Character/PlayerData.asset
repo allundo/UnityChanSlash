@@ -15,10 +15,12 @@ MonoBehaviour:
   setParams:
   - name: "\u30D7\u30EC\u30A4\u30E4\u30FC"
     defaultLifeMax: 10
+    isOnGround: 1
+    attack: 1
+    shield: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
     restDamageMultiplier: 6
-    attack: 1
-    shield: 1
     armorMultiplier: 1
+    prefab: {fileID: 0}

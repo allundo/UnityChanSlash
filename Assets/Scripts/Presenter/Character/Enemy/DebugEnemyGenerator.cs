@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class DebugEnemyGenerator : EnemyAutoGenerator
 {
-    [SerializeField] private EnemyData enemyData = default;
     [SerializeField] private EnemyType type = default;
+
+    private EnemyData enemyData = default;
 
     protected override void Awake()
     {
         base.Awake();
+        enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
         gameObject.SetActive(false);
     }
 

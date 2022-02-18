@@ -6,11 +6,11 @@ public class PlaceEnemyGenerator : EnemyGenerator
 {
     [SerializeField] private EnemySpawnPoint prefabEnemySpawnPoint = default;
 
-    [SerializeField] private EnemyData enemyData = default;
     [SerializeField] private EnemyTypesData enemyTypesData = default;
 
     [SerializeField] private int numOfRandomSpawn = 12;
 
+    private EnemyData enemyData = default;
     private EnemyType[] enemyTypes;
     private EnemyType RandomEnemyType => enemyTypes[Random.Range(0, enemyTypes.Length)];
 
@@ -38,6 +38,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     protected override void Awake()
     {
+        enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
+
         SetWorldMap(GameManager.Instance.worldMap);
         respawnData = new List<RespawnData>[enemyTypesData.Length].Select(_ => new List<RespawnData>()).ToArray();
     }

@@ -4,7 +4,7 @@ using System;
 
 public class BulletGeneratorLoader : MonoBehaviour
 {
-    [SerializeField] protected BulletData data;
+    protected BulletData data;
     protected BulletGenerator prefabBulletGenerator;
 
     public Dictionary<BulletType, BulletGenerator> bulletGenerators { get; protected set; } = new Dictionary<BulletType, BulletGenerator>();
@@ -12,6 +12,7 @@ public class BulletGeneratorLoader : MonoBehaviour
     void Awake()
     {
         prefabBulletGenerator = Resources.Load<BulletGenerator>("Prefabs/Generator/BulletGenerator");
+        data = Resources.Load<BulletData>("DataAssets/Character/BulletData");
 
         foreach (BulletType type in Enum.GetValues(typeof(BulletType)))
         {
