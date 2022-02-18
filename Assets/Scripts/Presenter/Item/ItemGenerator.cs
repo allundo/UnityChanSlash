@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class ItemGenerator : MobGenerator<Item>
 {
-    [SerializeField] private ItemData itemData = default;
 
     // FIXME: Use only the number of floors for now
     [SerializeField] private EnemyTypesData enemyTypesData = default;
+
+    private ItemData itemData;
 
     private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
 
@@ -20,6 +21,8 @@ public class ItemGenerator : MobGenerator<Item>
         pool = transform;
         spawnPoint = Vector3.zero;
         map = GameManager.Instance.worldMap;
+
+        itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
 
         itemInfo[ItemType.Potion] = new PotionInfo(itemData.Param((int)ItemType.Potion));
         respawnData = new Stack<RespawnData>[enemyTypesData.Length].Select(_ => new Stack<RespawnData>()).ToArray();
