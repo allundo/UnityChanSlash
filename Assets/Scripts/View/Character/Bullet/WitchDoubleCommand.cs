@@ -6,14 +6,14 @@ using DG.Tweening;
 public class WitchDoubleCommand : BulletCommand
 {
     protected WitchDoubleAnimator witchAnim;
-    protected BulletReactor bulletReact;
+    protected WitchDoubleReactor witchReact;
     protected float attackTimeScale = 0.75f;
     protected float decentVec = -0.5f;
 
     public WitchDoubleCommand(BulletCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         witchAnim = target.anim as WitchDoubleAnimator;
-        bulletReact = target.react as BulletReactor;
+        witchReact = target.react as WitchDoubleReactor;
     }
 }
 
@@ -98,6 +98,8 @@ public class WitchDoubleStart : WitchDoubleCommand
 
         completeTween = attack.AttackSequence(duration).Play();
 
+        witchReact.OnAttackStart();
+
         target.input.Interrupt(attackKeep, false);
 
         return ObservableComplete(attackTimeScale);
@@ -141,6 +143,9 @@ public class WitchDoubleEnd : WitchDoubleCommand
         Vector3 dest = map.CurrentVec3Pos + new Vector3(destTileVec.x, decentVec * (1f - attackTimeScale), destTileVec.z);
 
         playingTween = tweenMove.Move(dest).Play();
+
+        witchReact.OnAttackEnd();
+
         input.Interrupt(leave, false);
 
         return ObservableComplete();
