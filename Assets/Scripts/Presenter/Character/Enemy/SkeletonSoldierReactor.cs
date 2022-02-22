@@ -34,10 +34,12 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
     public void OnResurrection()
     {
         status.ResetStatus();
+        bodyCollider.enabled = true;
     }
     public void OnSleep()
     {
         effect.OnDie();
         map.ResetTile();
+        bodyCollider.enabled = false;
     }
 }
