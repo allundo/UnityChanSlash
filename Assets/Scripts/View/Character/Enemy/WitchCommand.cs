@@ -19,23 +19,17 @@ public class WitchCommand : EnemyTurnCommand
 public class WitchTargetAttack : WitchCommand
 {
     protected IAttack targetAttack;
-    protected IAttack targetCritical;
 
     public WitchTargetAttack(EnemyCommandTarget target, float duration) : base(target, duration)
     {
         targetAttack = target.enemyAttack[1];
-        targetCritical = target.enemyAttack[2];
     }
 
     protected override bool Action()
     {
         witchReact.OnAppear();
         witchAnim.targetAttack.Fire();
-        playingTween = DOTween.Sequence()
-            .Join(targetAttack.AttackSequence(duration))
-            .Join(targetCritical.AttackSequence(duration))
-            .SetUpdate(false)
-            .Play();
+        playingTween = targetAttack.AttackSequence(duration).Play();
 
         return true;
     }

@@ -1,8 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
 
+public abstract class AttackBehaviour : MonoBehaviour, IAttack
+{
+    public abstract Tween AttackSequence(float attackDuration);
+}
+
 [RequireComponent(typeof(Collider))]
-public class Attack : MonoBehaviour, IAttack
+public class Attack : AttackBehaviour
 {
     [SerializeField] protected AttackType attackType = default;
     [SerializeField] protected AttackAttr attackAttr = default;
@@ -30,13 +35,15 @@ public class Attack : MonoBehaviour, IAttack
         attackCollider.enabled = true;
     }
 
-    protected virtual void OnHitAttack(Collider collider)
+    protected virtual IReactor OnHitAttack(Collider collider)
     {
         IReactor targetMob = collider.GetComponent<MobReactor>();
 
-        if (null == targetMob) return;
+        if (null == targetMob) return null;
 
         targetMob.OnDamage(status.Attack * attackMultiplier, status.dir, attackType, attackAttr);
+
+        return targetMob;
     }
 
     protected virtual void OnHitFinished()
@@ -44,7 +51,7 @@ public class Attack : MonoBehaviour, IAttack
         attackCollider.enabled = false;
     }
 
-    public virtual Tween AttackSequence(float attackDuration)
+    public override Tween AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
             .AppendCallback(OnHitStart)

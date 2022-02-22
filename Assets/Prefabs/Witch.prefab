@@ -5127,7 +5127,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2605310810881789625}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1776864531471977445
 BoxCollider:
@@ -5173,7 +5173,7 @@ GameObject:
   - component: {fileID: 1776864531675097825}
   - component: {fileID: 1776864531675097824}
   m_Layer: 9
-  m_Name: 'TargetAttackHitDetector '
+  m_Name: 'AttackHitDetector '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5190,8 +5190,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2605310810881789625}
-  m_RootOrder: 2
+  m_Father: {fileID: 8532282073260290853}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1776864531675097825
 BoxCollider:
@@ -5237,7 +5237,7 @@ GameObject:
   - component: {fileID: 1776864532949272516}
   - component: {fileID: 1776864532949272539}
   m_Layer: 9
-  m_Name: TargetCriticalHitDetector
+  m_Name: CriticalHitDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5254,8 +5254,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2605310810881789625}
-  m_RootOrder: 3
+  m_Father: {fileID: 8532282073260290853}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1776864532949272516
 BoxCollider:
@@ -10225,6 +10225,54 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!1 &2824766092882600369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8532282073260290853}
+  - component: {fileID: 7651901149069753934}
+  m_Layer: 0
+  m_Name: TargetAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8532282073260290853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824766092882600369}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1776864531675097831}
+  - {fileID: 1776864532949272538}
+  m_Father: {fileID: 2605310810881789625}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7651901149069753934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824766092882600369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1492d6ba270904ed7809f78ac518ef58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
+  - {fileID: 1776864531675097824}
+  - {fileID: 1776864532949272539}
 --- !u!1 &2932497001728208205
 GameObject:
   m_ObjectHideFlags: 0
@@ -10530,8 +10578,7 @@ Transform:
   m_Children:
   - {fileID: 6383633892098956839}
   - {fileID: 655840467313232483}
-  - {fileID: 1776864531675097831}
-  - {fileID: 1776864532949272538}
+  - {fileID: 8532282073260290853}
   - {fileID: 1776864531471977467}
   - {fileID: 2794451308921814199}
   m_Father: {fileID: 0}
@@ -10634,8 +10681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAttack:
   - {fileID: 1776864531471977444}
-  - {fileID: 1776864531675097824}
-  - {fileID: 1776864532949272539}
+  - {fileID: 7651901149069753934}
 --- !u!114 &7840712780051297016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10755,7 +10801,7 @@ Transform:
   - {fileID: 4792862366164766323}
   - {fileID: 3003357028467501580}
   m_Father: {fileID: 2605310810881789625}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6575503794801308097
 ParticleSystem:
