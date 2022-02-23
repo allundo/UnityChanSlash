@@ -55,7 +55,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         isPaused = isScaled = false;
     }
 
-    public void TimeScale(float scale = 4f)
+    public void TimeScale(float scale = 5f)
     {
         if (isPaused) return;
 
