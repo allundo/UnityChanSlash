@@ -2,7 +2,7 @@ Shader "Custom/Mobile/UI/AdditiveMutiply"
 {
     Properties
     {
-        [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+        _MainTex ("Sprite Texture", 2D) = "white" {}
         [MainColor] _Color ("Tint", Color) = (1,1,1,1)
     }
 

@@ -80,7 +80,7 @@ public class AttackButton : FadeEnable
     private void Disable()
     {
         isFiring = true;
-        region.FadeOut(0.05f).Play();
+        region.FadeOut(0.1f).Play();
     }
 
     private void Enable()
