@@ -7,6 +7,7 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private FightCircle fightCircle = default;
     [SerializeField] private MiniMap miniMap = default;
     [SerializeField] private RectTransform rtItemList = default;
+    [SerializeField] private RestButton restButton = default;
     [SerializeField] private float portraitFromBottom = 720f;
     [SerializeField] private float landscapeFromLeft = 480f;
     [SerializeField] private float lifeGaugeFromBottom = 60f;
@@ -19,7 +20,7 @@ public class UIPosition : MonoBehaviour
         itemListSize = rtItemList.sizeDelta;
     }
 
-    public void ResetPosition(DeviceOrientation orientation)
+    public void ResetOrientation(DeviceOrientation orientation)
     {
         switch (orientation)
         {
@@ -43,6 +44,7 @@ public class UIPosition : MonoBehaviour
         }
 
         miniMap.ResetOrientation(orientation);
+        restButton.ResetOrientation(orientation);
         fightCircle.ResetCenterPos();
     }
 }

@@ -5850,8 +5850,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -80, y: -80}
-  m_SizeDelta: {x: 120, y: 120}
+  m_AnchoredPosition: {x: -100, y: -80}
+  m_SizeDelta: {x: 180, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &314247949
 MonoBehaviour:
@@ -5862,7 +5862,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 314247947}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d9b512c1b4e6042d4bcfa84ef9780473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -5909,7 +5909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9372549, g: 0.52156866, b: 0.54901963, a: 1}
+  m_Color: {r: 0.75686276, g: 0.85882354, b: 0.5058824, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -16444,17 +16444,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: REST
+  m_text: "\u4F11\u606F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e23ffa080bb5e49498f74c16f2fc5641, type: 2}
+  m_sharedMaterial: {fileID: -7043066345028997652, guid: e23ffa080bb5e49498f74c16f2fc5641,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278517844
-  m_fontColor: {r: 0.32941177, g: 0, b: 0.019607844, a: 1}
+    rgba: 4278217288
+  m_fontColor: {r: 0.28235295, g: 0.41568628, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -16471,8 +16472,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -45485,6 +45486,7 @@ MonoBehaviour:
   fightCircle: {fileID: 4719329011268037073}
   miniMap: {fileID: 8337679454959986929}
   rtItemList: {fileID: 528637048}
+  restButton: {fileID: 314247949}
   portraitFromBottom: 720
   landscapeFromLeft: 480
   lifeGaugeFromBottom: 60

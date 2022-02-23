@@ -8,7 +8,7 @@ using System;
 
 public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private Button restButton = default;
+    [SerializeField] private RestButton restButton = default;
     [SerializeField] private ResumeButton resumeButton = default;
     [SerializeField] private RestLifeGauge restLifeGauge = default;
     [SerializeField] private TextMeshProUGUI txtRest = default;
@@ -63,7 +63,8 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     protected void Start()
     {
-        restButton.onClick.AddListener(Activate);
+        // restButton.onClick.AddListener(Activate);
+        restButton.Click.Subscribe(_ => Activate());
         resumeButton.onPush.AddListener(Inactivate);
 
         HideUIs();

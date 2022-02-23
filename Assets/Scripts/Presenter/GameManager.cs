@@ -169,7 +169,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         cover.sizeDelta = new Vector2(Screen.width, Screen.height);
 
-        uiPosition.ResetPosition(orientation);
+        uiPosition.ResetOrientation(orientation);
 
         if (!isInitialOrientation)
         {
