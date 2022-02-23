@@ -75,10 +75,11 @@ public class GoblinAIInput : ShieldInput
             }
         }
 
-        // Move forward if player found in front
-        if (map.IsPlayerFound(forward)) return run;
-
         bool isForwardMovable = map.IsMovable(forward);
+
+        // Move forward if player found in front
+        if (map.IsPlayerFound(forward) && isForwardMovable) return run;
+
         bool isLeftMovable = map.IsMovable(left);
         bool isRightMovable = map.IsMovable(right);
 

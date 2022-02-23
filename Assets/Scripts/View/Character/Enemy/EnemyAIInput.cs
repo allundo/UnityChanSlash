@@ -49,10 +49,11 @@ public class EnemyAIInput : MobInput
         Pos forward = map.GetForward;
         if (IsOnPlayer(forward)) return RandomChoice(attack, doubleAttack);
 
-        // Move forward if player found in front
-        if (map.IsPlayerFound(forward)) return moveForward;
-
         bool isForwardMovable = map.IsMovable(forward);
+
+        // Move forward if player found in front
+        if (map.IsPlayerFound(forward) && isForwardMovable) return moveForward;
+
         bool isLeftMovable = map.IsMovable(left);
         bool isRightMovable = map.IsMovable(right);
 
