@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4638532762040982953}
   - component: {fileID: 7394793903594270375}
   - component: {fileID: 8761223803396366255}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: EnemySpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,11 +125,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyAutoGenerator
-      objectReference: {fileID: 0}
-    - target: {fileID: 8671504285426466023, guid: 96c917849d9e84b5baaa0b452042a0fa,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96c917849d9e84b5baaa0b452042a0fa, type: 3}
