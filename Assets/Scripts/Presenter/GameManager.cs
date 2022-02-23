@@ -17,7 +17,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private DebugEnemyGenerator debugEnemyGenerator = default;
 
-
     // Player info
     private Transform playerTransform = default;
     private HidePlateHandler hidePlateHandler = default;
@@ -40,7 +39,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         if (isPaused) return;
 
-        if (isHideUIs) HideUIs();
+        if (isHideUIs) input.SetInputVisible(false);
         Time.timeScale = 0f;
 
         isPaused = isScaled = true;
@@ -50,7 +49,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         if (!isScaled) return;
 
-        DisplayUIs();
+        input.SetInputVisible(true);
         Time.timeScale = 1f;
 
         isPaused = isScaled = false;
@@ -64,9 +63,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         isScaled = true;
     }
-
-    private void HideUIs() { input.SetInputVisible(false); }
-    private void DisplayUIs() { input.SetInputVisible(true); }
 
     protected override void Awake()
     {
@@ -187,7 +183,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public Pos PlayerPos => worldMap.MapPos(playerTransform.position);
     public Vector3 PlayerWorldPos
         => new Vector3(playerTransform.position.x, 0f, playerTransform.position.z);
-
 
     public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
