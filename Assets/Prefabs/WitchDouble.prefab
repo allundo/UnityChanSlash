@@ -20191,12 +20191,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
-  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
   emitVfx: {fileID: 5839838650848461688}
   fireVfx: {fileID: 0}
   hitVfx: {fileID: 0}
   eraseVfx: {fileID: 0}
-  fireSound: {fileID: 8510601521370976849}
+  fireSound: {fileID: 0}
   meshTf: {fileID: 1765497339840932412}
 --- !u!114 &25396102096358982
 MonoBehaviour:

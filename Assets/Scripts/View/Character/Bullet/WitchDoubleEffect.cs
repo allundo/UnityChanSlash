@@ -22,7 +22,6 @@ public class WitchDoubleEffect : BulletEffect
 
     public void OnAttackStart()
     {
-        fireSound.PlayEx();
         emitVfx?.Play();
     }
 
@@ -38,8 +37,6 @@ public class WitchDoubleEffect : BulletEffect
 
     public override void OnDie()
     {
-        dieSound.PlayEx();
-        // eraseVfx?.Play();
         PlayFlash(FadeOutTween(0.5f));
     }
 
