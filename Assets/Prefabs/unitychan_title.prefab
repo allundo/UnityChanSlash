@@ -2410,7 +2410,7 @@ MonoBehaviour:
   faceAngry: {fileID: 7400000, guid: 689da6f371ad8441395f39acaf2c7ae3, type: 2}
   faceEyeClose: {fileID: 7400000, guid: 73cb3ae8fc1de47a0a307cb5f95ec701, type: 2}
   faceSmile: {fileID: 7400000, guid: 06b76ba9895174fc19d91c361e7c911b, type: 2}
-  faceSuprise: {fileID: 7400000, guid: ff0ec808b24b748e482e13ebfc9305ad, type: 2}
+  faceSurprise: {fileID: 7400000, guid: ff0ec808b24b748e482e13ebfc9305ad, type: 2}
 --- !u!1 &4379356342470970481
 GameObject:
   m_ObjectHideFlags: 0

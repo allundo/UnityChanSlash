@@ -554,7 +554,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 302795057}
   m_OnClick:
     m_PersistentCalls:
@@ -7398,7 +7398,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1822275784}
   m_OnClick:
     m_PersistentCalls:
@@ -7970,10 +7970,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2110886712, guid: b1fce0d6376df46ca905a24230f5e609, type: 3}
-      propertyPath: faceSurprise
-      value: 
-      objectReference: {fileID: 7400000, guid: ff0ec808b24b748e482e13ebfc9305ad, type: 2}
     - target: {fileID: 4379356342470676565, guid: b1fce0d6376df46ca905a24230f5e609,
         type: 3}
       propertyPath: m_LocalPosition.x
