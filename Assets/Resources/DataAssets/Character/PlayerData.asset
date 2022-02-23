@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   setParams:
   - name: "\u30D7\u30EC\u30A4\u30E4\u30FC"
-    defaultLifeMax: 10
+    defaultLifeMax: 20
     isOnGround: 1
     attack: 1
     shield: 1

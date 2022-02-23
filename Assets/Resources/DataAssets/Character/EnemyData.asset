@@ -27,7 +27,7 @@ MonoBehaviour:
     type: 0
     enemyCore: {x: 0, y: 0, z: 0}
   - name: "\u30B9\u30E9\u30A4\u30E0"
-    defaultLifeMax: 10
+    defaultLifeMax: 6
     isOnGround: 1
     attack: 1
     shield: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
     type: 1
     enemyCore: {x: 0, y: 0.3, z: 0}
   - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
-    defaultLifeMax: 10
+    defaultLifeMax: 6
     isOnGround: 1
     attack: 1
     shield: 0
@@ -55,13 +55,13 @@ MonoBehaviour:
     type: 2
     enemyCore: {x: 0, y: 0.3, z: 0}
   - name: "\u30B4\u30D6\u30EA\u30F3"
-    defaultLifeMax: 10
+    defaultLifeMax: 8
     isOnGround: 1
     attack: 1
     shield: 1
     faceDamageMultiplier: 1
-    sideDamageMultiplier: 1.5
-    backDamageMultiplier: 2
+    sideDamageMultiplier: 2
+    backDamageMultiplier: 3
     restDamageMultiplier: 6
     armorMultiplier: 1
     prefab: {fileID: 7026800704296965620, guid: ff99ea07affb94dfea946d8b36d43fdf,
@@ -69,7 +69,7 @@ MonoBehaviour:
     type: 3
     enemyCore: {x: 0, y: 1.05, z: 0}
   - name: "\u9EC4\u3046\u3055\u304E"
-    defaultLifeMax: 10
+    defaultLifeMax: 6
     isOnGround: 1
     attack: 1
     shield: 1
@@ -83,7 +83,7 @@ MonoBehaviour:
     type: 4
     enemyCore: {x: 0, y: 0.5, z: 0}
   - name: "\u7D2B\u30B3\u30A6\u30E2\u30EA"
-    defaultLifeMax: 10
+    defaultLifeMax: 5
     isOnGround: 0
     attack: 1
     shield: 1
@@ -97,13 +97,13 @@ MonoBehaviour:
     type: 5
     enemyCore: {x: 0, y: 1.5, z: 0}
   - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
-    defaultLifeMax: 10
+    defaultLifeMax: 6
     isOnGround: 1
     attack: 1
     shield: 1
     faceDamageMultiplier: 1
-    sideDamageMultiplier: 1.5
-    backDamageMultiplier: 2
+    sideDamageMultiplier: 2
+    backDamageMultiplier: 4
     restDamageMultiplier: 6
     armorMultiplier: 1
     prefab: {fileID: 6037122337985102315, guid: a03eb92f0820c44a88b400f98c5cfb97,
@@ -116,8 +116,8 @@ MonoBehaviour:
     attack: 1
     shield: 1
     faceDamageMultiplier: 1
-    sideDamageMultiplier: 1.5
-    backDamageMultiplier: 2
+    sideDamageMultiplier: 2
+    backDamageMultiplier: 3
     restDamageMultiplier: 6
     armorMultiplier: 1
     prefab: {fileID: 1234450232476947528, guid: 2a77346479df447fdbc8731795f33d55,
@@ -125,7 +125,7 @@ MonoBehaviour:
     type: 7
     enemyCore: {x: 0, y: 0.75, z: 0}
   - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093"
-    defaultLifeMax: 3
+    defaultLifeMax: 4
     isOnGround: 1
     attack: 1
     shield: 1
