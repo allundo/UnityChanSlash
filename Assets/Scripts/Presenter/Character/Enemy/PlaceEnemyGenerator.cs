@@ -6,8 +6,6 @@ public class PlaceEnemyGenerator : EnemyGenerator
 {
     [SerializeField] private EnemySpawnPoint prefabEnemySpawnPoint = default;
 
-    [SerializeField] private int numOfRandomSpawn = 12;
-
     private EnemyData enemyData;
     private EnemyTypesData enemyTypesData;
 
@@ -48,6 +46,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
     public void Place()
     {
         map.roomCenterPos.ForEach(pos => PlaceGenerator(pos));
+
+        int numOfRandomSpawn = (int)(map.Width * map.Height * 0.012f);
 
         if (numOfRandomSpawn < 4) return;
 

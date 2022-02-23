@@ -9213,7 +9213,6 @@ MonoBehaviour:
   spawnPoint: {x: 0, y: 0, z: 0}
   prefabEnemySpawnPoint: {fileID: 8761223803396366255, guid: c3040f26213444bb7a3c88c0d8bf2f7e,
     type: 3}
-  numOfRandomSpawn: 12
 --- !u!4 &1196509790
 Transform:
   m_ObjectHideFlags: 0
@@ -9750,7 +9749,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 20
+  m_Radius: 25
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1300454258
 MonoBehaviour:
