@@ -15,7 +15,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
-    [SerializeField] private DebugEnemyGenerator debugEnemyGenerator = default;
+    [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
 
     // Player info
     private Transform playerTransform = default;
@@ -156,7 +156,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void DebugStart()
     {
         Debug.Log("DEBUG MODE");
-        debugEnemyGenerator.gameObject.SetActive(true);
+        debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
 
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
@@ -229,8 +229,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         hidePlateHandler.SwitchWorldMap(worldMap);
         yield return new WaitForEndOfFrame();
 
-        debugEnemyGenerator.DestroyAll();
-        debugEnemyGenerator.gameObject.SetActive(false);
+        debugEnemyGenerators.ForEach(gen =>
+        {
+            gen.DestroyAll();
+            gen.gameObject.SetActive(false);
+        });
 
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
         bulletGeneratorLoader.DestroyAll();
