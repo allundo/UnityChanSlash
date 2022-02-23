@@ -145,7 +145,6 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
 
     public void Deselect(BaseEventData eventData = null)
     {
-
         isSelected = isButtonValid = false;
         ExecuteEvents.Execute<IDeselectHandler>(button.gameObject, eventData, (target, data) => target.OnDeselect(eventData));
         expandTween?.Pause();
