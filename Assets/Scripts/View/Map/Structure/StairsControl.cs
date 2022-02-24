@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public class StairsControl : MonoBehaviour
 {
+    [SerializeField] protected bool isDownStairs = true;
     [SerializeField] protected Renderer rendererWalls = default;
     protected Renderer rendererStairs;
 
@@ -14,5 +16,13 @@ public class StairsControl : MonoBehaviour
     {
         Util.SwitchMaterial(rendererStairs, materialStairs);
         if (materialWalls != null) Util.SwitchMaterial(rendererWalls, materialWalls);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerReactor>() != null)
+        {
+            GameManager.Instance.EnterStair(isDownStairs);
+        }
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4513989411858513432}
   - component: {fileID: 2265721019792593412}
   - component: {fileID: 8730571074934459041}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FX_UP_FLOOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4768,7 +4768,8 @@ GameObject:
   - component: {fileID: 2970738456269347425}
   - component: {fileID: 2970738456269347430}
   - component: {fileID: 5672300880596749038}
-  m_Layer: 0
+  - component: {fileID: 1195523143432343171}
+  m_Layer: 10
   m_Name: UpStairsN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5836,7 +5837,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f25fb8fdcc547c2a4cecd3e1b3b164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDownStairs: 0
   rendererWalls: {fileID: 0}
+--- !u!135 &1195523143432343171
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2970738456269347428}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!1 &4548963652319907651
 GameObject:
   m_ObjectHideFlags: 0
@@ -5850,7 +5865,7 @@ GameObject:
   - component: {fileID: 3217011197666931890}
   - component: {fileID: 3883069008029796515}
   - component: {fileID: 8729543672507329418}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StairUpDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}

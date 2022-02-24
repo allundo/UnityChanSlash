@@ -46,15 +46,6 @@ public abstract class PlayerCommand : Command
         playerInput.SetInputVisible(false);
         onCompleted.Add(() => playerInput.SetInputVisible(true));
     }
-
-    protected void EnterStairs(ITile destTile)
-    {
-        if (!(destTile is Stairs)) return;
-
-        tweenMove.DelayedCall(0.6f, () =>
-            GameManager.Instance.EnterStair((destTile as Stairs).isDownStairs)
-        ).Play();
-    }
 }
 
 public abstract class PlayerMove : PlayerCommand
@@ -84,8 +75,6 @@ public abstract class PlayerMove : PlayerCommand
         {
             return false;
         }
-
-        EnterStairs(DestTile);
 
         playingTween = tweenMove.Linear(GetDest).OnComplete(hidePlateHandler.Move).Play();
 
@@ -164,8 +153,6 @@ public class PlayerStartRunning : PlayerRun
         var dest = map.DestVec;
         var timeScale = dest.magnitude / TILE_UNIT;
 
-        EnterStairs(map.ForwardTile);
-
         playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
 
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
@@ -193,8 +180,6 @@ public class PlayerRun : PlayerDash
     {
         if (map.IsForwardMovable)
         {
-            EnterStairs(map.ForwardTile);
-
             playingTween = tweenMove.Linear(map.GetForward, 1f, hidePlateHandler.Move);
 
             playerAnim.speed.Float = TILE_UNIT / duration;
@@ -243,8 +228,6 @@ public class PlayerBrakeStop : PlayerBrake
 
         if (map.IsForwardMovable)
         {
-            EnterStairs(map.ForwardTile);
-
             playingTween = tweenMove.Brake(map.GetForward, 0.75f, hidePlateHandler.Move);
             validateTween = ValidateTween().Play();
             completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, 0.3f);
@@ -298,8 +281,6 @@ public class PlayerJump : PlayerCommand
             distance = 1;
             destTile = map.ForwardTile;
         }
-
-        EnterStairs(destTile);
 
         playerAnim.jump.Fire();
 

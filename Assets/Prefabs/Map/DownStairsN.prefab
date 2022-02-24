@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1780277762034702525}
   - component: {fileID: 1780277762034702522}
   - component: {fileID: 4578704803065865090}
-  m_Layer: 0
+  - component: {fileID: 1660206515101578302}
+  m_Layer: 10
   m_Name: DownStairsN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1086,7 +1087,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f25fb8fdcc547c2a4cecd3e1b3b164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDownStairs: 1
   rendererWalls: {fileID: 3829987005421692532}
+--- !u!135 &1660206515101578302
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780277762034702520}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!1 &1994314544926424065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,7 +1113,7 @@ GameObject:
   - component: {fileID: 234039777806889984}
   - component: {fileID: 7635550588068322821}
   - component: {fileID: 7664657375444672953}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FX_DOWN_FLOOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5854,7 +5869,7 @@ GameObject:
   - component: {fileID: 7033044719611486040}
   - component: {fileID: 7640633658543054117}
   - component: {fileID: 2264490039280681301}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StairDownDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6016,7 +6031,7 @@ GameObject:
   - component: {fileID: 3829987005421692532}
   - component: {fileID: 3829987005421692539}
   - component: {fileID: 3829987005421692538}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StairsWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6240,7 +6255,7 @@ GameObject:
   - component: {fileID: 3829987005976661759}
   - component: {fileID: 3829987005976661758}
   - component: {fileID: 3829987005976661757}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StairsHole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6402,7 +6417,7 @@ GameObject:
   - component: {fileID: 7385804193481348566}
   - component: {fileID: 8755289832348923172}
   - component: {fileID: 1294081609326871251}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: UnderGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6632,6 +6647,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BoardDownStair
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 03d8e3683a550471d98b254870070287,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d8e3683a550471d98b254870070287, type: 3}
