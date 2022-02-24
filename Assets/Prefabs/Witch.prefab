@@ -20174,7 +20174,6 @@ GameObject:
   - component: {fileID: 2605310810881789625}
   - component: {fileID: 8270791126481753283}
   - component: {fileID: 448080202027934680}
-  - component: {fileID: 2022644864710226035}
   - component: {fileID: 173471009557050624}
   - component: {fileID: 3925285196016408620}
   - component: {fileID: 4494748880000112786}
@@ -20184,6 +20183,7 @@ GameObject:
   - component: {fileID: 7348866445878775853}
   - component: {fileID: 8243631925803624697}
   - component: {fileID: 5407489785467007558}
+  - component: {fileID: 943698342954164601}
   m_Layer: 9
   m_Name: Witch
   m_TagString: Untagged
@@ -20244,21 +20244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acbb824790d8e4504b3bbfbc3b6ae5e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2022644864710226035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3417173071095157763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12b4f9311d7764dfe89cb24f480072f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dieSound: {fileID: 0}
-  emitVfx: {fileID: 6575503794801308097}
-  attackSnd: {fileID: 3772204711003452410}
 --- !u!114 &173471009557050624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20283,7 +20268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ae437baf05d45c59ac3dd531bf7674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
 --- !u!114 &4494748880000112786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20381,6 +20365,21 @@ MonoBehaviour:
   targetAttackSfx: {fileID: 8275294749153813388}
   targetShockVfx: {fileID: 2989641728139560717}
   targetTrailVfx: {fileID: 7534679643743841335}
+--- !u!114 &943698342954164601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3417173071095157763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b523150b15146a997419ee9bff4718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dieSound: {fileID: 0}
+  emitVfx: {fileID: 6575503794801308097}
+  attackSnd: {fileID: 3772204711003452410}
 --- !u!1 &3665483582086556155
 GameObject:
   m_ObjectHideFlags: 0
@@ -49951,7 +49950,7 @@ GameObject:
   - component: {fileID: 7534679643743841335}
   - component: {fileID: 2739762233206976891}
   m_Layer: 9
-  m_Name: FX_SOMERSAULT
+  m_Name: FX_TARGET_ATTACK_TRAIL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

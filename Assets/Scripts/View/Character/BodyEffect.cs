@@ -31,6 +31,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected AudioSource dieSound = null;
     protected DamageSndData sndData;
+    protected AnimationFX animFX;
 
     protected AudioSource SndDamage(AttackType type) => Util.Instantiate(sndData.Param((int)type).damage, transform);
     protected Dictionary<AttackType, AudioSource> damageSndSource = new Dictionary<AttackType, AudioSource>();
@@ -47,6 +48,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
         vfx.Play();
     }
     protected void StopBodyVFX(VFXType type) => crashVfxSource.LazyLoad(type, LoadBodyVfx)?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+    protected virtual void StopAnimFX() { }
 
     protected List<Material> flashMaterials = new List<Material>();
     protected Tween prevFlash;
@@ -55,6 +57,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
     {
         StoreMaterialColors();
         sndData = Resources.Load<DamageSndData>("DataAssets/Sound/DamageSndData");
+        animFX = GetComponent<AnimationFX>();
     }
 
     protected void PlayFlash(Tween flash)
@@ -79,6 +82,7 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
     {
         dieSound.PlayEx();
         StopBodyVFX(VFXType.Iced);
+        StopAnimFX();
     }
 
     public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)

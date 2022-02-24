@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-[RequireComponent(typeof(GhostEffect))]
+[RequireComponent(typeof(WitchEffect))]
 [RequireComponent(typeof(WitchStatus))]
 public class WitchReactor : GhostReactor, IUndeadReactor
 {

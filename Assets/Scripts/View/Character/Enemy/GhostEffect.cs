@@ -48,6 +48,11 @@ public class GhostEffect : MobEffect
         trailTarget = 0f;
     }
 
+    /// <summary>
+    /// Stop charging trail OnDie()
+    /// </summary>
+    protected override void StopAnimFX() => OnAttackEnd();
+
     public override void OnActive()
     {
         PlayFlash(FadeInTween());
