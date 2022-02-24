@@ -283,6 +283,8 @@ public class PlayerInput : ShieldInput
         jumpUI.Inactivate();
 
         guardUI.Inactivate();
+
+        handleIcon.Disable();
     }
 
     /// <summary>

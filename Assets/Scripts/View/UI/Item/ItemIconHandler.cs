@@ -113,7 +113,7 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler OnSubmit() => null;
 
-        public IItemIconHandler CleanUp()
+        public virtual IItemIconHandler CleanUp()
         {
             handler.currentSelected?.Resize(1f, 0.2f)?.Play();
             handler.currentSelected = null;
@@ -198,8 +198,18 @@ public class ItemIconHandler : IItemIconHandler
             currentSelected.SetIndex(pressedIndex);
             itemIndex.SetItem(pressedIndex, currentSelected);
 
-            return CleanUp();
+            return base.CleanUp();
         }
+
+        public override IItemIconHandler CleanUp()
+        {
+            onPutItem.OnNext(null);
+            var currentSelected = handler.currentSelected;
+            currentSelected.Move(itemIndex.UIPos(currentSelected.index)).SetDelay(0.1f).Play();
+            return BaseCleanUp();
+        }
+
+        protected IItemIconHandler BaseCleanUp() => base.CleanUp();
 
         public override IItemIconHandler OnDrag(Vector2 screenPos)
         {
@@ -230,6 +240,13 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
+            // Apply put action if possible
+            onPutApply.OnNext(handler.currentSelected);
+            return CleanUp();
+        }
+
+        public override IItemIconHandler CleanUp()
+        {
             var currentSelected = handler.currentSelected;
 
             // Reserve moving back to item inventory
@@ -237,9 +254,7 @@ public class ItemIconHandler : IItemIconHandler
             currentSelected.SetParent(selector.transform.parent, true);
             currentSelected.Move(itemIndex.UIPos(currentSelected.index)).Play();
 
-            // Apply put action if possible
-            onPutApply.OnNext(currentSelected);
-            return CleanUp();
+            return BaseCleanUp();
         }
 
         protected override IItemIconHandler Drag(Vector2 uiPos)

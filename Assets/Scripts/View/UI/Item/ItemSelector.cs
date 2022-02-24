@@ -45,7 +45,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void SetEnable(bool isEnable)
     {
-        image.enabled = isEnable;
+        image.enabled = enabled = isEnable;
     }
 
     public void SetRaycast(bool isEnable)
