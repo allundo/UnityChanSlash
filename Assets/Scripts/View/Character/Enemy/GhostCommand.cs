@@ -43,11 +43,12 @@ public class GhostThrough : EnemyForward
 
     public override IObservable<Unit> Execute()
     {
+        (react as IGhostReactor).OnHide();
+        SetSpeed();
+
         playingTween = LinearMove(GetDest);
         completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
-        SetSpeed();
-        (react as IGhostReactor).OnHide();
 
         input.Interrupt(MapUtil.IsOnPlayer(map.GetForward) ? attack : throughEnd, false);
 
