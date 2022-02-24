@@ -48,9 +48,12 @@ public abstract class Gauge : MonoBehaviour
         fillAmount = valueRatio;
     }
 
-    public virtual void UpdateGauge(float valueRatio)
+    public virtual void UpdateGauge(float valueRatio, bool isFlash = false)
     {
         gaugeTween?.Kill();
+
+        if (isFlash) gauge.color = new Color(1, 1, 1);
+
         gaugeTween = UpdateTween(valueRatio);
     }
 }

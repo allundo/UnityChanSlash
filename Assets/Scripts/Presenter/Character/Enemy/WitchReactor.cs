@@ -18,8 +18,6 @@ public class WitchReactor : GhostReactor, IUndeadReactor
     protected override void OnLifeChange(float life)
     {
         if (life <= 0.0f) witchInput.InputSleep();
-
-        lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
     }
 
     public void OnResurrection()

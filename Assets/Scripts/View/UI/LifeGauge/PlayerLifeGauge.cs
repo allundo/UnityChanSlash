@@ -25,12 +25,15 @@ public class PlayerLifeGauge : MonoBehaviour
         healEffect = new HealEffect(healImage, healVfx, rectTransform.sizeDelta.x);
     }
 
-    public void OnLifeChange(float life, float lifeMax)
+    public void UpdateLife(float life, float lifeMax, bool isFlash)
     {
-        float lifeRatio = life / lifeMax;
-
         UpdateLifeText(life, lifeMax);
-        greenGauge.UpdateGauge(lifeRatio);
+        UpdateGauge(life / lifeMax, isFlash);
+    }
+
+    private void UpdateGauge(float lifeRatio, bool isFlash)
+    {
+        greenGauge.UpdateGauge(lifeRatio, isFlash);
         redGauge.UpdateGauge(lifeRatio);
     }
 
@@ -41,13 +44,17 @@ public class PlayerLifeGauge : MonoBehaviour
     /// <param name="lifeRatio">Normalized life ratio after healing to the life max</param>
     public void OnHeal(float healRatio, float lifeRatio)
     {
-        if (lifeRatio != 1f) greenGauge.color = new Color(1, 1, 1);
+        UpdateGauge(lifeRatio, true);
         healEffect.PlayEffect(healRatio * 0.5f, lifeRatio);
     }
 
-    public void OnNoEffectHeal(float heal, float life)
+    public void OnNoEffectHeal(float heal, float prevLife, float lifeMax)
     {
-        bool isHealVisible = (int)((heal + life) * 10f) > (int)(life * 10f);
+        float life = heal + prevLife;
+
+        UpdateGauge(life / lifeMax, true);
+
+        bool isHealVisible = (int)(life * 10f) > (int)(prevLife * 10f);
         if (isHealVisible) smallHealSound.PlayEx();
     }
 
@@ -56,12 +63,17 @@ public class PlayerLifeGauge : MonoBehaviour
         lifeMaxSound.PlayEx();
     }
 
-    public void OnDamage(float damageRatio)
+    public void OnDamage(float damageRatio, float lifeRatio)
     {
-        if (damageRatio < 0.000001f) return;
+        if (damageRatio < 0.000001f)
+        {
+            UpdateGauge(lifeRatio, false);
+            return;
+        }
 
         healEffect.KillEffect();
-        greenGauge.color = new Color(1, 1, 1);
+
+        UpdateGauge(lifeRatio, true);
 
         shakeTween?.Kill();
         shakeTween = DamageShake(damageRatio);

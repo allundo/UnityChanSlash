@@ -27,8 +27,6 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
                 input.InputDie();
             }
         }
-
-        lifeGauge?.OnLifeChange(life, status.LifeMax.Value);
     }
 
     public void OnResurrection()
