@@ -6,6 +6,7 @@ public class EnemyLifeGauge : MonoBehaviour
     [SerializeField] private GaugeAlpha blackGauge = default;
     [SerializeField] private GaugeAlpha redGauge = default;
     [SerializeField] private AlphaRawImage brightness = default;
+    [SerializeField] private ParticleSystem dieVFX = default;
 
     private float lifeMax = 1.0f;
 
@@ -30,6 +31,8 @@ public class EnemyLifeGauge : MonoBehaviour
 
     public void OnLifeChange(float life)
     {
+        if (life <= 0f) dieVFX?.Play();
+
         float lifeRatio = Mathf.Max(life, 0f) / lifeMax;
 
         greenGauge.color = new Color(1, 1, 1);
