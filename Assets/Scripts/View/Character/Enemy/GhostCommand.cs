@@ -90,7 +90,7 @@ public class GhostAttackStart : FlyingAttackStart
 
     public GhostAttackStart(EnemyCommandTarget target, float duration) : base(target, duration)
     {
-        attackEnd = AttackEndCommand(target, duration);
+        attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
         attackKeep = new GhostAttackKeep(target, duration, attackEnd);
     }
 

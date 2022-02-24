@@ -30,8 +30,11 @@ public class WitchDoubleJump : WitchDoubleCommand
     {
         witchAnim.jumpOver.Fire();
 
+        Pos dest = map.GetJump;
+        map.MoveObjectOn(dest);
+
         playingTween = DOTween.Sequence()
-            .Join(tweenMove.Jump(map.GetJump, 1f, 1.6f))
+            .Join(tweenMove.Jump(dest, 1f, 1.6f))
             .Join(tweenMove.TurnLB.SetEase(Ease.Linear))
             .SetUpdate(false)
             .Play();
@@ -56,7 +59,10 @@ public class WitchDoubleBackStep : WitchDoubleCommand
     {
         witchAnim.backStep.Fire();
 
-        playingTween = tweenMove.Jump(map.GetBackward, 1f, 1f).Play();
+        Pos dest = map.GetBackward;
+        map.MoveObjectOn(dest);
+
+        playingTween = tweenMove.Jump(dest, 1f, 1f).Play();
 
         input.Interrupt(doubleAttack, false);
         return ObservableComplete();
@@ -100,7 +106,7 @@ public class WitchDoubleStart : WitchDoubleCommand
 
         witchReact.OnAttackStart();
 
-        target.input.Interrupt(attackKeep, false);
+        input.Interrupt(attackKeep, false);
 
         return ObservableComplete(attackTimeScale);
     }
@@ -111,7 +117,7 @@ public class WitchDoubleKeep : WitchDoubleCommand
 
     public WitchDoubleKeep(BulletCommandTarget target, float duration) : base(target, duration)
     {
-        attackEnd = new WitchDoubleEnd(target, duration);
+        attackEnd = new WitchDoubleEnd(target, duration * (1f - attackTimeScale));
     }
 
     public override IObservable<Unit> Execute()
@@ -124,7 +130,7 @@ public class WitchDoubleKeep : WitchDoubleCommand
 
         completeTween = attack.AttackSequence(duration).Play();
 
-        target.input.Interrupt(attackEnd, false);
+        input.Interrupt(attackEnd, false);
 
         return ObservableComplete();
     }
@@ -158,7 +164,10 @@ public class WitchDoubleLeave : WitchDoubleCommand
 
     public override IObservable<Unit> Execute()
     {
-        playingTween = tweenMove.Move(map.onTilePos, 1f, Ease.OutQuad).Play();
+        Pos dest = map.GetForward;
+        map.MoveObjectOn(dest);
+
+        playingTween = tweenMove.Move(dest, 1f, Ease.OutQuad).Play();
         react.OnDie();
 
         return ObservableComplete();
