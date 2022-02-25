@@ -6,12 +6,12 @@ public class RestLifeGauge : MonoBehaviour
     [SerializeField] private Gauge greenGauge = default;
     [SerializeField] private TextMeshProUGUI lifeText = default;
 
-    public void OnLifeChange(float life, float lifeMax, bool isFlash = false)
+    public void OnLifeChange(float life, float lifeMax)
     {
         float lifeRatio = life / lifeMax;
 
         UpdateLifeText(life, lifeMax);
-        greenGauge.UpdateGauge(lifeRatio, isFlash);
+        greenGauge.SetGauge(lifeRatio);
     }
 
     public void UpdateLifeText(float life, float lifeMax)
