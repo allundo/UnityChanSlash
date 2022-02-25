@@ -204,15 +204,15 @@ public class PlayerInput : ShieldInput
         // Is face to enemy
         if (forwardTile.IsEnemyOn)
         {
-            if (IsFightValid) isEnemyDetected.Value = true;
             fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.GetEnemyStatus());
             fightCircle.isForwardMovable = forwardTile.IsEnterable();
         }
         else
         {
-            isEnemyDetected.Value = false;
             fightCircle.Inactivate();
         }
+
+        isEnemyDetected.Value = fightCircle.isActive;
 
         bool isFaceToDoor = !IsDash && !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
 
