@@ -75,8 +75,11 @@ public class ItemInventory : MonoBehaviour
 
     public void SetEnable(bool isEnable)
     {
-        if (!isEnable) iconHandler.CleanUp();
-        selector.SetEnable(isEnable);
+        if (!isEnable)
+        {
+            iconHandler.CleanUp();
+            selector.Disable();
+        }
         panels.ForEach(panel => panel.enabled = isEnable);
         enabled = isEnable;
     }
