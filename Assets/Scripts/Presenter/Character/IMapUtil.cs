@@ -47,6 +47,7 @@ public interface IMapUtil
 
     bool IsObjectOn(Pos destPos);
     bool IsMovable(Pos destPos, IDirection dir = null);
+    bool IsViewable(Pos destPos);
     bool IsLeapable(Pos destPos);
 
     Vector3 CurrentVec3Pos { get; }

@@ -63,6 +63,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
 
     public bool IsObjectOn(Pos destPos) => map.GetTile(destPos).IsCharacterOn;
     public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
+    public bool IsViewable(Pos destPos) => map.GetTile(destPos).IsViewOpen;
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
     public Vector3 CurrentVec3Pos => tf.position;
@@ -97,7 +98,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
 
         return IsOnPlayer(forward)
             ? true
-            : !IsMovable(forward)
+            : !IsViewable(forward)
                 ? false
                 : IsPlayerFound(forward);
     }
