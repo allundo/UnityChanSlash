@@ -606,3 +606,19 @@ public class PlayerMessage : PlayerAction
         return true;
     }
 }
+
+public class PlayerIcedCommand : PlayerCommand
+{
+    public override int priority => 20;
+    public PlayerIcedCommand(PlayerCommandTarget target, float duration) : base(target, duration, 0.98f) { }
+
+    protected override bool Action()
+    {
+        anim.Pause();
+
+        completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
+        SetUIInvisible();
+        SetOnCompleted(() => react.OnMelt());
+        return true;
+    }
+}

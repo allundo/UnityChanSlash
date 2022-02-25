@@ -178,6 +178,7 @@ public class PlayerInput : ShieldInput
         base.InputDie();
         SetInputVisible(false);
     }
+
     public override void InputIced(float duration)
     {
         var current = commander.currentCommand;
@@ -191,6 +192,9 @@ public class PlayerInput : ShieldInput
 
         base.InputIced(duration);
     }
+
+    protected override ICommand GetIcedCommand(float duration)
+        => new PlayerIcedCommand(playerTarget, duration);
 
     /// <summary>
     /// Switches display of input UIs according to the situation for every frames.

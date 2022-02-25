@@ -122,10 +122,13 @@ public abstract class MobInput : MonoBehaviour, IInput
         // Delete Command queue only
         ClearAll(true);
         ICommand continuation = commander.PostponeCurrent();
-        ForceEnqueue(new IcedCommand(target, duration));
+        ForceEnqueue(GetIcedCommand(duration));
         if (continuation != null) ForceEnqueue(continuation);
         DisableInput();
     }
+
+    protected virtual ICommand GetIcedCommand(float duration)
+        => new IcedCommand(target, duration);
 
     public virtual void ValidateInput(bool isTriggerOnly = false)
     {
