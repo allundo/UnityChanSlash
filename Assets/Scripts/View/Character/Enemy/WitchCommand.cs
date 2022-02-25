@@ -27,7 +27,8 @@ public class WitchTargetAttack : WitchCommand
 
     protected override bool Action()
     {
-        witchReact.OnAppear();
+        if (!witchReact.OnAppear()) return false;
+
         witchAnim.targetAttack.Fire();
         playingTween = targetAttack.AttackSequence(duration).Play();
 

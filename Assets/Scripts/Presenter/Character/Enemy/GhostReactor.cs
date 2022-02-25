@@ -3,8 +3,8 @@ using UnityEngine;
 
 public interface IGhostReactor : IReactor
 {
-    void OnHide();
-    void OnAppear();
+    bool OnHide();
+    bool OnAppear();
     void OnAttackStart();
     void OnAttackEnd();
 }
@@ -29,13 +29,14 @@ public class GhostReactor : EnemyReactor, IGhostReactor
         return base.OnDamage(attack, dir, type);
     }
 
-    public void OnHide()
+    public bool OnHide()
     {
-        if (!status.isOnGround) return;
+        if (!status.isOnGround) return true;
 
         map.RemoveObjectOn();
         ghostStatus.SetOnGround(false);
         ghostEffect.OnHide();
+        return true;
     }
     public void OnAttackStart()
     {
@@ -45,13 +46,15 @@ public class GhostReactor : EnemyReactor, IGhostReactor
 
     public void OnAttackEnd() => ghostEffect.OnAttackEnd();
 
-    public void OnAppear()
+    public bool OnAppear()
     {
-        if (status.isOnGround || map.OnTile.OnCharacterDest != null) return;
+        if (status.isOnGround) return true;
+        if (map.OnTile.OnCharacterDest != null) return false;
 
         map.RemoveObjectOn();
         ghostStatus.SetOnGround(true);
         map.SetObjectOn(map.onTilePos);
         ghostEffect.OnAppear();
+        return true;
     }
 }
