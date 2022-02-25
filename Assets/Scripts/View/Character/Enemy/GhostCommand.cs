@@ -161,10 +161,13 @@ public class GhostAttackEnd : FlyingAttackEnd
     public override IObservable<Unit> Execute()
     {
         (react as IGhostReactor).OnAttackEnd();
-        if (map.IsForwardMovable || IsBackwardMovable || IsRightMovable || IsLeftMovable)
-        {
-            (react as IGhostReactor).OnAppear();
-        }
-        return base.Execute();
+
+        // Apply enemyMap.MoveObjectOn()
+        var observableComplete = base.Execute();
+
+        // Appear if destination tile is enterable
+        (react as IGhostReactor).OnAppear();
+
+        return observableComplete;
     }
 }
