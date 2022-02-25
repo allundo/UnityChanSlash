@@ -5,6 +5,7 @@ using DG.Tweening;
 public class Magic : MonoBehaviour
 {
     [SerializeField] protected BulletType[] types;
+    public BulletType PrimaryType => types[0];
 
     public Dictionary<BulletType, ILauncher> launcher { get; protected set; } = new Dictionary<BulletType, ILauncher>();
 

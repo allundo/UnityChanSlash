@@ -22,7 +22,7 @@ public class EnemyAIInput : MobInput
         turnR = new EnemyTurnR(enemyTarget, 16f);
         attack = new EnemyAttack(enemyTarget, 100f);
         doubleAttack = new EnemyDoubleAttack(enemyTarget, 100f);
-        fire = new EnemyFire(enemyTarget, 108f);
+        fire = new EnemyFire(enemyTarget, 108f, enemyTarget.magic?.PrimaryType ?? BulletType.FireBall);
     }
 
     protected T RandomChoice<T>(params T[] choices) => choices[Random.Range(0, choices.Length)];
