@@ -70,6 +70,9 @@ public interface IMapUtil
     bool IsPlayerFound();
     bool IsPlayerFound(Pos pos);
 
+    Pos SearchSpaceNearBy(int size = 2);
+    Pos SearchSpaceNearBy(Pos targetPos, int size = 2);
+
     bool IsPlayerForward { get; }
     bool IsPlayerLeft { get; }
     bool IsPlayerRight { get; }

@@ -11,6 +11,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     protected ICommand backStep;
     protected ICommand ice;
     protected ICommand magic;
+    protected ICommand teleport;
 
     protected override void SetCommands()
     {
@@ -31,6 +32,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         fire = new WitchTripleFire(enemyTarget, 72f);
         ice = new WitchDoubleIce(enemyTarget, 72f);
         magic = new WitchMagic(enemyTarget, 108f);
+        teleport = new WitchTeleport(enemyTarget, 84f);
 
         sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
     }
@@ -97,7 +99,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         }
         else
         {
-            if (map.GetTile(forward2).IsViewOpen) return throughForward;
+            if (map.GetTile(forward2).IsViewOpen) return RandomChoice(throughForward, teleport);
 
             // Turn if forward unmovable and left or right movable
             if (map.IsMovable(left)) return turnL;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Map の Tile の状態を更新するメソッドを公開 <br>
@@ -101,6 +102,24 @@ public class MapUtil : MonoBehaviour, IMapUtil
             : !IsViewable(forward)
                 ? false
                 : IsPlayerFound(forward);
+    }
+
+    public Pos SearchSpaceNearBy(int range = 2) => SearchSpaceNearBy(GameManager.Instance.PlayerPos, range);
+
+    public Pos SearchSpaceNearBy(Pos targetPos, int range = 2)
+    {
+        var destCandidates = new List<Pos>();
+
+        for (int j = targetPos.y - range; j < targetPos.y + range; j++)
+        {
+            for (int i = targetPos.x - range; i < targetPos.x + range; i++)
+            {
+                var pos = new Pos(i, j);
+                if (map.GetTile(pos).IsEnterable()) destCandidates.Add(pos);
+            }
+        }
+
+        return destCandidates.Count > 0 ? destCandidates.GetRandom() : new Pos();
     }
 
     public bool IsPlayerForward => MapUtil.IsOnPlayer(GetForward);

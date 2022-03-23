@@ -160,6 +160,12 @@ public class TweenMove
             .AppendInterval(stunDuration + wakeUpDuration);
     }
 
+    public Tween Teleport(Pos destPos)
+    {
+        map.MoveObjectOn(destPos);
+        return DelayedCall(0.5f, () => tf.position = map.WorldPos(destPos));
+    }
+
     /// <summary>
     /// Reserve processing after command duration
     /// </summary>

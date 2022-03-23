@@ -206,6 +206,29 @@ public class WitchMagic : WitchCommand
     }
 }
 
+public class WitchTeleport : WitchCommand
+{
+    public WitchTeleport(EnemyCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        Pos destPos = map.SearchSpaceNearBy();
+
+        if (destPos.IsNull) return false;
+
+        completeTween = DOTween.Sequence()
+            .AppendCallback(() => witchAnim.teleport.Bool = true)
+            .Join(tweenMove.Teleport(destPos))
+            .InsertCallback(0.25f * duration, () => (react as GhostReactor).OnHide())
+            .InsertCallback(0.5f * duration, () => witchAnim.teleport.Bool = false)
+            .InsertCallback(0.75f * duration, () => (react as GhostReactor).OnAppear())
+            .SetUpdate(false)
+            .Play();
+
+        return true;
+    }
+}
+
 public class WitchDoubleAttackLaunch : FlyingAttack
 {
     protected ICommand doubleAttackStart;
