@@ -7,12 +7,14 @@ public class WitchReactor : GhostReactor, IUndeadReactor
 {
     protected WitchAIInput witchInput;
     protected WitchStatus witchStatus;
+    protected WitchEffect witchEffect;
 
     protected override void Awake()
     {
         base.Awake();
         witchStatus = status as WitchStatus;
         witchInput = input as WitchAIInput;
+        witchEffect = effect as WitchEffect;
     }
 
     protected override void OnLifeChange(float life)
@@ -34,6 +36,17 @@ public class WitchReactor : GhostReactor, IUndeadReactor
 
     public void OnTeleport(float duration)
     {
-        (effect as WitchEffect).TeleportWipe(duration);
+        witchEffect.TeleportWipe(duration);
+        witchEffect.TeleportFX();
+    }
+
+    public void OnTeleportDest()
+    {
+        witchEffect.TeleportDestFX();
+    }
+
+    public void OnTeleportEnd()
+    {
+        witchEffect.OnTeleportEnd();
     }
 }

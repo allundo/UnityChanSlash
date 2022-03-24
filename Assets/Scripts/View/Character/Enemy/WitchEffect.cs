@@ -3,6 +3,10 @@ using DG.Tweening;
 
 public class WitchEffect : GhostEffect
 {
+    [SerializeField] protected ParticleSystem teleportVfx = default;
+    [SerializeField] protected AudioSource teleportSnd = default;
+    [SerializeField] protected ParticleSystem teleportEndVfx = default;
+    [SerializeField] protected AudioSource teleportEndSnd = default;
     protected Tween teleportWipeTween;
     protected int propClipY;
     protected float clipY
@@ -31,6 +35,22 @@ public class WitchEffect : GhostEffect
             .SetLoops(2, LoopType.Yoyo)
             .SetUpdate(false)
             .Play();
+    }
+
+    public void TeleportFX()
+    {
+        PlayBodyVFX(VFXType.Teleport, transform.position);
+    }
+
+    public void TeleportDestFX()
+    {
+        StopBodyVFX(VFXType.Teleport);
+        PlayBodyVFX(VFXType.TeleportDest, transform.position);
+    }
+
+    public void OnTeleportEnd()
+    {
+        StopBodyVFX(VFXType.TeleportDest);
     }
 
     /// <summary>

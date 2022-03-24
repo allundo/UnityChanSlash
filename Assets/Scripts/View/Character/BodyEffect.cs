@@ -38,16 +38,29 @@ public class BodyEffect : MonoBehaviour, IBodyEffect
     protected void PlayDamage(AttackType type) => damageSndSource.LazyLoad(type, SndDamage).PlayEx();
 
     protected ParticleSystem LoadBodyVfx(VFXType type) => Util.Instantiate(GameManager.Instance.GetPrefabVFX(type));
-    protected Dictionary<VFXType, ParticleSystem> crashVfxSource = new Dictionary<VFXType, ParticleSystem>();
+    protected Dictionary<VFXType, ParticleSystem> bodyVfxSource = new Dictionary<VFXType, ParticleSystem>();
     protected void PlayBodyVFX(VFXType type, Vector3 pos)
     {
-        var vfx = crashVfxSource.LazyLoad(type, LoadBodyVfx);
+        var vfx = bodyVfxSource.LazyLoad(type, LoadBodyVfx);
         if (vfx == null) return;
 
         vfx.transform.position = pos;
         vfx.Play();
     }
-    protected void StopBodyVFX(VFXType type) => crashVfxSource.LazyLoad(type, LoadBodyVfx)?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+    protected void StopBodyVFX(VFXType type) => bodyVfxSource.LazyLoad(type, LoadBodyVfx)?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+    protected AudioSource LoadBodySnd(SNDType type) => Util.Instantiate(GameManager.Instance.GetPrefabSND(type));
+    protected Dictionary<SNDType, AudioSource> bodySndSource = new Dictionary<SNDType, AudioSource>();
+    protected void PlayBodySnd(SNDType type, Vector3 pos)
+    {
+        var snd = bodySndSource.LazyLoad(type, LoadBodySnd);
+        if (snd == null) return;
+
+        snd.transform.position = pos;
+        snd.PlayEx();
+    }
+    protected void StopBodySND(SNDType type) => bodySndSource.LazyLoad(type, LoadBodySnd).StopEx();
+
     protected virtual void StopAnimFX() { }
 
     protected List<Material> flashMaterials = new List<Material>();

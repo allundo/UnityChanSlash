@@ -222,11 +222,13 @@ public class WitchTeleport : WitchCommand
         completeTween = DOTween.Sequence()
             .Join(tweenMove.Teleport(destPos))
             .InsertCallback(0.125f * duration, () => witchReact.OnHide())
-            .InsertCallback(0.5f * duration, () =>
+            .InsertCallback(0.50f * duration, () =>
             {
                 witchAnim.teleport.Bool = false;
                 witchReact.OnAppear();
+                witchReact.OnTeleportDest();
             })
+            .InsertCallback(duration, witchReact.OnTeleportEnd)
             .SetUpdate(false)
             .Play();
 

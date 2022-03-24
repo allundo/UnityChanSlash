@@ -35,6 +35,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public ParticleSystem GetPrefabVFX(VFXType type) => prefabVFXs[type];
     private Dictionary<VFXType, ParticleSystem> prefabVFXs;
 
+    public AudioSource GetPrefabSND(SNDType type) => prefabSNDs[type];
+    private Dictionary<SNDType, AudioSource> prefabSNDs;
+
     public void Pause(bool isHideUIs = false)
     {
         if (isPaused) return;
@@ -78,9 +81,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         prefabVFXs = new Dictionary<VFXType, ParticleSystem>()
         {
-            { VFXType.Iced,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICED")        },
-            { VFXType.IceCrash, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")   },
+            { VFXType.Iced,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICED")            },
+            { VFXType.IceCrash,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")       },
+            { VFXType.Teleport,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT")        },
+            { VFXType.TeleportDest, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")   },
         };
+
+        prefabSNDs = new Dictionary<SNDType, AudioSource>();
     }
 
     void Start()

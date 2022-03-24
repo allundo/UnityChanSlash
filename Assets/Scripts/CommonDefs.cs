@@ -465,4 +465,12 @@ public enum VFXType
 {
     Iced = 0,
     IceCrash,
+    Teleport,
+    TeleportDest,
+}
+
+public enum SNDType
+{
+    Teleport = 0,
+    TeleportDest,
 }
