@@ -136,9 +136,7 @@ public class RabbitSomersault : RabbitAttack
         playingTween = DOTween.Sequence()
             .AppendInterval(0.1f * duration)
             .Join(tweenMove.JumpRelative(map.GetBackwardVector(), 0.4f).SetEase(Ease.InQuart))
-            .AppendInterval(0.15f * duration)
-            .AppendCallback(() => enemyMap.MoveOnEnemy(backward))
-            .AppendInterval(0.5f * duration)
+            .InsertCallback(0.65f * duration, () => enemyMap.MoveOnEnemy(backward))
             .Play();
 
         return true;
@@ -194,10 +192,8 @@ public class RabbitWakeUp : RabbitCommand
         playingTween = tweenMove.Jump(map.DestVec3Pos, 0.25f, 0.25f).SetEase(Ease.InQuad).SetDelay(duration * wakeUpTiming).Play();
 
         completeTween = DOTween.Sequence()
-            .AppendInterval(duration * wakeUpTiming)
-            .AppendCallback(() => rabbitAnim.icedFall.Bool = false)
-            .AppendInterval(duration * (1f - wakeUpTiming) * 0.5f)
-            .AppendCallback(() => react.OnWakeUp())
+            .InsertCallback(duration * wakeUpTiming, () => rabbitAnim.icedFall.Bool = false)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, react.OnWakeUp)
             .SetUpdate(false)
             .Play();
 

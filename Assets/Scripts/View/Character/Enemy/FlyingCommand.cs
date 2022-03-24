@@ -192,10 +192,8 @@ public class FlyingWakeUp : FlyingCommand
             .Play();
 
         completeTween = DOTween.Sequence()
-            .AppendInterval(duration * wakeUpTiming)
-            .AppendCallback(() => flyingAnim.icedFall.Bool = false)
-            .AppendInterval(duration * (1f - wakeUpTiming) * 0.5f)
-            .AppendCallback(() => react.OnWakeUp())
+            .InsertCallback(duration * wakeUpTiming, () => flyingAnim.icedFall.Bool = false)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, react.OnWakeUp)
             .SetUpdate(false)
             .Play();
 

@@ -150,16 +150,15 @@ public class PlayerStartRunning : PlayerRun
 
     public override IObservable<Unit> Execute()
     {
-        var dest = map.DestVec;
-        var timeScale = dest.magnitude / TILE_UNIT;
+        var dest = map.DestVec;                     // Remaining vector to front tile
+        var timeScale = dest.magnitude / TILE_UNIT; // Remaining distance rate
 
         playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
 
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
         completeTween = DOTween.Sequence()
             .Append(ToSpeed(TILE_UNIT / duration, 0.25f))
-            .AppendInterval(duration * (timeScale - 0.25f))
-            .AppendCallback(() => playerAnim.speed.Float = 0f)
+            .InsertCallback(duration * timeScale, () => playerAnim.speed.Float = 0f)
             .Play();
 
         target.input.Interrupt(run, false);
@@ -334,10 +333,8 @@ public class PlayerWakeUp : PlayerCommand
     protected override bool Action()
     {
         completeTween = DOTween.Sequence()
-            .AppendInterval(duration * wakeUpTiming)
-            .AppendCallback(() => playerAnim.icedFall.Bool = false)
-            .AppendInterval(duration * (1f - wakeUpTiming) * 0.5f)
-            .AppendCallback(() => react.OnWakeUp())
+            .InsertCallback(duration * wakeUpTiming, () => playerAnim.icedFall.Bool = false)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, () => react.OnWakeUp())
             .SetUpdate(false)
             .Play();
 
@@ -471,10 +468,8 @@ public abstract class PlayerAttack : PlayerAction
         if (cancelStart < 1f)
         {
             cancelTimer = DOTween.Sequence()
-                .AppendInterval(cancelStart * duration * FRAME_UNIT)
-                .AppendCallback(() => playerAnim.cancel.Bool = true)
-                .AppendInterval((1 - cancelStart) * duration * FRAME_UNIT)
-                .AppendCallback(() => playerAnim.cancel.Bool = false)
+                .InsertCallback(cancelStart * duration * FRAME_UNIT, () => playerAnim.cancel.Bool = true)
+                .InsertCallback((1 + cancelStart) * duration * FRAME_UNIT, () => playerAnim.cancel.Bool = false)
                 .AsReusable(target.gameObject);
         }
     }

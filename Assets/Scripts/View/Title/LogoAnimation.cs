@@ -64,10 +64,9 @@ public class LogoAnimation : MonoBehaviour
                     nowLoading.Inactivate();
                 })
                 .AppendInterval(0.1f)
-                .AppendCallback(() => vfxRain?.Pause())
-                .AppendInterval(0.1f)
                 .Append(rtBackGround.DOAnchorPos(new Vector2(2820f, 0), 1.8f))
                 .Join(DOVirtual.DelayedCall(0.3f, () => vfxRain?.Clear()))
+                .InsertCallback(0.1f, () => vfxRain?.Pause())
                 .OnComplete(() => rtBackGround.transform.gameObject.SetActive(false));
     }
 }

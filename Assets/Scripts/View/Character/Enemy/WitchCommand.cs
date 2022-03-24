@@ -55,10 +55,8 @@ public class WitchJumpOver : WitchCommand
         playingTween = DOTween.Sequence()
             .Join(tweenMove.Jump(destPos, 1f, 1.6f))
             .Join(tweenMove.TurnLB.SetEase(Ease.Linear))
-            .AppendInterval(0.4f * duration)
-            .AppendCallback(() => enemyMap.MoveOnEnemy())
-            .AppendInterval(0.4f * duration)
-            .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.4f * duration, () => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.8f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
 
@@ -107,8 +105,7 @@ public class WitchBackStep : WitchCommand
 
         playingTween = DOTween.Sequence()
             .Join(tweenMove.Jump(destPos, 1f, 1f))
-            .AppendInterval(0.51f * duration)
-            .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.51f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
 
