@@ -31,4 +31,9 @@ public class WitchReactor : GhostReactor, IUndeadReactor
         map.ResetTile();
         bodyCollider.enabled = false;
     }
+
+    public void OnTeleport(float duration)
+    {
+        (effect as WitchEffect).TeleportWipe(duration);
+    }
 }

@@ -8,20 +8,20 @@ public class GhostEffect : MobEffect
     protected Vector3 prevPos;
     protected float trailStrength = 0f;
     protected float trailTarget = 0f;
-    protected int propID;
+    protected int propTrailDir;
 
 
     protected override void Awake()
     {
         base.Awake();
-        propID = Shader.PropertyToID("_TrailDir");
+        propTrailDir = Shader.PropertyToID("_TrailDir");
     }
 
     protected virtual void FixedUpdate()
     {
         trailStrength = 0.04f * trailTarget + 0.96f * trailStrength;
         var dir = (prevPos - transform.position).normalized * trailStrength;
-        flashMaterials.ForEach(mat => mat.SetVector(propID, dir));
+        flashMaterials.ForEach(mat => mat.SetVector(propTrailDir, dir));
         prevPos = transform.position;
     }
 
@@ -57,7 +57,7 @@ public class GhostEffect : MobEffect
     {
         PlayFlash(FadeInTween());
         trailTarget = 0f;
-        flashMaterials.ForEach(mat => mat.SetVector(propID, Vector4.zero));
+        flashMaterials.ForEach(mat => mat.SetVector(propTrailDir, Vector4.zero));
         prevPos = transform.position;
     }
 }

@@ -216,12 +216,17 @@ public class WitchTeleport : WitchCommand
 
         if (destPos.IsNull) return false;
 
+        witchAnim.teleport.Bool = true;
+        witchReact.OnTeleport(duration);
+
         completeTween = DOTween.Sequence()
-            .AppendCallback(() => witchAnim.teleport.Bool = true)
             .Join(tweenMove.Teleport(destPos))
-            .InsertCallback(0.25f * duration, () => (react as GhostReactor).OnHide())
-            .InsertCallback(0.5f * duration, () => witchAnim.teleport.Bool = false)
-            .InsertCallback(0.75f * duration, () => (react as GhostReactor).OnAppear())
+            .InsertCallback(0.125f * duration, () => witchReact.OnHide())
+            .InsertCallback(0.5f * duration, () =>
+            {
+                witchAnim.teleport.Bool = false;
+                witchReact.OnAppear();
+            })
             .SetUpdate(false)
             .Play();
 
