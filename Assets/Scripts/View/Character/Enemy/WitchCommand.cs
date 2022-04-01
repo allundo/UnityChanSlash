@@ -223,6 +223,7 @@ public class WitchTeleport : WitchCommand
             {
                 witchAnim.teleport.Bool = false;
                 witchReact.OnAppear();
+                enemyMap.MoveOnEnemy(destPos);
                 witchReact.OnTeleportDest();
             })
             .InsertCallback(duration, witchReact.OnTeleportEnd)

@@ -30,6 +30,7 @@ public class SkeletonWizTeleport : SkeletonWizCommand
             .InsertCallback(0.50f * duration, () =>
             {
                 magicianAnim.teleport.Bool = false;
+                enemyMap.MoveOnEnemy(destPos);
                 skeletonWizReact.OnTeleportDest();
             })
             .InsertCallback(duration, skeletonWizReact.OnTeleportEnd)
