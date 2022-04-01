@@ -85,9 +85,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             { VFXType.IceCrash,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")       },
             { VFXType.Teleport,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT")        },
             { VFXType.TeleportDest, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")   },
+            { VFXType.Resurrection, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")    },
         };
 
-        prefabSNDs = new Dictionary<SNDType, AudioSource>();
+        prefabSNDs = new Dictionary<SNDType, AudioSource>()
+        {
+            { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL")    },
+        };
     }
 
     void Start()

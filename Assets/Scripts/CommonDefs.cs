@@ -467,10 +467,12 @@ public enum VFXType
     IceCrash,
     Teleport,
     TeleportDest,
+    Resurrection,
 }
 
 public enum SNDType
 {
     Teleport = 0,
     TeleportDest,
+    ResurrectionSkull,
 }
