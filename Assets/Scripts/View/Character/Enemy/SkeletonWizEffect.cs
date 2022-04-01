@@ -39,12 +39,14 @@ public class SkeletonWizEffect : UndeadEffect
     public void TeleportFX()
     {
         PlayBodyVFX(VFXType.Teleport, transform.position);
+        PlayBodySnd(SNDType.Teleport, transform.position);
     }
 
     public void TeleportDestFX()
     {
         StopBodyVFX(VFXType.Teleport);
         PlayBodyVFX(VFXType.TeleportDest, transform.position);
+        PlayBodySnd(SNDType.TeleportDest, transform.position);
     }
 
     public void OnTeleportEnd()

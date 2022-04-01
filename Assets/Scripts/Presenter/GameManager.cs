@@ -90,7 +90,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         prefabSNDs = new Dictionary<SNDType, AudioSource>()
         {
-            { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL")    },
+            { SNDType.Teleport,             Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT")          },
+            { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")     },
+            { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
         };
     }
 
