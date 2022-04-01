@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class WitchEffect : GhostEffect
+public class SkeletonWizEffect : UndeadEffect
 {
     protected Tween teleportWipeTween;
     protected int propClipY;
@@ -27,10 +27,13 @@ public class WitchEffect : GhostEffect
     {
         teleportWipeTween = DOTween.Sequence()
             .AppendInterval(0.1f * duration)
-            .Append(DOVirtual.Float(0f, 2.5f, 0.4f * duration, value => clipY = value).SetEase(Ease.InCubic))
+            .Append(DOVirtual.Float(0f, 2.5f, 0.35f * duration, value => clipY = value).SetEase(Ease.InCubic))
+            .AppendInterval(0.05f * duration)
             .SetLoops(2, LoopType.Yoyo)
             .SetUpdate(false)
             .Play();
+
+        PlayFlash(DOTween.Sequence().Append(FadeOutTween(0.5f * duration)).Append(FadeInTween(0.5f * duration)).SetUpdate(false));
     }
 
     public void TeleportFX()
@@ -50,12 +53,10 @@ public class WitchEffect : GhostEffect
     }
 
     /// <summary>
-    /// Stop charging trail and target attack trail OnDie()
+    /// Stop teleport motion OnDie()
     /// </summary>
     protected override void StopAnimFX()
     {
-        OnAttackEnd();
-        (animFX as WitchAnimFX).OnTrailEnd();
         teleportWipeTween?.Complete();
     }
 }

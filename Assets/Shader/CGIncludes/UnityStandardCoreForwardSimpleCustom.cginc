@@ -31,7 +31,7 @@ struct VertexOutputBaseSimple
         half3 tangentSpaceEyeVec        : TEXCOORD7;
     #endif
 #endif
-#if UNITY_REQUIRE_FRAG_WORLDPOS
+#if UNITY_REQUIRE_FRAG_WORLDPOS || defined(_CLIP_Y)
     float3 posWorld                     : TEXCOORD8;
 #endif
 
@@ -134,6 +134,10 @@ VertexOutputBaseSimple vertForwardBaseSimple (VertexInput v)
 
 FragmentCommonData FragmentSetupSimple(VertexOutputBaseSimple i)
 {
+    #ifdef _CLIP_Y
+        clip(i.posWorld.y - _ClipY);
+    #endif
+
     half alpha = Alpha(i.tex.xy);
     #ifdef _ALPHATEST_ON
         #ifdef _DITHER_ALPHA
@@ -210,6 +214,10 @@ half3 BRDF3DirectSimple(half3 diffColor, half3 specColor, half smoothness, half 
 
 half4 fragForwardBaseSimpleInternal (VertexOutputBaseSimple i)
 {
+    #ifdef _CLIP_Y
+        clip(i.posWorld.y - _ClipY);
+    #endif
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     FragmentCommonData s = FragmentSetupSimple(i);
@@ -366,6 +374,10 @@ half3 LightSpaceNormal(VertexOutputForwardAddSimple i, FragmentCommonData s)
 
 half4 fragForwardAddSimpleInternal (VertexOutputForwardAddSimple i)
 {
+    #ifdef _CLIP_Y
+        clip(i.posWorld.y - _ClipY);
+    #endif
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     FragmentCommonData s = FragmentSetupSimpleAdd(i);

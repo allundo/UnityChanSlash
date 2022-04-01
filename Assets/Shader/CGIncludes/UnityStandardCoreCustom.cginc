@@ -393,7 +393,7 @@ struct VertexOutputForwardBase
     UNITY_LIGHTING_COORDS(6,7)
 
     // next ones would not fit into SM2.0 limits, but they are always for SM3.0+
-#if UNITY_REQUIRE_FRAG_WORLDPOS && !UNITY_PACK_WORLDPOS_WITH_TANGENT
+#if defined(_CLIP_Y) || UNITY_REQUIRE_FRAG_WORLDPOS && !UNITY_PACK_WORLDPOS_WITH_TANGENT
     float3 posWorld                     : TEXCOORD8;
 #endif
 
@@ -423,6 +423,11 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
             o.posWorld = posWorld.xyz;
         #endif
     #endif
+
+    #ifdef _CLIP_Y
+        o.posWorld = posWorld.xyz;
+    #endif
+
     o.pos = UnityObjectToClipPos(v.vertex);
 
     o.tex = TexCoords(v);
@@ -464,6 +469,10 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
 
 half4 fragForwardBaseInternal (VertexOutputForwardBase i)
 {
+    #ifdef _CLIP_Y
+        clip(i.posWorld.y - _ClipY);
+    #endif
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     FRAGMENT_SETUP(s)
@@ -571,6 +580,11 @@ VertexOutputForwardAdd vertForwardAdd (VertexInput v)
 
 half4 fragForwardAddInternal (VertexOutputForwardAdd i)
 {
+
+    #ifdef _CLIP_Y
+        clip(i.posWorld.y - _ClipY);
+    #endif
+
     UNITY_APPLY_DITHER_CROSSFADE(i.pos.xy);
 
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);

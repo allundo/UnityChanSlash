@@ -60,6 +60,10 @@ sampler2D   _DitherMaskLOD2D;
 half4       _AdditiveColor;
 #endif
 
+#ifdef _CLIP_Y
+float       _ClipY;
+#endif
+
 //-------------------------------------------------------------------------------------
 // Input functions
 

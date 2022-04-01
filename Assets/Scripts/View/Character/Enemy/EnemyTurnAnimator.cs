@@ -1,4 +1,10 @@
-public class EnemyTurnAnimator : EnemyAnimator
+public interface IEnemyTurnAnimator : IEnemyAnimator
+{
+    MobAnimator.AnimatorTrigger turnR { get; }
+    MobAnimator.AnimatorTrigger turnL { get; }
+}
+
+public class EnemyTurnAnimator : EnemyAnimator, IEnemyTurnAnimator
 {
     public AnimatorTrigger turnR { get; protected set; }
     public AnimatorTrigger turnL { get; protected set; }

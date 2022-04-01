@@ -451,6 +451,7 @@ public enum EnemyType
     VioletBat,
     VioletGhost,
     SkeletonSoldier,
+    SkeletonWizard,
     Witch,
 }
 
