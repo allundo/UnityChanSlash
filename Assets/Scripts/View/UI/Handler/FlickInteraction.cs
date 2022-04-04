@@ -82,21 +82,21 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     }
 
     /// <summary>
-    /// Fade-out flicking button but reactivate again on complete.
+    /// Fade-out flicking button but reactivate again on complete if the UI is still active.
     /// </summary>
-    public Tween FadeOutActive(float duration = 0.2f)
+    public void FadeOutActive(float duration = 0.2f)
     {
+        if (!isActive) return;
+        isActive = false;
+
         fadeOutActive = fade.ToAlpha(0, duration)
-            .OnPlay(() => isActive = false)
             .OnComplete(() =>
             {
                 InitImage();
                 Clear();
                 FadeIn(0.1f).Play();
-            });
-
-        return DOTween.Sequence()
-            .AppendCallback(() => { if (isActive) fadeOutActive?.Play(); });
+            })
+            .Play();
     }
 
     private IObservable<T> Merge<T>(Func<FlickDirection, IObservable<T>> observable)
@@ -152,7 +152,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
 
         ui.MoveBack(duration).Play();
         ui.Resize(0.5f, duration).Play();
-        FadeOutActive(duration).Play();
+        FadeOutActive(duration);
     }
 
     public override void Activate()
@@ -308,7 +308,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 .Append(ui.MoveOffset(Destination, duration))
                 .Join(fade.In(duration))
                 .Append(ui.Resize(1.5f, duration))
-                .Join(flick.FadeOutActive(duration))
+                .InsertCallback(duration, () => flick.FadeOutActive(duration))
                 .Play();
 
             FlickOnNext();
