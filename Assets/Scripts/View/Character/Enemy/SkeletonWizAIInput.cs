@@ -5,7 +5,7 @@ using UnityEngine;
 public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
 {
     protected ICommand sleep;
-    protected ICommand magic;
+    protected ICommand ice;
     protected ICommand teleport;
 
     protected override void SetCommands()
@@ -19,7 +19,8 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         turnL = new EnemyTurnAnimL(enemyTarget, 16f);
         turnR = new EnemyTurnAnimR(enemyTarget, 16f);
 
-        fire = new EnemyFire(enemyTarget, 72f, BulletType.IceBullet);
+        fire = new EnemyFire(enemyTarget, 72f, BulletType.DarkHound);
+        ice = new EnemyFire(enemyTarget, 72f, BulletType.IceBullet);
         teleport = new SkeletonWizTeleport(enemyTarget, 84f);
 
         sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
@@ -52,7 +53,7 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos right2 = map.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        if (map.IsPlayerFound(forward)) return RandomChoice(fire, magic);
+        if (map.IsPlayerFound(forward)) return RandomChoice(ice, fire);
 
         Pos backward = map.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);

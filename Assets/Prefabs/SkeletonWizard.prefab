@@ -11709,6 +11709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack: []
   enemyAttack:
   - {fileID: 5783524373530240961}
 --- !u!114 &5783524372521205083
@@ -11747,7 +11748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11fe0deb62e2e4221a89c67668c27c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  types: 0000000001000000
+  types: 0100000002000000
 --- !u!136 &2461294804068648982
 CapsuleCollider:
   m_ObjectHideFlags: 0
