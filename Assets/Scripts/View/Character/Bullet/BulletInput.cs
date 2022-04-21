@@ -12,8 +12,14 @@ public class BulletInput : MobInput
 
     public override void OnActive()
     {
+        ValidateInput();
         Interrupt(fire);
     }
-
+    public override void InputDie()
+    {
+        ClearAll();
+        Interrupt(die);
+        DisableInput();
+    }
     protected override ICommand GetCommand() => moveForward;
 }

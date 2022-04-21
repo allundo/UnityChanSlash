@@ -38,7 +38,7 @@ MonoBehaviour:
     prefab: {fileID: 6710468430858598547, guid: e332a9fe601cc4e34a7878a7a09f3039,
       type: 3}
   - name: "\u30C0\u30FC\u30AF\u30CF\u30A6\u30F3\u30C9"
-    defaultLifeMax: 1
+    defaultLifeMax: 20
     isOnGround: 0
     attack: 1
     shield: 0

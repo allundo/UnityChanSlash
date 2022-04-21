@@ -43,7 +43,6 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
 
     public virtual void OnDie()
     {
-        bulletMatEffect.Inactivate();
         eraseVfx?.Play();
         emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }

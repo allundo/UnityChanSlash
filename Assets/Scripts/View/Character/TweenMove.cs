@@ -37,6 +37,15 @@ public class TweenMove
         => Move(map.WorldPos(destPos), timeScale, ease);
 
     /// <summary>
+    /// Nat a tilewise moving.
+    /// </summary>
+    /// <param name="distance">Move distance to forward</param>
+    /// <param name="timeScale">Normalized time scale of the move Command duration</param>
+    /// <returns></returns>
+    public Tween MoveForward(float distance, float timeScale = 1f, TweenCallback onComplete = null)
+        => Move(tf.position + tf.forward * distance, timeScale).OnComplete(onComplete);
+
+    /// <summary>
     /// DOTween move with updating IsObjectOn flag to destination Tile
     /// </summary>
     /// <param name="destPos">Destination Vector3 postion</param>
@@ -88,12 +97,12 @@ public class TweenMove
             .Play();
     }
 
-    public Tween TurnLB => Rotate(-180);
-    public Tween TurnRB => Rotate(180);
+    public Tween TurnLB => Rotate(-180f);
+    public Tween TurnRB => Rotate(180f);
 
-    public Tween Rotate(int angle = 90)
+    public Tween Rotate(float angle = 90, float timeScale = 1f)
     {
-        return tf.DORotate(new Vector3(0, angle, 0), duration).SetRelative();
+        return tf.DORotate(new Vector3(0, angle, 0), duration * timeScale).SetRelative();
     }
 
     public Tween TurnToDir => tf.DORotate(map.dir.Angle, duration);

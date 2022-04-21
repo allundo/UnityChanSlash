@@ -25,7 +25,7 @@ public class MatColorEffect : MaterialEffect, IMatColorEffect
 
     public virtual void PlayExclusive(Tween matTween)
     {
-        prevTween?.Complete();
+        prevTween?.Complete(true);
         prevTween = matTween.Play();
     }
 
@@ -101,11 +101,13 @@ public class MatColorEffect : MaterialEffect, IMatColorEffect
 
     public virtual void Inactivate(TweenCallback onComplete = null, float duration = 0.5f)
     {
+        prevTween?.Complete(true);
+
         disappearSeq = DOTween.Sequence()
             .Append(FadeOutTween(duration))
             .AppendCallback(onComplete);
 
-        PlayExclusive(disappearSeq);
+        disappearSeq.Play();
     }
 
     public override void KillAllTweens()

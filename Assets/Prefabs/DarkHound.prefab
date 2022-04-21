@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7841307284493305703}
   - component: {fileID: 1913472907516128576}
   - component: {fileID: 4677238121700859841}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4832,7 +4832,7 @@ GameObject:
   - component: {fileID: 626717905239650346}
   - component: {fileID: 4547886890621124495}
   - component: {fileID: 1799645731040021317}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4912,7 +4912,7 @@ GameObject:
   - component: {fileID: 9012537963256248486}
   - component: {fileID: 5350895928153091888}
   - component: {fileID: 8193893255226628502}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: FX_ Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9670,7 +9670,7 @@ GameObject:
   - component: {fileID: 1096685745647538421}
   - component: {fileID: 1096685745647538419}
   - component: {fileID: 1096685745647538418}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Tail01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14424,7 +14424,7 @@ GameObject:
   - component: {fileID: 1096685746256275111}
   - component: {fileID: 1096685746256275109}
   - component: {fileID: 1096685746256275108}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Tail02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14855,7 +14855,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationX:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -14908,7 +14908,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -14961,8 +14961,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotation:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: 6.283185
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -15546,10 +15546,10 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -15602,7 +15602,7 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -15655,9 +15655,9 @@ ParticleSystem:
         m_RotationOrder: 4
     curve:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0.7853982
-      minScalar: 0.7853982
+      minMaxState: 3
+      scalar: 0.7853981
+      minScalar: -0.7853981
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -19144,12 +19144,12 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
-  m_VelocityScale: 0
+  m_VelocityScale: 0.5
   m_LengthScale: 0.5
   m_SortingFudge: 0
   m_NormalDirection: 1
@@ -19178,7 +19178,7 @@ GameObject:
   - component: {fileID: 1096685746460651459}
   - component: {fileID: 1096685746460651457}
   - component: {fileID: 1096685746460651456}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: FlareBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23932,7 +23932,7 @@ GameObject:
   - component: {fileID: 1096685746802432406}
   - component: {fileID: 1096685746802432404}
   - component: {fileID: 1096685746802432407}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: FX_Burn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24035,7 +24035,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -28693,11 +28693,12 @@ GameObject:
   - component: {fileID: 1096685746827863708}
   - component: {fileID: 2166247514337266677}
   - component: {fileID: 3301600930119818964}
-  - component: {fileID: 1498431799970167427}
   - component: {fileID: 3352413254257450255}
-  - component: {fileID: 3726488040809255340}
   - component: {fileID: 1130021880968960385}
-  m_Layer: 11
+  - component: {fileID: 1931141891665843265}
+  - component: {fileID: 3867140944479442219}
+  - component: {fileID: 5345091127426973996}
+  m_Layer: 9
   m_Name: DarkHound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28749,18 +28750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1498431799970167427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096685746827863711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5060fecb6dcb947d49db401278051559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3352413254257450255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28781,19 +28770,7 @@ MonoBehaviour:
   meshTf: {fileID: 626717905239650346}
   dyingFXDuration: 1.5
   cycle: 0
-  blinkColor: {r: 0, g: 0, b: 0, a: 0}
---- !u!114 &3726488040809255340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096685746827863711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0037f418b54c34f10a878fa835e12ca1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  blinkColor: {r: 0.0061285994, g: 0, b: 0.7169812, a: 0}
 --- !u!114 &1130021880968960385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28808,6 +28785,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attack:
   - {fileID: 4859168606413223796}
+--- !u!135 &1931141891665843265
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096685746827863711}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.5
+  m_Center: {x: 0, y: 1, z: 5}
+--- !u!114 &3867140944479442219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096685746827863711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47837445910ac428c81c5e54b62c5f04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5345091127426973996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096685746827863711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbadc585fc8914e00847d5a2ea95357c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1096685747001462497
 GameObject:
   m_ObjectHideFlags: 0
@@ -28819,7 +28833,7 @@ GameObject:
   - component: {fileID: 1096685747001462510}
   - component: {fileID: 1096685747001462508}
   - component: {fileID: 1096685747001462511}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Flare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33573,7 +33587,7 @@ GameObject:
   - component: {fileID: 976126116037103722}
   - component: {fileID: 2153525807562080659}
   - component: {fileID: 4395070716798598780}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Ring02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38385,7 +38399,7 @@ GameObject:
   - component: {fileID: 6042715609900486832}
   - component: {fileID: 3712901515089100555}
   - component: {fileID: 3427481686436775923}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Fog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43139,7 +43153,7 @@ GameObject:
   - component: {fileID: 4772670745788162190}
   - component: {fileID: 4817898783487553627}
   - component: {fileID: 4859168606413223796}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: AttackDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43171,7 +43185,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &4859168606413223796
 MonoBehaviour:
@@ -43199,7 +43213,7 @@ GameObject:
   - component: {fileID: 7209764050329517778}
   - component: {fileID: 3545420421156026717}
   - component: {fileID: 3707909155201851623}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48020,7 +48034,7 @@ GameObject:
   - component: {fileID: 4373152208624341103}
   - component: {fileID: 4373152208624341105}
   - component: {fileID: 4373152208624341104}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52832,7 +52846,7 @@ GameObject:
   - component: {fileID: 4373152208994231298}
   - component: {fileID: 4373152208994231300}
   - component: {fileID: 4373152208994231299}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Fog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57586,7 +57600,7 @@ GameObject:
   - component: {fileID: 4373152209001113920}
   - component: {fileID: 4373152209001113922}
   - component: {fileID: 4373152209001113921}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Hound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67152,7 +67166,7 @@ GameObject:
   - component: {fileID: 4373152209225778118}
   - component: {fileID: 4373152209225778120}
   - component: {fileID: 4373152209225778119}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71973,7 +71987,7 @@ GameObject:
   - component: {fileID: 4373152210330513388}
   - component: {fileID: 4373152210330513390}
   - component: {fileID: 4373152210330513389}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Blood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81597,7 +81611,7 @@ GameObject:
   - component: {fileID: 3522972932221144078}
   - component: {fileID: 3157624950771481862}
   - component: {fileID: 3201366118033019700}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86418,7 +86432,7 @@ GameObject:
   - component: {fileID: 2819263323339306583}
   - component: {fileID: 6434222533617822641}
   - component: {fileID: 5008404108860239015}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: FX_ Erase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86455,7 +86469,7 @@ ParticleSystem:
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -91174,7 +91188,7 @@ GameObject:
   - component: {fileID: 3017177612239824018}
   - component: {fileID: 6244940219424994507}
   - component: {fileID: 460319118941616424}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95986,7 +96000,7 @@ GameObject:
   - component: {fileID: 3123038783315253749}
   - component: {fileID: 3263784432255648804}
   - component: {fileID: 398375645170720947}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: FX_Explode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100745,7 +100759,7 @@ GameObject:
   - component: {fileID: 6774741487920157132}
   - component: {fileID: 8375375315717210495}
   - component: {fileID: 7671451936947771353}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Ring01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
