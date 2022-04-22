@@ -8,6 +8,6 @@ public class WitchDoubleLauncher : Launcher
 
     public override void Fire()
     {
-        (bulletGenerator.Fire(status.Position, status.dir, status.attack) as WitchDoubleStatus).SetBackStep(isBackStep);
+        (bulletGenerator.Fire(status) as WitchDoubleStatus).SetBackStep(isBackStep);
     }
 }

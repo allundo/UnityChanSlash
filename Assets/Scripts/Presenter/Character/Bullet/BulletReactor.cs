@@ -33,10 +33,10 @@ public class BulletReactor : Reactor, IBulletReactor
     {
         if (!status.IsAlive) return 0f;
 
-        status.Damage(10f);
-        effect.OnDamage(1f, type, attr);
+        status.Damage(attack);
+        effect.OnDamage(attack, type, attr);
 
-        return 10f;
+        return attack;
     }
 
     public override void OnDie()

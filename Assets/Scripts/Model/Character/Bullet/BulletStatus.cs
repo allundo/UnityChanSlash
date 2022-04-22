@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class BulletStatus : MobStatus
 {
-    [SerializeField] protected MobData data;
     [SerializeField] protected BulletType type;
 
-    protected override void Awake()
+    public IStatus shotBy { get; protected set; }
+    public virtual BulletStatus SetShooter(IStatus shooter)
     {
-        param = data.Param((int)type);
-        base.Awake();
+        shotBy = type == BulletType.HealSprit ? (shooter as BulletStatus).shotBy : shooter;
+        attack = shooter.attack;
+        return this;
     }
 
     public override MobStatus OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)

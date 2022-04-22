@@ -460,6 +460,7 @@ public enum BulletType
     FireBall = 0,
     IceBullet,
     DarkHound,
+    HealSprit,
     WitchDouble,
 }
 
@@ -477,4 +478,17 @@ public enum SNDType
     Teleport = 0,
     TeleportDest,
     ResurrectionSkull,
+}
+
+public enum ObjectLayerEnum
+{
+    Default = 0,
+    TransparentFX = 1,
+    IgnoreRaycast = 2,
+    Water = 4,
+    UI = 5,
+    Player = 8,
+    Enemy,
+    Structure,
+    Bullet,
 }

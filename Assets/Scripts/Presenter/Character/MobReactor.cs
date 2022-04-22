@@ -3,6 +3,7 @@ using UnityEngine;
 public interface IMobReactor : IReactor
 {
     void OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
+    void OnHeal(float life, bool isEffectOn = true);
     void OnFall();
     void OnWakeUp();
     void OnMelt(bool isBroken = false);
@@ -65,6 +66,9 @@ public class MobReactor : Reactor, IMobReactor
 
         status.Heal(healRatio * status.LifeMax.Value);
     }
+
+    public void OnHeal(float life, bool isEffectOn = true)
+        => OnHealRatio(LifeRatio(life), isEffectOn);
 
     protected float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);
 

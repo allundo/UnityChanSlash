@@ -19,5 +19,5 @@ public class Launcher : ILauncher
     public virtual Tween AttackSequence(float attackDuration)
         => DOVirtual.DelayedCall(attackDuration * 0.3f, Fire, false);
 
-    public virtual void Fire() => bulletGenerator.Fire(status.Position, status.dir, status.attack);
+    public virtual void Fire() => bulletGenerator.Fire(status);
 }

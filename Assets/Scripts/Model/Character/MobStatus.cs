@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public interface IStatus
 {
     float attack { get; }
+    GameObject gameObject { get; }
     float Shield { get; }
     bool IsAlive { get; }
 
@@ -92,7 +93,6 @@ public class MobStatus : SpawnObject<MobStatus>, IStatus
     public void SetDir(IDirection dir) => this.dir = dir;
 
     private static readonly IDirection defaultDir = new South();
-
 
     public Vector3 Position => transform.position;
 

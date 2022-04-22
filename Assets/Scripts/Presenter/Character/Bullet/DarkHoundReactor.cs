@@ -5,9 +5,15 @@ using UnityEngine;
 [RequireComponent(typeof(BulletEffect))]
 public class DarkHoundReactor : BulletReactor
 {
-    public IStatus shotBy { protected get; set; } = null;
     protected Transform targetTf = null;
-    public float TargetAngle => targetTf == null ? 0f : Vector3.SignedAngle(transform.forward, (targetTf.position - transform.position), Vector3.up);
+    public float TargetAngle => targetTf == null ? 0f : Vector3.SignedAngle(transform.forward, targetTf.position - transform.position, Vector3.up);
+    protected ILauncher healSpritLauncher;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        healSpritLauncher = new Launcher(status, BulletType.HealSprit);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -28,14 +34,24 @@ public class DarkHoundReactor : BulletReactor
         bodyCollider.enabled = true;
     }
 
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public override float OnDamage(float drain, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;
 
-        status.Damage(20f);
-        effect.OnDamage(1f, type, attr);
+        var lifeMax = status.LifeMax.Value;
 
-        return 10f;
+        (status as BulletStatus).attack = Mathf.Max(drain * 0.1f, 0.05f);
+
+        while (drain > 0.0001f)
+        {
+            healSpritLauncher.Fire();
+            drain -= status.attack * 2f;
+        }
+
+        effect.OnDamage(lifeMax, type, attr);
+        status.Damage(lifeMax);
+
+        return lifeMax;
     }
     public override void OnDie()
     {
