@@ -45,4 +45,7 @@ public class MagicianTeleport : MagicianCommand
 
         return true;
     }
+
+    public override ICommand GetContinuation()
+        => new Command(input, null, completeTween, onCompleted); // Don't pause completeTween on iced.
 }
