@@ -62,7 +62,7 @@ public class MobReactor : Reactor, IMobReactor
     {
         if (!status.IsAlive) return;
 
-        if (isEffectOn) mobEffect.OnHeal(healRatio);
+        if (isEffectOn && !status.isIced && healRatio > 0.1f) mobEffect.OnHeal(healRatio);
 
         status.Heal(healRatio * status.LifeMax.Value);
     }
