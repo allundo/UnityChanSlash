@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Keeps attached component used by Command execution.
 /// </summary>
-[RequireComponent(typeof(MobReactor))]
+[RequireComponent(typeof(Reactor))]
 [RequireComponent(typeof(MobInput))]
 [RequireComponent(typeof(MapUtil))]
 public class CommandTarget : MonoBehaviour
@@ -29,6 +29,11 @@ public class CommandTarget : MonoBehaviour
     public IMapUtil map { get; protected set; }
 
     /// <summary>
+    /// Attack collider and type handlers invoked on attack commands.
+    /// </summary>
+    [SerializeField] public AttackBehaviour[] attack;
+
+    /// <summary>
     /// Bullet attack source. Not imperative.
     /// </summary>
     public Magic magic { get; protected set; }
@@ -36,9 +41,10 @@ public class CommandTarget : MonoBehaviour
     protected virtual void Awake()
     {
         anim = GetComponent<MobAnimator>();
-        react = GetComponent<MobReactor>();
+        react = GetComponent<Reactor>();
         input = GetComponent<MobInput>();
         map = GetComponent<MapUtil>();
         magic = GetComponent<Magic>();
     }
 }
+

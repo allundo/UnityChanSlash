@@ -1,38 +1,62 @@
 using UnityEngine;
-public class AnimationFX : MonoBehaviour
+
+
+public abstract class AnimationFX : MonoBehaviour
 {
-    protected void Play(AudioSource sfx)
+    protected FXPlayer fx;
+
+    public virtual void Awake()
     {
-        sfx.PlayEx();
+        fx = new FXPlayer();
     }
 
-    protected void Play(AudioSource sfx, float minPitch = 0.7f, float maxPitch = 1.3f)
-    {
-        sfx.SetPitch(Random.Range(minPitch, maxPitch));
+    public abstract void StopVFX();
 
-        sfx.PlayEx();
-    }
-
-    protected void Play(AudioSource sfx, ParticleSystem vfx)
+    protected class FXPlayer
     {
-        sfx.PlayEx();
-        vfx?.Play();
-    }
+        public void Play(AudioSource sfx)
+        {
+            sfx.PlayEx();
+        }
 
-    protected void Play(AudioSource sfx, ParticleSystem vfx, float minPitch = 0.7f, float maxPitch = 1.3f)
-    {
-        Play(sfx, minPitch, maxPitch);
-        vfx?.Play();
-    }
+        public void PlayPitch(AudioSource sfx, float pitch = 1.0f)
+        {
+            sfx.SetPitch(pitch);
 
-    protected void Stop(AudioSource sfx)
-    {
-        sfx.StopEx();
-    }
+            sfx.PlayEx();
+        }
 
-    protected void Stop(AudioSource sfx, ParticleSystem vfx)
-    {
-        sfx.StopEx();
-        vfx?.Stop();
+        public void PlayPitch(AudioSource sfx, float minPitch = 0.7f, float maxPitch = 1.3f)
+        {
+            PlayPitch(sfx, Random.Range(minPitch, maxPitch));
+        }
+
+        public void Play(AudioSource sfx, ParticleSystem vfx)
+        {
+            sfx.PlayEx();
+            vfx?.Play();
+        }
+
+        public void PlayPitch(AudioSource sfx, ParticleSystem vfx, float minPitch = 0.7f, float maxPitch = 1.3f)
+        {
+            PlayPitch(sfx, minPitch, maxPitch);
+            vfx?.Play();
+        }
+
+        public void Stop(AudioSource sfx)
+        {
+            sfx.StopEx();
+        }
+
+        public void Stop(AudioSource sfx, ParticleSystem vfx)
+        {
+            sfx.StopEx();
+            vfx?.Stop();
+        }
+
+        public void StopEmitting(ParticleSystem vfx)
+        {
+            vfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
     }
 }

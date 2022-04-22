@@ -36,7 +36,7 @@ public class SkeletonWizReactor : EnemyReactor, IUndeadReactor
 
     public void OnTeleport(float duration)
     {
-        skeletonWizEffect.TeleportWipe(duration);
+        skeletonWizEffect.Teleport(duration);
         skeletonWizEffect.TeleportFX();
     }
 

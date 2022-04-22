@@ -7,5 +7,5 @@ public class ShieldEnemyAnimFX : EnemyAnimFX
 
 
     // Called as Animation Event functions
-    public virtual void OnShield() => Play(shieldSfx, shieldVfx);
+    public virtual void OnShield() => fx.Play(shieldSfx, shieldVfx);
 }

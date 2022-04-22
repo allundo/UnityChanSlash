@@ -3,15 +3,13 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public abstract class RabbitCommand : Command
+public abstract class RabbitCommand : EnemyCommand
 {
     protected RabbitAnimator rabbitAnim;
-    protected EnemyMapUtil enemyMap;
 
     public RabbitCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         rabbitAnim = target.anim as RabbitAnimator;
-        enemyMap = target.map as EnemyMapUtil;
     }
 }
 
@@ -167,13 +165,13 @@ public class RabbitIcedFall : RabbitCommand
         rabbitAnim.icedFall.Bool = true;
 
         playingTween = DOTween.Sequence()
-            .AppendCallback(react.OnFall)
+            .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.Jump(map.DestVec3Pos + map.GetBackwardVector(0.2f), 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
+            .AppendCallback(() => mobReact.OnDamage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => react.OnMelt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.OnMelt(), false).Play();
 
         return ObservableComplete();
     }
@@ -193,7 +191,7 @@ public class RabbitWakeUp : RabbitCommand
 
         completeTween = DOTween.Sequence()
             .InsertCallback(duration * wakeUpTiming, () => rabbitAnim.icedFall.Bool = false)
-            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, react.OnWakeUp)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, mobReact.OnWakeUp)
             .SetUpdate(false)
             .Play();
 

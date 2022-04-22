@@ -3,7 +3,7 @@ using System;
 using UniRx;
 using DG.Tweening;
 
-public abstract class PlayerCommand : Command
+public abstract class PlayerCommand : MobCommand
 {
     protected PlayerCommandTarget playerTarget;
     protected PlayerAnimator playerAnim;
@@ -24,6 +24,7 @@ public abstract class PlayerCommand : Command
 
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
+        mobReact = react as IMobReactor;
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
         itemGenerator = target.itemGenerator;
@@ -309,13 +310,13 @@ public class PlayerIcedFall : PlayerCommand
         playerAnim.icedFall.Bool = true;
 
         playingTween = DOTween.Sequence()
-            .AppendCallback(react.OnFall)
+            .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.Jump(map.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
+            .AppendCallback(() => mobReact.OnDamage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => react.OnMelt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.OnMelt(), false).Play();
 
         return ObservableComplete();
     }
@@ -334,7 +335,7 @@ public class PlayerWakeUp : PlayerCommand
     {
         completeTween = DOTween.Sequence()
             .InsertCallback(duration * wakeUpTiming, () => playerAnim.icedFall.Bool = false)
-            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, () => react.OnWakeUp())
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, () => mobReact.OnWakeUp())
             .SetUpdate(false)
             .Play();
 
@@ -459,9 +460,9 @@ public abstract class PlayerAttack : PlayerAction
 
     public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration)
     {
-        jab = target.jab;
-        straight = target.straight;
-        kick = target.kick;
+        jab = target.attack[0];
+        straight = target.attack[1];
+        kick = target.attack[2];
 
         this.cancelStart = cancelStart;
 
@@ -562,11 +563,11 @@ public class PlayerDie : PlayerCommand
 
     public override IObservable<Unit> Execute()
     {
-        react.OnDie();
+        mobReact.OnDie();
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();
 
-        return ExecOnCompleted(() => react.FadeOutToDead());
+        return ExecOnCompleted(() => mobReact.OnDisappear());
     }
 }
 
@@ -613,7 +614,7 @@ public class PlayerIcedCommand : PlayerCommand
 
         completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
         SetUIInvisible();
-        SetOnCompleted(() => react.OnMelt());
+        SetOnCompleted(() => mobReact.OnMelt());
         return true;
     }
 }

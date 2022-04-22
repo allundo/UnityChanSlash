@@ -41,7 +41,7 @@ public class Attack : AttackBehaviour
 
         if (null == targetMob) return null;
 
-        targetMob.OnDamage(status.Attack * attackMultiplier, status.dir, attackType, attackAttr);
+        targetMob.OnDamage(status.attack * attackMultiplier, status.dir, attackType, attackAttr);
 
         return targetMob;
     }

@@ -1,10 +1,8 @@
 using UnityEngine;
 
 
-public interface IGhostReactor : IReactor
+public interface IGhostReactor : IMobReactor
 {
-    bool OnHide();
-    bool OnAppear();
     void OnAttackStart();
     void OnAttackEnd();
 }
@@ -14,29 +12,21 @@ public interface IGhostReactor : IReactor
 public class GhostReactor : EnemyReactor, IGhostReactor
 {
     protected GhostEffect ghostEffect;
-    protected IGhostStatus ghostStatus;
 
     protected override void Awake()
     {
         base.Awake();
         ghostEffect = effect as GhostEffect;
-        ghostStatus = status as IGhostStatus;
 
     }
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
-    {
-        if (!status.isOnGround) return 0f;
-        return base.OnDamage(attack, dir, type);
-    }
 
-    public bool OnHide()
+    public override void OnHide()
     {
-        if (!status.isOnGround) return true;
+        if (status.isHidden) return;
 
         map.RemoveObjectOn();
-        ghostStatus.SetOnGround(false);
-        ghostEffect.OnHide();
-        return true;
+        status.SetHidden(true);
+        mobEffect.OnHide();
     }
     public void OnAttackStart()
     {
@@ -46,13 +36,13 @@ public class GhostReactor : EnemyReactor, IGhostReactor
 
     public void OnAttackEnd() => ghostEffect.OnAttackEnd();
 
-    public bool OnAppear()
+    public override bool OnAppear()
     {
-        if (status.isOnGround) return true;
+        if (!status.isHidden) return true;
         if (map.OnTile.OnCharacterDest != null) return false;
 
         map.RemoveObjectOn();
-        ghostStatus.SetOnGround(true);
+        status.SetHidden(false);
         map.SetObjectOn(map.onTilePos);
         ghostEffect.OnAppear();
         return true;

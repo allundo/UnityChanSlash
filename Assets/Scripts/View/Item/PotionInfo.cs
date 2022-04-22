@@ -9,7 +9,7 @@ public class PotionInfo : ItemInfo
 
     protected override void OnAction(IReactor react, MobAnimator anim)
     {
-        react.OnHealRatio(1f);
+        (react as IMobReactor).OnHealRatio(1f);
         OnFXStart(react.position);
     }
 

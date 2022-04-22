@@ -7,7 +7,13 @@ public class WitchAnimFX : AnimationFX
     [SerializeField] protected ParticleSystem targetTrailVfx = default;
 
     // Called as Animation Event functions
-    public void OnAttack() => Play(targetAttackSfx, targetShockVfx);
+    public void OnAttack() => fx.Play(targetAttackSfx, targetShockVfx);
     public void OnTrailStart() => targetTrailVfx?.Play();
-    public void OnTrailEnd() => targetTrailVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+    public void OnTrailEnd() => fx.StopEmitting(targetTrailVfx);
+
+    public override void StopVFX()
+    {
+        OnTrailEnd();
+        fx.StopEmitting(targetShockVfx);
+    }
 }

@@ -11,6 +11,7 @@ Shader "Custom/Mobile/Diffuse-Additive-Trail-ClipY" {
         [MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 1)
         _NoiseTex ("Noise", 2D) = "white" {}
         _ClipY("Clipping Y Plane", Range(0, 2.5)) = 0
+        _TrailDir ("Trail Dir", Vector) = (0, 0, 0, 0)
     }
 
     SubShader {

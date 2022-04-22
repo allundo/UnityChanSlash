@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(WitchDoubleAnimator))]
-[RequireComponent(typeof(BulletCommandTarget))]
 public class WitchDoubleInput : BulletInput
 {
     protected ICommand jump;
@@ -11,7 +10,7 @@ public class WitchDoubleInput : BulletInput
 
     protected override void SetCommands()
     {
-        var bulletTarget = target as BulletCommandTarget;
+        var bulletTarget = target as CommandTarget;
 
         var attack = new WitchDoubleLaunch(bulletTarget, 32f);
         jump = new WitchDoubleJump(bulletTarget, 32f, attack);

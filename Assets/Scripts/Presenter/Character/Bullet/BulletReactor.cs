@@ -1,11 +1,16 @@
 using UnityEngine;
-using DG.Tweening;
 
 [RequireComponent(typeof(BulletStatus))]
 [RequireComponent(typeof(BulletInput))]
 [RequireComponent(typeof(BulletEffect))]
-public class BulletReactor : MobReactor
+public class BulletReactor : Reactor
 {
+    protected override void Awake()
+    {
+        base.Awake();
+        effect = GetComponent<BulletEffect>();
+
+    }
     public override void OnActive()
     {
         effect.OnActive();
@@ -14,18 +19,19 @@ public class BulletReactor : MobReactor
         input.OnActive();
     }
 
+    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    {
+        if (!status.IsAlive) return 0f;
+
+        status.Damage(10f);
+        effect.OnDamage(1f, type, attr);
+
+        return 10f;
+    }
+
     public override void OnDie()
     {
         effect.OnDie();
-        FadeOutToDead(0.5f);
-    }
-
-    public override void FadeOutToDead(float duration = 0.5f)
-    {
-        fadeOut = DOTween.Sequence()
-            .Join(effect.FadeOutTween(duration))
-            .AppendInterval(1.5f) // Wait for explode effect end
-            .AppendCallback(OnDead)
-            .Play();
+        effect.Disappear(OnDead);
     }
 }

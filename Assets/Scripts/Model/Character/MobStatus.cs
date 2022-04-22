@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 public interface IStatus
 {
-    float Attack { get; }
+    float attack { get; }
     float Shield { get; }
     bool IsAlive { get; }
 
     Vector3 Position { get; }
 
     bool isOnGround { get; }
+    bool isHidden { get; }
+    void SetHidden(bool isHidden = true);
     bool isIced { get; }
     void SetIsIced(bool isIced);
 
@@ -61,7 +63,7 @@ public class MobStatus : SpawnObject<MobStatus>, IStatus
             { AttackAttr.Dark,        1f },
         };
 
-    public virtual float Attack
+    public virtual float attack
     {
         get { return param.attack; }
         set { param.attack = value; }
@@ -70,6 +72,13 @@ public class MobStatus : SpawnObject<MobStatus>, IStatus
     public virtual float Shield => param.shield;
 
     public bool isOnGround { get; protected set; }
+    public bool isHidden { get; protected set; }
+
+    public virtual void SetHidden(bool isHidden = true)
+    {
+        this.isHidden = isHidden;
+    }
+
     public bool isIced { get; protected set; }
 
     public void SetIsIced(bool isIced)
@@ -145,7 +154,7 @@ public class MobStatus : SpawnObject<MobStatus>, IStatus
     {
         life.Value = lifeMax.Value = DefaultLifeMax;
         isOnGround = param.isOnGround;
-        isIced = false;
+        isIced = isHidden = false;
     }
 
     public override void Activate()

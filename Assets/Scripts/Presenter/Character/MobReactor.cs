@@ -1,68 +1,36 @@
 using UnityEngine;
-using UniRx;
-using DG.Tweening;
 
-public interface IReactor
+public interface IMobReactor : IReactor
 {
-    Vector3 position { get; }
-    float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
     void OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
     void OnFall();
     void OnWakeUp();
-    void OnDie();
     void OnMelt(bool isBroken = false);
-    void OnActive();
-    void FadeOutToDead(float duration = 0.5f);
-    void Destroy();
+    void OnDisappear(float duration = 0.5f);
+    void OnHide();
+    bool OnAppear();
 }
 
-public interface IUndeadReactor : IReactor
+public interface IUndeadReactor : IMobReactor
 {
     void OnResurrection();
     void OnSleep();
 }
 
-[RequireComponent(typeof(BodyEffect))]
-[RequireComponent(typeof(MobInput))]
-[RequireComponent(typeof(MapUtil))]
-public class MobReactor : MonoBehaviour, IReactor
+[RequireComponent(typeof(MobEffect))]
+public class MobReactor : Reactor, IMobReactor
 {
-    protected IStatus status;
-    protected IMapUtil map;
-    protected IBodyEffect effect;
-    protected IInput input;
-    protected Collider bodyCollider;
-    protected Tween fadeOut;
+    protected IMobEffect mobEffect;
 
-    public Vector3 position => transform.position;
-
-    protected virtual void Awake()
+    protected override void Awake()
     {
-        status = GetComponent<MobStatus>();
-        effect = GetComponent<BodyEffect>();
-        input = GetComponent<MobInput>();
-        map = GetComponent<MapUtil>();
-        bodyCollider = GetComponentInChildren<Collider>();
+        base.Awake();
+        effect = mobEffect = GetComponent<MobEffect>();
     }
 
-    protected virtual void Start()
+    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        status.Life
-            .SkipLatestValueOnSubscribe()
-            .Subscribe(life => OnLifeChange(life))
-            .AddTo(this);
-
-        status.Active.Subscribe(_ => OnActive()).AddTo(this);
-    }
-
-    protected virtual void OnLifeChange(float life)
-    {
-        if (life <= 0.0f) input.InputDie();
-    }
-
-    public virtual float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
-    {
-        if (!status.IsAlive) return 0f;
+        if (!status.IsAlive || status.isHidden) return 0f;
 
         float damage = CalcDamage(attack, dir, attr);
 
@@ -72,7 +40,7 @@ public class MobReactor : MonoBehaviour, IReactor
             {
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
                 input.InputIced(damage * 100f);
-                effect.OnIced(status.corePos);
+                mobEffect.OnIced(status.corePos);
                 status.SetIsIced(true);
             }
             return 0f;
@@ -93,7 +61,7 @@ public class MobReactor : MonoBehaviour, IReactor
     {
         if (!status.IsAlive) return;
 
-        if (isEffectOn) effect.OnHeal(healRatio);
+        if (isEffectOn) mobEffect.OnHeal(healRatio);
 
         status.Heal(healRatio * status.LifeMax.Value);
     }
@@ -115,49 +83,34 @@ public class MobReactor : MonoBehaviour, IReactor
         bodyCollider.enabled = true;
     }
 
-    public virtual void OnDie()
-    {
-        effect.OnDie();
-        map.ResetTile();
-        bodyCollider.enabled = false;
-    }
-
     public virtual void OnMelt(bool isBroken = false)
     {
         if (!status.isIced) return;
 
-        effect.OnMelt();
-        if (isBroken) effect.OnIceCrash(status.corePos);
+        mobEffect.OnMelt();
+        if (isBroken) mobEffect.OnIceCrash(status.corePos);
         status.SetIsIced(false);
     }
 
-    public virtual void OnActive()
+    public virtual void OnHide()
     {
-        effect.OnActive();
-        map.OnActive();
-        input.OnActive();
-        bodyCollider.enabled = true;
+        if (status.isHidden) return;
+
+        status.SetHidden(true);
+        mobEffect.OnHide();
     }
 
-    public virtual void FadeOutToDead(float duration = 0.5f)
+    public virtual bool OnAppear()
     {
-        fadeOut = effect.FadeOutTween(duration)
-            .OnComplete(OnDead)
-            .Play();
+        if (!status.isHidden) return true;
+
+        status.SetHidden(false);
+        mobEffect.OnAppear();
+        return true;
     }
 
-    protected virtual void OnDead() => status.Inactivate();
-
-    public virtual void Destroy()
+    public virtual void OnDisappear(float duration = 0.5f)
     {
-        // Stop all tweens before destroying
-        input.ClearAll();
-        fadeOut?.Kill();
-        effect.KillAllTweens();
-
-        bodyCollider.enabled = false;
-        map.ResetTile();
-
-        Destroy(gameObject);
+        mobEffect.Disappear(OnDead, duration);
     }
 }

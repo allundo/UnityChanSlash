@@ -2,13 +2,14 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public abstract class EnemyCommand : Command
+public abstract class EnemyCommand : MobCommand
 {
     protected IEnemyAnimator enemyAnim;
     protected EnemyMapUtil enemyMap;
 
     public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
+        mobReact = react as IMobReactor;
         enemyAnim = target.anim as IEnemyAnimator;
         enemyMap = target.map as EnemyMapUtil;
     }
@@ -155,6 +156,6 @@ public class EnemyDie : EnemyCommand
         anim.die.Fire();
         react.OnDie();
 
-        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
+        return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
     }
 }

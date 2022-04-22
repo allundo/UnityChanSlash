@@ -7,14 +7,14 @@ public class BulletGenerator : Generator<MobStatus>
     public BulletStatus Fire(Vector3 pos, IDirection dir, float attack = 1f)
     {
         var bullet = base.Spawn(param.prefab, pos, dir) as BulletStatus;
-        bullet.Attack = attack;
+        bullet.attack = attack;
 
         return bullet;
     }
 
     public override void DestroyAll()
     {
-        pool.ForEach(t => t.GetComponent<MobReactor>().Destroy());
+        pool.ForEach(t => t.GetComponent<Reactor>().Destroy());
     }
     public virtual BulletGenerator Init(GameObject bulletPool, MobParam param)
     {

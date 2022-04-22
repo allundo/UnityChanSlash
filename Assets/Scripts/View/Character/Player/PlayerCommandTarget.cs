@@ -12,11 +12,6 @@ public class PlayerCommandTarget : CommandTarget
     /// </summary>
     [SerializeField] public ThirdPersonCamera mainCamera = default;
 
-    // Player attack handler for PlayerAttack Command execution.
-    [SerializeField] public MobAttack jab = default;
-    [SerializeField] public MobAttack straight = default;
-    [SerializeField] public MobAttack kick = default;
-
     /// <summary>
     /// Message window controller for PlayerMessage Command execution.
     /// </summary>

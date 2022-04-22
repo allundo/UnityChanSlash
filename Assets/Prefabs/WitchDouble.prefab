@@ -20161,7 +20161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4536938854602372188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9a55bdb70e94872a8fd38a98d43303, type: 3}
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attack:
@@ -20190,13 +20190,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2df87405c33f240489f6561c091c666b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dieSound: {fileID: 0}
   emitVfx: {fileID: 5839838650848461688}
   fireVfx: {fileID: 0}
   hitVfx: {fileID: 0}
   eraseVfx: {fileID: 0}
   fireSound: {fileID: 0}
   meshTf: {fileID: 1765497339840932412}
+  dyingFXDuration: 0
+  cycle: 0
+  blinkColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &25396102096358982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20209,7 +20211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e2bb8c79e144c7893c527e334c62dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
 --- !u!1 &4541233192805926167
 GameObject:
   m_ObjectHideFlags: 0

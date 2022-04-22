@@ -34,6 +34,6 @@ public class EnemyGenerator : Generator<MobStatus>
 
     public override void DestroyAll()
     {
-        pool.ForEach(t => t.GetComponent<MobReactor>().Destroy());
+        pool.ForEach(t => t.GetComponent<Reactor>().Destroy());
     }
 }

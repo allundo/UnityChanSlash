@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class BulletEffect : BodyEffect
+public class BulletEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected ParticleSystem emitVfx = default;
     [SerializeField] protected ParticleSystem fireVfx = default;
@@ -10,82 +10,49 @@ public class BulletEffect : BodyEffect
 
     [SerializeField] protected AudioSource fireSound = default;
 
-    [SerializeField] protected Transform meshTf;
+    [SerializeField] protected Transform meshTf = null;
+    [SerializeField] protected float dyingFXDuration = 0f;
+    [SerializeField] protected float cycle = 0f;
+    [SerializeField] protected Color blinkColor = default;
 
-    protected Vector3 defaultScale;
-    protected Tween rolling;
+    protected BulletMatEffect bulletMatEffect = null;
 
-    protected override void StoreMaterialColors()
+    protected virtual void Awake()
     {
-        foreach (Renderer renderer in meshTf.GetComponentsInChildren<Renderer>())
-        {
-            foreach (Material mat in renderer.materials)
-            {
-                if (mat.HasProperty("_AdditiveColor"))
-                {
-                    mat.color = new Color(0, 0, 0, 1);
-                    flashMaterials.Add(mat);
-                }
-            }
-        }
+        bulletMatEffect = new BulletMatEffect(meshTf, dyingFXDuration, cycle, blinkColor);
+    }
 
-        defaultScale = meshTf.localScale;
-
-        rolling = meshTf.DOLocalRotate(new Vector3(0f, 0f, 90f), 0.25f, RotateMode.FastBeyond360)
+    protected virtual Tween RollingTween(float duration = 0.25f)
+    {
+        return meshTf.DOLocalRotate(new Vector3(0f, 0f, 90f), duration, RotateMode.FastBeyond360)
             .SetEase(Ease.Linear)
             .SetRelative()
             .SetLoops(-1, LoopType.Incremental);
     }
 
-    public override void OnActive()
+    public void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
+         => bulletMatEffect.Inactivate(onComplete, duration);
+
+    public virtual void OnActive()
     {
         fireSound.PlayEx();
         emitVfx?.Play();
         fireVfx?.Play();
-        PlayFlash(FadeInTween(0.25f));
-        rolling?.Restart();
+        bulletMatEffect.Activate();
     }
 
-    public override void OnDie()
+    public virtual void OnDie()
     {
-        rolling?.Pause();
+        bulletMatEffect.Inactivate();
         eraseVfx?.Play();
-        PlayFlash(FadeOutTween(0.5f));
         emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
-    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        DamageFlash(damageRatio);
+        bulletMatEffect.DamageFlash(damageRatio);
         hitVfx?.Play();
     }
 
-    public override void OnHeal(float healRatio) { }
-
-    protected override Sequence GetFadeTween(bool isFadeIn, float duration = 0.5f)
-    {
-        Sequence fade = base.GetFadeTween(isFadeIn, duration);
-
-        fade.Join(meshTf.DOScale(isFadeIn ? defaultScale : Vector3.zero, duration));
-
-        if (isFadeIn)
-        {
-            Sequence blink = DOTween.Sequence();
-
-            foreach (Material mat in flashMaterials)
-            {
-                blink.Join(mat.DOColor(Color.red, 0.2f).SetLoops(-1, LoopType.Yoyo));
-            }
-
-            fade.Append(blink);
-        }
-
-        return fade;
-    }
-
-    public override void KillAllTweens()
-    {
-        prevFlash?.Kill();
-        rolling?.Kill();
-    }
+    public void OnDestroy() => bulletMatEffect.KillAllTweens();
 }

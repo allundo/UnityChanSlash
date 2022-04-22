@@ -163,13 +163,13 @@ public class FlyingIcedFall : FlyingCommand
 
 
         playingTween = DOTween.Sequence()
-            .AppendCallback(react.OnFall)
+            .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.JumpRelative(map.DestVec + new Vector3(0f, -1.25f, 0f), 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => react.OnDamage(0.5f, null, AttackType.Smash))
+            .AppendCallback(() => mobReact.OnDamage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => react.OnMelt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.OnMelt(), false).Play();
 
         return ObservableComplete();
     }
@@ -193,7 +193,7 @@ public class FlyingWakeUp : FlyingCommand
 
         completeTween = DOTween.Sequence()
             .InsertCallback(duration * wakeUpTiming, () => flyingAnim.icedFall.Bool = false)
-            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, react.OnWakeUp)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, mobReact.OnWakeUp)
             .SetUpdate(false)
             .Play();
 
@@ -208,8 +208,8 @@ public class FlyingDie : FlyingCommand
     {
         playingTween = tweenMove.Move(map.DestVec3Pos, 0.5f, Ease.InQuad).Play();
         anim.die.Fire();
-        react.OnDie();
+        mobReact.OnDie();
 
-        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
+        return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
     }
 }

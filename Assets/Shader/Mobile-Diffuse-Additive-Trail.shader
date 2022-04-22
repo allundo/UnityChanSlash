@@ -10,6 +10,7 @@ Shader "Custom/Mobile/Diffuse-Additive-Trail" {
         _MainTex ("Base (RGB)", 2D) = "white" {}
         [MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 1)
         _NoiseTex ("Noise", 2D) = "white" {}
+        _TrailDir ("Trail Dir", Vector) = (0, 0, 0, 0)
     }
 
     SubShader {

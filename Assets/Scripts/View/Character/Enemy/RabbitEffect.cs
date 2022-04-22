@@ -13,10 +13,4 @@ public class RabbitEffect : MobEffect
         base.OnDamage(damageRatio, type, attr);
         anim.wondering.Bool = false;
     }
-
-    /// <summary>
-    /// Stop somersault trail OnDie()
-    /// </summary>
-    protected override void StopAnimFX()
-        => (animFX as RabbitAnimFX).OnSomersaultEnd();
 }

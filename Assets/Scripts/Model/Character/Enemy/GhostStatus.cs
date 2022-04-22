@@ -1,12 +1,9 @@
-public interface IGhostStatus : IEnemyStatus
-{
-    void SetOnGround(bool isOnGround);
-}
 
-public class GhostStatus : EnemyStatus, IGhostStatus
+public class GhostStatus : EnemyStatus
 {
-    public void SetOnGround(bool isOnGround)
+    public override void SetHidden(bool isHidden = true)
     {
-        this.isOnGround = isOnGround;
+        this.isHidden = isHidden;
+        this.isOnGround = !isHidden;
     }
 }

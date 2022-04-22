@@ -18,10 +18,18 @@ public class PlayerAnimFX : AnimationFX
     [SerializeField] private AudioSource jumpLandingSfx = null;
 
     // Called as Animation Event functions
-    public void OnShield() => Play(shieldSfx, shieldVfx);
-    public void OnJab() => Play(jabSfx, jabVfx);
-    public void OnStraight() => Play(straightSfx, straightVfx);
-    public void OnKick() => Play(kickSfx, kickVfx);
-    public void OnJump() => Play(jumpSfx);
-    public void OnJumpLanding() => Play(jumpLandingSfx);
+    public void OnShield() => fx.Play(shieldSfx, shieldVfx);
+    public void OnJab() => fx.PlayPitch(jabSfx, jabVfx);
+    public void OnStraight() => fx.PlayPitch(straightSfx, straightVfx);
+    public void OnKick() => fx.PlayPitch(kickSfx, kickVfx);
+    public void OnJump() => fx.Play(jumpSfx);
+    public void OnJumpLanding() => fx.Play(jumpLandingSfx);
+
+    public override void StopVFX()
+    {
+        jabVfx?.Stop();
+        straightVfx?.Stop();
+        kickVfx?.Stop();
+        shieldVfx?.Stop();
+    }
 }

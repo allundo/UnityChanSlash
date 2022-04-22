@@ -6,8 +6,10 @@ public class PlayerEffect : MobEffect
 
     protected override void Awake()
     {
-        StoreMaterialColors();
+        matColEffect = new MobMatColorEffect(transform);
         sndData = Resources.Load<PlayerDamageSndData>("DataAssets/Sound/PlayerDamageSndData");
+        animFX = GetComponent<AnimationFX>();
+        resourceFX = new ResourceFX();
         anim = GetComponent<PlayerAnimator>();
     }
 

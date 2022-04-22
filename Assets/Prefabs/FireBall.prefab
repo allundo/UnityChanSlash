@@ -38170,10 +38170,10 @@ GameObject:
   - component: {fileID: 2805387921361035656}
   - component: {fileID: 4019047258990873825}
   - component: {fileID: 290249210931567040}
-  - component: {fileID: 6204209526432335164}
   - component: {fileID: 4403947982082489751}
   - component: {fileID: 527099848321554971}
   - component: {fileID: 1900991498281850552}
+  - component: {fileID: 548237984061548355}
   m_Layer: 11
   m_Name: FireBall
   m_TagString: Untagged
@@ -38227,20 +38227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6204209526432335164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2805387921361035659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9a55bdb70e94872a8fd38a98d43303, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attack:
-  - {fileID: 7690376341311500384}
 --- !u!114 &4403947982082489751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38253,7 +38239,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5060fecb6dcb947d49db401278051559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
 --- !u!114 &527099848321554971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38266,14 +38251,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc27026fab74644748e4b47aa496c170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dieSound: {fileID: 0}
-  sndData: {fileID: 0}
   emitVfx: {fileID: 2805387921336131200}
   fireVfx: {fileID: 7175566729394513956}
   hitVfx: {fileID: 332635480921310000}
   eraseVfx: {fileID: 8114496825619606693}
   fireSound: {fileID: 2294812715281089802}
   meshTf: {fileID: 2406052561114265406}
+  dyingFXDuration: 0.9
+  cycle: 1
+  blinkColor: {r: 1, g: 0.36659658, b: 0, a: 0}
 --- !u!114 &1900991498281850552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38286,6 +38272,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0037f418b54c34f10a878fa835e12ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &548237984061548355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2805387921361035659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 7690376341311500384}
 --- !u!1 &2981539196751895809
 GameObject:
   m_ObjectHideFlags: 0
@@ -52784,7 +52784,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6665284924511291484}
   serializedVersion: 6
-  lengthInSec: 0.2
+  lengthInSec: 0.25
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0

@@ -32,12 +32,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
 
-    public ParticleSystem GetPrefabVFX(VFXType type) => prefabVFXs[type];
-    private Dictionary<VFXType, ParticleSystem> prefabVFXs;
-
-    public AudioSource GetPrefabSND(SNDType type) => prefabSNDs[type];
-    private Dictionary<SNDType, AudioSource> prefabSNDs;
-
     public void Pause(bool isHideUIs = false)
     {
         if (isPaused) return;
@@ -78,22 +72,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         worldMap = GameInfo.Instance.NextFloorMap();
         mapRenderer.Render(worldMap);
-
-        prefabVFXs = new Dictionary<VFXType, ParticleSystem>()
-        {
-            { VFXType.Iced,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICED")            },
-            { VFXType.IceCrash,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")       },
-            { VFXType.Teleport,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT")        },
-            { VFXType.TeleportDest, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")   },
-            { VFXType.Resurrection, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")    },
-        };
-
-        prefabSNDs = new Dictionary<SNDType, AudioSource>()
-        {
-            { SNDType.Teleport,             Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT")          },
-            { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")     },
-            { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
-        };
     }
 
     void Start()

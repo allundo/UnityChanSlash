@@ -193,31 +193,3 @@ public class Command : ICommand
     public bool IsPriorTo(int target) => priority > target;
     public bool IsPriorTo(ICommand cmd) => IsPriorTo(cmd.priority);
 }
-
-public class DieCommand : Command
-{
-    public DieCommand(CommandTarget target, float duration) : base(target, duration) { }
-
-    public override IObservable<Unit> Execute()
-    {
-        map.RemoveObjectOn();
-        react.OnDie();
-
-        return ExecOnCompleted(() => react.FadeOutToDead()); // Don't validate input.
-    }
-}
-
-public class IcedCommand : Command
-{
-    public override int priority => 20;
-    public IcedCommand(CommandTarget target, float duration) : base(target, duration, 0.98f) { }
-
-    protected override bool Action()
-    {
-        anim.Pause();
-
-        completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
-        SetOnCompleted(() => react.OnMelt());
-        return true;
-    }
-}

@@ -139,7 +139,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
     public void DestroyAllEnemies()
     {
         enemyPool.ForEach(
-            kv => kv.Value.transform?.ForEach(t => t.GetComponent<MobReactor>().Destroy())
+            kv => kv.Value.transform?.ForEach(t => t.GetComponent<Reactor>().Destroy())
         );
     }
 
