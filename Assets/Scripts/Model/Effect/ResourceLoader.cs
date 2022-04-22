@@ -28,7 +28,5 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")     },
             { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
         };
-
     }
-
 }
