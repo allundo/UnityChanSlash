@@ -20868,7 +20868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 8312738784135996020}
-  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  excludeBody: {fileID: 7100256392402996467}
 --- !u!114 &1822043555450433614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20881,7 +20881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d238cf5be83c246f4b675bcf992e3860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
+  shieldTf: {fileID: 7100256392402996467}
 --- !u!114 &7026800704296965620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20894,7 +20894,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isIced: 0
 --- !u!114 &2241535295335571476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20919,6 +20918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack: []
   enemyAttack:
   - {fileID: 1447125428554083896}
 --- !u!114 &8633113565537013601

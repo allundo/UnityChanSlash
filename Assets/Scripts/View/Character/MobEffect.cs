@@ -21,6 +21,9 @@ public interface IMobEffect : IBodyEffect
 public class MobEffect : MonoBehaviour, IMobEffect
 {
     [SerializeField] protected AudioSource dieSound = null;
+
+    [SerializeField] protected Transform excludeBody = null;
+
     protected DamageSndData sndData;
     protected AnimationFX animFX;
     protected ResourceFX resourceFX;
@@ -38,14 +41,14 @@ public class MobEffect : MonoBehaviour, IMobEffect
     protected Dictionary<AttackType, AudioSource> guardSndSource = new Dictionary<AttackType, AudioSource>();
     protected void PlayGuard(AttackType type) => guardSndSource.LazyLoad(type, SndGuard).PlayEx();
 
-
     protected virtual void Awake()
     {
-        matColEffect = new MobMatColorEffect(transform);
+        matColEffect = new MobMatColorEffect(transform, excludeBody);
         sndData = Resources.Load<DamageSndData>("DataAssets/Sound/DamageSndData");
         animFX = GetComponent<AnimationFX>();
         resourceFX = new ResourceFX();
     }
+
     public virtual void OnActive()
     {
         matColEffect.Activate();

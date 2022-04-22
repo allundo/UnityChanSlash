@@ -19,22 +19,23 @@ public abstract class MaterialEffect : IMaterialEffect
 
     public MaterialEffect(Transform targetTf)
     {
-        RetrieveMaterials(targetTf);
+        materials = RetrieveMaterials(targetTf);
     }
 
     /// <summary>
     /// Retrieve and store materials having the property specified by propName
     /// </summary>
     /// <returns></returns>
-    public void RetrieveMaterials(Transform targetTf)
+    public List<Material> RetrieveMaterials(Transform targetTf)
     {
         propID = Shader.PropertyToID(propName);
-        materials = new List<Material>();
+        var materials = new List<Material>();
 
         foreach (Renderer renderer in targetTf.GetComponentsInChildren<Renderer>())
         {
             materials.AddRange(renderer.materials.Where(mat => mat.HasProperty(propID)));
         }
+        return materials;
     }
 
     public MaterialEffect(List<Material> materials)

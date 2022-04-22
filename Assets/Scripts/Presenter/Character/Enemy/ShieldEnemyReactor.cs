@@ -5,12 +5,15 @@ using static ShieldInput;
 [RequireComponent(typeof(ShieldEnemyAnimFX))]
 public class ShieldEnemyReactor : EnemyReactor
 {
+    [SerializeField] protected Transform shieldTf;
     protected ShieldEnemyAnimator anim;
     protected GuardState guardState => (input as ShieldInput).guardState;
+    protected MatColorEffect shieldEffect;
 
     protected override void Awake()
     {
         anim = GetComponent<ShieldEnemyAnimator>();
+        shieldEffect = new MatColorEffect(shieldTf);
         base.Awake();
     }
 
@@ -22,6 +25,7 @@ public class ShieldEnemyReactor : EnemyReactor
         {
             shield = status.Shield;
             guardState.SetShield();
+            shieldEffect.DamageFlash(0.1f);
         }
 
         return Mathf.Max(status.CalcAttack(attack, dir, attr) - shield, 0.0f);

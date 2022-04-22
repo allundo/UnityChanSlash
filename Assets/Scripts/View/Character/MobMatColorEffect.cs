@@ -4,8 +4,16 @@ using DG.Tweening;
 
 public class MobMatColorEffect : MatColorEffect
 {
-    public MobMatColorEffect(Transform targetTf) : base(targetTf) { }
-    public MobMatColorEffect(List<Material> materials) : base(materials) { }
+    public MobMatColorEffect(Transform targetTf, Transform exclude = null) : base(targetTf)
+    {
+        if (exclude == null) return;
+        RetrieveMaterials(exclude).ForEach(mat => materials.Remove(mat));
+    }
+
+    public MobMatColorEffect(List<Material> materials, List<Material> excludes = null) : base(materials)
+    {
+        excludes?.ForEach(mat => materials.Remove(mat));
+    }
 
     public void HealFlash(float duration)
     {
