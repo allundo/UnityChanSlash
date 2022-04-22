@@ -27,9 +27,11 @@ public class SkeletonWizTeleport : SkeletonWizCommand
 
         completeTween = DOTween.Sequence()
             .Join(tweenMove.Teleport(destPos))
+            .InsertCallback(0.125f * duration, () => skeletonWizReact.OnHide())
             .InsertCallback(0.50f * duration, () =>
             {
                 magicianAnim.teleport.Bool = false;
+                skeletonWizReact.OnAppear();
                 enemyMap.MoveOnEnemy(destPos);
                 skeletonWizReact.OnTeleportDest();
             })
