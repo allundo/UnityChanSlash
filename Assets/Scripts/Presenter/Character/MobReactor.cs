@@ -37,7 +37,7 @@ public class MobReactor : Reactor, IMobReactor
 
         if (attr == AttackAttr.Ice)
         {
-            if (!status.isIced)
+            if (damage > 0 && !status.isIced)
             {
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
                 input.InputIced(damage * 100f);
