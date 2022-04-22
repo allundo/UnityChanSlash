@@ -26,3 +26,9 @@ public class DarkHoundMove : BulletMove
         return ObservableComplete();
     }
 }
+
+public class DarkHoundDie : BulletDie
+{
+    public DarkHoundDie(CommandTarget target, float duration) : base(target, duration) { }
+    protected override Tween MoveForward() => tweenMove.MoveForward(TILE_UNIT * 0.05f).Play();
+}

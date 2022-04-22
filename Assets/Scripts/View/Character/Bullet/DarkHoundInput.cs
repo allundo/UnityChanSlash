@@ -4,6 +4,6 @@ public class DarkHoundInput : BulletInput
     {
         fire = new BulletFire(target, 24f);
         moveForward = new DarkHoundMove(target, 12f);
-        die = new BulletDie(target, 24f);
+        die = new DarkHoundDie(target, 24f);
     }
 }
