@@ -44,12 +44,12 @@ public class MatColorEffect : MaterialEffect, IMatColorEffect
 
         foreach (Material mat in materials)
         {
-            Sequence flashSub = DOTween.Sequence().Append(mat.DOColor(Color.white, 0.02f));
+            Sequence flashSub = DOTween.Sequence().Append(mat.DOColor(Color.white, 0.04f));
 
             if (damageRatio > 0.1f)
             {
-                flashSub.Append(mat.DOColor(Color.black, 0.02f));
-                flashSub.Append(mat.DOColor(Color.red, 0.02f));
+                flashSub.Append(mat.DOColor(Color.black, 0.04f));
+                flashSub.Append(mat.DOColor(Color.red, 0.04f));
             }
 
             flash.Join(flashSub.Append(mat.DOColor(Color.black, 2.0f * damageRatio)));
