@@ -71,8 +71,8 @@ public class Command : ICommand
     public Command(IInput input, Tween playing, Tween complete, List<Action> onCompleted)
     {
         this.input = input;
-        this.playingTween = Pause(playing);
-        this.completeTween = Pause(complete);
+        this.playingTween = playing;
+        this.completeTween = complete;
         this.onCompleted = onCompleted;
         this.duration = RemainingDuration;
         this.invalidDuration = this.duration * 0.95f;
@@ -87,7 +87,7 @@ public class Command : ICommand
     protected Tween validateTween = null;
     protected List<Action> onCompleted = new List<Action>();
 
-    public ICommand GetContinuation() => new Command(input, playingTween, completeTween, onCompleted);
+    public virtual ICommand GetContinuation() => new Command(input, Pause(playingTween), Pause(completeTween), onCompleted);
 
     public virtual void Cancel()
     {

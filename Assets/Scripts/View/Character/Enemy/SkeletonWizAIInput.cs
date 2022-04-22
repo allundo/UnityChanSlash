@@ -21,7 +21,7 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
 
         fire = new EnemyFire(enemyTarget, 72f, BulletType.DarkHound);
         ice = new EnemyFire(enemyTarget, 72f, BulletType.IceBullet);
-        teleport = new SkeletonWizTeleport(enemyTarget, 84f);
+        teleport = new MagicianTeleport(enemyTarget, 84f, 3);
 
         sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
     }

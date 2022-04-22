@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(SkeletonWizEffect))]
 [RequireComponent(typeof(UndeadStatus))]
-public class SkeletonWizReactor : EnemyReactor, IUndeadReactor
+public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
 {
     protected IUndeadInput undeadInput;
     protected IUndeadStatus undeadStatus;

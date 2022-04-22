@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(WitchEffect))]
 [RequireComponent(typeof(WitchStatus))]
-public class WitchReactor : GhostReactor, IUndeadReactor
+public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
 {
     protected WitchAIInput witchInput;
     protected WitchStatus witchStatus;

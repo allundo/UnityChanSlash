@@ -203,37 +203,6 @@ public class WitchMagic : WitchCommand
     }
 }
 
-public class WitchTeleport : WitchCommand
-{
-    public WitchTeleport(EnemyCommandTarget target, float duration) : base(target, duration) { }
-
-    protected override bool Action()
-    {
-        Pos destPos = map.SearchSpaceNearBy();
-
-        if (destPos.IsNull) return false;
-
-        witchAnim.teleport.Bool = true;
-        witchReact.OnTeleport(duration);
-
-        completeTween = DOTween.Sequence()
-            .Join(tweenMove.Teleport(destPos))
-            .InsertCallback(0.125f * duration, () => witchReact.OnHide())
-            .InsertCallback(0.50f * duration, () =>
-            {
-                witchAnim.teleport.Bool = false;
-                witchReact.OnAppear();
-                enemyMap.MoveOnEnemy(destPos);
-                witchReact.OnTeleportDest();
-            })
-            .InsertCallback(duration, witchReact.OnTeleportEnd)
-            .SetUpdate(false)
-            .Play();
-
-        return true;
-    }
-}
-
 public class WitchDoubleAttackLaunch : FlyingAttack
 {
     protected ICommand doubleAttackStart;

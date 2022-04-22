@@ -32,7 +32,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         fire = new WitchTripleFire(enemyTarget, 72f);
         ice = new WitchDoubleIce(enemyTarget, 72f);
         magic = new WitchMagic(enemyTarget, 108f);
-        teleport = new WitchTeleport(enemyTarget, 84f);
+        teleport = new MagicianTeleport(enemyTarget, 84f);
 
         sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
     }
