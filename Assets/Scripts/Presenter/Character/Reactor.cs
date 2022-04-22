@@ -4,7 +4,7 @@ using UniRx;
 public interface IReactor
 {
     Vector3 position { get; }
-    float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
+    float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
     void OnDie();
     void OnActive();
     void Destroy();
@@ -45,7 +45,7 @@ public abstract class Reactor : MonoBehaviour, IReactor
         if (life <= 0.0f) input.InputDie();
     }
 
-    public abstract float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
+    public abstract float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
 
     public virtual void OnDie()
     {

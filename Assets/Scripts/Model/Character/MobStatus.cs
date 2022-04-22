@@ -27,9 +27,8 @@ public interface IStatus
     float LifeRatio { get; }
     Vector3 corePos { get; }
 
-    void Damage(float damage, AttackAttr attr = AttackAttr.None);
+    void LifeChange(float diff, AttackAttr attr = AttackAttr.None);
 
-    void Heal(float heal);
     float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None);
 
     void ResetStatus();
@@ -118,14 +117,9 @@ public class MobStatus : SpawnObject<MobStatus>, IStatus
         lifeMax = new ReactiveProperty<float>(0f);
     }
 
-    public virtual void Damage(float damage, AttackAttr attr = AttackAttr.None)
+    public virtual void LifeChange(float diff, AttackAttr attr = AttackAttr.None)
     {
-        life.Value -= damage;
-    }
-
-    public void Heal(float heal)
-    {
-        life.Value = Mathf.Min(life.Value + heal, lifeMax.Value);
+        life.Value = Mathf.Clamp(life.Value + diff, 0f, lifeMax.Value);
     }
 
     public virtual float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None)

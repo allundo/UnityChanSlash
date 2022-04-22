@@ -26,14 +26,14 @@ public class BulletReactor : Reactor, IBulletReactor
 
     public void ReduceHP(float reduction = 1f)
     {
-        if (status.IsAlive) status.Damage(reduction);
+        if (status.IsAlive) status.LifeChange(-reduction);
     }
 
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;
 
-        status.Damage(attack);
+        status.LifeChange(-attack);
         effect.OnDamage(attack, type, attr);
 
         return attack;

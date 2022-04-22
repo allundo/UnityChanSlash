@@ -49,20 +49,20 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
         if (status.shotBy.gameObject != targetMob?.gameObject) return;
 
         targetMob.OnHeal(status.attack);
-        OnDamage(20f, null);
+        Damage(20f, null);
         bodyCollider.enabled = false;
     }
 
     public void ReduceHP(float reduction = 1f)
     {
-        if (status.IsAlive) status.Damage(reduction);
+        if (status.IsAlive) status.LifeChange(-reduction);
     }
 
-    public float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;
 
-        status.Damage(attack);
+        status.LifeChange(-attack);
         effect.OnDamage(attack, type, attr);
 
         return 10f;

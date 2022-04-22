@@ -312,7 +312,7 @@ public class PlayerIcedFall : PlayerCommand
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.Jump(map.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => mobReact.OnDamage(0.5f, null, AttackType.Smash))
+            .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 

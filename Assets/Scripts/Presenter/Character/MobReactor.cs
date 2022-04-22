@@ -29,7 +29,7 @@ public class MobReactor : Reactor, IMobReactor
         effect = mobEffect = GetComponent<MobEffect>();
     }
 
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive || status.isHidden) return 0f;
 
@@ -51,7 +51,7 @@ public class MobReactor : Reactor, IMobReactor
             OnMelt(true);
         }
 
-        status.Damage(damage);
+        status.LifeChange(-damage);
 
         effect.OnDamage(LifeRatio(damage), type, attr);
 
@@ -64,7 +64,7 @@ public class MobReactor : Reactor, IMobReactor
 
         if (isEffectOn && !status.isIced && healRatio > 0.1f) mobEffect.OnHeal(healRatio);
 
-        status.Heal(healRatio * status.LifeMax.Value);
+        status.LifeChange(healRatio * status.LifeMax.Value);
     }
 
     public void OnHeal(float life, bool isEffectOn = true)

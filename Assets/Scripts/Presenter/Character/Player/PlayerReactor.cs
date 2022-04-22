@@ -71,7 +71,7 @@ public class PlayerReactor : MobReactor
             if (lifeRatio == 1f) lifeGauge.OnLifeMax();
         }
 
-        status.Heal(heal);
+        status.LifeChange(heal);
     }
 
     protected override void OnLifeChange(float life)
@@ -87,9 +87,9 @@ public class PlayerReactor : MobReactor
 
     }
 
-    public override float OnDamage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        float damage = base.OnDamage(attack, dir, type, attr);
+        float damage = base.Damage(attack, dir, type, attr);
         if (restUI.isActive) restUI.OnDamage();
 
         lifeGauge.OnDamage(LifeRatio(damage), LifeRatio(status.Life.Value));

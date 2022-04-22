@@ -34,7 +34,7 @@ public class DarkHoundReactor : BulletReactor
         bodyCollider.enabled = true;
     }
 
-    public override float OnDamage(float drain, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public override float Damage(float drain, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;
 
@@ -49,7 +49,7 @@ public class DarkHoundReactor : BulletReactor
         }
 
         effect.OnDamage(lifeMax, type, attr);
-        status.Damage(lifeMax);
+        status.LifeChange(-lifeMax);
 
         return lifeMax;
     }

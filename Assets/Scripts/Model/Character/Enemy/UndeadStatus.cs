@@ -34,9 +34,9 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
         base.ResetStatus();
     }
 
-    public override void Damage(float damage, AttackAttr attr = AttackAttr.None)
+    public override void LifeChange(float diff, AttackAttr attr = AttackAttr.None)
     {
-        curse = Mathf.Clamp(curse - damage * curseMultiplier[attr], 0f, curseMax);
-        life.Value -= damage;
+        curse = Mathf.Clamp(curse + diff * curseMultiplier[attr], 0f, curseMax);
+        life.Value = Mathf.Clamp(life.Value + diff, 0f, lifeMax.Value);
     }
 }
