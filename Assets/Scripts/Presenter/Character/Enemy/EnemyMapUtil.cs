@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyStatus))]
-public class EnemyMapUtil : MapUtil
+public class EnemyMapUtil : MobMapUtil
 {
     /// <summary>
     /// Tile position of enemy body Collider for fighting
@@ -90,7 +90,7 @@ public class EnemyMapUtil : MapUtil
     /// <returns>destPos</returns>
     public override Pos SetObjectOn(Pos destPos)
     {
-        if (status.isOnGround)
+        if (mobStatus.isOnGround)
         {
             map.GetTile(destPos).OnCharacterDest = status;
         }
@@ -109,7 +109,7 @@ public class EnemyMapUtil : MapUtil
     /// <param name="pos">Pos unit Tile position</param>
     public override void RemoveObjectOn(Pos pos)
     {
-        if (status.isOnGround)
+        if (mobStatus.isOnGround)
         {
             map.GetTile(pos).OnCharacterDest = null;
         }

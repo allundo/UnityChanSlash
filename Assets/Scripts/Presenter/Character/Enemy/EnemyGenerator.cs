@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyGenerator : Generator<MobStatus>
+public class EnemyGenerator : Generator<Status>
 {
     protected override void Awake()
     {
@@ -20,11 +20,11 @@ public class EnemyGenerator : Generator<MobStatus>
     public virtual IStatus Spawn(Transform pool, MobParam param, Vector3 pos, IDirection dir = null, float life = 0f)
         => GetInstance(pool, param.prefab).InitParam(param, life).OnSpawn(pos, dir);
 
-    public virtual IStatus GetInstance(Transform pool, MobStatus prefab)
+    public virtual IStatus GetInstance(Transform pool, Status prefab)
         => GetPooledObj(pool) ?? Instantiate(prefab, pool, false);
 
     protected virtual IStatus GetPooledObj(Transform pool)
-        => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<MobStatus>();
+        => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<Status>();
 
     public virtual EnemyGenerator Init(GameObject enemyPool)
     {

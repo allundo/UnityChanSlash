@@ -1,4 +1,4 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BulletData", menuName = "ScriptableObjects/CreateBulletParamAsset")]
-public class BulletData : MobData { }
+public class BulletData : DataAsset<Param> { }

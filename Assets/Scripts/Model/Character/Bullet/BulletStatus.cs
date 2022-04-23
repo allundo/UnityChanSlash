@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BulletStatus : MobStatus
+public class BulletStatus : Status
 {
     [SerializeField] protected BulletType type;
 
@@ -12,12 +12,10 @@ public class BulletStatus : MobStatus
         return this;
     }
 
-    public override MobStatus OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
+    public override Status OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f)
     {
         SetPosition(pos, dir);
         Activate();
         return this;
     }
-
-    public override float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None) => attack;
 }

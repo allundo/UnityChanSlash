@@ -20,17 +20,23 @@ public class DataAsset<T> : ScriptableObject
     }
 }
 
-// System.SerializeField属性を使用することで、Inspector上で変更した値がアセットに保存されるようになります
+
 [System.Serializable]
-public class MobParam
+public class Param
 {
     [SerializeField] public string name = "キャラクター";
 
     [SerializeField] public float defaultLifeMax = 10;
 
-    [SerializeField] public bool isOnGround = true;
-
     [SerializeField] public float attack = 1.0f;
+
+    [SerializeField] public Status prefab = default;
+}
+
+[System.Serializable]
+public class MobParam : Param
+{
+    [SerializeField] public bool isOnGround = true;
 
     [SerializeField] public float shield = 0.0f;
 
@@ -42,9 +48,17 @@ public class MobParam
 
     [SerializeField] public float restDamageMultiplier = 6.0f;
 
-    [SerializeField] public float armorMultiplier = 1.0f;
+    [SerializeField] public float fireDamageMultiplier = 1f;
 
-    [SerializeField] public MobStatus prefab = default;
+    [SerializeField] public float iceDamageMultiplier = 1f;
+
+    [SerializeField] public float thunderDamageMultiplier = 1f;
+
+    [SerializeField] public float lightDamageMultiplier = 1f;
+
+    [SerializeField] public float darkDamageMultiplier = 1f;
+
+    [SerializeField] public float armorMultiplier = 1.0f;
 }
 
 [System.Serializable]

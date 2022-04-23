@@ -41,7 +41,7 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
     public void OnSleep()
     {
         effect.OnDie();
-        map.ResetTile();
+        mobMap.ResetTile();
         bodyCollider.enabled = false;
     }
 }

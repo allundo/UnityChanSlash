@@ -32,13 +32,13 @@ public class EnemyAIInput : MobInput
         var currentCommand = commander.currentCommand;
 
         // Turn if player found at left, right or backward
-        Pos left = map.GetLeft;
-        Pos right = map.GetRight;
+        Pos left = mobMap.GetLeft;
+        Pos right = mobMap.GetRight;
 
         if (IsOnPlayer(left)) return turnL;
         if (IsOnPlayer(right)) return turnR;
 
-        Pos backward = map.GetBackward;
+        Pos backward = mobMap.GetBackward;
 
         if (IsOnPlayer(backward))
         {
@@ -46,16 +46,16 @@ public class EnemyAIInput : MobInput
         }
 
         // Attack if player found at forward
-        Pos forward = map.GetForward;
+        Pos forward = mobMap.GetForward;
         if (IsOnPlayer(forward)) return RandomChoice(attack, doubleAttack);
 
-        bool isForwardMovable = map.IsMovable(forward);
+        bool isForwardMovable = mobMap.IsMovable(forward);
 
         // Move forward if player found in front
-        if (map.IsPlayerFound(forward) && isForwardMovable) return moveForward;
+        if (mobMap.IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
-        bool isLeftMovable = map.IsMovable(left);
-        bool isRightMovable = map.IsMovable(right);
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
 
         if (isForwardMovable)
         {
@@ -86,7 +86,7 @@ public class EnemyAIInput : MobInput
             if (isRightMovable) return turnR;
 
             // Turn if backward movable
-            if (map.IsMovable(backward))
+            if (mobMap.IsMovable(backward))
             {
                 return RandomChoice(turnL, turnR);
             }

@@ -1,4 +1,4 @@
-public abstract class ShieldCommand : Command
+public abstract class ShieldCommand : MobCommand
 {
     public ShieldCommand(CommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     { }

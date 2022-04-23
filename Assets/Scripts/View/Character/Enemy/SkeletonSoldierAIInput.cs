@@ -39,7 +39,7 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         var currentCommand = commander.currentCommand;
 
         // Fighting start if player found at forward
-        Pos forward = map.GetForward;
+        Pos forward = mobMap.GetForward;
         shieldAnim.fighting.Bool = IsOnPlayer(forward);
         shieldAnim.guard.Bool &= shieldAnim.fighting.Bool;
 
@@ -50,32 +50,32 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
             return RandomChoice(attack, guard, idle);
         }
 
-        Pos forward2 = map.dir.GetForward(forward);
-        bool isForwardMovable = map.IsMovable(forward);
+        Pos forward2 = mobMap.dir.GetForward(forward);
+        bool isForwardMovable = mobMap.IsMovable(forward);
 
         // Run forward if player found in front
         if (IsOnPlayer(forward2) && isForwardMovable) return run;
 
         // Turn if player found at left, right or backward
-        Pos left = map.GetLeft;
+        Pos left = mobMap.GetLeft;
         if (IsOnPlayer(left)) return turnL;
 
-        Pos right = map.GetRight;
+        Pos right = mobMap.GetRight;
         if (IsOnPlayer(right)) return turnR;
 
-        Pos backward = map.GetBackward;
+        Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
-        Pos left2 = map.dir.GetLeft(left);
-        bool isLeftMovable = map.IsMovable(left);
+        Pos left2 = mobMap.dir.GetLeft(left);
+        bool isLeftMovable = mobMap.IsMovable(left);
         if (IsOnPlayer(left2) && isLeftMovable) return turnL;
 
-        Pos right2 = map.dir.GetRight(right);
-        bool isRightMovable = map.IsMovable(right);
+        Pos right2 = mobMap.dir.GetRight(right);
+        bool isRightMovable = mobMap.IsMovable(right);
         if (IsOnPlayer(right2) && isRightMovable) return turnR;
 
-        Pos backward2 = map.dir.GetBackward(backward);
-        bool isBackwardMovable = map.IsMovable(backward);
+        Pos backward2 = mobMap.dir.GetBackward(backward);
+        bool isBackwardMovable = mobMap.IsMovable(backward);
         if (IsOnPlayer(backward2) && isBackwardMovable) return RandomChoice(turnL, turnR);
 
         if (isForwardMovable)

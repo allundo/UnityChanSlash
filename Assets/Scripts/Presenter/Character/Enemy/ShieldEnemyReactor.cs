@@ -23,12 +23,12 @@ public class ShieldEnemyReactor : EnemyReactor
 
         if (guardState.IsShieldOn(dir))
         {
-            shield = status.Shield;
+            shield = mobStatus.Shield;
             guardState.SetShield();
             shieldEffect.DamageFlash(0.1f);
         }
 
-        return Mathf.Max(status.CalcAttack(attack, dir, attr) - shield, 0.0f);
+        return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, 0.0f);
     }
     public override void Destroy()
     {

@@ -35,30 +35,30 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
     {
         var currentCommand = commander.currentCommand;
 
-        Pos forward = map.GetForward;
+        Pos forward = mobMap.GetForward;
 
         // Start attack if player found at forward
         if (IsOnPlayer(forward)) return RandomChoice(attack, teleport);
 
         // Turn if player found at left, right or backward
-        Pos left = map.GetLeft;
+        Pos left = mobMap.GetLeft;
         if (IsOnPlayer(left)) return turnL;
 
-        Pos right = map.GetRight;
+        Pos right = mobMap.GetRight;
         if (IsOnPlayer(right)) return turnR;
 
-        Pos left2 = map.dir.GetLeft(left);
+        Pos left2 = mobMap.dir.GetLeft(left);
         if (IsOnPlayer(left2)) return turnL;
 
-        Pos right2 = map.dir.GetRight(right);
+        Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        if (map.IsPlayerFound(forward)) return RandomChoice(ice, fire);
+        if (mobMap.IsPlayerFound(forward)) return RandomChoice(ice, fire);
 
-        Pos backward = map.GetBackward;
+        Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
-        bool isForwardMovable = map.IsMovable(forward);
+        bool isForwardMovable = mobMap.IsMovable(forward);
 
         if (isForwardMovable)
         {
@@ -81,9 +81,9 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         else
         {
             // Turn if forward unmovable and left or right movable
-            if (map.IsMovable(left)) return turnL;
-            if (map.IsMovable(right)) return turnR;
-            if (map.IsMovable(backward)) return RandomChoice(turnL, turnR);
+            if (mobMap.IsMovable(left)) return turnL;
+            if (mobMap.IsMovable(right)) return turnR;
+            if (mobMap.IsMovable(backward)) return RandomChoice(turnL, turnR);
         }
 
         // Idle if unmovable

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MobStatus))]
-public class PlayerMapUtil : MapUtil
+[RequireComponent(typeof(PlayerStatus))]
+public class PlayerMapUtil : MobMapUtil
 {
     public override bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos), dir);
     public override bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos), dir.Backward);

@@ -31,7 +31,7 @@ public class WitchDoubleJump : WitchDoubleCommand
         witchAnim.jumpOver.Fire();
 
         Pos dest = map.GetJump;
-        map.MoveObjectOn(dest);
+        map.SetObjectOn(dest);
 
         playingTween = DOTween.Sequence()
             .Join(tweenMove.Jump(dest, 1f, 1.6f))
@@ -60,7 +60,7 @@ public class WitchDoubleBackStep : WitchDoubleCommand
         witchAnim.backStep.Fire();
 
         Pos dest = map.GetBackward;
-        map.MoveObjectOn(dest);
+        map.SetObjectOn(dest);
 
         playingTween = tweenMove.Jump(dest, 1f, 1f).Play();
 
@@ -98,7 +98,7 @@ public class WitchDoubleStart : WitchDoubleCommand
 
         Vector3 dest = map.CurrentVec3Pos + (map.GetForwardVector() + new Vector3(0f, decentVec, 0f)) * attackTimeScale;
 
-        map.MoveObjectOn(map.GetForward);
+        map.SetObjectOn(map.GetForward);
 
         playingTween = tweenMove.Move(dest, attackTimeScale).Play();
 
@@ -124,7 +124,7 @@ public class WitchDoubleKeep : WitchDoubleCommand
     {
         Vector3 dest = map.CurrentVec3Pos + map.GetForwardVector();
 
-        map.MoveObjectOn(map.GetForward);
+        map.SetObjectOn(map.GetForward);
 
         playingTween = tweenMove.Move(dest).Play();
 
@@ -165,7 +165,7 @@ public class WitchDoubleLeave : WitchDoubleCommand
     public override IObservable<Unit> Execute()
     {
         Pos dest = map.GetForward;
-        map.MoveObjectOn(dest);
+        map.SetObjectOn(dest);
 
         playingTween = tweenMove.Move(dest, 1f, Ease.OutQuad).Play();
         react.OnDie();

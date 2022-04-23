@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class BulletGenerator : Generator<MobStatus>
+public class BulletGenerator : Generator<Status>
 {
-    protected MobParam param;
+    protected Param param;
 
     public BulletStatus Fire(IStatus status)
     {
@@ -14,7 +14,7 @@ public class BulletGenerator : Generator<MobStatus>
     {
         pool.ForEach(t => t.GetComponent<Reactor>().Destroy());
     }
-    public virtual BulletGenerator Init(GameObject bulletPool, MobParam param)
+    public virtual BulletGenerator Init(GameObject bulletPool, Param param)
     {
         pool = bulletPool.transform;
         this.param = param;

@@ -19,39 +19,46 @@ public interface IUndeadReactor : IMobReactor
 }
 
 [RequireComponent(typeof(MobEffect))]
+[RequireComponent(typeof(MobMapUtil))]
 public class MobReactor : Reactor, IMobReactor
 {
+    protected IMobStatus mobStatus;
+    protected IMobMapUtil mobMap;
+    protected IMobInput mobInput;
     protected IMobEffect mobEffect;
 
     protected override void Awake()
     {
         base.Awake();
         effect = mobEffect = GetComponent<MobEffect>();
+        mobStatus = status as IMobStatus;
+        mobMap = map as IMobMapUtil;
+        mobInput = input as IMobInput;
     }
 
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
-        if (!status.IsAlive || status.isHidden) return 0f;
+        if (!mobStatus.IsAlive || mobStatus.isHidden) return 0f;
 
         float damage = CalcDamage(attack, dir, attr);
 
         if (attr == AttackAttr.Ice)
         {
-            if (damage > 0 && !status.isIced)
+            if (damage > 0 && !mobStatus.isIced)
             {
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
-                input.InputIced(damage * 100f);
-                mobEffect.OnIced(status.corePos);
-                status.SetIsIced(true);
+                mobInput.InputIced(damage * 100f);
+                mobEffect.OnIced(mobStatus.corePos);
+                mobStatus.SetIsIced(true);
             }
             return 0f;
         }
-        else if (status.isIced)
+        else if (mobStatus.isIced)
         {
             OnMelt(true);
         }
 
-        status.LifeChange(-damage);
+        mobStatus.LifeChange(-damage);
 
         effect.OnDamage(LifeRatio(damage), type, attr);
 
@@ -60,21 +67,21 @@ public class MobReactor : Reactor, IMobReactor
 
     public virtual void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
     {
-        if (!status.IsAlive) return;
+        if (!mobStatus.IsAlive) return;
 
-        if (isEffectOn && !status.isIced && healRatio > 0.1f) mobEffect.OnHeal(healRatio);
+        if (isEffectOn && !mobStatus.isIced && healRatio > 0.1f) mobEffect.OnHeal(healRatio);
 
-        status.LifeChange(healRatio * status.LifeMax.Value);
+        mobStatus.LifeChange(healRatio * status.LifeMax.Value);
     }
 
     public void OnHeal(float life, bool isEffectOn = true)
         => OnHealRatio(LifeRatio(life), isEffectOn);
 
-    protected float LifeRatio(float life) => Mathf.Clamp01(life / status.LifeMax.Value);
+    protected float LifeRatio(float life) => Mathf.Clamp01(life / mobStatus.LifeMax.Value);
 
     protected virtual float CalcDamage(float attack, IDirection dir, AttackAttr attr)
     {
-        return status.CalcAttack(attack, dir, attr);
+        return mobStatus.CalcAttack(attack, dir, attr);
     }
 
     public virtual void OnFall()
@@ -89,26 +96,26 @@ public class MobReactor : Reactor, IMobReactor
 
     public virtual void OnMelt(bool isBroken = false)
     {
-        if (!status.isIced) return;
+        if (!mobStatus.isIced) return;
 
         mobEffect.OnMelt();
-        if (isBroken) mobEffect.OnIceCrash(status.corePos);
-        status.SetIsIced(false);
+        if (isBroken) mobEffect.OnIceCrash(mobStatus.corePos);
+        mobStatus.SetIsIced(false);
     }
 
     public virtual void OnHide()
     {
-        if (status.isHidden) return;
+        if (mobStatus.isHidden) return;
 
-        status.SetHidden(true);
+        mobStatus.SetHidden(true);
         mobEffect.OnHide();
     }
 
     public virtual bool OnAppear()
     {
-        if (!status.isHidden) return true;
+        if (!mobStatus.isHidden) return true;
 
-        status.SetHidden(false);
+        mobStatus.SetHidden(false);
         mobEffect.OnAppear();
         return true;
     }
@@ -116,5 +123,17 @@ public class MobReactor : Reactor, IMobReactor
     public virtual void OnDisappear(float duration = 0.5f)
     {
         mobEffect.Disappear(OnDead, duration);
+    }
+
+    public override void OnDie()
+    {
+        mobMap.ResetTile();
+        base.OnDie();
+    }
+
+    public override void Destroy()
+    {
+        mobMap.ResetTile();
+        base.Destroy();
     }
 }

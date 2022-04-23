@@ -7,15 +7,15 @@ public class RedSlimeAIInput : EnemyAIInput
     {
         var currentCommand = commander.currentCommand;
 
-        Pos forward = map.GetForward;
-        Pos backward = map.GetBackward;
-        Pos left = map.GetLeft;
-        Pos right = map.GetRight;
+        Pos forward = mobMap.GetForward;
+        Pos backward = mobMap.GetBackward;
+        Pos left = mobMap.GetLeft;
+        Pos right = mobMap.GetRight;
 
-        bool isForwardMovable = map.IsMovable(forward);
-        bool isBackwardMovable = map.IsMovable(backward);
-        bool isLeftMovable = map.IsMovable(left);
-        bool isRightMovable = map.IsMovable(right);
+        bool isForwardMovable = mobMap.IsMovable(forward);
+        bool isBackwardMovable = mobMap.IsMovable(backward);
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
 
         // Get away if player found at forward
         if (IsOnPlayer(forward))
@@ -54,12 +54,12 @@ public class RedSlimeAIInput : EnemyAIInput
         }
 
         // Shoot if player found in front
-        bool isForwardOpen = map.GetTile(forward).IsViewOpen;
-        if (map.IsPlayerFound(forward) && isForwardOpen) return fire;
+        bool isForwardOpen = mobMap.GetTile(forward).IsViewOpen;
+        if (mobMap.IsPlayerFound(forward) && isForwardOpen) return fire;
 
-        Pos backward2 = map.dir.GetBackward(backward);
-        Pos left2 = map.dir.GetLeft(left);
-        Pos right2 = map.dir.GetRight(right);
+        Pos backward2 = mobMap.dir.GetBackward(backward);
+        Pos left2 = mobMap.dir.GetLeft(left);
+        Pos right2 = mobMap.dir.GetRight(right);
 
         // Turn to player if player is found in 2 tile distance
         if (IsOnPlayer(backward2)) return Random.Range(0, 2) == 0 ? turnL : turnR;

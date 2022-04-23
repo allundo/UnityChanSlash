@@ -20,7 +20,7 @@ public class Attack : AttackBehaviour
     protected virtual void Awake()
     {
         attackCollider = GetComponent<Collider>();
-        status = GetComponentInParent<MobStatus>();
+        status = GetComponentInParent<Status>();
 
         attackCollider.enabled = false;
     }

@@ -12,9 +12,9 @@ public class PlayerStatus : MobStatus
 
     protected override void Awake()
     {
-        param = Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0);
-        col = GetComponent<CapsuleCollider>();
         base.Awake();
+        col = GetComponent<CapsuleCollider>();
+        InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
     }
 
     public void SetPosition(KeyValuePair<Pos, IDirection> initPos)

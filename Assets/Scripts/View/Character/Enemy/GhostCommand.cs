@@ -50,7 +50,7 @@ public class GhostThrough : EnemyForward
         completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
 
-        input.Interrupt(MapUtil.IsOnPlayer(map.GetForward) ? attack : throughEnd, false);
+        input.Interrupt(MapUtil.IsOnPlayer(mobMap.GetForward) ? attack : throughEnd, false);
 
         return ObservableComplete();
     }
@@ -62,8 +62,8 @@ public class GhostThroughEnd : EnemyForward
 
     protected override bool Action()
     {
-        if (!map.ForwardTile.IsViewOpen) return false;
-        if (map.IsForwardMovable) mobReact.OnAppear();
+        if (!mobMap.ForwardTile.IsViewOpen) return false;
+        if (mobMap.IsForwardMovable) mobReact.OnAppear();
 
         playingTween = LinearMove(GetDest);
         SetSpeed();
@@ -77,13 +77,13 @@ public class GhostAttackStart : FlyingAttackStart
 {
     protected ICommand attackKeep;
 
-    protected override bool IsForwardMovable => map.ForwardTile.IsViewOpen;
+    protected override bool IsForwardMovable => mobMap.ForwardTile.IsViewOpen;
 
     protected override ICommand AttackEndCommand(EnemyCommandTarget target, float duration)
         => attackEnd ?? new GhostAttackEnd(target, duration);
 
     protected override ICommand PlayNext()
-        => MapUtil.IsOnPlayer(map.GetForward) ? attackKeep : attackEnd;
+        => MapUtil.IsOnPlayer(mobMap.GetForward) ? attackKeep : attackEnd;
 
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
@@ -112,7 +112,7 @@ public class GhostAttackKeep : FlyingAttack
 {
     protected ICommand attackEnd;
 
-    protected ICommand PlayNext() => MapUtil.IsOnPlayer(map.GetForward) ? this : attackEnd;
+    protected ICommand PlayNext() => MapUtil.IsOnPlayer(mobMap.GetForward) ? this : attackEnd;
 
     public GhostAttackKeep(EnemyCommandTarget target, float duration, ICommand attackEnd) : base(target, duration)
     {
@@ -128,9 +128,9 @@ public class GhostAttackKeep : FlyingAttack
             return Observable.Empty(Unit.Default);
         }
 
-        Vector3 dest = map.CurrentVec3Pos + map.GetForwardVector();
+        Vector3 dest = mobMap.CurrentVec3Pos + map.GetForwardVector();
 
-        map.MoveObjectOn(map.GetForward);
+        mobMap.MoveObjectOn(map.GetForward);
 
         playingTween = DOTween.Sequence()
             .Join(tweenMove.Move(dest))
@@ -148,10 +148,10 @@ public class GhostAttackKeep : FlyingAttack
 
 public class GhostAttackEnd : FlyingAttackEnd
 {
-    protected override bool IsForwardMovable => map.ForwardTile.IsViewOpen;
-    protected override bool IsBackwardMovable => map.IsBackwardMovable;
-    protected override bool IsRightMovable => map.IsRightMovable;
-    protected override bool IsLeftMovable => map.IsLeftMovable;
+    protected override bool IsForwardMovable => mobMap.ForwardTile.IsViewOpen;
+    protected override bool IsBackwardMovable => mobMap.IsBackwardMovable;
+    protected override bool IsRightMovable => mobMap.IsRightMovable;
+    protected override bool IsLeftMovable => mobMap.IsLeftMovable;
 
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
@@ -162,7 +162,7 @@ public class GhostAttackEnd : FlyingAttackEnd
     {
         (react as IGhostReactor).OnAttackEnd();
 
-        // Apply enemyMap.MoveObjectOn()
+        // Apply enemymobMap.MoveObjectOn()
         var observableComplete = base.Execute();
 
         // Appear if destination tile is enterable

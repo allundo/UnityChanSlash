@@ -99,16 +99,16 @@ public class PlayerReactor : MobReactor
 
     protected override float CalcDamage(float attack, IDirection dir, AttackAttr attr = AttackAttr.None)
     {
-        if (restUI.isActive) return Mathf.Max(status.CalcAttack(attack, null, attr), 0.0f);
+        if (restUI.isActive) return Mathf.Max(mobStatus.CalcAttack(attack, null, attr), 0.0f);
 
         float shield = 0.0f;
 
         if (guardState.IsShieldOn(dir))
         {
-            shield = status.Shield;
+            shield = mobStatus.Shield;
             guardState.SetShield();
         }
 
-        return Mathf.Max(status.CalcAttack(attack, dir, attr) - shield, 0.0f);
+        return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, 0.0f);
     }
 }

@@ -24,7 +24,7 @@ public abstract class Reactor : MonoBehaviour, IReactor
 
     protected virtual void Awake()
     {
-        status = GetComponent<MobStatus>();
+        status = GetComponent<Status>();
         input = GetComponent<MobInput>();
         map = GetComponent<MapUtil>();
         bodyCollider = GetComponentInChildren<Collider>();
@@ -50,7 +50,6 @@ public abstract class Reactor : MonoBehaviour, IReactor
     public virtual void OnDie()
     {
         effect.OnDie();
-        map.ResetTile();
         bodyCollider.enabled = false;
     }
 
@@ -71,7 +70,6 @@ public abstract class Reactor : MonoBehaviour, IReactor
         effect.OnDestroy();
 
         bodyCollider.enabled = false;
-        map.ResetTile();
 
         Destroy(gameObject);
     }

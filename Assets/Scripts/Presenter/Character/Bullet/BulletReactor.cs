@@ -43,6 +43,5 @@ public class BulletReactor : Reactor, IBulletReactor
     {
         effect.OnDie();
         effect.Disappear(OnDead);
-        map.ResetTile();
     }
 }

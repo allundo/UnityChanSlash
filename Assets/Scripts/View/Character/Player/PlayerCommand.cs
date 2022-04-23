@@ -90,9 +90,9 @@ public class PlayerForward : PlayerMove
 {
     public PlayerForward(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool IsMovable => map.IsForwardMovable;
-    protected override ITile DestTile => map.ForwardTile;
-    protected override Pos GetDest => map.GetForward;
+    protected override bool IsMovable => mobMap.IsForwardMovable;
+    protected override ITile DestTile => mobMap.ForwardTile;
+    protected override Pos GetDest => mobMap.GetForward;
     protected override float Speed => TILE_UNIT / duration;
 }
 
@@ -100,9 +100,9 @@ public class PlayerBack : PlayerMove
 {
     public PlayerBack(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool IsMovable => map.IsBackwardMovable;
-    protected override ITile DestTile => map.BackwardTile;
-    protected override Pos GetDest => map.GetBackward;
+    protected override bool IsMovable => mobMap.IsBackwardMovable;
+    protected override ITile DestTile => mobMap.BackwardTile;
+    protected override Pos GetDest => mobMap.GetBackward;
     protected override float Speed => -TILE_UNIT / duration;
 }
 
@@ -110,9 +110,9 @@ public class PlayerRight : PlayerMove
 {
     public PlayerRight(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool IsMovable => map.IsRightMovable;
-    protected override ITile DestTile => map.RightTile;
-    protected override Pos GetDest => map.GetRight;
+    protected override bool IsMovable => mobMap.IsRightMovable;
+    protected override ITile DestTile => mobMap.RightTile;
+    protected override Pos GetDest => mobMap.GetRight;
     protected override float RSpeed => TILE_UNIT / duration;
 }
 
@@ -120,9 +120,9 @@ public class PlayerLeft : PlayerMove
 {
     public PlayerLeft(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool IsMovable => map.IsLeftMovable;
-    protected override ITile DestTile => map.LeftTile;
-    protected override Pos GetDest => map.GetLeft;
+    protected override bool IsMovable => mobMap.IsLeftMovable;
+    protected override ITile DestTile => mobMap.LeftTile;
+    protected override Pos GetDest => mobMap.GetLeft;
     protected override float RSpeed => -TILE_UNIT / duration;
 }
 
@@ -151,10 +151,10 @@ public class PlayerStartRunning : PlayerRun
 
     public override IObservable<Unit> Execute()
     {
-        var dest = map.DestVec;                     // Remaining vector to front tile
+        var dest = mobMap.DestVec;                     // Remaining vector to front tile
         var timeScale = dest.magnitude / TILE_UNIT; // Remaining distance rate
 
-        playingTween = tweenMove.Linear(map.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
+        playingTween = tweenMove.Linear(mobMap.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
 
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
         completeTween = DOTween.Sequence()
@@ -178,9 +178,9 @@ public class PlayerRun : PlayerDash
 
     public override IObservable<Unit> Execute()
     {
-        if (map.IsForwardMovable)
+        if (mobMap.IsForwardMovable)
         {
-            playingTween = tweenMove.Linear(map.GetForward, 1f, hidePlateHandler.Move);
+            playingTween = tweenMove.Linear(mobMap.GetForward, 1f, hidePlateHandler.Move);
 
             playerAnim.speed.Float = TILE_UNIT / duration;
             completeTween = tweenMove.FinallyCall(() => playerAnim.speed.Float = 0).Play();
@@ -226,9 +226,9 @@ public class PlayerBrakeStop : PlayerBrake
     public override IObservable<Unit> Execute()
     {
 
-        if (map.IsForwardMovable)
+        if (mobMap.IsForwardMovable)
         {
-            playingTween = tweenMove.Brake(map.GetForward, 0.75f, hidePlateHandler.Move);
+            playingTween = tweenMove.Brake(mobMap.GetForward, 0.75f, hidePlateHandler.Move);
             validateTween = ValidateTween().Play();
             completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, 0.3f);
 
@@ -271,15 +271,15 @@ public class PlayerJump : PlayerCommand
         int distance = 0;
         ITile destTile = null;
 
-        if (map.IsJumpable)
+        if (mobMap.IsJumpable)
         {
             distance = 2;
-            destTile = map.JumpTile;
+            destTile = mobMap.JumpTile;
         }
-        else if (map.IsForwardMovable)
+        else if (mobMap.IsForwardMovable)
         {
             distance = 1;
-            destTile = map.ForwardTile;
+            destTile = mobMap.ForwardTile;
         }
 
         playerAnim.jump.Fire();
@@ -311,7 +311,7 @@ public class PlayerIcedFall : PlayerCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.Jump(map.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
+            .Append(tweenMove.Jump(mobMap.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
             .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash))
             .SetUpdate(false)
             .Play();
@@ -349,11 +349,11 @@ public class PlayerTurnL : PlayerCommand
 
     protected override bool Action()
     {
-        map.TurnLeft();
+        mobMap.TurnLeft();
         mainCamera.TurnLeft();
         playerAnim.turnL.Fire();
         hidePlateHandler.Turn();
-        itemGenerator.Turn(map.dir);
+        itemGenerator.Turn(mobMap.dir);
 
         playingTween = tweenMove.TurnToDir.SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
@@ -366,11 +366,11 @@ public class PlayerTurnR : PlayerCommand
 
     protected override bool Action()
     {
-        map.TurnRight();
+        mobMap.TurnRight();
         mainCamera.TurnRight();
         playerAnim.turnR.Fire();
         hidePlateHandler.Turn();
-        itemGenerator.Turn(map.dir);
+        itemGenerator.Turn(mobMap.dir);
 
         playingTween = tweenMove.TurnToDir.SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
@@ -404,7 +404,7 @@ public class PlayerGetItem : PlayerAction
 
     protected override bool Action()
     {
-        ITile tile = map.ForwardTile;
+        ITile tile = mobMap.ForwardTile;
         Item item = tile.PickItem();
 
         if (playerAnim.handOn.Bool && itemInventory.PickUp(item.itemInfo))
@@ -433,7 +433,7 @@ public class PlayerPutItem : PlayerAction
 
     protected override bool Action()
     {
-        if (playerAnim.handOn.Bool && itemGenerator.Put(itemIcon.itemInfo, map.GetForward, map.dir))
+        if (playerAnim.handOn.Bool && itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir))
         {
             itemInventory.Remove(itemIcon);
             playerAnim.putItem.Fire();

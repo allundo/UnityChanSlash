@@ -40,7 +40,7 @@ public abstract class EnemyMove : EnemyCommand
 
     protected Tween LinearMove(Pos destPos)
     {
-        map.MoveObjectOn(destPos);
+        mobMap.MoveObjectOn(destPos);
 
         return DOTween.Sequence()
             .Join(tweenMove.Move(destPos))
@@ -67,8 +67,8 @@ public class EnemyForward : EnemyMove
 {
     public EnemyForward(EnemyCommandTarget target, float duration) : base(target, duration) { }
 
-    protected override bool IsMovable => map.IsForwardMovable;
-    protected override Pos GetDest => map.GetForward;
+    protected override bool IsMovable => mobMap.IsForwardMovable;
+    protected override Pos GetDest => mobMap.GetForward;
     protected override float Speed => TILE_UNIT / duration;
 }
 
@@ -78,7 +78,7 @@ public class EnemyTurnL : EnemyCommand
 
     protected override bool Action()
     {
-        map.TurnLeft();
+        mobMap.TurnLeft();
         playingTween = tweenMove.TurnToDir.Play();
         return true;
     }
@@ -90,7 +90,7 @@ public class EnemyTurnR : EnemyCommand
 
     protected override bool Action()
     {
-        map.TurnRight();
+        mobMap.TurnRight();
         playingTween = tweenMove.TurnToDir.Play();
         return true;
     }

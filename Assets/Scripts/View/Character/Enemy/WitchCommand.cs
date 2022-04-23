@@ -42,12 +42,12 @@ public class WitchJumpOver : WitchCommand
 
     protected override bool Action()
     {
-        if (!map.IsJumpable) return false;
+        if (!enemyMap.IsJumpable) return false;
 
         witchReact.OnAppear();
         witchAnim.jump.Fire();
 
-        Pos destPos = map.GetJump;
+        Pos destPos = enemyMap.GetJump;
 
         enemyMap.MoveObjectOn(destPos);
         enemyMap.TurnBack();
@@ -74,7 +74,7 @@ public class WitchJumpOverAttack : WitchJumpOver
 
     public override IObservable<Unit> Execute()
     {
-        if (!map.IsJumpable)
+        if (!enemyMap.IsJumpable)
         {
             // Cancel attack
             input.ValidateInput();
@@ -94,7 +94,7 @@ public class WitchBackStep : WitchCommand
 
     protected override bool Action()
     {
-        if (!map.IsBackwardMovable) return false;
+        if (!enemyMap.IsBackwardMovable) return false;
 
         witchReact.OnAppear();
         witchAnim.backStep.Fire();
@@ -124,7 +124,7 @@ public class WitchBackStepAttack : WitchBackStep
 
     public override IObservable<Unit> Execute()
     {
-        if (!map.IsBackwardMovable)
+        if (!enemyMap.IsBackwardMovable)
         {
             // Cancel attack
             input.ValidateInput();

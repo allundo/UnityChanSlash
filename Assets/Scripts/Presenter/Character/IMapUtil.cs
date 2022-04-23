@@ -6,7 +6,6 @@ public interface IMapUtil
     Pos onTilePos { get; }
 
     void OnActive();
-    void ResetTile();
     Vector3 WorldPos(Pos pos);
 
     void TurnLeft();
@@ -46,9 +45,7 @@ public interface IMapUtil
     ITile JumpTile { get; }
 
     bool IsObjectOn(Pos destPos);
-    bool IsMovable(Pos destPos, IDirection dir = null);
     bool IsViewable(Pos destPos);
-    bool IsLeapable(Pos destPos);
 
     Vector3 CurrentVec3Pos { get; }
     Vector3 DestVec { get; }
@@ -60,18 +57,8 @@ public interface IMapUtil
     Pos GetBackward { get; }
     Pos GetJump { get; }
 
-    bool IsForwardMovable { get; }
-    bool IsForwardLeapable { get; }
-    bool IsBackwardMovable { get; }
-    bool IsLeftMovable { get; }
-    bool IsRightMovable { get; }
-    bool IsJumpable { get; }
-
     bool IsPlayerFound();
     bool IsPlayerFound(Pos pos);
-
-    Pos SearchSpaceNearBy(int size = 2);
-    Pos SearchSpaceNearBy(Pos targetPos, int size = 2);
 
     bool IsPlayerForward { get; }
     bool IsPlayerLeft { get; }
@@ -99,29 +86,16 @@ public interface IMapUtil
     Pos SetObjectOn(Pos destPos);
 
     /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile currently on
-    /// </summary>
-    void RemoveObjectOn();
-
-    /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
-    /// </summary>
-    /// <param name="pos">Vector3 Tile position</param>
-    void RemoveObjectOn(Vector3 pos);
-
-    /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
-    /// </summary>
-    /// <param name="pos">Pos unit Tile position</param>
-    void RemoveObjectOn(Pos pos);
-
-    /// <summary>
     /// Apply RemoveObjectOn at current Tile and SetObjectOn to the dest Pos.
     /// </summary>
+    /// <param name="destPos">Vector3 position of destination Tile</param>
+    /// <returns>destPos</returns>
     Pos MoveObjectOn(Vector3 destPos);
 
     /// <summary>
     /// Apply RemoveObjectOn at current Tile and SetObjectOn to the dest Pos.
     /// </summary>
+    /// <param name="destPos">Tile map position of destination</param>
+    /// <returns>destPos</returns>
     Pos MoveObjectOn(Pos destPos);
 }

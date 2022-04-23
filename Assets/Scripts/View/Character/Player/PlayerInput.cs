@@ -9,7 +9,7 @@ using DG.Tweening;
 /// In addition to MobInput, there is 'Trigger type' input implemented to improve usability.<br />
 /// </summary>
 [RequireComponent(typeof(PlayerCommandTarget))]
-[RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(PlayerMapUtil))]
 public class PlayerInput : ShieldInput
 {
     // Fight UI to fight against Enemy on front Tile
@@ -254,9 +254,9 @@ public class PlayerInput : ShieldInput
         uiMask.SetActive(isHandleUIOn || IsAttack || fightCircle.IsPressed);
 
         forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !isHandleUIOn);
-        backwardUI.SetActive(map.IsBackwardMovable);
-        rightUI.SetActive(map.IsRightMovable);
-        leftUI.SetActive(map.IsLeftMovable);
+        backwardUI.SetActive(mobMap.IsBackwardMovable);
+        rightUI.SetActive(mobMap.IsRightMovable);
+        leftUI.SetActive(mobMap.IsLeftMovable);
 
         bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield;
 

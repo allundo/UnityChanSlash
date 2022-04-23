@@ -37,15 +37,15 @@ public class RabbitAIInput : EnemyAIInput
     {
         var currentCommand = commander.currentCommand;
 
-        Pos forward = map.GetForward;
-        Pos left = map.GetLeft;
-        Pos right = map.GetRight;
-        Pos backward = map.GetBackward;
+        Pos forward = mobMap.GetForward;
+        Pos left = mobMap.GetLeft;
+        Pos right = mobMap.GetRight;
+        Pos backward = mobMap.GetBackward;
 
-        bool isForwardMovable = map.IsMovable(forward);
-        bool isLeftMovable = map.IsMovable(left);
-        bool isRightMovable = map.IsMovable(right);
-        bool isBackwardMovable = map.IsMovable(backward);
+        bool isForwardMovable = mobMap.IsMovable(forward);
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
+        bool isBackwardMovable = mobMap.IsMovable(backward);
 
         if (IsOnPlayer(left))
         {
@@ -76,16 +76,16 @@ public class RabbitAIInput : EnemyAIInput
             return RandomChoice(wondering, attack);
         }
 
-        Pos backward2 = map.dir.GetBackward(backward);
-        Pos left2 = map.dir.GetLeft(left);
-        Pos right2 = map.dir.GetRight(right);
+        Pos backward2 = mobMap.dir.GetBackward(backward);
+        Pos left2 = mobMap.dir.GetLeft(left);
+        Pos right2 = mobMap.dir.GetRight(right);
 
         // Turn to player if player is found in 2 tile distance if able to reach player
         if (IsOnPlayer(backward2) && isBackwardMovable) return RandomChoice(turnL, turnR);
         if (IsOnPlayer(left2) && isLeftMovable) return RandomChoice(turnL, moveForward);
         if (IsOnPlayer(right2) && isRightMovable) return RandomChoice(turnR, moveForward);
 
-        Pos forward2 = map.dir.GetForward(forward);
+        Pos forward2 = mobMap.dir.GetForward(forward);
 
         // Move forward or jump attack if player found in 2 tile distance front
         if (IsOnPlayer(forward2) && isForwardMovable)
@@ -98,7 +98,7 @@ public class RabbitAIInput : EnemyAIInput
         }
 
         // Move forward if player found in front
-        if (map.IsPlayerFound(forward) && isForwardMovable) return moveForward;
+        if (mobMap.IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
         if (isForwardMovable)
         {
@@ -132,7 +132,7 @@ public class RabbitAIInput : EnemyAIInput
             if (isRightMovable) return turnR;
 
             // Turn if backward movable
-            if (map.IsMovable(backward))
+            if (mobMap.IsMovable(backward))
             {
                 return RandomChoice(turnL, turnR);
             }

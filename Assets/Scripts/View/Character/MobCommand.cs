@@ -6,9 +6,11 @@ using UniRx;
 public class MobCommand : Command
 {
     protected IMobReactor mobReact;
+    protected IMobMapUtil mobMap;
     public MobCommand(CommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
-        mobReact = react as MobReactor;
+        mobReact = react as IMobReactor;
+        mobMap = map as IMobMapUtil;
     }
 }
 
@@ -18,7 +20,7 @@ public class DieCommand : MobCommand
 
     public override IObservable<Unit> Execute()
     {
-        map.RemoveObjectOn();
+        mobMap.RemoveObjectOn();
         mobReact.OnDie();
 
         return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
