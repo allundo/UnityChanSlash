@@ -169,7 +169,7 @@ public class FlyingIcedFall : FlyingCommand
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.OnMelt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
 
         return ObservableComplete();
     }

@@ -31,11 +31,11 @@ public class MagicianTeleport : MagicianCommand
 
         completeTween = DOTween.Sequence()
             .Join(tweenMove.Teleport(destPos))
-            .InsertCallback(0.125f * duration, () => magicianReact.OnHide())
+            .InsertCallback(0.125f * duration, () => magicianReact.Hide())
             .InsertCallback(0.50f * duration, () =>
             {
                 magicianAnim.teleport.Bool = false;
-                magicianReact.OnAppear();
+                magicianReact.Appear();
                 enemyMap.MoveOnEnemy(destPos);
                 magicianReact.OnTeleportDest();
             })

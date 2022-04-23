@@ -171,7 +171,7 @@ public class RabbitIcedFall : RabbitCommand
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.OnMelt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
 
         return ObservableComplete();
     }

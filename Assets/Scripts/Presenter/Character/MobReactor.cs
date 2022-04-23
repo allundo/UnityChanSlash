@@ -2,14 +2,14 @@ using UnityEngine;
 
 public interface IMobReactor : IReactor
 {
-    void OnHealRatio(float healRatio = 0f, bool isEffectOn = true);
-    void OnHeal(float life, bool isEffectOn = true);
+    void HealRatio(float healRatio = 0f, bool isEffectOn = true);
+    void Heal(float life, bool isEffectOn = true);
     void OnFall();
     void OnWakeUp();
-    void OnMelt(bool isBroken = false);
+    void Melt(bool isBroken = false);
     void OnDisappear(float duration = 0.5f);
-    void OnHide();
-    bool OnAppear();
+    void Hide();
+    bool Appear();
 }
 
 public interface IUndeadReactor : IMobReactor
@@ -55,7 +55,7 @@ public class MobReactor : Reactor, IMobReactor
         }
         else if (mobStatus.isIced)
         {
-            OnMelt(true);
+            Melt(true);
         }
 
         mobStatus.LifeChange(-damage);
@@ -65,7 +65,7 @@ public class MobReactor : Reactor, IMobReactor
         return damage;
     }
 
-    public virtual void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
+    public virtual void HealRatio(float healRatio = 0f, bool isEffectOn = true)
     {
         if (!mobStatus.IsAlive) return;
 
@@ -74,8 +74,8 @@ public class MobReactor : Reactor, IMobReactor
         mobStatus.LifeChange(healRatio * status.LifeMax.Value);
     }
 
-    public void OnHeal(float life, bool isEffectOn = true)
-        => OnHealRatio(LifeRatio(life), isEffectOn);
+    public void Heal(float life, bool isEffectOn = true)
+        => HealRatio(LifeRatio(life), isEffectOn);
 
     protected float LifeRatio(float life) => Mathf.Clamp01(life / mobStatus.LifeMax.Value);
 
@@ -94,7 +94,7 @@ public class MobReactor : Reactor, IMobReactor
         bodyCollider.enabled = true;
     }
 
-    public virtual void OnMelt(bool isBroken = false)
+    public virtual void Melt(bool isBroken = false)
     {
         if (!mobStatus.isIced) return;
 
@@ -103,7 +103,7 @@ public class MobReactor : Reactor, IMobReactor
         mobStatus.SetIsIced(false);
     }
 
-    public virtual void OnHide()
+    public virtual void Hide()
     {
         if (mobStatus.isHidden) return;
 
@@ -111,7 +111,7 @@ public class MobReactor : Reactor, IMobReactor
         mobEffect.OnHide();
     }
 
-    public virtual bool OnAppear()
+    public virtual bool Appear()
     {
         if (!mobStatus.isHidden) return true;
 

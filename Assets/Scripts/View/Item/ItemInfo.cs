@@ -36,7 +36,7 @@ public abstract class ItemInfo : ICloneable
         return --numOfItem;
     }
 
-    protected virtual void OnFXStart(Vector3 position)
+    protected virtual void FXStart(Vector3 position)
     {
         if (sfx != null)
         {
@@ -51,13 +51,13 @@ public abstract class ItemInfo : ICloneable
         }
     }
 
-    protected virtual void OnAction(IReactor react, MobAnimator anim) { }
+    protected virtual void Action(IReactor react, MobAnimator anim) { }
 
     public virtual Tween EffectSequence(CommandTarget target)
     {
         return DOTween.Sequence()
-            .Join(DOTweenTimer(0f, () => OnFXStart(target.transform.position)))
-            .Join(DOTweenTimer(0f, () => OnAction(target.react, target.anim)))
+            .Join(DOTweenTimer(0f, () => FXStart(target.transform.position)))
+            .Join(DOTweenTimer(0f, () => Action(target.react, target.anim)))
             .SetUpdate(false);
 
     }

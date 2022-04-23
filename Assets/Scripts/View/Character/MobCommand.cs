@@ -37,7 +37,7 @@ public class IcedCommand : MobCommand
         anim.Pause();
 
         completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
-        SetOnCompleted(() => mobReact.OnMelt());
+        SetOnCompleted(() => mobReact.Melt());
         return true;
     }
 }

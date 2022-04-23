@@ -19,7 +19,7 @@ public class GhostReactor : EnemyReactor, IGhostReactor
         ghostEffect = effect as GhostEffect;
     }
 
-    public override void OnHide()
+    public override void Hide()
     {
         if (mobStatus.isHidden) return;
 
@@ -29,13 +29,13 @@ public class GhostReactor : EnemyReactor, IGhostReactor
     }
     public void OnAttackStart()
     {
-        OnHide();
+        Hide();
         ghostEffect.OnAttackStart();
     }
 
     public void OnAttackEnd() => ghostEffect.OnAttackEnd();
 
-    public override bool OnAppear()
+    public override bool Appear()
     {
         if (!mobStatus.isHidden) return true;
         if (mobMap.OnTile.OnCharacterDest != null) return false;

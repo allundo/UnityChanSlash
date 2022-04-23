@@ -11,7 +11,7 @@ public class GhostForward : EnemyForward
     {
         if (base.Action())
         {
-            mobReact.OnAppear();
+            mobReact.Appear();
             return true;
         }
         return false;
@@ -43,7 +43,7 @@ public class GhostThrough : EnemyForward
 
     public override IObservable<Unit> Execute()
     {
-        mobReact.OnHide();
+        mobReact.Hide();
         SetSpeed();
 
         playingTween = LinearMove(GetDest);
@@ -63,7 +63,7 @@ public class GhostThroughEnd : EnemyForward
     protected override bool Action()
     {
         if (!mobMap.ForwardTile.IsViewOpen) return false;
-        if (mobMap.IsForwardMovable) mobReact.OnAppear();
+        if (mobMap.IsForwardMovable) mobReact.Appear();
 
         playingTween = LinearMove(GetDest);
         SetSpeed();
@@ -166,7 +166,7 @@ public class GhostAttackEnd : FlyingAttackEnd
         var observableComplete = base.Execute();
 
         // Appear if destination tile is enterable
-        (react as IGhostReactor).OnAppear();
+        (react as IGhostReactor).Appear();
 
         return observableComplete;
     }

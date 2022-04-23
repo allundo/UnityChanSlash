@@ -27,7 +27,7 @@ public class WitchTargetAttack : WitchCommand
 
     protected override bool Action()
     {
-        if (!witchReact.OnAppear()) return false;
+        if (!witchReact.Appear()) return false;
 
         witchAnim.targetAttack.Fire();
         playingTween = targetAttack.AttackSequence(duration).Play();
@@ -44,7 +44,7 @@ public class WitchJumpOver : WitchCommand
     {
         if (!enemyMap.IsJumpable) return false;
 
-        witchReact.OnAppear();
+        witchReact.Appear();
         witchAnim.jump.Fire();
 
         Pos destPos = enemyMap.GetJump;
@@ -96,7 +96,7 @@ public class WitchBackStep : WitchCommand
     {
         if (!enemyMap.IsBackwardMovable) return false;
 
-        witchReact.OnAppear();
+        witchReact.Appear();
         witchAnim.backStep.Fire();
 
         Pos destPos = map.GetBackward;
@@ -148,7 +148,7 @@ public class WitchTripleFire : WitchCommand
         float interval = FRAME_UNIT * 10f;
         float fireDuration = duration - interval * 2;
 
-        witchReact.OnAppear();
+        witchReact.Appear();
         witchAnim.fire.Fire();
 
         ILauncher fire = target.magic.launcher[BulletType.FireBall];
@@ -174,7 +174,7 @@ public class WitchDoubleIce : WitchCommand
         float interval = FRAME_UNIT * 15f;
         float fireDuration = duration - interval;
 
-        witchReact.OnAppear();
+        witchReact.Appear();
         witchAnim.fire.Fire();
 
         ILauncher ice = target.magic.launcher[BulletType.IceBullet];
@@ -197,7 +197,7 @@ public class WitchMagic : WitchCommand
     protected override bool Action()
     {
         // TODO: Implement command action
-        witchReact.OnAppear();
+        witchReact.Appear();
         witchAnim.magic.Fire();
         return true;
     }

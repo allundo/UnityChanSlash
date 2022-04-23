@@ -27,7 +27,7 @@ public class BulletHeal : MonoBehaviour
 
         if (null == targetMob) return null;
 
-        targetMob.OnHeal(status.attack);
+        targetMob.Heal(status.attack);
         healCollider.enabled = false;
 
         return targetMob;

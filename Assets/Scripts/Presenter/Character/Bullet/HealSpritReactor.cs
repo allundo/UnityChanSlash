@@ -48,7 +48,7 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
         MobReactor targetMob = other.GetComponent<MobReactor>();
         if (status.shotBy.gameObject != targetMob?.gameObject) return;
 
-        targetMob.OnHeal(status.attack);
+        targetMob.Heal(status.attack);
         Damage(20f, null);
         bodyCollider.enabled = false;
     }

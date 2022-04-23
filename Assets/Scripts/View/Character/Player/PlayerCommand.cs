@@ -316,7 +316,7 @@ public class PlayerIcedFall : PlayerCommand
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.OnMelt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
 
         return ObservableComplete();
     }
@@ -614,7 +614,7 @@ public class PlayerIcedCommand : PlayerCommand
 
         completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
         SetUIInvisible();
-        SetOnCompleted(() => mobReact.OnMelt());
+        SetOnCompleted(() => mobReact.Melt());
         return true;
     }
 }

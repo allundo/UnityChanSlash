@@ -36,7 +36,7 @@ public class PlayerReactor : MobReactor
             .Subscribe(lifeMax => OnLifeMaxChange(lifeMax))
             .AddTo(this);
 
-        restUI.Heal.Subscribe(point => OnHealRatio(point, false)).AddTo(this);
+        restUI.Heal.Subscribe(point => HealRatio(point, false)).AddTo(this);
 
         lifeGauge.UpdateLife(status.Life.Value, status.LifeMax.Value, false);
     }
@@ -46,7 +46,7 @@ public class PlayerReactor : MobReactor
         lifeGauge.UpdateLife(status.Life.Value, lifeMax, false);
     }
 
-    public override void OnHealRatio(float healRatio = 0f, bool isEffectOn = true)
+    public override void HealRatio(float healRatio = 0f, bool isEffectOn = true)
     {
         if (!status.IsAlive) return;
 
