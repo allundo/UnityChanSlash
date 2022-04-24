@@ -10,14 +10,10 @@ public interface IReactor
     void Destroy();
 }
 
-[RequireComponent(typeof(MobInput))]
-[RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(Status))]
 public abstract class Reactor : MonoBehaviour, IReactor
 {
     protected IStatus status;
-    protected IMapUtil map;
-    protected IInput input;
-    protected IBodyEffect effect;
     protected Collider bodyCollider;
 
     public Vector3 position => transform.position;
@@ -25,8 +21,6 @@ public abstract class Reactor : MonoBehaviour, IReactor
     protected virtual void Awake()
     {
         status = GetComponent<Status>();
-        input = GetComponent<MobInput>();
-        map = GetComponent<MapUtil>();
         bodyCollider = GetComponentInChildren<Collider>();
     }
 
@@ -40,37 +34,15 @@ public abstract class Reactor : MonoBehaviour, IReactor
         status.Active.Subscribe(_ => OnActive()).AddTo(this);
     }
 
-    protected virtual void OnLifeChange(float life)
-    {
-        if (life <= 0.0f) input.InputDie();
-    }
+    protected abstract void OnLifeChange(float life);
 
     public abstract float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
 
-    public virtual void OnDie()
-    {
-        effect.OnDie();
-        bodyCollider.enabled = false;
-    }
+    public abstract void OnDie();
 
-    public virtual void OnActive()
-    {
-        effect.OnActive();
-        map.OnActive();
-        input.OnActive();
-        bodyCollider.enabled = true;
-    }
+    public abstract void OnActive();
 
     protected virtual void OnDead() => status.Inactivate();
 
-    public virtual void Destroy()
-    {
-        // Stop all tweens before destroying
-        input.ClearAll();
-        effect.OnDestroy();
-
-        bodyCollider.enabled = false;
-
-        Destroy(gameObject);
-    }
+    public abstract void Destroy();
 }

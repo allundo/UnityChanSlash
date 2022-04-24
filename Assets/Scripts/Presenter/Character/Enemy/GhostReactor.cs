@@ -23,9 +23,9 @@ public class GhostReactor : EnemyReactor, IGhostReactor
     {
         if (mobStatus.isHidden) return;
 
-        mobMap.RemoveObjectOn();
+        map.RemoveObjectOn();
         mobStatus.SetHidden(true);
-        mobEffect.OnHide();
+        effect.OnHide();
     }
     public void OnAttackStart()
     {
@@ -38,11 +38,11 @@ public class GhostReactor : EnemyReactor, IGhostReactor
     public override bool Appear()
     {
         if (!mobStatus.isHidden) return true;
-        if (mobMap.OnTile.OnCharacterDest != null) return false;
+        if (map.OnTile.OnCharacterDest != null) return false;
 
-        mobMap.RemoveObjectOn();
+        map.RemoveObjectOn();
         mobStatus.SetHidden(false);
-        mobMap.SetObjectOn(map.onTilePos);
+        map.SetObjectOn(map.onTilePos);
         ghostEffect.OnAppear();
         return true;
     }

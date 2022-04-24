@@ -62,7 +62,7 @@ public class PlayerReactor : MobReactor
 
         if (isEffectOn)
         {
-            mobEffect.OnHeal(healRatio);
+            effect.OnHeal(healRatio);
             lifeGauge.OnHeal(healRatio, lifeRatio);
         }
         else if (status.Life.Value < status.LifeMax.Value)

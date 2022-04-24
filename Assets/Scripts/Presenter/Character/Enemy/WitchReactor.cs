@@ -30,7 +30,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     public void OnSleep()
     {
         effect.OnDie();
-        mobMap.ResetTile();
+        map.ResetTile();
         bodyCollider.enabled = false;
     }
 

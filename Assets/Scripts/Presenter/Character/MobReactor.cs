@@ -20,20 +20,27 @@ public interface IUndeadReactor : IMobReactor
 
 [RequireComponent(typeof(MobEffect))]
 [RequireComponent(typeof(MobMapUtil))]
+[RequireComponent(typeof(MobInput))]
+[RequireComponent(typeof(MobStatus))]
 public class MobReactor : Reactor, IMobReactor
 {
     protected IMobStatus mobStatus;
-    protected IMobMapUtil mobMap;
-    protected IMobInput mobInput;
-    protected IMobEffect mobEffect;
+    protected IMobMapUtil map;
+    protected IMobInput input;
+    protected IMobEffect effect;
 
     protected override void Awake()
     {
         base.Awake();
-        effect = mobEffect = GetComponent<MobEffect>();
+        effect = GetComponent<MobEffect>();
         mobStatus = status as IMobStatus;
-        mobMap = map as IMobMapUtil;
-        mobInput = input as IMobInput;
+        map = GetComponent<MobMapUtil>(); ;
+        input = GetComponent<MobInput>();
+    }
+
+    protected override void OnLifeChange(float life)
+    {
+        if (life <= 0.0f) input.InputDie();
     }
 
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
@@ -47,8 +54,8 @@ public class MobReactor : Reactor, IMobReactor
             if (damage > 0 && !mobStatus.isIced)
             {
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
-                mobInput.InputIced(damage * 100f);
-                mobEffect.OnIced(mobStatus.corePos);
+                input.InputIced(damage * 100f);
+                effect.OnIced(mobStatus.corePos);
                 mobStatus.SetIsIced(true);
             }
             return 0f;
@@ -69,7 +76,7 @@ public class MobReactor : Reactor, IMobReactor
     {
         if (!mobStatus.IsAlive) return;
 
-        if (isEffectOn && !mobStatus.isIced && healRatio > 0.1f) mobEffect.OnHeal(healRatio);
+        if (isEffectOn && !mobStatus.isIced && healRatio > 0.1f) effect.OnHeal(healRatio);
 
         mobStatus.LifeChange(healRatio * status.LifeMax.Value);
     }
@@ -98,11 +105,11 @@ public class MobReactor : Reactor, IMobReactor
     {
         if (!mobStatus.isIced) return;
 
-        mobEffect.OnMelt();
+        effect.OnMelt();
         if (isBroken)
         {
-            mobInput.OnIceCrash();
-            mobEffect.OnIceCrash(mobStatus.corePos);
+            input.OnIceCrash();
+            effect.OnIceCrash(mobStatus.corePos);
         }
         mobStatus.SetIsIced(false);
     }
@@ -112,7 +119,7 @@ public class MobReactor : Reactor, IMobReactor
         if (mobStatus.isHidden) return;
 
         mobStatus.SetHidden(true);
-        mobEffect.OnHide();
+        effect.OnHide();
     }
 
     public virtual bool Appear()
@@ -120,24 +127,36 @@ public class MobReactor : Reactor, IMobReactor
         if (!mobStatus.isHidden) return true;
 
         mobStatus.SetHidden(false);
-        mobEffect.OnAppear();
+        effect.OnAppear();
         return true;
     }
 
     public virtual void OnDisappear(float duration = 0.5f)
     {
-        mobEffect.Disappear(OnDead, duration);
+        effect.Disappear(OnDead, duration);
     }
 
     public override void OnDie()
     {
-        mobMap.ResetTile();
-        base.OnDie();
+        map.ResetTile();
+        effect.OnDie();
+        bodyCollider.enabled = false;
+    }
+
+    public override void OnActive()
+    {
+        effect.OnActive();
+        map.OnActive();
+        input.OnActive();
+        bodyCollider.enabled = true;
     }
 
     public override void Destroy()
     {
-        mobMap.ResetTile();
-        base.Destroy();
+        map.ResetTile();
+        input.ClearAll();
+        effect.OnDestroy();
+        bodyCollider.enabled = false;
+        Destroy(gameObject);
     }
 }

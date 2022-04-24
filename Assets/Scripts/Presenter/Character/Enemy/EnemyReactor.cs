@@ -32,10 +32,10 @@ public class EnemyReactor : MobReactor
 
     public void Disappear()
     {
-        mobEffect.Disappear(() =>
+        effect.Disappear(() =>
         {
             input.ClearAll();
-            mobMap.ResetTile();
+            map.ResetTile();
             OnDead();
         });
     }
@@ -49,7 +49,7 @@ public class EnemyReactor : MobReactor
         inactiveNextFrame?.Dispose();
 
         bodyCollider.enabled = false;
-        mobMap.ResetTile();
+        map.ResetTile();
 
         Destroy(gameObject);
     }

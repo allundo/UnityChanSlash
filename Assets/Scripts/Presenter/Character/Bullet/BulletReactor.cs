@@ -8,12 +8,24 @@ public interface IBulletReactor : IReactor
 [RequireComponent(typeof(BulletStatus))]
 [RequireComponent(typeof(BulletInput))]
 [RequireComponent(typeof(BulletEffect))]
+[RequireComponent(typeof(MapUtil))]
 public class BulletReactor : Reactor, IBulletReactor
 {
+    protected IMapUtil map;
+    protected IInput input;
+    protected IBodyEffect effect;
+
     protected override void Awake()
     {
         base.Awake();
         effect = GetComponent<BulletEffect>();
+        input = GetComponent<BulletInput>();
+        map = GetComponent<MapUtil>();
+    }
+
+    protected override void OnLifeChange(float life)
+    {
+        if (life <= 0.0f) input.InputDie();
     }
 
     public override void OnActive()
@@ -43,5 +55,16 @@ public class BulletReactor : Reactor, IBulletReactor
     {
         effect.OnDie();
         effect.Disappear(OnDead);
+    }
+
+    public override void Destroy()
+    {
+        // Stop all tweens before destroying
+        input.ClearAll();
+        effect.OnDestroy();
+
+        bodyCollider.enabled = false;
+
+        Destroy(gameObject);
     }
 }
