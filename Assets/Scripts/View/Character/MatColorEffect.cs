@@ -16,7 +16,7 @@ public interface IMatColorEffect : IMaterialEffect
 public class MatColorEffect : MaterialEffect, IMatColorEffect
 {
     protected Tween prevTween;
-    protected Sequence disappearSeq;
+    protected Tween disappearTween;
 
     protected override string propName => "_AdditiveColor";
     protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 1);
@@ -102,17 +102,12 @@ public class MatColorEffect : MaterialEffect, IMatColorEffect
     public virtual void Inactivate(TweenCallback onComplete = null, float duration = 0.5f)
     {
         prevTween?.Complete(true);
-
-        disappearSeq = DOTween.Sequence()
-            .Append(FadeOutTween(duration))
-            .AppendCallback(onComplete);
-
-        disappearSeq.Play();
+        disappearTween = FadeOutTween(duration).OnComplete(onComplete).Play();
     }
 
     public override void KillAllTweens()
     {
-        disappearSeq?.Complete(true);
+        disappearTween?.Complete();
         prevTween?.Kill();
     }
 }

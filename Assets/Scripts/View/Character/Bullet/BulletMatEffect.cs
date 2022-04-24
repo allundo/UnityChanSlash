@@ -47,12 +47,12 @@ public class BulletMatEffect : MatColorEffect
         blinkTween?.Pause();
         prevTween?.Complete(true);
 
-        disappearSeq = DOTween.Sequence().Append(FadeOutTween(duration));
+        var seq = DOTween.Sequence().Append(FadeOutTween(duration));
 
         float extraDuration = dyingFXDuration - duration;
-        if (extraDuration > 0) disappearSeq.AppendInterval(extraDuration);
+        if (extraDuration > 0) seq.AppendInterval(extraDuration);
 
-        disappearSeq.AppendCallback(onComplete).Play();
+        disappearTween = seq.OnComplete(onComplete).Play();
     }
 
     public override void PlayExclusive(Tween matTween)
