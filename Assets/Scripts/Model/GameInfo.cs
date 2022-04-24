@@ -31,7 +31,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         if (floor > 0 && floor <= MAX_FLOOR)
         {
             int size = mapSize[floor - 1];
-            return (maps[floor - 1] = maps[floor - 1] ?? new WorldMap(null, floor, size, size));
+            return maps[floor - 1] = (maps[floor - 1] ?? new WorldMap(null, floor, size, size));
         }
 
         return null;
