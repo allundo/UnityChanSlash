@@ -195,6 +195,19 @@ public class PlayerInput : ShieldInput
 
     protected override ICommand GetIcedCommand(float duration)
         => new PlayerIcedCommand(playerTarget, duration);
+    public override void OnIceCrash()
+    {
+
+#if UNITY_EDITOR
+        if (!(commander.currentCommand is PlayerIcedCommand))
+        {
+            Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + commander.currentCommand, gameObject);
+        }
+#endif
+
+        commander.currentCommand.Cancel();
+        SetInputVisible();
+    }
 
     /// <summary>
     /// Switches display of input UIs according to the situation for every frames.

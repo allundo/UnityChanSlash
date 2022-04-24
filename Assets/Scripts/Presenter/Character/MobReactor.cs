@@ -99,7 +99,11 @@ public class MobReactor : Reactor, IMobReactor
         if (!mobStatus.isIced) return;
 
         mobEffect.OnMelt();
-        if (isBroken) mobEffect.OnIceCrash(mobStatus.corePos);
+        if (isBroken)
+        {
+            mobInput.OnIceCrash();
+            mobEffect.OnIceCrash(mobStatus.corePos);
+        }
         mobStatus.SetIsIced(false);
     }
 
