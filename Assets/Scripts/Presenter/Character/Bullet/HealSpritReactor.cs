@@ -1,44 +1,31 @@
 using UnityEngine;
-using UniRx;
 using DG.Tweening;
 
 [RequireComponent(typeof(BulletStatus))]
 [RequireComponent(typeof(HealSpritEffect))]
-public class HealSpritReactor : MonoBehaviour, IBulletReactor
+public class HealSpritReactor : Reactor, IBulletReactor
 {
-    protected BulletStatus status;
+    protected BulletStatus bulletStatus;
     protected IBodyEffect effect;
-    protected Collider bodyCollider;
     protected bool isTweening = false;
     protected Tween emittingTween = null;
 
-    public Vector3 position => transform.position;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
-        status = GetComponent<BulletStatus>();
+        base.Awake();
+        bulletStatus = status as BulletStatus;
         effect = GetComponent<HealSpritEffect>();
-        bodyCollider = GetComponent<Collider>();
-    }
-
-    protected virtual void Start()
-    {
-        status.Life
-            .SkipLatestValueOnSubscribe()
-            .Subscribe(life => OnLifeChange(life))
-            .AddTo(this);
-
-        status.Active.Subscribe(_ => OnActive()).AddTo(this);
     }
 
     protected virtual void Update()
     {
         if (isTweening) return;
-        transform.position += (status.shotBy.Position - transform.position).normalized * Time.deltaTime * 2.5f;
+        transform.position += (bulletStatus.shotBy.Position - transform.position).normalized * Time.deltaTime * 2.5f;
         ReduceHP(Time.deltaTime);
     }
 
-    protected void OnLifeChange(float life)
+    protected override void OnLifeChange(float life)
     {
         if (life <= 0.0f) OnDie();
     }
@@ -46,7 +33,7 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
     private void OnTriggerEnter(Collider other)
     {
         MobReactor targetMob = other.GetComponent<MobReactor>();
-        if (status.shotBy.gameObject != targetMob?.gameObject) return;
+        if (bulletStatus.shotBy.gameObject != targetMob?.gameObject) return;
 
         targetMob.Heal(status.attack);
         Damage(20f, null);
@@ -58,7 +45,7 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
         if (status.IsAlive) status.LifeChange(-reduction);
     }
 
-    public float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;
 
@@ -68,7 +55,7 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
         return 10f;
     }
 
-    public void OnDie()
+    public override void OnDie()
     {
         bodyCollider.enabled = false;
         effect.OnDie();
@@ -76,7 +63,7 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
         isTweening = true;
     }
 
-    public virtual void OnActive()
+    public override void OnActive()
     {
         effect.OnActive();
         bodyCollider.enabled = true;
@@ -87,9 +74,7 @@ public class HealSpritReactor : MonoBehaviour, IBulletReactor
             .Play();
     }
 
-    protected void OnDead() => status.Inactivate();
-
-    public void Destroy()
+    public override void Destroy()
     {
         // Stop all tweens before destroying
         effect.OnDestroy();
