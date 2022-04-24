@@ -37,15 +37,11 @@ public class Status : SpawnObject<Status>, IStatus
 
     protected virtual float DefaultLifeMax => param.defaultLifeMax;
 
-    public virtual float attack
-    {
-        get { return param.attack; }
-        set { param.attack = value; }
-    }
+    public float attack { get; protected set; }
 
     public bool isOnGround { get; protected set; }
 
-    public IDirection dir { get; protected set; }
+    public virtual IDirection dir { get; protected set; }
     public void SetDir(IDirection dir) => this.dir = dir;
     private static readonly IDirection defaultDir = new South();
 
@@ -123,6 +119,7 @@ public class Status : SpawnObject<Status>, IStatus
     public virtual IStatus InitParam(Param param, float life = 0f)
     {
         this.param = param;
+        attack = param.attack;
         ResetStatus();
 
         if (life > 0f) this.life.Value = life;

@@ -40,7 +40,7 @@ public class DarkHoundReactor : BulletReactor
 
         var lifeMax = status.LifeMax.Value;
 
-        (status as BulletStatus).attack = Mathf.Max(drain * 0.1f, 0.05f);
+        (status as IBulletStatus).SetAttack(Mathf.Max(drain * 0.1f, 0.05f));
 
         while (drain > 0.0001f)
         {
