@@ -8,7 +8,7 @@ public class DarkHoundAttack : BulletAttack
 
         if (null == targetMob) return null;
 
-        var damage = targetMob.Damage(status.attack * attackMultiplier, status.dir, attackType, attackAttr);
+        var damage = targetMob.Damage(status.attack * attackMultiplier, Direction.Convert(transform.forward), attackType, attackAttr);
         reactor.Damage(damage, null, AttackType.None, AttackAttr.None);
         return targetMob;
     }

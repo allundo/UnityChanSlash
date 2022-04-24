@@ -212,6 +212,18 @@ public abstract class Direction
         }
     }
 
+    public static IDirection Convert(Vector3 forward)
+    {
+        IDirection retDir = Direction.north;
+        float maxInnerProduct = Vector3.Dot(forward, Direction.north.LookAt);
+        foreach (IDirection dir in new Direction[] { Direction.east, Direction.south, Direction.west })
+        {
+            if (maxInnerProduct < Vector3.Dot(forward, dir.LookAt)) retDir = dir;
+        }
+
+        return retDir;
+    }
+
     public abstract bool IsSame(IDirection dir);
 
     public abstract Vector3 Angle { get; }
