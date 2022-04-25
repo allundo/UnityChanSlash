@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Util
 {
-    public static bool IsNull<T>(T prefab)
+    public static bool IsNull<T>(T prefab) where T : UnityEngine.Object
     {
         if (prefab == null)
         {
