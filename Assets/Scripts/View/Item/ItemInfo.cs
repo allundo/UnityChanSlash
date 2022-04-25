@@ -1,10 +1,24 @@
 using System;
 using UnityEngine;
+using UniRx;
 using DG.Tweening;
 
 public abstract class ItemInfo : ICloneable
 {
-    public int numOfItem { get; protected set; }
+    protected int numOfItem
+    {
+        get
+        {
+            return onNumOfItemChange.Value;
+        }
+        set
+        {
+            onNumOfItemChange.Value = value;
+        }
+    }
+
+    public IReactiveProperty<int> onNumOfItemChange;
+    public IReadOnlyReactiveProperty<int> OnNumOfItemChange => onNumOfItemChange;
 
     public Material material { get; protected set; }
     public float duration { get; protected set; }
@@ -12,13 +26,14 @@ public abstract class ItemInfo : ICloneable
     protected AudioSource sfx;
     protected ParticleSystem vfx;
 
+
     public ItemInfo(ItemSource itemSource, int numOfItem = 1)
         : this(itemSource.material, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
     { }
 
     public ItemInfo(Material material, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
     {
-        this.numOfItem = numOfItem;
+        this.onNumOfItemChange = new ReactiveProperty<int>(numOfItem);
 
         this.material = material;
         this.vfx = vfx;
@@ -30,11 +45,6 @@ public abstract class ItemInfo : ICloneable
     public object Clone() => Clone(numOfItem);
 
     public abstract object Clone(int numOfItem);
-
-    public int UseItem()
-    {
-        return --numOfItem;
-    }
 
     protected virtual void FXStart(Vector3 position)
     {
@@ -51,15 +61,23 @@ public abstract class ItemInfo : ICloneable
         }
     }
 
-    protected virtual void Action(PlayerCommandTarget target) { }
+    /// <summary>
+    /// Item effect.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns>The number of item consumption.</returns>
+    protected abstract int Action(PlayerCommandTarget target);
 
     public virtual Tween EffectSequence(PlayerCommandTarget target)
     {
-        return DOTween.Sequence()
-            .Join(DOTweenTimer(0f, () => FXStart(target.transform.position)))
-            .Join(DOTweenTimer(0f, () => Action(target)))
-            .SetUpdate(false);
+        return ItemUse(target) ? DOTweenTimer(0f, () => FXStart(target.react.position)) : null;
+    }
 
+    protected bool ItemUse(PlayerCommandTarget target)
+    {
+        int useCount = Action(target);
+        numOfItem -= useCount;
+        return useCount > 0;
     }
 
     protected Tween DOTweenTimer(float dueTimeSec, TweenCallback callback, bool ignoreTimeScale = false)

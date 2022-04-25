@@ -17,6 +17,7 @@ public interface IStatus
     IReadOnlyReactiveProperty<float> Life { get; }
     IReadOnlyReactiveProperty<float> LifeMax { get; }
     float LifeRatio { get; }
+    bool IsLifeMax { get; }
 
     void LifeChange(float diff, AttackAttr attr = AttackAttr.None);
 
@@ -58,6 +59,7 @@ public class Status : SpawnObject<Status>, IStatus
 
     public bool IsAlive => Life.Value > 0.0f;
     public float LifeRatio => life.Value / lifeMax.Value;
+    public bool IsLifeMax => life.Value == lifeMax.Value;
 
     protected bool isActive = false;
 

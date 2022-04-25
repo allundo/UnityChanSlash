@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 using System;
 using DG.Tweening;
 
@@ -12,6 +13,8 @@ public class ItemIcon : UISymbol
     private Vector2 defaultSize;
 
     public int index { get; private set; }
+
+    public IObservable<Unit> OnItemEmpty => itemInfo.OnNumOfItemChange.Where(num => num == 0).Select(_ => Unit.Default);
 
     protected override void Awake()
     {
@@ -75,17 +78,6 @@ public class ItemIcon : UISymbol
     {
         this.index = index;
         return this;
-    }
-
-    public bool UseItem()
-    {
-        // TODO: Item effect
-
-        bool isEmpty = itemInfo.UseItem() == 0;
-
-        if (isEmpty) Inactivate();
-
-        return isEmpty;
     }
 
     public Vector2 GetPos() => rectTransform.anchoredPosition;

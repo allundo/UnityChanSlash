@@ -46,15 +46,15 @@ public class PlayerReactor : MobReactor
         lifeGauge.UpdateLife(status.Life.Value, lifeMax, false);
     }
 
-    public override void HealRatio(float healRatio = 0f, bool isEffectOn = true)
+    public override bool HealRatio(float healRatio = 0f, bool isEffectOn = true, bool healAnyway = false)
     {
-        if (!status.IsAlive) return;
+        if (!status.IsAlive || (mobStatus.IsLifeMax && !healAnyway)) return false;
 
         if (healRatio == 0f)
         {
             // Update RestUI life gauge
             restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
-            return;
+            return false;
         }
 
         float heal = healRatio * status.LifeMax.Value;
@@ -72,6 +72,7 @@ public class PlayerReactor : MobReactor
         }
 
         status.LifeChange(heal);
+        return true;
     }
 
     protected override void OnLifeChange(float life)

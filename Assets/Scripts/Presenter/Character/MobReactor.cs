@@ -2,13 +2,25 @@ using UnityEngine;
 
 public interface IMobReactor : IReactor
 {
-    void HealRatio(float healRatio = 0f, bool isEffectOn = true);
-    void Heal(float life, bool isEffectOn = true);
+    /// <summary>
+    /// Apply healing by rate of life max.
+    /// </summary>
+    /// <param name="healRatio"></param>
+    /// <param name="isEffectOn">Applies healing effect if true.</param>
+    /// <param name="healAnyway">Applies the healing anyway even when it isn't effective if true.</param>
+    /// <returns>true if the healing is applied</returns>
+    bool HealRatio(float healRatio = 0f, bool isEffectOn = true, bool healAnyway = false);
+    bool Heal(float life, bool isEffectOn = true, bool healAnyway = false);
     void OnFall();
     void OnWakeUp();
     void Melt(bool isBroken = false);
     void OnDisappear(float duration = 0.5f);
     void Hide();
+
+    /// <summary>
+    /// Returns from hiding.
+    /// </summary>
+    /// <returns>true if appearing is valid</returns>
     bool Appear();
 }
 
@@ -72,17 +84,19 @@ public class MobReactor : Reactor, IMobReactor
         return damage;
     }
 
-    public virtual void HealRatio(float healRatio = 0f, bool isEffectOn = true)
+    public virtual bool HealRatio(float healRatio = 0f, bool isEffectOn = true, bool healAnyway = false)
     {
-        if (!mobStatus.IsAlive) return;
+        if (!mobStatus.IsAlive || (mobStatus.IsLifeMax && !healAnyway)) return false;
 
         if (isEffectOn && !mobStatus.isIced && healRatio > 0.1f) effect.OnHeal(healRatio);
 
         mobStatus.LifeChange(healRatio * status.LifeMax.Value);
+
+        return true;
     }
 
-    public void Heal(float life, bool isEffectOn = true)
-        => HealRatio(LifeRatio(life), isEffectOn);
+    public bool Heal(float life, bool isEffectOn = true, bool healAnyway = false)
+        => HealRatio(LifeRatio(life), isEffectOn, healAnyway);
 
     protected float LifeRatio(float life) => Mathf.Clamp01(life / mobStatus.LifeMax.Value);
 

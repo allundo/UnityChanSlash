@@ -1,5 +1,7 @@
 using UnityEngine;
+using UniRx;
 using System.Linq;
+using System;
 
 public class ItemIndexHandler
 {
@@ -9,6 +11,7 @@ public class ItemIndexHandler
     public Pos INVALID_INDEX { get; private set; }
 
     private ItemIcon[] items;
+    private IDisposable[] itemEmptyCheck;
 
     private Vector2 unit;
     private Vector2 origin;
@@ -25,6 +28,7 @@ public class ItemIndexHandler
         INVALID_INDEX = new Pos(WIDTH, HEIGHT);
 
         items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
+        itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
 
         uiSize = rt.sizeDelta;
         unit = new Vector2(uiSize.x / WIDTH, uiSize.y / HEIGHT);
@@ -52,6 +56,12 @@ public class ItemIndexHandler
     public void SetItem(int index, ItemIcon itemIcon)
     {
         items[index] = itemIcon;
+
+        itemEmptyCheck[index]?.Dispose();
+
+        itemEmptyCheck[index] = itemIcon.OnItemEmpty
+            .Subscribe(_ => RemoveItem(items[index]))
+            .AddTo(itemIcon);
     }
 
     public ItemIcon GetItem(Pos index) => GetItem(index.x, index.y);
@@ -65,21 +75,11 @@ public class ItemIndexHandler
     {
         if (itemIcon == null) return false;
 
+        itemEmptyCheck[itemIcon.index]?.Dispose();
+        itemEmptyCheck[itemIcon.index] = null;
+
         itemIcon.Inactivate();
         items[itemIcon.index] = null;
         return true;
-    }
-
-    public ItemInfo UseItem(Pos index) => UseItem(index.x, index.y);
-    public ItemInfo UseItem(int x, int y) => UseItem(x + WIDTH * y);
-    public ItemInfo UseItem(int index)
-    {
-        var itemIcon = GetItem(index);
-
-        if (itemIcon == null) return null;
-
-        if (itemIcon.UseItem()) items[index] = null;
-
-        return itemIcon.itemInfo;
     }
 }

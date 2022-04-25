@@ -159,7 +159,14 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            onUseItem.OnNext(itemIndex.UseItem(handler.pressedIndex));
+            onUseItem.OnNext(itemIndex.GetItem(handler.pressedIndex)?.itemInfo);
+
+            // Continue Select mode when the item is remaining after use it.
+            if (itemIndex.GetItem(handler.pressedIndex) != null)
+            {
+                handler.currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo).Play();
+                return this;
+            }
 
             return CleanUp();
         }
