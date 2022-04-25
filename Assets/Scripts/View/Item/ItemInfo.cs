@@ -51,13 +51,13 @@ public abstract class ItemInfo : ICloneable
         }
     }
 
-    protected virtual void Action(IReactor react, MobAnimator anim) { }
+    protected virtual void Action(PlayerCommandTarget target) { }
 
-    public virtual Tween EffectSequence(CommandTarget target)
+    public virtual Tween EffectSequence(PlayerCommandTarget target)
     {
         return DOTween.Sequence()
             .Join(DOTweenTimer(0f, () => FXStart(target.transform.position)))
-            .Join(DOTweenTimer(0f, () => Action(target.react, target.anim)))
+            .Join(DOTweenTimer(0f, () => Action(target)))
             .SetUpdate(false);
 
     }

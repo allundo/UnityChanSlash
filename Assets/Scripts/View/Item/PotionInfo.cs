@@ -7,10 +7,9 @@ public class PotionInfo : ItemInfo
     public PotionInfo(Material material, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null)
         : base(material, numOfItem, vfx, sfx) { }
 
-    protected override void Action(IReactor react, MobAnimator anim)
+    protected override void Action(PlayerCommandTarget target)
     {
-        (react as IMobReactor).HealRatio(1f);
-        FXStart(react.position);
+        (target.react as IMobReactor).HealRatio(1f);
     }
 
     public override object Clone(int numOfItem)
