@@ -53,5 +53,5 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
         hitVfx?.Play();
     }
 
-    public void OnDestroy() => bulletMatEffect.KillAllTweens();
+    public void OnDestroyByReactor() => bulletMatEffect.KillAllTweens();
 }

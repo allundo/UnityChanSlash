@@ -44,7 +44,7 @@ public class EnemyReactor : MobReactor
     {
         // Stop all tweens before destroying
         input.ClearAll();
-        effect.OnDestroy();
+        effect.OnDestroyByReactor();
 
         inactiveNextFrame?.Dispose();
 

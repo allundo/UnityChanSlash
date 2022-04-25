@@ -169,7 +169,7 @@ public class MobReactor : Reactor, IMobReactor
     {
         map.ResetTile();
         input.ClearAll();
-        effect.OnDestroy();
+        effect.OnDestroyByReactor();
         bodyCollider.enabled = false;
         Destroy(gameObject);
     }

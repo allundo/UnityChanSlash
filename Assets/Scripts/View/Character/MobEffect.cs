@@ -125,7 +125,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
         animFX.StopVFX();
     }
 
-    public virtual void OnDestroy()
+    public virtual void OnDestroyByReactor()
     {
         matColEffect.KillAllTweens();
     }

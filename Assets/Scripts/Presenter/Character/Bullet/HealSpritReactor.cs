@@ -77,7 +77,7 @@ public class HealSpritReactor : Reactor, IBulletReactor
     public override void Destroy()
     {
         // Stop all tweens before destroying
-        effect.OnDestroy();
+        effect.OnDestroyByReactor();
         bodyCollider.enabled = false;
 
         Destroy(gameObject);

@@ -11,6 +11,6 @@ public interface IBodyEffect
     /// <param name="damageRatio">Normalized damage ratio to the life max</param>
     void OnDamage(float damageRatio, AttackType type, AttackAttr attr);
 
-    void OnDestroy();
+    void OnDestroyByReactor();
     void Disappear(TweenCallback onComplete = null, float duration = 0.5f);
 }

@@ -27,5 +27,5 @@ public class HealSpritEffect : MonoBehaviour, IBodyEffect
         hitSnd.PlayEx();
     }
 
-    public void OnDestroy() { }
+    public void OnDestroyByReactor() { }
 }

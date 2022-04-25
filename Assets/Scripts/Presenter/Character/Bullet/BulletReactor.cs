@@ -61,7 +61,7 @@ public class BulletReactor : Reactor, IBulletReactor
     {
         // Stop all tweens before destroying
         input.ClearAll();
-        effect.OnDestroy();
+        effect.OnDestroyByReactor();
 
         bodyCollider.enabled = false;
 
