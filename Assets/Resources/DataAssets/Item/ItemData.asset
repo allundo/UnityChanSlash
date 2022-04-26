@@ -18,3 +18,8 @@ MonoBehaviour:
     vfx: {fileID: 3893910784469507714, guid: 0ee90d52b4a814c02abda4136cea1b8c, type: 3}
     sfx: {fileID: 886390825641632656, guid: 2c9ef0da081474cc1a2bd2c9038fffb4, type: 3}
     duration: 0.2
+  - name: "\u30AD\u30FC\u30D6\u30EC\u30FC\u30C9"
+    material: {fileID: 2100000, guid: c0d5f7ad429974192bdc470d3b87f882, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.2

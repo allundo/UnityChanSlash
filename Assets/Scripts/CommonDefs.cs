@@ -428,6 +428,7 @@ public enum Plate
 public enum ItemType
 {
     Potion = 0,
+    KeyBlade,
 }
 public enum AttackType
 {

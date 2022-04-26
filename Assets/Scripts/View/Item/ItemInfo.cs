@@ -3,7 +3,7 @@ using UnityEngine;
 using UniRx;
 using DG.Tweening;
 
-public abstract class ItemInfo : ICloneable
+public class ItemInfo : ICloneable
 {
     protected int numOfItem
     {
@@ -26,14 +26,17 @@ public abstract class ItemInfo : ICloneable
     protected AudioSource sfx;
     protected ParticleSystem vfx;
 
+    protected Func<PlayerCommandTarget, int> itemUseAction;
 
-    public ItemInfo(ItemSource itemSource, int numOfItem = 1)
-        : this(itemSource.material, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
+    public ItemInfo(ItemSource itemSource, Func<PlayerCommandTarget, int> itemUseAction, int numOfItem = 1)
+        : this(itemSource.material, itemUseAction, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
     { }
 
-    public ItemInfo(Material material, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
+    public ItemInfo(Material material, Func<PlayerCommandTarget, int> itemUseAction, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
     {
         this.onNumOfItemChange = new ReactiveProperty<int>(numOfItem);
+
+        this.itemUseAction = itemUseAction;
 
         this.material = material;
         this.vfx = vfx;
@@ -44,7 +47,8 @@ public abstract class ItemInfo : ICloneable
 
     public object Clone() => Clone(numOfItem);
 
-    public abstract object Clone(int numOfItem);
+    public object Clone(int numOfItem)
+        => new ItemInfo(material, itemUseAction, numOfItem, vfx, sfx);
 
     protected virtual void FXStart(Vector3 position)
     {
@@ -66,7 +70,7 @@ public abstract class ItemInfo : ICloneable
     /// </summary>
     /// <param name="target"></param>
     /// <returns>The number of item consumption.</returns>
-    protected abstract int Action(PlayerCommandTarget target);
+    protected int Action(PlayerCommandTarget target) => itemUseAction(target);
 
     public virtual Tween EffectSequence(PlayerCommandTarget target)
     {
@@ -75,7 +79,7 @@ public abstract class ItemInfo : ICloneable
 
     protected bool ItemUse(PlayerCommandTarget target)
     {
-        int useCount = Action(target);
+        int useCount = itemUseAction(target);
         numOfItem -= useCount;
         return useCount > 0;
     }

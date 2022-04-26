@@ -15,6 +15,8 @@ public class ItemGenerator : MobGenerator<Item>
 
     private WorldMap map;
 
+    private ItemSource Param(ItemType type) => itemData.Param((int)type);
+
     protected override void Awake()
     {
         pool = transform;
@@ -24,12 +26,13 @@ public class ItemGenerator : MobGenerator<Item>
         itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
         enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");
 
-        itemInfo[ItemType.Potion] = new PotionInfo(itemData.Param((int)ItemType.Potion));
+
         respawnData = new Stack<RespawnData>[enemyTypesData.Length].Select(_ => new Stack<RespawnData>()).ToArray();
     }
 
     void Start()
     {
+        itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
         PlaceItems(map);
     }
 

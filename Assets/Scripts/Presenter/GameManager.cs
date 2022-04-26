@@ -2,7 +2,6 @@ using UnityEngine;
 using DG.Tweening;
 using UniRx;
 using System.Collections;
-using System.Collections.Generic;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
