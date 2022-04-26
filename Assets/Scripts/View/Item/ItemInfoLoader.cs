@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class ItemInfoLoader
 {
     protected ItemData itemData;
-    protected Dictionary<ItemType, Func<PlayerCommandTarget, int>> itemUseActions;
+    protected Dictionary<ItemType, ItemAction> itemActions;
 
     public Dictionary<ItemType, ItemInfo> LoadItemInfo()
     {
@@ -12,7 +12,7 @@ public class ItemInfoLoader
 
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
         {
-            retItemInfo[type] = new ItemInfo(itemData.Param((int)type), itemUseActions[type]);
+            retItemInfo[type] = new ItemInfo(itemData.Param((int)type), itemActions[type]);
         }
 
         return retItemInfo;
@@ -22,14 +22,40 @@ public class ItemInfoLoader
     {
         this.itemData = itemData;
 
-        itemUseActions = new Dictionary<ItemType, Func<PlayerCommandTarget, int>>()
+        itemActions = new Dictionary<ItemType, ItemAction>()
         {
-            { ItemType.Potion,      target => (target.react as IMobReactor).HealRatio(1f) ? 1 : 0       },
-            { ItemType.KeyBlade,    KeyBladeAction                                                      },
+            { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)  },
+            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Equipment)  },
         };
     }
+}
 
-    protected int KeyBladeAction(PlayerCommandTarget target)
+public class ItemAction
+{
+    public ItemAttr attr { get; protected set; }
+    public ItemAction(ItemAttr attr)
+    {
+        this.attr = attr;
+    }
+    /// <summary>
+    /// Item effect.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns>The number of item consumption.</returns>
+    public virtual int Action(PlayerCommandTarget target) => 0;
+}
+
+public class PotionAction : ItemAction
+{
+    public PotionAction(ItemAttr attr) : base(attr) { }
+    public override int Action(PlayerCommandTarget target)
+         => (target.react as IMobReactor).HealRatio(1f) ? 1 : 0;
+}
+
+public class KeyBladeAction : ItemAction
+{
+    public KeyBladeAction(ItemAttr attr) : base(attr) { }
+    public override int Action(PlayerCommandTarget target)
     {
         ITile tile = target.map.ForwardTile;
         if (tile is Door)

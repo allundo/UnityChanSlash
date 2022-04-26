@@ -430,6 +430,14 @@ public enum ItemType
     Potion = 0,
     KeyBlade,
 }
+
+public enum ItemAttr
+{
+    Consumption = 0,
+    Equipment,
+    Ring,
+}
+
 public enum AttackType
 {
     None = 0,

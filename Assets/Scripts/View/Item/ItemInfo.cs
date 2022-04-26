@@ -21,22 +21,27 @@ public class ItemInfo : ICloneable
     public IReadOnlyReactiveProperty<int> OnNumOfItemChange => onNumOfItemChange;
 
     public Material material { get; protected set; }
+
+    /// <summary>
+    /// Item use command duration
+    /// </summary>
     public float duration { get; protected set; }
 
     protected AudioSource sfx;
     protected ParticleSystem vfx;
 
-    protected Func<PlayerCommandTarget, int> itemUseAction;
+    protected ItemAction itemAction;
+    public ItemAttr attr => itemAction.attr;
 
-    public ItemInfo(ItemSource itemSource, Func<PlayerCommandTarget, int> itemUseAction, int numOfItem = 1)
-        : this(itemSource.material, itemUseAction, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
+    public ItemInfo(ItemSource itemSource, ItemAction itemAction, int numOfItem = 1)
+        : this(itemSource.material, itemAction, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
     { }
 
-    public ItemInfo(Material material, Func<PlayerCommandTarget, int> itemUseAction, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
+    public ItemInfo(Material material, ItemAction itemAction, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
     {
         this.onNumOfItemChange = new ReactiveProperty<int>(numOfItem);
 
-        this.itemUseAction = itemUseAction;
+        this.itemAction = itemAction;
 
         this.material = material;
         this.vfx = vfx;
@@ -48,7 +53,7 @@ public class ItemInfo : ICloneable
     public object Clone() => Clone(numOfItem);
 
     public object Clone(int numOfItem)
-        => new ItemInfo(material, itemUseAction, numOfItem, vfx, sfx);
+        => new ItemInfo(material, itemAction, numOfItem, vfx, sfx);
 
     protected virtual void FXStart(Vector3 position)
     {
@@ -65,13 +70,6 @@ public class ItemInfo : ICloneable
         }
     }
 
-    /// <summary>
-    /// Item effect.
-    /// </summary>
-    /// <param name="target"></param>
-    /// <returns>The number of item consumption.</returns>
-    protected int Action(PlayerCommandTarget target) => itemUseAction(target);
-
     public virtual Tween EffectSequence(PlayerCommandTarget target)
     {
         return ItemUse(target) ? DOTweenTimer(0f, () => FXStart(target.react.position)) : null;
@@ -79,7 +77,7 @@ public class ItemInfo : ICloneable
 
     protected bool ItemUse(PlayerCommandTarget target)
     {
-        int useCount = itemUseAction(target);
+        int useCount = itemAction.Action(target);
         numOfItem -= useCount;
         return useCount > 0;
     }

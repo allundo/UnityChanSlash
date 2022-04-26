@@ -59,9 +59,16 @@ public class ItemIndexHandler
 
         itemEmptyCheck[index]?.Dispose();
 
-        itemEmptyCheck[index] = itemIcon.OnItemEmpty
-            .Subscribe(_ => RemoveItem(items[index]))
-            .AddTo(itemIcon);
+        if (itemIcon != null)
+        {
+            itemEmptyCheck[index] = itemIcon.OnItemEmpty
+                .Subscribe(_ => RemoveItem(items[index]))
+                .AddTo(itemIcon);
+        }
+        else
+        {
+            itemEmptyCheck[index] = null;
+        }
     }
 
     public ItemIcon GetItem(Pos index) => GetItem(index.x, index.y);

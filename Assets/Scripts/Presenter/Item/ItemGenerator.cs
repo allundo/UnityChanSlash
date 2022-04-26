@@ -60,6 +60,13 @@ public class ItemGenerator : MobGenerator<Item>
 
     private void PlaceItems(WorldMap map)
     {
+        // TODO: Need to implement item placing process
+        if (map.deadEndPos.Count == 0) return;
+
+        var first = map.deadEndPos.First();
+        Put(ItemType.KeyBlade, first.Key, first.Value.Backward);
+        map.deadEndPos.Remove(first.Key);
+
         map.deadEndPos.ForEach(kvp => Put(ItemType.Potion, kvp.Key, kvp.Value.Backward));
         map.deadEndPos.Clear();
     }

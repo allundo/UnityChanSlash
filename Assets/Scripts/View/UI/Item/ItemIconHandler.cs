@@ -187,7 +187,14 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            onUseItem.OnNext(itemIndex.GetItem(handler.pressedIndex)?.itemInfo);
+            ItemIcon pressed = itemIndex.GetItem(handler.pressedIndex);
+
+            if (pressed == null) return CleanUp();
+
+            if (pressed.itemInfo.attr != ItemAttr.Equipment)
+            {
+                onUseItem.OnNext(pressed.itemInfo);
+            }
 
             // Continue Select mode when the item is remaining after use it.
             if (itemIndex.GetItem(handler.pressedIndex) != null)
