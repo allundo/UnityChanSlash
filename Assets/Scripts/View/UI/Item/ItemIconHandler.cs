@@ -56,6 +56,9 @@ public class ItemIconHandler : IItemIconHandler
     public IObservable<ItemInfo> OnUseItem => selectMode.onUseItem;
     public bool IsPutItem => currentMode is PutMode;
 
+    private TweenUtil t = new TweenUtil();
+    public Tween Play(Tween tween) => t.PlayExclusive(tween);
+
     public ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex)
     {
         this.selector = selector;
@@ -119,7 +122,7 @@ public class ItemIconHandler : IItemIconHandler
             {
                 selector.Enable();
                 selector.SetSelect(itemIndex.UIPos(index));
-                currentTarget.Resize(1.5f, 0.2f).Play();
+                handler.Play(currentTarget.Resize(1.5f, 0.2f));
                 handler.pressedIndex = index;
             }
 
@@ -140,7 +143,7 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler CleanUp()
         {
-            handler.currentSelected?.Resize(1f, 0.2f)?.Play();
+            handler.Play(handler.currentSelected?.Resize(1f, 0.2f));
             handler.currentSelected = null;
             handler.pressedIndex = itemIndex.MAX_ITEMS;
 
@@ -171,7 +174,7 @@ public class ItemIconHandler : IItemIconHandler
                 handler.currentSelected.Resize(1f, 0.2f).Play();
                 handler.currentSelected = null;
 
-                currentTarget.Resize(1.5f, 0.2f).Play();
+                handler.Play(currentTarget.Resize(1.5f, 0.2f));
                 handler.pressedIndex = index;
 
                 return handler.normalMode;
@@ -189,7 +192,7 @@ public class ItemIconHandler : IItemIconHandler
             // Continue Select mode when the item is remaining after use it.
             if (itemIndex.GetItem(handler.pressedIndex) != null)
             {
-                handler.currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo).Play();
+                handler.Play(handler.currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo));
                 return this;
             }
 
@@ -226,7 +229,7 @@ public class ItemIconHandler : IItemIconHandler
             }
 
             itemIndex.SetItem(currentSelected.index, currentTarget);
-            currentSelected.Move(itemIndex.UIPos(pressedIndex)).Play();
+            handler.Play(currentSelected.Move(itemIndex.UIPos(pressedIndex)));
             currentSelected.SetIndex(pressedIndex);
             itemIndex.SetItem(pressedIndex, currentSelected);
 
@@ -237,7 +240,7 @@ public class ItemIconHandler : IItemIconHandler
         {
             onPutItem.OnNext(null);
             var currentSelected = handler.currentSelected;
-            currentSelected.Move(itemIndex.UIPos(currentSelected.index)).SetDelay(0.1f).Play();
+            handler.Play(currentSelected.Move(itemIndex.UIPos(currentSelected.index)).SetDelay(0.1f));
             return BaseCleanUp();
         }
 
@@ -284,7 +287,7 @@ public class ItemIconHandler : IItemIconHandler
             // Reserve moving back to item inventory
             currentSelected.ResetSize();
             currentSelected.SetParent(selector.transform.parent, true);
-            currentSelected.Move(itemIndex.UIPos(currentSelected.index)).Play();
+            handler.Play(currentSelected.Move(itemIndex.UIPos(currentSelected.index)));
 
             return BaseCleanUp();
         }
