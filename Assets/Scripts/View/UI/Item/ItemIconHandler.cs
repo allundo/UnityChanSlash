@@ -5,10 +5,35 @@ using DG.Tweening;
 
 public interface IItemIconHandler
 {
+    /// <summary>
+    /// OnPointerEnter into a panel.
+    /// </summary>
+    /// <param name="index">panel index</param>
+    /// <returns>next state icon handler</returns>
     IItemIconHandler OnPress(int index);
+
+    /// <summary>
+    /// OnPointerExit from pressing panel.
+    /// </summary>
+    /// <returns>next state icon handler</returns>
     IItemIconHandler OnRelease();
+
+    /// <summary>
+    /// OnPointerUp from selected panel.
+    /// </summary>
+    /// <returns>next state icon handler</returns>
     IItemIconHandler OnSubmit();
+
+    /// <summary>
+    /// OnDrag an item icon.
+    /// </summary>
+    /// <returns>next state icon handler</returns>
     IItemIconHandler OnDrag(Vector2 screenPos);
+
+    /// <summary>
+    /// Back to the normal mde icon handler mode and neutral state.
+    /// </summary>
+    /// <returns>normal mode icon handler</returns>
     IItemIconHandler CleanUp();
 }
 
