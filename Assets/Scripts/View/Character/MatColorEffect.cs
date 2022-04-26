@@ -4,7 +4,6 @@ using DG.Tweening;
 
 public interface IMatColorEffect : IMaterialEffect
 {
-    void PlayExclusive(Tween matTween);
     void Flash(Color color, float duration);
     void DamageFlash(float damageRatio);
     void FadeIn(float duration);
@@ -15,19 +14,16 @@ public interface IMatColorEffect : IMaterialEffect
 
 public class MatColorEffect : MaterialEffect, IMatColorEffect
 {
-    protected Tween prevTween;
     protected Tween disappearTween;
 
     protected override string propName => "_AdditiveColor";
     protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 1);
+
+    protected TweenUtil t = new TweenUtil();
+    protected virtual Tween PlayExclusive(Tween tween) => t.PlayExclusive(tween);
+
     public MatColorEffect(Transform targetTf) : base(targetTf) { }
     public MatColorEffect(List<Material> materials) : base(materials) { }
-
-    public virtual void PlayExclusive(Tween matTween)
-    {
-        prevTween?.Complete(true);
-        prevTween = matTween.Play();
-    }
 
     public void Flash(Color color, float duration)
     {
@@ -101,13 +97,13 @@ public class MatColorEffect : MaterialEffect, IMatColorEffect
 
     public virtual void Inactivate(TweenCallback onComplete = null, float duration = 0.5f)
     {
-        prevTween?.Complete(true);
+        t.Complete();
         disappearTween = FadeOutTween(duration).OnComplete(onComplete).Play();
     }
 
     public override void KillAllTweens()
     {
         disappearTween?.Complete();
-        prevTween?.Kill();
+        t.Kill();
     }
 }
