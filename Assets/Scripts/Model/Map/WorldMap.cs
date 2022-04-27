@@ -20,7 +20,7 @@ public class WorldMap
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
     public Dir[,] CloneDirMap() => map.dirMap.Clone() as Dir[,];
 
-    public Dir GetPallDir(int x, int y) => map.GetPallDir(x, y);
+    public Dir GetPillarDir(int x, int y) => map.GetPillarDir(x, y);
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
@@ -111,7 +111,7 @@ public class WorldMap
                 switch (matrix[i, j])
                 {
                     case Terrain.Wall:
-                    case Terrain.Pall:
+                    case Terrain.Pillar:
                         tileInfo[i, j] = new Wall();
                         pixels[i + Width * j] = Color.gray;
                         break;

@@ -20,6 +20,8 @@ public class MapManager
     /// </summary>
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
+    public IDirection exitDoorDir { get; protected set; }
+
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
 
@@ -143,11 +145,13 @@ public class MapManager
 
     protected void SetExitDoor(Pos pos, IDirection doorDir)
     {
+        this.exitDoorDir = doorDir;
+
         Pos leftPos = doorDir.GetLeft(pos);
         Pos rightPos = doorDir.GetRight(pos);
 
         matrix[pos.x, pos.y] = Terrain.ExitDoor;
-        matrix[leftPos.x, leftPos.y] = matrix[rightPos.x, rightPos.y] = Terrain.Pall;
+        matrix[leftPos.x, leftPos.y] = matrix[rightPos.x, rightPos.y] = Terrain.Pillar;
         dirMap[pos.x, pos.y] = doorDir.Enum;
         dirMap[leftPos.x, leftPos.y] |= doorDir.Right.Enum;
         dirMap[rightPos.x, rightPos.y] |= doorDir.Left.Enum;
@@ -225,14 +229,14 @@ public class MapManager
         {
             for (int x = 0; x < width; x++)
             {
-                // Skip pall or gate
+                // Skip pillar or gate
                 if (x % 2 == 0 && y % 2 == 0) continue;
 
                 dirMap[x, y] = GetWallDir(x, y);
             }
         }
 
-        // Set pall or gate
+        // Set pillar or gate
         for (int y = 0; y < height; y += 2)
         {
             for (int x = 0; x < width; x += 2)
@@ -252,8 +256,8 @@ public class MapManager
                 }
 
                 // Set gate as wall next to door
-                // Set pall as corner wall
-                matrix[x, y] = Terrain.Pall;
+                // Set pillar as corner wall
+                matrix[x, y] = Terrain.Pillar;
                 dirMap[x, y] = doorDir;
             }
         }
@@ -277,7 +281,7 @@ public class MapManager
     }
     private Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.ExitDoor);
     private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall);
-    public Dir GetPallDir(int x, int y) => GetDir(x, y, Terrain.Pall);
+    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar);
 
     public class MazeCreator
     {

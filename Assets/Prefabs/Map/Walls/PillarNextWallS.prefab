@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6612740791611479507}
   - component: {fileID: 6612740791611479506}
   m_Layer: 0
-  m_Name: PallNextWallS
+  m_Name: PillarNextWallS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

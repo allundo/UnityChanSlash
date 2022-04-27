@@ -15,12 +15,12 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject wallParent = default;
     [SerializeField] private GameObject wallV = default;
     [SerializeField] private GameObject wallH = default;
-    [SerializeField] private GameObject pallNextWallV = default;
-    [SerializeField] private GameObject pallNextWallH = default;
-    [SerializeField] private GameObject pallNextWallN = default;
-    [SerializeField] private GameObject pallNextWallE = default;
-    [SerializeField] private GameObject pallNextWallS = default;
-    [SerializeField] private GameObject pallNextWallW = default;
+    [SerializeField] private GameObject pillarNextWallV = default;
+    [SerializeField] private GameObject pillarNextWallH = default;
+    [SerializeField] private GameObject pillarNextWallN = default;
+    [SerializeField] private GameObject pillarNextWallE = default;
+    [SerializeField] private GameObject pillarNextWallS = default;
+    [SerializeField] private GameObject pillarNextWallW = default;
     [SerializeField] private GameObject gateV = default;
     [SerializeField] private GameObject gateH = default;
     [SerializeField] private GameObject gateVE = default;
@@ -36,7 +36,7 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject gateE = default;
     [SerializeField] private GameObject gateS = default;
     [SerializeField] private GameObject gateW = default;
-    [SerializeField] private GameObject pall = default;
+    [SerializeField] private GameObject pillar = default;
     [SerializeField] private DoorControl doorV = default;
     [SerializeField] private DoorControl doorH = default;
     [SerializeField] private ExitDoorControl exitDoorN = default;
@@ -65,14 +65,14 @@ public class MapRenderer : MonoBehaviour
         wallVMesh = GetMeshFromObject(wallV);
         wallHMesh = GetMeshFromObject(wallH);
 
-        wallMesh[(int)Dir.N] = GetMeshFromObject(pallNextWallN);
-        wallMesh[(int)Dir.E] = GetMeshFromObject(pallNextWallE);
-        wallMesh[(int)Dir.S] = GetMeshFromObject(pallNextWallS);
-        wallMesh[(int)Dir.W] = GetMeshFromObject(pallNextWallW);
-        wallMesh[(int)Dir.NS] = GetMeshFromObject(pallNextWallV);
-        wallMesh[(int)Dir.EW] = GetMeshFromObject(pallNextWallH);
+        wallMesh[(int)Dir.N] = GetMeshFromObject(pillarNextWallN);
+        wallMesh[(int)Dir.E] = GetMeshFromObject(pillarNextWallE);
+        wallMesh[(int)Dir.S] = GetMeshFromObject(pillarNextWallS);
+        wallMesh[(int)Dir.W] = GetMeshFromObject(pillarNextWallW);
+        wallMesh[(int)Dir.NS] = GetMeshFromObject(pillarNextWallV);
+        wallMesh[(int)Dir.EW] = GetMeshFromObject(pillarNextWallH);
 
-        gateMesh[(int)Dir.NONE] = GetMeshFromObject(pall);
+        gateMesh[(int)Dir.NONE] = GetMeshFromObject(pillar);
         gateMesh[(int)Dir.N] = GetMeshFromObject(gateN);
         gateMesh[(int)Dir.E] = GetMeshFromObject(gateE);
         gateMesh[(int)Dir.S] = GetMeshFromObject(gateS);
@@ -178,7 +178,7 @@ public class MapRenderer : MonoBehaviour
                     case Terrain.Ground:
                         break;
 
-                    case Terrain.Pall:
+                    case Terrain.Pillar:
                         terrainMeshes.Add(GetMeshInstance(gateMesh[(int)dirMap[i, j]], new Pos(i, j)));
                         break;
 
@@ -192,14 +192,14 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.Wall:
-                        Dir pallDir = map.GetPallDir(i, j);
-                        if (pallDir == Dir.NONE)
+                        Dir pillarDir = map.GetPillarDir(i, j);
+                        if (pillarDir == Dir.NONE)
                         {
                             if (dirMap[i, j] == Dir.NS) terrainMeshes.Add(GetMeshInstance(wallVMesh, new Pos(i, j)));
                             if (dirMap[i, j] == Dir.EW) terrainMeshes.Add(GetMeshInstance(wallHMesh, new Pos(i, j)));
                             break;
                         }
-                        terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pallDir], new Pos(i, j)));
+                        terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pillarDir], new Pos(i, j)));
                         break;
 
                     case Terrain.DownStairs:

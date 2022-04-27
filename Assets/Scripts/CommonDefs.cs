@@ -28,7 +28,7 @@ public enum Terrain
     Path = 0,
     Ground,
     Wall,
-    Pall, // Gate or Pall
+    Pillar, // Gate or Pillar
     Door,
     ExitDoor,
     DownStairs,
