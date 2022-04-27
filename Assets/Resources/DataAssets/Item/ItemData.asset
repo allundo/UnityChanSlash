@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: ItemData
   m_EditorClassIdentifier: 
   setParams:
+  - name: Null
+    material: {fileID: 0}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0
   - name: "\u30DD\u30FC\u30B7\u30E7\u30F3"
     material: {fileID: 2100000, guid: b4d0df5607eb74b15b1bb09440cce67c, type: 2}
     vfx: {fileID: 3893910784469507714, guid: 0ee90d52b4a814c02abda4136cea1b8c, type: 3}

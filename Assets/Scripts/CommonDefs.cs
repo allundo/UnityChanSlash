@@ -30,6 +30,7 @@ public enum Terrain
     Wall,
     Pall, // Gate or Pall
     Door,
+    ExitDoor,
     DownStairs,
     UpStairs,
 }
@@ -427,7 +428,8 @@ public enum Plate
 
 public enum ItemType
 {
-    Potion = 0,
+    Null = 0,
+    Potion,
     KeyBlade,
 }
 

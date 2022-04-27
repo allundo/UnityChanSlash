@@ -1,8 +1,14 @@
-using UnityEngine;
 using UniRx;
+using System;
 
-public class DoorState : MonoBehaviour
+public class DoorState
 {
+    public DoorState() : this(ItemType.Null) { }
+    public DoorState(ItemType type)
+    {
+        lockType = new ReactiveProperty<ItemType>(type);
+    }
+
     public enum StateEnum
     {
         OPEN,
@@ -13,7 +19,19 @@ public class DoorState : MonoBehaviour
 
     protected IReactiveProperty<StateEnum> state = new ReactiveProperty<StateEnum>(StateEnum.CLOSE);
     public IReadOnlyReactiveProperty<StateEnum> State => state;
-    private bool isLocked = false;
+
+    protected IReactiveProperty<ItemType> lockType;
+    public IObservable<bool> LockedState => lockType.SkipLatestValueOnSubscribe().Select(type => type != ItemType.Null);
+
+    public bool IsLocked => lockType.Value != ItemType.Null;
+
+    public bool Unlock(ItemType key)
+    {
+        if (key != lockType.Value) return false;
+
+        lockType.Value = ItemType.Null;
+        return true;
+    }
 
     public bool IsOpen => State.Value == StateEnum.OPEN || State.Value == StateEnum.OPENING;
     public bool IsControllable => State.Value == StateEnum.OPEN && !IsCharacterOn || State.Value == StateEnum.CLOSE;
@@ -21,14 +39,14 @@ public class DoorState : MonoBehaviour
     public bool IsCharacterOn => onCharacterDest != null;
     public IStatus onCharacterDest = null;
 
-    public void TransitionNext()
+    protected void TransitionNext()
     {
         state.Value = GetNextState();
     }
 
-    public void Handle()
+    public void TransitToNextState()
     {
-        if (IsControllable) TransitionNext();
+        if (IsControllable) state.Value = GetNextState();
     }
 
     private StateEnum GetNextState()
@@ -36,7 +54,7 @@ public class DoorState : MonoBehaviour
         switch (State.Value)
         {
             case StateEnum.CLOSE:
-                return isLocked ? StateEnum.CLOSE : StateEnum.OPENING;
+                return IsLocked ? StateEnum.CLOSE : StateEnum.OPENING;
 
             case StateEnum.OPEN:
                 return StateEnum.CLOSING;

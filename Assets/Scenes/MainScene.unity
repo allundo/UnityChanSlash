@@ -815,6 +815,8 @@ MonoBehaviour:
   pall: {fileID: 322688804}
   doorV: {fileID: 7630895998581611990, guid: 752f66cf1eab8491485d085e1fcd90e2, type: 3}
   doorH: {fileID: 2790598104398771217, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb, type: 3}
+  exitDoorN: {fileID: 4523986769115520068, guid: 6aac3f791bcf3476585a4ffed7e7dade,
+    type: 3}
   upStairsN: {fileID: 5672300880596749038, guid: c4e746f0d2d7e4354b8596d4a2660257,
     type: 3}
   downStairsN: {fileID: 4578704803065865090, guid: 23ba178c5a0be4877997045dcd5971e4,
@@ -87338,6 +87340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 0}
+  excludeBody: {fileID: 0}
 --- !u!222 &7263179161030713676
 CanvasRenderer:
   m_ObjectHideFlags: 0

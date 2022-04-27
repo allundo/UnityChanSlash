@@ -24,7 +24,7 @@ public class WorldMap
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
-    public ITile GetTile(int x, int y) => IsOutWall(x, y) ? new Wall() : tileInfo[x, y];
+    public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
 
     public Ground GetGround(ref int x, ref int y)
     {
@@ -74,7 +74,7 @@ public class WorldMap
         }
     }
 
-    public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
+    public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= Width || y >= Height;
 
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
@@ -82,7 +82,8 @@ public class WorldMap
     public WorldMap(MapManager map = null, int floor = 1, int w = 49, int h = 49)
     {
         this.map = map ?? new MapManager(w, h).SetDownStairs();
-        if (floor > 1) stairsBottom = this.map.SetUpStairs().stairsBottom;
+        stairsBottom = floor == 1 ? this.map.SetStartDoor().stairsBottom : this.map.SetUpStairs().stairsBottom;
+
         this.floor = floor;
 
         stairsTop = this.map.stairsTop;
@@ -116,6 +117,7 @@ public class WorldMap
                         break;
 
                     case Terrain.Door:
+                    case Terrain.ExitDoor:
                         tileInfo[i, j] = new Door();
                         pixels[i + Width * j] = Color.red;
                         break;
@@ -150,7 +152,7 @@ public class WorldMap
     /// <summary>
     /// The tile can be seen through
     /// </summary>
-    public bool IsTileViewOpen(int x, int y) => IsOutWall(x, y) ? false : tileInfo[x, y].IsViewOpen;
+    public bool IsTileViewOpen(int x, int y) => IsOutOfRange(x, y) ? false : tileInfo[x, y].IsViewOpen;
 
     public bool IsCurrentViewOpen(Vector3 worldPos) => IsCurrentViewOpen(MapPos(worldPos));
     public bool IsCurrentViewOpen(Pos pos) => currentViewOpen.Contains(pos);

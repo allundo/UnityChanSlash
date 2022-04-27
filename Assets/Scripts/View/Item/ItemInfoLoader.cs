@@ -24,8 +24,9 @@ public class ItemInfoLoader
 
         itemActions = new Dictionary<ItemType, ItemAction>()
         {
-            { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)  },
-            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Equipment)  },
+            { ItemType.Null,        null                                                        },
+            { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)                      },
+            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Equipment, ItemType.KeyBlade)   },
         };
     }
 }
@@ -54,7 +55,12 @@ public class PotionAction : ItemAction
 
 public class KeyBladeAction : ItemAction
 {
-    public KeyBladeAction(ItemAttr attr) : base(attr) { }
+    protected ItemType type;
+    public KeyBladeAction(ItemAttr attr, ItemType type) : base(attr)
+    {
+        this.type = type;
+    }
+
     public override int Action(PlayerCommandTarget target)
     {
         ITile tile = target.map.ForwardTile;

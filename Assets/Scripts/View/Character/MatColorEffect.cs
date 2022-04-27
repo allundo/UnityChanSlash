@@ -2,25 +2,20 @@ using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
 
-public interface IMatColorEffect : IMaterialEffect
+public interface IMatColorEffect : IMatTransparentEffect
 {
     void Flash(Color color, float duration);
     void DamageFlash(float damageRatio);
-    void FadeIn(float duration);
-    void FadeOut(float duration);
     void Activate(float duration);
     void Inactivate(TweenCallback onComplete, float duration);
 }
 
-public class MatColorEffect : MaterialEffect, IMatColorEffect
+public class MatColorEffect : MatTransparentEffect, IMatColorEffect
 {
     protected Tween disappearTween;
 
     protected override string propName => "_AdditiveColor";
     protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 1);
-
-    protected TweenUtil t = new TweenUtil();
-    protected virtual Tween PlayExclusive(Tween tween) => t.PlayExclusive(tween);
 
     public MatColorEffect(Transform targetTf) : base(targetTf) { }
     public MatColorEffect(List<Material> materials) : base(materials) { }
@@ -52,41 +47,6 @@ public class MatColorEffect : MaterialEffect, IMatColorEffect
         }
 
         PlayExclusive(flash);
-    }
-
-    protected virtual Tween FadeInTween(float duration = 0.5f) => GetFadeTween(true, duration);
-    protected virtual Tween FadeOutTween(float duration = 0.5f) => GetFadeTween(false, duration);
-
-    protected virtual Tween GetFadeTween(bool isFadeIn, float duration = 0.5f) => GetFadeTween(isFadeIn ? 1f : 0f, duration);
-
-    protected virtual Tween GetFadeTween(float endValue, float duration = 0.5f)
-    {
-        Sequence fade = DOTween.Sequence();
-
-        foreach (Material mat in materials)
-        {
-            fade.Join(
-                DOTween.ToAlpha(
-                    () => mat.color,
-                    color => mat.color = color,
-                    endValue,
-                    duration
-                )
-                .SetEase(Ease.InSine)
-            );
-        }
-
-        return fade;
-    }
-
-    public virtual void FadeIn(float duration = 0.5f)
-    {
-        PlayExclusive(FadeInTween(duration));
-    }
-
-    public virtual void FadeOut(float duration = 0.5f)
-    {
-        PlayExclusive(FadeOutTween(duration));
     }
 
     public virtual void Activate(float duration = 0.5f)

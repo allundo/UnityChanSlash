@@ -81,7 +81,7 @@ public class Door : Tile, ITile
     public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
 
     public DoorState state { protected get; set; }
-    public void Handle() => state.Handle();
+    public void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
     public bool IsControllable => state.IsControllable;
 

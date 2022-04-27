@@ -39,6 +39,7 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject pall = default;
     [SerializeField] private DoorControl doorV = default;
     [SerializeField] private DoorControl doorH = default;
+    [SerializeField] private ExitDoorControl exitDoorN = default;
     [SerializeField] private StairsControl upStairsN = default;
     [SerializeField] private StairsControl downStairsN = default;
     [SerializeField] private GameObject ground = default;
@@ -91,18 +92,27 @@ public class MapRenderer : MonoBehaviour
 
     private void SetDoor(Pos pos, DoorControl doorPrefab)
     {
-        var door = PlacePrefab(pos, doorPrefab.gameObject);
+        InitAndStoreDoorData(pos, PlacePrefab(pos, doorPrefab));
+    }
 
-        Door tileDoor = map.GetTile(pos) as Door;
-        tileDoor.state = door.GetComponent<DoorState>();
+    private void SetExitDoor(Pos pos, IDirection dir)
+    {
+        InitAndStoreDoorData(pos, PlacePrefab(pos, exitDoorN, dir.Rotate).SetDir(dir));
+    }
 
-        doorsPool.Push(door.GetComponent<DoorControl>());
-        doorsPool.Peek().SetMaterials(floorMaterials.gate, floorMaterials.door);
+    private void InitAndStoreDoorData(Pos pos, DoorControl doorInstance)
+    {
+        var state = new DoorState(doorInstance.LockType);
+
+        doorInstance.SetMaterials(floorMaterials.gate, floorMaterials.door).SetState(state);
+        (map.GetTile(pos) as Door).state = state;
+
+        doorsPool.Push(doorInstance);
     }
 
     public void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
     {
-        var stairs = PlacePrefab(pos, (isDownStairs ? downStairsN : upStairsN).gameObject, dir.Rotate);
+        var stairs = PlacePrefab(pos, isDownStairs ? downStairsN : upStairsN, dir.Rotate);
 
         Stairs tileStairs = map.GetTile(pos) as Stairs;
         tileStairs.enterDir = dir;
@@ -114,12 +124,13 @@ public class MapRenderer : MonoBehaviour
     private Stack<GameObject> objectPool = new Stack<GameObject>();
     private Stack<DoorControl> doorsPool = new Stack<DoorControl>();
 
-    private GameObject PlacePrefab(Pos pos, GameObject prefab)
+    private T PlacePrefab<T>(Pos pos, T prefab) where T : UnityEngine.Object
         => PlacePrefab(pos, prefab, Quaternion.identity);
-    private GameObject PlacePrefab(Pos pos, GameObject prefab, Quaternion rotation)
+    private T PlacePrefab<T>(Pos pos, T prefab, Quaternion rotation) where T : UnityEngine.Object
     {
-        objectPool.Push(Instantiate(prefab, map.WorldPos(pos), rotation, transform));
-        return objectPool.Peek();
+        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, transform);
+        objectPool.Push(instance as GameObject);
+        return instance;
     }
 
     public void DestroyObjects()
@@ -174,6 +185,10 @@ public class MapRenderer : MonoBehaviour
                     case Terrain.Door:
                         if (dirMap[i, j] == Dir.NS) SetDoor(new Pos(i, j), doorV);
                         if (dirMap[i, j] == Dir.EW) SetDoor(new Pos(i, j), doorH);
+                        break;
+
+                    case Terrain.ExitDoor:
+                        SetExitDoor(new Pos(i, j), Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.Wall:
