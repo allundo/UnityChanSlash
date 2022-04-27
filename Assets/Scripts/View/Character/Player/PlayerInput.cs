@@ -62,7 +62,9 @@ public class PlayerInput : ShieldInput
     // Reserved ICommand input applied by other classes.
     // FIXME: need to implement game events handling system.
     public void EnqueueDropFloor() => Interrupt(new PlayerDropFloor(playerTarget, 220f));
-    public void EnqueueStartMessage(MessageData data) => ForceEnqueue(new PlayerMessage(playerTarget, data));
+    public void EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f));
+    public void EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f));
+    public void EnqueueStartMessage(MessageData data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
     public void EnqueueRestartMessage(MessageData data) => Interrupt(new PlayerMessage(playerTarget, data));
 
     protected override void SetCommander()

@@ -42,10 +42,10 @@ public abstract class PlayerCommand : MobCommand
             .Join(validateTween);
     }
 
-    protected void SetUIInvisible()
+    protected void SetUIInvisible(bool isVisibleOnCompleted = true)
     {
         playerInput.SetInputVisible(false);
-        onCompleted.Add(() => playerInput.SetInputVisible(true));
+        onCompleted.Add(() => playerInput.SetInputVisible(isVisibleOnCompleted));
     }
 }
 
@@ -586,18 +586,21 @@ public class PlayerDropFloor : PlayerCommand
 
 public class PlayerMessage : PlayerAction
 {
-    MessageData data;
-    public PlayerMessage(PlayerCommandTarget target, MessageData data) : base(target, 3.6f)
+    protected MessageData data;
+    protected bool isUIVisibleOnCompleted;
+
+    public PlayerMessage(PlayerCommandTarget target, MessageData data, bool isUIVisibleOnCompleted = true) : base(target, 3.6f)
     {
         this.data = data;
+        this.isUIVisibleOnCompleted = isUIVisibleOnCompleted;
     }
 
-    public PlayerMessage(PlayerCommandTarget target, string[] sentences, FaceID[] faces)
-        : this(target, new MessageData(sentences, faces)) { }
+    public PlayerMessage(PlayerCommandTarget target, string[] sentences, FaceID[] faces, bool isUIVisibleOnCompleted = true)
+        : this(target, new MessageData(sentences, faces), isUIVisibleOnCompleted) { }
 
     protected override bool Action()
     {
-        SetUIInvisible();
+        SetUIInvisible(isUIVisibleOnCompleted);
         messageController.InputMessageData(data);
         return true;
     }

@@ -106,13 +106,50 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             {
                 sentences = new string[]
                 {
-                    "[仮] (ここに開幕の説明が入ります)",
-                    "[仮] ・・・メタすぎる！"
+                    "いきなりなんなのさ・・・",
+                    "久々の出番なのに、扱いが雑じゃない！？"
                 },
                 faces = new FaceID[]
                 {
                     FaceID.DISATTRACT,
                     FaceID.ANGRY
+                }
+            },
+            false
+        );
+
+        var exitDir = worldMap.GetExitDoorDir();
+
+        if (map.dir.IsLeft(exitDir))
+        {
+            input.EnqueueTurnR();
+        }
+        else if (map.dir.IsRight(exitDir))
+        {
+            input.EnqueueTurnL();
+        }
+        else if (map.dir.IsSame(exitDir))
+        {
+            input.EnqueueTurnL();
+            input.EnqueueTurnL();
+        }
+
+        input.EnqueueStartMessage(
+            new MessageData
+            {
+                sentences = new string[]
+                {
+                    "なんか使う標示まちがってる気がするけど",
+                    "どうみてもこれが出口だね",
+                    "・・・うーん",
+                    "鍵が掛かってますねぇ！"
+                },
+                faces = new FaceID[]
+                {
+                    FaceID.DEFAULT,
+                    FaceID.NOTICE,
+                    FaceID.DISATTRACT,
+                    FaceID.ANGRY,
                 }
             }
         );
