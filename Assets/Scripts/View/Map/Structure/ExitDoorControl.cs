@@ -51,4 +51,11 @@ public class ExitDoorControl : DoorControl
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerReactor>() != null)
+        {
+            GameManager.Instance.Exit();
+        }
+    }
 }

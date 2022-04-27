@@ -181,7 +181,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void EnterStair(bool isDownStairs)
     {
-
         input.ClearAll();
         input.SetInputVisible(false);
         mainCamera.StopScreen(cover.transform.GetSiblingIndex());
@@ -263,5 +262,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         itemGenerator.SwitchWorldMap(worldMap);
         itemGenerator.Turn(map.dir);
         yield return new WaitForEndOfFrame();
+    }
+
+    public void Exit()
+    {
+        Pause(true);
+        cover.color = new Color(1f, 1f, 1f, 0f);
+        cover.FadeOut(3f).SetEase(Ease.InCubic).Play();
     }
 }

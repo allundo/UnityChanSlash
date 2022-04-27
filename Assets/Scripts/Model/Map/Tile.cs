@@ -76,7 +76,7 @@ public class Door : Tile, ITile
 {
     public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
-    public bool IsViewOpen => state.IsOpen;
+    public virtual bool IsViewOpen => state.IsOpen;
     public override bool IsCharacterOn => state.IsCharacterOn;
     public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
 
@@ -84,9 +84,15 @@ public class Door : Tile, ITile
     public void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
     public bool IsControllable => state.IsControllable;
+    public bool UnLock(ItemType type) => state.Unlock(type);
 
     public override bool PutItem(Item item) => IsOpen ? base.PutItem(item) : false;
     public override Item PickItem() => IsOpen ? base.PickItem() : null;
+}
+
+public class ExitDoor : Door, ITile
+{
+    public override bool IsViewOpen => false;
 }
 
 public class Stairs : Tile, ITile

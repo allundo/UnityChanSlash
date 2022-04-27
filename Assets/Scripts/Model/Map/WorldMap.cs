@@ -117,9 +117,13 @@ public class WorldMap
                         break;
 
                     case Terrain.Door:
-                    case Terrain.ExitDoor:
                         tileInfo[i, j] = new Door();
                         pixels[i + Width * j] = Color.red;
+                        break;
+
+                    case Terrain.ExitDoor:
+                        tileInfo[i, j] = new ExitDoor();
+                        pixels[i + Width * j] = Color.green;
                         break;
 
                     case Terrain.DownStairs:

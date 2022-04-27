@@ -26,7 +26,7 @@ public class ItemInfoLoader
         {
             { ItemType.Null,        null                                                        },
             { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)                      },
-            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Equipment, ItemType.KeyBlade)   },
+            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)   },
         };
     }
 }
@@ -64,12 +64,6 @@ public class KeyBladeAction : ItemAction
     public override int Action(PlayerCommandTarget target)
     {
         ITile tile = target.map.ForwardTile;
-        if (tile is Door)
-        {
-            // TODO: implement unlocking door process
-            return 1;
-        }
-
-        return 0;
+        return (tile is Door && (tile as Door).UnLock(type)) ? 1 : 0;
     }
 }

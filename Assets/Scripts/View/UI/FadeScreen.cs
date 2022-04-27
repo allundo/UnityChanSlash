@@ -20,6 +20,12 @@ public class FadeScreen : MonoBehaviour
         }
     }
 
+    public Color color
+    {
+        get { return fade.color; }
+        set { fade.color = value; }
+    }
+
     public virtual void SetAlpha(float alpha) => fade.SetAlpha(alpha);
 
     protected virtual void Awake()
