@@ -19,15 +19,6 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
         Inactivate();
     }
 
-    protected virtual void Start()
-    {
-        textHandler.Sentence.Subscribe(
-            faceID => characterUI.DispFace(faceID),
-            err => Debug.Log(err),
-            () => CloseMessage()
-        ).AddTo(this);
-    }
-
     public void OnPointerDown(PointerEventData eventData) { }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -41,6 +32,12 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     public void InputMessageData(MessageData data)
     {
+        textHandler.Sentence.Subscribe(
+            faceID => characterUI.DispFace(faceID),
+            err => Debug.Log(err),
+            () => CloseMessage()
+        ).AddTo(this);
+
         activateTween =
             DOTween.Sequence()
             .Join(

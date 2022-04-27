@@ -70,6 +70,8 @@ public class TextHandler : MonoBehaviour
         {
             tm.text = currentSentence = "";
             sentence.OnCompleted();
+            // Initialize a Subject again because RepeatUntilDestroy() operator sends OnCompleted message ONLY ONCE when destroyed.
+            sentence = new Subject<FaceID>();
             return;
         }
 
