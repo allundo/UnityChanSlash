@@ -20,9 +20,10 @@ public class WorldMap
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
     public Dir[,] CloneDirMap() => map.dirMap.Clone() as Dir[,];
 
+    public Dir GetDoorDir(int x, int y) => map.GetDoorDir(x, y);
     public Dir GetPillarDir(int x, int y) => map.GetPillarDir(x, y);
 
-    public IDirection GetExitDoorDir() => map.exitDoorDir;
+    public IDirection exitDoorDir => map.exitDoorDir;
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
@@ -116,6 +117,12 @@ public class WorldMap
                     case Terrain.Pillar:
                         tileInfo[i, j] = new Wall();
                         pixels[i + Width * j] = Color.gray;
+                        break;
+
+                    case Terrain.MessageWall:
+                    case Terrain.MessagePillar:
+                        tileInfo[i, j] = new MessageWall();
+                        pixels[i + Width * j] = Color.magenta;
                         break;
 
                     case Terrain.Door:

@@ -30,9 +30,11 @@ public enum Terrain
     Wall,
     Pillar, // Gate or Pillar
     Door,
-    ExitDoor,
+    MessageWall,
+    MessagePillar,
     DownStairs,
     UpStairs,
+    ExitDoor,
 }
 
 public struct Pos

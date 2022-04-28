@@ -123,14 +123,17 @@ public class MapManager
         if (IsArroundWall(doorPos = dir.GetLeft(pos)))
         {
             SetExitDoor(doorPos, dir.Right);
+            SetMessageBoard(dir.GetBackward(pos), dir);
         }
         else if (IsArroundWall(doorPos = dir.GetRight(pos)))
         {
             SetExitDoor(doorPos, dir.Left);
+            SetMessageBoard(dir.GetBackward(pos), dir);
         }
         else if (IsArroundWall(doorPos = dir.GetBackward(pos)))
         {
             SetExitDoor(doorPos, dir);
+            SetMessageBoard(dir.GetLeft(pos), dir.Right);
         }
         else
         {
@@ -155,6 +158,12 @@ public class MapManager
         dirMap[pos.x, pos.y] = doorDir.Enum;
         dirMap[leftPos.x, leftPos.y] |= doorDir.Right.Enum;
         dirMap[rightPos.x, rightPos.y] |= doorDir.Left.Enum;
+    }
+
+    protected void SetMessageBoard(Pos pos, IDirection boardDir)
+    {
+        dirMap[pos.x, pos.y] = boardDir.Enum;
+        matrix[pos.x, pos.y] = Terrain.MessageWall;
     }
 
     protected bool IsArroundWall(Pos pos) => IsArroundWall(pos.x, pos.y);
@@ -232,7 +241,14 @@ public class MapManager
                 // Skip pillar or gate
                 if (x % 2 == 0 && y % 2 == 0) continue;
 
+                if (matrix[x, y] == Terrain.MessageWall || matrix[x, y] == Terrain.ExitDoor)
+                {
+                    dirMap[x, y] = GetValidDir(x, y);
+                    continue;
+                }
+
                 dirMap[x, y] = GetWallDir(x, y);
+
             }
         }
 
@@ -241,6 +257,12 @@ public class MapManager
         {
             for (int x = 0; x < width; x += 2)
             {
+
+                if (matrix[x, y] == Terrain.MessagePillar)
+                {
+                    dirMap[x, y] = GetValidDir(x, y);
+                    continue;
+                }
 
                 Dir doorDir = GetDoorDir(x, y);
 
@@ -279,9 +301,21 @@ public class MapManager
 
         return dir;
     }
-    private Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.ExitDoor);
-    private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall);
-    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar);
+    public Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.ExitDoor);
+    private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall) | GetDir(x, y, Terrain.MessageWall);
+    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar);
+
+    private Dir GetValidDir(int x, int y)
+    {
+        if (y > 0 && IsEnterable(matrix[x, y - 1])) return Dir.N;
+        if (x > 0 && IsEnterable(matrix[x - 1, y])) return Dir.W;
+        if (y < height - 2 && IsEnterable(matrix[x, y + 1])) return Dir.S;
+        if (x < width - 2 && IsEnterable(matrix[x + 1, y])) return Dir.E;
+
+        return Dir.NONE;
+    }
+
+    private bool IsEnterable(Terrain terrain) => terrain == Terrain.Ground || terrain == Terrain.Path;
 
     public class MazeCreator
     {

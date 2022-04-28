@@ -72,6 +72,13 @@ public class Wall : Tile, ITile
 
 }
 
+public class MessageWall : Wall
+{
+    public bool IsReadable(IDirection dir = null) => boardDir.IsInverse(dir);
+    public IDirection boardDir { protected get; set; }
+    public MessageData[] data { protected get; set; }
+}
+
 public class Door : Tile, ITile
 {
     public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;

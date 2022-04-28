@@ -12,6 +12,7 @@ public class MapRenderer : MonoBehaviour
 
     public WorldMap map { get; private set; }
 
+    // Instantiated GameObjects
     [SerializeField] private GameObject wallParent = default;
     [SerializeField] private GameObject wallV = default;
     [SerializeField] private GameObject wallH = default;
@@ -39,10 +40,13 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject pillar = default;
     [SerializeField] private DoorControl doorV = default;
     [SerializeField] private DoorControl doorH = default;
+    [SerializeField] private GameObject ground = default;
+
+    // Prefabs
     [SerializeField] private ExitDoorControl exitDoorN = default;
     [SerializeField] private StairsControl upStairsN = default;
     [SerializeField] private StairsControl downStairsN = default;
-    [SerializeField] private GameObject ground = default;
+    [SerializeField] private GameObject messageBoardN = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -93,6 +97,19 @@ public class MapRenderer : MonoBehaviour
     private void SetDoor(Pos pos, DoorControl doorPrefab)
     {
         InitAndStoreDoorData(pos, PlacePrefab(pos, doorPrefab));
+    }
+
+    private void SetMessageBoard(Pos pos, IDirection dir)
+    {
+        PlacePrefab(pos, messageBoardN, dir.Rotate);
+        MessageWall tile = map.GetTile(pos) as MessageWall;
+        tile.boardDir = dir;
+
+        tile.data = MessageData.Board(
+            "【試練の迷宮】\n"
+            + "迷宮の番人を倒せ！！\n"
+            + "封印されし剣が鍵となり、道は開けるであろう。"
+        );
     }
 
     private void SetExitDoor(Pos pos, IDirection dir)
@@ -173,41 +190,63 @@ public class MapRenderer : MonoBehaviour
         {
             for (int i = 0; i < width; i++)
             {
+                Pos pos = new Pos(i, j);
+
                 switch (matrix[i, j])
                 {
                     case Terrain.Ground:
                         break;
 
                     case Terrain.Pillar:
-                        terrainMeshes.Add(GetMeshInstance(gateMesh[(int)dirMap[i, j]], new Pos(i, j)));
+                        terrainMeshes.Add(GetMeshInstance(gateMesh[(int)dirMap[i, j]], pos));
+                        break;
+
+                    case Terrain.MessagePillar:
+                        // Render a message board
+                        SetMessageBoard(pos, Direction.Convert(dirMap[i, j]));
+
+                        // Render a pillar
+                        terrainMeshes.Add(GetMeshInstance(gateMesh[(int)map.GetDoorDir(i, j)], pos));
                         break;
 
                     case Terrain.Door:
-                        if (dirMap[i, j] == Dir.NS) SetDoor(new Pos(i, j), doorV);
-                        if (dirMap[i, j] == Dir.EW) SetDoor(new Pos(i, j), doorH);
+                        if (dirMap[i, j] == Dir.NS) SetDoor(pos, doorV);
+                        if (dirMap[i, j] == Dir.EW) SetDoor(pos, doorH);
                         break;
 
                     case Terrain.ExitDoor:
-                        SetExitDoor(new Pos(i, j), Direction.Convert(dirMap[i, j]));
+                        SetExitDoor(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.Wall:
+                    case Terrain.MessageWall:
+                        // Render a message board
+                        if (matrix[i, j] == Terrain.MessageWall)
+                        {
+                            var dir = Direction.Convert(dirMap[i, j]);
+                            SetMessageBoard(pos, dir);
+
+                            // Change back Dir data for rendering wall
+                            dirMap[i, j] = dir.Left.Enum | dir.Right.Enum;
+                        }
+
+                        // Render a wall
                         Dir pillarDir = map.GetPillarDir(i, j);
                         if (pillarDir == Dir.NONE)
                         {
-                            if (dirMap[i, j] == Dir.NS) terrainMeshes.Add(GetMeshInstance(wallVMesh, new Pos(i, j)));
-                            if (dirMap[i, j] == Dir.EW) terrainMeshes.Add(GetMeshInstance(wallHMesh, new Pos(i, j)));
+                            if (dirMap[i, j] == Dir.NS) terrainMeshes.Add(GetMeshInstance(wallVMesh, pos));
+                            if (dirMap[i, j] == Dir.EW) terrainMeshes.Add(GetMeshInstance(wallHMesh, pos));
                             break;
                         }
-                        terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pillarDir], new Pos(i, j)));
+                        terrainMeshes.Add(GetMeshInstance(wallMesh[(int)pillarDir], pos));
                         break;
 
                     case Terrain.DownStairs:
-                        SetStairs(new Pos(i, j), Direction.Convert(dirMap[i, j]), true);
+                        SetStairs(pos, Direction.Convert(dirMap[i, j]), true);
                         break;
 
                     case Terrain.UpStairs:
-                        SetStairs(new Pos(i, j), Direction.Convert(dirMap[i, j]), false);
+                        SetStairs(pos, Direction.Convert(dirMap[i, j]), false);
                         break;
                 }
             }

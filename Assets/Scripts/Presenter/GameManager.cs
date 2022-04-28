@@ -111,7 +111,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             false
         );
 
-        var exitDir = worldMap.GetExitDoorDir();
+        var exitDir = worldMap.exitDoorDir;
 
         if (map.dir.IsLeft(exitDir))
         {
