@@ -64,8 +64,8 @@ public class PlayerInput : ShieldInput
     public void EnqueueDropFloor() => Interrupt(new PlayerDropFloor(playerTarget, 220f));
     public void EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f));
     public void EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f));
-    public void EnqueueStartMessage(MessageData data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
-    public void EnqueueRestartMessage(MessageData data) => Interrupt(new PlayerMessage(playerTarget, data));
+    public void EnqueueStartMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
+    public void EnqueueRestartMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
 
     protected override void SetCommander()
     {

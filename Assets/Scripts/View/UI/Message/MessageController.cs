@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UniRx;
+using System.Linq;
 
 public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
@@ -30,7 +31,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
         textHandler.TapNext();
     }
 
-    public void InputMessageData(MessageData data)
+    public void InputMessageData(MessageData[] data)
     {
         textHandler.Sentence.Subscribe(
             faceID => characterUI.DispFace(faceID),
@@ -55,7 +56,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
             .SetUpdate(true)
             .Play();
 
-        characterUI.InputFaceIDs(data.faces);
+        characterUI.InputFaceIDs(data.Select(elem => elem.face).ToArray());
     }
 
     private void CloseMessage()

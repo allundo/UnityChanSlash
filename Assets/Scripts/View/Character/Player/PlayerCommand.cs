@@ -586,17 +586,14 @@ public class PlayerDropFloor : PlayerCommand
 
 public class PlayerMessage : PlayerAction
 {
-    protected MessageData data;
+    protected MessageData[] data;
     protected bool isUIVisibleOnCompleted;
 
-    public PlayerMessage(PlayerCommandTarget target, MessageData data, bool isUIVisibleOnCompleted = true) : base(target, 3.6f)
+    public PlayerMessage(PlayerCommandTarget target, MessageData[] data, bool isUIVisibleOnCompleted = true) : base(target, 3.6f)
     {
         this.data = data;
         this.isUIVisibleOnCompleted = isUIVisibleOnCompleted;
     }
-
-    public PlayerMessage(PlayerCommandTarget target, string[] sentences, FaceID[] faces, bool isUIVisibleOnCompleted = true)
-        : this(target, new MessageData(sentences, faces), isUIVisibleOnCompleted) { }
 
     protected override bool Action()
     {

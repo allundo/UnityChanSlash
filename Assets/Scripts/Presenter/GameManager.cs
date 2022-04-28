@@ -101,19 +101,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         player.SetActive(true);
         cover.FadeIn(1.5f, 0.6f, false).Play();
         input.EnqueueDropFloor();
+
         input.EnqueueStartMessage(
-            new MessageData
+            new MessageData[]
             {
-                sentences = new string[]
-                {
-                    "いきなりなんなのさ・・・",
-                    "久々の出番なのに、扱いが雑じゃない！？"
-                },
-                faces = new FaceID[]
-                {
-                    FaceID.DISATTRACT,
-                    FaceID.ANGRY
-                }
+                new MessageData("いきなりなんなのさ・・・", FaceID.DISATTRACT),
+                new MessageData("久々の出番なのに、扱いが雑じゃない！？", FaceID.ANGRY)
             },
             false
         );
@@ -135,22 +128,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         }
 
         input.EnqueueStartMessage(
-            new MessageData
+            new MessageData[]
             {
-                sentences = new string[]
-                {
-                    "なんか使う標示まちがってる気がするけど",
-                    "どうみてもこれが出口だね",
-                    "・・・うーん",
-                    "鍵が掛かってますねぇ！"
-                },
-                faces = new FaceID[]
-                {
-                    FaceID.DEFAULT,
-                    FaceID.NOTICE,
-                    FaceID.DISATTRACT,
-                    FaceID.ANGRY,
-                }
+                new MessageData("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
+                new MessageData("どうみてもこれが出口だね", FaceID.NOTICE),
+                new MessageData("・・・うーん", FaceID.DISATTRACT),
+                new MessageData("鍵が掛かってますねぇ！", FaceID.DISATTRACT),
             }
         );
     }
@@ -164,18 +147,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         cover.FadeIn(1f, 0.5f, false).Play();
         input.EnqueueRestartMessage(
-            new MessageData
+            new MessageData[]
             {
-                sentences = new string[]
-                {
-                        "[仮] ・・・という夢だったのさ",
-                        "[仮] なんも解決してないんだけどねっ！",
-                },
-                faces = new FaceID[]
-                {
-                        FaceID.SMILE,
-                        FaceID.ANGRY
-                }
+                new MessageData("[仮] ・・・という夢だったのさ", FaceID.SMILE),
+                new MessageData("[仮] なんも解決してないんだけどねっ！", FaceID.ANGRY)
             }
         );
     }

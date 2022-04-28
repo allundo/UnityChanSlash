@@ -1,4 +1,4 @@
-using System;
+using TMPro;
 
 public enum FaceID
 {
@@ -12,12 +12,19 @@ public enum FaceID
 
 public struct MessageData
 {
-    public string[] sentences;
-    public FaceID[] faces;
+    public string sentence;
+    public FaceID face;
+    public float fontSize;
+    public float literalsPerSec;
+    public TextAlignmentOptions alignment;
 
-    public MessageData(string[] sentences, FaceID[] faces)
+    public MessageData(string sentence, FaceID face = FaceID.NONE, float fontSize = 64f, float literalsPerSec = 20f, TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft)
+
     {
-        this.sentences = sentences;
-        this.faces = faces;
+        this.sentence = sentence;
+        this.face = face;
+        this.fontSize = fontSize;
+        this.literalsPerSec = literalsPerSec;
+        this.alignment = alignment;
     }
 }

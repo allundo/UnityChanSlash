@@ -5,12 +5,11 @@ using TMPro;
 
 public class TextHandler : MonoBehaviour
 {
-    [SerializeField] private float literalsPerSec = 20.0f;
     private string currentSentence = "";
     private int currentLength = 0;
     private float currentLiterals = 0;
     private TextMeshProUGUI tm;
-    private MessageData messageData;
+    private MessageData[] messageData;
     private int length;
     private int currentIndex = 0;
     private bool IsDisplayedAll => (int)currentLiterals == currentLength;
@@ -54,10 +53,10 @@ public class TextHandler : MonoBehaviour
         }
     }
 
-    public void InputMessageData(MessageData data)
+    public void InputMessageData(MessageData[] data)
     {
         messageData = data;
-        length = data.sentences.Length;
+        length = data.Length;
         currentIndex = 0;
         SetNextSentence(0);
     }
@@ -75,9 +74,14 @@ public class TextHandler : MonoBehaviour
             return;
         }
 
-        currentSentence = messageData.sentences[index];
+        var currentData = messageData[index];
+
+        tm.fontSize = currentData.fontSize;
+        tm.alignment = currentData.alignment;
+
+        currentSentence = currentData.sentence;
         currentLength = currentSentence.Length;
-        sentence.OnNext(messageData.faces[index]);
+        sentence.OnNext(currentData.face);
 
         literalsTween =
             DOTween
@@ -85,7 +89,7 @@ public class TextHandler : MonoBehaviour
                     () => currentLiterals,
                     value => currentLiterals = value,
                     currentLength,
-                    currentLength / literalsPerSec
+                    currentLength / currentData.literalsPerSec
                 )
                 .SetEase(Ease.Linear)
                 .SetUpdate(true)
