@@ -75,6 +75,7 @@ public class Wall : Tile, ITile
 public class MessageWall : Wall
 {
     public bool IsReadable(IDirection dir = null) => boardDir.IsInverse(dir);
+    public MessageData[] Read => data;
     public IDirection boardDir { protected get; set; }
     public MessageData[] data { protected get; set; }
 }

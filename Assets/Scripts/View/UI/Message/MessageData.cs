@@ -28,7 +28,7 @@ public struct MessageData
         this.alignment = alignment;
     }
 
-    public static MessageData[] Board(string sentence, float fontsize = 72f, float literalsPerSec = 60f, TextAlignmentOptions alignment = TextAlignmentOptions.Center)
+    public static MessageData[] Board(string sentence, float fontsize = 72f, float literalsPerSec = 1000f, TextAlignmentOptions alignment = TextAlignmentOptions.Center)
     {
         return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontsize, literalsPerSec, alignment) };
     }

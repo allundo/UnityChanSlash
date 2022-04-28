@@ -83,6 +83,12 @@ public class TextHandler : MonoBehaviour
         currentLength = currentSentence.Length;
         sentence.OnNext(currentData.face);
 
+        if (currentData.literalsPerSec > 999.9f)
+        {
+            currentLiterals = currentLength;
+            return;
+        }
+
         literalsTween =
             DOTween
                 .To(

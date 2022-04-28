@@ -34,6 +34,7 @@ public class PlayerInput : ShieldInput
     [SerializeField] protected PointerDownUI turnLUI = default;
     [SerializeField] protected PointerDownUI jumpUI = default;
     [SerializeField] protected PointerEnterUI guardUI = default;
+    [SerializeField] protected InspectUI inspectUI = default;
 
     [SerializeField] protected Button restButton = default;
 
@@ -264,6 +265,15 @@ public class PlayerInput : ShieldInput
             handleIcon.Disable();
         }
 
+        if (forwardTile is MessageWall)
+        {
+            inspectUI.SetActive(forwardTile as MessageWall, mobMap.dir, fightCircle.isActive);
+        }
+        else
+        {
+            inspectUI.Inactivate();
+        }
+
         bool isHandleUIOn = doorHandler.isPressed || itemHandler.isPressed || itemInventory.IsPutItem;
 
         uiMask.SetActive(isHandleUIOn || IsAttack || fightCircle.IsPressed);
@@ -362,6 +372,10 @@ public class PlayerInput : ShieldInput
 
         itemInventory.OnUseItem
             .Subscribe(itemInfo => Interrupt(new PlayerItem(playerTarget, itemInfo), false))
+            .AddTo(this);
+
+        inspectUI.OnInspectMessage
+            .Subscribe(data => Interrupt(new PlayerMessage(playerTarget, data)))
             .AddTo(this);
     }
 
