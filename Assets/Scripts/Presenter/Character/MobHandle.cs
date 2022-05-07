@@ -19,11 +19,11 @@ public class MobHandle : MonoBehaviour
 
     public void OnHitHand(Collider collider)
     {
-        DoorControl targetDoor = collider.GetComponent<DoorControl>();
+        IHandleStructure targetStructure = collider.GetComponent<HandleStructure>();
 
-        if (null == targetDoor) return;
+        if (null == targetStructure) return;
 
-        targetDoor.Handle();
+        targetStructure.Handle();
         hidePlateHandler.Redraw();
     }
 

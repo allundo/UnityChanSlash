@@ -1,13 +1,8 @@
 using UnityEngine;
-using UniRx;
 using DG.Tweening;
 
-public class DoorControl : MonoBehaviour
+public class DoorControl : HandleStructure
 {
-    public virtual ItemType LockType => ItemType.Null;
-
-    protected DoorState doorState;
-
     protected Transform doorL;
     protected Transform doorR;
 
@@ -21,10 +16,6 @@ public class DoorControl : MonoBehaviour
 
     protected Tween doorMove;
 
-    public void KillTween()
-    {
-        doorMove?.Kill();
-    }
 
     protected virtual void Awake()
     {
@@ -36,9 +27,9 @@ public class DoorControl : MonoBehaviour
         doorLRenderer = doorL.GetComponent<Renderer>();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
-        doorState.State.Subscribe(state => OnStateChange(state)).AddTo(this);
+        base.Start();
         ResetAlpha();
     }
 
@@ -47,12 +38,6 @@ public class DoorControl : MonoBehaviour
         this.materialGate = Util.SwitchMaterial(gateRenderer, materialGate);
         this.materialR = Util.SwitchMaterial(doorRRenderer, materialDoor);
         this.materialL = Util.SwitchMaterial(doorLRenderer, materialDoor);
-        return this;
-    }
-
-    public DoorControl SetState(DoorState state)
-    {
-        this.doorState = state;
         return this;
     }
 
@@ -67,11 +52,6 @@ public class DoorControl : MonoBehaviour
         SetColorToMaterial(new Color(1, 1, 1, 1));
     }
 
-    public void Handle()
-    {
-        if (doorState.IsControllable) doorState.TransitToNextState();
-    }
-
     protected virtual void SetColorToMaterial(Color color)
     {
         materialGate.SetColor("_Color", color);
@@ -79,27 +59,10 @@ public class DoorControl : MonoBehaviour
         materialL.SetColor("_Color", color);
     }
 
-    private void OnStateChange(DoorState.StateEnum state)
-    {
-        switch (state)
-        {
-            case DoorState.StateEnum.OPENING:
-                doorMove = OpenTween.Play();
-                break;
-
-            case DoorState.StateEnum.CLOSING:
-                doorMove = CloseTween.Play();
-                break;
-        }
-    }
-
-    protected Sequence OpenTween => GetDoorHandle(true);
-    protected Sequence CloseTween => GetDoorHandle(false);
-
     protected virtual Vector3 VecL => new Vector3(0, 0, -0.75f);
     protected virtual Vector3 VecR => new Vector3(0, 0, 0.75f);
 
-    protected virtual Sequence GetDoorHandle(bool isOpen)
+    protected override Tween GetDoorHandle(bool isOpen)
     {
         Tween moveL = doorL.DOMove(isOpen ? VecL : -VecL, 0.8f)
                 .SetRelative()
@@ -112,6 +75,6 @@ public class DoorControl : MonoBehaviour
         return DOTween.Sequence()
                 .Append(moveL)
                 .Join(moveR)
-                .OnComplete(() => doorState.TransitToNextState());
+                .OnComplete(() => handleState.TransitToNextState());
     }
 }

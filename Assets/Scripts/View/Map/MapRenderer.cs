@@ -114,12 +114,12 @@ public class MapRenderer : MonoBehaviour
 
     private void SetExitDoor(Pos pos, IDirection dir)
     {
-        InitAndStoreDoorData(pos, PlacePrefab(pos, exitDoorN, dir.Rotate).SetDir(dir));
+        InitAndStoreDoorData(pos, PlacePrefab(pos, exitDoorN, dir.Rotate).SetDir(dir), ItemType.KeyBlade);
     }
 
-    private void InitAndStoreDoorData(Pos pos, DoorControl doorInstance)
+    private void InitAndStoreDoorData(Pos pos, DoorControl doorInstance, ItemType lockType = ItemType.Null)
     {
-        var state = new DoorState(doorInstance.LockType);
+        var state = new DoorState(lockType);
 
         doorInstance.SetMaterials(floorMaterials.gate, floorMaterials.door).SetState(state);
         (map.GetTile(pos) as Door).state = state;

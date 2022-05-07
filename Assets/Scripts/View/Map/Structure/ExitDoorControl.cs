@@ -6,8 +6,6 @@ public class ExitDoorControl : DoorControl
     private LockControl lockControl = default;
     private Material materialExit;
 
-    public override ItemType LockType => ItemType.KeyBlade;
-
     private Vector3 vecL;
 
     public ExitDoorControl SetDir(IDirection dir)
@@ -27,7 +25,7 @@ public class ExitDoorControl : DoorControl
     protected override void Start()
     {
         base.Start();
-        doorState.LockedState.Subscribe(isLocked => Lock(isLocked)).AddTo(this);
+        handleState.LockedState.Subscribe(isLocked => Lock(isLocked)).AddTo(this);
     }
 
     protected override void SetColorToMaterial(Color color)
