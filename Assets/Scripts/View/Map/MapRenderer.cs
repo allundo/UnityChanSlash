@@ -254,22 +254,6 @@ public class MapRenderer : MonoBehaviour
         return terrainMeshes;
     }
 
-    public void SwitchWorldMap(WorldMap map)
-    {
-        var store = doorOpenData[this.map.floor - 1];
-        var restore = doorOpenData[map.floor - 1];
-
-        this.map.ForEachTiles((tile, pos) =>
-        {
-            if (tile is Door && (tile as Door).IsOpen) store.Add(pos);
-        });
-
-        Render(map);
-
-        restore.ForEach(pos => (map.GetTile(pos) as Door).Handle());
-        restore.Clear();
-    }
-
     public void StoreMapData()
     {
         var store = doorOpenData[this.map.floor - 1];
