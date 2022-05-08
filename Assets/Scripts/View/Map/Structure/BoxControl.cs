@@ -7,7 +7,7 @@ public class BoxControl : HandleStructure
 
     protected override Tween GetDoorHandle(bool isOpen)
     {
-        return lidTf.DOLocalRotate(new Vector3(isOpen ? -90f : 0f, 0, 0), 0.5f)
+        return lidTf.DOLocalRotate(new Vector3(isOpen ? -90f : 0f, 0, 0), 0.6f)
                 .OnComplete(() => handleState.TransitToNextState());
     }
 }

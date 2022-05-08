@@ -161,16 +161,28 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         ui.ResetSize();
         ui.ResetPos();
         base.Activate();
+        image.raycastTarget = true;
     }
 
     public override void Inactivate()
     {
+        image.raycastTarget = false;
         Clear();
         base.Inactivate();
     }
 
-    protected override void OnFadeIn() => InitImage();
-    protected override void OnFadeOut() => fadeOutActive?.Kill();
+    protected override void OnFadeIn()
+    {
+        InitImage();
+        image.raycastTarget = true;
+    }
+
+    protected override void OnFadeOut()
+    {
+        fadeOutActive?.Kill();
+        image.raycastTarget = false;
+    }
+
     public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
         => base.FadeOut(duration, onPlay, Clear, isContinuous);
 

@@ -241,7 +241,7 @@ public class MapManager
                 // Skip pillar or gate
                 if (x % 2 == 0 && y % 2 == 0) continue;
 
-                if (matrix[x, y] == Terrain.MessageWall || matrix[x, y] == Terrain.ExitDoor)
+                if (matrix[x, y] == Terrain.MessageWall || matrix[x, y] == Terrain.ExitDoor || matrix[x, y] == Terrain.Box)
                 {
                     dirMap[x, y] = GetValidDir(x, y);
                     continue;
@@ -305,7 +305,7 @@ public class MapManager
     private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall) | GetDir(x, y, Terrain.MessageWall);
     public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar);
 
-    private Dir GetValidDir(int x, int y)
+    public Dir GetValidDir(int x, int y)
     {
         if (y > 0 && IsEnterable(matrix[x, y - 1])) return Dir.N;
         if (x > 0 && IsEnterable(matrix[x - 1, y])) return Dir.W;

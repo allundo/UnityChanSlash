@@ -22,6 +22,7 @@ public class WorldMap
 
     public Dir GetDoorDir(int x, int y) => map.GetDoorDir(x, y);
     public Dir GetPillarDir(int x, int y) => map.GetPillarDir(x, y);
+    public Dir GetValidDir(int x, int y) => map.GetValidDir(x, y);
 
     public IDirection exitDoorDir => map.exitDoorDir;
 
@@ -138,6 +139,11 @@ public class WorldMap
                     case Terrain.DownStairs:
                     case Terrain.UpStairs:
                         tileInfo[i, j] = new Stairs();
+                        pixels[i + Width * j] = Color.green;
+                        break;
+
+                    case Terrain.Box:
+                        tileInfo[i, j] = new Box();
                         pixels[i + Width * j] = Color.blue;
                         break;
 

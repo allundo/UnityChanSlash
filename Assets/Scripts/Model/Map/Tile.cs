@@ -16,6 +16,12 @@ public interface ITile
     IEnemyStatus GetEnemyStatus();
 }
 
+public interface IHandleTile : ITile
+{
+    void Handle();
+    bool IsOpen { get; }
+}
+
 public class Tile
 {
     protected Stack<Item> items = new Stack<Item>();
@@ -80,7 +86,7 @@ public class MessageWall : Wall
     public MessageData[] data { protected get; set; }
 }
 
-public class Door : Tile, ITile
+public class Door : Tile, IHandleTile
 {
     public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
@@ -98,9 +104,26 @@ public class Door : Tile, ITile
     public override Item PickItem() => IsOpen ? base.PickItem() : null;
 }
 
-public class ExitDoor : Door, ITile
+public class ExitDoor : Door
 {
     public override bool IsViewOpen => false;
+}
+
+public class Box : Tile, IHandleTile
+{
+    public bool IsEnterable(IDirection dir = null) => false;
+    public bool IsLeapable => true;
+    public virtual bool IsViewOpen => true;
+    public override bool IsCharacterOn => false;
+
+    public override bool IsEnemyOn => AboveEnemy != null;
+    public override IEnemyStatus OnEnemy { get { return null; } set { } }
+    public override IStatus OnCharacterDest { get { return null; } set { } }
+
+    public BoxState state { protected get; set; }
+    public void Handle() => state.TransitToNextState();
+    public bool IsOpen => state.IsOpen;
+    public bool IsControllable => state.IsControllable;
 }
 
 public class Stairs : Tile, ITile

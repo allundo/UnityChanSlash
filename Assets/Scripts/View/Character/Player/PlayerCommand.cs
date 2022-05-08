@@ -420,6 +420,38 @@ public class PlayerGetItem : PlayerAction
     }
 }
 
+public class PlayerHandleBox : PlayerAction
+{
+    public PlayerHandleBox(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        Box boxTile = mobMap.ForwardTile as Box;
+
+        // Cancel the command if forward tile isn't Box or Box isn't controllable or player isn't handling the Box.
+        if (boxTile == null || !boxTile.IsControllable || !playerAnim.handOn.Bool) return false;
+
+        bool isOpen = boxTile.IsOpen;
+
+        boxTile.Handle();
+
+        // Finish this handling command if player is closing the Box.
+        if (isOpen) return true;
+
+        Item item = boxTile.PickItem();
+
+        // Cancel pickking up an item if player failed to get item from the Box.
+        if (item == null || !itemInventory.PickUp(item.itemInfo))
+        {
+            boxTile.PutItem(item);
+            return false;
+        }
+
+        playerAnim.getItem.Fire();
+        return true;
+    }
+}
+
 public class PlayerPutItem : PlayerAction
 {
     private ItemIcon itemIcon = null;
@@ -433,15 +465,17 @@ public class PlayerPutItem : PlayerAction
 
     protected override bool Action()
     {
-        if (playerAnim.handOn.Bool && itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir))
-        {
-            itemInventory.Remove(itemIcon);
-            playerAnim.putItem.Fire();
-        }
-        else
-        {
-            return false;
-        }
+        // Cancel if forward tile is Box and the Box isn't Open or Controlable.
+        Box boxTile = mobMap.ForwardTile as Box;
+        if (boxTile != null && (!boxTile.IsOpen || !boxTile.IsControllable)) return false;
+
+        // Cancel if player isn't handling or putting item is invalid.
+        if (!playerAnim.handOn.Bool || !itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir)) return false;
+
+        if (boxTile != null) boxTile.Handle();
+
+        itemInventory.Remove(itemIcon);
+        playerAnim.putItem.Fire();
         playerAnim.handOn.Bool = false;
         itemIcon = null;
 

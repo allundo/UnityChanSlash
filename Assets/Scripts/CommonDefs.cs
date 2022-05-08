@@ -32,6 +32,7 @@ public enum Terrain
     Door,
     MessageWall,
     MessagePillar,
+    Box,
     DownStairs,
     UpStairs,
     ExitDoor,

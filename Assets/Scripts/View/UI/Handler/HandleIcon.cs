@@ -51,14 +51,6 @@ public class HandleIcon : FadeEnable
             .AddTo(this);
     }
 
-    public void Activate(Sprite sprite)
-    {
-        if (isActive) return;
-
-        fade.sprite = sprite;
-        base.Activate();
-    }
-
     private void SetFadeActive(FlickInteraction.FlickDirection flick)
     {
         if (flick.Ratio > 0.5f)

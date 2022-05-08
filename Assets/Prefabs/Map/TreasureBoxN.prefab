@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4706307881273047331}
-  - component: {fileID: 1977777350011274860}
+  - component: {fileID: 6235967488727333423}
   m_Layer: 0
   m_Name: TreasureBoxN
   m_TagString: Untagged
@@ -194,19 +194,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1977777350011274860
-BoxCollider:
+--- !u!114 &6235967488727333423
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5340137458343797657}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 0.75}
-  m_Center: {x: 0, y: 1.25, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614d5bf14f63d462cade1e9713f1b57c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lidTf: {fileID: 8914231210307261512}
 --- !u!1 &7791219713296948855
 GameObject:
   m_ObjectHideFlags: 0

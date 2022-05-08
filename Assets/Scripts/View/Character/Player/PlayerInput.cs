@@ -18,6 +18,7 @@ public class PlayerInput : ShieldInput
     // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
     [SerializeField] protected ItemHandler itemHandler = default;
+    [SerializeField] protected BoxHandler boxHandler = default;
     [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] protected HandleIcon handleIcon = default;
 
@@ -248,7 +249,18 @@ public class PlayerInput : ShieldInput
             doorHandler.Inactivate();
         }
 
-        bool isFaceToItem = !IsDash && !fightCircle.isActive && forwardTile.IsItemOn;
+        bool isFaceToBox = !IsDash && !fightCircle.isActive && forwardTile is Box;
+        if (isFaceToBox)
+        {
+            Box box = forwardTile as Box;
+            boxHandler.SetActive(box.IsControllable, box.IsOpen);
+        }
+        else
+        {
+            boxHandler.Inactivate();
+        }
+
+        bool isFaceToItem = !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
         if (isFaceToItem)
         {
             itemHandler.Activate();
@@ -259,7 +271,8 @@ public class PlayerInput : ShieldInput
             itemHandler.Inactivate();
         }
 
-        if (!isFaceToDoor && !isFaceToItem && !itemInventory.IsPutItem)
+        bool isHandleIconOn = isFaceToDoor || isFaceToBox || isFaceToItem || itemInventory.IsPutItem;
+        if (!isHandleIconOn)
         {
             forwardUI.Resize(1f, 1f);
             handleIcon.Disable();
@@ -274,7 +287,7 @@ public class PlayerInput : ShieldInput
             inspectUI.Inactivate();
         }
 
-        bool isHandleUIOn = doorHandler.isPressed || itemHandler.isPressed || itemInventory.IsPutItem;
+        bool isHandleUIOn = doorHandler.isPressed || boxHandler.isPressed || itemHandler.isPressed || itemInventory.IsPutItem;
 
         uiMask.SetActive(isHandleUIOn || IsAttack || fightCircle.IsPressed);
 
@@ -299,6 +312,7 @@ public class PlayerInput : ShieldInput
     private void InactivateUIs()
     {
         doorHandler.Inactivate();
+        boxHandler.Inactivate();
         itemHandler.Inactivate();
         fightCircle.Inactivate();
 
@@ -348,18 +362,23 @@ public class PlayerInput : ShieldInput
         ICommand handle = new PlayerHandle(playerTarget, 14.4f);
         ICommand getItem = new PlayerGetItem(playerTarget, 28.8f);
         PlayerPutItem putItem = new PlayerPutItem(playerTarget, 14.4f);
+        PlayerHandleBox handleBox = new PlayerHandleBox(playerTarget, 14.4f);
 
         Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
             .Subscribe(_ => InputCommand(forward))
+            .AddTo(this);
+
+        PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
+        Observable.Merge(doorHandler.ObserveHandOn, boxHandler.ObserveHandOn, itemHandler.ObserveHandOn, itemInventory.OnPutItem.Select(itemIcon => itemIcon != null))
+            .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
             .AddTo(this);
 
         doorHandler.ObserveHandle
             .Subscribe(_ => InputTrigger(handle))
             .AddTo(this);
 
-        PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
-        Observable.Merge(doorHandler.ObserveHandOn, itemHandler.ObserveHandOn, itemInventory.OnPutItem.Select(itemIcon => itemIcon != null))
-            .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
+        boxHandler.ObserveHandle
+            .Subscribe(_ => InputTrigger(handleBox))
             .AddTo(this);
 
         itemHandler.ObserveGet
