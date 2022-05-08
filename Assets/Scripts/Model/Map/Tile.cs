@@ -20,6 +20,7 @@ public interface IHandleTile : ITile
 {
     void Handle();
     bool IsOpen { get; }
+    bool IsLocked { get; }
 }
 
 public class Tile
@@ -97,6 +98,7 @@ public class Door : Tile, IHandleTile
     public DoorState state { protected get; set; }
     public void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
+    public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
     public bool UnLock(ItemType type) => state.Unlock(type);
 
@@ -123,6 +125,7 @@ public class Box : Tile, IHandleTile
     public BoxState state { protected get; set; }
     public void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
+    public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
 }
 

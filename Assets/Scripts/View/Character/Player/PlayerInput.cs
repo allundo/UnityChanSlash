@@ -243,6 +243,7 @@ public class PlayerInput : ShieldInput
 
             doorHandler.SetActive(door.IsControllable, door.IsOpen);
             forwardUI.Resize(0.5f, 1f);
+            handleIcon.isLocked = door.IsLocked;
         }
         else
         {
@@ -254,6 +255,7 @@ public class PlayerInput : ShieldInput
         {
             Box box = forwardTile as Box;
             boxHandler.SetActive(box.IsControllable, box.IsOpen);
+            handleIcon.isLocked = box.IsLocked;
         }
         else
         {

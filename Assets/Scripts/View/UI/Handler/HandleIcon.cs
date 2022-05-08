@@ -10,6 +10,7 @@ public class HandleIcon : FadeEnable
     [SerializeField] private FlickInteraction[] flicks = default;
     [SerializeField] private ItemInventory itemInventory = default;
     [SerializeField] private HandleText text = default;
+    [SerializeField] private Sprite locked = default;
 
     protected UITween ui;
     protected Tween prevTween = null;
@@ -17,6 +18,7 @@ public class HandleIcon : FadeEnable
 
     private FlickInteraction.FlickDirection currentFlick = null;
     protected ItemIcon currentItemIcon = null;
+    public bool isLocked = false;
 
     protected override void Awake()
     {
@@ -76,21 +78,21 @@ public class HandleIcon : FadeEnable
     private Tween Show(FlickInteraction.FlickDirection flick, float duration = 0.4f)
     {
         return DOTween.Sequence()
-            .AppendCallback(() => fade.sprite = flick.sprite)
+            .AppendCallback(() => fade.sprite = isLocked ? locked : flick.sprite)
             .AppendCallback(() => ui.ResetSize(2f))
             .Join(base.FadeIn(duration))
             .Join(ui.Resize(1.5f, duration))
-            .Join(text.Show(flick.text));
+            .Join(text.Show(isLocked ? "LOCK" : flick.text));
     }
 
     private Tween Switch(FlickInteraction.FlickDirection flick, float duration = 0.4f)
     {
         return DOTween.Sequence()
-            .AppendCallback(() => fade.sprite = flick.sprite)
+            .AppendCallback(() => fade.sprite = isLocked ? locked : flick.sprite)
             .AppendCallback(() => ui.ResetSize(2f))
             .Join(base.FadeIn(duration, null, null, false))
             .Join(ui.Resize(1.5f, duration))
-            .Join(text.Switch(flick.text));
+            .Join(text.Switch(isLocked ? "LOCK" : flick.text));
     }
 
     private Tween Hide(float duration = 0.4f)
@@ -114,6 +116,7 @@ public class HandleIcon : FadeEnable
     {
         if (!isActive) return;
 
+        isLocked = false;
         PlayTween(Hide());
     }
 
