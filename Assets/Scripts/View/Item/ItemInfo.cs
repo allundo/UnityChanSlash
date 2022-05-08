@@ -34,10 +34,10 @@ public class ItemInfo : ICloneable
     public ItemAttr attr => itemAction.attr;
 
     public ItemInfo(ItemSource itemSource, ItemAction itemAction, int numOfItem = 1)
-        : this(itemSource.material, itemAction, numOfItem, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx), itemSource.duration)
+        : this(itemSource.material, itemAction, numOfItem, itemSource.duration, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx))
     { }
 
-    public ItemInfo(Material material, ItemAction itemAction, int numOfItem = 1, ParticleSystem vfx = null, AudioSource sfx = null, float duration = 0.2f)
+    protected ItemInfo(Material material, ItemAction itemAction, int numOfItem = 1, float duration = 0.2f, ParticleSystem vfx = null, AudioSource sfx = null)
     {
         this.onNumOfItemChange = new ReactiveProperty<int>(numOfItem);
 
@@ -53,7 +53,7 @@ public class ItemInfo : ICloneable
     public object Clone() => Clone(numOfItem);
 
     public object Clone(int numOfItem)
-        => new ItemInfo(material, itemAction, numOfItem, vfx, sfx);
+        => new ItemInfo(material, itemAction, numOfItem, duration, vfx, sfx);
 
     protected virtual void FXStart(Vector3 position)
     {
