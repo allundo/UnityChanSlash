@@ -39,9 +39,11 @@ public abstract class MobInput : InputHandler, IMobInput
     {
 
 #if UNITY_EDITOR
-        if (!(commander.currentCommand is IcedCommand))
+        ICommand cmd = commander.currentCommand;
+        bool isCurrentlyIced = cmd is IcedCommand || cmd is RabbitIcedFall || cmd is FlyingIcedFall;
+        if (!isCurrentlyIced)
         {
-            Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + commander.currentCommand, gameObject);
+            Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + cmd, gameObject);
         }
 #endif
 
