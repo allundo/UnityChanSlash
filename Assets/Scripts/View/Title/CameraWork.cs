@@ -17,7 +17,7 @@ public class CameraWork : MonoBehaviour
     [SerializeField] private Transform tfUnityChan = default;
     [SerializeField] private RawImage crossFade = default;
     [SerializeField] private Camera secondCamera = default;
-    [SerializeField] private TitleRotateHandler rotate = default;
+    [SerializeField] private PortraitRotateHandler rotate = default;
 
     private Camera currentCamera;
     private Camera standByCamera;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class TitleRotateHandler : ScreenRotateHandler
+public class PortraitRotateHandler : ScreenRotateHandler
 {
     protected override void Awake()
     {
