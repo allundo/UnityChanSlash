@@ -915,7 +915,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 642505874}
-  - component: {fileID: 642505876}
   - component: {fileID: 642505875}
   m_Layer: 0
   m_Name: TitleSceneMediator
@@ -953,18 +952,6 @@ MonoBehaviour:
   prefabGameInfo: {fileID: 3952858366562794599, guid: 881a30d094786442e8fd345fab01078c,
     type: 3}
   titleUIHandler: {fileID: 760657576}
---- !u!114 &642505876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642505873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10db4edb2d84a49db974e99f59ff6dbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &710371037
 GameObject:
   m_ObjectHideFlags: 0

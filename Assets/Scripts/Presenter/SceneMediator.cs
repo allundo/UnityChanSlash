@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 
-[RequireComponent(typeof(SceneLoader))]
 public abstract class SceneMediator : MonoBehaviour
 {
     [SerializeField] private GameObject prefabGameInfo = default;
@@ -15,7 +14,7 @@ public abstract class SceneMediator : MonoBehaviour
         {
             Instantiate(prefabGameInfo, Vector3.zero, Quaternion.identity); ;
         }
-        sceneLoader = GetComponent<SceneLoader>();
+        sceneLoader = new SceneLoader();
     }
 
     private void Start()

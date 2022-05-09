@@ -5,7 +5,7 @@ using System.Collections;
 using UniRx;
 using DG.Tweening;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader
 {
     private AsyncOperation asyncLoad;
     private int currentLoading = -1;
