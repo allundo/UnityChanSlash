@@ -10,6 +10,12 @@ public class SceneLoader : MonoBehaviour
     private AsyncOperation asyncLoad;
     private int currentLoading = -1;
 
+    /// <summary>
+    /// Starts loading next scene in parallel. To transit to next scene, it's needed to call SceneTransition().
+    /// </summary>
+    /// <param name="sceneBuildIndex">0 origin scenes list index number registered in editor "Build Settings".</param>
+    /// <param name="waitSec">Waiting unit time[sec]. Waiting is repeated until scene loading has finished.</param>
+    /// <returns></returns>
     public IObservable<Unit> LoadSceneAsync(int sceneBuildIndex, float waitSec = 0f)
         => Observable.FromCoroutine(() => LoadScene(sceneBuildIndex, waitSec));
 
@@ -25,6 +31,11 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads next scene without waiting.
+    /// </summary>
+    /// <param name="sceneBuildIndex">0 origin scenes list index number registered in editor "Build Settings".</param>
+    /// <param name="allowSceneActivation">Scene transition happens immediately after the loading is finished if TRUE.</param>
     public void StartLoadScene(int sceneBuildIndex, bool allowSceneActivation = false)
     {
         if (currentLoading != sceneBuildIndex)
@@ -50,6 +61,9 @@ public class SceneLoader : MonoBehaviour
             new WaitForEndOfFrame() as YieldInstruction
             : new WaitForSeconds(waitSec) as YieldInstruction;
 
+    /// <summary>
+    /// Activate a preloaded scene.
+    /// </summary>
     public void SceneTransition()
     {
         DOTween.KillAll();
