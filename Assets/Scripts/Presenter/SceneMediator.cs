@@ -34,15 +34,24 @@ public abstract class SceneMediator : MonoBehaviour
         this.startActions = startActions;
     }
 
-    protected void SceneTransition(Action updateGameInfo = null)
+    protected void SceneTransition(Action updateGameInfo)
     {
-        (updateGameInfo ?? (() => { }))();
+        updateGameInfo();
         sceneLoader.SceneTransition();
     }
 
+    /// <summary>
+    /// Selects scene starting method of next scene by ID and apply the scene transition.
+    /// </summary>
+    /// <param name="startActionID">Index of start actions of next scene manager regestered by SetStartActions().</param>
     protected void SceneTransition(int startActionID)
         => SceneTransition(() => GameInfo.Instance.startActionID = startActionID);
 
+    /// <summary>
+    /// Selects scene starting method of next scene by ID and apply the scene transition.
+    /// </summary>
+    /// <param name="startActionID">Index of start actions of next scene manager regestered by SetStartActions().</param>
+    /// <param name="updateGameInfo">Callback action that updates GameInfo parameters before the scene transition.</param>
     protected void SceneTransition(int startActionID, Action updateGameInfo)
     {
         updateGameInfo();
