@@ -152,12 +152,24 @@ public class MapRenderer : MonoBehaviour
     private Stack<DoorControl> doorsPool = new Stack<DoorControl>();
     private Stack<BoxControl> boxesPool = new Stack<BoxControl>();
 
-    private T PlacePrefab<T>(Pos pos, T prefab) where T : UnityEngine.Object
+    // For prefab components
+    private T PlacePrefab<T>(Pos pos, T prefab) where T : MonoBehaviour
         => PlacePrefab(pos, prefab, Quaternion.identity);
-    private T PlacePrefab<T>(Pos pos, T prefab, Quaternion rotation) where T : UnityEngine.Object
+    private T PlacePrefab<T>(Pos pos, T prefab, Quaternion rotation) where T : MonoBehaviour
     {
         var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, transform);
-        objectPool.Push(instance as GameObject);
+        objectPool.Push(instance.gameObject); // MonoBehaviour components cannot be CASTed to GameObject by "as".
+        return instance;
+    }
+
+    // For prefab GameObjects
+    private GameObject PlacePrefab(Pos pos, GameObject prefab)
+        => PlacePrefab(pos, prefab, Quaternion.identity) as GameObject;
+
+    private GameObject PlacePrefab(Pos pos, GameObject prefab, Quaternion rotation)
+    {
+        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, transform);
+        objectPool.Push(instance);
         return instance;
     }
 
