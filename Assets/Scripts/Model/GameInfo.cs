@@ -18,12 +18,15 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
 
+#if UNITY_EDITOR
+    public bool isScenePlayedByEditor = true;
+#endif
+
     public WorldMap Map(int floor)
     {
         // DEBUG ONLY
         if (Debug.isDebugBuild && floor == 1 && isDebugFloorLoaded)
         {
-            startActionID = 2;
             currentFloor = 2;
             return (maps[1] = maps[MAX_FLOOR]);
         }

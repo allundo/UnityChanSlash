@@ -69,5 +69,10 @@ public class SceneLoader
         DOTween.KillAll();
         asyncLoad.allowSceneActivation = true;
         currentLoading = -1;
+
+#if UNITY_EDITOR
+        GameInfo.Instance.isScenePlayedByEditor = false;
+#endif
+
     }
 }

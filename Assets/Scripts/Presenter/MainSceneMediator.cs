@@ -25,6 +25,10 @@ public class MainSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.ClearMaps))
             .AddTo(this);
+
+#if UNITY_EDITOR
+        if (GameInfo.Instance.isScenePlayedByEditor) GameInfo.Instance.startActionID = 2;
+#endif
     }
 
     private IObservable<Unit> LoadSceneWithCoverOn(int sceneBuildIndex, float duration = 2f)
