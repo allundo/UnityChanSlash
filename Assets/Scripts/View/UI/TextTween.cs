@@ -15,6 +15,7 @@ public class TextTween : UITween
     {
         rectTransform.sizeDelta = size;
         txtMP.fontSize = size.y;
+        txtMP.enableWordWrapping = false;
         if (setDefault) defaultSize = size;
     }
 
@@ -53,7 +54,7 @@ public class TextTween : UITween
         return DOTween.To(
             () => txtMP.fontSize,
             size => txtMP.fontSize = size,
-            defaultSize.y * Mathf.Max(ratio.x, ratio.x / ratio.y),
+            defaultSize.y * ratio.y,
             duration
         );
     }
