@@ -26,6 +26,10 @@ public class MainSceneMediator : SceneMediator
             .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.ClearMaps))
             .AddTo(this);
 
+        GameManager.Instance.ExitObservable
+            .Subscribe(null, () => LoadSceneAndTransit(2, 0))
+            .AddTo(this);
+
 #if UNITY_EDITOR
         if (GameInfo.Instance.isScenePlayedByEditor) GameInfo.Instance.startActionID = 2;
 #endif

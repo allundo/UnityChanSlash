@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using UniRx;
+using System;
 using System.Collections;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
@@ -28,6 +29,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool isScaled { get; private set; } = false;
 
     public WorldMap worldMap { get; protected set; }
+
+    public IObservable<Unit> ExitObservable => exitSubject.IgnoreElements();
+    private ISubject<Unit> exitSubject = new Subject<Unit>();
 
     public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
 
@@ -69,7 +73,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         map = player.GetComponent<PlayerMapUtil>();
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
-        worldMap = GameInfo.Instance.NextFloorMap();
+        worldMap = GameInfo.Instance.Map(0);
         mapRenderer.Render(worldMap);
     }
 
@@ -279,7 +283,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void Exit()
     {
         Pause(true);
+
         cover.color = new Color(1f, 1f, 1f, 0f);
-        cover.FadeOut(3f).SetEase(Ease.InCubic).Play();
+        cover.FadeOut(3f).SetEase(Ease.InCubic)
+            .OnComplete(exitSubject.OnCompleted)
+            .Play();
     }
 }

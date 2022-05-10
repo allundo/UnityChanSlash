@@ -24,11 +24,15 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     public WorldMap Map(int floor)
     {
-        // DEBUG ONLY
-        if (Debug.isDebugBuild && floor == 1 && isDebugFloorLoaded)
+        if (floor == 0)
         {
-            currentFloor = 2;
-            return (maps[1] = maps[MAX_FLOOR]);
+            floor = currentFloor = 1;
+
+            // DEBUG ONLY
+            if (Debug.isDebugBuild && isDebugFloorLoaded)
+            {
+                return (maps[++currentFloor - 1] = maps[MAX_FLOOR]);
+            }
         }
 
         if (floor > 0 && floor <= MAX_FLOOR)

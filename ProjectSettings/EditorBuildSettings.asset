@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/MainScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/ParticleTest.unity
-    guid: c028764784a7942d2a2fcad080ac331b
+    path: Assets/Scenes/ResultScene.unity
+    guid: a2af885f75cb0446a87ab4687baa84c3
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9759d652dea1c4e858a2f1a8e336de42,
       type: 2}

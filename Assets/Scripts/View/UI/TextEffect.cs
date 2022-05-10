@@ -2,8 +2,8 @@
 
 public class TextEffect : FadeEnable
 {
-    private TextTween text;
-    private Tween expand;
+    protected TextTween text;
+    protected Tween expand;
 
     protected override void Awake()
     {
