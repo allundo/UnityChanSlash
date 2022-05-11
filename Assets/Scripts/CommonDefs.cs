@@ -26,7 +26,7 @@ public class Constants
 public enum Terrain
 {
     Path = 0,
-    Ground,
+    Ground = 1,
     Wall,
     Pillar, // Gate or Pillar
     Door,
@@ -36,6 +36,7 @@ public enum Terrain
     DownStairs,
     UpStairs,
     ExitDoor,
+    RoomCenter = 11,
 }
 
 public struct Pos

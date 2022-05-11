@@ -76,6 +76,11 @@ public class MapManager
             for (int i = 0; i < width; i++)
             {
                 this.matrix[i, j] = (Terrain)Enum.ToObject(typeof(Terrain), matrix[i + j * width]);
+                if (this.matrix[i, j] == Terrain.RoomCenter)
+                {
+                    this.roomCenterPos.Add(new Pos(i, j));
+                    this.matrix[i, j] = Terrain.Ground;
+                }
             }
         }
 
@@ -257,8 +262,7 @@ public class MapManager
         {
             for (int x = 0; x < width; x += 2)
             {
-
-                if (matrix[x, y] == Terrain.MessagePillar)
+                if (matrix[x, y] == Terrain.MessagePillar || matrix[x, y] == Terrain.Box)
                 {
                     dirMap[x, y] = GetValidDir(x, y);
                     continue;
