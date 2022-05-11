@@ -159,10 +159,22 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         );
     }
 
+    public void DebugStartFloor(int floor)
+    {
+        Debug.Log("DEBUG MODE: floor = " + floor);
+        if (floor == 2)
+        {
+            debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
+        }
+        else
+        {
+            placeEnemyGenerator.Place();
+        }
+    }
+
     public void DebugStart()
     {
-        Debug.Log("DEBUG MODE: floor = " + GameInfo.Instance.currentFloor);
-        debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
+        DebugStartFloor(GameInfo.Instance.currentFloor);
 
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
