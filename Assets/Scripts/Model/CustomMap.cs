@@ -60,15 +60,7 @@ public class CustomMap
         var mapManager = new MapManager(matrix, width, deadEndPos);
 
         if (!isLastFloor) mapManager.SetDownStairs();
-
-        if (isCustomDeadEnds)
-        {
-            mapManager.SetUpStairs(deadEndPos.Last().Key);
-        }
-        else
-        {
-            mapManager.SetUpStairs();
-        }
+        if (isCustomDeadEnds) mapManager.SetUpStairs(deadEndPos.Last().Key);
 
         return new WorldMap(mapManager, floor);
     }

@@ -15,15 +15,20 @@ public class MapManager
     /// </summary>
     public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
+    private bool IsUpstairsSet => !stairsBottom.Key.IsNull;
+
     /// <summary>
     /// Represents the start position and direction after going up a floor.
     /// </summary>
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
+    private bool IsDownstairsSet => !stairsTop.Key.IsNull;
+
     public IDirection exitDoorDir { get; protected set; }
 
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
+
 
 #if UNITY_EDITOR
     public void DebugMatrix()
@@ -89,12 +94,13 @@ public class MapManager
     }
 
     public MapManager SetDownStairs() => SetDownStairs(deadEndPos.First().Key);
-
-    public MapManager SetDownStairs(Pos pos) => SetDownStairs(pos, GetDownStairsDir(pos));
-
-    public MapManager SetDownStairs(Pos pos, IDirection dir)
+    public MapManager SetDownStairs(Pos pos) => SetDownStairs(pos, GetDownStairsDir);
+    public MapManager SetDownStairs(Pos pos, IDirection dir) => SetDownStairs(pos, _ => dir);
+    public MapManager SetDownStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
-        if (!stairsTop.Key.IsNull) return this;
+        if (IsDownstairsSet) return this;
+
+        IDirection dir = DirGetter(pos);
 
         matrix[pos.x, pos.y] = Terrain.DownStairs;
         dirMap[pos.x, pos.y] = dir.Enum;
@@ -102,26 +108,29 @@ public class MapManager
         stairsTop = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
         matrix[stairsTop.Key.x, stairsTop.Key.y] = Terrain.Ground;
 
+        deadEndPos.Remove(pos);
+
         return this;
     }
+
     protected IDirection GetDownStairsDir(Pos pos)
     {
         IDirection dir;
         deadEndPos.TryGetValue(pos, out dir);
         dir = dir ?? stairsBottom.Value?.Backward ?? Direction.south;
 
-        deadEndPos.Remove(pos);
-
         return dir;
     }
 
     public MapManager SetStartDoor() => SetStartDoor(GetStartPos());
-
-    public MapManager SetStartDoor(Pos pos) => SetStartDoor(pos, GetUpStairsDir(pos));
-
-    public MapManager SetStartDoor(Pos pos, IDirection dir)
+    public MapManager SetStartDoor(Pos pos) => SetStartDoor(pos, GetUpStairsDir);
+    public MapManager SetStartDoor(Pos pos, IDirection dir) => SetStartDoor(pos, _ => dir);
+    public MapManager SetStartDoor(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         if (!stairsBottom.Key.IsNull) return this;
+
+        IDirection dir = DirGetter(pos);
+
         stairsBottom = new KeyValuePair<Pos, IDirection>(pos, dir);
 
         Pos doorPos;
@@ -147,6 +156,8 @@ public class MapManager
 #endif
             throw new Exception("Position: (" + pos.x + ", " + pos.y + ") isn't suitable to start.");
         }
+
+        deadEndPos.Remove(pos);
 
         return this;
     }
@@ -175,18 +186,21 @@ public class MapManager
     protected bool IsArroundWall(int x, int y) => x == 0 || x == width - 1 || y == 0 || y == height - 1;
 
     public MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
-
-    public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir(pos));
-
-    public MapManager SetUpStairs(Pos pos, IDirection dir)
+    public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir);
+    public MapManager SetUpStairs(Pos pos, IDirection dir) => SetUpStairs(pos, _ => dir);
+    public MapManager SetUpStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
-        if (!stairsBottom.Key.IsNull) return this;
+        if (IsUpstairsSet) return this;
+
+        IDirection dir = DirGetter(pos);
 
         matrix[pos.x, pos.y] = Terrain.UpStairs;
         dirMap[pos.x, pos.y] = dir.Enum;
 
         stairsBottom = new KeyValuePair<Pos, IDirection>(dir.GetForward(pos), dir);
         matrix[stairsBottom.Key.x, stairsBottom.Key.y] = Terrain.Ground;
+
+        deadEndPos.Remove(pos);
 
         return this;
     }
@@ -230,8 +244,6 @@ public class MapManager
         IDirection dir;
         deadEndPos.TryGetValue(pos, out dir);
         dir = dir ?? stairsTop.Value?.Backward ?? Direction.north;
-
-        deadEndPos.Remove(pos);
 
         return dir;
     }
