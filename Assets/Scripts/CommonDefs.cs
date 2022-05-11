@@ -219,11 +219,16 @@ public abstract class Direction
 
     public static IDirection Convert(Vector3 forward)
     {
-        IDirection retDir = Direction.north;
-        float maxInnerProduct = Vector3.Dot(forward, Direction.north.LookAt);
-        foreach (IDirection dir in new Direction[] { Direction.east, Direction.south, Direction.west })
+        IDirection retDir = null;
+        float maxInnerProduct = 0f;
+        foreach (IDirection dir in new Direction[] { Direction.north, Direction.east, Direction.south, Direction.west })
         {
-            if (maxInnerProduct < Vector3.Dot(forward, dir.LookAt)) retDir = dir;
+            float innerProduct = Vector3.Dot(forward, dir.LookAt);
+            if (maxInnerProduct < innerProduct)
+            {
+                retDir = dir;
+                maxInnerProduct = innerProduct;
+            }
         }
 
         return retDir;
