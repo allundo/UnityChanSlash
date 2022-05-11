@@ -25,7 +25,12 @@ public class MobEffect : MonoBehaviour, IMobEffect
     [SerializeField] protected Transform excludeBody = null;
 
     protected DamageSndData sndData;
+
+    /// <summary>
+    /// Animation effects played by Animation clip. They need to stop on dying.
+    /// </summary>
     protected AnimationFX animFX;
+
     protected ResourceFX resourceFX;
     protected MobMatColorEffect matColEffect;
 
@@ -122,7 +127,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
 
     protected virtual void StopAllAnimation()
     {
-        animFX.StopVFX();
+        animFX?.StopVFX();
     }
 
     public virtual void OnDestroyByReactor()
