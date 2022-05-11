@@ -13,7 +13,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     private CustomMap customMap;
 
-    private int currentFloor = 0;
+    public int currentFloor = 1;
 
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
@@ -28,12 +28,15 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         if (floor == 0)
         {
-            floor = currentFloor = 1;
+#if UNITY_EDITOR
+            if (isScenePlayedByEditor) currentFloor = 2;
+#endif
+            floor = currentFloor;
 
             // DEBUG ONLY
             if (Debug.isDebugBuild && isDebugFloorLoaded)
             {
-                return (maps[++currentFloor - 1] = maps[MAX_FLOOR]);
+                maps[1] = maps[MAX_FLOOR];
             }
         }
 
@@ -156,7 +159,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR + 1).ToArray();
         mapSize = Enumerable.Repeat(49, MAX_FLOOR + 1).ToArray();
-        currentFloor = 0;
+        currentFloor = 1;
 
         mapSize[0] = 19;
         mapSize[1] = 35;

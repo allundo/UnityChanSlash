@@ -161,7 +161,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void DebugStart()
     {
-        Debug.Log("DEBUG MODE");
+        Debug.Log("DEBUG MODE: floor = " + GameInfo.Instance.currentFloor);
         debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
 
         map.SetPosition(worldMap);

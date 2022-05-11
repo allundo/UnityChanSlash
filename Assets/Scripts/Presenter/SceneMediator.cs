@@ -3,18 +3,24 @@ using System;
 
 public abstract class SceneMediator : MonoBehaviour
 {
-    [SerializeField] private GameObject prefabGameInfo = default;
     protected SceneLoader sceneLoader;
 
     private Action[] startActions;
 
     protected virtual void Awake()
     {
-        if (FindObjectOfType(typeof(GameInfo)) == null)
-        {
-            Instantiate(prefabGameInfo, Vector3.zero, Quaternion.identity); ;
-        }
+        LoadSingleton(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        LoadSingleton(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+
         sceneLoader = new SceneLoader();
+    }
+
+    protected void LoadSingleton<T>(T prefab) where T : MonoBehaviour
+    {
+        if (FindObjectOfType(typeof(T)) == null)
+        {
+            Instantiate(prefab, Vector3.zero, Quaternion.identity); ;
+        }
     }
 
     private void Start()

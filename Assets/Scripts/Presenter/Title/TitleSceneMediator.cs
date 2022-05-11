@@ -19,10 +19,17 @@ public class TitleSceneMediator : SceneMediator
         // DEBUG ONLY
         if (Debug.isDebugBuild)
         {
-            titleUIHandler.debugStart
-                .OnClickAsObservable()
-                .Subscribe(_ => DebugStart())
-                .AddTo(this);
+            int count = 0;
+            titleUIHandler.debugStart.ForEach(btn =>
+            {
+                IObservable<int> ret = Observable.Return(++count);
+
+                btn.OnClickAsObservable()
+                    .First()
+                    .ContinueWith(_ => ret)
+                    .Subscribe(floor => DebugStart(floor))
+                    .AddTo(this);
+            });
         }
     }
 
@@ -43,12 +50,13 @@ public class TitleSceneMediator : SceneMediator
             .AddTo(this);
     }
 
-    private void DebugStart()
+    private void DebugStart(int floor)
     {
         GameInfo.Instance.CreateDebugMap();
+        GameInfo.Instance.currentFloor = floor;
 
         disposable.Dispose();
-        titleUIHandler.debugStart.gameObject.SetActive(false);
+        titleUIHandler.debugStart.ForEach(btn => btn.gameObject.SetActive(false));
         sceneLoader.StartLoadScene(1);
         SceneTransition(2);
     }
