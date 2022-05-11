@@ -4,19 +4,16 @@ using System;
 
 public class BulletGeneratorLoader : MonoBehaviour
 {
-    protected BulletData data;
-    protected BulletGenerator prefabBulletGenerator;
-
     public Dictionary<BulletType, BulletGenerator> bulletGenerators { get; protected set; } = new Dictionary<BulletType, BulletGenerator>();
 
     void Awake()
     {
-        prefabBulletGenerator = Resources.Load<BulletGenerator>("Prefabs/Generator/BulletGenerator");
-        data = Resources.Load<BulletData>("DataAssets/Character/BulletData");
+        var prefabBulletGenerator = Resources.Load<BulletGenerator>("Prefabs/Generator/BulletGenerator");
+        var bulletData = Resources.Load<BulletData>("DataAssets/Character/BulletData");
 
         foreach (BulletType type in Enum.GetValues(typeof(BulletType)))
         {
-            bulletGenerators[type] = Instantiate(prefabBulletGenerator, transform).Init(new GameObject("Bullet Pool: " + type), data.Param((int)type));
+            bulletGenerators[type] = Instantiate(prefabBulletGenerator, transform).Init(new GameObject("Bullet Pool: " + type), bulletData.Param((int)type));
         }
     }
 

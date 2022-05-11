@@ -9,6 +9,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public AudioSource LoadSnd(SNDType type) => Util.Instantiate(prefabSNDs[type]);
     private Dictionary<SNDType, AudioSource> prefabSNDs;
 
+    public EnemyData enemyData { get; private set; }
+    public EnemyTypesData enemyTypesData { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -28,5 +31,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")     },
             { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
         };
+
+        enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
+        enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");
     }
 }

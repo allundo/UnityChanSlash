@@ -36,8 +36,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     protected override void Awake()
     {
-        enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
-        enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");
+        enemyData = ResourceLoader.Instance.enemyData;
+        enemyTypesData = ResourceLoader.Instance.enemyTypesData;
 
         SetWorldMap(GameManager.Instance.worldMap);
         respawnData = new List<RespawnData>[enemyTypesData.Length].Select(_ => new List<RespawnData>()).ToArray();

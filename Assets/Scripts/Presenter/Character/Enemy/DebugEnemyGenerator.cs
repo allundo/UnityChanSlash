@@ -9,7 +9,7 @@ public class DebugEnemyGenerator : EnemyAutoGenerator
     protected override void Awake()
     {
         base.Awake();
-        enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
+        enemyData = ResourceLoader.Instance.enemyData;
         gameObject.SetActive(false);
     }
 

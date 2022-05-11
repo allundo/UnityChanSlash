@@ -18,6 +18,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
 
+    public int LastFloor => ResourceLoader.Instance.enemyTypesData.Length;
+
 #if UNITY_EDITOR
     public bool isScenePlayedByEditor = true;
 #endif

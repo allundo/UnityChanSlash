@@ -6,9 +6,6 @@ public class ItemGenerator : MobGenerator<Item>
 {
     private ItemData itemData;
 
-    // FIXME: Use only the number of floors for now
-    private EnemyTypesData enemyTypesData = default;
-
     private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
 
     private Stack<RespawnData>[] respawnData;
@@ -24,10 +21,8 @@ public class ItemGenerator : MobGenerator<Item>
         map = GameManager.Instance.worldMap;
 
         itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
-        enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");
 
-
-        respawnData = new Stack<RespawnData>[enemyTypesData.Length].Select(_ => new Stack<RespawnData>()).ToArray();
+        respawnData = new Stack<RespawnData>[GameInfo.Instance.LastFloor].Select(_ => new Stack<RespawnData>()).ToArray();
     }
 
     void Start()
