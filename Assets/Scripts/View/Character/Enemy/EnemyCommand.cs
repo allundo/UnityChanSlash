@@ -119,12 +119,12 @@ public class EnemyDoubleAttack : EnemyAttack
 
     protected override bool Action()
     {
-        completeTween = DOTween.Sequence()
+        playingTween = DOTween.Sequence()
             .AppendCallback(enemyAnim.attack.Fire)
-            .Join(enemyAttack.AttackSequence(duration))
+            .AppendCallback(() => completeTween = enemyAttack.AttackSequence(duration).Play())
             .AppendInterval(duration * 0.12f)
             .AppendCallback(enemyAnim.attack.Fire)
-            .Join(enemyAttack.AttackSequence(duration))
+            .AppendCallback(() => completeTween = enemyAttack.AttackSequence(duration).Play())
             .Play();
 
         return true;
