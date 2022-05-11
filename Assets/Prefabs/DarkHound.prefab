@@ -28757,7 +28757,7 @@ MonoBehaviour:
   meshTf: {fileID: 626717905239650346}
   dyingFXDuration: 1.5
   cycle: 0
-  blinkColor: {r: 0.0061285994, g: 0, b: 0.7169812, a: 0}
+  blinkColor: {r: 0.0061285994, g: 0, b: 0.7169812, a: 1}
 --- !u!114 &1130021880968960385
 MonoBehaviour:
   m_ObjectHideFlags: 0
