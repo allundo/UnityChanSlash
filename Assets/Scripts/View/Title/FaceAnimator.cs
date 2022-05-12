@@ -16,6 +16,7 @@ public class FaceAnimator : MobAnimator
     public FaceSwitch surprise { get; protected set; }
 
     public TriggerFace drop { get; protected set; }
+    public TriggerFace stagger { get; protected set; }
 
     protected Tween faceLayerCanceler;
     protected int faceLayerIndex;
@@ -41,6 +42,7 @@ public class FaceAnimator : MobAnimator
         surprise = new FaceSwitch(this, faceSurprise.name, 1.0f);
 
         drop = new TriggerFace("Drop", surprise);
+        stagger = new TriggerFace("Stagger", surprise);
     }
 
     public class TriggerFace : AnimatorParam
