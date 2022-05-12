@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 2af62122dd37643588c5b4795cce3df6
+guid: 0f9a7621cff4244fa95ad0aa2d3c1011
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
+    second: Character1_Reference|Character1_ReferenceAction
+  - first:
+      74: 3227230039308557110
+    second: DROP
+  - first:
+      74: 957054535369391249
+    second: FALL
+  - first:
+      74: 4792201108249778304
+    second: WAKEUP
+  - first:
+      74: -4227308659487456393
     second: Brake
   - first:
       74: 7612265029756922610
