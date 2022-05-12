@@ -15,7 +15,7 @@ public class BulletStatus : Status, IBulletStatus
 
     public virtual BulletStatus SetShooter(IStatus shooter)
     {
-        shotBy = type == BulletType.HealSprit ? (shooter as IBulletStatus).shotBy : shooter;
+        shotBy = type == BulletType.HealSpirit ? (shooter as IBulletStatus).shotBy : shooter;
         attack = shooter.attack;
         return this;
     }

@@ -492,7 +492,7 @@ public enum BulletType
     FireBall = 0,
     IceBullet,
     DarkHound,
-    HealSprit,
+    HealSpirit,
     WitchDouble,
 }
 

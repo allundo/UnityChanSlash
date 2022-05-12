@@ -3,7 +3,7 @@ using DG.Tweening;
 
 [RequireComponent(typeof(BulletStatus))]
 [RequireComponent(typeof(HealSpritEffect))]
-public class HealSpritReactor : Reactor, IBulletReactor
+public class HealSpiritReactor : Reactor, IBulletReactor
 {
     protected BulletStatus bulletStatus;
     protected IBodyEffect effect;

@@ -7,12 +7,12 @@ public class DarkHoundReactor : BulletReactor
 {
     protected Transform targetTf = null;
     public float TargetAngle => targetTf == null ? 0f : Vector3.SignedAngle(transform.forward, targetTf.position - transform.position, Vector3.up);
-    protected ILauncher healSpritLauncher;
+    protected ILauncher healSpiritLauncher;
 
     protected override void Awake()
     {
         base.Awake();
-        healSpritLauncher = new Launcher(status, BulletType.HealSprit);
+        healSpiritLauncher = new Launcher(status, BulletType.HealSpirit);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,7 +44,7 @@ public class DarkHoundReactor : BulletReactor
 
         while (drain > 0.0001f)
         {
-            healSpritLauncher.Fire();
+            healSpiritLauncher.Fire();
             drain -= status.attack * 2f;
         }
 
