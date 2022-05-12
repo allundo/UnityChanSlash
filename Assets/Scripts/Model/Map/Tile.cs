@@ -127,6 +127,20 @@ public class Box : Tile, IHandleTile
     public bool IsOpen => state.IsOpen;
     public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
+
+    public override bool PutItem(Item item)
+    {
+        bool isPut = base.PutItem(item);
+        if (isPut) item.SetDisplay(false);
+        return isPut;
+    }
+
+    public override Item PickItem()
+    {
+        Item item = base.PickItem();
+        item?.SetDisplay(true);
+        return item;
+    }
 }
 
 public class Stairs : Tile, ITile
