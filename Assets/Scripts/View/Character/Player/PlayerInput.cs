@@ -398,7 +398,7 @@ public class PlayerInput : ShieldInput
             .AddTo(this);
 
         inspectUI.OnInspectMessage
-            .Subscribe(data => Interrupt(new PlayerMessage(playerTarget, data)))
+            .Subscribe(data => InputTrigger(commander.currentCommand is PlayerMessage ? null : new PlayerMessage(playerTarget, data)))
             .AddTo(this);
     }
 
