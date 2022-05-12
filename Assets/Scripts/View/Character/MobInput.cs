@@ -29,9 +29,15 @@ public abstract class MobInput : InputHandler, IMobInput
     {
         // Delete Command queue only
         ClearAll(true);
+
+        // Retrieve remaining process of current command
         ICommand continuation = commander.PostponeCurrent();
+
         ForceEnqueue(GetIcedCommand(duration));
+
+        // Enqueue remaining process command after icing
         if (continuation != null) ForceEnqueue(continuation);
+
         DisableInput();
     }
 
@@ -47,7 +53,7 @@ public abstract class MobInput : InputHandler, IMobInput
         }
 #endif
 
-        commander.currentCommand.Cancel();
+        commander.Cancel();
     }
 
     protected virtual ICommand GetIcedCommand(float duration)

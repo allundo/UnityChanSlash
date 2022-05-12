@@ -211,7 +211,7 @@ public class PlayerInput : ShieldInput
         }
 #endif
 
-        commander.currentCommand.Cancel();
+        commander.Cancel();
         SetInputVisible();
     }
 

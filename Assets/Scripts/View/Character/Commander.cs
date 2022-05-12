@@ -103,11 +103,15 @@ public class Commander
         }
     }
 
+    /// <summary>
+    /// Pauses current command and dispatches next command.
+    /// </summary>
+    /// <returns>New command including remaining process of current command.</returns>
     public ICommand PostponeCurrent()
     {
         ICommand continuation = currentCommand?.GetContinuation();
         execDisposable?.Dispose();
-        DispatchCommand();
+        DispatchCommand(); // No command is dispatched if iced or command queue is empty.
         return continuation;
     }
 

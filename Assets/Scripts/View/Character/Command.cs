@@ -87,7 +87,11 @@ public class Command : ICommand
     protected Tween validateTween = null;
     protected List<Action> onCompleted = new List<Action>();
 
-    public virtual ICommand GetContinuation() => new Command(input, Pause(playingTween), Pause(completeTween), onCompleted);
+    public virtual ICommand GetContinuation()
+    {
+        CancelValidate();
+        return new Command(input, Pause(playingTween), Pause(completeTween), onCompleted);
+    }
 
     public virtual void Cancel()
     {
