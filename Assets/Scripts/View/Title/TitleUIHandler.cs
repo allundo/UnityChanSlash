@@ -56,7 +56,7 @@ public class TitleUIHandler : MonoBehaviour
     {
         // camera work duration is 1.2f
         cameraWork.TitleTween().Play();
-        DOVirtual.DelayedCall(0.95f, unityChanAnim.stagger.Fire).Play();
+        if (Util.Judge(4)) DOVirtual.DelayedCall(0.95f, unityChanAnim.stagger.Fire).Play();
 
         unityChanIcon.TitleTween(selectButtons).Play();
         logo.TitleTween().Play();

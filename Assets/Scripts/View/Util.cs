@@ -35,4 +35,21 @@ public class Util
         if (matPrev != null) UnityEngine.Object.Destroy(matPrev);
         return image.material = new Material(matSrc);
     }
+
+    /// <summary>
+    /// Simple judgement with probability: 1 / elems
+    /// </summary>
+    /// <param name="elems">denominator that determines probability</param>
+    /// <returns>true if succeed</returns>
+    public static bool Judge(int elems) => Util.DiceRoll(1, elems);
+
+    /// <summary>
+    /// Simple judgement with probability: top / bottom
+    /// </summary>
+    /// <param name="top">numerator that determines probability</param>
+    /// <param name="bottom">denominator that determines probability</param>
+    /// <returns>true if succeed</returns>
+    public static bool DiceRoll(int top, int bottom)
+        => Random.Range(0, bottom) < top;
+
 }
