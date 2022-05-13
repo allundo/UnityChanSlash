@@ -9,7 +9,6 @@ public class CharacterUI : MonoBehaviour
     private UITween uiTween;
     private Tween faceTween = null;
     private Vector2 faceMoveOrigin;
-    private FaceID[] faceIDs;
 
     void Awake()
     {
@@ -18,11 +17,6 @@ public class CharacterUI : MonoBehaviour
 
         fade.SetAlpha(0f);
         faceMoveOrigin = uiTween.defaultPos + new Vector2(50f, 0);
-    }
-
-    public void InputFaceIDs(FaceID[] faceIDs)
-    {
-        this.faceIDs = faceIDs;
     }
 
     public void DispFace(FaceID faceID = FaceID.NONE)

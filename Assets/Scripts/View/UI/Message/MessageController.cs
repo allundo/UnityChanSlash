@@ -55,8 +55,6 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
             .Join(window.FadeIn(0.5f))
             .SetUpdate(true)
             .Play();
-
-        characterUI.InputFaceIDs(data.Select(elem => elem.face).ToArray());
     }
 
     private void CloseMessage()
