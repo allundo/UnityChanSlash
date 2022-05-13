@@ -7,7 +7,6 @@ using System.Linq;
 public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] protected FadeEnable window = default;
-    [SerializeField] protected CharacterUI characterUI = default;
     [SerializeField] protected TextHandler textHandler = default;
 
     protected bool isUIActive = false;
@@ -33,11 +32,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     public void InputMessageData(MessageData[] data)
     {
-        textHandler.Sentence.Subscribe(
-            faceID => characterUI.DispFace(faceID),
-            err => Debug.Log(err),
-            () => CloseMessage()
-        ).AddTo(this);
+        textHandler.Sentence.Subscribe(null, CloseMessage).AddTo(this);
 
         activateTween =
             DOTween.Sequence()
@@ -61,6 +56,5 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
     {
         FadeOut(0.5f, null, () => GameManager.Instance.Resume()).Play();
         window.FadeOut(0.5f).Play();
-        characterUI.DispFace(FaceID.NONE);
     }
 }

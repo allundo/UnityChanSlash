@@ -93849,7 +93849,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   window: {fileID: 8337679455058783588}
-  characterUI: {fileID: 8337679454861261740}
   textHandler: {fileID: 8337679456624263723}
 --- !u!114 &8337679455136500816
 MonoBehaviour:
@@ -94499,6 +94498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee7347e57c6b4eada33549fa266d4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterUI: {fileID: 8337679454861261740}
 --- !u!114 &8357896775832668571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95192,7 +95192,7 @@ GameObject:
   - component: {fileID: 4208675169781032310}
   - component: {fileID: 8337679456624263723}
   m_Layer: 5
-  m_Name: Message
+  m_Name: TextHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

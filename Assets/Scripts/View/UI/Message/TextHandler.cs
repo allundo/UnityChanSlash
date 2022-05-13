@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using DG.Tweening;
 using UniRx;
 using TMPro;
 
 public class TextHandler : MonoBehaviour
 {
+    [SerializeField] private CharacterUI characterUI = default;
+
     private RectTransform rectTransform;
     private Vector2 defaultPos;
     private Vector2 defaultSize;
@@ -22,8 +25,8 @@ public class TextHandler : MonoBehaviour
 
     private bool isTapped = false;
 
-    private ISubject<FaceID> sentence = new Subject<FaceID>();
-    public ISubject<FaceID> Sentence => sentence;
+    private ISubject<Unit> sentence = new Subject<Unit>();
+    public IObservable<Unit> Sentence => sentence.IgnoreElements();
 
     void Awake()
     {
@@ -74,9 +77,11 @@ public class TextHandler : MonoBehaviour
         if (index >= length)
         {
             tm.text = currentSentence = "";
+            characterUI.DispFace(FaceID.NONE);
+
             sentence.OnCompleted();
             // Initialize a Subject again because RepeatUntilDestroy() operator sends OnCompleted message ONLY ONCE when destroyed.
-            sentence = new Subject<FaceID>();
+            sentence = new Subject<Unit>();
             return;
         }
 
@@ -87,7 +92,7 @@ public class TextHandler : MonoBehaviour
 
         currentSentence = currentData.sentence;
         currentLength = currentSentence.Length;
-        sentence.OnNext(currentData.face);
+        characterUI.DispFace(currentData.face);
 
         if (currentData.literalsPerSec > 999.9f)
         {
