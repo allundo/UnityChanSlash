@@ -84,7 +84,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     /// <summary>
     /// Fade-out flicking button but reactivate again on complete if the UI is still active.
     /// </summary>
-    public void FadeOutActive(float duration = 0.2f)
+    public void FadeOutActive(float duration = 0.2f, bool isValidOnPause = false)
     {
         if (!isActive) return;
         isActive = false;
@@ -96,6 +96,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 Clear();
                 FadeIn(0.1f).Play();
             })
+            .SetUpdate(isValidOnPause)
             .Play();
     }
 
@@ -320,7 +321,8 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 .Append(ui.MoveOffset(Destination, duration))
                 .Join(fade.In(duration))
                 .Append(ui.Resize(1.5f, duration))
-                .InsertCallback(duration, () => flick.FadeOutActive(duration))
+                .InsertCallback(duration, () => flick.FadeOutActive(duration, true))
+                .SetUpdate(true)
                 .Play();
 
             FlickOnNext();
