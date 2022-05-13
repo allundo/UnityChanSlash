@@ -13,6 +13,7 @@ public interface ITile
     IStatus OnCharacterDest { get; set; }
     bool PutItem(Item item);
     Item PickItem();
+    ItemInfo TopItem { get; }
     IEnemyStatus GetEnemyStatus();
 }
 
@@ -53,6 +54,8 @@ public class Tile
         return item;
     }
 
+    public virtual ItemInfo TopItem => items.Count > 0 ? items.Peek().itemInfo : null;
+
     public virtual IEnemyStatus GetEnemyStatus()
         => OnEnemy ?? (OnCharacterDest is IEnemyStatus ? OnCharacterDest as IEnemyStatus : null) ?? AboveEnemy;
 }
@@ -76,6 +79,7 @@ public class Wall : Tile, ITile
     public override IStatus OnCharacterDest { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
+    public override ItemInfo TopItem => null;
 
 }
 
@@ -104,6 +108,7 @@ public class Door : Tile, IHandleTile
 
     public override bool PutItem(Item item) => IsOpen ? base.PutItem(item) : false;
     public override Item PickItem() => IsOpen ? base.PickItem() : null;
+    public override ItemInfo TopItem => IsOpen ? base.TopItem : null;
 }
 
 public class ExitDoor : Door
@@ -141,6 +146,8 @@ public class Box : Tile, IHandleTile
         item?.SetDisplay(true);
         return item;
     }
+
+    public override ItemInfo TopItem => null;
 }
 
 public class Stairs : Tile, ITile

@@ -76,6 +76,7 @@ public class ItemSource
     [SerializeField] public ParticleSystem vfx = default;
     [SerializeField] public AudioSource sfx = default;
     [SerializeField] public float duration = 0.2f;
+    [SerializeField] public string description = "説明";
 }
 
 [System.Serializable]

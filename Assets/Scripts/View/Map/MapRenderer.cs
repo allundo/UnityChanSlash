@@ -106,7 +106,7 @@ public class MapRenderer : MonoBehaviour
         MessageWall tile = map.GetTile(pos) as MessageWall;
         tile.boardDir = dir;
 
-        tile.data = MessageData.Board(
+        tile.data = MessageData.Inspect(
             "【試練の迷宮】\n"
             + "迷宮の番人を倒せ！！\n"
             + "封印されし剣が鍵となり、道は開けるであろう。"

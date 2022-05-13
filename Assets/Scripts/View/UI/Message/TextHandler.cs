@@ -5,6 +5,9 @@ using TMPro;
 
 public class TextHandler : MonoBehaviour
 {
+    private RectTransform rectTransform;
+    private Vector2 defaultPos;
+    private Vector2 defaultSize;
     private string currentSentence = "";
     private int currentLength = 0;
     private float currentLiterals = 0;
@@ -25,6 +28,9 @@ public class TextHandler : MonoBehaviour
     void Awake()
     {
         tm = GetComponent<TextMeshProUGUI>();
+        rectTransform = GetComponent<RectTransform>();
+        defaultPos = rectTransform.anchoredPosition;
+        defaultSize = rectTransform.sizeDelta;
     }
 
     void Update()
@@ -100,5 +106,19 @@ public class TextHandler : MonoBehaviour
                 .SetEase(Ease.Linear)
                 .SetUpdate(true)
                 .Play();
+    }
+
+    public void MoveX(float moveX)
+    {
+        rectTransform.anchoredPosition += new Vector2(moveX, 0f);
+        float moveDelta = rectTransform.anchoredPosition.x - defaultPos.x;
+        rectTransform.sizeDelta = defaultSize - new Vector2(Mathf.Abs(moveDelta) * 2f, 0);
+    }
+
+    public void ResetTransform()
+    {
+        rectTransform.anchoredPosition = defaultPos;
+        rectTransform.sizeDelta = defaultSize;
+
     }
 }

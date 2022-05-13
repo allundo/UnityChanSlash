@@ -631,6 +631,7 @@ public class PlayerMessage : PlayerAction
 
     protected override bool Action()
     {
+        if (data == null) return false;
         SetUIInvisible(isUIVisibleOnCompleted);
         messageController.InputMessageData(data);
         return true;

@@ -3,9 +3,10 @@ using UniRx;
 
 public class ItemHandler : BaseHandler
 {
+    protected ItemInfo itemInfo;
     public IObservable<Unit> ObserveGo => ObserveUp;
     public IObservable<Unit> ObserveGet => ObserveDown;
-    public IObservable<Unit> ObserveInspect => ObserveRL;
+    public IObservable<MessageData[]> ObserveInspect => ObserveRL.Select(_ => MessageData.ItemDescription(itemInfo));
     public IObservable<bool> ObserveHandOn => Observable.Merge(getItemFlickR.IsHandOn, getItemFlickL.IsHandOn);
 
     private GetItemFlick getItemFlickR;
@@ -16,5 +17,11 @@ public class ItemHandler : BaseHandler
         base.Awake();
         getItemFlickR = flickR as GetItemFlick;
         getItemFlickL = flickL as GetItemFlick;
+    }
+
+    public void Activate(ItemInfo itemInfo)
+    {
+        this.itemInfo = itemInfo;
+        base.Activate();
     }
 }

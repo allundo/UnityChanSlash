@@ -5,13 +5,15 @@ using DG.Tweening;
 
 public class ItemInfo : ICloneable
 {
-    protected int numOfItem
+    protected ItemSource itemSource;
+
+    public int numOfItem
     {
         get
         {
             return onNumOfItemChange.Value;
         }
-        set
+        protected set
         {
             onNumOfItemChange.Value = value;
         }
@@ -20,53 +22,52 @@ public class ItemInfo : ICloneable
     public IReactiveProperty<int> onNumOfItemChange;
     public IReadOnlyReactiveProperty<int> OnNumOfItemChange => onNumOfItemChange;
 
-    public Material material { get; protected set; }
+    public ItemType type { get; protected set; }
+
+    public Material material => itemSource.material;
 
     /// <summary>
     /// Item use command duration
     /// </summary>
-    public float duration { get; protected set; }
+    public float duration => itemSource.duration;
 
-    protected AudioSource sfx;
-    protected ParticleSystem vfx;
+    public string name => itemSource.name;
+    public string description => itemSource.description.Replace("\\n", "\n"); // strings on DataAsset cannot include NEW_LINE and escapes \
+
+    protected AudioSource sfx = null;
+    protected ParticleSystem vfx = null;
 
     protected ItemAction itemAction;
     public ItemAttr attr => itemAction.attr;
 
-    public ItemInfo(ItemSource itemSource, ItemAction itemAction, int numOfItem = 1)
-        : this(itemSource.material, itemAction, numOfItem, itemSource.duration, Util.Instantiate(itemSource.vfx), Util.Instantiate(itemSource.sfx))
-    { }
-
-    protected ItemInfo(Material material, ItemAction itemAction, int numOfItem = 1, float duration = 0.2f, ParticleSystem vfx = null, AudioSource sfx = null)
+    public ItemInfo(ItemSource itemSource, ItemType type, ItemAction itemAction, int numOfItem = 1)
     {
         this.onNumOfItemChange = new ReactiveProperty<int>(numOfItem);
 
+        this.type = type;
         this.itemAction = itemAction;
-
-        this.material = material;
-        this.vfx = vfx;
-        this.sfx = sfx;
-
-        this.duration = duration;
+        this.itemSource = itemSource;
     }
 
-    public object Clone() => Clone(numOfItem);
+    public object Clone() => Clone(this.numOfItem);
 
     public object Clone(int numOfItem)
-        => new ItemInfo(material, itemAction, numOfItem, duration, vfx, sfx);
+        => new ItemInfo(itemSource, type, itemAction, numOfItem);
 
     protected virtual void FXStart(Vector3 position)
     {
-        if (sfx != null)
+        if (itemSource.sfx != null)
         {
+            if (sfx == null) sfx = Util.Instantiate(itemSource.sfx);
             sfx.transform.position = position;
-            sfx.Play();
+            sfx.PlayEx();
         }
 
-        if (vfx != null)
+        if (itemSource.vfx != null)
         {
+            if (vfx == null) vfx = Util.Instantiate(itemSource.vfx);
             vfx.transform.position = position;
-            vfx.Play();
+            vfx?.Play();
         }
     }
 

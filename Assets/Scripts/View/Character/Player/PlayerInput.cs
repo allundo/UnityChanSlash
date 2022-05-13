@@ -45,6 +45,7 @@ public class PlayerInput : ShieldInput
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
     protected bool IsDash => commander.currentCommand is PlayerDash;
     protected bool IsForward => commander.currentCommand is PlayerForward;
+    protected bool IsMessage => commander.currentCommand is PlayerMessage;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsEnemyDetected => isEnemyDetected;
@@ -267,7 +268,7 @@ public class PlayerInput : ShieldInput
         bool isFaceToItem = !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
         if (isFaceToItem)
         {
-            itemHandler.Activate();
+            itemHandler.Activate(forwardTile.TopItem);
             forwardUI.Resize(0.5f, 1f);
         }
         else
@@ -389,6 +390,10 @@ public class PlayerInput : ShieldInput
             .Subscribe(_ => InputTrigger(getItem))
             .AddTo(this);
 
+        itemHandler.ObserveInspect
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
+            .AddTo(this);
+
         itemInventory.OnPutApply
             .Subscribe(itemIcon => InputTrigger(putItem.SetItem(itemIcon)))
             .AddTo(this);
@@ -398,7 +403,7 @@ public class PlayerInput : ShieldInput
             .AddTo(this);
 
         inspectUI.OnInspectMessage
-            .Subscribe(data => InputTrigger(commander.currentCommand is PlayerMessage ? null : new PlayerMessage(playerTarget, data)))
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
             .AddTo(this);
     }
 
