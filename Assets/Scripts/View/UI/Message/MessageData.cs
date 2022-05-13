@@ -36,8 +36,8 @@ public struct MessageData
         this.fontSize = fontSize;
         this.literalsPerSec = literalsPerSec;
         this.alignment = alignment;
-        this.spriteImage = null;
-        this.matImage = null;
+        this.spriteImage = spriteImage;
+        this.matImage = matImage;
     }
 
     public static MessageData[] Inspect(

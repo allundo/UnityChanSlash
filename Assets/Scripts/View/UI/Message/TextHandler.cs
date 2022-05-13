@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using UniRx;
@@ -7,6 +8,7 @@ using TMPro;
 public class TextHandler : MonoBehaviour
 {
     [SerializeField] private CharacterUI characterUI = default;
+    [SerializeField] private Image icon = default;
 
     private RectTransform rectTransform;
     private Vector2 defaultPos;
@@ -34,6 +36,7 @@ public class TextHandler : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         defaultPos = rectTransform.anchoredPosition;
         defaultSize = rectTransform.sizeDelta;
+        icon.enabled = false;
     }
 
     void Update()
@@ -78,6 +81,7 @@ public class TextHandler : MonoBehaviour
         {
             tm.text = currentSentence = "";
             characterUI.DispFace(FaceID.NONE);
+            DisableIcon();
 
             sentence.OnCompleted();
             // Initialize a Subject again because RepeatUntilDestroy() operator sends OnCompleted message ONLY ONCE when destroyed.
@@ -93,6 +97,7 @@ public class TextHandler : MonoBehaviour
         currentSentence = currentData.sentence;
         currentLength = currentSentence.Length;
         characterUI.DispFace(currentData.face);
+        SetImage(currentData.spriteImage, currentData.matImage);
 
         if (currentData.literalsPerSec > 999.9f)
         {
@@ -113,17 +118,35 @@ public class TextHandler : MonoBehaviour
                 .Play();
     }
 
-    public void MoveX(float moveX)
+    private void DisableIcon() => SetImage(null, null);
+    private void SetImage(Sprite sprite, Material material)
     {
-        rectTransform.anchoredPosition += new Vector2(moveX, 0f);
-        float moveDelta = rectTransform.anchoredPosition.x - defaultPos.x;
-        rectTransform.sizeDelta = defaultSize - new Vector2(Mathf.Abs(moveDelta) * 2f, 0);
+        icon.sprite = sprite;
+        icon.material = material;
+
+        if (sprite == null && material == null)
+        {
+            icon.enabled = false;
+            ResetTransform();
+            return;
+        }
+
+        icon.enabled = true;
+        SpaceLeft(icon.rectTransform.sizeDelta.x);
     }
 
-    public void ResetTransform()
+    private void SpaceLeft(float sizeX) => SetPosX(sizeX * 0.5f);
+    private void SpaceRight(float sizeX) => SetPosX(-sizeX * 0.5f);
+
+    private void SetPosX(float deltaX)
+    {
+        rectTransform.anchoredPosition += new Vector2(deltaX, 0f);
+        rectTransform.sizeDelta = defaultSize - new Vector2(Mathf.Abs(deltaX) * 2f, 0);
+    }
+
+    private void ResetTransform()
     {
         rectTransform.anchoredPosition = defaultPos;
         rectTransform.sizeDelta = defaultSize;
-
     }
 }
