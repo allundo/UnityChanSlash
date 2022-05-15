@@ -4,12 +4,13 @@ using DG.Tweening;
 
 public abstract class EnemyCommand : MobCommand
 {
+    protected IEnemyReactor enemyReact;
     protected IEnemyAnimator enemyAnim;
     protected EnemyMapUtil enemyMap;
 
     public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
-        mobReact = react as IMobReactor;
+        enemyReact = react as IEnemyReactor;
         enemyAnim = target.anim as IEnemyAnimator;
         enemyMap = target.map as EnemyMapUtil;
     }
@@ -157,5 +158,18 @@ public class EnemyDie : EnemyCommand
         react.OnDie();
 
         return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
+    }
+}
+
+public class EnemySummoned : EnemyCommand
+{
+    public EnemySummoned(EnemyCommandTarget target) : base(target, 120f)
+    { }
+
+    protected override bool Action()
+    {
+        enemyReact.OnSummoned();
+        completeTween = tweenMove.FinallyCall(enemyReact.OnTeleportEnd);
+        return true;
     }
 }

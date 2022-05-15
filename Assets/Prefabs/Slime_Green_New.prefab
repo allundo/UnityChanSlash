@@ -699,7 +699,6 @@ GameObject:
   - component: {fileID: 7301358922868385108}
   - component: {fileID: 3725479187051396910}
   - component: {fileID: 6806135843735641528}
-  - component: {fileID: 505605690554175498}
   - component: {fileID: 2541051171018419898}
   - component: {fileID: 7022502647330896685}
   - component: {fileID: 5628525963363757197}
@@ -708,6 +707,7 @@ GameObject:
   - component: {fileID: 2985910597201624646}
   - component: {fileID: 2371523530875487701}
   - component: {fileID: 302231359052145734}
+  - component: {fileID: 4039896437358873619}
   m_Layer: 9
   m_Name: Slime_Green_New
   m_TagString: Untagged
@@ -766,19 +766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &505605690554175498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7933218205718462446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffc5b9d1049634c6abf3718d8879654a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dieSound: {fileID: 4813233136152941162}
 --- !u!114 &2541051171018419898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,6 +802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack: []
   enemyAttack:
   - {fileID: 168930359519291889}
 --- !u!135 &1867213726471065726
@@ -884,7 +872,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a24e2ada49a41999aa5513c1933da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
+--- !u!114 &4039896437358873619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933218205718462446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fe21dbafc8a94b42b7234ac52f6c688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dieSound: {fileID: 4813233136152941162}
+  excludeBody: {fileID: 0}
 --- !u!1 &8160939513619371127
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GhostEffect : MobEffect
+public class GhostEffect : EnemyEffect
 {
     [SerializeField] protected ParticleSystem emitVfx = default;
     [SerializeField] protected AudioSource attackSnd = default;

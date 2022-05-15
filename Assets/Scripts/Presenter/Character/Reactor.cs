@@ -6,7 +6,6 @@ public interface IReactor
     Vector3 position { get; }
     float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
     void OnDie();
-    void OnActive();
     void Destroy();
 }
 
@@ -40,7 +39,7 @@ public abstract class Reactor : MonoBehaviour, IReactor
 
     public abstract void OnDie();
 
-    public abstract void OnActive();
+    protected abstract void OnActive();
 
     protected virtual void OnDead() => status.Inactivate();
 

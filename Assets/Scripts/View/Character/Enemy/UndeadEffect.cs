@@ -3,7 +3,7 @@ public interface IUndeadEffect : IBodyEffect
     void OnResurrection();
 }
 
-public class UndeadEffect : MobEffect, IUndeadEffect
+public class UndeadEffect : EnemyEffect, IUndeadEffect
 {
     public virtual void OnResurrection()
     {

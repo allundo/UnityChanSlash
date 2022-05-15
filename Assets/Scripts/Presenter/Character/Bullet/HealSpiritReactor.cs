@@ -63,7 +63,7 @@ public class HealSpiritReactor : Reactor, IBulletReactor
         isTweening = true;
     }
 
-    public override void OnActive()
+    protected override void OnActive()
     {
         effect.OnActive();
         bodyCollider.enabled = true;

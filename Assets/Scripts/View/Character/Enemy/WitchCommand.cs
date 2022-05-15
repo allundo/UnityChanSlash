@@ -203,6 +203,19 @@ public class WitchMagic : WitchCommand
     }
 }
 
+public class WitchSummonMonster : WitchCommand
+{
+    public WitchSummonMonster(EnemyCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        witchReact.Appear();
+        witchAnim.magic.Fire();
+        playingTween = tweenMove.DelayedCall(0.8f, witchReact.Summon).Play();
+        return true;
+    }
+}
+
 public class WitchDoubleAttackLaunch : FlyingAttack
 {
     protected ICommand doubleAttackStart;

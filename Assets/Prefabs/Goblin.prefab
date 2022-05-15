@@ -20771,7 +20771,6 @@ GameObject:
   - component: {fileID: 1907535087651694565}
   - component: {fileID: 8206916191252188880}
   - component: {fileID: 3616340637596616701}
-  - component: {fileID: 388565091403915286}
   - component: {fileID: 1822043555450433614}
   - component: {fileID: 7026800704296965620}
   - component: {fileID: 2241535295335571476}
@@ -20779,6 +20778,7 @@ GameObject:
   - component: {fileID: 8633113565537013601}
   - component: {fileID: 1683884296315452545}
   - component: {fileID: 912859088886939122}
+  - component: {fileID: 6048263144553628391}
   m_Layer: 9
   m_Name: Goblin
   m_TagString: Untagged
@@ -20855,20 +20855,6 @@ MonoBehaviour:
   attackVfx: {fileID: 1447125426765748007}
   shieldSfx: {fileID: 1447125426861837336}
   shieldVfx: {fileID: 1447125427250074763}
---- !u!114 &388565091403915286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5175499596891105061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffc5b9d1049634c6abf3718d8879654a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dieSound: {fileID: 8312738784135996020}
-  excludeBody: {fileID: 7100256392402996467}
 --- !u!114 &1822043555450433614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20963,6 +20949,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6048263144553628391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5175499596891105061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fe21dbafc8a94b42b7234ac52f6c688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dieSound: {fileID: 8312738784135996020}
+  excludeBody: {fileID: 7100256392402996467}
 --- !u!1 &5199455122212165135
 GameObject:
   m_ObjectHideFlags: 0

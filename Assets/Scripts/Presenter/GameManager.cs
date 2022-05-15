@@ -35,6 +35,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
 
+    public IEnemyStatus PlaceEnemy(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
+        => placeEnemyGenerator.ManualSpawn(type, pos, dir, option, life);
+
+    public IEnemyStatus PlaceEnemyRandom(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
+        => placeEnemyGenerator.RandomSpawn(pos, dir, option, life);
+
     public void Pause(bool isHideUIs = false)
     {
         if (isPaused) return;

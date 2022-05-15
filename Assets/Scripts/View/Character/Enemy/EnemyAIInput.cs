@@ -1,7 +1,12 @@
 using UnityEngine;
 
+public interface IEnemyInput : IMobInput
+{
+    void OnActive(bool isSummoned);
+}
+
 [RequireComponent(typeof(EnemyCommandTarget))]
-public class EnemyAIInput : MobInput
+public class EnemyAIInput : MobInput, IEnemyInput
 {
     protected ICommand turnL;
     protected ICommand turnR;
@@ -11,6 +16,12 @@ public class EnemyAIInput : MobInput
     protected ICommand fire;
 
     protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
+
+    public virtual void OnActive(bool isSummoned)
+    {
+        ValidateInput();
+        if (isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget));
+    }
 
     protected override void SetCommands()
     {

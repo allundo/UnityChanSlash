@@ -28,7 +28,7 @@ public class BulletReactor : Reactor, IBulletReactor
         if (life <= 0.0f) input.InputDie();
     }
 
-    public override void OnActive()
+    protected override void OnActive()
     {
         effect.OnActive();
         // Need to set MapUtil.onTilePos before input moving Command

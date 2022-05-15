@@ -11,6 +11,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     protected ICommand backStep;
     protected ICommand ice;
     protected ICommand magic;
+    protected ICommand summon;
     protected ICommand teleport;
 
     protected override void SetCommands()
@@ -32,6 +33,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         fire = new WitchTripleFire(enemyTarget, 72f);
         ice = new WitchDoubleIce(enemyTarget, 72f);
         magic = new WitchMagic(enemyTarget, 108f);
+        summon = new WitchSummonMonster(enemyTarget, 108f);
         teleport = new MagicianTeleport(enemyTarget, 84f);
 
         sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
@@ -70,7 +72,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         // Move forward if player found in front
         if (IsOnPlayer(forward2))
         {
-            return isForwardMovable ? RandomChoice(moveForward, fire, ice, magic) : throughForward;
+            return isForwardMovable ? RandomChoice(moveForward, fire, ice, summon) : throughForward;
         }
 
         Pos forward3 = mobMap.dir.GetForward(forward2);

@@ -19,18 +19,6 @@ public class SkeletonWizEffect : UndeadEffect
         resourceFX.PlaySnd(SNDType.Teleport, transform.position);
     }
 
-    public void TeleportDestFX()
-    {
-        resourceFX.StopVFX(VFXType.Teleport);
-        resourceFX.PlayVFX(VFXType.TeleportDest, transform.position);
-        resourceFX.PlaySnd(SNDType.TeleportDest, transform.position);
-    }
-
-    public void OnTeleportEnd()
-    {
-        resourceFX.StopVFX(VFXType.TeleportDest);
-    }
-
     /// <summary>
     /// Stop teleport motion OnDie()
     /// </summary>
@@ -39,4 +27,11 @@ public class SkeletonWizEffect : UndeadEffect
         base.StopAllAnimation();
         matClipEffect.InitEffects();
     }
+
+    public void TeleportDestFX()
+    {
+        resourceFX.StopVFX(VFXType.Teleport);
+        base.SummonFX();
+    }
+
 }

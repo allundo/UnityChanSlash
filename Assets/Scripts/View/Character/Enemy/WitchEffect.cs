@@ -22,13 +22,7 @@ public class WitchEffect : GhostEffect
     public void TeleportDestFX()
     {
         resourceFX.StopVFX(VFXType.Teleport);
-        resourceFX.PlayVFX(VFXType.TeleportDest, transform.position);
-        resourceFX.PlaySnd(SNDType.TeleportDest, transform.position);
-    }
-
-    public void OnTeleportEnd()
-    {
-        resourceFX.StopVFX(VFXType.TeleportDest);
+        base.SummonFX();
     }
 
     /// <summary>

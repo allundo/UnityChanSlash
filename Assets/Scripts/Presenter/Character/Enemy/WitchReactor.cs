@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 [RequireComponent(typeof(WitchEffect))]
 [RequireComponent(typeof(WitchStatus))]
 public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
@@ -8,6 +7,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     protected WitchAIInput witchInput;
     protected WitchStatus witchStatus;
     protected WitchEffect witchEffect;
+    protected Summoner summoner;
 
     protected override void Awake()
     {
@@ -15,6 +15,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
         witchStatus = status as WitchStatus;
         witchInput = input as WitchAIInput;
         witchEffect = effect as WitchEffect;
+        summoner = new Summoner(map);
     }
 
     protected override void OnLifeChange(float life)
@@ -39,14 +40,10 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
         witchEffect.TeleportWipe(duration);
         witchEffect.TeleportFX();
     }
+    public void OnTeleportDest() => witchEffect.TeleportDestFX();
 
-    public void OnTeleportDest()
+    public void Summon()
     {
-        witchEffect.TeleportDestFX();
-    }
-
-    public void OnTeleportEnd()
-    {
-        witchEffect.OnTeleportEnd();
+        summoner.SummonMulti(8 - GameInfo.Instance.currentFloor);
     }
 }

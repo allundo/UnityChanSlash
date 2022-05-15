@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(ShieldEnemyReactor))]
 [RequireComponent(typeof(ShieldEnemyAnimator))]
 [RequireComponent(typeof(EnemyCommandTarget))]
-public class GoblinAIInput : ShieldInput
+public class GoblinAIInput : ShieldInput, IEnemyInput
 {
     protected ShieldEnemyAnimator shieldAnim;
 
@@ -120,5 +120,11 @@ public class GoblinAIInput : ShieldInput
 
         // Idle if unmovable
         return null;
+    }
+
+    public virtual void OnActive(bool isSummoned = false)
+    {
+        ValidateInput();
+        if (isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget));
     }
 }

@@ -25,7 +25,7 @@ public class DarkHoundReactor : BulletReactor
         }
     }
 
-    public override void OnActive()
+    protected override void OnActive()
     {
         effect.OnActive();
         // Need to set MapUtil.onTilePos before input moving Command

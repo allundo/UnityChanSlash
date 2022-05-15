@@ -40,13 +40,5 @@ public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
         skeletonWizEffect.TeleportFX();
     }
 
-    public void OnTeleportDest()
-    {
-        skeletonWizEffect.TeleportDestFX();
-    }
-
-    public void OnTeleportEnd()
-    {
-        skeletonWizEffect.OnTeleportEnd();
-    }
+    public void OnTeleportDest() => skeletonWizEffect.TeleportDestFX();
 }

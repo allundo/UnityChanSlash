@@ -18,15 +18,16 @@ public class PlaceEnemyGenerator : EnemyGenerator
         this.map = map;
         enemyTypes = enemyTypesData.Param(map.floor - 1).types;
 
-        enemyTypes.ForEach(type =>
-        {
-            if (!enemyPool.ContainsKey(type))
-            {
-                var pool = new GameObject("Enemy Pool: " + type);
-                pool.transform.SetParent(transform);
-                enemyPool[type] = pool;
-            }
-        });
+        enemyTypes.ForEach(type => CreateEnemyPool(type));
+    }
+
+    private void CreateEnemyPool(EnemyType type)
+    {
+        if (enemyPool.ContainsKey(type)) return;
+
+        var pool = new GameObject("Enemy Pool: " + type);
+        pool.transform.SetParent(transform);
+        enemyPool[type] = pool;
     }
 
     private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
@@ -149,8 +150,19 @@ public class PlaceEnemyGenerator : EnemyGenerator
         generatorPool.Clear();
     }
 
-    private IStatus Respawn(RespawnData data)
-        => Spawn(enemyPool[data.type].transform, enemyData.Param((int)data.type), map.WorldPos(data.pos), data.dir, data.life);
+    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
+        => ManualSpawn(RandomEnemyType, pos, dir, option, life);
+
+    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
+    {
+        CreateEnemyPool(type);
+        return Spawn(type, pos, dir, option, life);
+    }
+
+    private IEnemyStatus Respawn(RespawnData data) => Spawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.life);
+
+    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life)
+        => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, life);
 
     private struct RespawnData
     {

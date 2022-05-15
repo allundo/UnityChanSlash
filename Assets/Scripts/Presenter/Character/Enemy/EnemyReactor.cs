@@ -2,12 +2,37 @@ using UnityEngine;
 using UniRx;
 using System;
 
-[RequireComponent(typeof(MobEffect))]
-public class EnemyReactor : MobReactor
+public interface IEnemyReactor : IMobReactor
+{
+    void OnSummoned();
+    void OnTeleportEnd();
+}
+
+[RequireComponent(typeof(EnemyEffect))]
+public class EnemyReactor : MobReactor, IEnemyReactor
 {
     private static readonly Vector3 OUT_OF_SCREEN = new Vector3(1024.0f, 0.0f, 1024.0f);
 
+    protected IEnemyEffect enemyEffect;
+    protected IEnemyInput enemyInput;
     private IDisposable inactiveNextFrame;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        enemyEffect = effect as IEnemyEffect;
+        enemyInput = input as IEnemyInput;
+    }
+
+    protected override void Start()
+    {
+        status.Life
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(life => OnLifeChange(life))
+            .AddTo(this);
+
+        (status as EnemyStatus).ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
+    }
 
     /// <summary>
     /// Before being dead, enemies must move out of player's detection on Minimap <br />
@@ -53,4 +78,24 @@ public class EnemyReactor : MobReactor
 
         Destroy(gameObject);
     }
+
+    public void OnSummoned()
+    {
+        enemyEffect.SummonFX();
+    }
+
+    public void OnTeleportEnd()
+    {
+        enemyEffect.OnTeleportEnd();
+    }
+
+    protected void OnActive(EnemyStatus.ActivateOption option)
+    {
+        enemyEffect.OnActive(option.fadeInDuration);
+        map.OnActive();
+        enemyInput.OnActive(option.isSummoned);
+        bodyCollider.enabled = true;
+    }
+
+    protected override void OnActive() => OnActive(new EnemyStatus.ActivateOption());
 }

@@ -157,7 +157,7 @@ public class MobReactor : Reactor, IMobReactor
         bodyCollider.enabled = false;
     }
 
-    public override void OnActive()
+    protected override void OnActive()
     {
         effect.OnActive();
         map.OnActive();

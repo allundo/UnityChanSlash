@@ -1,4 +1,4 @@
-public class RabbitEffect : MobEffect
+public class RabbitEffect : EnemyEffect
 {
     protected RabbitAnimator anim;
 
