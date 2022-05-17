@@ -47,7 +47,6 @@ public class PlayerAnimator : ShieldAnimator
         dieEx = new TriggerEx(triggers, anim, "Die", 0);
         dropFloor = new TriggerEx(triggers, anim, "DropFloor", 0);
         brake = new TriggerEx(triggers, anim, "Brake");
-        handOn = new AnimatorBool(anim, "HandOn");
         cancel = new AnimatorBool(anim, "Cancel");
         lifeRatio = new AnimatorFloat(anim, "LifeRatio");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
@@ -58,6 +57,7 @@ public class PlayerAnimator : ShieldAnimator
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
 
         rest = new BoolRest(this);
+        handOn = new BoolHandOn(this);
 
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
@@ -142,7 +142,20 @@ public class PlayerAnimator : ShieldAnimator
                 .Subscribe(_ => Bool = true)
                 .AddTo(playerAnim);
         }
+    }
 
+    public class BoolHandOn : AnimatorBool
+    {
+        public BoolHandOn(PlayerAnimator playerAnim) : base(playerAnim.anim, "HandOn")
+        {
+            int handOnHash = Animator.StringToHash("Base Layer.Handle.HandOn");
+
+            // Avoid hand on flag remaining after transition to another state.
+            playerAnim.StateExit
+                .Where(x => x.StateInfo.fullPathHash == handOnHash)
+                .Subscribe(_ => Bool = false)
+                .AddTo(playerAnim);
+        }
     }
 
     public class BoolIcedFall : AnimatorBool
