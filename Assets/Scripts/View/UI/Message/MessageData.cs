@@ -8,7 +8,13 @@ public enum FaceID
     ANGRY,
     SMILE,
     DISATTRACT,
-    NOTICE
+    NOTICE,
+    EYECLOSE,
+    ANGRY2,
+    DISATTRACT2,
+    DESPISE,
+    ASHAMED,
+    SURPRISE
 }
 
 public struct MessageData
@@ -61,7 +67,5 @@ public struct MessageData
             TextAlignmentOptions.MidlineLeft,
             64f
         );
-
     }
-
 }

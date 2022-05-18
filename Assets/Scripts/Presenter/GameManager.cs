@@ -11,9 +11,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private ItemGenerator itemGenerator = default;
     [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
+    [SerializeField] private EventInvokerGenerator eventInvokerGenerator = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
+    [SerializeField] private LightManager lightManager = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
 
@@ -22,6 +24,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private HidePlateHandler hidePlateHandler = default;
     private PlayerInput input = default;
     private PlayerMapUtil map = default;
+
+    private EventManager eventManager;
 
     private bool isInitialOrientation = true;
 
@@ -85,6 +89,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void Start()
     {
+        eventManager = new EventManager(map, input, lightManager, eventInvokerGenerator);
+        eventManager.MoveFloor(GameInfo.Instance.currentFloor);
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
     }
 
@@ -110,42 +116,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         player.SetActive(true);
         cover.FadeIn(1.5f, 0.6f, false).Play();
-        input.EnqueueDropFloor();
 
-        input.EnqueueStartMessage(
-            new MessageData[]
-            {
-                new MessageData("いきなりなんなのさ・・・", FaceID.DISATTRACT),
-                new MessageData("久々の出番なのに、扱いが雑じゃない！？", FaceID.ANGRY)
-            },
-            false
-        );
-
-        var exitDir = worldMap.exitDoorDir;
-
-        if (map.dir.IsLeft(exitDir))
-        {
-            input.EnqueueTurnR();
-        }
-        else if (map.dir.IsRight(exitDir))
-        {
-            input.EnqueueTurnL();
-        }
-        else if (map.dir.IsSame(exitDir))
-        {
-            input.EnqueueTurnL();
-            input.EnqueueTurnL();
-        }
-
-        input.EnqueueStartMessage(
-            new MessageData[]
-            {
-                new MessageData("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
-                new MessageData("どうみてもこれが出口だね", FaceID.NOTICE),
-                new MessageData("・・・うーん", FaceID.DISATTRACT),
-                new MessageData("鍵が掛かってますねぇ！", FaceID.DISATTRACT),
-            }
-        );
+        eventManager.DropStartEvent();
     }
 
     public void Restart()
@@ -156,13 +128,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         hidePlateHandler.Init();
 
         cover.FadeIn(1f, 0.5f, false).Play();
-        input.EnqueueRestartMessage(
-            new MessageData[]
-            {
-                new MessageData("[仮] ・・・という夢だったのさ", FaceID.SMILE),
-                new MessageData("[仮] なんも解決してないんだけどねっ！", FaceID.ANGRY)
-            }
-        );
+
+        eventManager.RestartEvent();
     }
 
     public void DebugStartFloor(int floor)
@@ -260,6 +227,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
         bulletGeneratorLoader.DestroyAll();
+
+        eventManager.MoveFloor(GameInfo.Instance.currentFloor);
 
         yield return new WaitForEndOfFrame();
 

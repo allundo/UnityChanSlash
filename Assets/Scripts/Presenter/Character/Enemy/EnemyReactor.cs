@@ -93,7 +93,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     {
         enemyEffect.OnActive(option.fadeInDuration);
         map.OnActive();
-        enemyInput.OnActive(option.isSummoned);
+        enemyInput.OnActive(option);
         bodyCollider.enabled = true;
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IEnemyInput : IMobInput
 {
-    void OnActive(bool isSummoned);
+    void OnActive(EnemyStatus.ActivateOption option);
 }
 
 [RequireComponent(typeof(EnemyCommandTarget))]
@@ -17,10 +17,10 @@ public class EnemyAIInput : MobInput, IEnemyInput
 
     protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
 
-    public virtual void OnActive(bool isSummoned)
+    public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
         ValidateInput();
-        if (isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget));
+        if (option.isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget, option.fadeInDuration * 60f));
     }
 
     protected override void SetCommands()

@@ -89,4 +89,12 @@ public class ItemIndexHandler
         items[itemIcon.index] = null;
         return true;
     }
+
+    public void ForEach(Action<ItemIcon> action)
+    {
+        for (int i = 0; i < MAX_ITEMS; i++)
+        {
+            action(GetItem(i));
+        }
+    }
 }

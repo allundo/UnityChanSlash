@@ -88,11 +88,11 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         var deadEnds = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(5, 5), Direction.west },
-            { new Pos(1, 3), Direction.north },
-            { new Pos(1, 5), Direction.north },
-            { new Pos(13, 13), Direction.north },
-            { new Pos(1, 1), Direction.south },
+            { new Pos(5, 5),    Direction.west  },
+            { new Pos(1, 3),    Direction.north },
+            { new Pos(1, 5),    Direction.north },
+            { new Pos(13, 13),  Direction.north },
+            { new Pos(1, 1),    Direction.south },
         };
 
         maps[MAX_FLOOR] = new CustomMap(15, matrix, deadEnds).CreateMap(2);
@@ -138,7 +138,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         return new Dictionary<Pos, IDirection>()
         {
-            { new Pos(14, 14), Direction.north },
             { new Pos(14, 12), Direction.north },
             { new Pos(16, 12), Direction.north },
             { new Pos(16, 14), Direction.north },
@@ -151,6 +150,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(11, 27), Direction.north },
             { new Pos( 7, 13), Direction.south },
             { new Pos(13,  7), Direction.west  },
+            { new Pos(14, 14), Direction.north }, // KeyBlade
             { new Pos( 1,  1), Direction.south }, // up stairs
         };
     }

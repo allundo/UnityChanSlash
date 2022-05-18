@@ -163,7 +163,7 @@ public class EnemyDie : EnemyCommand
 
 public class EnemySummoned : EnemyCommand
 {
-    public EnemySummoned(EnemyCommandTarget target) : base(target, 120f)
+    public EnemySummoned(EnemyCommandTarget target, float duration = 120f) : base(target, duration)
     { }
 
     protected override bool Action()

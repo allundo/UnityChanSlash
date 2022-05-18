@@ -83,4 +83,15 @@ public class ItemInventory : MonoBehaviour
         panels.ForEach(panel => panel.enabled = isEnable);
         enabled = isEnable;
     }
+
+    public bool hasKeyBlade()
+    {
+        for (int index = 0; index < MAX_ITEMS; index++)
+        {
+            var itemIcon = itemIndex.GetItem(index);
+            if (itemIcon == null) continue;
+            if (itemIcon.itemInfo.type == ItemType.KeyBlade) return true;
+        }
+        return false;
+    }
 }

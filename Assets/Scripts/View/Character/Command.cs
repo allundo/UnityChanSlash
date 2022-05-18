@@ -68,12 +68,12 @@ public class Command : ICommand
         map = target.map;
     }
 
-    public Command(IInput input, Tween playing, Tween complete, List<Action> onCompleted)
+    public Command(IInput input, Tween playing, Tween complete, List<Action> onCompleted = null)
     {
         this.input = input;
         this.playingTween = playing;
         this.completeTween = complete;
-        this.onCompleted = onCompleted;
+        this.onCompleted = onCompleted ?? new List<Action>();
         this.duration = RemainingDuration;
         this.invalidDuration = this.duration * 0.95f;
     }

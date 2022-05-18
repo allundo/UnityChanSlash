@@ -122,9 +122,9 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         return null;
     }
 
-    public virtual void OnActive(bool isSummoned = false)
+    public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
         ValidateInput();
-        if (isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget));
+        if (option.isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget, option.fadeInDuration * 60f));
     }
 }
