@@ -10,20 +10,18 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
 
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
+        attack = new EnemyAttack(target, 64f);
 
-        attack = new EnemyAttack(enemyTarget, 64f);
+        die = new EnemyDie(target, 72f);
+        moveForward = new EnemyForward(target, 64f);
+        turnL = new EnemyTurnAnimL(target, 16f);
+        turnR = new EnemyTurnAnimR(target, 16f);
 
-        die = new EnemyDie(enemyTarget, 72f);
-        moveForward = new EnemyForward(enemyTarget, 64f);
-        turnL = new EnemyTurnAnimL(enemyTarget, 16f);
-        turnR = new EnemyTurnAnimR(enemyTarget, 16f);
+        fire = new EnemyFire(target, 72f, BulletType.DarkHound);
+        ice = new EnemyFire(target, 72f, BulletType.IceBullet);
+        teleport = new MagicianTeleport(target, 84f, 3);
 
-        fire = new EnemyFire(enemyTarget, 72f, BulletType.DarkHound);
-        ice = new EnemyFire(enemyTarget, 72f, BulletType.IceBullet);
-        teleport = new MagicianTeleport(enemyTarget, 84f, 3);
-
-        sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
+        sleep = new UndeadSleep(target, 300f, new Resurrection(target, 64f));
     }
     public void InputSleep()
     {

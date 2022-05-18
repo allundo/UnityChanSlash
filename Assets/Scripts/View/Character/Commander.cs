@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// </summary>
 public class Commander
 {
-    public Commander(CommandTarget commandTarget)
+    public Commander(GameObject target)
     {
-        targetObject = commandTarget.gameObject;
+        targetObject = target;
     }
 
     /// <summary>

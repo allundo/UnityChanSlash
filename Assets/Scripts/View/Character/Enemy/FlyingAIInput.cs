@@ -6,14 +6,12 @@ public class FlyingAIInput : EnemyAIInput
     protected ICommand wakeUp;
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
-
-        die = new FlyingDie(enemyTarget, 118f);
-        wakeUp = new FlyingWakeUp(enemyTarget, 120f);
-        moveForward = new FlyingForward(enemyTarget, 45f);
-        turnL = new EnemyTurnAnimL(enemyTarget, 7f);
-        turnR = new EnemyTurnAnimR(enemyTarget, 7f);
-        attack = new FlyingAttackStart(enemyTarget, 21f);
+        die = new FlyingDie(target, 118f);
+        wakeUp = new FlyingWakeUp(target, 120f);
+        moveForward = new FlyingForward(target, 45f);
+        turnL = new EnemyTurnAnimL(target, 7f);
+        turnR = new EnemyTurnAnimR(target, 7f);
+        attack = new FlyingAttackStart(target, 21f);
     }
 
     protected override ICommand GetCommand()
@@ -90,7 +88,7 @@ public class FlyingAIInput : EnemyAIInput
     public override void InputIced(float duration)
     {
         ClearAll();
-        Interrupt(new FlyingIcedFall(target as EnemyCommandTarget, duration, 25f));
+        Interrupt(new FlyingIcedFall(target, duration, 25f));
         commander.EnqueueCommand(wakeUp);
         return;
     }

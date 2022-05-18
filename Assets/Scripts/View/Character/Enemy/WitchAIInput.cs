@@ -16,27 +16,25 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
 
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
+        var doubleAttack = new WitchDoubleAttackLaunch(target, 32f);
+        attack = new WitchBackStepAttack(target, 32f, doubleAttack);
+        backAttack = new WitchJumpOverAttack(target, 32f, doubleAttack);
 
-        var doubleAttack = new WitchDoubleAttackLaunch(enemyTarget, 32f);
-        attack = new WitchBackStepAttack(enemyTarget, 32f, doubleAttack);
-        backAttack = new WitchJumpOverAttack(enemyTarget, 32f, doubleAttack);
+        die = new EnemyDie(target, 72f);
+        targetAttack = new WitchTargetAttack(target, 75f);
+        moveForward = new GhostForward(target, 48f);
+        backStep = new WitchBackStep(target, 32f);
+        throughForward = new GhostThrough(target, 48f, new GhostAttackStart(target, 16f));
+        turnL = new EnemyTurnAnimL(target, 8f);
+        turnR = new EnemyTurnAnimR(target, 8f);
 
-        die = new EnemyDie(enemyTarget, 72f);
-        targetAttack = new WitchTargetAttack(enemyTarget, 75f);
-        moveForward = new GhostForward(enemyTarget, 48f);
-        backStep = new WitchBackStep(enemyTarget, 32f);
-        throughForward = new GhostThrough(enemyTarget, 48f, new GhostAttackStart(enemyTarget, 16f));
-        turnL = new EnemyTurnAnimL(enemyTarget, 8f);
-        turnR = new EnemyTurnAnimR(enemyTarget, 8f);
+        fire = new WitchTripleFire(target, 72f);
+        ice = new WitchDoubleIce(target, 72f);
+        magic = new WitchMagic(target, 108f);
+        summon = new WitchSummonMonster(target, 108f);
+        teleport = new MagicianTeleport(target, 84f);
 
-        fire = new WitchTripleFire(enemyTarget, 72f);
-        ice = new WitchDoubleIce(enemyTarget, 72f);
-        magic = new WitchMagic(enemyTarget, 108f);
-        summon = new WitchSummonMonster(enemyTarget, 108f);
-        teleport = new MagicianTeleport(enemyTarget, 84f);
-
-        sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
+        sleep = new UndeadSleep(target, 300f, new Resurrection(target, 64f));
     }
     public void InputSleep()
     {

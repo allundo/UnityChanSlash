@@ -514,7 +514,7 @@ public class PlayerInput : ShieldInput
             Observable.Merge(IsAutoGuardObservable, IsShieldObservable)
                 .Select(_ => isAutoGuard || playerInput.IsShield)
                 .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
-                .AddTo(playerInput.target);
+                .AddTo(playerInput.gameObject);
         }
 
         protected override void SetShieldReady(bool isGuardOn)

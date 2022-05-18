@@ -10151,12 +10151,12 @@ GameObject:
   - component: {fileID: 6646648689493842627}
   - component: {fileID: 6646648689493842624}
   - component: {fileID: 6646648689493842633}
-  - component: {fileID: 6646648689493842638}
   - component: {fileID: 5172686151483640410}
   - component: {fileID: 6037122337985102315}
   - component: {fileID: 5367982663961441733}
   - component: {fileID: 6299658109764173939}
   - component: {fileID: 3526103026299736497}
+  - component: {fileID: 7096597538805016510}
   m_Layer: 9
   m_Name: VioletGhost
   m_TagString: Untagged
@@ -10244,20 +10244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6646648689493842638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5835761410320476130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyAttack:
-  - {fileID: 6646648690421457345}
 --- !u!114 &5172686151483640410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10271,7 +10257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 8965305710852680509}
-  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  excludeBody: {fileID: 0}
   emitVfx: {fileID: 8407344189817049972}
   attackSnd: {fileID: 8058817155851483271}
 --- !u!114 &6037122337985102315
@@ -10298,7 +10284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b640c68b53d24153880132bc497564f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
 --- !u!114 &6299658109764173939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10323,6 +10308,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f687d1cc12eb94b4581d0d9fabc04d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7096597538805016510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5835761410320476130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 6646648690421457345}
 --- !u!1 &6183973933191762915
 GameObject:
   m_ObjectHideFlags: 0

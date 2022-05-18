@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class GhostForward : EnemyForward
 {
-    public GhostForward(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public GhostForward(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -35,7 +35,7 @@ public class GhostThrough : EnemyForward
         (anim as GhostAnimator).wallThrough.Bool = false;
     }
 
-    public GhostThrough(EnemyCommandTarget target, float duration, ICommand attack) : base(target, duration)
+    public GhostThrough(ICommandTarget target, float duration, ICommand attack) : base(target, duration)
     {
         throughEnd = new GhostThroughEnd(target, duration);
         this.attack = attack;
@@ -58,7 +58,7 @@ public class GhostThrough : EnemyForward
 
 public class GhostThroughEnd : EnemyForward
 {
-    public GhostThroughEnd(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public GhostThroughEnd(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -79,7 +79,7 @@ public class GhostAttackStart : FlyingAttackStart
 
     protected override bool IsForwardMovable => mobMap.ForwardTile.IsViewOpen;
 
-    protected override ICommand AttackEndCommand(EnemyCommandTarget target, float duration)
+    protected override ICommand AttackEndCommand(ICommandTarget target, float duration)
         => attackEnd ?? new GhostAttackEnd(target, duration);
 
     protected override ICommand PlayNext()
@@ -88,7 +88,7 @@ public class GhostAttackStart : FlyingAttackStart
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
 
-    public GhostAttackStart(EnemyCommandTarget target, float duration) : base(target, duration)
+    public GhostAttackStart(ICommandTarget target, float duration) : base(target, duration)
     {
         attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
         attackKeep = new GhostAttackKeep(target, duration, attackEnd);
@@ -114,7 +114,7 @@ public class GhostAttackKeep : FlyingAttack
 
     protected ICommand PlayNext() => MapUtil.IsOnPlayer(mobMap.GetForward) ? this : attackEnd;
 
-    public GhostAttackKeep(EnemyCommandTarget target, float duration, ICommand attackEnd) : base(target, duration)
+    public GhostAttackKeep(ICommandTarget target, float duration, ICommand attackEnd) : base(target, duration)
     {
         this.attackEnd = attackEnd;
     }
@@ -156,7 +156,7 @@ public class GhostAttackEnd : FlyingAttackEnd
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
 
-    public GhostAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public GhostAttackEnd(ICommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

@@ -3,7 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(RabbitAnimator))]
 [RequireComponent(typeof(RabbitAnimFX))]
 [RequireComponent(typeof(RabbitEffect))]
-[RequireComponent(typeof(EnemyCommandTarget))]
 public class RabbitAIInput : EnemyAIInput
 {
     protected ICommand idle;
@@ -14,18 +13,16 @@ public class RabbitAIInput : EnemyAIInput
 
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
-
-        die = new EnemyDie(enemyTarget, 56f);
-        wakeUp = new RabbitWakeUp(enemyTarget, 80f);
-        idle = new EnemyIdle(enemyTarget, 32f);
-        wondering = new RabbitWondering(enemyTarget, 64f);
-        moveForward = new EnemyForward(enemyTarget, 40f);
-        turnL = new EnemyTurnAnimL(enemyTarget, 8f);
-        turnR = new EnemyTurnAnimR(enemyTarget, 8f);
-        attack = new RabbitJumpAttack(enemyTarget, 80f);
-        jumpAttack = new RabbitLongJumpAttack(enemyTarget, 80f);
-        somersault = new RabbitSomersault(enemyTarget, 80f);
+        die = new EnemyDie(target, 56f);
+        wakeUp = new RabbitWakeUp(target, 80f);
+        idle = new EnemyIdle(target, 32f);
+        wondering = new RabbitWondering(target, 64f);
+        moveForward = new EnemyForward(target, 40f);
+        turnL = new EnemyTurnAnimL(target, 8f);
+        turnR = new EnemyTurnAnimR(target, 8f);
+        attack = new RabbitJumpAttack(target, 80f);
+        jumpAttack = new RabbitLongJumpAttack(target, 80f);
+        somersault = new RabbitSomersault(target, 80f);
     }
     public void CancelWondering()
     {
@@ -147,7 +144,7 @@ public class RabbitAIInput : EnemyAIInput
         if (commander.currentCommand is RabbitAttack && commander.currentCommand.RemainingTimeScale > 0.3f)
         {
             ClearAll();
-            Interrupt(new RabbitIcedFall(target as EnemyCommandTarget, duration, 25f));
+            Interrupt(new RabbitIcedFall(target, duration, 25f));
             commander.EnqueueCommand(wakeUp);
             return;
         }

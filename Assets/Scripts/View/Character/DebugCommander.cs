@@ -3,7 +3,7 @@ using UnityEngine;
 public class DebugCommander : Commander
 {
 
-    public DebugCommander(CommandTarget commandTarget) : base(commandTarget)
+    public DebugCommander(GameObject target) : base(target)
     { }
 
     public override void EnqueueCommand(ICommand cmd)

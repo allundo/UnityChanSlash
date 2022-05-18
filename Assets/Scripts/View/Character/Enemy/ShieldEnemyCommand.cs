@@ -1,6 +1,6 @@
 public class ShieldEnemyTurnL : EnemyTurnL
 {
-    public ShieldEnemyTurnL(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public ShieldEnemyTurnL(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -11,7 +11,7 @@ public class ShieldEnemyTurnL : EnemyTurnL
 
 public class ShieldEnemyTurnR : EnemyTurnR
 {
-    public ShieldEnemyTurnR(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public ShieldEnemyTurnR(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {

@@ -8,18 +8,16 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
 
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
+        die = new EnemyDie(target, 72f);
+        idle = new EnemyIdle(target, 36f);
+        moveForward = new EnemyForward(target, 72f);
+        run = new EnemyForward(target, 36f);
+        turnL = new ShieldEnemyTurnL(target, 16f);
+        turnR = new ShieldEnemyTurnR(target, 16f);
+        guard = new GuardCommand(target, 36f, 0.95f);
+        attack = new EnemyAttack(target, 86f);
 
-        die = new EnemyDie(enemyTarget, 72f);
-        idle = new EnemyIdle(enemyTarget, 36f);
-        moveForward = new EnemyForward(enemyTarget, 72f);
-        run = new EnemyForward(enemyTarget, 36f);
-        turnL = new ShieldEnemyTurnL(enemyTarget, 16f);
-        turnR = new ShieldEnemyTurnR(enemyTarget, 16f);
-        guard = new GuardCommand(enemyTarget, 36f, 0.95f);
-        attack = new EnemyAttack(enemyTarget, 86f);
-
-        sleep = new UndeadSleep(enemyTarget, 300f, new Resurrection(enemyTarget, 64f));
+        sleep = new UndeadSleep(target, 300f, new Resurrection(target, 64f));
     }
 
     protected override void SetInputs()

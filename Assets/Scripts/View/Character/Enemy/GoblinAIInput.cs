@@ -2,7 +2,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(ShieldEnemyReactor))]
 [RequireComponent(typeof(ShieldEnemyAnimator))]
-[RequireComponent(typeof(EnemyCommandTarget))]
 public class GoblinAIInput : ShieldInput, IEnemyInput
 {
     protected ShieldEnemyAnimator shieldAnim;
@@ -20,16 +19,14 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
 
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
-
-        die = new EnemyDie(enemyTarget, 72f);
-        idle = new EnemyIdle(enemyTarget, 36f);
-        moveForward = new EnemyForward(enemyTarget, 72f);
-        run = new EnemyForward(enemyTarget, 36f);
-        turnL = new ShieldEnemyTurnL(enemyTarget, 16f);
-        turnR = new ShieldEnemyTurnR(enemyTarget, 16f);
-        guard = new GuardCommand(enemyTarget, 36f, 0.95f);
-        attack = new EnemyAttack(enemyTarget, 60f);
+        die = new EnemyDie(target, 72f);
+        idle = new EnemyIdle(target, 36f);
+        moveForward = new EnemyForward(target, 72f);
+        run = new EnemyForward(target, 36f);
+        turnL = new ShieldEnemyTurnL(target, 16f);
+        turnR = new ShieldEnemyTurnR(target, 16f);
+        guard = new GuardCommand(target, 36f, 0.95f);
+        attack = new EnemyAttack(target, 60f);
     }
 
     protected override void SetInputs()
@@ -125,6 +122,6 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
     public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
         ValidateInput();
-        if (option.isSummoned) Interrupt(new EnemySummoned(target as EnemyCommandTarget, option.fadeInDuration * 60f));
+        if (option.isSummoned) Interrupt(new EnemySummoned(target, option.fadeInDuration * 60f));
     }
 }

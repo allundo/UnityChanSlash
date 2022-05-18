@@ -7,7 +7,7 @@ public class PlayerCommander : ShieldCommander
 {
     protected PlayerAnimator anim;
 
-    public PlayerCommander(PlayerCommandTarget target) : base(target)
+    public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
         anim = target.anim as PlayerAnimator;
     }

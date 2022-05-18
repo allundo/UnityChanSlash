@@ -8,14 +8,12 @@ public class GhostAIInput : EnemyAIInput
 
     protected override void SetCommands()
     {
-        var enemyTarget = target as EnemyCommandTarget;
-
-        die = new EnemyDie(enemyTarget, 72f);
-        attack = new GhostAttackStart(enemyTarget, 30f);
-        moveForward = new GhostForward(enemyTarget, 64f);
-        throughForward = new GhostThrough(enemyTarget, 64f, attack);
-        turnL = new EnemyTurnAnimL(enemyTarget, 16f);
-        turnR = new EnemyTurnAnimR(enemyTarget, 16f);
+        die = new EnemyDie(target, 72f);
+        attack = new GhostAttackStart(target, 30f);
+        moveForward = new GhostForward(target, 64f);
+        throughForward = new GhostThrough(target, 64f, attack);
+        turnL = new EnemyTurnAnimL(target, 16f);
+        turnR = new EnemyTurnAnimR(target, 16f);
     }
 
     protected override ICommand GetCommand()

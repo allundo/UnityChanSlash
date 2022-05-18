@@ -11582,12 +11582,12 @@ GameObject:
   - component: {fileID: 5783524372521205095}
   - component: {fileID: 5783524372521205092}
   - component: {fileID: 5783524372521205093}
-  - component: {fileID: 5783524372521205082}
   - component: {fileID: 5783524372521205083}
   - component: {fileID: 5783524372521205080}
   - component: {fileID: 6627270785402526232}
   - component: {fileID: 2461294804068648982}
   - component: {fileID: 2495696679434822334}
+  - component: {fileID: 7497879317737267918}
   m_Layer: 9
   m_Name: SkeletonWizard
   m_TagString: Untagged
@@ -11685,6 +11685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 7088471772245400287}
+  excludeBody: {fileID: 0}
 --- !u!114 &5783524372521205093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11697,21 +11698,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efab91ee144a42ca8cd88a7ac85c4cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5783524372521205082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6665992755484655667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attack: []
-  enemyAttack:
-  - {fileID: 5783524373530240961}
 --- !u!114 &5783524372521205083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11779,6 +11765,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7497879317737267918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665992755484655667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 5783524373530240961}
 --- !u!1 &6758964285167618662
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public abstract class FlyingCommand : EnemyTurnCommand
 {
     protected FlyingAnimator flyingAnim;
 
-    public FlyingCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public FlyingCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         flyingAnim = target.anim as FlyingAnimator;
     }
@@ -15,7 +15,7 @@ public abstract class FlyingCommand : EnemyTurnCommand
 
 public class FlyingForward : EnemyForward
 {
-    public FlyingForward(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public FlyingForward(ICommandTarget target, float duration) : base(target, duration) { }
     protected override bool IsMovable => map.ForwardTile.IsViewOpen;
 }
 
@@ -30,9 +30,9 @@ public abstract class FlyingAttack : FlyingCommand
 
     protected virtual bool IsForwardMovable => map.ForwardTile.IsViewOpen;
 
-    public FlyingAttack(EnemyCommandTarget target, float duration) : base(target, duration)
+    public FlyingAttack(ICommandTarget target, float duration) : base(target, duration)
     {
-        flyingAttack = target.enemyAttack[0];
+        flyingAttack = target.Attack(0);
     }
 }
 
@@ -40,12 +40,12 @@ public class FlyingAttackStart : FlyingAttack
 {
     protected ICommand attackEnd;
 
-    protected virtual ICommand AttackEndCommand(EnemyCommandTarget target, float duration)
+    protected virtual ICommand AttackEndCommand(ICommandTarget target, float duration)
         => new FlyingAttackEnd(target, duration);
 
     protected virtual ICommand PlayNext() => attackEnd;
 
-    public FlyingAttackStart(EnemyCommandTarget target, float duration) : base(target, duration)
+    public FlyingAttackStart(ICommandTarget target, float duration) : base(target, duration)
     {
         attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
     }
@@ -85,7 +85,7 @@ public class FlyingAttackEnd : FlyingAttack
     protected virtual bool IsRightMovable => map.RightTile.IsViewOpen;
     protected virtual bool IsLeftMovable => map.LeftTile.IsViewOpen;
 
-    public FlyingAttackEnd(EnemyCommandTarget target, float duration) : base(target, duration)
+    public FlyingAttackEnd(ICommandTarget target, float duration) : base(target, duration)
     {
         leave = new FlyingAttackLeave(target, duration / (1f - attackTimeScale) * 2f);
     }
@@ -136,7 +136,7 @@ public class FlyingAttackEnd : FlyingAttack
 
 public class FlyingAttackLeave : FlyingAttack
 {
-    public FlyingAttackLeave(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public FlyingAttackLeave(ICommandTarget target, float duration) : base(target, duration) { }
     protected override bool Action()
     {
         playingTween = DOTween.Sequence()
@@ -151,7 +151,7 @@ public class FlyingAttackLeave : FlyingAttack
 public class FlyingIcedFall : FlyingCommand
 {
     protected float meltFrameTimer;
-    public FlyingIcedFall(EnemyCommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    public FlyingIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
         meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
     }
@@ -178,7 +178,7 @@ public class FlyingIcedFall : FlyingCommand
 public class FlyingWakeUp : FlyingCommand
 {
     protected float wakeUpTiming;
-    public FlyingWakeUp(EnemyCommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
+    public FlyingWakeUp(ICommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
     {
         this.wakeUpTiming = wakeUpTiming;
     }
@@ -202,7 +202,7 @@ public class FlyingWakeUp : FlyingCommand
 }
 public class FlyingDie : FlyingCommand
 {
-    public FlyingDie(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public FlyingDie(ICommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

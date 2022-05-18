@@ -201,10 +201,10 @@ GameObject:
   - component: {fileID: 1234450232476947528}
   - component: {fileID: 5934634380934516988}
   - component: {fileID: 6908585404483116527}
-  - component: {fileID: 4913433251101017608}
   - component: {fileID: 4145719160831982119}
   - component: {fileID: 3614868262937342799}
   - component: {fileID: 1505298008736259366}
+  - component: {fileID: 3298733753453232942}
   m_Layer: 9
   m_Name: SkeletonSoldier
   m_TagString: Untagged
@@ -332,21 +332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4913433251101017608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 799938764790708774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attack: []
-  enemyAttack:
-  - {fileID: 3769941086074530290}
 --- !u!114 &4145719160831982119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,6 +374,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 8626003820171309201}
   excludeBody: {fileID: 8293297162768083278}
+--- !u!114 &3298733753453232942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799938764790708774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 3769941086074530290}
 --- !u!1 &907574872776517408
 GameObject:
   m_ObjectHideFlags: 0

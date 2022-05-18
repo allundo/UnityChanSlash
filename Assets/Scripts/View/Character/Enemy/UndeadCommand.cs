@@ -7,7 +7,7 @@ public abstract class UndeadCommand : EnemyCommand
     protected IUndeadReactor undeadReact;
     protected IUndeadAnimator undeadAnim;
 
-    public UndeadCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public UndeadCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         undeadReact = target.react as IUndeadReactor;
         undeadAnim = target.anim as IUndeadAnimator;
@@ -17,7 +17,7 @@ public abstract class UndeadCommand : EnemyCommand
 public class Resurrection : UndeadCommand
 {
     private ICommand startMoving;
-    public Resurrection(EnemyCommandTarget target, float duration) : base(target, duration)
+    public Resurrection(ICommandTarget target, float duration) : base(target, duration)
     {
         startMoving = new StartMoving(target, 72f);
     }
@@ -53,7 +53,7 @@ public class Resurrection : UndeadCommand
 
 public class StartMoving : UndeadCommand
 {
-    public StartMoving(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public StartMoving(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override float Speed => TILE_UNIT / duration;
 
@@ -83,7 +83,7 @@ public class StartMoving : UndeadCommand
 public class UndeadSleep : UndeadCommand
 {
     ICommand resurrection;
-    public UndeadSleep(EnemyCommandTarget target, float duration, ICommand resurrection) : base(target, duration)
+    public UndeadSleep(ICommandTarget target, float duration, ICommand resurrection) : base(target, duration)
     {
         this.resurrection = resurrection;
     }

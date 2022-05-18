@@ -494,9 +494,9 @@ public abstract class PlayerAttack : PlayerAction
 
     public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration)
     {
-        jab = target.attack[0];
-        straight = target.attack[1];
-        kick = target.attack[2];
+        jab = target.Attack(0);
+        straight = target.Attack(1);
+        kick = target.Attack(2);
 
         this.cancelStart = cancelStart;
 

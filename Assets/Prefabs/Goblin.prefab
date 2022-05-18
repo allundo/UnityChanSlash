@@ -20774,11 +20774,11 @@ GameObject:
   - component: {fileID: 1822043555450433614}
   - component: {fileID: 7026800704296965620}
   - component: {fileID: 2241535295335571476}
-  - component: {fileID: 6164900741494732223}
   - component: {fileID: 8633113565537013601}
   - component: {fileID: 1683884296315452545}
   - component: {fileID: 912859088886939122}
   - component: {fileID: 6048263144553628391}
+  - component: {fileID: 7854132551053064595}
   m_Layer: 9
   m_Name: Goblin
   m_TagString: Untagged
@@ -20892,21 +20892,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6164900741494732223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5175499596891105061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attack: []
-  enemyAttack:
-  - {fileID: 1447125428554083896}
 --- !u!114 &8633113565537013601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20963,6 +20948,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 8312738784135996020}
   excludeBody: {fileID: 7100256392402996467}
+--- !u!114 &7854132551053064595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5175499596891105061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 1447125428554083896}
 --- !u!1 &5199455122212165135
 GameObject:
   m_ObjectHideFlags: 0

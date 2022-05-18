@@ -26,7 +26,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
     /// Target Commander to input Command.
     /// </summary>
     public Commander commander { get; protected set; }
-    protected CommandTarget target;
+    protected ICommandTarget target;
 
     /// <summary>
     /// Stops input ICommand if false. <br />
@@ -54,7 +54,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
 
     protected virtual void SetCommander()
     {
-        commander = new Commander(target);
+        commander = new Commander(gameObject);
     }
 
     /// <summary>

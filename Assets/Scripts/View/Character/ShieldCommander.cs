@@ -1,3 +1,4 @@
+using UnityEngine;
 using UniRx;
 using System;
 
@@ -16,5 +17,5 @@ public class ShieldCommander : Commander
     private IReactiveProperty<ICommand> CurrentCommand = new ReactiveProperty<ICommand>(null);
     public IObservable<ICommand> CurrentObservable => CurrentCommand;
 
-    public ShieldCommander(CommandTarget target) : base(target) { }
+    public ShieldCommander(GameObject target) : base(target) { }
 }

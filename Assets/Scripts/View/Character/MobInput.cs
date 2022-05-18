@@ -14,7 +14,6 @@ public interface IUndeadInput : IMobInput
 /// <summary>
 /// Inputs ICommand to ICommand queue in Commander. <br />
 /// </summary>
-[RequireComponent(typeof(CommandTarget))]
 [RequireComponent(typeof(MobMapUtil))]
 public abstract class MobInput : InputHandler, IMobInput
 {

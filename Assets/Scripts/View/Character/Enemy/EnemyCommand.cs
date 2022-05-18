@@ -8,7 +8,7 @@ public abstract class EnemyCommand : MobCommand
     protected IEnemyAnimator enemyAnim;
     protected EnemyMapUtil enemyMap;
 
-    public EnemyCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
+    public EnemyCommand(ICommandTarget target, float duration, float validateTiming = 0.5f) : base(target, duration, validateTiming)
     {
         enemyReact = react as IEnemyReactor;
         enemyAnim = target.anim as IEnemyAnimator;
@@ -18,13 +18,13 @@ public abstract class EnemyCommand : MobCommand
 
 public class EnemyIdle : EnemyCommand
 {
-    public EnemyIdle(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public EnemyIdle(ICommandTarget target, float duration) : base(target, duration) { }
     protected override bool Action() => true;
 }
 
 public abstract class EnemyMove : EnemyCommand
 {
-    public EnemyMove(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }
+    public EnemyMove(ICommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
@@ -66,7 +66,7 @@ public abstract class EnemyMove : EnemyCommand
 
 public class EnemyForward : EnemyMove
 {
-    public EnemyForward(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public EnemyForward(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => mobMap.IsForwardMovable;
     protected override Pos GetDest => mobMap.GetForward;
@@ -75,7 +75,7 @@ public class EnemyForward : EnemyMove
 
 public class EnemyTurnL : EnemyCommand
 {
-    public EnemyTurnL(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }
+    public EnemyTurnL(ICommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected override bool Action()
     {
@@ -87,7 +87,7 @@ public class EnemyTurnL : EnemyCommand
 
 public class EnemyTurnR : EnemyCommand
 {
-    public EnemyTurnR(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f) { }
+    public EnemyTurnR(ICommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected override bool Action()
     {
@@ -101,9 +101,9 @@ public class EnemyAttack : EnemyCommand
 {
     protected IAttack enemyAttack;
 
-    public EnemyAttack(EnemyCommandTarget target, float duration) : base(target, duration, 0.95f)
+    public EnemyAttack(ICommandTarget target, float duration) : base(target, duration, 0.95f)
     {
-        enemyAttack = target.enemyAttack[0];
+        enemyAttack = target.Attack(0);
     }
 
     protected override bool Action()
@@ -116,7 +116,7 @@ public class EnemyAttack : EnemyCommand
 
 public class EnemyDoubleAttack : EnemyAttack
 {
-    public EnemyDoubleAttack(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public EnemyDoubleAttack(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -135,7 +135,7 @@ public class EnemyDoubleAttack : EnemyAttack
 public class EnemyFire : EnemyAttack
 {
     protected BulletType type;
-    public EnemyFire(EnemyCommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
+    public EnemyFire(ICommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
     {
         this.type = type;
     }
@@ -150,7 +150,7 @@ public class EnemyFire : EnemyAttack
 
 public class EnemyDie : EnemyCommand
 {
-    public EnemyDie(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public EnemyDie(ICommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {
@@ -163,7 +163,7 @@ public class EnemyDie : EnemyCommand
 
 public class EnemySummoned : EnemyCommand
 {
-    public EnemySummoned(EnemyCommandTarget target, float duration = 120f) : base(target, duration)
+    public EnemySummoned(ICommandTarget target, float duration = 120f) : base(target, duration)
     { }
 
     protected override bool Action()

@@ -701,13 +701,13 @@ GameObject:
   - component: {fileID: 6806135843735641528}
   - component: {fileID: 2541051171018419898}
   - component: {fileID: 7022502647330896685}
-  - component: {fileID: 5628525963363757197}
   - component: {fileID: 1867213726471065726}
   - component: {fileID: 7646930436761287342}
   - component: {fileID: 2985910597201624646}
   - component: {fileID: 2371523530875487701}
   - component: {fileID: 302231359052145734}
   - component: {fileID: 4039896437358873619}
+  - component: {fileID: 199357197180059940}
   m_Layer: 9
   m_Name: Slime_Green_New
   m_TagString: Untagged
@@ -790,21 +790,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ddf8f300671a4a8aa7c5e48370c2aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5628525963363757197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7933218205718462446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attack: []
-  enemyAttack:
-  - {fileID: 168930359519291889}
 --- !u!135 &1867213726471065726
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -886,6 +871,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 4813233136152941162}
   excludeBody: {fileID: 0}
+--- !u!114 &199357197180059940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933218205718462446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 168930359519291889}
 --- !u!1 &8160939513619371127
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public abstract class ShieldInput : MobInput
     }
     protected override void SetCommander()
     {
-        commander = new ShieldCommander(target);
+        commander = new ShieldCommander(gameObject);
     }
 
     public class GuardState
@@ -57,7 +57,7 @@ public abstract class ShieldInput : MobInput
         {
             IsShieldObservable
                 .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
-                .AddTo(input.target);
+                .AddTo(input.gameObject);
         }
 
         public virtual bool IsShieldOn(IDirection attackDir) => isShieldReady && map.dir.IsInverse(attackDir);

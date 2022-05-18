@@ -8,7 +8,7 @@ public class WitchCommand : EnemyTurnCommand
     protected WitchReactor witchReact;
     protected MagicAndDouble magicAndDouble;
 
-    public WitchCommand(EnemyCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public WitchCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         witchAnim = target.anim as WitchAnimator;
         witchReact = target.react as WitchReactor;
@@ -20,9 +20,9 @@ public class WitchTargetAttack : WitchCommand
 {
     protected IAttack targetAttack;
 
-    public WitchTargetAttack(EnemyCommandTarget target, float duration) : base(target, duration)
+    public WitchTargetAttack(ICommandTarget target, float duration) : base(target, duration)
     {
-        targetAttack = target.enemyAttack[1];
+        targetAttack = target.Attack(1);
     }
 
     protected override bool Action()
@@ -38,7 +38,7 @@ public class WitchTargetAttack : WitchCommand
 
 public class WitchJumpOver : WitchCommand
 {
-    public WitchJumpOver(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public WitchJumpOver(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -67,7 +67,7 @@ public class WitchJumpOverAttack : WitchJumpOver
 {
     protected ICommand doubleAttack;
 
-    public WitchJumpOverAttack(EnemyCommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
+    public WitchJumpOverAttack(ICommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
     {
         this.doubleAttack = doubleAttack;
     }
@@ -90,7 +90,7 @@ public class WitchJumpOverAttack : WitchJumpOver
 }
 public class WitchBackStep : WitchCommand
 {
-    public WitchBackStep(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public WitchBackStep(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -117,7 +117,7 @@ public class WitchBackStepAttack : WitchBackStep
 {
     protected ICommand doubleAttack;
 
-    public WitchBackStepAttack(EnemyCommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
+    public WitchBackStepAttack(ICommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
     {
         this.doubleAttack = doubleAttack;
     }
@@ -141,7 +141,7 @@ public class WitchBackStepAttack : WitchBackStep
 
 public class WitchTripleFire : WitchCommand
 {
-    public WitchTripleFire(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public WitchTripleFire(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -167,7 +167,7 @@ public class WitchTripleFire : WitchCommand
 
 public class WitchDoubleIce : WitchCommand
 {
-    public WitchDoubleIce(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public WitchDoubleIce(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -192,7 +192,7 @@ public class WitchDoubleIce : WitchCommand
 
 public class WitchMagic : WitchCommand
 {
-    public WitchMagic(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public WitchMagic(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -205,7 +205,7 @@ public class WitchMagic : WitchCommand
 
 public class WitchSummonMonster : WitchCommand
 {
-    public WitchSummonMonster(EnemyCommandTarget target, float duration) : base(target, duration) { }
+    public WitchSummonMonster(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -219,7 +219,7 @@ public class WitchSummonMonster : WitchCommand
 public class WitchDoubleAttackLaunch : FlyingAttack
 {
     protected ICommand doubleAttackStart;
-    public WitchDoubleAttackLaunch(EnemyCommandTarget target, float duration) : base(target, duration)
+    public WitchDoubleAttackLaunch(ICommandTarget target, float duration) : base(target, duration)
     {
         doubleAttackStart = new GhostAttackStart(target, duration * 0.5f);
     }

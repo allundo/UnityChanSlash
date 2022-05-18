@@ -24882,11 +24882,11 @@ GameObject:
   - component: {fileID: 4710703816869286450}
   - component: {fileID: 4710703816869286453}
   - component: {fileID: 4710703816869286452}
-  - component: {fileID: 4710703816869286455}
   - component: {fileID: 4710703816869286454}
   - component: {fileID: 4710703816869286472}
   - component: {fileID: 4710703816869286475}
   - component: {fileID: 2613311094568533996}
+  - component: {fileID: 2643365324410000897}
   m_Layer: 9
   m_Name: YellowRabbit
   m_TagString: Untagged
@@ -24960,7 +24960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieSound: {fileID: 7883246141361873954}
-  sndData: {fileID: 11400000, guid: ba258e23a3d85446bb595ce6665f9b48, type: 2}
+  excludeBody: {fileID: 0}
 --- !u!114 &4710703816869286450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24973,7 +24973,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a24e2ada49a41999aa5513c1933da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeGauge: {fileID: 0}
 --- !u!114 &4710703816869286453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24986,7 +24985,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isIced: 0
 --- !u!114 &4710703816869286452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24999,21 +24997,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4710703816869286455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5593085875285077789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ddb24875e05f47fa999d5f3fc89fdab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyAttack:
-  - {fileID: 4710703816355849621}
-  - {fileID: 1186108234732040887}
 --- !u!114 &4710703816869286454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25071,6 +25054,21 @@ MonoBehaviour:
   jumpAttackVfx: {fileID: 2421199109089050677}
   somersaultSfx: {fileID: 5246954497292811768}
   somersaultVfx: {fileID: 7154161310819393095}
+--- !u!114 &2643365324410000897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5593085875285077789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack:
+  - {fileID: 4710703816355849621}
+  - {fileID: 1186108234732040887}
 --- !u!1 &5709385664302473624
 GameObject:
   m_ObjectHideFlags: 0
