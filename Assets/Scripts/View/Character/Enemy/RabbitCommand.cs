@@ -133,7 +133,8 @@ public class RabbitSomersault : RabbitAttack
         mobMap.MoveObjectOn(backward);
         playingTween = DOTween.Sequence()
             .AppendInterval(0.1f * duration)
-            .Join(tweenMove.JumpRelative(mobMap.GetBackwardVector(), 0.4f).SetEase(Ease.InQuart))
+            .Append(tweenMove.JumpRelative(mobMap.GetBackwardVector(), 0.4f).SetEase(Ease.InQuart))
+            .AppendInterval(duration * 0.5f)
             .InsertCallback(0.65f * duration, () => enemyMap.MoveOnEnemy(backward))
             .Play();
 
