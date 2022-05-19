@@ -67,8 +67,10 @@ public class PlayerInput : ShieldInput
     public void EnqueueDropFloor() => Interrupt(new PlayerDropFloor(playerTarget, 220f));
     public void EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f));
     public void EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f));
-    public void EnqueueStartMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
-    public void EnqueueRestartMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
+    public void EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
+    public void InterruptMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
+
+    public float RemainingDuration => IsIdling ? 0f : commander.currentCommand.RemainingDuration;
 
     protected override void SetCommander()
     {
@@ -492,6 +494,12 @@ public class PlayerInput : ShieldInput
         guardUI.EnterObservable
             .Subscribe(_ => InputTrigger(guard))
             .AddTo(this);
+    }
+
+    public void InputStop()
+    {
+        if (commander.currentCommand is PlayerRun) Interrupt(new PlayerBrakeStop(playerTarget, 48f));
+        commander.ClearAll(true);
     }
 
     public class PlayerGuardState : GuardState

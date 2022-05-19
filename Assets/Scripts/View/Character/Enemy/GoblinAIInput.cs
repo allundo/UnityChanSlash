@@ -122,6 +122,6 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
     public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
         ValidateInput();
-        if (option.isSummoned) Interrupt(new EnemySummoned(target, option.fadeInDuration * 60f));
+        if (option.isSummoned) Interrupt(new EnemySummoned(target, option.summoningDuration));
     }
 }

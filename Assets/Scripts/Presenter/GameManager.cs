@@ -11,11 +11,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private ItemGenerator itemGenerator = default;
     [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
-    [SerializeField] private EventInvokerGenerator eventInvokerGenerator = default;
+    [SerializeField] private EventManager eventManager = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
-    [SerializeField] private LightManager lightManager = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
 
@@ -24,8 +23,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private HidePlateHandler hidePlateHandler = default;
     private PlayerInput input = default;
     private PlayerMapUtil map = default;
-
-    private EventManager eventManager;
 
     private bool isInitialOrientation = true;
 
@@ -89,8 +86,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void Start()
     {
-        eventManager = new EventManager(map, input, lightManager, eventInvokerGenerator);
-        eventManager.MoveFloor(GameInfo.Instance.currentFloor);
+        eventManager.EventInit(GameInfo.Instance.currentFloor);
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
     }
 
@@ -99,6 +95,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         input.SetInputVisible(false);
         cover.SetAlpha(1f);
 
+        // Need to set player position before initialize HidePlateHandler.
+        // MiniMap controlled by HidePlateHandler refers to player position and direction.
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
 

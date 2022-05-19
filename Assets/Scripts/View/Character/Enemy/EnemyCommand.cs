@@ -1,3 +1,4 @@
+using UnityEngine;
 using UniRx;
 using System;
 using DG.Tweening;
@@ -169,7 +170,7 @@ public class EnemySummoned : EnemyCommand
     protected override bool Action()
     {
         enemyReact.OnSummoned();
-        completeTween = tweenMove.FinallyCall(enemyReact.OnTeleportEnd);
+        completeTween = DOVirtual.DelayedCall(Mathf.Min(duration, 1.5f), enemyReact.OnTeleportEnd, false).Play();
         return true;
     }
 }

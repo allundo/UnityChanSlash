@@ -30,17 +30,19 @@ public class LightManager : MonoBehaviour
 
     }
 
-    public Tween SpotFade(Vector3 pos, float from, float to, float duration)
+    public Tween SpotFadeIn(Vector3 pos, float from, float to, float duration)
     {
         return DOTween.Sequence()
             .AppendCallback(() => SpotLightInit(pos, to))
-            .Append(DOVirtual.Float(from, to, duration, value => spotLight.spotAngle = value));
+            .Join(DOVirtual.Float(from, to, duration, value => spotLight.spotAngle = value))
+            .Join(DOVirtual.Float(0f, 1f, duration, value => spotLight.intensity = value));
     }
 
     public Tween SpotFadeOut(float from, float duration)
     {
         return DOTween.Sequence()
-            .Append(DOVirtual.Float(from, 0f, duration, value => spotLight.spotAngle = value))
+            .Join(DOVirtual.Float(from, 1f, duration, value => spotLight.spotAngle = value))
+            .Join(DOVirtual.Float(1f, 0f, duration, value => spotLight.intensity = value))
             .AppendCallback(() => spotLight.enabled = false);
     }
 }

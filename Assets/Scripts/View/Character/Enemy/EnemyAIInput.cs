@@ -19,7 +19,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
     public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
         ValidateInput();
-        if (option.isSummoned) Interrupt(new EnemySummoned(target, option.fadeInDuration * 60f));
+        if (option.isSummoned) Interrupt(new EnemySummoned(target, option.summoningDuration));
     }
 
     protected override void SetCommands()

@@ -797,11 +797,10 @@ MonoBehaviour:
   placeEnemyGenerator: {fileID: 1196509789}
   itemGenerator: {fileID: 1345430765}
   bulletGeneratorLoader: {fileID: 795530022}
-  eventInvokerGenerator: {fileID: 1086912729}
+  eventManager: {fileID: 1086912729}
   cover: {fileID: 6691234942917525759}
   uiPosition: {fileID: 3530082429098461079}
   mainCamera: {fileID: 963194229}
-  lightManager: {fileID: 53870344}
   rotate: {fileID: 458642054}
   debugEnemyGenerators:
   - {fileID: 1015295890}
@@ -9565,7 +9564,7 @@ GameObject:
   - component: {fileID: 1086912730}
   - component: {fileID: 1086912729}
   m_Layer: 0
-  m_Name: EventInvokerGenerator
+  m_Name: EventManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9580,12 +9579,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1086912728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb8c00563f46a43d7a08e44ed4ecddfc, type: 3}
+  m_Script: {fileID: 11500000, guid: b4dedbcb32255492495ce535de1febeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
   fixedPrefab: {fileID: 4718034046630093612, guid: 83fe4847ca67c484abec2a369ba96ef9,
     type: 3}
+  playerTarget: {fileID: 3442943665555868991}
+  lightManager: {fileID: 53870344}
+  messageController: {fileID: 8337679455110417430}
+  gameOverUI: {fileID: 5465461844953474837}
 --- !u!4 &1086912730
 Transform:
   m_ObjectHideFlags: 0

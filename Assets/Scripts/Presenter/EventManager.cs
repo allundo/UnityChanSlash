@@ -5,34 +5,73 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 
-public class EventManager
+public class EventManager : MobGenerator<EventInvoker>
 {
+    [SerializeField] private PlayerCommandTarget playerTarget = default;
+    [SerializeField] private LightManager lightManager = default;
+    [SerializeField] private MessageController messageController = default;
+    [SerializeField] private GameOverUI gameOverUI = default;
+
+    private EventCommandTarget target;
+
     private IPlayerMapUtil map;
     private PlayerInput input;
-    private LightManager lightManager;
-    private EventInvokerGenerator eventInvokerGenerator;
+
     private int currentFloor = 0;
+
+    private Commander commander;
+
+    private ICommand dropFloor;
+    private ICommand turnL;
+    private ICommand turnR;
 
     private Dictionary<Pos, EventInvoker>[] eventInvokers;
 
-    public EventManager(IPlayerMapUtil map, PlayerInput input, LightManager lightManager, EventInvokerGenerator eventInvokerGenerator)
-    {
-        this.map = map;
-        this.input = input;
-        this.lightManager = lightManager;
-        this.eventInvokerGenerator = eventInvokerGenerator;
+    public virtual EventInvoker Spawn(Vector3 pos, Func<PlayerCommandTarget, bool> IsEventValid, bool isOneShot = true) => Spawn(pos).Init(IsEventValid, isOneShot);
 
-        EventInit();
+    protected override void Awake()
+    {
+        base.Awake();
+        target = new EventCommandTarget(playerTarget, messageController, gameOverUI, lightManager);
+        commander = new Commander(playerTarget.gameObject);
+
+        map = target.map as IPlayerMapUtil;
+        input = target.input as PlayerInput;
+
+        dropFloor = new PlayerDropFloor(playerTarget, 220f);
+        turnL = new PlayerTurnL(playerTarget, 18f);
+        turnR = new PlayerTurnR(playerTarget, 18f);
     }
 
-    private void EventInit()
+    public void EventInit(int firstFloor)
     {
         eventInvokers = new Dictionary<Pos, EventInvoker>[GameInfo.Instance.LastFloor].Select(_ => new Dictionary<Pos, EventInvoker>()).ToArray();
 
         // KeyBlade detecting
-        // Invoke witch generating event if player has the KeyBlade or the KeyBlade is put on event tile.
-        SetEvent(5, new Pos(11, 11), WitchGenerateEvent, target => target.itemInventory.hasKeyBlade() || target.map.OnTile.TopItem?.type == ItemType.KeyBlade);
+        SetEvent(5, new Pos(11, 11),
+            WitchGenerateEvent,
+            // Invoke witch generating event if player has the KeyBlade or the KeyBlade is put on event tile
+            target => target.itemInventory.hasKeyBlade() || target.map.OnTile.TopItem?.type == ItemType.KeyBlade || target.map.BackwardTile.TopItem?.type == ItemType.KeyBlade,
+            true, Direction.south
+        );
+
+        MoveFloor(firstFloor);
     }
+
+    private void Enqueue(ICommand cmd) => commander.EnqueueCommand(cmd);
+    private void WaitEnqueue(ICommand cmd)
+        => DOVirtual.DelayedCall(input.RemainingDuration, () => commander.EnqueueCommand(cmd), false).Play();
+
+    private void Interrupt(ICommand cmd) => commander.Interrupt(cmd);
+
+    public void EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true)
+        => Enqueue(new EventMessage(target, data, isUIVisibleOnCompleted));
+
+    public void WaitEnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true)
+        => WaitEnqueue(new EventMessage(target, data, isUIVisibleOnCompleted));
+
+    public void InterruptMessage(MessageData[] data)
+        => Interrupt(new EventMessage(target, data));
 
     public void MoveFloor(int nextFloor)
     {
@@ -41,22 +80,20 @@ public class EventManager
         currentFloor = nextFloor;
     }
 
-    private void SetEvent(int floor, Pos pos, Action eventAct, Func<PlayerCommandTarget, bool> isEventValid, bool isOneShot = true)
+    private void SetEvent(int floor, Pos pos, Action<IDirection> eventAct, Func<PlayerCommandTarget, bool> isEventValid, bool isOneShot = true, IDirection dir = null)
     {
-        var eventInvoker = eventInvokerGenerator.Spawn(map.WorldPos(pos), isEventValid, isOneShot);
+        var eventInvoker = Spawn(map.WorldPos(pos), isEventValid, isOneShot);
 
-        eventInvoker.DetectPlayer.Subscribe(_ => eventAct(), () => eventInvokers[floor - 1].Remove(pos)).AddTo(input.gameObject);
+        eventInvoker.DetectPlayer.Subscribe(_ => eventAct(dir), () => eventInvokers[floor - 1].Remove(pos)).AddTo(playerTarget.gameObject);
 
         eventInvokers[floor - 1][pos] = eventInvoker;
     }
 
-    private void WitchGenerateEvent()
+    private void WitchGenerateEvent(IDirection witchDir)
     {
-        input.SetInputVisible(false);
+        input.InputStop();
 
-        lightManager.DirectionalFade(1f, 0.2f, 1.5f).SetEase(Ease.InCubic).Play();
-
-        input.EnqueueStartMessage(
+        input.EnqueueMessage(
             new MessageData[]
             {
                 new MessageData("『ちょっと待ちなよ』", FaceID.NONE),
@@ -65,47 +102,13 @@ public class EventManager
             false
         );
 
-        var spotTween = DOTween.Sequence()
-            .AppendCallback(() => GameManager.Instance.PlaceEnemy(EnemyType.Witch, map.GetBackward, map.dir, new EnemyStatus.ActivateOption(3f, true)))
-            .Append(lightManager.SpotFade(map.WorldPos(map.GetBackward) + new Vector3(0, 4f, 0), 1f, 30f, 2f))
-            .SetUpdate(true);
-
-        input.ForceEnqueue(new Command(input, DOVirtual.DelayedCall(0.2f, null, false), spotTween.SetDelay(0.2f)));
-
-        input.EnqueueTurnL();
-        input.EnqueueTurnL();
-
-        var resumeTween = DOTween.Sequence()
-            .Join(lightManager.DirectionalFade(0.2f, 1f, 2f))
-            .Join(lightManager.SpotFadeOut(30f, 2f))
-            .SetUpdate(false);
-
-        input.ForceEnqueue(new Command(input, DOVirtual.DelayedCall(2f, null, false), resumeTween.SetDelay(2f)));
-
-        input.EnqueueStartMessage(
-            new MessageData[]
-            {
-                new MessageData("『表の立て札は読まなかったのかい？』", FaceID.NONE),
-                new MessageData("いやまあ読んだけど・・・\n誰よ？あんた", FaceID.DEFAULT),
-                new MessageData("『私は迷宮の守護霊。その鍵は返してもらう。』", FaceID.NONE),
-                new MessageData("こっちだってコレないと外に出られないんだけど？？", FaceID.DESPISE),
-                new MessageData("『そっちの事情なんて知らないね。私はここの宝物を守るように命令を受けている。』", FaceID.NONE),
-                new MessageData("『ここで逃がすわけにはいかない・・・！』", FaceID.NONE),
-                new MessageData("ふーん・・・", FaceID.ASHAMED),
-                new MessageData("それ、誰の命令なんだろうね？", FaceID.EYECLOSE),
-                new MessageData("『誰・・・。誰って・・・・？』", FaceID.NONE),
-                new MessageData("知らないんだ？", FaceID.DISATTRACT2),
-                new MessageData("・・・まあ、私だってそっちの事情なんて知らんし", FaceID.DEFAULT),
-                new MessageData("こんなとこ、とっととトンズラさせてもらうわ！", FaceID.ANGRY),
-            }
-        );
+        WaitEnqueue(new WitchGenerateEvent(target, witchDir));
     }
 
     public void DropStartEvent()
     {
-        input.EnqueueDropFloor();
-
-        input.EnqueueStartMessage(
+        Interrupt(new PlayerDropFloor(playerTarget, 220f));
+        EnqueueMessage(
             new MessageData[]
             {
                 new MessageData("いきなりなんなのさ・・・", FaceID.DISATTRACT),
@@ -116,19 +119,19 @@ public class EventManager
 
         if (map.IsExitDoorLeft)
         {
-            input.EnqueueTurnR();
+            Enqueue(turnR);
         }
         else if (map.IsExitDoorRight)
         {
-            input.EnqueueTurnL();
+            Enqueue(turnL);
         }
         else if (map.IsExitDoorBack)
         {
-            input.EnqueueTurnL();
-            input.EnqueueTurnL();
+            Enqueue(turnL);
+            Enqueue(turnL);
         }
 
-        input.EnqueueStartMessage(
+        EnqueueMessage(
             new MessageData[]
             {
                 new MessageData("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
@@ -141,7 +144,7 @@ public class EventManager
 
     public void RestartEvent()
     {
-        input.EnqueueRestartMessage(
+        InterruptMessage(
             new MessageData[]
             {
                 new MessageData("[仮] ・・・という夢だったのさ", FaceID.SMILE),

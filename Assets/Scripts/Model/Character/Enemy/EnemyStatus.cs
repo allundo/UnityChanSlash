@@ -14,10 +14,12 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     {
         public float fadeInDuration;
         public bool isSummoned;
-        public ActivateOption(float fadeInDuration = 0.5f, bool isSummoned = false)
+        public float summoningDuration;
+        public ActivateOption(float fadeInDuration = 0.5f, bool isSummoned = false, float summoningDuration = 120f)
         {
             this.fadeInDuration = fadeInDuration;
             this.isSummoned = isSummoned;
+            this.summoningDuration = summoningDuration;
         }
     }
 
