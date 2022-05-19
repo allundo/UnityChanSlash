@@ -15,7 +15,7 @@ public class MatColorEffect : MatTransparentEffect, IMatColorEffect
     protected Tween disappearTween;
 
     protected override string propName => "_AdditiveColor";
-    protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 1);
+    protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 0);
 
     public MatColorEffect(Transform targetTf) : base(targetTf) { }
     public MatColorEffect(List<Material> materials) : base(materials) { }

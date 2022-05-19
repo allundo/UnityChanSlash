@@ -18,4 +18,9 @@ public class PlayerEffect : MobEffect
         base.OnDamage(damageRatio, type, attr);
         anim.rest.Bool = false;
     }
+
+    public override void OnActive()
+    {
+        matColEffect.Activate(0f);
+    }
 }

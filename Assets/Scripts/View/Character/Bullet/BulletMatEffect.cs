@@ -11,6 +11,8 @@ public class BulletMatEffect : MatColorEffect
     protected Tween rollingTween = null;
     protected Tween blinkTween = null;
 
+    protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 1);
+
     public BulletMatEffect(Transform targetTf, float dyingFXDuration = 0f, float cycle = 0f, Color blinkColor = default) : base(targetTf)
     {
         meshTf = targetTf;
