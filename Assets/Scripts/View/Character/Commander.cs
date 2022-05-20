@@ -14,7 +14,7 @@ public class Commander
     }
 
     /// <summary>
-    /// Used only for detecting destraction of command target object
+    /// Used only for detecting destruction of command target object
     /// </summary>
     protected GameObject targetObject;
 
@@ -23,7 +23,7 @@ public class Commander
     /// <summary>
     /// Reserve Commands to execute in order.
     /// </summary>
-    /// <typeparam name="Command">Command that Execute() method is implemented </typeparam>
+    /// <typeparam name="ICommand">Command that Execute() method is implemented </typeparam>
     protected LinkedList<ICommand> cmdQueue = new LinkedList<ICommand>();
 
     public int QueueCount => cmdQueue.Count;
