@@ -19,7 +19,7 @@ public class EnemySpawnController : MonoBehaviour
         // Inactivate the enemy getting out of player's view range
         if (enemy != null)
         {
-            enemy.Disappear();
+            enemy.OnOutOfView();
         }
     }
 }

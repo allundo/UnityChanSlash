@@ -55,7 +55,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         status.Inactivate();
     }
 
-    public void Disappear()
+    public virtual void OnOutOfView()
     {
         effect.Disappear(() =>
         {

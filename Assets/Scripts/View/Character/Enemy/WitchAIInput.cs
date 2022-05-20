@@ -120,4 +120,6 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         InputCommand(new IcedCommand(target, duration));
         if (continuation != null) ForceEnqueue(continuation);
     }
+
+    public void InputTeleport() => ForceEnqueue(teleport);
 }

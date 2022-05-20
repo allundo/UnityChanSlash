@@ -46,4 +46,10 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     {
         summoner.SummonMulti(8 - GameInfo.Instance.currentFloor);
     }
+
+    public override void OnOutOfView()
+    {
+        // Don't disappear. Close to player again.
+        witchInput.InputTeleport();
+    }
 }
