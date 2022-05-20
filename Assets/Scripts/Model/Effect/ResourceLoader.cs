@@ -12,6 +12,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public EnemyData enemyData { get; private set; }
     public EnemyTypesData enemyTypesData { get; private set; }
 
+    public ItemData itemData { get; private set; }
+    public ItemTypesData itemTypesData { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -34,5 +37,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
         enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");
+
+        itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
+        itemTypesData = Resources.Load<ItemTypesData>("DataAssets/Map/ItemTypesData");
     }
 }

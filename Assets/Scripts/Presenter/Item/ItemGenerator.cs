@@ -5,6 +5,11 @@ using System.Collections.Generic;
 public class ItemGenerator : MobGenerator<Item>
 {
     private ItemData itemData;
+    private ItemTypesData itemTypesData;
+
+    private ItemType[] singleItemTypes;
+    private ItemType[] randomItemTypes;
+    private ItemType RandomItemType => randomItemTypes[Random.Range(0, randomItemTypes.Length)];
 
     private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
 
@@ -18,9 +23,9 @@ public class ItemGenerator : MobGenerator<Item>
     {
         pool = transform;
         spawnPoint = Vector3.zero;
-        map = GameManager.Instance.worldMap;
 
-        itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
+        itemData = ResourceLoader.Instance.itemData;
+        itemTypesData = ResourceLoader.Instance.itemTypesData;
 
         respawnData = new Stack<RespawnData>[GameInfo.Instance.LastFloor].Select(_ => new Stack<RespawnData>()).ToArray();
     }
@@ -28,7 +33,23 @@ public class ItemGenerator : MobGenerator<Item>
     void Start()
     {
         itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
+
+        SetWorldMap(GameManager.Instance.worldMap);
         PlaceItems(map);
+    }
+
+    private void SetWorldMap(WorldMap map)
+    {
+        this.map = map;
+        randomItemTypes = itemTypesData.Param(map.floor - 1).randomTypes;
+        singleItemTypes = itemTypesData.Param(map.floor - 1).singleTypes;
+
+#if UNITY_EDITOR
+        if (GameInfo.Instance.isScenePlayedByEditor)
+        {
+            singleItemTypes = new ItemType[1] { ItemType.KeyBlade };
+        }
+#endif
     }
 
     public void SwitchWorldMap(WorldMap map)
@@ -44,7 +65,7 @@ public class ItemGenerator : MobGenerator<Item>
             }
         });
 
-        this.map = map;
+        SetWorldMap(map);
         PlaceItems(map);
 
         while (restore.Count > 0)
@@ -58,11 +79,14 @@ public class ItemGenerator : MobGenerator<Item>
         // TODO: Need to implement item placing process
         if (map.deadEndPos.Count == 0) return;
 
-        var last = map.deadEndPos.Last();
-        Put(ItemType.KeyBlade, last.Key, last.Value.Backward);
-        map.deadEndPos.Remove(last.Key);
+        for (int i = 0; i < singleItemTypes.Length && map.deadEndPos.Count > 0; i++)
+        {
+            var last = map.deadEndPos.Last();
+            Put(singleItemTypes[i], last.Key, last.Value.Backward);
+            map.deadEndPos.Remove(last.Key);
+        }
 
-        map.deadEndPos.ForEach(kvp => Put(ItemType.Potion, kvp.Key, kvp.Value.Backward));
+        map.deadEndPos.ForEach(kvp => Put(RandomItemType, kvp.Key, kvp.Value.Backward));
         map.deadEndPos.Clear();
     }
 

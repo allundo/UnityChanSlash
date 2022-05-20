@@ -95,6 +95,13 @@ public class EnemyTypesSource
 }
 
 [System.Serializable]
+public class ItemTypesSource
+{
+    [SerializeField] public ItemType[] randomTypes;
+    [SerializeField] public ItemType[] singleTypes;
+}
+
+[System.Serializable]
 public class FloorMaterialsSource
 {
     [SerializeField] public string name = "通常ダンジョン";
