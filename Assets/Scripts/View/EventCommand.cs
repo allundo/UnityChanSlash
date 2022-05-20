@@ -94,7 +94,7 @@ public class WitchGenerateEvent : EventCommand
         }
 
         playingTween = seq
-            .InsertCallback(0.5f, () => GameManager.Instance.PlaceEnemy(EnemyType.Witch, witchPos, witchDir.Backward, new EnemyStatus.ActivateOption(2f, true, 300f)))
+            .InsertCallback(0.5f, () => GameManager.Instance.PlaceWitch(witchPos, witchDir.Backward, 300f))
             .Append(lightManager.DirectionalFade(1f, 0.2f, 1.0f))
             .Join(lightManager.SpotFadeIn(map.WorldPos(map.GetBackward) + new Vector3(0, 4f, 0), 1f, 30f, 1.0f))
             .AppendInterval(interval)

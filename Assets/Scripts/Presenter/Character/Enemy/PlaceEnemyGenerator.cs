@@ -12,6 +12,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
     private EnemyType[] enemyTypes;
     private EnemyType RandomEnemyType => enemyTypes[Random.Range(0, enemyTypes.Length)];
 
+    private bool isWitchReserved = false;
+
     private WorldMap map;
     private void SetWorldMap(WorldMap map)
     {
@@ -132,9 +134,25 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         SetWorldMap(map);
         restore.ForEach(data => Respawn(data));
+
+        // Reserve spawning witch if player has KeyBlade.
+        isWitchReserved = GameManager.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.type == EnemyType.Witch).Count() == 0;
+
         restore.Clear();
 
         Place();
+    }
+
+    /// <summary>
+    /// Spawns witch on moving floor. Must be called after preparing floor tiles on WorldMap to search space.
+    /// </summary>
+    public void RespawnWitch()
+    {
+        if (!isWitchReserved) return;
+
+        var gm = GameManager.Instance;
+        SpawnWitch(map.SearchSpaceNearBy(gm.PlayerPos, 3), gm.PlayerDir.Backward, 300f);
+        isWitchReserved = false;
     }
 
     public void DestroyAllEnemies()
@@ -158,6 +176,9 @@ public class PlaceEnemyGenerator : EnemyGenerator
         CreateEnemyPool(type);
         return Spawn(type, pos, dir, option, life);
     }
+
+    public IEnemyStatus SpawnWitch(Pos pos, IDirection dir, float waitFrames = 120f)
+        => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, true, waitFrames));
 
     private IEnemyStatus Respawn(RespawnData data) => Spawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.life);
 

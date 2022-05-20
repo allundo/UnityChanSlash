@@ -52,7 +52,7 @@ public class PlayerInput : ShieldInput
 
     /// <summary>
     /// Stops Trigger type input if false.
-    /// Trigger type input is validated earlyer than Normal type input<br />
+    /// Trigger type input is validated earlier than Normal type input<br />
     /// but invalidated while moving Commands are executed continuously.
     /// </summary>
     protected bool isTriggerValid = true;

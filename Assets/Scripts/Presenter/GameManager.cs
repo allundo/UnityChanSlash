@@ -42,6 +42,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public IEnemyStatus PlaceEnemyRandom(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
         => placeEnemyGenerator.RandomSpawn(pos, dir, option, life);
 
+    public IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f)
+        => placeEnemyGenerator.SpawnWitch(pos, dir, waitFrames);
+
     public void Pause(bool isHideUIs = false)
     {
         if (isPaused) return;
@@ -169,7 +172,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         isInitialOrientation = false;
     }
 
-    public Pos PlayerPos => worldMap.MapPos(playerTransform.position);
+    public Pos PlayerPos => map.onTilePos;
+    public IDirection PlayerDir => map.dir;
+    public bool IsPlayerHavingKeyBlade => player.GetComponent<PlayerCommandTarget>().itemInventory.hasKeyBlade();
+
     public Vector3 PlayerWorldPos
         => new Vector3(playerTransform.position.x, 0f, playerTransform.position.z);
 
@@ -262,6 +268,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         itemGenerator.SwitchWorldMap(worldMap);
         itemGenerator.Turn(map.dir);
+        placeEnemyGenerator.RespawnWitch();
         yield return new WaitForEndOfFrame();
     }
 
