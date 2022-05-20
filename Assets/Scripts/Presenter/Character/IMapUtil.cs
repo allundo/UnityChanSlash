@@ -4,6 +4,7 @@ public interface IMapUtil
 {
     IDirection dir { get; }
     Pos onTilePos { get; }
+    Transform transform { get; }
 
     void OnActive();
     Vector3 WorldPos(Pos pos);

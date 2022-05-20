@@ -42,14 +42,18 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     }
     public void OnTeleportDest() => witchEffect.TeleportDestFX();
 
-    public void Summon()
-    {
-        summoner.SummonMulti(8 - GameInfo.Instance.currentFloor);
-    }
+    public void Summon() => summoner.SummonMulti(8 - GameInfo.Instance.currentFloor);
+    public bool IsSummoning => summoner.IsSummoning;
 
     public override void OnOutOfView()
     {
         // Don't disappear. Close to player again.
         witchInput.InputTeleport();
+    }
+
+    public override void Destroy()
+    {
+        summoner.StopSummoning();
+        base.Destroy();
     }
 }

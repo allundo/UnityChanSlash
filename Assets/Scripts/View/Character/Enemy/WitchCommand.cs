@@ -209,6 +209,8 @@ public class WitchSummonMonster : WitchCommand
 
     protected override bool Action()
     {
+        if (witchReact.IsSummoning) return false;
+
         witchReact.Appear();
         witchAnim.magic.Fire();
         playingTween = tweenMove.DelayedCall(0.8f, witchReact.Summon).Play();
