@@ -92,6 +92,7 @@ public class EventManager : MobGenerator<EventInvoker>
     private void WitchGenerateEvent(IDirection witchDir)
     {
         input.InputStop();
+        input.SetInputVisible(false);
 
         input.EnqueueMessage(
             new MessageData[]
