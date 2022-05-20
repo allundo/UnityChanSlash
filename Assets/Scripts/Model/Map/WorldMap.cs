@@ -80,6 +80,24 @@ public class WorldMap
 
     public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= Width || y >= Height;
 
+    public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
+    {
+        var spaceCandidates = new List<Pos>();
+
+        for (int j = targetPos.y - range; j < targetPos.y + range; j++)
+        {
+            for (int i = targetPos.x - range; i < targetPos.x + range; i++)
+            {
+                var pos = new Pos(i, j);
+                if (GetTile(pos).IsEnterable()) spaceCandidates.Add(pos);
+            }
+        }
+
+        exceptFor?.ForEach(pos => spaceCandidates.Remove(pos));
+
+        return spaceCandidates.Count > 0 ? spaceCandidates.GetRandom() : new Pos();
+    }
+
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 

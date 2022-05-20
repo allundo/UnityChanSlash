@@ -61,25 +61,12 @@ public class MobMapUtil : MapUtil, IMobMapUtil
     public virtual bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos));
     public virtual bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
     public virtual bool IsJumpable => IsForwardLeapable && IsMovable(GetJump);
-    public Pos SearchSpaceNearBy(int range = 2, List<Pos> exceptFor = null) => SearchSpaceNearBy(onTilePos, range, exceptFor);
+
+    public Pos SearchSpaceNearBy(int range = 2, List<Pos> exceptFor = null)
+        => SearchSpaceNearBy(onTilePos, range, exceptFor);
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
-    {
-        var destCandidates = new List<Pos>();
-
-        for (int j = targetPos.y - range; j < targetPos.y + range; j++)
-        {
-            for (int i = targetPos.x - range; i < targetPos.x + range; i++)
-            {
-                var pos = new Pos(i, j);
-                if (map.GetTile(pos).IsEnterable()) destCandidates.Add(pos);
-            }
-        }
-
-        exceptFor?.ForEach(pos => destCandidates.Remove(pos));
-
-        return destCandidates.Count > 0 ? destCandidates.GetRandom() : new Pos();
-    }
+        => map.SearchSpaceNearBy(targetPos, range, exceptFor);
 
     /// <summary>
     /// Set current on tile and IsObjectOn flag to the Tile specified by Pos unit
