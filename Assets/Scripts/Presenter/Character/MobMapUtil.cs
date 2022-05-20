@@ -61,7 +61,7 @@ public class MobMapUtil : MapUtil, IMobMapUtil
     public virtual bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos));
     public virtual bool IsRightMovable => IsMovable(dir.GetRight(onTilePos));
     public virtual bool IsJumpable => IsForwardLeapable && IsMovable(GetJump);
-    public Pos SearchSpaceNearBy(int range = 2, List<Pos> exceptFor = null) => SearchSpaceNearBy(GameManager.Instance.PlayerPos, range, exceptFor);
+    public Pos SearchSpaceNearBy(int range = 2, List<Pos> exceptFor = null) => SearchSpaceNearBy(onTilePos, range, exceptFor);
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
     {
