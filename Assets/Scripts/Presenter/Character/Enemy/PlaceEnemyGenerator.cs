@@ -63,7 +63,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         for (int i = 0; i < numOfRandomSpawn; i++)
         {
-            (Pos leftTop, Pos rightBottom) region = regions[numOfRandomSpawn % regions.Length];
+            (Pos leftTop, Pos rightBottom) region = regions[i % regions.Length];
 
             int x = Random.Range(region.leftTop.x, region.rightBottom.x + 1);
             int y = Random.Range(region.leftTop.y, region.rightBottom.y + 1);
