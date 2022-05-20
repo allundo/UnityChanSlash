@@ -61,6 +61,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         var regions = GetRegions(new Pos(0, 0), new Pos(map.Width - 1, map.Height - 1), division);
 
+        List<Pos> placeAlready = new List<Pos>();
         for (int i = 0; i < numOfRandomSpawn; i++)
         {
             (Pos leftTop, Pos rightBottom) region = regions[i % regions.Length];
@@ -68,9 +69,11 @@ public class PlaceEnemyGenerator : EnemyGenerator
             int x = Random.Range(region.leftTop.x, region.rightBottom.x + 1);
             int y = Random.Range(region.leftTop.y, region.rightBottom.y + 1);
 
-            var spacePos = map.GetGroundPos(new Pos(x, y));
+            var spacePos = map.GetGroundPos(new Pos(x, y), placeAlready);
 
             if (spacePos.IsNull) continue;
+
+            placeAlready.Add(spacePos);
 
             PlaceGenerator(spacePos);
         }
