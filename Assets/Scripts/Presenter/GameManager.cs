@@ -270,6 +270,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         itemGenerator.SwitchWorldMap(worldMap);
         itemGenerator.Turn(map.dir);
+        yield return new WaitForEndOfFrame();
+
+        placeEnemyGenerator.Place();
         placeEnemyGenerator.RespawnWitch();
         yield return new WaitForEndOfFrame();
     }

@@ -46,6 +46,9 @@ public class PlaceEnemyGenerator : EnemyGenerator
         respawnData = new List<RespawnData>[enemyTypesData.Length].Select(_ => new List<RespawnData>()).ToArray();
     }
 
+    /// <summary>
+    /// Places enemy generators. Must be called after preparing floor tiles on WorldMap to search space.
+    /// </summary>
     public void Place()
     {
         map.roomCenterPos.ForEach(pos => PlaceGenerator(pos));
@@ -65,11 +68,11 @@ public class PlaceEnemyGenerator : EnemyGenerator
             int x = Random.Range(region.leftTop.x, region.rightBottom.x + 1);
             int y = Random.Range(region.leftTop.y, region.rightBottom.y + 1);
 
-            Ground ground = map.GetGround(ref x, ref y);
+            var spacePos = map.GetGroundPos(new Pos(x, y));
 
-            if (ground == null) continue;
+            if (spacePos.IsNull) continue;
 
-            PlaceGenerator(map.WorldPos(x, y), ground);
+            PlaceGenerator(spacePos);
         }
     }
 
@@ -139,8 +142,6 @@ public class PlaceEnemyGenerator : EnemyGenerator
         isWitchReserved = GameManager.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.type == EnemyType.Witch).Count() == 0;
 
         restore.Clear();
-
-        Place();
     }
 
     /// <summary>

@@ -30,31 +30,15 @@ public class WorldMap
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
 
-    public Ground GetGround(ref int x, ref int y)
+    public Pos GetGroundPos(Pos targetPos)
     {
-        ITile tile = GetTile(x, y);
-
-        if (tile is Ground) return tile as Ground;
-
-        for (int j = y - 1; j < y + 1; j++)
+        for (int range = 0; range < 3; range++)
         {
-            for (int i = x - 1; i < x + 1; i++)
-            {
-                Pos pos = new Pos(i, j);
-                if (pos == stairsTop.Key || pos == stairsBottom.Key) continue;
-
-                tile = GetTile(i, j);
-
-                if (tile is Ground)
-                {
-                    x = i;
-                    y = j;
-                    return tile as Ground;
-                }
-
-            }
+            var spacePos = SearchSpaceNearBy(targetPos, range, new Pos[] { stairsTop.Key, stairsBottom.Key }.ToList());
+            if (!spacePos.IsNull) return spacePos;
         }
-        return null;
+
+        return new Pos();
     }
 
     public void ForEachTiles(Action<ITile> action)
