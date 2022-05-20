@@ -45,6 +45,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f)
         => placeEnemyGenerator.SpawnWitch(pos, dir, waitFrames);
 
+    public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
+
     public void Pause(bool isHideUIs = false)
     {
         if (isPaused) return;

@@ -94,6 +94,8 @@ public class EventManager : MobGenerator<EventInvoker>
         input.InputStop();
         input.SetInputVisible(false);
 
+        GameManager.Instance.EraseAllEnemies();
+
         input.EnqueueMessage(
             new MessageData[]
             {

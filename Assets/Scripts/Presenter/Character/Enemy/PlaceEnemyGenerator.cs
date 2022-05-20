@@ -162,6 +162,13 @@ public class PlaceEnemyGenerator : EnemyGenerator
         );
     }
 
+    public void EraseAllEnemies()
+    {
+        enemyPool.ForEach(
+            kv => kv.Value.transform?.ForEach(t => t.GetComponent<EnemyReactor>().OnOutOfView())
+        );
+    }
+
     public void DestroyAllEnemyGenerators()
     {
         generatorPool.ForEach(generator => Destroy(generator));
