@@ -19,7 +19,7 @@ public abstract class AnimationFX : MonoBehaviour
             sfx.PlayEx();
         }
 
-        public void PlayPitch(AudioSource sfx, float pitch = 1.0f)
+        public void PlayPitch(AudioSource sfx, float pitch)
         {
             sfx.SetPitch(pitch);
 
