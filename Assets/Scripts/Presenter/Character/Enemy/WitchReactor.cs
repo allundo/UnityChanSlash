@@ -42,7 +42,16 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     }
     public void OnTeleportDest() => witchEffect.TeleportDestFX();
 
-    public void Summon() => summoner.SummonMulti(8 - GameInfo.Instance.currentFloor);
+    public void Summon()
+    {
+        summoner.SummonMulti(8 - GameInfo.Instance.currentFloor);
+    }
+
+    public void OnSummonStart()
+    {
+        witchEffect.OnSummonStart();
+    }
+
     public bool IsSummoning => summoner.IsSummoning;
 
     public override void OnOutOfView()

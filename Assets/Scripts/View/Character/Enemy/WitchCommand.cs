@@ -212,6 +212,7 @@ public class WitchSummonMonster : WitchCommand
         if (witchReact.IsSummoning) return false;
 
         witchReact.Appear();
+        witchReact.OnSummonStart();
         witchAnim.magic.Fire();
         playingTween = tweenMove.DelayedCall(0.8f, witchReact.Summon).Play();
         return true;
