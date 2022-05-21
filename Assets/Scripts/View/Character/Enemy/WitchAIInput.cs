@@ -112,13 +112,16 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     }
 
     // Doesn't fall by ice
-    public override void InputIced(float duration)
+    public override ICommand InputIced(float duration)
     {
         // Delete Command queue only
         ClearAll(true);
         ICommand continuation = commander.PostponeCurrent();
-        InputCommand(new IcedCommand(target, duration));
+        ICommand iced = new IcedCommand(target, duration);
+        InputCommand(iced);
         if (continuation != null) ForceEnqueue(continuation);
+
+        return iced;
     }
 
     public void InputTeleport() => ForceEnqueue(teleport);

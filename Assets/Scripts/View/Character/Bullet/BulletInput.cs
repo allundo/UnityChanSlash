@@ -15,11 +15,12 @@ public class BulletInput : MobInput
         ValidateInput();
         Interrupt(fire);
     }
-    public override void InputDie()
+    public override ICommand InputDie()
     {
         ClearAll();
         Interrupt(die);
         DisableInput();
+        return die;
     }
     protected override ICommand GetCommand() => moveForward;
 }

@@ -70,14 +70,16 @@ public class Commander
         return false;
     }
 
-    protected void SetAndExec(ICommand cmd)
+    protected virtual void SetAndExec(ICommand cmd)
     {
         currentCommand = cmd;
-        Subscribe(cmd.Execute());
+        Subscribe(cmd);
     }
 
-    protected virtual void Subscribe(IObservable<Unit> execObservable)
+    protected virtual void Subscribe(ICommand cmd)
     {
+        IObservable<Unit> execObservable = cmd.Execute();
+
         if (execObservable == null) return;
 
         execDisposable = execObservable.Subscribe(null, () => DispatchCommand()).AddTo(targetObject);

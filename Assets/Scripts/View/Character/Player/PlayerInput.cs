@@ -64,11 +64,16 @@ public class PlayerInput : ShieldInput
 
     // Reserved ICommand input applied by other classes.
     // FIXME: need to implement game events handling system.
-    public void EnqueueDropFloor() => Interrupt(new PlayerDropFloor(playerTarget, 220f));
-    public void EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f));
-    public void EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f));
-    public void EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
-    public void InterruptMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
+    public ICommand EnqueueDropFloor() => Interrupt(new PlayerDropFloor(playerTarget, 220f));
+    public ICommand EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f, 0.99f, 0.99f));
+    public ICommand EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f, 0.99f, 0.99f));
+    public ICommand EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
+    public ICommand InterruptMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
+
+    public IObservable<ICommand> ObserveComplete(ICommand cmd)
+        => (commander as PlayerCommander).CommandComplete
+            .First(completedCommand => completedCommand == cmd)
+            .IgnoreElements();
 
     public float RemainingDuration => IsIdling ? 0f : commander.currentCommand.RemainingDuration;
 
@@ -111,16 +116,17 @@ public class PlayerInput : ShieldInput
     /// When Normal input is applied, Trigger input is invalidated.
     /// </summary>
     /// <param name="cmd">Command to input</param>
-    public override void InputCommand(ICommand cmd)
+    public override ICommand InputCommand(ICommand cmd)
     {
         bool isTriggerValid = this.isTriggerValid;
         this.isTriggerValid = false; // Disable Trigger input UI
 
-        if (!isTriggerValid || !isCommandValid || cmd == null) return;
+        if (!isTriggerValid || !isCommandValid || cmd == null) return null;
 
         isCommandValid = false;
 
         commander.EnqueueCommand(cmd);
+        return cmd;
     }
 
     /// <summary>
@@ -180,24 +186,25 @@ public class PlayerInput : ShieldInput
         if (!isVisible) InactivateUIs();
     }
 
-    public override void InputDie()
+    public override ICommand InputDie()
     {
-        base.InputDie();
         SetInputVisible(false);
+        return base.InputDie();
     }
 
-    public override void InputIced(float duration)
+    public override ICommand InputIced(float duration)
     {
         var current = commander.currentCommand;
         if (current is PlayerJump && current.RemainingTimeScale > 0.25f || current is PlayerRun)
         {
             ClearAll();
-            Interrupt(new PlayerIcedFall(playerTarget, duration, 30f));
+            ICommand iced = new PlayerIcedFall(playerTarget, duration, 30f);
+            Interrupt(iced);
             commander.EnqueueCommand(wakeUp);
-            return;
+            return iced;
         }
 
-        base.InputIced(duration);
+        return base.InputIced(duration);
     }
 
     protected override ICommand GetIcedCommand(float duration)

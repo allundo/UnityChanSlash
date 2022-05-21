@@ -7,6 +7,9 @@ public class PlayerCommander : ShieldCommander
 {
     protected PlayerAnimator anim;
 
+    protected ISubject<ICommand> commandComplete = new Subject<ICommand>();
+    public IObservable<ICommand> CommandComplete => commandComplete;
+
     public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
         anim = target.anim as PlayerAnimator;
@@ -21,14 +24,20 @@ public class PlayerCommander : ShieldCommander
         if (anim.cancel.Bool) CheckCancel(); // Cancel current cancelable Attack if newly enqueued command is Attack
     }
 
-    protected override void Subscribe(IObservable<Unit> execObservable)
+    protected override void Subscribe(ICommand cmd)
     {
+        IObservable<Unit> execObservable = cmd.Execute();
+
         if (execObservable == null) return;
 
         execDisposable = execObservable
             .Subscribe(
-                _ => CheckCancel(), // Cancel current Attack if next is also Attack on cancelation timing
-                () => DispatchCommand()
+                _ => CheckCancel(), // Cancel current Attack if next is also Attack on cancellation timing
+                () =>
+                {
+                    DispatchCommand();
+                    commandComplete.OnNext(cmd);
+                }
             )
             .AddTo(targetObject);
     }

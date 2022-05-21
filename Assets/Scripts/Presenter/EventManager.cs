@@ -12,14 +12,10 @@ public class EventManager : MobGenerator<EventInvoker>
     [SerializeField] private MessageController messageController = default;
     [SerializeField] private GameOverUI gameOverUI = default;
 
-    private EventCommandTarget target;
-
     private IPlayerMapUtil map;
     private PlayerInput input;
 
     private int currentFloor = 0;
-
-    private Commander commander;
 
     private ICommand dropFloor;
     private ICommand turnL;
@@ -32,11 +28,9 @@ public class EventManager : MobGenerator<EventInvoker>
     protected override void Awake()
     {
         base.Awake();
-        target = new EventCommandTarget(playerTarget, messageController, gameOverUI, lightManager);
-        commander = new Commander(playerTarget.gameObject);
 
-        map = target.map as IPlayerMapUtil;
-        input = target.input as PlayerInput;
+        map = playerTarget.map as IPlayerMapUtil;
+        input = playerTarget.input as PlayerInput;
 
         dropFloor = new PlayerDropFloor(playerTarget, 220f);
         turnL = new PlayerTurnL(playerTarget, 18f);
@@ -49,7 +43,7 @@ public class EventManager : MobGenerator<EventInvoker>
 
         // KeyBlade detecting
         SetEvent(5, new Pos(11, 11),
-            WitchGenerateEvent,
+            WitchGenerateEventIntro,
             // Invoke witch generating event if player has the KeyBlade or the KeyBlade is put on event tile
             target => target.itemInventory.hasKeyBlade() || target.map.OnTile.TopItem?.type == ItemType.KeyBlade || target.map.BackwardTile.TopItem?.type == ItemType.KeyBlade,
             true, Direction.south
@@ -57,21 +51,6 @@ public class EventManager : MobGenerator<EventInvoker>
 
         MoveFloor(firstFloor);
     }
-
-    private void Enqueue(ICommand cmd) => commander.EnqueueCommand(cmd);
-    private void WaitEnqueue(ICommand cmd)
-        => DOVirtual.DelayedCall(input.RemainingDuration, () => commander.EnqueueCommand(cmd), false).Play();
-
-    private void Interrupt(ICommand cmd) => commander.Interrupt(cmd);
-
-    public void EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true)
-        => Enqueue(new EventMessage(target, data, isUIVisibleOnCompleted));
-
-    public void WaitEnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true)
-        => WaitEnqueue(new EventMessage(target, data, isUIVisibleOnCompleted));
-
-    public void InterruptMessage(MessageData[] data)
-        => Interrupt(new EventMessage(target, data));
 
     public void MoveFloor(int nextFloor)
     {
@@ -89,14 +68,14 @@ public class EventManager : MobGenerator<EventInvoker>
         eventInvokers[floor - 1][pos] = eventInvoker;
     }
 
-    private void WitchGenerateEvent(IDirection witchDir)
+    private void WitchGenerateEventIntro(IDirection witchDir)
     {
         input.InputStop();
         input.SetInputVisible(false);
 
         GameManager.Instance.EraseAllEnemies();
 
-        input.EnqueueMessage(
+        ICommand message = input.EnqueueMessage(
             new MessageData[]
             {
                 new MessageData("『ちょっと待ちなよ』", FaceID.NONE),
@@ -105,13 +84,74 @@ public class EventManager : MobGenerator<EventInvoker>
             false
         );
 
-        WaitEnqueue(new WitchGenerateEvent(target, witchDir));
+        input.ObserveComplete(message)
+            .Subscribe(null, () => WitchGenerateEventMain(witchDir))
+            .AddTo(this);
+    }
+
+    private void WitchGenerateEventMain(IDirection witchDir)
+    {
+        Sequence seq = DOTween.Sequence();
+        Pos witchPos = map.GetForward;
+        float interval = 0.5f;
+
+        if (map.dir.IsInverse(witchDir))
+        {
+            seq
+                .AppendCallback(() => input.EnqueueTurnL())
+                .AppendCallback(() => input.EnqueueTurnL());
+
+            witchPos = map.GetBackward;
+
+            interval += 0.6f;
+        }
+        else if (map.dir.IsLeft(witchDir))
+        {
+            seq.AppendCallback(() => input.EnqueueTurnL());
+            witchPos = map.GetLeft;
+            interval += 0.3f;
+        }
+        else if (map.dir.IsRight(witchDir))
+        {
+            seq.AppendCallback(() => input.EnqueueTurnR());
+            witchPos = map.GetRight;
+            interval += 0.3f;
+        }
+
+        seq
+            .InsertCallback(0.5f, () => GameManager.Instance.PlaceWitch(witchPos, witchDir.Backward, 300f))
+            .Append(lightManager.DirectionalFade(1f, 0.2f, 1.0f))
+            .Join(lightManager.SpotFadeIn(map.WorldPos(witchPos) + new Vector3(0, 4f, 0), 1f, 30f, 1.0f))
+            .AppendInterval(interval)
+            .Append(lightManager.DirectionalFade(0.2f, 1f, 1.5f))
+            .Join(lightManager.SpotFadeOut(30f, 1f))
+            .AppendCallback(() => messageController.InputMessageData(
+                new MessageData[]
+                {
+                    new MessageData("『表の立て札は読まなかったのかい？』", FaceID.NONE),
+                    new MessageData("いやまあ読んだけど・・・\n誰よ？あんた", FaceID.DEFAULT),
+                    new MessageData("『私は迷宮の守護霊。その鍵は返してもらう。』", FaceID.NONE),
+                    new MessageData("こっちだってコレないと外に出られないんだけど？？", FaceID.DESPISE),
+                    new MessageData("『そっちの事情なんて知らないね。私はここの宝物を守るように命令を受けている。』", FaceID.NONE),
+                    new MessageData("『ここで逃がすわけにはいかない・・・！』", FaceID.NONE),
+                    new MessageData("ふーん・・・", FaceID.ASHAMED),
+                    new MessageData("それ、誰の命令なんだろうね？", FaceID.EYECLOSE),
+                    new MessageData("『誰・・・。誰って・・・・？』", FaceID.NONE),
+                    new MessageData("知らないんだ？", FaceID.DISATTRACT2),
+                    new MessageData("・・・まあ、私だってそっちの事情なんて知らんし", FaceID.DEFAULT),
+                    new MessageData("こんなとこ、とっととトンズラさせてもらうわ！", FaceID.ANGRY),
+                }
+            ))
+            .AppendInterval(1f)
+            .AppendCallback(() => input.SetInputVisible())
+            .SetUpdate(false)
+            .Play();
     }
 
     public void DropStartEvent()
     {
-        Interrupt(new PlayerDropFloor(playerTarget, 220f));
-        EnqueueMessage(
+        input.Interrupt(new PlayerDropFloor(playerTarget, 220f));
+        input.EnqueueMessage(
             new MessageData[]
             {
                 new MessageData("いきなりなんなのさ・・・", FaceID.DISATTRACT),
@@ -122,19 +162,19 @@ public class EventManager : MobGenerator<EventInvoker>
 
         if (map.IsExitDoorLeft)
         {
-            Enqueue(turnR);
+            input.EnqueueTurnR();
         }
         else if (map.IsExitDoorRight)
         {
-            Enqueue(turnL);
+            input.EnqueueTurnL();
         }
         else if (map.IsExitDoorBack)
         {
-            Enqueue(turnL);
-            Enqueue(turnL);
+            input.EnqueueTurnL();
+            input.EnqueueTurnL();
         }
 
-        EnqueueMessage(
+        input.EnqueueMessage(
             new MessageData[]
             {
                 new MessageData("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
@@ -147,7 +187,7 @@ public class EventManager : MobGenerator<EventInvoker>
 
     public void RestartEvent()
     {
-        InterruptMessage(
+        input.InterruptMessage(
             new MessageData[]
             {
                 new MessageData("[仮] ・・・という夢だったのさ", FaceID.SMILE),

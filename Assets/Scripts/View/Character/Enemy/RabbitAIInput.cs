@@ -139,16 +139,17 @@ public class RabbitAIInput : EnemyAIInput
         return wondering;
     }
 
-    public override void InputIced(float duration)
+    public override ICommand InputIced(float duration)
     {
         if (commander.currentCommand is RabbitAttack && commander.currentCommand.RemainingTimeScale > 0.3f)
         {
             ClearAll();
-            Interrupt(new RabbitIcedFall(target, duration, 25f));
+            ICommand iced = new RabbitIcedFall(target, duration, 25f);
+            Interrupt(iced);
             commander.EnqueueCommand(wakeUp);
-            return;
+            return iced;
         }
 
-        base.InputIced(duration);
+        return base.InputIced(duration);
     }
 }

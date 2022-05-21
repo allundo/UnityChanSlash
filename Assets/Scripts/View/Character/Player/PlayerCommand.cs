@@ -345,7 +345,8 @@ public class PlayerWakeUp : PlayerCommand
 
 public class PlayerTurnL : PlayerCommand
 {
-    public PlayerTurnL(PlayerCommandTarget target, float duration) : base(target, duration, 0.5f, 0.1f) { }
+    public PlayerTurnL(PlayerCommandTarget target, float duration, float validateTiming = 0.5f, float triggerTiming = 0.1f)
+        : base(target, duration, validateTiming, triggerTiming) { }
 
     protected override bool Action()
     {
@@ -362,7 +363,8 @@ public class PlayerTurnL : PlayerCommand
 
 public class PlayerTurnR : PlayerCommand
 {
-    public PlayerTurnR(PlayerCommandTarget target, float duration) : base(target, duration, 0.5f, 0.1f) { }
+    public PlayerTurnR(PlayerCommandTarget target, float duration, float validateTiming = 0.5f, float triggerTiming = 0.1f)
+        : base(target, duration, validateTiming, triggerTiming) { }
 
     protected override bool Action()
     {

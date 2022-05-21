@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IMobInput : IInput
 {
-    void InputIced(float duration);
+    ICommand InputIced(float duration);
     void OnIceCrash();
 }
 
@@ -24,7 +24,7 @@ public abstract class MobInput : InputHandler, IMobInput
         mobMap = map as IMobMapUtil;
     }
 
-    public virtual void InputIced(float duration)
+    public virtual ICommand InputIced(float duration)
     {
         // Delete Command queue only
         ClearAll(true);
@@ -32,12 +32,16 @@ public abstract class MobInput : InputHandler, IMobInput
         // Retrieve remaining process of current command
         ICommand continuation = commander.PostponeCurrent();
 
-        ForceEnqueue(GetIcedCommand(duration));
+        ICommand iced = GetIcedCommand(duration);
+
+        ForceEnqueue(iced);
 
         // Enqueue remaining process command after icing
         if (continuation != null) ForceEnqueue(continuation);
 
         DisableInput();
+
+        return iced;
     }
 
     public virtual void OnIceCrash()
