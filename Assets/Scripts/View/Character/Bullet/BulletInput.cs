@@ -1,4 +1,4 @@
-public class BulletInput : MobInput
+public class BulletInput : InputHandler
 {
     protected ICommand fire;
     protected ICommand moveForward;

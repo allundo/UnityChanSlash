@@ -60,7 +60,7 @@ public class CommandTarget : MonoBehaviour, ICommandTarget
     {
         anim = GetComponent<MobAnimator>();
         react = GetComponent<Reactor>();
-        input = GetComponent<MobInput>();
+        input = GetComponent<InputHandler>();
         map = GetComponent<MapUtil>();
         magic = GetComponent<Magic>();
     }
