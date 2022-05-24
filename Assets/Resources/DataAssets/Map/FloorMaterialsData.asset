@@ -15,7 +15,7 @@ MonoBehaviour:
   setParams:
   - name: "\u901A\u5E38"
     ground: {fileID: 2100000, guid: c7735e5a1d7af4e8eb0587928ea8754b, type: 2}
-    wall: {fileID: 2100000, guid: 094c835627124fe4bbbaa762d2240cb1, type: 2}
+    wall: {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
     gate: {fileID: 2100000, guid: 735530cba18284c8e910acceab873b08, type: 2}
     door: {fileID: 2100000, guid: 330a4aaf46ee4416292f67402a840440, type: 2}
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
@@ -23,7 +23,7 @@ MonoBehaviour:
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
   - name: "\u901A\u5E38"
     ground: {fileID: 2100000, guid: c7735e5a1d7af4e8eb0587928ea8754b, type: 2}
-    wall: {fileID: 2100000, guid: 094c835627124fe4bbbaa762d2240cb1, type: 2}
+    wall: {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
     gate: {fileID: 2100000, guid: 735530cba18284c8e910acceab873b08, type: 2}
     door: {fileID: 2100000, guid: 330a4aaf46ee4416292f67402a840440, type: 2}
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
@@ -47,7 +47,7 @@ MonoBehaviour:
     plateFront: {fileID: 2100000, guid: a59c89f02d20a44b1a669ef0cf8d241b, type: 2}
   - name: "\u901A\u5E38"
     ground: {fileID: 2100000, guid: c7735e5a1d7af4e8eb0587928ea8754b, type: 2}
-    wall: {fileID: 2100000, guid: 094c835627124fe4bbbaa762d2240cb1, type: 2}
+    wall: {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
     gate: {fileID: 2100000, guid: 735530cba18284c8e910acceab873b08, type: 2}
     door: {fileID: 2100000, guid: 330a4aaf46ee4416292f67402a840440, type: 2}
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}

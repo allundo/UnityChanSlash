@@ -5,6 +5,7 @@ public class ExitDoorControl : DoorControl
 {
     private LockControl lockControl = default;
     private Material materialExit;
+    private Color defaultExitColor;
 
     private Vector3 vecL;
 
@@ -20,6 +21,7 @@ public class ExitDoorControl : DoorControl
 
         materialExit = this.transform.GetChild(2).GetComponent<Renderer>().material;
         lockControl = this.transform.GetChild(3).GetComponent<LockControl>();
+        defaultExitColor = materialExit.color;
         SetDir(Direction.north);
     }
     protected override void Start()
@@ -28,10 +30,10 @@ public class ExitDoorControl : DoorControl
         handleState.LockedState.Subscribe(isLocked => Lock(isLocked)).AddTo(this);
     }
 
-    protected override void SetColorToMaterial(Color color)
+    protected override void SetAlphaToMaterial(float alpha)
     {
-        base.SetColorToMaterial(color);
-        materialExit.SetColor("_Color", color);
+        base.SetAlphaToMaterial(alpha);
+        materialExit.SetColor("_Color", new Color(defaultExitColor.r, defaultExitColor.g, defaultExitColor.b, alpha));
     }
 
     protected override Vector3 VecL => vecL;

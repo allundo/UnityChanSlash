@@ -14,6 +14,9 @@ public class DoorControl : HandleStructure
     protected Renderer doorRRenderer;
     protected Renderer doorLRenderer;
 
+    protected Color defaultGateColor;
+    protected Color defaultDoorColor;
+
     protected Tween doorMove;
 
 
@@ -38,25 +41,30 @@ public class DoorControl : HandleStructure
         this.materialGate = Util.SwitchMaterial(gateRenderer, materialGate);
         this.materialR = Util.SwitchMaterial(doorRRenderer, materialDoor);
         this.materialL = Util.SwitchMaterial(doorLRenderer, materialDoor);
+
+        this.defaultGateColor = this.materialGate.color;
+        this.defaultDoorColor = this.materialR.color;
+
         return this;
     }
 
     public void SetAlpha(float distance)
     {
         float alpha = Mathf.Clamp01(0.3f + 0.4f * distance);
-        SetColorToMaterial(new Color(1, 1, 1, alpha));
+        SetAlphaToMaterial(alpha);
     }
 
     public void ResetAlpha()
     {
-        SetColorToMaterial(new Color(1, 1, 1, 1));
+        SetAlphaToMaterial(1f);
     }
 
-    protected virtual void SetColorToMaterial(Color color)
+    protected virtual void SetAlphaToMaterial(float alpha)
     {
-        materialGate.SetColor("_Color", color);
-        materialR.SetColor("_Color", color);
-        materialL.SetColor("_Color", color);
+        materialGate.SetColor("_Color", new Color(defaultGateColor.r, defaultGateColor.g, defaultGateColor.b, alpha));
+        var doorColor = new Color(defaultDoorColor.r, defaultDoorColor.g, defaultDoorColor.b, alpha);
+        materialR.SetColor("_Color", doorColor);
+        materialL.SetColor("_Color", doorColor);
     }
 
     protected virtual Vector3 VecL => new Vector3(0, 0, -0.75f);
