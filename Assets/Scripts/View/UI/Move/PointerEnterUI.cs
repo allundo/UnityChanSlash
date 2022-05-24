@@ -1,5 +1,4 @@
 ﻿using UnityEngine.EventSystems;
-using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System;
@@ -26,17 +25,11 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-#if UNITY_EDITOR
-        // BUG: Unintended pointer enter (0,0) is detected on Unity Editor.
-        if (eventData.position == Vector2.zero) return;
-#endif
-
-        if (!isActive) return;
-        raycastMoveButton.ExecutePointerEnter(eventData);
+        if (isActive) moveButton.PressButton();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        raycastMoveButton.ExecutePointerExit(eventData);
+        moveButton.ReleaseButton();
     }
 }

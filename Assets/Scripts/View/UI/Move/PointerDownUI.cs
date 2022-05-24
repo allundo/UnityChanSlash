@@ -8,6 +8,6 @@ public class PointerDownUI : MoveUI, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        raycastMoveButton.ExecutePointerDown(eventData);
+        moveButton.ReleaseButton();
     }
 }

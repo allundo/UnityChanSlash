@@ -111,17 +111,8 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         left = FlickLeft.New(this);
     }
 
-#if UNITY_EDITOR
-    // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private InputControl ic = new InputControl();
-#endif
-
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
         isPressed.OnNext(Unit.Default);
         pressPos = eventData.position;
         UpdateImage(Vector2.zero);
@@ -129,10 +120,6 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
         Release(DragVector(eventData.position));
     }
 

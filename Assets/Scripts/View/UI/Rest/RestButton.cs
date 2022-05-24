@@ -33,17 +33,8 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
         }
     }
 
-#if UNITY_EDITOR
-    // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private InputControl ic = new InputControl();
-#endif
-
     public override void OnPointerDown(PointerEventData eventData)
     {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
         if (interactable)
         {
             base.OnPointerDown(eventData);
@@ -55,10 +46,6 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
         if (interactable)
         {
             base.OnPointerUp(eventData);

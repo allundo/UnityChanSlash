@@ -1,24 +1,9 @@
-﻿using UnityEngine.EventSystems;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UniRx;
 
-public class PointerDown : MoveButton, IPointerDownHandler
+public class PointerDown : MoveButton
 {
     public ISubject<Unit> PressSubject { get; private set; } = new Subject<Unit>();
-
-#if UNITY_EDITOR
-    // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private InputControl ic = new InputControl();
-#endif
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
-        ReleaseButton();
-    }
 
     public override void ReleaseButton()
     {

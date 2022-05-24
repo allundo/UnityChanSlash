@@ -30,13 +30,11 @@ public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!isActive) return;
-        raycastMoveButton.ExecutePointerDown(eventData);
+        if (isActive) forwardButton.PointerDown();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!isActive) return;
-        raycastMoveButton.ExecutePointerUp(eventData);
+        if (isActive) forwardButton.PointerUp();
     }
 }

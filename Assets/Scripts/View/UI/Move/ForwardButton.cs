@@ -1,9 +1,8 @@
-﻿using UnityEngine.EventSystems;
-using UnityEngine;
+﻿using UnityEngine;
 using UniRx;
 using DG.Tweening;
 
-public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandler
+public class ForwardButton : MoveButton
 {
     [SerializeField] protected Sprite dash = default;
     [SerializeField] protected float duration = 0.2f;
@@ -25,7 +24,6 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         forward = fade.sprite;
 
         dashTimer = DOTween.Sequence()
-            .AppendCallback(EnableDash)
             .AppendInterval(duration)
             .AppendCallback(DisableDash)
             .AsReusable(gameObject);
@@ -38,17 +36,8 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
 
     }
 
-#if UNITY_EDITOR
-    // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private InputControl ic = new InputControl();
-#endif
-
-    public void OnPointerDown(PointerEventData eventData)
+    public void PointerDown()
     {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
         if (!isActive) return;
 
         if (isDashValid)
@@ -59,17 +48,15 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         }
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void PointerUp()
     {
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
-
-        if (!isActive || !isDashInputActive || isWalking) return;
-        dashTimer.Restart();
+        if (!isActive || !isDashInputActive || isWalking || !isPressed.Value) return;
+        ActivateDashTimer();
     }
 
+    /// <summary>
+    /// Called by PointerEnter()
+    /// </summary>
     public override void PressButton()
     {
         if (isPressed.Value) return;
@@ -83,14 +70,19 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         walkTimer.Restart();
     }
 
+    /// <summary>
+    /// Called by PointerExit()
+    /// </summary>
     public override void ReleaseButton()
     {
-        isDash.Value = false;
-        DisableDash();
-
         if (!isPressed.Value) return;
-
         isPressed.Value = false;
+
+        if (isDash.Value)
+        {
+            isDash.Value = false;
+            DisableDash();
+        }
 
         shrink = ui.Resize(1f, 0.2f).Play();
         alphaTween = fade.ToAlpha(maxAlpha, 0.3f).Play();
@@ -108,10 +100,11 @@ public class ForwardButton : PointerEnter, IPointerDownHandler, IPointerUpHandle
         isPressed.Value = false;
     }
 
-    protected void EnableDash()
+    private void ActivateDashTimer()
     {
         fade.sprite = dash;
         isDashValid = true;
+        dashTimer.Restart();
     }
 
     protected void DisableDash()

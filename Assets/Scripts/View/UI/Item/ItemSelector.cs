@@ -85,18 +85,9 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         onDrag.OnNext(eventData.position);
     }
 
-#if UNITY_EDITOR
-    // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-    private InputControl ic = new InputControl();
-#endif
 
     public void OnPointerDown(PointerEventData eventData)
     {
-
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
         startPos = eventData.position;
         isDragOn = IsOnCircle(startPos);
 
@@ -105,12 +96,6 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerUp(PointerEventData eventData)
     {
-
-#if UNITY_EDITOR
-        // BUG: Input Action "Position[Pointer]" causes pointer event double firing on Editor.
-        if (!ic.CanFire()) return;
-#endif
-
         if (!isDragOn)
         {
             raycastHandler.RaycastPointerUp(eventData);
