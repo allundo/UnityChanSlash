@@ -467,7 +467,7 @@ public class PlayerPutItem : PlayerAction
 
     protected override bool Action()
     {
-        // Cancel if forward tile is Box and the Box isn't Open or Controlable.
+        // Cancel if forward tile is Box and the Box isn't Open or Controllable.
         Box boxTile = mobMap.ForwardTile as Box;
         if (boxTile != null && (!boxTile.IsOpen || !boxTile.IsControllable)) return false;
 
@@ -494,7 +494,7 @@ public abstract class PlayerAttack : PlayerAction
     protected Tween cancelTimer = null;
     protected float cancelStart;
 
-    public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration)
+    public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
     {
         jab = target.Attack(0);
         straight = target.Attack(1);
