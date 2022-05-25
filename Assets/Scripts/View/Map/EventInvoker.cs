@@ -25,8 +25,6 @@ public class EventInvoker : SpawnObject<EventInvoker>
         col.enabled = true;
     }
 
-    public void Disable() => col.enabled = false;
-
     public void OnTriggerEnter(Collider other)
     {
         var target = other.GetComponent<PlayerCommandTarget>();
