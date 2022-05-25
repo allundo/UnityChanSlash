@@ -64,13 +64,11 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Activate()
     {
-        cover.FadeOut(0.01f).Play();
+        cover.FadeOut(0.01f).OnComplete(ShowUIs).Play();
         GameManager.Instance.TimeScale();
 
         healSubject.OnNext(0f);
         healTween.Restart();
-
-        ShowUIs();
 
         isActive = true;
     }
