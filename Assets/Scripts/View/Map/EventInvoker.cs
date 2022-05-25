@@ -11,17 +11,21 @@ public class EventInvoker : SpawnObject<EventInvoker>
     private Collider col;
     private bool isOneShot = true;
     private Func<PlayerCommandTarget, bool> IsEventValid;
+    private Pos pos;
 
     void Awake()
     {
         col = GetComponent<Collider>();
-        SetEnabled(false);
+        col.enabled = false;
     }
 
-    public void SetEnabled(bool isEnabled = true)
+    public void Enable(WorldMap map)
     {
-        col.enabled = isEnabled;
+        transform.position = map.WorldPos(pos);
+        col.enabled = true;
     }
+
+    public void Disable() => col.enabled = false;
 
     public void OnTriggerEnter(Collider other)
     {
@@ -42,7 +46,7 @@ public class EventInvoker : SpawnObject<EventInvoker>
 
     public override void Activate()
     {
-        SetEnabled(false);
+        col.enabled = false;
         gameObject.SetActive(true);
     }
 
@@ -52,8 +56,9 @@ public class EventInvoker : SpawnObject<EventInvoker>
         gameObject.SetActive(false);
     }
 
-    public EventInvoker Init(Func<PlayerCommandTarget, bool> IsEventValid, bool isOneShot = true)
+    public EventInvoker Init(Pos pos, Func<PlayerCommandTarget, bool> IsEventValid, bool isOneShot = true)
     {
+        this.pos = pos;
         this.IsEventValid = IsEventValid;
         this.isOneShot = isOneShot;
         return this;

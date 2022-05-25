@@ -91,7 +91,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void Start()
     {
-        eventManager.EventInit(GameInfo.Instance.currentFloor);
+        eventManager.EventInit(worldMap);
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
     }
 
@@ -234,7 +234,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
         bulletGeneratorLoader.DestroyAll();
 
-        eventManager.MoveFloor(GameInfo.Instance.currentFloor);
+        eventManager.SwitchWorldMap(worldMap);
 
         yield return new WaitForEndOfFrame();
 

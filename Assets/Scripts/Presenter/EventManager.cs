@@ -21,7 +21,7 @@ public class EventManager : MobGenerator<EventInvoker>
 
     private Dictionary<Pos, EventInvoker>[] eventInvokers;
 
-    public virtual EventInvoker Spawn(Vector3 pos, Func<PlayerCommandTarget, bool> IsEventValid, bool isOneShot = true) => Spawn(pos).Init(IsEventValid, isOneShot);
+    public virtual EventInvoker Spawn(Pos pos, Func<PlayerCommandTarget, bool> IsEventValid, bool isOneShot = true) => Spawn().Init(pos, IsEventValid, isOneShot);
 
     protected override void Awake()
     {
@@ -35,7 +35,7 @@ public class EventManager : MobGenerator<EventInvoker>
         turnR = new PlayerTurnR(playerTarget, 18f);
     }
 
-    public void EventInit(int firstFloor)
+    public void EventInit(WorldMap map)
     {
         eventInvokers = new Dictionary<Pos, EventInvoker>[GameInfo.Instance.LastFloor].Select(_ => new Dictionary<Pos, EventInvoker>()).ToArray();
 
@@ -47,19 +47,19 @@ public class EventManager : MobGenerator<EventInvoker>
             true, Direction.south
         );
 
-        MoveFloor(firstFloor);
+        SwitchWorldMap(map);
     }
 
-    public void MoveFloor(int nextFloor)
+    public void SwitchWorldMap(WorldMap map)
     {
-        eventInvokers[nextFloor - 1].ForEach(kv => kv.Value.SetEnabled(true));
-        if (currentFloor > 0) eventInvokers[currentFloor - 1].ForEach(kv => kv.Value.SetEnabled(false));
-        currentFloor = nextFloor;
+        eventInvokers[map.floor - 1].ForEach(kv => kv.Value.Enable(map));
+        if (currentFloor > 0) eventInvokers[currentFloor - 1].ForEach(kv => kv.Value.Enable(map));
+        currentFloor = map.floor;
     }
 
     private void SetEvent(int floor, Pos pos, Action<IDirection> eventAct, Func<PlayerCommandTarget, bool> isEventValid, bool isOneShot = true, IDirection dir = null)
     {
-        var eventInvoker = Spawn(map.WorldPos(pos), isEventValid, isOneShot);
+        var eventInvoker = Spawn(pos, isEventValid, isOneShot);
 
         eventInvoker.DetectPlayer.Subscribe(_ => eventAct(dir), () => eventInvokers[floor - 1].Remove(pos)).AddTo(playerTarget.gameObject);
 
