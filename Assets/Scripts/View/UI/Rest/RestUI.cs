@@ -20,7 +20,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Tween damageTween;
     private Tween cancelValidTween;
 
-    private float healPoint = 0.0f;
+    private float healPoint = 0.005f;
 
     private ISubject<float> healSubject = new Subject<float>();
     public IObservable<float> Heal => healSubject;
@@ -37,9 +37,9 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         fade = new FadeTween(image);
 
         healTween = DOTween.Sequence()
-            .AppendCallback(() => healPoint += 0.0001f)
+            .AppendCallback(() => healPoint += 0.0005f)
             .AppendCallback(() => healSubject.OnNext(healPoint))
-            .AppendInterval(0.05f)
+            .AppendInterval(0.1f) // 6frames
             .SetLoops(-1, LoopType.Restart)
             .SetUpdate(true)
             .AsReusable(gameObject);
@@ -88,7 +88,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         GameManager.Instance.TimeScale(1f);
         cover.FadeIn(0.01f).Play();
 
-        healPoint = 0f;
+        healPoint = 0.005f;
         healTween.Pause();
 
         HideUIs();
