@@ -9,8 +9,6 @@ public class EventManager : MobGenerator<EventInvoker>
 {
     [SerializeField] private PlayerCommandTarget playerTarget = default;
     [SerializeField] private LightManager lightManager = default;
-    [SerializeField] private MessageController messageController = default;
-    [SerializeField] private GameOverUI gameOverUI = default;
 
     private IPlayerMapUtil map;
     private PlayerInput input;
@@ -125,7 +123,7 @@ public class EventManager : MobGenerator<EventInvoker>
             .AppendInterval(interval)
             .Append(lightManager.DirectionalFade(0.2f, 1f, 1.5f))
             .Join(lightManager.SpotFadeOut(30f, 1f))
-            .AppendCallback(() => messageController.InputMessageData(
+            .AppendCallback(() => input.EnqueueMessage(
                 new MessageData[]
                 {
                     new MessageData("『表の立て札は読まなかったのかい？』", FaceID.NONE),
@@ -142,8 +140,6 @@ public class EventManager : MobGenerator<EventInvoker>
                     new MessageData("こんなとこ、とっととトンズラさせてもらうわ！", FaceID.ANGRY),
                 }
             ))
-            .AppendInterval(1f)
-            .AppendCallback(() => input.SetInputVisible())
             .SetUpdate(false)
             .Play();
     }
