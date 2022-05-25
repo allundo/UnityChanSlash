@@ -8,6 +8,7 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private MiniMap miniMap = default;
     [SerializeField] private RectTransform rtItemList = default;
     [SerializeField] private RestButton restButton = default;
+    [SerializeField] private ResumeButton resumeButton = default;
     [SerializeField] private float portraitFromBottom = 720f;
     [SerializeField] private float landscapeFromLeft = 480f;
     [SerializeField] private float lifeGaugeFromBottom = 60f;
@@ -45,6 +46,7 @@ public class UIPosition : MonoBehaviour
 
         miniMap.ResetOrientation(orientation);
         restButton.ResetOrientation(orientation);
+        resumeButton.ResetOrientation(orientation);
         fightCircle.ResetCenterPos();
     }
 }

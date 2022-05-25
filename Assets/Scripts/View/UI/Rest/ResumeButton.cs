@@ -18,10 +18,13 @@ public class ResumeButton : FadeEnable, IPointerDownHandler
         ui = new UITween(gameObject);
 
         ui.SetSize(guardRegion.sizeDelta * 1.25f, true);
-        ui.SetScreenPos(new Vector2(Screen.width * 0.5f, guardRegion.position.y));
+
 
         Inactivate();
     }
+
+    public void ResetOrientation(DeviceOrientation orientation)
+        => ui.SetScreenPos(new Vector2(Screen.width * 0.5f, guardRegion.position.y));
 
     public void OnPointerDown(PointerEventData eventData) => onPush.Invoke();
 

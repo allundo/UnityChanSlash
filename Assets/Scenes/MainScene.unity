@@ -53041,6 +53041,7 @@ MonoBehaviour:
   miniMap: {fileID: 8337679454959986929}
   rtItemList: {fileID: 528637048}
   restButton: {fileID: 314247949}
+  resumeButton: {fileID: 1057805256}
   portraitFromBottom: 720
   landscapeFromLeft: 480
   lifeGaugeFromBottom: 60
