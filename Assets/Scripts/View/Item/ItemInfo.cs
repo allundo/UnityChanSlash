@@ -54,26 +54,28 @@ public class ItemInfo : ICloneable
     public object Clone(int numOfItem)
         => new ItemInfo(itemSource, type, itemAction, numOfItem);
 
-    protected virtual void FXStart(Vector3 position)
+    protected virtual void FXStart(Transform user)
     {
         if (itemSource.sfx != null)
         {
             if (sfx == null) sfx = Util.Instantiate(itemSource.sfx);
-            sfx.transform.position = position;
+            sfx.transform.position = user.position;
+            sfx.transform.SetParent(user);
             sfx.PlayEx();
         }
 
         if (itemSource.vfx != null)
         {
             if (vfx == null) vfx = Util.Instantiate(itemSource.vfx);
-            vfx.transform.position = position;
+            vfx.transform.position = user.position;
+            vfx.transform.SetParent(user);
             vfx?.Play();
         }
     }
 
     public virtual Tween EffectSequence(PlayerCommandTarget target)
     {
-        return ItemUse(target) ? DOTweenTimer(0f, () => FXStart(target.react.position)) : null;
+        return ItemUse(target) ? DOTweenTimer(0f, () => FXStart(target.transform)) : null;
     }
 
     protected bool ItemUse(PlayerCommandTarget target)
