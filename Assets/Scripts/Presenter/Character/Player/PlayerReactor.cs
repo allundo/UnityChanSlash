@@ -38,6 +38,9 @@ public class PlayerReactor : MobReactor
 
         restUI.Heal.Subscribe(point => HealRatio(point, false)).AddTo(this);
 
+        // Initialize life text and gauge
+        restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
+
         lifeGauge.UpdateLife(status.Life.Value, status.LifeMax.Value, false);
     }
 
