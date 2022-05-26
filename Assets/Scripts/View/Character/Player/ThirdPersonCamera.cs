@@ -73,7 +73,10 @@ public class ThirdPersonCamera : MonoBehaviour
 
         cam.rect = sideCamera.rect = viewPortRect;
         renderTexture?.Release();
-        renderTexture = new RenderTexture(Screen.width, Screen.height, 16);
+
+        // Enable stencil by setting depth = 24
+        renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+
         crossFade.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         crossFade.texture = renderTexture;
 
