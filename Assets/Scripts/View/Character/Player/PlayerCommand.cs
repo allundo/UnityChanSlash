@@ -77,10 +77,10 @@ public abstract class PlayerMove : PlayerCommand
             return false;
         }
 
-        playingTween = tweenMove.Linear(GetDest).OnComplete(hidePlateHandler.Move).Play();
+        playingTween = tweenMove.Linear(GetDest);
 
         SetSpeed();
-        completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
+        completeTween = tweenMove.FinallyCall(ResetSpeed).OnComplete(hidePlateHandler.Move).Play();
 
         return true;
     }
@@ -154,12 +154,16 @@ public class PlayerStartRunning : PlayerRun
         var dest = mobMap.DestVec;                     // Remaining vector to front tile
         var timeScale = dest.magnitude / TILE_UNIT; // Remaining distance rate
 
-        playingTween = tweenMove.Linear(mobMap.CurrentVec3Pos + dest, timeScale, hidePlateHandler.Move);
+        playingTween = tweenMove.Linear(mobMap.CurrentVec3Pos + dest, timeScale);
 
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
         completeTween = DOTween.Sequence()
             .Append(ToSpeed(TILE_UNIT / duration, 0.25f))
-            .InsertCallback(duration * timeScale, () => playerAnim.speed.Float = 0f)
+            .InsertCallback(duration * timeScale, () =>
+            {
+                playerAnim.speed.Float = 0f;
+                hidePlateHandler.Move();
+            })
             .Play();
 
         target.input.Interrupt(run, false);
@@ -180,10 +184,13 @@ public class PlayerRun : PlayerDash
     {
         if (mobMap.IsForwardMovable)
         {
-            playingTween = tweenMove.Linear(mobMap.GetForward, 1f, hidePlateHandler.Move);
+            playingTween = tweenMove.Linear(mobMap.GetForward, 1f);
 
             playerAnim.speed.Float = TILE_UNIT / duration;
-            completeTween = tweenMove.FinallyCall(() => playerAnim.speed.Float = 0).Play();
+            completeTween = tweenMove
+                .FinallyCall(() => playerAnim.speed.Float = 0)
+                .OnComplete(hidePlateHandler.Move)
+                .Play();
 
             target.input.Interrupt(this, false);
 
@@ -211,7 +218,7 @@ public class PlayerBrake : PlayerDash
 
         if (startCallback != null) seq.AppendCallback(startCallback);
 
-        return seq.Append(ToSpeed(0f, timeScale)).Play();
+        return seq.Append(ToSpeed(0f, timeScale)).OnComplete(hidePlateHandler.Move).Play();
     }
 }
 
@@ -228,7 +235,7 @@ public class PlayerBrakeStop : PlayerBrake
 
         if (mobMap.IsForwardMovable)
         {
-            playingTween = tweenMove.Brake(mobMap.GetForward, 0.75f, hidePlateHandler.Move);
+            playingTween = tweenMove.Brake(mobMap.GetForward, 0.75f);
             validateTween = ValidateTween().Play();
             completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, 0.3f);
 
@@ -313,6 +320,7 @@ public class PlayerIcedFall : PlayerCommand
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.Jump(mobMap.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
             .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash))
+            .AppendCallback(hidePlateHandler.Move)
             .SetUpdate(false)
             .Play();
 
