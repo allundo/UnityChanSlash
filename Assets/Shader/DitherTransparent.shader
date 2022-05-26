@@ -30,7 +30,7 @@
         void surf (Input IN, inout SurfaceOutput o)
         {
             DitherClipping(IN.screenPos, _Color.a);
-            o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb;
+            o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb * _Color.rgb;
         }
 
         ENDCG
