@@ -2,6 +2,11 @@
 
 public class WitchDoubleEffect : BulletEffect
 {
+    protected override void Awake()
+    {
+        bulletMatEffect = new MatColorEffect(meshTf);
+    }
+
     public void OnAttackStart()
     {
         emitVfx?.Play();

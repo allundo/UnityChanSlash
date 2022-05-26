@@ -15,7 +15,7 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
     [SerializeField] protected float cycle = 0f;
     [SerializeField] protected Color blinkColor = default;
 
-    protected BulletMatEffect bulletMatEffect = null;
+    protected MatColorEffect bulletMatEffect = null;
 
     protected virtual void Awake()
     {
