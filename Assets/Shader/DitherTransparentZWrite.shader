@@ -12,8 +12,8 @@
         LOD 100
 
         Pass{
-  	        ZWrite ON
-  	        ColorMask 0
+            ZWrite ON
+            ColorMask 0
         }
 
         CGPROGRAM

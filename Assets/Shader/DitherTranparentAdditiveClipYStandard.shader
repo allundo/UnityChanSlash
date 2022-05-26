@@ -89,12 +89,12 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #define _DITHER_ALPHA
             #define _ADDITIVE_COLOR
             #define _CLIP_Y
-            #pragma shader_feature _EMISSION
+            #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _DETAIL_MULX2
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local _GLOSSYREFLECTIONS_OFF
+            #pragma shader_feature_local_fragment _DETAIL_MULX2
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
+            #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
             #pragma shader_feature_local _PARALLAXMAP
 
             #pragma multi_compile_fwdbase
@@ -131,9 +131,9 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #define _DITHER_ALPHA
             #define _ADDITIVE_COLOR
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local _DETAIL_MULX2
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
+            #pragma shader_feature_local_fragment _DETAIL_MULX2
             #pragma shader_feature_local _PARALLAXMAP
 
             #pragma multi_compile_fwdadd_fullshadows
@@ -156,13 +156,19 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             ZWrite On ZTest LEqual
 
             CGPROGRAM
-            #pragma target 2.0
+            #pragma target 3.0
+
+            // -------------------------------------
+
 
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma skip_variants SHADOWS_SOFT
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local _PARALLAXMAP
             #pragma multi_compile_shadowcaster
+            #pragma multi_compile_instancing
+            // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
+            //#pragma multi_compile _ LOD_FADE_CROSSFADE
 
             #pragma vertex vertShadowCaster
             #pragma fragment fragShadowCaster
@@ -190,11 +196,11 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #define _DITHER_ALPHA
             #define _ADDITIVE_COLOR
             #define _CLIP_Y
-            #pragma shader_feature _EMISSION
+            #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local _DETAIL_MULX2
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
+            #pragma shader_feature_local_fragment _DETAIL_MULX2
             #pragma shader_feature_local _PARALLAXMAP
 
             #pragma multi_compile_prepassfinal
@@ -224,10 +230,10 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #pragma vertex vert_meta
             #pragma fragment frag_meta
 
-            #pragma shader_feature _EMISSION
+            #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _DETAIL_MULX2
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _DETAIL_MULX2
             #pragma shader_feature EDITOR_VISUALIZATION
 
             #include "UnityStandardMeta.cginc"
@@ -239,12 +245,6 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
     {
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 150
-
-        Stencil
-        {
-            Ref 1 // Hole flag
-            Comp NotEqual
-        }
 
         // ------------------------------------------------------------------
         //  Base forward pass (directional light, emission, lightmaps, ...)
@@ -264,11 +264,11 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #define _DITHER_ALPHA
             #define _ADDITIVE_COLOR
             #define _CLIP_Y
-            #pragma shader_feature _EMISSION
+            #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local _GLOSSYREFLECTIONS_OFF
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
+            #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
             // SM2.0: NOT SUPPORTED shader_feature_local _DETAIL_MULX2
             // SM2.0: NOT SUPPORTED shader_feature_local _PARALLAXMAP
 
@@ -303,9 +303,9 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #define _ADDITIVE_COLOR
             #define _CLIP_Y
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local _DETAIL_MULX2
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
+            #pragma shader_feature_local_fragment _DETAIL_MULX2
             // SM2.0: NOT SUPPORTED shader_feature_local _PARALLAXMAP
             #pragma skip_variants SHADOWS_SOFT
 
@@ -331,7 +331,7 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
 
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
             #pragma skip_variants SHADOWS_SOFT
             #pragma multi_compile_shadowcaster
 
@@ -357,10 +357,10 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
             #pragma vertex vert_meta
             #pragma fragment frag_meta
 
-            #pragma shader_feature _EMISSION
+            #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local _DETAIL_MULX2
+            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+            #pragma shader_feature_local_fragment _DETAIL_MULX2
             #pragma shader_feature EDITOR_VISUALIZATION
 
             #include "UnityStandardMeta.cginc"

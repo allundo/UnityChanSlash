@@ -254,40 +254,47 @@ inline FragmentCommonData MetallicSetup (float4 i_tex)
     return o;
 }
 
-inline FragmentCommonData FragmentSetupSub (inout float4 i_tex, float3 i_eyeVec, float4 tangentToWorld[3], float3 i_posWorld)
-{
-    FragmentCommonData o = UNITY_SETUP_BRDF_INPUT (i_tex);
-    o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld);
-    o.eyeVec = NormalizePerPixelNormal(i_eyeVec);
-    o.posWorld = i_posWorld;
-
-    // NOTE: shader relies on pre-multiply alpha-blend (_SrcBlend = One, _DstBlend = OneMinusSrcAlpha)
-    o.diffColor = PreMultiplyAlpha (o.diffColor, Alpha(i_tex.xy), o.oneMinusReflectivity, /*out*/ o.alpha);
-    return o;
-}
-
 // parallax transformed texcoord is used to sample occlusion
 #ifdef _DITHER_ALPHA
 inline FragmentCommonData FragmentSetup (inout float4 i_tex, float3 i_eyeVec, half3 i_viewDirForParallax, float4 tangentToWorld[3], float3 i_posWorld, float4 i_screenPos)
 {
     i_tex = Parallax(i_tex, i_viewDirForParallax);
 
+    half alpha = Alpha(i_tex.xy);
+
     #ifdef _ALPHATEST_ON
-        clip (DitherCutoff(Alpha(i_tex.xy), i_screenPos));
+        clip (DitherCutoff(alpha, i_screenPos));
+
     #endif
 
-    return FragmentSetupSub(i_tex, i_eyeVec, tangentToWorld, i_posWorld);
+    FragmentCommonData o = UNITY_SETUP_BRDF_INPUT (i_tex);
+    o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld);
+    o.eyeVec = NormalizePerPixelNormal(i_eyeVec);
+    o.posWorld = i_posWorld;
+
+    // NOTE: shader relies on pre-multiply alpha-blend (_SrcBlend = One, _DstBlend = OneMinusSrcAlpha)
+    o.diffColor = PreMultiplyAlpha (o.diffColor, alpha, o.oneMinusReflectivity, /*out*/ o.alpha);
+    return o;
 }
 #else
 inline FragmentCommonData FragmentSetup (inout float4 i_tex, float3 i_eyeVec, half3 i_viewDirForParallax, float4 tangentToWorld[3], float3 i_posWorld)
 {
     i_tex = Parallax(i_tex, i_viewDirForParallax);
 
+    half alpha = Alpha(i_tex.xy);
+
     #ifdef _ALPHATEST_ON
-        clip (Alpha(i_tex.xy) - _Cutoff);
+        clip (alpha - _Cutoff);
     #endif
 
-    return FragmentSetupSub(i_tex, i_eyeVec, tangentToWorld, i_posWorld);
+    FragmentCommonData o = UNITY_SETUP_BRDF_INPUT (i_tex);
+    o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld);
+    o.eyeVec = NormalizePerPixelNormal(i_eyeVec);
+    o.posWorld = i_posWorld;
+
+    // NOTE: shader relies on pre-multiply alpha-blend (_SrcBlend = One, _DstBlend = OneMinusSrcAlpha)
+    o.diffColor = PreMultiplyAlpha (o.diffColor, alpha, o.oneMinusReflectivity, /*out*/ o.alpha);
+    return o;
 }
 #endif
 
