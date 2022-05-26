@@ -50,6 +50,7 @@ public class ItemIconHandler : IItemIconHandler
 
     protected ItemIndexHandler itemIndex;
     protected ItemSelector selector;
+    protected IDisposable cancelSelect = null;
 
     public IObservable<ItemIcon> OnPutItem => dragMode.onPutItem.DistinctUntilChanged();
     public IObservable<ItemIcon> OnPutApply => putMode.onPutApply;
@@ -135,6 +136,11 @@ public class ItemIconHandler : IItemIconHandler
 
             if (handler.currentSelected == null) return this;
 
+            handler.cancelSelect?.Dispose();
+
+            // Disable selector when selected item is empty.
+            handler.cancelSelect = handler.currentSelected.OnItemEmpty.Subscribe(_ => selector.Disable()).AddTo(selector);
+
             selector.SetRaycast(true);
             return handler.selectMode;
         }
@@ -149,6 +155,7 @@ public class ItemIconHandler : IItemIconHandler
 
             selector.SetRaycast(false);
             selector.Disable();
+            handler.cancelSelect?.Dispose();
 
             return handler.normalMode;
         }
@@ -173,6 +180,7 @@ public class ItemIconHandler : IItemIconHandler
 
                 handler.currentSelected.Resize(1f, 0.2f).Play();
                 handler.currentSelected = null;
+                handler.cancelSelect?.Dispose();
 
                 handler.Play(currentTarget.Resize(1.5f, 0.2f));
                 handler.pressedIndex = index;
