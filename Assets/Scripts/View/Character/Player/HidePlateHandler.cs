@@ -11,7 +11,7 @@ public class HidePlateHandler : MonoBehaviour
     [SerializeField] private HidePlatePool hidePlatePool = default;
 
     /// <summary>
-    /// Turn PlayerSymbol direction with player's turn and update discovered area when calcurating visible area.
+    /// Turn PlayerSymbol direction with player's turn and update discovered area when calculating visible area.
     /// </summary>
     [SerializeField] private MiniMapHandler miniMap = default;
 
@@ -46,12 +46,12 @@ public class HidePlateHandler : MonoBehaviour
     protected const int REAR = 3;
 
     /// <summary>
-    /// Previous player position for calcurate moved direction and distance.
+    /// Previous player position for calculate moved direction and distance.
     /// </summary>
     private Pos prevPos = new Pos();
 
     /// <summary>
-    /// Calcurate current player's map tile position
+    /// Calculate current player's map tile position
     /// </summary>
     private Pos CurrentPos => map.MapPos(transform.position);
 
