@@ -52,7 +52,15 @@ public class TitleSceneMediator : SceneMediator
 
     private void DebugStart(int floor)
     {
-        GameInfo.Instance.CreateDebugMap();
+        if (floor == 2)
+        {
+            GameInfo.Instance.CreateDebugMap();
+        }
+        else
+        {
+            GameInfo.Instance.ClearMaps();
+        }
+
         GameInfo.Instance.currentFloor = floor;
 
         disposable.Dispose();
