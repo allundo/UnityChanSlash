@@ -175,7 +175,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     public void DestroyAllEnemyGenerators()
     {
-        generatorPool.ForEach(generator => Destroy(generator));
+        generatorPool.ForEach(generator => generator.Destroy());
         generatorPool.Clear();
     }
 

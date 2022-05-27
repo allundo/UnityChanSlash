@@ -17,6 +17,11 @@ public class EnemyAutoGenerator : EnemyGenerator
         detectCharacter = GetComponent<Collider>();
     }
 
+    protected virtual void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public IStatus Spawn(IDirection dir = null, float life = 0f)
         => base.Spawn(param, spawnPoint, dir, life);
 
@@ -57,6 +62,8 @@ public class EnemyAutoGenerator : EnemyGenerator
 
     public void Activate()
     {
+        if (gameObject.activeSelf) return;
+
         gameObject.SetActive(true);
         detectCharacter.enabled = false;
         spawnLoop = StartCoroutine(SpawnLoop());
@@ -64,6 +71,8 @@ public class EnemyAutoGenerator : EnemyGenerator
 
     public void Inactivate()
     {
+        if (!gameObject.activeSelf) return;
+
         StopCoroutine(spawnLoop);
         StopSearchCharacter();
         gameObject.SetActive(false);
@@ -72,6 +81,6 @@ public class EnemyAutoGenerator : EnemyGenerator
     private void StopSearchCharacter()
     {
         detectCharacter.enabled = false;
-        StopCoroutine(searchCharacter);
+        if (searchCharacter != null) StopCoroutine(searchCharacter);
     }
 }

@@ -12,11 +12,6 @@ public class EnemySpawnPoint : MonoBehaviour
         detectPlayer = GetComponent<Collider>();
     }
 
-    void Start()
-    {
-        enemyAutoGenerator.gameObject.SetActive(false);
-    }
-
     public EnemySpawnPoint Init(GameObject enemyPool, ITile tile, MobParam param)
     {
         enemyAutoGenerator.Init(enemyPool, tile, param);
@@ -39,5 +34,11 @@ public class EnemySpawnPoint : MonoBehaviour
         {
             enemyAutoGenerator.Inactivate();
         }
+    }
+
+    public void Destroy()
+    {
+        enemyAutoGenerator.Inactivate();
+        Destroy(gameObject);
     }
 }
