@@ -11,6 +11,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private ItemGenerator itemGenerator = default;
     [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
+    [SerializeField] private WitchLightGenerator lightGenerator = default;
     [SerializeField] private EventManager eventManager = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private UIPosition uiPosition = default;
@@ -35,6 +36,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     private ISubject<Unit> exitSubject = new Subject<Unit>();
 
     public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
+
+    public void SpawnLight(Vector3 pos) => lightGenerator.Spawn(pos);
+    public void DistributeLight(Vector3 pos, float range) => lightGenerator.Spawn(pos + UnityEngine.Random.insideUnitSphere * range);
 
     public IEnemyStatus PlaceEnemy(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
         => placeEnemyGenerator.ManualSpawn(type, pos, dir, option, life);
@@ -233,6 +237,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
         bulletGeneratorLoader.DestroyAll();
+
+        lightGenerator.DestroyAll();
 
         eventManager.SwitchWorldMap(worldMap);
 

@@ -26,6 +26,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     public void OnResurrection()
     {
         status.ResetStatus();
+        witchEffect.OnResurrection();
         bodyCollider.enabled = true;
     }
     public void OnSleep()
