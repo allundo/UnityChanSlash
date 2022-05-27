@@ -7,7 +7,7 @@ public interface IInput
     bool IsFightValid { get; }
     ICommand InputCommand(ICommand cmd);
     ICommand ForceEnqueue(ICommand cmd);
-    ICommand Interrupt(ICommand cmd, bool isCancel = true);
+    ICommand Interrupt(ICommand cmd, bool isCancel = true, bool isQueueClear = false);
     ICommand InputDie();
     void ValidateInput(bool isTriggerOnly = false);
     void DisableInput(bool isTriggerOnly = false);
@@ -102,10 +102,10 @@ public abstract class InputHandler : MonoBehaviour, IInput
     /// <summary>
     /// Execute command immediately without queuing
     /// </summary>
-    public ICommand Interrupt(ICommand cmd, bool isCancel = true)
+    public ICommand Interrupt(ICommand cmd, bool isCancel = true, bool isQueueClear = false)
     {
         DisableInput();
-        commander.Interrupt(cmd, isCancel);
+        commander.Interrupt(cmd, isCancel, isQueueClear);
         return cmd;
     }
 

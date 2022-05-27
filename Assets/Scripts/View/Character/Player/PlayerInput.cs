@@ -505,8 +505,14 @@ public class PlayerInput : ShieldInput
 
     public void InputStop()
     {
-        if (commander.currentCommand is PlayerRun) Interrupt(new PlayerBrakeStop(playerTarget, 48f));
-        commander.ClearAll(true);
+        if (commander.currentCommand is PlayerRun)
+        {
+            Interrupt(new PlayerBrakeStop(playerTarget, 48f), false, true);
+        }
+        else
+        {
+            commander.ClearAll(true);
+        }
     }
 
     public class PlayerGuardState : GuardState

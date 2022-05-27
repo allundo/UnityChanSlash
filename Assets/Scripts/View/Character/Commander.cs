@@ -90,8 +90,11 @@ public class Commander
     /// </summary>
     /// <param name="cmd">New Command to execute as interruption</param>
     /// <param name="isCancel">Cancels current executing command if TRUE</param>
-    public void Interrupt(ICommand cmd, bool isCancel = true)
+    /// <param name="isQueueClear">Clear Command queued after interruption if TRUE</param>
+    public void Interrupt(ICommand cmd, bool isCancel = true, bool isQueueClear = false)
     {
+        if (isQueueClear) cmdQueue.Clear();
+
         InsertQueue(cmd);
 
         if (IsIdling)
