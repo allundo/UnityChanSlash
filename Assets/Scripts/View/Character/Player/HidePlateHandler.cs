@@ -344,7 +344,7 @@ public class HidePlateHandler : MonoBehaviour
         }
 
         public void ClearRangeImmediately(Pos playerPos)
-            => ClearRange(playerPos, plate => plate?.Inactivate());
+            => ClearRange(playerPos, plate => plate?.RemoveImmediately());
 
         private void RedrawXShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 1, 0);
         private void RedrawYShrink(Pos playerPos, Plate[,] plateMap) => RedrawRange(playerPos, plateMap, 0, 1);

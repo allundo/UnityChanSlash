@@ -41,7 +41,7 @@ public class FadeMaterialColor : FadeTween
 
     public void SetMaterial(Material material)
     {
-        KillTweens();
+        CompleteTweens(); // Complete fade tweens before switching material
         this.material = material;
     }
 }

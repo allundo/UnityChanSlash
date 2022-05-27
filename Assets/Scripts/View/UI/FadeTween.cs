@@ -60,6 +60,12 @@ public class FadeTween
         fadeOut?.Kill();
     }
 
+    public void CompleteTweens()
+    {
+        fadeIn?.Complete(true);
+        fadeOut?.Complete(true);
+    }
+
     public void SetAlpha(float alpha, bool isScaledByMaxAlpha = true)
     {
         color = new Color(color.r, color.g, color.b, isScaledByMaxAlpha ? alpha * maxAlpha : alpha);
