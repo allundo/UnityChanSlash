@@ -60,6 +60,7 @@ namespace UnityEditor
         MaterialProperty albedoMap = null;
         MaterialProperty albedoColor = null;
         MaterialProperty additiveColor = null;
+        MaterialProperty alphaCutoff = null;
         MaterialProperty specularMap = null;
         MaterialProperty specularColor = null;
         MaterialProperty metallicMap = null;
@@ -86,7 +87,10 @@ namespace UnityEditor
         MaterialEditor m_MaterialEditor;
         WorkflowMode m_WorkflowMode = WorkflowMode.Specular;
 
-        bool m_FirstTimeApply = true;
+        static int _SpecGlossMap = Shader.PropertyToID("_SpecGlossMap");
+        static int _SpecColor = Shader.PropertyToID("_SpecColor");
+        static int _MetallicGlossMap = Shader.PropertyToID("_MetallicGlossMap");
+        static int _Metallic = Shader.PropertyToID("_Metallic");
 
         public void FindProperties(MaterialProperty[] props)
         {
@@ -94,6 +98,7 @@ namespace UnityEditor
             albedoMap = FindProperty("_MainTex", props);
             albedoColor = FindProperty("_Color", props);
             additiveColor = FindProperty("_AdditiveColor", props);
+            alphaCutoff = FindProperty("_Cutoff", props);
             specularMap = FindProperty("_SpecGlossMap", props, false);
             specularColor = FindProperty("_SpecColor", props, false);
             metallicMap = FindProperty("_MetallicGlossMap", props, false);
@@ -130,15 +135,6 @@ namespace UnityEditor
             m_MaterialEditor = materialEditor;
             Material material = materialEditor.target as Material;
 
-            // Make sure that needed setup (ie keywords/renderqueue) are set up if we're switching some existing
-            // material to a standard shader.
-            // Do this before any GUI code has been issued to prevent layout issues in subsequent GUILayout statements (case 780071)
-            if (m_FirstTimeApply)
-            {
-                MaterialChanged(material, m_WorkflowMode);
-                m_FirstTimeApply = false;
-            }
-
             ShaderPropertiesGUI(material);
         }
 
@@ -147,10 +143,10 @@ namespace UnityEditor
             // Use default labelWidth
             EditorGUIUtility.labelWidth = 0f;
 
-            // Detect any changes to the material
-            EditorGUI.BeginChangeCheck();
+            bool blendModeChanged = false;
+
             {
-                BlendModePopup();
+                blendModeChanged = BlendModePopup();
 
                 // Primary properties
                 GUILayout.Label(Styles.primaryMapsText, EditorStyles.boldLabel);
@@ -181,26 +177,39 @@ namespace UnityEditor
                     m_MaterialEditor.ShaderProperty(highlights, Styles.highlightsText);
                 if (reflections != null)
                     m_MaterialEditor.ShaderProperty(reflections, Styles.reflectionsText);
+
+                EditorGUILayout.Space();
+
+                GUILayout.Label(Styles.advancedText, EditorStyles.boldLabel);
+
+                m_MaterialEditor.RenderQueueField();
             }
-            if (EditorGUI.EndChangeCheck())
+            if (blendModeChanged)
             {
                 foreach (var obj in blendMode.targets)
-                    MaterialChanged((Material)obj, m_WorkflowMode);
+                    SetupMaterialWithBlendMode((Material)obj);
             }
 
-            EditorGUILayout.Space();
-
-            // NB renderqueue editor is not shown on purpose: we want to override it based on blend mode
-            GUILayout.Label(Styles.advancedText, EditorStyles.boldLabel);
             m_MaterialEditor.EnableInstancingField();
             m_MaterialEditor.DoubleSidedGIField();
         }
 
-        internal void DetermineWorkflow(MaterialProperty[] props)
+        bool ShaderHasProperty(Shader shader, int nameId)
         {
-            if (FindProperty("_SpecGlossMap", props, false) != null && FindProperty("_SpecColor", props, false) != null)
+            for (int i = 0, count = shader.GetPropertyCount(); i < count; i++)
+            {
+                if (shader.GetPropertyNameId(i) == nameId)
+                    return true;
+            }
+            return false;
+        }
+
+        internal void DetermineWorkflow(Material material)
+        {
+            var shader = material.shader;
+            if (ShaderHasProperty(shader, _SpecGlossMap) && ShaderHasProperty(shader, _SpecColor))
                 m_WorkflowMode = WorkflowMode.Specular;
-            else if (FindProperty("_MetallicGlossMap", props, false) != null && FindProperty("_Metallic", props, false) != null)
+            else if (ShaderHasProperty(shader, _MetallicGlossMap) && ShaderHasProperty(shader, _Metallic))
                 m_WorkflowMode = WorkflowMode.Metallic;
             else
                 m_WorkflowMode = WorkflowMode.Dielectric;
@@ -223,30 +232,33 @@ namespace UnityEditor
                 return;
             }
 
-            DetermineWorkflow(MaterialEditor.GetMaterialProperties(new Material[] { material }));
-            MaterialChanged(material, m_WorkflowMode);
+            SetupMaterialWithBlendMode(material);
         }
 
-        void BlendModePopup()
+        bool BlendModePopup()
         {
             EditorGUI.showMixedValue = blendMode.hasMixedValue;
             var mode = (BlendMode)blendMode.floatValue;
 
             EditorGUI.BeginChangeCheck();
             mode = (BlendMode)EditorGUILayout.Popup(Styles.renderingMode, (int)mode, Styles.blendNames);
-            if (EditorGUI.EndChangeCheck())
+            bool result = EditorGUI.EndChangeCheck();
+            if (result)
             {
                 m_MaterialEditor.RegisterPropertyChangeUndo("Rendering Mode");
                 blendMode.floatValue = (float)mode;
             }
 
             EditorGUI.showMixedValue = false;
+
+            return result;
         }
 
         void DoNormalArea()
         {
             m_MaterialEditor.TexturePropertySingleLine(Styles.normalMapText, bumpMap, bumpMap.textureValue != null ? bumpScale : null);
-            if (bumpScale.floatValue != 1)
+            if (bumpScale.floatValue != 1
+                && UnityEditorInternal.InternalEditorUtility.IsMobilePlatform(EditorUserBuildSettings.activeBuildTarget))
                 if (m_MaterialEditor.HelpBoxWithButton(
                     EditorGUIUtility.TrTextContent("Bump scale is not supported on mobile platforms"),
                     EditorGUIUtility.TrTextContent("Fix Now")))
@@ -361,11 +373,11 @@ namespace UnityEditor
             }
         }
 
-        static void MaterialChanged(Material material, WorkflowMode workflowMode)
+        override public void ValidateMaterial(Material material)
         {
+            DetermineWorkflow(material);
             SetupMaterialWithBlendMode(material);
-
-            SetMaterialKeywords(material, workflowMode);
+            SetMaterialKeywords(material, m_WorkflowMode);
         }
 
         static void SetKeyword(Material m, string keyword, bool state)
