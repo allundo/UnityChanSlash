@@ -35,6 +35,11 @@ public class EnemyGenerator : Generator<Status>
         return this;
     }
 
+    public void DisableInputAll()
+    {
+        pool.ForEach(t => t.GetComponent<InputHandler>().DisableInput());
+    }
+
     public override void DestroyAll()
     {
         pool.ForEach(t => t.GetComponent<Reactor>().Destroy());

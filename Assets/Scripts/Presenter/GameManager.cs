@@ -222,6 +222,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         hidePlateHandler.OnMoveFloor();
 
+        // Deny enemies to access WorldMap
+        debugEnemyGenerators.ForEach(gen => gen.DisableInputAll());
+        placeEnemyGenerator.DisableAllEnemiesInput();
+
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 

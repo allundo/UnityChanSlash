@@ -158,6 +158,12 @@ public class PlaceEnemyGenerator : EnemyGenerator
         SpawnWitch(map.SearchSpaceNearBy(gm.PlayerPos, 3), gm.PlayerDir.Backward, 300f);
         isWitchReserved = false;
     }
+    public void DisableAllEnemiesInput()
+    {
+        enemyPool.ForEach(
+            kv => kv.Value.transform?.ForEach(t => t.GetComponent<InputHandler>().DisableInput())
+        );
+    }
 
     public void DestroyAllEnemies()
     {
