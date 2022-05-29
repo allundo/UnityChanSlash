@@ -35,6 +35,12 @@ public interface IItemIconHandler
     /// </summary>
     /// <returns>normal mode icon handler</returns>
     IItemIconHandler CleanUp();
+
+    /// <summary>
+    /// Returns long pressed item info.
+    /// </summary>
+    /// <returns>ItemInfo to be inspected</returns>
+    IItemIconHandler OnLongPress();
 }
 
 public class ItemIconHandler : IItemIconHandler
@@ -55,8 +61,22 @@ public class ItemIconHandler : IItemIconHandler
     public IObservable<ItemIcon> OnPutItem => dragMode.onPutItem.DistinctUntilChanged();
     public IObservable<ItemIcon> OnPutApply => putMode.onPutApply;
     public IObservable<ItemInfo> OnUseItem => selectMode.onUseItem;
-    public bool IsPutItem => currentMode is PutMode;
+    public IObservable<ItemInfo> OnInspectItem => onInspectItem;
+    private ISubject<ItemInfo> onInspectItem = new Subject<ItemInfo>();
 
+    private IDisposable longPress;
+
+    protected void StartLongPressing(int dueTimeFrameCount = 90)
+    {
+        longPress = Observable.TimerFrame(dueTimeFrameCount).Subscribe(_ => OnLongPress()).AddTo(selector);
+    }
+
+    protected void StopPressing()
+    {
+        longPress?.Dispose();
+    }
+
+    public bool IsPutItem => currentMode is PutMode;
     private TweenUtil t = new TweenUtil();
     public Tween Play(Tween tween) => t.PlayExclusive(tween);
 
@@ -102,6 +122,12 @@ public class ItemIconHandler : IItemIconHandler
         return currentMode;
     }
 
+    public IItemIconHandler OnLongPress()
+    {
+        currentMode = currentMode.OnLongPress();
+        return currentMode;
+    }
+
     protected class NormalMode : IItemIconHandler
     {
         protected ItemIconHandler handler;
@@ -117,9 +143,15 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler OnPress(int index)
         {
+            handler.StopPressing();
+
             var currentTarget = itemIndex.GetItem(index);
 
-            if (currentTarget != null && currentTarget != handler.currentSelected)
+            if (currentTarget == null) return this;
+
+            handler.StartLongPressing();
+
+            if (currentTarget != handler.currentSelected)
             {
                 selector.Enable();
                 selector.SetSelect(itemIndex.UIPos(index));
@@ -132,6 +164,8 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler OnRelease()
         {
+            handler.StopPressing();
+
             handler.currentSelected = itemIndex.GetItem(handler.pressedIndex);
 
             if (handler.currentSelected == null) return this;
@@ -147,8 +181,20 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler OnSubmit() => null;
 
+        public IItemIconHandler OnLongPress()
+        {
+            var itemIcon = itemIndex.GetItem(handler.pressedIndex);
+            if (itemIcon == null) return this;
+
+            handler.onInspectItem.OnNext(itemIcon.itemInfo);
+            handler.Play(itemIcon.Resize(1f, 0.2f));
+            return CleanUp(); // FIXME: Handler is cleaned up by PlayerInput.SetInputVisible(false) after the inspection. The handler mode should be kept.
+        }
+
         public virtual IItemIconHandler CleanUp()
         {
+            handler.StopPressing();
+
             handler.Play(handler.currentSelected?.Resize(1f, 0.2f));
             handler.currentSelected = null;
             handler.pressedIndex = itemIndex.MAX_ITEMS;
@@ -160,7 +206,11 @@ public class ItemIconHandler : IItemIconHandler
             return handler.normalMode;
         }
 
-        public virtual IItemIconHandler OnDrag(Vector2 screenPos) => handler.dragMode.OnDrag(screenPos);
+        public virtual IItemIconHandler OnDrag(Vector2 screenPos)
+        {
+            handler.StopPressing();
+            return handler.dragMode.OnDrag(screenPos);
+        }
     }
 
     protected class SelectMode : NormalMode
@@ -171,10 +221,17 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnPress(int index)
         {
+            handler.StopPressing();
+
             var currentTarget = itemIndex.GetItem(index);
 
-            if (currentTarget != null && currentTarget != handler.currentSelected)
+            if (currentTarget == null) return this;
+
+
+            if (currentTarget != handler.currentSelected)
             {
+                handler.StartLongPressing();
+
                 selector.SetRaycast(false);
                 selector.SetSelect(itemIndex.UIPos(index));
 
@@ -191,7 +248,11 @@ public class ItemIconHandler : IItemIconHandler
             return this;
         }
 
-        public override IItemIconHandler OnRelease() => this;
+        public override IItemIconHandler OnRelease()
+        {
+            handler.StopPressing();
+            return this;
+        }
 
         public override IItemIconHandler OnSubmit()
         {
@@ -228,7 +289,11 @@ public class ItemIconHandler : IItemIconHandler
             return this;
         }
 
-        public override IItemIconHandler OnRelease() => this;
+        public override IItemIconHandler OnRelease()
+        {
+            handler.StopPressing();
+            return this;
+        }
 
         public override IItemIconHandler OnSubmit()
         {
@@ -263,6 +328,8 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnDrag(Vector2 screenPos)
         {
+            handler.StopPressing();
+
             var vec = itemIndex.ConvertToVec(screenPos);
             return itemIndex.IsOnUI(vec) ? Drag(vec) : Put();
         }

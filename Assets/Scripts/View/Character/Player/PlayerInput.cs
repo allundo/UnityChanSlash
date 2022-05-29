@@ -411,6 +411,10 @@ public class PlayerInput : ShieldInput
             .Subscribe(itemInfo => Interrupt(new PlayerItem(playerTarget, itemInfo), false))
             .AddTo(this);
 
+        itemInventory.OnInspectItem
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
+            .AddTo(this);
+
         inspectUI.OnInspectMessage
             .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
             .AddTo(this);

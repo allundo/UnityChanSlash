@@ -17,6 +17,18 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private ISubject<Vector2> onDrag = new Subject<Vector2>();
     public IObservable<Vector2> OnDragMode => onDrag;
 
+    private IReactiveProperty<bool> isLongPressing = new ReactiveProperty<bool>(false);
+    public IObservable<Unit> OnLongPress => isLongPressing
+        .Where(x => x)
+        .SelectMany(_ => Observable.TimerFrame(120))
+        .TakeUntil(isLongPressing.Where(x => !x))
+        .RepeatUntilDestroy(this)
+        .Select(_ =>
+        {
+            isLongPressing.Value = isDragOn = false;
+            return Unit.Default;
+        });
+
     private ISubject<Unit> onReleased = new Subject<Unit>();
     public IObservable<Unit> OnReleased => onReleased;
 
@@ -76,6 +88,8 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnDrag(PointerEventData eventData)
     {
+        isLongPressing.Value = false;
+
         if (!isDragOn)
         {
             raycastHandler.RaycastDrag(eventData);
@@ -85,17 +99,24 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         onDrag.OnNext(eventData.position);
     }
 
-
     public void OnPointerDown(PointerEventData eventData)
     {
         startPos = eventData.position;
         isDragOn = IsOnCircle(startPos);
 
-        if (!isDragOn) raycastHandler.RaycastPointerDown(eventData);
+        if (!isDragOn)
+        {
+            raycastHandler.RaycastPointerDown(eventData);
+            return;
+        }
+
+        isLongPressing.Value = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        isLongPressing.Value = false;
+
         if (!isDragOn)
         {
             raycastHandler.RaycastPointerUp(eventData);

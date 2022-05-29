@@ -22,6 +22,7 @@ public class ItemInventory : MonoBehaviour
     public IObservable<ItemIcon> OnPutItem => iconHandler.OnPutItem;
     public IObservable<ItemIcon> OnPutApply => iconHandler.OnPutApply;
     public IObservable<ItemInfo> OnUseItem => iconHandler.OnUseItem;
+    public IObservable<MessageData[]> OnInspectItem => iconHandler.OnInspectItem.Select(itemInfo => MessageData.ItemDescription(itemInfo));
     public bool IsPutItem => iconHandler.IsPutItem;
 
     void Awake()
@@ -49,6 +50,7 @@ public class ItemInventory : MonoBehaviour
     {
         Observable.Merge(panels.Select(panel => panel.OnPress)).Subscribe(index => iconHandler.OnPress(index));
         Observable.Merge(panels.Select(panel => panel.OnRelease)).Subscribe(index => iconHandler.OnRelease());
+        selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress());
         selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos));
         selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit());
     }
