@@ -112,4 +112,5 @@ public class FloorMaterialsSource
     [SerializeField] public Material stairs = default;
     [SerializeField] public Material hidePlate = default;
     [SerializeField] public Material plateFront = default;
+    [SerializeField] public Color pointLightColor = default;
 }

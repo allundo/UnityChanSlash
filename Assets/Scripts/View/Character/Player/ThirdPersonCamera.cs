@@ -14,6 +14,8 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] public Vector3 cameraPositionL = new Vector3(0, 8f, -8f);
     [SerializeField] private SideCamera sideCamera = default;
     [SerializeField] private RawImage crossFade = default;
+    [SerializeField] private Light pointLight = default;
+    [SerializeField] public Vector3 pointLightOffset = new Vector3(0, 4f, 0);
 
     public float fieldOfView { get; private set; }
     public Vector3 followOffset { get; private set; }
@@ -23,20 +25,17 @@ public class ThirdPersonCamera : MonoBehaviour
     private Texture2D screenShot;
 
     private Camera cam = default;
-    private Transform lightTf;
+    private FloorMaterialsData floorMaterialsData;
 
     public static readonly Vector2 viewPortAspect = new Vector2(1920f, 1080f);
     public static readonly float aspect = viewPortAspect.x / viewPortAspect.y;
     public static float ScreenAspect => Mathf.Max(Screen.width, Screen.height) / Mathf.Min(Screen.width, Screen.height);
     public static float Margin => Mathf.Clamp01(1f - aspect / ScreenAspect) * 0.5f;
 
-    private void Start()
+    void Awake()
     {
         cam = Camera.main;
-
-        // Set point light position
-        lightTf = transform.GetChild(0);
-
+        floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
         ResetRenderSettings(DeviceOrientation.Portrait);
         crossFade.enabled = false;
     }
@@ -46,8 +45,14 @@ public class ThirdPersonCamera : MonoBehaviour
         transform.position = lookAt.position + lookAt.rotation * cameraPosition;
 
         transform.LookAt(lookAt.position + lookAt.rotation * followOffset);
+    }
 
-        lightTf.position = lookAt.position + new Vector3(0, 4f, 0);
+    public void SwitchFloor(int floor)
+    {
+        pointLight.color = floorMaterialsData.Param(floor - 1).pointLightColor;
+
+        LateUpdate();
+        pointLight.transform.position = lookAt.position + pointLightOffset;
     }
 
     public void ResetRenderSettings(DeviceOrientation orientation)

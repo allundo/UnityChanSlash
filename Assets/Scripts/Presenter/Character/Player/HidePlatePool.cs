@@ -12,7 +12,6 @@ public class HidePlatePool : MonoBehaviour
     [SerializeField] private HidePlate prefabHidePlateFull = default;
     [SerializeField] private HidePlate prefabHidePlateCross = default;
     [SerializeField] private HidePlateFront plateFrontPrefab = default;
-    [SerializeField] private FloorMaterialsData floorMaterialsData = default;
 
     private HidePlateGenerator plate1Generator;
     private HidePlateGenerator plate2Generator;
@@ -25,11 +24,14 @@ public class HidePlatePool : MonoBehaviour
 
     private WorldMap map;
 
+    private FloorMaterialsData floorMaterialsData;
     private FloorMaterialsSource FloorMaterialSource(WorldMap map) => floorMaterialsData.Param(map.floor - 1);
 
     void Awake()
     {
         map = GameManager.Instance.worldMap;
+
+        floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
         Material mat = FloorMaterialSource(map).hidePlate;
 
         plateFront = Instantiate(plateFrontPrefab, transform);

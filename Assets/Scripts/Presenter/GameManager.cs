@@ -108,6 +108,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         // MiniMap controlled by HidePlateHandler refers to player position and direction.
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
+        mainCamera.SwitchFloor(worldMap.floor);
 
         player.SetActive(false);
 
@@ -133,6 +134,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
+        mainCamera.SwitchFloor(worldMap.floor);
 
         cover.FadeIn(1f, 0.5f, false).Play();
 
@@ -158,6 +160,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
+        mainCamera.SwitchFloor(worldMap.floor);
 
         cover.SetAlpha(0f);
         input.SetInputVisible(true);
@@ -227,6 +230,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
+        mainCamera.SwitchFloor(worldMap.floor);
         yield return new WaitForEndOfFrame();
 
         debugEnemyGenerators.ForEach(gen =>

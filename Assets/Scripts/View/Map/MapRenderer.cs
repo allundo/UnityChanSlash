@@ -5,7 +5,7 @@ using UnityEngine.ProBuilder;
 
 public class MapRenderer : MonoBehaviour
 {
-    [SerializeField] private FloorMaterialsData floorMaterialsData = default;
+    private FloorMaterialsData floorMaterialsData;
     private FloorMaterialsSource floorMaterials;
 
     private List<Pos>[] doorOpenData;
@@ -59,6 +59,7 @@ public class MapRenderer : MonoBehaviour
 
     void Awake()
     {
+        floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
         doorOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
     }
 

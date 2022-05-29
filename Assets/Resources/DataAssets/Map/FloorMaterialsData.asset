@@ -21,6 +21,7 @@ MonoBehaviour:
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
     hidePlate: {fileID: 2100000, guid: 506e4b1f8f1844f688258f4873e081bb, type: 2}
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
+    pointLightColor: {r: 1, g: 0.79607844, b: 0.4117647, a: 1}
   - name: "\u901A\u5E38"
     ground: {fileID: 2100000, guid: c7735e5a1d7af4e8eb0587928ea8754b, type: 2}
     wall: {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
@@ -29,6 +30,7 @@ MonoBehaviour:
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
     hidePlate: {fileID: 2100000, guid: 506e4b1f8f1844f688258f4873e081bb, type: 2}
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
+    pointLightColor: {r: 1, g: 0.79607844, b: 0.4117647, a: 1}
   - name: "\u708E"
     ground: {fileID: 2100000, guid: 196a83e4fac7a644ebc189706f6c2082, type: 2}
     wall: {fileID: 2100000, guid: 505fbbba9c5a99a4ba162ef4ee7c5736, type: 2}
@@ -37,6 +39,7 @@ MonoBehaviour:
     stairs: {fileID: 2100000, guid: 55a512382d8a87e48bf3bb9092ecbf4e, type: 2}
     hidePlate: {fileID: 2100000, guid: 45aefc3cd68184c03af330a5b99e0d42, type: 2}
     plateFront: {fileID: 2100000, guid: 9f5d14b4dc00a49ef80c697a38726671, type: 2}
+    pointLightColor: {r: 1, g: 0.64699256, b: 0.514151, a: 0}
   - name: "\u6C37"
     ground: {fileID: 2100000, guid: 38915b34fb784e641be19e619ced4763, type: 2}
     wall: {fileID: 2100000, guid: 0ae9263b538edb14e8dc1e9c3775d2a3, type: 2}
@@ -45,6 +48,7 @@ MonoBehaviour:
     stairs: {fileID: 2100000, guid: 481d1d21c29b1ed41b50472c451abfda, type: 2}
     hidePlate: {fileID: 2100000, guid: bd1be0e22b64bc246989849e76c0f37c, type: 2}
     plateFront: {fileID: 2100000, guid: a59c89f02d20a44b1a669ef0cf8d241b, type: 2}
+    pointLightColor: {r: 0.61387503, g: 0.8107554, b: 0.8396226, a: 0}
   - name: "\u901A\u5E38"
     ground: {fileID: 2100000, guid: c7735e5a1d7af4e8eb0587928ea8754b, type: 2}
     wall: {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
@@ -53,3 +57,4 @@ MonoBehaviour:
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
     hidePlate: {fileID: 2100000, guid: 506e4b1f8f1844f688258f4873e081bb, type: 2}
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
+    pointLightColor: {r: 1, g: 1, b: 1, a: 0}

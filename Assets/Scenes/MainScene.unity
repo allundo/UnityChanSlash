@@ -545,8 +545,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97894651}
-  m_LocalRotation: {x: -0.26693562, y: -0, z: -0, w: 0.96371436}
-  m_LocalPosition: {x: 0, y: 0.8575897, z: 22.809307}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1011,7 +1011,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fbebe962b5146059a1165bc0d9f4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorMaterialsData: {fileID: 11400000, guid: 09156dd13c32e45a89b6023354979c09, type: 2}
   wallParent: {fileID: 1669232644}
   wallV: {fileID: 671906690}
   wallH: {fileID: 1022731393}
@@ -9358,6 +9357,8 @@ MonoBehaviour:
   cameraPositionL: {x: 0, y: 8, z: -8}
   sideCamera: {fileID: 736671719}
   crossFade: {fileID: 2022153802}
+  pointLight: {fileID: 97894653}
+  pointLightOffset: {x: 0, y: 4, z: 0}
 --- !u!1 &967713705 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6789149903494324914, guid: 6db7489872f1b48849e620e8982951b2,
@@ -18620,7 +18621,6 @@ MonoBehaviour:
     type: 3}
   plateFrontPrefab: {fileID: 6882625021751139374, guid: 27aaebf1280af48638468e9f9e004434,
     type: 3}
-  floorMaterialsData: {fileID: 11400000, guid: 09156dd13c32e45a89b6023354979c09, type: 2}
 --- !u!4 &1669641517
 Transform:
   m_ObjectHideFlags: 0
