@@ -8,8 +8,12 @@ public class HealSpritEffect : MonoBehaviour, IBodyEffect
     [SerializeField] protected ParticleSystem hitVfx = default;
     [SerializeField] protected AudioSource hitSnd = default;
 
+    private Tween disappearingTween;
+
     public void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
-         => DOVirtual.DelayedCall(duration, onComplete).Play();
+    {
+        disappearingTween = DOVirtual.DelayedCall(duration, onComplete).Play();
+    }
 
     public virtual void OnActive()
     {
@@ -27,5 +31,8 @@ public class HealSpritEffect : MonoBehaviour, IBodyEffect
         hitSnd.PlayEx();
     }
 
-    public void OnDestroyByReactor() { }
+    public void OnDestroyByReactor()
+    {
+        disappearingTween?.Complete(true);
+    }
 }
