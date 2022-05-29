@@ -139,12 +139,10 @@ FragmentCommonData FragmentSetupSimple(VertexOutputBaseSimple i)
     #endif
 
     half alpha = Alpha(i.tex.xy);
-    #ifdef _ALPHATEST_ON
-        #ifdef _DITHER_ALPHA
-            clip (DitherCutoff(alpha, i.screenPos));
-        #else
-            clip (alpha - _Cutoff);
-        #endif
+    #ifdef _DITHER_ALPHA
+        clip (DitherCutoff(alpha, i.screenPos));
+    #else ifdef _ALPHATEST_ON
+        clip (alpha - _Cutoff);
     #endif
 
     FragmentCommonData s = UNITY_SETUP_BRDF_INPUT (i.tex);
@@ -334,9 +332,12 @@ VertexOutputForwardAddSimple vertForwardAddSimple (VertexInput v)
 FragmentCommonData FragmentSetupSimpleAdd(VertexOutputForwardAddSimple i)
 {
     half alpha = Alpha(i.tex.xy);
-    #if defined(_ALPHATEST_ON)
-        clip (alpha - _Cutoff);
-    #endif
+    
+        #ifdef _DITHER_ALPHA
+            clip (DitherCutoff(alpha, i.screenPos));
+        #else ifdef _ALPHATEST_ON
+            clip (alpha - _Cutoff);
+        #endif
 
     FragmentCommonData s = UNITY_SETUP_BRDF_INPUT (i.tex);
 

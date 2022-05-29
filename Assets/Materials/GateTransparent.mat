@@ -10,7 +10,6 @@ Material:
   m_Name: GateTransparent
   m_Shader: {fileID: 4800000, guid: 7314027385a594f2491691d964879d9d, type: 3}
   m_ValidKeywords:
-  - _ALPHATEST_ON
   - _METALLICGLOSSMAP
   - _NORMALMAP
   - _PARALLAXMAP

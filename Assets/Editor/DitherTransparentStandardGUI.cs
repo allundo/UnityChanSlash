@@ -329,11 +329,12 @@ namespace UnityEditor
 
         public static void SetupMaterialWithBlendMode(Material material)
         {
+            // Setup for DitherTransparent
             material.SetOverrideTag("RenderType", "Transparent");
-            material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-            material.SetInt("_ZWrite", 1);
-            material.EnableKeyword("_ALPHATEST_ON");
+            material.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.One);
+            material.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.Zero);
+            material.SetFloat("_ZWrite", 1f);
+            material.DisableKeyword("_ALPHATEST_ON");
             material.DisableKeyword("_ALPHABLEND_ON");
             material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
             material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;

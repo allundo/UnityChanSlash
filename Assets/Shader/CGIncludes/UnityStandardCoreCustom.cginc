@@ -261,11 +261,7 @@ inline FragmentCommonData FragmentSetup (inout float4 i_tex, float3 i_eyeVec, ha
     i_tex = Parallax(i_tex, i_viewDirForParallax);
 
     half alpha = Alpha(i_tex.xy);
-
-    #ifdef _ALPHATEST_ON
-        clip (DitherCutoff(alpha, i_screenPos));
-
-    #endif
+    clip (DitherCutoff(alpha, i_screenPos));
 
     FragmentCommonData o = UNITY_SETUP_BRDF_INPUT (i_tex);
     o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld);
