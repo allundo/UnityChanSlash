@@ -118,10 +118,12 @@ public class EventManager : MobGenerator<EventInvoker>
 
         seq
             .InsertCallback(0.5f, () => GameManager.Instance.PlaceWitch(witchPos, witchDir.Backward, 300f))
-            .Append(lightManager.DirectionalFade(1f, 0.2f, 1.0f))
+            .Append(lightManager.DirectionalFadeOut(1.5f))
+            .Join(lightManager.PointFadeOut(1.5f))
             .Join(lightManager.SpotFadeIn(map.WorldPos(witchPos) + new Vector3(0, 4f, 0), 1f, 30f, 1.0f))
             .AppendInterval(interval)
-            .Append(lightManager.DirectionalFade(0.2f, 1f, 1.5f))
+            .Append(lightManager.DirectionalFadeIn(1.5f))
+            .Join(lightManager.PointFadeIn(1.5f))
             .Join(lightManager.SpotFadeOut(30f, 1f))
             .AppendCallback(() => input.EnqueueMessage(
                 new MessageData[]

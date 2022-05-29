@@ -23,6 +23,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private Texture2D screenShot;
 
     private Camera cam = default;
+    private Transform lightTf;
 
     public static readonly Vector2 viewPortAspect = new Vector2(1920f, 1080f);
     public static readonly float aspect = viewPortAspect.x / viewPortAspect.y;
@@ -33,6 +34,9 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         cam = Camera.main;
 
+        // Set point light position
+        lightTf = transform.GetChild(0);
+
         ResetRenderSettings(DeviceOrientation.Portrait);
         crossFade.enabled = false;
     }
@@ -42,6 +46,8 @@ public class ThirdPersonCamera : MonoBehaviour
         transform.position = lookAt.position + lookAt.rotation * cameraPosition;
 
         transform.LookAt(lookAt.position + lookAt.rotation * followOffset);
+
+        lightTf.position = lookAt.position + new Vector3(0, 4f, 0);
     }
 
     public void ResetRenderSettings(DeviceOrientation orientation)
