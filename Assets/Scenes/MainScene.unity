@@ -10094,7 +10094,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   greenGauge: {fileID: 1832759678}
+  frameImage: {fileID: 1996034207}
   lifeText: {fileID: 1166764181}
+  hpText: {fileID: 535991599}
 --- !u!222 &1102654278
 CanvasRenderer:
   m_ObjectHideFlags: 0

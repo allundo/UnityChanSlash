@@ -76,7 +76,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     protected void ShowUIs()
     {
         image.raycastTarget = true;
-        restLifeGauge.gameObject.SetActive(true);
+        restLifeGauge.Enable();
         txtRest.gameObject.SetActive(true);
         resumeButton.Show().Play();
 
@@ -99,7 +99,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     protected void HideUIs()
     {
         image.raycastTarget = false;
-        restLifeGauge.gameObject.SetActive(false);
+        restLifeGauge.Disable();
         txtRest.gameObject.SetActive(false);
         resumeButton.Hide().Play();
 

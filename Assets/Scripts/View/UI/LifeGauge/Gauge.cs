@@ -56,4 +56,7 @@ public abstract class Gauge : MonoBehaviour
 
         gaugeTween = UpdateTween(valueRatio);
     }
+
+    public virtual void Enable() => gauge.enabled = true;
+    public virtual void Disable() => gauge.enabled = false;
 }
