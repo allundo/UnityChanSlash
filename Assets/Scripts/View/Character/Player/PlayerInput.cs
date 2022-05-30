@@ -330,6 +330,8 @@ public class PlayerInput : ShieldInput
         itemHandler.Inactivate();
         fightCircle.Inactivate();
 
+        inspectUI.Inactivate();
+
         forwardUI.Inactivate();
         backwardUI.Inactivate();
         rightUI.Inactivate();

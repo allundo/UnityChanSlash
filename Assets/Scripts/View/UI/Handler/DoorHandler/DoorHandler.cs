@@ -54,6 +54,7 @@ public class DoorHandler : BaseHandler
         }
         else
         {
+            openDoorUI.SetActive(false);
             base.SetActiveButtons(false);
         }
     }

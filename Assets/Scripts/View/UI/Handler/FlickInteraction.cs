@@ -68,7 +68,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     protected override void Awake()
     {
         image = GetComponent<Image>();
-        fade = new FadeTween(image, maxAlpha);
+        fade = new FadeTween(image, maxAlpha, true);
         ui = new UITween(gameObject);
 
         SetFlicks();
@@ -172,7 +172,13 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     }
 
     public override Tween FadeOut(float duration = 0.2f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
-        => base.FadeOut(duration, onPlay, Clear, isContinuous);
+        => base.FadeOut(duration, onPlay,
+            () =>
+            {
+                (onComplete ?? (() => { }))();
+                Clear();
+            },
+            isContinuous);
 
     public void UpdateImage(Vector2 dragVector)
     {
