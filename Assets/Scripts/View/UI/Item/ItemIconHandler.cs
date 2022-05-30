@@ -66,7 +66,7 @@ public class ItemIconHandler : IItemIconHandler
 
     private IDisposable longPress;
 
-    protected void StartLongPressing(int dueTimeFrameCount = 90)
+    protected void StartLongPressing(int dueTimeFrameCount = 60)
     {
         longPress = Observable.TimerFrame(dueTimeFrameCount).Subscribe(_ => OnLongPress()).AddTo(selector);
     }

@@ -20,7 +20,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private IReactiveProperty<bool> isLongPressing = new ReactiveProperty<bool>(false);
     public IObservable<Unit> OnLongPress => isLongPressing
         .Where(x => x)
-        .SelectMany(_ => Observable.TimerFrame(120))
+        .SelectMany(_ => Observable.TimerFrame(90))
         .TakeUntil(isLongPressing.Where(x => !x))
         .RepeatUntilDestroy(this)
         .Select(_ =>
