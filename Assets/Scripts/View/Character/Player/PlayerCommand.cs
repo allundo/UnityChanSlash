@@ -610,6 +610,7 @@ public class PlayerDie : PlayerCommand
         mobReact.OnDie();
         playerAnim.dieEx.Fire();
         playerTarget.gameOverUI.Play();
+        itemInventory.Cancel();
 
         return ExecOnCompleted(() => mobReact.OnDisappear());
     }

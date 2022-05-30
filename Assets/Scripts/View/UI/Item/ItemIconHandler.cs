@@ -183,12 +183,9 @@ public class ItemIconHandler : IItemIconHandler
 
         public IItemIconHandler OnLongPress()
         {
-            var itemIcon = itemIndex.GetItem(handler.pressedIndex);
-            if (itemIcon == null) return this;
-
-            handler.onInspectItem.OnNext(itemIcon.itemInfo);
-            handler.Play(itemIcon.Resize(1f, 0.2f));
-            return CleanUp(); // FIXME: Handler is cleaned up by PlayerInput.SetInputVisible(false) after the inspection. The handler mode should be kept.
+            var itemInfo = itemIndex.GetItem(handler.pressedIndex)?.itemInfo;
+            if (itemInfo != null) handler.onInspectItem.OnNext(itemInfo);
+            return this;
         }
 
         public virtual IItemIconHandler CleanUp()

@@ -77,13 +77,11 @@ public class ItemInventory : MonoBehaviour
 
     public void SetEnable(bool isEnable)
     {
-        if (!isEnable)
-        {
-            iconHandler.CleanUp();
-        }
-        panels.ForEach(panel => panel.enabled = isEnable);
+        panels.ForEach(panel => panel.enabled = selector.enabled = isEnable);
         enabled = isEnable;
     }
+
+    public void Cancel() => iconHandler.CleanUp();
 
     public bool hasKeyBlade()
     {
