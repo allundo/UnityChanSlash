@@ -60,6 +60,14 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         image.enabled = enabled = isEnable;
     }
 
+    public void Hide() => SetVisible(false);
+    public void Show() => SetVisible(true);
+
+    public void SetVisible(bool isVisible)
+    {
+        image.enabled = isVisible;
+    }
+
     public void SetRaycast(bool isEnable)
     {
         image.raycastTarget = isEnable;

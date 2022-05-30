@@ -343,6 +343,7 @@ public class ItemIconHandler : IItemIconHandler
 
         protected IItemIconHandler Put()
         {
+            selector.Hide();
             onPutItem.OnNext(handler.currentSelected);
             return handler.putMode;
         }
@@ -375,6 +376,7 @@ public class ItemIconHandler : IItemIconHandler
 
         protected override IItemIconHandler Drag(Vector2 uiPos)
         {
+            selector.Show();
             handler.currentSelected.Display(false);
             onPutItem.OnNext(null);
             return handler.dragMode;
