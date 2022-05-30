@@ -310,7 +310,9 @@ public class ItemIconHandler : IItemIconHandler
             currentSelected.SetIndex(pressedIndex);
             itemIndex.SetItem(pressedIndex, currentSelected);
 
-            return base.CleanUp();
+            selector.Enable();
+            selector.SetSelect(itemIndex.UIPos(pressedIndex));
+            return handler.selectMode;
         }
 
         public override IItemIconHandler CleanUp()
