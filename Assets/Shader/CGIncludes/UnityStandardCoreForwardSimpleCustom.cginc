@@ -141,7 +141,7 @@ FragmentCommonData FragmentSetupSimple(VertexOutputBaseSimple i)
     half alpha = Alpha(i.tex.xy);
     #ifdef _DITHER_ALPHA
         clip (DitherCutoff(alpha, i.screenPos));
-    #else ifdef _ALPHATEST_ON
+    #elif defined(_ALPHATEST_ON)
         clip (alpha - _Cutoff);
     #endif
 
@@ -281,6 +281,10 @@ struct VertexOutputForwardAddSimple
 
     UNITY_LIGHTING_COORDS(5, 6)
 
+#ifdef _DITHER_ALPHA
+    float4 screenPos                    : TEXCOORD7;    // screenPos.xyw | screen coordinate
+#endif
+
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
@@ -335,7 +339,7 @@ FragmentCommonData FragmentSetupSimpleAdd(VertexOutputForwardAddSimple i)
     
         #ifdef _DITHER_ALPHA
             clip (DitherCutoff(alpha, i.screenPos));
-        #else ifdef _ALPHATEST_ON
+        #elif defined(_ALPHATEST_ON)
             clip (alpha - _Cutoff);
         #endif
 
