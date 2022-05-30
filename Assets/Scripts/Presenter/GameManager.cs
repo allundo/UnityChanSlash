@@ -123,8 +123,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         yield return new WaitForEndOfFrame();
 
         player.SetActive(true);
-        cover.FadeIn(1.5f, 0.6f, false).Play();
+        yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start()
 
+        cover.FadeIn(1.5f, 0.6f, false).Play();
         eventManager.DropStartEvent();
     }
 

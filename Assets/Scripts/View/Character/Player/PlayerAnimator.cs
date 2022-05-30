@@ -3,10 +3,15 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using UnityChan;
+using static UniRx.Triggers.ObservableStateMachineTrigger;
 
 [RequireComponent(typeof(RandomWind))]
 public class PlayerAnimator : ShieldAnimator
 {
+    protected ObservableStateMachineTrigger trigger;
+    protected IObservable<OnStateInfo> StateEnter => trigger.OnStateEnterAsObservable();
+    protected IObservable<OnStateInfo> StateExit => trigger.OnStateExitAsObservable();
+
     public TriggerJump jump { get; protected set; }
     public TriggerBrakeAndBackStep brakeAndBackStep { get; protected set; }
 
@@ -54,16 +59,21 @@ public class PlayerAnimator : ShieldAnimator
         fallHeight = new AnimatorFloat(anim, "FallHeight");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 
-        bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
+        randomWind = GetComponent<RandomWind>();
+    }
+
+    protected void Start()
+    {
+        // StateMachineTrigger may have been prepared on Start()
+        trigger = anim.GetBehaviour<ObservableStateMachineTrigger>();
 
         rest = new BoolRest(this);
         handOn = new BoolHandOn(this);
 
+        bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
         icedFall = new BoolIcedFall(this, fallHeight, bodyCollider);
-
-        randomWind = GetComponent<RandomWind>();
     }
 
     public override void Pause()
@@ -92,7 +102,7 @@ public class PlayerAnimator : ShieldAnimator
             this.animatorFloat = animatorFloat;
             this.bodyCollider = bodyCollider;
 
-            // Disable the updateing collider when exiting trigger entered state
+            // Disable the updating collider when exiting trigger entered state
             playerAnim.StateExit
                 .Where(x => x.StateInfo.fullPathHash == Animator.StringToHash(fullPathStateName))
                 .Subscribe(_ =>

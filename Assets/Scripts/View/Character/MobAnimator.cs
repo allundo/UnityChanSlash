@@ -1,15 +1,10 @@
 using UnityEngine;
 using UniRx.Triggers;
-using static UniRx.Triggers.ObservableStateMachineTrigger;
-using System;
 
 [RequireComponent(typeof(Animator))]
 public class MobAnimator : MonoBehaviour
 {
     public Animator anim { get; protected set; }
-    protected ObservableStateMachineTrigger Trigger;
-    protected IObservable<OnStateInfo> StateEnter => Trigger.OnStateEnterAsObservable();
-    protected IObservable<OnStateInfo> StateExit => Trigger.OnStateExitAsObservable();
 
     public AnimatorFloat speed { get; protected set; }
     public AnimatorTrigger die { get; protected set; }
@@ -20,7 +15,6 @@ public class MobAnimator : MonoBehaviour
     protected virtual void Awake()
     {
         anim = GetComponent<Animator>();
-        Trigger = anim.GetBehaviour<ObservableStateMachineTrigger>();
 
         speed = new AnimatorFloat(anim, "Speed");
         die = new AnimatorTrigger(anim, "Die");
