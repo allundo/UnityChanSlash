@@ -49,7 +49,7 @@ public class Command : ICommand
     protected IObserver<bool> onValidateInput;
 
     /// <summary>
-    /// Initializes Command infomation.
+    /// Initializes Command information.
     /// </summary>
     /// <param name="target">Target GameObject to apply Command execution</param>
     /// <param name="duration">Command duration time with frame unit</param>
@@ -141,7 +141,7 @@ public class Command : ICommand
         => DOTweenCompleted(duration * timeScale, Unit.Default);
 
     /// <summary>
-    /// Since Observable.Timer() has about 25 frames delay on complete compaired to DOVirtual.DelayedCall(), <br />
+    /// Since Observable.Timer() has about 25 frames delay on complete compared to DOVirtual.DelayedCall(), <br />
     /// you should use this DelayedCall based Observable to work with DOTween durations.
     /// /// </summary>
     /// <param name="dueTimeSec">wait time second for notification</param>

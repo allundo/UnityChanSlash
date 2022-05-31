@@ -8557,7 +8557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
-  type: 7
+  type: 2
 --- !u!135 &911663841
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9426,7 +9426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
-  type: 4
+  type: 8
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -45686,7 +45686,7 @@ MonoBehaviour:
   turnRUI: {fileID: 1772793272}
   turnLUI: {fileID: 1400263964}
   jumpUI: {fileID: 4647984070459708861}
-  guardUI: {fileID: 5794931035596765977}
+  guardUI: {fileID: 5794931035596765984}
   inspectUI: {fileID: 1999884782}
   restButton: {fileID: 314247949}
   uiMask: {fileID: 1625512483}
@@ -55428,19 +55428,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5794931035596765981}
   m_CullTransparentMesh: 0
---- !u!114 &5794931035596765977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5794931035596765981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dcb82dfe160d458698b2023f6310174, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveButton: {fileID: 344754611787721303}
 --- !u!1 &5794931035596765981
 GameObject:
   m_ObjectHideFlags: 0
@@ -55452,7 +55439,7 @@ GameObject:
   - component: {fileID: 5794931035596765982}
   - component: {fileID: 5794931035596765976}
   - component: {fileID: 5794931035596765983}
-  - component: {fileID: 5794931035596765977}
+  - component: {fileID: 5794931035596765984}
   m_Layer: 5
   m_Name: Guard
   m_TagString: Untagged
@@ -55511,6 +55498,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5794931035596765984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5794931035596765981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28006e4becfe4f8f8aa808d534985ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveButton: {fileID: 344754611787721303}
 --- !u!198 &5828874369619149276
 ParticleSystem:
   m_ObjectHideFlags: 0

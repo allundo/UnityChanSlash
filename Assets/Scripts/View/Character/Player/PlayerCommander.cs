@@ -7,21 +7,34 @@ public class PlayerCommander : ShieldCommander
 {
     protected PlayerAnimator anim;
 
+    private ICommand guard;
+
     protected ISubject<ICommand> commandComplete = new Subject<ICommand>();
     public IObservable<ICommand> CommandComplete => commandComplete;
 
     public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
         anim = target.anim as PlayerAnimator;
+        guard = new GuardCommand(target, 6000f, 0f);
     }
 
     public override void EnqueueCommand(ICommand cmd)
     {
-        // Don't allow over queuing of GuardCommand
-        if (cmdQueue.First?.Value is GuardCommand) cmdQueue.Dequeue();
-
         base.EnqueueCommand(cmd);
         if (anim.cancel.Bool) CheckCancel(); // Cancel current cancelable Attack if newly enqueued command is Attack
+    }
+
+    public void SetGuard(bool isGuardOn)
+    {
+        if (isGuardOn)
+        {
+            EnqueueCommand(guard);
+        }
+        else
+        {
+            if (currentCommand is GuardCommand) Cancel();
+            cmdQueue.Remove(guard);
+        }
     }
 
     protected override void Subscribe(ICommand cmd)

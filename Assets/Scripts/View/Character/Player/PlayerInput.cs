@@ -34,7 +34,7 @@ public class PlayerInput : ShieldInput
     [SerializeField] protected PointerDownUI turnRUI = default;
     [SerializeField] protected PointerDownUI turnLUI = default;
     [SerializeField] protected PointerDownUI jumpUI = default;
-    [SerializeField] protected PointerEnterUI guardUI = default;
+    [SerializeField] protected PointerEnterExitUI guardUI = default;
     [SerializeField] protected InspectUI inspectUI = default;
 
     [SerializeField] protected Button restButton = default;
@@ -46,6 +46,7 @@ public class PlayerInput : ShieldInput
     protected bool IsDash => commander.currentCommand is PlayerDash;
     protected bool IsForward => commander.currentCommand is PlayerForward;
     protected bool IsMessage => commander.currentCommand is PlayerMessage;
+    protected bool isGuardOn => guardUI.IsPressed.Value;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsEnemyDetected => isEnemyDetected;
@@ -438,7 +439,7 @@ public class PlayerInput : ShieldInput
         ICommand turnL = new PlayerTurnL(playerTarget, 18f);
         ICommand jump = new PlayerJump(playerTarget, 72f);
 
-        ICommand guard = new GuardCommand(playerTarget, 1.44f);
+        ICommand guard = new GuardCommand(playerTarget, 2f);
 
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))
@@ -503,8 +504,8 @@ public class PlayerInput : ShieldInput
             .Subscribe(_ => InputTrigger(jump))
             .AddTo(this);
 
-        guardUI.EnterObservable
-            .Subscribe(_ => InputTrigger(guard))
+        guardUI.IsPressed
+            .Subscribe(isPressed => (commander as PlayerCommander).SetGuard(isPressed))
             .AddTo(this);
     }
 
@@ -530,6 +531,13 @@ public class PlayerInput : ShieldInput
         public override bool IsShieldOn(IDirection attackDir)
             => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
+        public override void SetShield()
+        {
+            input.ClearAll(true, false, 9);
+            input.Interrupt(shieldOn);
+            if (playerInput.isGuardOn) (input.commander as PlayerCommander).SetGuard(true);
+        }
+
         public PlayerGuardState(PlayerInput input, float duration = 15f, float timeToReady = 0.15f) : base(input, duration, timeToReady)
         { }
 
@@ -541,21 +549,6 @@ public class PlayerInput : ShieldInput
                 .Select(_ => isAutoGuard || playerInput.IsShield)
                 .Subscribe(isGuardOn => SetShieldReady(isGuardOn))
                 .AddTo(playerInput.gameObject);
-        }
-
-        protected override void SetShieldReady(bool isGuardOn)
-        {
-            anim.guard.Bool = isGuardOn;
-
-            if (isGuardOn)
-            {
-                readyTween = DOVirtual.DelayedCall(timeToReady, () => isShieldReady = true, false).Play();
-            }
-            else
-            {
-                readyTween?.Kill();
-                isShieldReady = false;
-            }
         }
     }
 }
