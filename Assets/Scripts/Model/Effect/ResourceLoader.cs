@@ -28,13 +28,15 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { VFXType.Teleport,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT")        },
             { VFXType.TeleportDest, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")   },
             { VFXType.Resurrection, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")    },
+            { VFXType.PitDrop,      Resources.Load<ParticleSystem>("Prefabs/Effect/FX_PIT_DROP")        },
         };
 
         prefabSNDs = new Dictionary<SNDType, AudioSource>()
         {
-            { SNDType.Teleport,             Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT")          },
-            { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")     },
+            { SNDType.Teleport,             Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT")           },
+            { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")      },
             { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
+            { SNDType.PitDrop,              Resources.Load<AudioSource>("Prefabs/Sound/SND_PIT_DROP")           },
         };
 
         enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");

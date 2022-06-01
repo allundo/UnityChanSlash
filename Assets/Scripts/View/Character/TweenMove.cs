@@ -60,7 +60,7 @@ public class TweenMove
     /// <summary>
     /// DOTween move with updating IsObjectOn flag to destination Tile
     /// </summary>
-    /// <param name="destPos">Destination map postion</param>
+    /// <param name="destPos">Destination map position</param>
     /// <param name="timeScale">Normalized time scale of the move Command duration</param>
     /// <returns>Playing tween for handling</returns>
     public Tween Linear(Pos destPos, float timeScale = 1f, TweenCallback onComplete = null)

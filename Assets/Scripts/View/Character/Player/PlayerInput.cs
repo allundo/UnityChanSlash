@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using System;
-using DG.Tweening;
 
 /// <summary>
 /// Convert player input UIs operation into a ICommand and enqueue it to PlayerCommander.<br />
@@ -41,6 +40,7 @@ public class PlayerInput : ShieldInput
 
     [SerializeField] protected GameObject uiMask = default;
 
+    protected IPlayerMapUtil playerMap;
     protected PlayerCommandTarget playerTarget;
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
     protected bool IsDash => commander.currentCommand is PlayerDash;
@@ -76,6 +76,12 @@ public class PlayerInput : ShieldInput
             .IgnoreElements();
 
     public float RemainingDuration => IsIdling ? 0f : commander.currentCommand.RemainingDuration;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        playerMap = map as IPlayerMapUtil;
+    }
 
     protected override void SetCommander()
     {
@@ -207,6 +213,14 @@ public class PlayerInput : ShieldInput
         return base.InputIced(duration);
     }
 
+    public ICommand InputPitFall(float damage)
+    {
+        ICommand pitFall = new PlayerPitFall(playerTarget, damage, 60f);
+        Interrupt(pitFall);
+        commander.EnqueueCommand(wakeUp);
+        return pitFall;
+    }
+
     protected override ICommand GetIcedCommand(float duration)
         => new PlayerIcedCommand(playerTarget, duration);
     public override void OnIceCrash()
@@ -234,8 +248,8 @@ public class PlayerInput : ShieldInput
 
         ITile forwardTile = map.ForwardTile;
 
-        // Is face to enemy
-        if (forwardTile.IsEnemyOn)
+        bool isFaceToEnemy = !playerMap.isInPit && forwardTile.IsEnemyOn;
+        if (isFaceToEnemy)
         {
             fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.GetEnemyStatus());
             fightCircle.isForwardMovable = forwardTile.IsEnterable();
@@ -247,7 +261,7 @@ public class PlayerInput : ShieldInput
 
         isEnemyDetected.Value = fightCircle.isActive;
 
-        bool isFaceToDoor = !IsDash && !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
+        bool isFaceToDoor = !playerMap.isInPit && !IsDash && !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
 
         if (isFaceToDoor)
         {
@@ -262,7 +276,7 @@ public class PlayerInput : ShieldInput
             doorHandler.Inactivate();
         }
 
-        bool isFaceToBox = !IsDash && !fightCircle.isActive && forwardTile is Box;
+        bool isFaceToBox = !playerMap.isInPit && !IsDash && !fightCircle.isActive && forwardTile is Box;
         if (isFaceToBox)
         {
             Box box = forwardTile as Box;
@@ -274,7 +288,7 @@ public class PlayerInput : ShieldInput
             boxHandler.Inactivate();
         }
 
-        bool isFaceToItem = !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
+        bool isFaceToItem = !playerMap.isInPit && !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
         if (isFaceToItem)
         {
             itemHandler.Activate(forwardTile.TopItem);
@@ -305,10 +319,10 @@ public class PlayerInput : ShieldInput
 
         uiMask.SetActive(isHandleUIOn || IsAttack || fightCircle.IsPressed);
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !isHandleUIOn);
-        backwardUI.SetActive(mobMap.IsBackwardMovable);
-        rightUI.SetActive(mobMap.IsRightMovable);
-        leftUI.SetActive(mobMap.IsLeftMovable);
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !playerMap.isInPit && !isHandleUIOn);
+        backwardUI.SetActive(playerMap.IsBackwardMovable);
+        rightUI.SetActive(playerMap.IsRightMovable);
+        leftUI.SetActive(playerMap.IsLeftMovable);
 
         bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield;
 
@@ -317,7 +331,7 @@ public class PlayerInput : ShieldInput
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
         jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
 
-        guardUI.SetActive(!fightCircle.isActive);
+        guardUI.SetActive(!fightCircle.isActive && !playerMap.isInPit);
     }
 
     /// <summary>
@@ -438,6 +452,7 @@ public class PlayerInput : ShieldInput
         ICommand turnR = new PlayerTurnR(playerTarget, 18f);
         ICommand turnL = new PlayerTurnL(playerTarget, 18f);
         ICommand jump = new PlayerJump(playerTarget, 72f);
+        ICommand pitJump = new PlayerPitJump(playerTarget, 48f);
 
         ICommand guard = new GuardCommand(playerTarget, 2f);
 
@@ -501,7 +516,7 @@ public class PlayerInput : ShieldInput
             .AddTo(this);
 
         jumpUI.PressObservable
-            .Subscribe(_ => InputTrigger(jump))
+            .Subscribe(_ => InputTrigger(playerMap.isInPit ? pitJump : jump))
             .AddTo(this);
 
         guardUI.IsPressed

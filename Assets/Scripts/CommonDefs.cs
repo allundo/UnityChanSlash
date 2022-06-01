@@ -37,6 +37,7 @@ public enum Terrain
     UpStairs,
     ExitDoor,
     RoomCenter = 11,
+    Pit = 12,
 }
 
 public struct Pos
@@ -503,6 +504,7 @@ public enum VFXType
     Teleport,
     TeleportDest,
     Resurrection,
+    PitDrop,
 }
 
 public enum SNDType
@@ -510,6 +512,7 @@ public enum SNDType
     Teleport = 0,
     TeleportDest,
     ResurrectionSkull,
+    PitDrop,
 }
 
 public enum ObjectLayerEnum

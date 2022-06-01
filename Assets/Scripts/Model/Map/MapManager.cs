@@ -134,17 +134,17 @@ public class MapManager
         stairsBottom = new KeyValuePair<Pos, IDirection>(pos, dir);
 
         Pos doorPos;
-        if (IsArroundWall(doorPos = dir.GetLeft(pos)))
+        if (IsAroundWall(doorPos = dir.GetLeft(pos)))
         {
             SetExitDoor(doorPos, dir.Right);
             SetMessageBoard(dir.GetBackward(pos), dir);
         }
-        else if (IsArroundWall(doorPos = dir.GetRight(pos)))
+        else if (IsAroundWall(doorPos = dir.GetRight(pos)))
         {
             SetExitDoor(doorPos, dir.Left);
             SetMessageBoard(dir.GetBackward(pos), dir);
         }
-        else if (IsArroundWall(doorPos = dir.GetBackward(pos)))
+        else if (IsAroundWall(doorPos = dir.GetBackward(pos)))
         {
             SetExitDoor(doorPos, dir);
             SetMessageBoard(dir.GetLeft(pos), dir.Right);
@@ -182,8 +182,8 @@ public class MapManager
         matrix[pos.x, pos.y] = Terrain.MessageWall;
     }
 
-    protected bool IsArroundWall(Pos pos) => IsArroundWall(pos.x, pos.y);
-    protected bool IsArroundWall(int x, int y) => x == 0 || x == width - 1 || y == 0 || y == height - 1;
+    protected bool IsAroundWall(Pos pos) => IsAroundWall(pos.x, pos.y);
+    protected bool IsAroundWall(int x, int y) => x == 0 || x == width - 1 || y == 0 || y == height - 1;
 
     public MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
     public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir);
@@ -246,6 +246,33 @@ public class MapManager
         dir = dir ?? stairsTop.Value?.Backward ?? Direction.north;
 
         return dir;
+    }
+
+    public MapManager SetPitTrap(int numOfPits)
+    {
+        var pitCandidate = new List<Pos>();
+
+        for (int y = 1; y < height; y++)
+        {
+            for (int x = 1; x < width; x++)
+            {
+                if ((x + y) % 2 == 0) continue;
+
+                if (matrix[x, y] == Terrain.Ground || matrix[x, y] == Terrain.Path)
+                {
+                    pitCandidate.Add(new Pos(x, y));
+                }
+            }
+        }
+
+        for (int i = 0; i < numOfPits && pitCandidate.Count > 0; i++)
+        {
+            var pos = pitCandidate.GetRandom();
+            matrix[pos.x, pos.y] = Terrain.Pit;
+            pitCandidate.Remove(pos);
+        }
+
+        return this;
     }
 
     private void CreateDirMap()

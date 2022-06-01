@@ -2,19 +2,23 @@ using UnityEngine;
 
 public interface IPlayerMapUtil : IMobMapUtil
 {
+    bool isInPit { get; }
     bool IsExitDoorLeft { get; }
     bool IsExitDoorRight { get; }
     bool IsExitDoorBack { get; }
+    bool IsPitJumpable { get; }
 }
 
 [RequireComponent(typeof(PlayerStatus))]
 public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
 {
-    public override bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos), dir);
-    public override bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos), dir.Backward);
-    public override bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos), dir.Left);
-    public override bool IsRightMovable => IsMovable(dir.GetRight(onTilePos), dir.Right);
+    public bool isInPit { get; protected set; } = false;
+    public override bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos), dir) && !isInPit;
+    public override bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos), dir.Backward) && !isInPit;
+    public override bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos), dir.Left) && !isInPit;
+    public override bool IsRightMovable => IsMovable(dir.GetRight(onTilePos), dir.Right) && !isInPit;
     public override bool IsJumpable => IsForwardLeapable && IsMovable(GetJump, dir);
+    public bool IsPitJumpable => IsMovable(dir.GetForward(onTilePos), dir);
 
     public bool IsExitDoorLeft => dir.IsLeft(map.exitDoorDir);
     public bool IsExitDoorRight => dir.IsRight(map.exitDoorDir);
@@ -25,5 +29,11 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
         this.map = map;
         (status as PlayerStatus).SetPosition(isDownStairs ? map.StairsBottom : map.stairsTop);
         SetObjectOn();
+    }
+
+    public override Pos SetObjectOn(Pos destPos)
+    {
+        isInPit = map.GetTile(destPos) is Pit;
+        return base.SetObjectOn(destPos);
     }
 }

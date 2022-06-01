@@ -13,14 +13,16 @@ public class PlayerReactor : MobReactor
     [SerializeField] protected RestUI restUI = default;
 
     protected PlayerAnimator anim;
+    protected PlayerInput playerInput;
     protected ParticleSystem iceCrashVFX;
 
-    protected GuardState guardState => (input as PlayerInput).guardState;
+    protected GuardState guardState => playerInput.guardState;
 
     protected override void Awake()
     {
         base.Awake();
         anim = GetComponent<PlayerAnimator>();
+        playerInput = input as PlayerInput;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
@@ -114,5 +116,10 @@ public class PlayerReactor : MobReactor
         }
 
         return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, 0.0f);
+    }
+
+    public void PitFall(float damage)
+    {
+        playerInput.InputPitFall(damage);
     }
 }

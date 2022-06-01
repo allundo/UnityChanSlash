@@ -8,7 +8,7 @@ public class MapRenderer : MonoBehaviour
     private FloorMaterialsData floorMaterialsData;
     private FloorMaterialsSource floorMaterials;
 
-    private List<Pos>[] doorOpenData;
+    private List<Pos>[] tileOpenData;
 
     public WorldMap map { get; private set; }
 
@@ -48,6 +48,7 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private StairsControl downStairsN = default;
     [SerializeField] private GameObject messageBoardN = default;
     [SerializeField] private BoxControl treasureBoxN = default;
+    [SerializeField] private PitControl pitTrap = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -60,7 +61,7 @@ public class MapRenderer : MonoBehaviour
     void Awake()
     {
         floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
-        doorOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
+        tileOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
     }
 
     ///  <summary>
@@ -131,13 +132,20 @@ public class MapRenderer : MonoBehaviour
 
     private void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
     {
-        var stairs = PlacePrefab(pos, isDownStairs ? downStairsN : upStairsN, dir.Rotate);
+        PlacePrefab(pos, isDownStairs ? downStairsN : upStairsN, dir.Rotate)
+            .SetMaterials(floorMaterials.stairs, isDownStairs ? floorMaterials.wall : null);
 
         Stairs tileStairs = map.GetTile(pos) as Stairs;
         tileStairs.enterDir = dir;
         tileStairs.isDownStairs = isDownStairs;
+    }
 
-        stairs.GetComponent<StairsControl>().SetMaterials(floorMaterials.stairs, isDownStairs ? floorMaterials.wall : null);
+    private void SetPitTrap(Pos pos)
+    {
+        var state = new PitState(floorMaterials.pitDamage);
+
+        PlacePrefab(pos, pitTrap).SetState(state).SetMaterials(floorMaterials.pitLid, floorMaterials.wall);
+        (map.GetTile(pos) as Pit).state = state;
     }
 
     private void SetBox(Pos pos, IDirection dir)
@@ -279,6 +287,10 @@ public class MapRenderer : MonoBehaviour
                     case Terrain.Box:
                         SetBox(pos, Direction.Convert(dirMap[i, j]));
                         break;
+
+                    case Terrain.Pit:
+                        SetPitTrap(pos);
+                        break;
                 }
             }
         }
@@ -287,18 +299,18 @@ public class MapRenderer : MonoBehaviour
 
     public void StoreMapData()
     {
-        var store = doorOpenData[this.map.floor - 1];
+        var store = tileOpenData[this.map.floor - 1];
 
         this.map.ForEachTiles((tile, pos) =>
         {
-            if (tile is IHandleTile && (tile as IHandleTile).IsOpen) store.Add(pos);
+            if (tile is IOpenable && (tile as IOpenable).IsOpen) store.Add(pos);
         });
     }
 
     public void RestoreMapData(WorldMap map)
     {
-        var restore = doorOpenData[map.floor - 1];
-        restore.ForEach(pos => (map.GetTile(pos) as IHandleTile).Handle());
+        var restore = tileOpenData[map.floor - 1];
+        restore.ForEach(pos => (map.GetTile(pos) as IOpenable).Open());
         restore.Clear();
     }
 

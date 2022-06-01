@@ -90,7 +90,7 @@ public class WorldMap
 
     public WorldMap(MapManager map = null, int floor = 1, int w = 49, int h = 49)
     {
-        this.map = map ?? new MapManager(w, h).SetDownStairs();
+        this.map = map ?? new MapManager(w, h).SetDownStairs().SetPitTrap(Mathf.Min(floor * floor * 4, w * h / 10));
         stairsBottom = floor == 1 ? this.map.SetStartDoor().stairsBottom : this.map.SetUpStairs().stairsBottom;
 
         this.floor = floor;
@@ -150,6 +150,11 @@ public class WorldMap
                     case Terrain.Box:
                         tileInfo[i, j] = new Box();
                         pixels[i + Width * j] = Color.blue;
+                        break;
+
+                    case Terrain.Pit:
+                        tileInfo[i, j] = new Pit();
+                        pixels[i + Width * j] = Color.black;
                         break;
 
                     default:

@@ -189,9 +189,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public Vector3 PlayerWorldPos
         => new Vector3(playerTransform.position.x, 0f, playerTransform.position.z);
 
-    public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && PlayerPos == pos;
+    public bool IsOnPlayer(Pos pos) => playerTransform.gameObject.activeSelf && !map.isInPit && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
-    public bool IsOnPlayerTile(Pos pos) => playerTransform.gameObject.activeSelf && map.onTilePos == pos;
+    public bool IsOnPlayerTile(Pos pos) => playerTransform.gameObject.activeSelf && !map.isInPit && map.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
 
     public void EnterStair(bool isDownStairs)

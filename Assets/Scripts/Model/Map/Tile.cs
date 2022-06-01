@@ -17,10 +17,15 @@ public interface ITile
     IEnemyStatus GetEnemyStatus();
 }
 
-public interface IHandleTile : ITile
+public interface IOpenable : ITile
+{
+    void Open();
+    bool IsOpen { get; }
+}
+
+public interface IHandleTile : IOpenable
 {
     void Handle();
-    bool IsOpen { get; }
     bool IsLocked { get; }
 }
 
@@ -60,6 +65,12 @@ public class Tile
         => OnEnemy ?? (OnCharacterDest is IEnemyStatus ? OnCharacterDest as IEnemyStatus : null) ?? AboveEnemy;
 }
 
+public abstract class HandleTile : Tile
+{
+    public void Open() => Handle();
+    public abstract void Handle();
+}
+
 public class Ground : Tile, ITile
 {
     public bool IsEnterable(IDirection dir = null) => !IsCharacterOn;
@@ -91,7 +102,7 @@ public class MessageWall : Wall
     public MessageData[] data { protected get; set; }
 }
 
-public class Door : Tile, IHandleTile
+public class Door : HandleTile, IHandleTile
 {
     public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
@@ -100,7 +111,7 @@ public class Door : Tile, IHandleTile
     public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
 
     public DoorState state { protected get; set; }
-    public void Handle() => state.TransitToNextState();
+    public override void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
     public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
@@ -116,7 +127,7 @@ public class ExitDoor : Door
     public override bool IsViewOpen => false;
 }
 
-public class Box : Tile, IHandleTile
+public class Box : HandleTile, IHandleTile
 {
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => true;
@@ -128,7 +139,7 @@ public class Box : Tile, IHandleTile
     public override IStatus OnCharacterDest { get { return null; } set { } }
 
     public BoxState state { protected get; set; }
-    public void Handle() => state.TransitToNextState();
+    public override void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
     public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
@@ -147,6 +158,25 @@ public class Box : Tile, IHandleTile
         return item;
     }
 
+    public override ItemInfo TopItem => null;
+}
+public class Pit : Tile, IOpenable
+{
+    public bool IsEnterable(IDirection dir = null) => dir != null;
+    public bool IsLeapable => true;
+    public virtual bool IsViewOpen => true;
+    public override bool IsCharacterOn => false;
+
+    public override bool IsEnemyOn => AboveEnemy != null;
+    public override IEnemyStatus OnEnemy { get { return null; } set { } }
+    public override IStatus OnCharacterDest { get { return null; } set { } }
+
+    public PitState state { protected get; set; }
+    public void Open() => state.Drop(false);
+    public bool IsOpen => state.isDropped;
+
+    public override bool PutItem(Item item) => false;
+    public override Item PickItem() => null;
     public override ItemInfo TopItem => null;
 }
 

@@ -271,32 +271,43 @@ public class PlayerJump : PlayerCommand
 {
     public PlayerJump(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected Pos prevPos = new Pos();
-
     protected override bool Action()
     {
-        int distance = 0;
-        ITile destTile = null;
-
-        if (mobMap.IsJumpable)
-        {
-            distance = 2;
-            destTile = mobMap.JumpTile;
-        }
-        else if (mobMap.IsForwardMovable)
-        {
-            distance = 1;
-            destTile = mobMap.ForwardTile;
-        }
-
         playerAnim.jump.Fire();
 
         playingTween = tweenMove
             .Jump(
-                distance,
+                mobMap.IsJumpable ? 2 : mobMap.IsForwardMovable ? 1 : 0,
                 hidePlateHandler.Move,  // Update HidePlate on entering the next Tile
                 hidePlateHandler.Move   // Update HidePlate on entering the next next Tile
             );
+
+        return true;
+    }
+}
+
+public class PlayerPitJump : PlayerCommand
+{
+    public PlayerPitJump(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        Vector3 destPos;
+
+        if ((map as IPlayerMapUtil).IsPitJumpable)
+        {
+            map.MoveObjectOn(map.GetForward);
+            destPos = map.DestVec3Pos;
+            completeTween = tweenMove.DelayedCall(0.8f, hidePlateHandler.Move).Play();
+            itemInventory.SetEnable(true);
+        }
+        else
+        {
+            destPos = map.CurrentVec3Pos;
+        }
+
+        playerAnim.jump.Fire();
+        playingTween = tweenMove.Jump(destPos, 1, 0.1f).Play();
 
         return true;
     }
@@ -325,6 +336,34 @@ public class PlayerIcedFall : PlayerCommand
             .Play();
 
         completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
+
+        return ObservableComplete();
+    }
+}
+
+public class PlayerPitFall : PlayerCommand
+{
+    public override int priority => 20;
+    protected float damage;
+    public PlayerPitFall(PlayerCommandTarget target, float damage, float duration) : base(target, duration)
+    {
+        this.damage = damage;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        playerAnim.speed.Float = 0f;
+        playerAnim.icedFall.Bool = true;
+
+        itemInventory.SetEnable(false);
+
+        playingTween = DOTween.Sequence()
+            .AppendCallback(mobReact.OnFall)
+            .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0f).SetEase(Ease.Linear))
+            .AppendCallback(() => mobReact.Damage(damage, null, AttackType.Smash))
+            .AppendCallback(hidePlateHandler.Move)
+            .SetUpdate(false)
+            .Play();
 
         return ObservableComplete();
     }
@@ -634,7 +673,7 @@ public class PlayerMessage : PlayerAction
     protected MessageData[] data;
     protected bool isUIVisibleOnCompleted;
 
-    public PlayerMessage(PlayerCommandTarget target, MessageData[] data, bool isUIVisibleOnCompleted = true) : base(target, 3.6f)
+    public PlayerMessage(PlayerCommandTarget target, MessageData[] data, bool isUIVisibleOnCompleted = true) : base(target, 30f)
     {
         this.data = data;
         this.isUIVisibleOnCompleted = isUIVisibleOnCompleted;

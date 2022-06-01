@@ -17,9 +17,6 @@ public class DoorControl : HandleStructure
     protected Color defaultGateColor;
     protected Color defaultDoorColor;
 
-    protected Tween doorMove;
-
-
     protected virtual void Awake()
     {
         doorR = this.transform.GetChild(0);
