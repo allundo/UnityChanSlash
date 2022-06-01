@@ -122,4 +122,10 @@ public class PlayerReactor : MobReactor
     {
         playerInput.InputPitFall(damage);
     }
+
+    public override void OnWakeUp()
+    {
+        bodyCollider.enabled = true;
+        playerInput.SetInputVisible(true, !(map as PlayerMapUtil).isInPit);
+    }
 }

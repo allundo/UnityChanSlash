@@ -13,6 +13,7 @@ public class PlayerAnimator : ShieldAnimator
     protected IObservable<OnStateInfo> StateExit => trigger.OnStateExitAsObservable();
 
     public TriggerJump jump { get; protected set; }
+    public TriggerJump pitJump { get; protected set; }
     public TriggerBrakeAndBackStep brakeAndBackStep { get; protected set; }
 
     public TriggerEx handle { get; protected set; }
@@ -27,7 +28,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorBool rest { get; protected set; }
     public AnimatorBool handOn { get; protected set; }
     public AnimatorBool cancel { get; protected set; }
-    public AnimatorBool icedFall { get; protected set; }
+    public AnimatorBool fall { get; protected set; }
     public AnimatorFloat lifeRatio { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
     public AnimatorFloat brakeOverRun { get; protected set; }
@@ -72,8 +73,9 @@ public class PlayerAnimator : ShieldAnimator
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
+        pitJump = new TriggerJump(this, jumpHeight, bodyCollider, "PitJump");
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
-        icedFall = new BoolIcedFall(this, fallHeight, bodyCollider);
+        fall = new BoolFall(this, fallHeight, bodyCollider);
     }
 
     public override void Pause()
@@ -128,8 +130,8 @@ public class PlayerAnimator : ShieldAnimator
 
     public class TriggerJump : TriggerUpdate
     {
-        public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider)
-            : base(playerAnim, jumpHeight, bodyCollider, "Jump", "Base Layer.Jump") { }
+        public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider, string triggerName = "Jump")
+            : base(playerAnim, jumpHeight, bodyCollider, triggerName, "Base Layer." + triggerName) { }
         protected override void Update(float value) => bodyCollider.JumpCollider(value);
     }
 
@@ -168,15 +170,15 @@ public class PlayerAnimator : ShieldAnimator
         }
     }
 
-    public class BoolIcedFall : AnimatorBool
+    public class BoolFall : AnimatorBool
     {
         protected IDisposable updateCollider = null;
         protected AnimatorFloat animatorFloat;
         protected PlayerBodyCollider bodyCollider;
         protected PlayerAnimator playerAnim;
 
-        public BoolIcedFall(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider)
-            : base(playerAnim.anim, "IcedFall")
+        public BoolFall(PlayerAnimator playerAnim, AnimatorFloat animatorFloat, PlayerBodyCollider bodyCollider)
+            : base(playerAnim.anim, "Fall")
         {
             this.playerAnim = playerAnim;
             this.animatorFloat = animatorFloat;

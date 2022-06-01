@@ -292,22 +292,24 @@ public class PlayerPitJump : PlayerCommand
 
     protected override bool Action()
     {
-        Vector3 destPos;
+        Vector3 moveVec;
+        float jumpPower = 0.1f;
 
         if ((map as IPlayerMapUtil).IsPitJumpable)
         {
             map.MoveObjectOn(map.GetForward);
-            destPos = map.DestVec3Pos;
+            moveVec = map.DestVec;
             completeTween = tweenMove.DelayedCall(0.8f, hidePlateHandler.Move).Play();
             itemInventory.SetEnable(true);
         }
         else
         {
-            destPos = map.CurrentVec3Pos;
+            moveVec = Vector3.zero;
+            jumpPower = 1.2f;
         }
 
-        playerAnim.jump.Fire();
-        playingTween = tweenMove.Jump(destPos, 1, 0.1f).Play();
+        playerAnim.pitJump.Fire();
+        playingTween = tweenMove.JumpRelative(moveVec, 0.8f, jumpPower).SetEase(Ease.OutQuad).Play();
 
         return true;
     }
@@ -325,7 +327,9 @@ public class PlayerIcedFall : PlayerCommand
     public override IObservable<Unit> Execute()
     {
         playerAnim.speed.Float = 0f;
-        playerAnim.icedFall.Bool = true;
+        playerAnim.fall.Bool = true;
+
+        playerInput.SetInputVisible(false);
 
         Vector3 moveVec = mobMap.DestVec;
 
@@ -361,13 +365,13 @@ public class PlayerPitFall : PlayerCommand
     public override IObservable<Unit> Execute()
     {
         playerAnim.speed.Float = 0f;
-        playerAnim.icedFall.Bool = true;
+        playerAnim.fall.Bool = true;
 
-        itemInventory.SetEnable(false);
+        playerInput.SetInputVisible(false);
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0f).SetEase(Ease.Linear))
+            .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0f).SetEase(Ease.OutCubic))
             .AppendCallback(() => mobReact.Damage(damage, null, AttackType.Smash))
             .AppendCallback(hidePlateHandler.Move)
             .SetUpdate(false)
@@ -389,8 +393,8 @@ public class PlayerWakeUp : PlayerCommand
     protected override bool Action()
     {
         completeTween = DOTween.Sequence()
-            .InsertCallback(duration * wakeUpTiming, () => playerAnim.icedFall.Bool = false)
-            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, () => mobReact.OnWakeUp())
+            .InsertCallback(duration * wakeUpTiming, () => playerAnim.fall.Bool = false)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, mobReact.OnWakeUp)
             .SetUpdate(false)
             .Play();
 

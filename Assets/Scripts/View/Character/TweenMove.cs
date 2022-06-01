@@ -33,6 +33,11 @@ public class TweenMove
         return tf.DOMove(destPos, duration * timeScale).SetEase(ease);
     }
 
+    public Tween MoveRelative(Vector3 moveVec, float timeScale = 1f, Ease ease = Ease.Linear)
+    {
+        return tf.DOMove(moveVec, duration * timeScale).SetEase(ease).SetRelative();
+    }
+
     public Tween Move(Pos destPos, float timeScale = 1f, Ease ease = Ease.Linear)
         => Move(map.WorldPos(destPos), timeScale, ease);
 
@@ -80,8 +85,8 @@ public class TweenMove
         map.MoveObjectOn(destPos);
         return DOTween.Sequence()
             // Set distances of (Linear : OutQuart) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
-            .Append(Move(toDestVec3 * 0.666667f, timeScale * 0.5f).SetRelative())
-            .Append(Move(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad).SetRelative())
+            .Append(MoveRelative(toDestVec3 * 0.666667f, timeScale * 0.5f))
+            .Append(MoveRelative(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad))
             .AppendCallback(onComplete)
             .Play();
     }
@@ -91,8 +96,8 @@ public class TweenMove
         var moveVec = map.dir.LookAt * TILE_UNIT * 0.2f;
 
         return DOTween.Sequence()
-            .Append(Move(moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative())
-            .Append(Move(-moveVec, timeScale * 0.5f, Ease.OutQuad).SetRelative())
+            .Append(MoveRelative(moveVec, timeScale * 0.5f, Ease.OutQuad))
+            .Append(MoveRelative(-moveVec, timeScale * 0.5f, Ease.OutQuad))
             .AppendCallback(onComplete)
             .Play();
     }

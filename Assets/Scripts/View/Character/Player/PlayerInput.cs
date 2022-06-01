@@ -184,11 +184,11 @@ public class PlayerInput : ShieldInput
     /// <summary>
     /// Switch visibilities of all input UIs.
     /// </summary>
-    public void SetInputVisible(bool isVisible = true)
+    public void SetInputVisible(bool isVisible = true, bool withInventory = true)
     {
         isInputVisible = isVisible;
         restButton.gameObject.SetActive(isVisible);
-        itemInventory.SetEnable(isVisible);
+        if (withInventory) itemInventory.SetEnable(isVisible);
         if (!isVisible) InactivateUIs();
     }
 
@@ -216,7 +216,7 @@ public class PlayerInput : ShieldInput
     public ICommand InputPitFall(float damage)
     {
         ICommand pitFall = new PlayerPitFall(playerTarget, damage, 60f);
-        Interrupt(pitFall);
+        Interrupt(pitFall, true, true);
         commander.EnqueueCommand(wakeUp);
         return pitFall;
     }
@@ -452,7 +452,7 @@ public class PlayerInput : ShieldInput
         ICommand turnR = new PlayerTurnR(playerTarget, 18f);
         ICommand turnL = new PlayerTurnL(playerTarget, 18f);
         ICommand jump = new PlayerJump(playerTarget, 72f);
-        ICommand pitJump = new PlayerPitJump(playerTarget, 48f);
+        ICommand pitJump = new PlayerPitJump(playerTarget, 60f);
 
         ICommand guard = new GuardCommand(playerTarget, 2f);
 
