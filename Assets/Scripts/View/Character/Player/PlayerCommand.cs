@@ -276,10 +276,10 @@ public class PlayerJump : PlayerCommand
         playerAnim.jump.Fire();
 
         playingTween = tweenMove
-            .Jump(
+            .JumpLeap(
                 mobMap.IsJumpable ? 2 : mobMap.IsForwardMovable ? 1 : 0,
-                hidePlateHandler.Move,  // Update HidePlate on entering the next Tile
-                hidePlateHandler.Move   // Update HidePlate on entering the next next Tile
+                hidePlateHandler.Move,  // Update HidePlate on entering the leaped Tile
+                hidePlateHandler.Move   // Update HidePlate on entering the destination Tile
             );
 
         return true;
@@ -327,13 +327,21 @@ public class PlayerIcedFall : PlayerCommand
         playerAnim.speed.Float = 0f;
         playerAnim.icedFall.Bool = true;
 
-        playingTween = DOTween.Sequence()
+        Vector3 moveVec = mobMap.DestVec;
+
+        var jumpSeq = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.Jump(mobMap.DestVec3Pos, 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash))
-            .AppendCallback(hidePlateHandler.Move)
-            .SetUpdate(false)
-            .Play();
+            .Append(tweenMove.JumpRelative(moveVec, 1f, 0f).SetEase(Ease.Linear))
+            .InsertCallback(0.95f * duration, hidePlateHandler.Move) // Update HidePlate on entering the destination Tile
+            .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash));
+
+        // Update HidePlate on entering the leaped Tile
+        if (moveVec.magnitude / TILE_UNIT > 1f)
+        {
+            jumpSeq.InsertCallback(0.5f * duration, hidePlateHandler.Move);
+        }
+
+        playingTween = jumpSeq.SetUpdate(false).Play();
 
         completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
 

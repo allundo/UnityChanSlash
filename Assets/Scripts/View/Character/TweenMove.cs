@@ -114,7 +114,7 @@ public class TweenMove
     /// <param name="DoMiddle">Called on entering next Tile if the jump distance is 2</param>
     /// <param name="DoDest">Called on entering destination Tile</param>
     /// <returns>Playing Tween for handling</returns>
-    public Tween Jump(int distance, TweenCallback DoMiddle = null, TweenCallback DoDest = null, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
+    public Tween JumpLeap(int distance, TweenCallback DoMiddle = null, TweenCallback DoDest = null, float jumpPower = 1.0f, float edgeTime = 0.3f, float takeoffRate = 0.01f)
     {
         Vector3 moveVector = map.GetForwardVector(distance);
         float middleTime = duration - 1.5f * edgeTime;
