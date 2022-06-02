@@ -215,7 +215,7 @@ public class PlayerInput : ShieldInput
 
     public ICommand InputPitFall(float damage)
     {
-        ICommand pitFall = new PlayerPitFall(playerTarget, damage, 60f);
+        ICommand pitFall = new PlayerPitFall(playerTarget, damage, 40f);
         Interrupt(pitFall, true, true);
         commander.EnqueueCommand(wakeUp);
         return pitFall;
