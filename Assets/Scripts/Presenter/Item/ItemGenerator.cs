@@ -11,7 +11,7 @@ public class ItemGenerator : MobGenerator<Item>
     private ItemType[] randomItemTypes;
     private ItemType RandomItemType => randomItemTypes[Random.Range(0, randomItemTypes.Length)];
 
-    private Dictionary<ItemType, ItemInfo> itemInfo = new Dictionary<ItemType, ItemInfo>();
+    private Dictionary<ItemType, ItemInfo> itemInfo;
 
     private Stack<RespawnData>[] respawnData;
 
