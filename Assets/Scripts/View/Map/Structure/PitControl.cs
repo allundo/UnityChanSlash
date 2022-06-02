@@ -4,9 +4,6 @@ using UniRx;
 [RequireComponent(typeof(Collider))]
 public class PitControl : MonoBehaviour
 {
-    protected static ParticleSystem dropVFX = null;
-    protected static AudioSource dropSnd = null;
-
     [SerializeField] protected Renderer rendererLid = default;
     [SerializeField] protected Renderer rendererPit = default;
     protected PitState pitState;
@@ -39,13 +36,8 @@ public class PitControl : MonoBehaviour
 
         if (isFXActive)
         {
-            dropVFX = dropVFX ?? ResourceLoader.Instance.LoadVFX(VFXType.PitDrop);
-            dropSnd = dropSnd ?? ResourceLoader.Instance.LoadSnd(SNDType.PitDrop);
-
-            dropVFX.transform.position = dropSnd.transform.position = transform.position;
-
-            dropVFX.Play();
-            dropSnd.PlayEx();
+            GameManager.Instance.PlayVFX(VFXType.PitDrop, transform.position);
+            GameManager.Instance.PlaySnd(SNDType.PitDrop, transform.position);
         }
     }
 

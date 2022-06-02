@@ -31,6 +31,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool isScaled { get; private set; } = false;
 
     public WorldMap worldMap { get; protected set; }
+    private ResourceFX resourceFX;
 
     public IObservable<Unit> ExitObservable => exitSubject.IgnoreElements();
     private ISubject<Unit> exitSubject = new Subject<Unit>();
@@ -48,6 +49,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f)
         => placeEnemyGenerator.SpawnWitch(pos, dir, waitFrames);
+
+    public void PlayVFX(VFXType type, Vector3 pos) => resourceFX.PlayVFX(type, pos);
+    public void PlaySnd(SNDType type, Vector3 pos) => resourceFX.PlaySnd(type, pos);
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
 
@@ -91,6 +95,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         worldMap = GameInfo.Instance.Map(0);
         mapRenderer.Render(worldMap);
+
+        resourceFX = new ResourceFX();
     }
 
     void Start()
