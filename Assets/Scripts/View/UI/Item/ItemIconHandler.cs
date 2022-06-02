@@ -185,7 +185,7 @@ public class ItemIconHandler : IItemIconHandler
         {
             var itemInfo = itemIndex.GetItem(handler.pressedIndex)?.itemInfo;
             if (itemInfo != null) handler.onInspectItem.OnNext(itemInfo);
-            return this;
+            return OnRelease();
         }
 
         public virtual IItemIconHandler CleanUp()
@@ -223,7 +223,6 @@ public class ItemIconHandler : IItemIconHandler
             var currentTarget = itemIndex.GetItem(index);
 
             if (currentTarget == null) return this;
-
 
             if (currentTarget != handler.currentSelected)
             {
