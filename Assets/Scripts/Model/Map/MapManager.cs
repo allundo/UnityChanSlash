@@ -266,6 +266,10 @@ public class MapManager
             }
         }
 
+        // Don't set pit traps in front of items on dead end position
+        deadEndPos.Select(kv => kv.Value.GetForward(kv.Key))
+            .ForEach(nextToDeadEnd => pitCandidate.Remove(nextToDeadEnd));
+
         for (int i = 0; i < numOfPits && pitCandidate.Count > 0; i++)
         {
             var pos = pitCandidate.GetRandom();
