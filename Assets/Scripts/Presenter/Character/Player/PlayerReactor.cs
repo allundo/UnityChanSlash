@@ -12,7 +12,7 @@ public class PlayerReactor : MobReactor
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
     [SerializeField] protected RestUI restUI = default;
 
-    protected PlayerAnimator anim;
+    protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
     protected ParticleSystem iceCrashVFX;
 
@@ -21,7 +21,7 @@ public class PlayerReactor : MobReactor
     protected override void Awake()
     {
         base.Awake();
-        anim = GetComponent<PlayerAnimator>();
+        playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
@@ -29,7 +29,7 @@ public class PlayerReactor : MobReactor
     protected override void Start()
     {
         status.Activate();
-        anim.lifeRatio.Float = 1f;
+        playerAnim.lifeRatio.Float = 1f;
 
         base.Start();
 
@@ -89,7 +89,7 @@ public class PlayerReactor : MobReactor
         lifeGauge.UpdateLifeText(life, status.LifeMax.Value);
 
         restUI.OnLifeChange(life, status.LifeMax.Value);
-        anim.lifeRatio.Float = LifeRatio(life);
+        playerAnim.lifeRatio.Float = LifeRatio(life);
 
     }
 

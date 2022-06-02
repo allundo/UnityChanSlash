@@ -371,7 +371,7 @@ public class PlayerPitFall : PlayerCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0f).SetEase(Ease.OutCubic))
+            .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0.001f).SetEase(Ease.OutCubic))
             .AppendCallback(() => mobReact.Damage(damage, null, AttackType.Smash))
             .AppendCallback(hidePlateHandler.Move)
             .SetUpdate(false)
@@ -659,7 +659,7 @@ public class PlayerDie : PlayerCommand
     public override IObservable<Unit> Execute()
     {
         mobReact.OnDie();
-        playerAnim.dieEx.Fire();
+        playerAnim.die.Bool = true;
         playerTarget.gameOverUI.Play();
         itemInventory.Cancel();
 

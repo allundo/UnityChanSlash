@@ -6,13 +6,13 @@ using static ShieldInput;
 public class ShieldEnemyReactor : EnemyReactor
 {
     [SerializeField] protected Transform shieldTf;
-    protected ShieldEnemyAnimator anim;
+    protected ShieldAnimator shieldAnim;
     protected GuardState guardState => (input as ShieldInput).guardState;
     protected MatColorEffect shieldEffect;
 
     protected override void Awake()
     {
-        anim = GetComponent<ShieldEnemyAnimator>();
+        shieldAnim = anim as ShieldAnimator;
         shieldEffect = new MatColorEffect(shieldTf);
         base.Awake();
     }
@@ -32,7 +32,7 @@ public class ShieldEnemyReactor : EnemyReactor
     }
     public override void Destroy()
     {
-        anim.ClearTriggers();
+        shieldAnim.ClearTriggers();
         base.Destroy();
     }
 }

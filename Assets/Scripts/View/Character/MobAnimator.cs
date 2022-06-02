@@ -1,5 +1,4 @@
 using UnityEngine;
-using UniRx.Triggers;
 
 [RequireComponent(typeof(Animator))]
 public class MobAnimator : MonoBehaviour
@@ -7,7 +6,7 @@ public class MobAnimator : MonoBehaviour
     public Animator anim { get; protected set; }
 
     public AnimatorFloat speed { get; protected set; }
-    public AnimatorTrigger die { get; protected set; }
+    public AnimatorBool die { get; protected set; }
 
     public virtual void Pause() => anim.speed = 0f;
     public virtual void Resume() => anim.speed = 1f;
@@ -17,7 +16,7 @@ public class MobAnimator : MonoBehaviour
         anim = GetComponent<Animator>();
 
         speed = new AnimatorFloat(anim, "Speed");
-        die = new AnimatorTrigger(anim, "Die");
+        die = new AnimatorBool(anim, "Die");
     }
 
     public abstract class AnimatorParam

@@ -27,7 +27,7 @@ public class Resurrection : UndeadCommand
         if (map.OnTile.IsEnterable())
         {
             undeadAnim.resurrection.Fire();
-            undeadAnim.sleep.Bool = false;
+            undeadAnim.die.Bool = undeadAnim.sleep.Bool = false;
             undeadReact.OnResurrection();
             map.SetObjectOn();
             enemyMap.SetOnEnemy();
@@ -90,8 +90,7 @@ public class UndeadSleep : UndeadCommand
 
     public override IObservable<Unit> Execute()
     {
-        undeadAnim.sleep.Bool = true;
-        undeadAnim.die.Fire();
+        undeadAnim.die.Bool = undeadAnim.sleep.Bool = true;
         undeadReact.OnSleep();
         input.Interrupt(resurrection, false);
 

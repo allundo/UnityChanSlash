@@ -161,7 +161,6 @@ public class FlyingIcedFall : FlyingCommand
         flyingAnim.speed.Float = 0f;
         flyingAnim.icedFall.Bool = true;
 
-
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.JumpRelative(map.DestVec + new Vector3(0f, -1.25f, 0f), 1f, 0f).SetEase(Ease.Linear))
@@ -207,7 +206,7 @@ public class FlyingDie : FlyingCommand
     public override IObservable<Unit> Execute()
     {
         playingTween = tweenMove.Move(map.DestVec3Pos, 0.5f, Ease.InQuad).Play();
-        anim.die.Fire();
+        anim.die.Bool = true;
         mobReact.OnDie();
 
         return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.

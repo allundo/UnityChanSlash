@@ -1,7 +1,7 @@
 public interface IEnemyAnimator
 {
     MobAnimator.AnimatorFloat speed { get; }
-    MobAnimator.AnimatorTrigger die { get; }
+    MobAnimator.AnimatorBool die { get; }
     MobAnimator.AnimatorTrigger attack { get; }
     MobAnimator.AnimatorTrigger fire { get; }
 }

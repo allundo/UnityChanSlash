@@ -40,6 +40,7 @@ public class MobReactor : Reactor, IMobReactor
     protected IMobMapUtil map;
     protected IMobInput input;
     protected IMobEffect effect;
+    protected MobAnimator anim;
 
     protected override void Awake()
     {
@@ -48,6 +49,7 @@ public class MobReactor : Reactor, IMobReactor
         mobStatus = status as IMobStatus;
         map = GetComponent<MobMapUtil>(); ;
         input = GetComponent<MobInput>();
+        anim = GetComponent<MobAnimator>();
     }
 
     protected override void OnLifeChange(float life)
@@ -148,6 +150,12 @@ public class MobReactor : Reactor, IMobReactor
     public virtual void OnDisappear(float duration = 0.5f)
     {
         effect.Disappear(OnDead, duration);
+    }
+
+    protected override void OnDead()
+    {
+        status.Inactivate();
+        anim.die.Bool = false;
     }
 
     public override void OnDie()

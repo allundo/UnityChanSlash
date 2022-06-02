@@ -155,7 +155,7 @@ public class EnemyDie : EnemyCommand
 
     public override IObservable<Unit> Execute()
     {
-        anim.die.Fire();
+        anim.die.Bool = true;
         react.OnDie();
 
         return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
