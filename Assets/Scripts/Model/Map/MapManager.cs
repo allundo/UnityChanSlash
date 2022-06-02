@@ -185,6 +185,8 @@ public class MapManager
 
     protected bool IsAroundWall(Pos pos) => IsAroundWall(pos.x, pos.y);
     protected bool IsAroundWall(int x, int y) => x == 0 || x == width - 1 || y == 0 || y == height - 1;
+    protected bool IsNextToAroundWall(Pos pos) => IsNextToAroundWall(pos.x, pos.y);
+    protected bool IsNextToAroundWall(int x, int y) => x == 1 || x == width - 2 || y == 1 || y == height - 2;
 
     public MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
     public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir);
@@ -208,7 +210,7 @@ public class MapManager
 
     private Pos GetStartPos()
     {
-        return deadEndPos.Keys.Where(pos => pos.x == 1 || pos.y == 1).Last();
+        return deadEndPos.Keys.Where(pos => IsNextToAroundWall(pos)).Last();
     }
 
     private Pos GetUpStairsPos()
