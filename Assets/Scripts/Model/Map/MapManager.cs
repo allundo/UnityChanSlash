@@ -9,6 +9,7 @@ public class MapManager
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
+    public List<Pos> pitTrapPos { get; private set; } = new List<Pos>();
 
     /// <summary>
     /// Represents the start position and direction after going down a floor.
@@ -270,6 +271,7 @@ public class MapManager
             var pos = pitCandidate.GetRandom();
             matrix[pos.x, pos.y] = Terrain.Pit;
             pitCandidate.Remove(pos);
+            pitTrapPos.Add(pos);
         }
 
         return this;

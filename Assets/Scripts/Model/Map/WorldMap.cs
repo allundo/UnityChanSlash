@@ -76,13 +76,30 @@ public class WorldMap
             for (int i = targetPos.x - range; i < targetPos.x + range; i++)
             {
                 var pos = new Pos(i, j);
-                if (GetTile(pos).IsEnterable()) spaceCandidates.Add(pos);
+                if (IsEnterableTile(pos)) spaceCandidates.Add(pos);
             }
         }
 
         exceptFor?.ForEach(pos => spaceCandidates.Remove(pos));
 
         return spaceCandidates.Count > 0 ? spaceCandidates.GetRandom() : new Pos();
+    }
+
+    /// <summary>
+    /// Tiles that cannot enter onto or move from are not enterable for enemies.
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns>TRUE if enterable</returns>
+    private bool IsEnterableTile(Pos pos)
+    {
+        if (!GetTile(pos).IsEnterable()) return false;
+
+        if (GetTile(pos.DecY()).IsEnterable()) return true; // North is open
+        if (GetTile(pos.IncX()).IsEnterable()) return true; // East is open
+        if (GetTile(pos.IncY()).IsEnterable()) return true; // South is open
+        if (GetTile(pos.DecX()).IsEnterable()) return true; // West is open
+
+        return false;
     }
 
     public int Width { get; protected set; } = 49;
