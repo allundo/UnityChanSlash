@@ -4,11 +4,8 @@ ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: 4636629381034469973
-    second: Lid|Action
-  - first:
       74: -294044572917435584
-    second: PIT_DROP
+    second: Lid|Action.001
   - first:
       74: 2231102873478410331
     second: PIT_DROP
