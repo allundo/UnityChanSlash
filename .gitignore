@@ -77,3 +77,6 @@ crashlytics-build.properties
 # ProBuilder settings
 /ProjectSettings/Packages/com.unity.probuilder/Settings.json
 
+# Code Coverage Report
+/[Cc]odeCoverage/
+
