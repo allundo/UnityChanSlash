@@ -12,4 +12,3 @@ public class InspectUI : PointerDownUI
         if (isActive) this.message = message;
     }
 }
-
