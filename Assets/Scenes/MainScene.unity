@@ -8006,7 +8006,7 @@ Camera:
     y: 0
     width: 1
     height: 0.8888889
-  near clip plane: 5
+  near clip plane: 4
   far clip plane: 500
   field of view: 30
   orthographic: 0
@@ -9301,7 +9301,7 @@ Camera:
     y: 0
     width: 1
     height: 0.8888889
-  near clip plane: 5
+  near clip plane: 4
   far clip plane: 500
   field of view: 30
   orthographic: 0
