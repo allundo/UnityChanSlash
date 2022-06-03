@@ -5,7 +5,8 @@
         "UnityChanSlash",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UniRx"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
