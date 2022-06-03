@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using TMPro;
 
 public class DataAsset<T> : ScriptableObject
 {
@@ -19,7 +20,6 @@ public class DataAsset<T> : ScriptableObject
         setParams.ForEach(param => action(param));
     }
 }
-
 
 [System.Serializable]
 public class Param
@@ -115,4 +115,49 @@ public class FloorMaterialsSource
     [SerializeField] public Material hidePlate = default;
     [SerializeField] public Material plateFront = default;
     [SerializeField] public Color pointLightColor = default;
+}
+
+[System.Serializable]
+public class MessageSource
+{
+    [SerializeField] public string name = "メッセージ";
+    [SerializeField] public string sentence = default;
+    [SerializeField] public FaceID face = FaceID.NONE;
+    [SerializeField] public float fontSize = 64f;
+    [SerializeField] public float literalsPerSec = 20f;
+    [SerializeField] public TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft;
+    [SerializeField] public Sprite spriteImage = null;
+    [SerializeField] public Material matImage = null;
+    [SerializeField] public bool ignoreIfRead = false;
+
+    public MessageSource(
+        string sentence,
+        FaceID face = FaceID.NONE,
+        float fontSize = 64f,
+        float literalsPerSec = 20f,
+        TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
+        Sprite spriteImage = null,
+        Material matImage = null,
+        bool ignoreIfRead = false
+    )
+    {
+        this.sentence = sentence;
+        this.face = face;
+        this.fontSize = fontSize;
+        this.literalsPerSec = literalsPerSec;
+        this.alignment = alignment;
+        this.spriteImage = spriteImage;
+        this.matImage = matImage;
+        this.ignoreIfRead = ignoreIfRead;
+    }
+
+    public MessageData Convert()
+        => new MessageData(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, spriteImage, matImage, ignoreIfRead);
+}
+
+[System.Serializable]
+public class FloorMessagesSource
+{
+    [SerializeField] public BoardMessageData[] fixedMessages = default;
+    [SerializeField] public BoardMessageData[] randomMessages = default;
 }

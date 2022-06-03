@@ -70,7 +70,7 @@ public class TextHandler : MonoBehaviour
         messageData = data;
         length = data.Length;
         currentIndex = 0;
-        SetNextSentence(0);
+        SetNextSentence(currentIndex);
     }
 
     private void SetNextSentence(int index)
@@ -90,6 +90,16 @@ public class TextHandler : MonoBehaviour
         }
 
         var currentData = messageData[index];
+
+        if (currentData.ignoreIfRead && currentData.isRead)
+        {
+            SetNextSentence(++currentIndex);
+            return;
+        }
+
+        // This "currentData" variable is no longer a reference of MessageData[].
+        // Update "read" flag of the MessageData via array reference.
+        messageData[index].isRead = true;
 
         tm.fontSize = currentData.fontSize;
         tm.alignment = currentData.alignment;

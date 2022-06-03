@@ -26,6 +26,8 @@ public struct MessageData
     public TextAlignmentOptions alignment;
     public Sprite spriteImage;
     public Material matImage;
+    public bool ignoreIfRead;
+    public bool isRead;
 
     public MessageData(
         string sentence,
@@ -34,7 +36,8 @@ public struct MessageData
         float literalsPerSec = 20f,
         TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
         Sprite spriteImage = null,
-        Material matImage = null
+        Material matImage = null,
+        bool ignoreIfRead = false
     )
     {
         this.sentence = sentence;
@@ -44,6 +47,8 @@ public struct MessageData
         this.alignment = alignment;
         this.spriteImage = spriteImage;
         this.matImage = matImage;
+        this.ignoreIfRead = ignoreIfRead;
+        this.isRead = false;
     }
 
     public static MessageData[] Inspect(
@@ -51,11 +56,11 @@ public struct MessageData
         Sprite spriteImage = null,
         Material matImage = null,
         TextAlignmentOptions alignment = TextAlignmentOptions.Center,
-        float fontsize = 72f,
+        float fontSize = 72f,
         float literalsPerSec = 1000f
     )
     {
-        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontsize, literalsPerSec, alignment, spriteImage, matImage) };
+        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, spriteImage, matImage) };
     }
 
     public static MessageData[] ItemDescription(ItemInfo itemInfo)

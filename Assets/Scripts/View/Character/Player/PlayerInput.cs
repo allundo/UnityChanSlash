@@ -306,6 +306,7 @@ public class PlayerInput : ShieldInput
             handleIcon.Disable();
         }
 
+        // Is face to Message Board
         if (forwardTile is MessageWall)
         {
             inspectUI.SetActive(forwardTile as MessageWall, mobMap.dir, fightCircle.isActive);

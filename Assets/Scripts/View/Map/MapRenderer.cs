@@ -8,6 +8,12 @@ public class MapRenderer : MonoBehaviour
     private FloorMaterialsData floorMaterialsData;
     private FloorMaterialsSource floorMaterials;
 
+    private FloorMessagesData floorMessagesData;
+    private FloorMessagesSource floorMessages;
+
+    private MessageData[] FixedMessage(int index) => floorMessages.fixedMessages[index].Convert();
+    private MessageData[] RandomMessage() => floorMessages.randomMessages[Random.Range(0, floorMessages.randomMessages.Length)].Convert();
+
     private List<Pos>[] tileOpenData;
 
     public WorldMap map { get; private set; }
@@ -58,9 +64,12 @@ public class MapRenderer : MonoBehaviour
 
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
 
+
     void Awake()
     {
         floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
+        floorMessagesData = ResourceLoader.Instance.floorMessagesData;
+
         tileOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
     }
 
@@ -108,11 +117,7 @@ public class MapRenderer : MonoBehaviour
         MessageWall tile = map.GetTile(pos) as MessageWall;
         tile.boardDir = dir;
 
-        tile.data = MessageData.Inspect(
-            "【試練の迷宮】\n"
-            + "迷宮の番人を倒せ！！\n"
-            + "封印されし剣が鍵となり、道は開けるであろう。"
-        );
+        tile.data = floorMessagesData.Param(0).fixedMessages[0].Convert();
     }
 
     private void SetExitDoor(Pos pos, IDirection dir)
@@ -209,6 +214,7 @@ public class MapRenderer : MonoBehaviour
     {
         this.map = map;
         floorMaterials = floorMaterialsData.Param(map.floor - 1);
+        floorMessages = floorMessagesData.Param(map.floor - 1);
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)

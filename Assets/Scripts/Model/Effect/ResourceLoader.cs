@@ -16,6 +16,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public ItemTypesData itemTypesData { get; private set; }
 
     public FloorMaterialsData floorMaterialsData { get; private set; }
+    public FloorMessagesData floorMessagesData { get; private set; }
 
     protected override void Awake()
     {
@@ -46,5 +47,6 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         itemTypesData = Resources.Load<ItemTypesData>("DataAssets/Map/ItemTypesData");
 
         floorMaterialsData = Resources.Load<FloorMaterialsData>("DataAssets/Map/FloorMaterialsData");
+        floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
     }
 }
