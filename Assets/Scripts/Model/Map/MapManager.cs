@@ -135,6 +135,10 @@ public class MapManager
 
         stairsBottom = new KeyValuePair<Pos, IDirection>(pos, dir);
 
+        // Don't set door in front of player start position
+        Pos front = dir.GetForward(pos);
+        matrix[front.x, front.y] = Terrain.Ground;
+
         Pos doorPos;
         if (IsAroundWall(doorPos = dir.GetLeft(pos)))
         {

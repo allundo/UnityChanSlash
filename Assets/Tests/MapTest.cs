@@ -61,4 +61,54 @@ public class MapTest
             Assert.That(Terrain.Pit, Is.EqualTo(pitCandidateL).Or.EqualTo(pitCandidateR));
         });
     }
+
+    [Test]
+    public void _003_1F_ExitDoorAndMessageBoardPlacingTest()
+    {
+        // setup
+        MapManager sut = new MapManager(49, 49).SetDownStairs().SetPitAndMessageBoards(1);
+
+        // when
+        sut.SetStartDoor();
+
+        // then
+        Pos startPos = sut.stairsBottom.Key;
+        IDirection startDir = sut.stairsBottom.Value;
+
+        Assert.False(sut.deadEndPos.ContainsKey(startPos));
+
+        Pos posF = startDir.GetForward(startPos);
+        Pos posL = startDir.GetLeft(startPos);
+        Pos posR = startDir.GetRight(startPos);
+        Pos posB = startDir.GetBackward(startPos);
+
+        Assert.That(sut.matrix[posF.x, posF.y], Is.EqualTo(Terrain.Path).Or.EqualTo(Terrain.Ground));
+
+        if (sut.matrix[posL.x, posL.y] == Terrain.ExitDoor)
+        {
+            Assert.True(posL.x == 0 || posL.y == 0 || posL.x == 48 || posL.y == 48);
+            Assert.AreEqual(startDir.Right.Enum, sut.dirMap[posL.x, posL.y]);
+            Assert.AreEqual(Terrain.MessageWall, sut.matrix[posB.x, posB.y]);
+            Assert.AreEqual(startDir.Enum, sut.dirMap[posB.x, posB.y]);
+        }
+        else if (sut.matrix[posR.x, posR.y] == Terrain.ExitDoor)
+        {
+            Assert.True(posR.x == 0 || posR.y == 0 || posR.x == 48 || posR.y == 48);
+            Assert.AreEqual(startDir.Left.Enum, sut.dirMap[posR.x, posR.y]);
+            Assert.AreEqual(Terrain.MessageWall, sut.matrix[posB.x, posB.y]);
+            Assert.AreEqual(startDir.Enum, sut.dirMap[posB.x, posB.y]);
+        }
+        else if (sut.matrix[posB.x, posB.y] == Terrain.ExitDoor)
+        {
+            Assert.True(posB.x == 0 || posB.y == 0 || posB.x == 48 || posB.y == 48);
+            Assert.AreEqual(startDir.Enum, sut.dirMap[posB.x, posB.y]);
+            Assert.AreEqual(Terrain.MessageWall, sut.matrix[posL.x, posL.y]);
+            Assert.AreEqual(startDir.Right.Enum, sut.dirMap[posL.x, posL.y]);
+        }
+        else
+        {
+            // Exit Door isn't found.
+            Assert.Fail();
+        }
+    }
 }
