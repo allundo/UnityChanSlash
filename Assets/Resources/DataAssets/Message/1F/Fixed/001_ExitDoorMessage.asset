@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: BoardMessageData
+  m_Name: 001_ExitDoorMessage
   m_EditorClassIdentifier: 
   setParams:
   - name: "ExitDoor\u8AAC\u660E"

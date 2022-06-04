@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 static public class CollectionsExtensions
@@ -6,6 +7,16 @@ static public class CollectionsExtensions
     // List
     static public T GetRandom<T>(this List<T> list)
         => list[UnityEngine.Random.Range(0, list.Count)];
+    static public K GetRandomKey<K, V>(this Dictionary<K, V> dictionary)
+    {
+        return dictionary.Select(kv => kv.Key).ToList().GetRandom();
+    }
+
+    static public KeyValuePair<K, V> GetRandom<K, V>(this Dictionary<K, V> dictionary)
+    {
+        K key = dictionary.GetRandomKey();
+        return new KeyValuePair<K, V>(key, dictionary[key]);
+    }
 
     // LinkedList
     static public void Enqueue<T>(this LinkedList<T> linkedList, T value)

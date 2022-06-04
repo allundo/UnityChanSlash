@@ -15,6 +15,7 @@ public class WorldMap
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
+    public List<Pos> fixedMessagePos { get; private set; }
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
@@ -107,7 +108,7 @@ public class WorldMap
 
     public WorldMap(MapManager map = null, int floor = 1, int w = 49, int h = 49)
     {
-        this.map = map ?? new MapManager(w, h).SetDownStairs().SetPitTrap(Mathf.Min(floor * floor * 4, w * h / 10));
+        this.map = map ?? new MapManager(w, h).SetDownStairs().SetPitAndMessageBoards(floor);
         stairsBottom = floor == 1 ? this.map.SetStartDoor().stairsBottom : this.map.SetUpStairs().stairsBottom;
 
         this.floor = floor;
@@ -115,6 +116,7 @@ public class WorldMap
         stairsTop = this.map.stairsTop;
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
+        fixedMessagePos = new List<Pos>(this.map.fixedMessagePos);
 
         Width = this.map.width;
         Height = this.map.height;

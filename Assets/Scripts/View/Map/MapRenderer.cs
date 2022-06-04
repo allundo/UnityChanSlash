@@ -117,7 +117,11 @@ public class MapRenderer : MonoBehaviour
         MessageWall tile = map.GetTile(pos) as MessageWall;
         tile.boardDir = dir;
 
-        tile.data = floorMessagesData.Param(0).fixedMessages[0].Convert();
+        if (tile.Read == null)
+        {
+            int fixedIndex = map.fixedMessagePos.IndexOf(pos);
+            tile.data = fixedIndex != -1 ? FixedMessage(fixedIndex) : RandomMessage();
+        }
     }
 
     private void SetExitDoor(Pos pos, IDirection dir)

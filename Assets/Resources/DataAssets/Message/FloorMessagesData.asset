@@ -15,12 +15,21 @@ MonoBehaviour:
   setParams:
   - fixedMessages:
     - {fileID: 11400000, guid: 1225680af12a0499595e3ab6a8d8d630, type: 2}
-    randomMessages: []
+    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
+    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
+    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
+    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
+    randomMessages:
+    - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
   - fixedMessages: []
-    randomMessages: []
+    randomMessages:
+    - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
   - fixedMessages: []
-    randomMessages: []
+    randomMessages:
+    - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
   - fixedMessages: []
-    randomMessages: []
+    randomMessages:
+    - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
   - fixedMessages: []
-    randomMessages: []
+    randomMessages:
+    - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}

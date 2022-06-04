@@ -10,6 +10,7 @@ public class MapManager
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
     public List<Pos> pitTrapPos { get; private set; } = new List<Pos>();
+    public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
 
     /// <summary>
     /// Represents the start position and direction after going down a floor.
@@ -138,17 +139,17 @@ public class MapManager
         if (IsAroundWall(doorPos = dir.GetLeft(pos)))
         {
             SetExitDoor(doorPos, dir.Right);
-            SetMessageBoard(dir.GetBackward(pos), dir);
+            SetExitDoorMessage(dir.GetBackward(pos), dir);
         }
         else if (IsAroundWall(doorPos = dir.GetRight(pos)))
         {
             SetExitDoor(doorPos, dir.Left);
-            SetMessageBoard(dir.GetBackward(pos), dir);
+            SetExitDoorMessage(dir.GetBackward(pos), dir);
         }
         else if (IsAroundWall(doorPos = dir.GetBackward(pos)))
         {
             SetExitDoor(doorPos, dir);
-            SetMessageBoard(dir.GetLeft(pos), dir.Right);
+            SetExitDoorMessage(dir.GetLeft(pos), dir.Right);
         }
         else
         {
@@ -162,7 +163,6 @@ public class MapManager
 
         return this;
     }
-
     protected void SetExitDoor(Pos pos, IDirection doorDir)
     {
         this.exitDoorDir = doorDir;
@@ -175,6 +175,19 @@ public class MapManager
         dirMap[pos.x, pos.y] = doorDir.Enum;
         dirMap[leftPos.x, leftPos.y] |= doorDir.Right.Enum;
         dirMap[rightPos.x, rightPos.y] |= doorDir.Left.Enum;
+    }
+
+    protected void SetFixedMessage(Pos pos, IDirection dir)
+    {
+        fixedMessagePos.Add(pos);
+        SetMessageBoard(pos, dir);
+    }
+
+    protected void SetExitDoorMessage(Pos pos, IDirection dir)
+    {
+        // Insert the position as first element
+        fixedMessagePos = new Pos[] { pos }.Concat(fixedMessagePos).ToList(); ;
+        SetMessageBoard(pos, dir);
     }
 
     protected void SetMessageBoard(Pos pos, IDirection boardDir)
@@ -251,32 +264,153 @@ public class MapManager
         return dir;
     }
 
-    public MapManager SetPitTrap(int numOfPits)
+    public MapManager SetPitAndMessageBoards(int floor)
     {
-        var pitCandidate = new List<Pos>();
+        var pitCandidates = new List<Pos>();
+        var boardCandidates = new Dictionary<Pos, IDirection>();
+
+        var inFrontOfDeadEnds = deadEndPos.Select(kv => kv.Value.GetForward(kv.Key)).ToList();
 
         for (int y = 1; y < height; y++)
         {
             for (int x = 1; x < width; x++)
             {
-                if ((x + y) % 2 == 0) continue;
+                Pos pos = new Pos(x, y);
 
-                if (matrix[x, y] == Terrain.Ground || matrix[x, y] == Terrain.Path)
+                // Allow placing on ground or path
+                if (matrix[x, y] != Terrain.Ground && matrix[x, y] != Terrain.Path) continue;
+
+                if ((x + y) % 2 == 0)
                 {
-                    pitCandidate.Add(new Pos(x, y));
+                    // Forbid placing boards on dead end position
+                    if (!deadEndPos.ContainsKey(pos)) SetBoardCandidate(boardCandidates, x, y);
+                }
+                else
+                {
+                    // Forbid placing pit traps in front of items
+                    if (!inFrontOfDeadEnds.Contains(pos)) pitCandidates.Add(pos);
                 }
             }
         }
 
-        // Don't set pit traps in front of items on dead end position
-        deadEndPos.Select(kv => kv.Value.GetForward(kv.Key))
-            .ForEach(nextToDeadEnd => pitCandidate.Remove(nextToDeadEnd));
+        FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
-        for (int i = 0; i < numOfPits && pitCandidate.Count > 0; i++)
+        int numOfPits = Math.Min(floor * floor * 4, width * height / 10);
+        int numOfFixedMessages = src.fixedMessages.Length;
+        int numOfRandomMessages = src.randomMessages.Length;
+
+        // Set pit traps
+        for (int i = 0; i < numOfPits && pitCandidates.Count > 0; i++)
         {
-            var pos = pitCandidate.GetRandom();
+            Pos pos = pitCandidates.GetRandom();
             matrix[pos.x, pos.y] = Terrain.Pit;
-            pitCandidate.Remove(pos);
+            pitCandidates.Remove(pos);
+            pitTrapPos.Add(pos);
+        }
+
+        if (floor == 1)
+        {
+            // The first message is used for Exit Door
+            numOfFixedMessages--;
+
+            pitTrapPos.ForEach(pos =>
+            {
+                // Fixed messages are used for Pit Trap Attentions
+                numOfFixedMessages--;
+
+                bool isSet = false;
+                // Try setting pit attention message to north-west, north-east, east-south, south-west wall of each pit position.
+                new Pos[] { pos.DecX().DecY(), pos.IncX().DecY(), pos.IncX().IncY(), pos.DecX().IncY() }.ForEach(dest =>
+                {
+                    if (!isSet) isSet = TrySetPitAttention(boardCandidates, pos, dest);
+
+                    IDirection dir;
+                    if (boardCandidates.TryGetValue(dest, out dir)) boardCandidates[dest] = BoardDirection(pos, dest, dir).Backward;
+                });
+            });
+        }
+
+        for (int i = 0; i < numOfFixedMessages && boardCandidates.Count > 0; i++)
+        {
+            Pos pos = boardCandidates.GetRandomKey();
+            SetFixedMessage(pos, boardCandidates[pos]);
+            boardCandidates.Remove(pos);
+        }
+
+        for (int i = 0; i < numOfRandomMessages && boardCandidates.Count > 0; i++)
+        {
+            Pos pos = boardCandidates.GetRandomKey();
+            SetMessageBoard(pos, boardCandidates[pos]);
+            boardCandidates.Remove(pos);
+        }
+
+        return this;
+    }
+
+    private bool TrySetPitAttention(Dictionary<Pos, IDirection> boardCandidates, Pos pitPos, Pos dest)
+    {
+        IDirection dir;
+
+        if (boardCandidates.TryGetValue(dest, out dir))
+        {
+            SetFixedMessage(dest, BoardDirection(pitPos, dest, dir));
+            boardCandidates.Remove(dest);
+            return true;
+        }
+
+        return false;
+    }
+
+    private IDirection BoardDirection(Pos pitPos, Pos boardPos, IDirection boardDir)
+    {
+        Pos vecToReadPos = boardDir.GetForward(boardPos) - pitPos;
+        switch (Math.Abs(vecToReadPos.x) + Math.Abs(vecToReadPos.y))
+        {
+            case 1: return boardDir;
+            case 3: return boardDir.Backward;
+            default: throw new ArgumentException("Invalid pair of pit and board position.");
+        }
+    }
+
+    private bool SetBoardCandidate(Dictionary<Pos, IDirection> candidates, int x, int y)
+    {
+        if (matrix[x, y + 1] == Terrain.Wall)
+        {
+            candidates[new Pos(x, y + 1)] = Direction.north;
+            return true;
+        }
+
+        if (matrix[x - 1, y] == Terrain.Wall)
+        {
+            candidates[new Pos(x - 1, y)] = Direction.east;
+            return true;
+        }
+
+        if (matrix[x, y - 1] == Terrain.Wall)
+        {
+            candidates[new Pos(x, y - 1)] = Direction.south;
+            return true;
+        }
+
+        if (matrix[x + 1, y] == Terrain.Wall)
+        {
+            candidates[new Pos(x + 1, y)] = Direction.west;
+            return true;
+        }
+
+        return false;
+    }
+
+    private MapManager SetPitTraps(List<Pos> pitCandidates, int numOfPits)
+    {
+        deadEndPos.Select(kv => kv.Value.GetForward(kv.Key))
+                .ForEach(nextToDeadEnd => pitCandidates.Remove(nextToDeadEnd));
+
+        for (int i = 0; i < numOfPits && pitCandidates.Count > 0; i++)
+        {
+            var pos = pitCandidates.GetRandom();
+            matrix[pos.x, pos.y] = Terrain.Pit;
+            pitCandidates.Remove(pos);
             pitTrapPos.Add(pos);
         }
 
