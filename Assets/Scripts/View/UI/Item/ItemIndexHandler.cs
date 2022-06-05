@@ -28,8 +28,13 @@ public class ItemIndexHandler
     public void ExpandNum(int index)
     {
         if (currentSelected < MAX_ITEMS) panels[currentSelected].ShrinkNum();
-        if (index < MAX_ITEMS) panels[index].ExpandNum();
+        if (index < MAX_ITEMS) panels[index].ExpandNum(inventoryTf);
         currentSelected = index;
+    }
+
+    public void DeleteNum(int index)
+    {
+        if (index < MAX_ITEMS) panels[index].SetItemNum(0);
     }
 
     public ItemIndexHandler(RectTransform rt, int width, int height)

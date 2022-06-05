@@ -34,18 +34,26 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     /// Set number of items to display on Item inventory
     /// </summary>
     /// <param name="num">Number of items</param>
-    public void SetItemNum(int num) => tmpNumOfItem.text = num > 0 ? num.ToString() : "";
+    public void SetItemNum(int num)
+    {
+        tmpNumOfItem.text = num > 0 ? num.ToString() : "";
+        // tmpNumOfItem.transform.SetParent(transform);
+        // rtNumOfItem.anchoredPosition = Vector2.zero;
+    }
 
-    public void ExpandNum()
+    public void ExpandNum(Transform inventoryTf)
     {
         tmpNumOfItem.fontSize = 54f;
         rtNumOfItem.sizeDelta = expand;
+        tmpNumOfItem.transform.SetParent(inventoryTf);
     }
 
     public void ShrinkNum()
     {
         tmpNumOfItem.fontSize = 36f;
         rtNumOfItem.sizeDelta = shrink;
+        tmpNumOfItem.transform.SetParent(transform);
+        rtNumOfItem.anchoredPosition = Vector2.zero;
     }
 
     public ItemPanel SetPos(Vector2 pos)

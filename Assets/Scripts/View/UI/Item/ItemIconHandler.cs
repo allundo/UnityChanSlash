@@ -208,6 +208,7 @@ public class ItemIconHandler : IItemIconHandler
         public virtual IItemIconHandler OnDrag(Vector2 screenPos)
         {
             handler.StopPressing();
+            itemIndex.DeleteNum(handler.pressedIndex);
             return handler.dragMode.OnDrag(screenPos);
         }
     }
