@@ -22,6 +22,19 @@ public class ItemInfo : ICloneable
     public IReactiveProperty<int> onNumOfItemChange;
     public IReadOnlyReactiveProperty<int> OnNumOfItemChange => onNumOfItemChange;
 
+    public bool Merge(ItemInfo itemInfo)
+    {
+        numOfItem += itemInfo.Subtraction();
+        return true;
+    }
+
+    public int Subtraction(int numOfItem = 0)
+    {
+        numOfItem = numOfItem == 0 ? this.numOfItem : Mathf.Min(this.numOfItem, numOfItem);
+        this.numOfItem -= numOfItem;
+        return numOfItem;
+    }
+
     public ItemType type { get; protected set; }
 
     public Material material => itemSource.material;

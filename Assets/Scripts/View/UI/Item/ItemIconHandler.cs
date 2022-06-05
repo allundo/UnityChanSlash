@@ -305,8 +305,15 @@ public class ItemIconHandler : IItemIconHandler
 
             if (currentTarget != null && currentTarget != currentSelected)
             {
-                currentTarget.Move(itemIndex.UIPos(currentSelected.index)).Play();
-                currentTarget.SetIndex(currentSelected.index);
+                if (currentSelected.TryMerge(currentTarget.itemInfo))
+                {
+                    // currentTarget will be null and its icon disappears if the merging is succeeded.
+                }
+                else
+                {
+                    currentTarget.Move(itemIndex.UIPos(currentSelected.index)).Play();
+                    currentTarget.SetIndex(currentSelected.index);
+                }
             }
 
             itemIndex.SetItem(currentSelected.index, currentTarget);

@@ -16,6 +16,17 @@ public class ItemIcon : UISymbol
 
     public IObservable<Unit> OnItemEmpty => itemInfo.OnNumOfItemChange.Where(num => num == 0).Select(_ => Unit.Default);
 
+    public bool TryMerge(ItemInfo itemInfo)
+    {
+        if (this.itemInfo.attr != ItemAttr.Equipment && this.itemInfo.type == itemInfo.type)
+        {
+            this.itemInfo.Merge(itemInfo);
+            return true;
+        }
+
+        return false;
+    }
+
     protected override void Awake()
     {
         base.Awake();
