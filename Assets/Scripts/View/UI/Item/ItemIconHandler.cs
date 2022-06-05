@@ -157,6 +157,7 @@ public class ItemIconHandler : IItemIconHandler
                 selector.SetSelect(itemIndex.UIPos(index));
                 handler.Play(currentTarget.Resize(1.5f, 0.2f));
                 handler.pressedIndex = index;
+                itemIndex.ExpandNum(index);
             }
 
             return this;
@@ -195,6 +196,7 @@ public class ItemIconHandler : IItemIconHandler
             handler.Play(handler.currentSelected?.Resize(1f, 0.2f));
             handler.currentSelected = null;
             handler.pressedIndex = itemIndex.MAX_ITEMS;
+            itemIndex.ExpandNum(itemIndex.MAX_ITEMS);
 
             selector.SetRaycast(false);
             selector.Disable();
@@ -237,6 +239,7 @@ public class ItemIconHandler : IItemIconHandler
 
                 handler.Play(currentTarget.Resize(1.5f, 0.2f));
                 handler.pressedIndex = index;
+                itemIndex.ExpandNum(index);
 
                 return handler.normalMode;
             }
@@ -259,6 +262,7 @@ public class ItemIconHandler : IItemIconHandler
             if (pressed.itemInfo.attr != ItemAttr.Equipment)
             {
                 onUseItem.OnNext(pressed.itemInfo);
+                itemIndex.UpdateItemNum(pressed);
             }
 
             // Continue Select mode when the item is remaining after use it.
@@ -308,6 +312,7 @@ public class ItemIconHandler : IItemIconHandler
             handler.Play(currentSelected.Move(itemIndex.UIPos(pressedIndex)));
             currentSelected.SetIndex(pressedIndex);
             itemIndex.SetItem(pressedIndex, currentSelected);
+            itemIndex.ExpandNum(pressedIndex);
 
             selector.Enable();
             selector.SetSelect(itemIndex.UIPos(pressedIndex));

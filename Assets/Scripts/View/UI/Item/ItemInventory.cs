@@ -16,8 +16,6 @@ public class ItemInventory : MonoBehaviour
     private static readonly int HEIGHT = 6;
     private static readonly int MAX_ITEMS = WIDTH * HEIGHT;
 
-    private ItemPanel[] panels;
-
     private ItemIconHandler iconHandler = null;
     public IObservable<ItemIcon> OnPutItem => iconHandler.OnPutItem;
     public IObservable<ItemIcon> OnPutApply => iconHandler.OnPutApply;
@@ -30,16 +28,7 @@ public class ItemInventory : MonoBehaviour
         iconGenerator = GetComponent<ItemIconGenerator>();
         iconGenerator.Init(transform);
 
-        itemIndex = new ItemIndexHandler(GetComponent<RectTransform>(), WIDTH, HEIGHT);
-
-        panels = Enumerable
-            .Range(0, MAX_ITEMS)
-            .Select(
-                index => Instantiate(prefabItemPanel, transform, false)
-                    .SetPos(itemIndex.UIPos(index))
-                    .SetIndex(index)
-            )
-            .ToArray();
+        itemIndex = new ItemIndexHandler(GetComponent<RectTransform>(), WIDTH, HEIGHT).SetPanels(prefabItemPanel);
 
         selector.transform.SetAsLastSibling(); // Bring selector UI to front
 
@@ -48,11 +37,12 @@ public class ItemInventory : MonoBehaviour
 
     void Start()
     {
-        Observable.Merge(panels.Select(panel => panel.OnPress)).Subscribe(index => iconHandler.OnPress(index));
-        Observable.Merge(panels.Select(panel => panel.OnRelease)).Subscribe(index => iconHandler.OnRelease());
-        selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress());
-        selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos));
-        selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit());
+        itemIndex.OnPress.Subscribe(index => iconHandler.OnPress(index)).AddTo(this);
+        itemIndex.OnRelease.Subscribe(index => iconHandler.OnRelease()).AddTo(this);
+
+        selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress()).AddTo(this);
+        selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos)).AddTo(this);
+        selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit()).AddTo(this);
     }
 
     public bool PickUp(ItemInfo itemInfo)
@@ -77,8 +67,8 @@ public class ItemInventory : MonoBehaviour
 
     public void SetEnable(bool isEnable)
     {
-        panels.ForEach(panel => panel.enabled = selector.enabled = isEnable);
-        enabled = isEnable;
+        itemIndex.SetEnablePanels(isEnable);
+        enabled = selector.enabled = isEnable;
     }
 
     public void Cancel() => iconHandler.CleanUp();
