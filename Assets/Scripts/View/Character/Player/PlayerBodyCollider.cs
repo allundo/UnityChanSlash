@@ -7,7 +7,7 @@ public class PlayerBodyCollider : BodyCollider
         => TransformCollider(jumpHeight, -0.5f, new Vector3(0f, 1f, 0f));
 
     public void OverRunCollider(float brakeOverRun)
-        => TransformCollider(brakeOverRun, -0.25f, new Vector3(0f, -0.5f, 0.75f), 0.3f);
+        => TransformCollider(brakeOverRun, -0.05f, new Vector3(0f, -0.025f, 0.5f), 0.3f);
 
     public void IcedFallCollider(float fallHeight)
     {
