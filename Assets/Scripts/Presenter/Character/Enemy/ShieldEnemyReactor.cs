@@ -12,9 +12,9 @@ public class ShieldEnemyReactor : EnemyReactor
 
     protected override void Awake()
     {
+        base.Awake();
         shieldAnim = anim as ShieldAnimator;
         shieldEffect = new MatColorEffect(shieldTf);
-        base.Awake();
     }
 
     protected override float CalcDamage(float attack, IDirection dir, AttackAttr attr = AttackAttr.None)
