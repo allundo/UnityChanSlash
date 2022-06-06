@@ -34,3 +34,13 @@ public class KeyBladeAction : ItemAction
         return (tile is Door && (tile as Door).UnLock(type)) ? 1 : 0;
     }
 }
+
+public class CoinAction : ItemAction
+{
+    public CoinAction(ItemAttr attr) : base(attr) { }
+
+    public override int Action(PlayerCommandTarget target)
+    {
+        return 0;
+    }
+}

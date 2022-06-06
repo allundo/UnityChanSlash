@@ -26,7 +26,8 @@ public class ItemInfoLoader
         {
             { ItemType.Null,        null                                                        },
             { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)                      },
-            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)   },
+            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade) },
+            { ItemType.Coin,        new CoinAction(ItemAttr.Consumption)                        },
         };
     }
 }

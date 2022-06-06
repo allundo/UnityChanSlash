@@ -441,6 +441,7 @@ public enum ItemType
     Null = 0,
     Potion,
     KeyBlade,
+    Coin,
 }
 
 public enum ItemAttr
