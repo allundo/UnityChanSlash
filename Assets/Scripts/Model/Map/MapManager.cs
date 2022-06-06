@@ -300,8 +300,10 @@ public class MapManager
             }
         }
 
-        // Forbid placing pit traps in front of items
+        // Forbid placing pit traps in front of items and stairs
         deadEndPos.ForEach(kv => pitCandidates.Remove(kv.Value.GetForward(kv.Key)));
+        pitCandidates.Remove(stairsBottom.Key);
+        pitCandidates.Remove(stairsTop.Key);
 
         FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
