@@ -131,7 +131,7 @@ Shader "Custom/Standard/DitherTransparent"
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd
-            #include "UnityStandardCoreForward.cginc"
+            #include "./CGIncludes/UnityStandardCoreForwardCustom.cginc"
 
             ENDCG
         }
