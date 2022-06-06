@@ -55,12 +55,11 @@ public class CustomMap
         if (list.Count == 1) deadEndPos[new Pos(x, y)] = list[0];
     }
 
-    public WorldMap CreateMap(int floor, bool isLastFloor = false)
+    public WorldMap CreateMap(int floor)
     {
         var mapManager = new MapManager(matrix, width, deadEndPos);
 
-        if (!isLastFloor) mapManager.SetDownStairs();
-        if (isCustomDeadEnds) mapManager.SetUpStairs(deadEndPos.Last().Key);
+        if (isCustomDeadEnds) mapManager.SetDownStairs(floor).SetUpStairs(deadEndPos.Last().Key);
 
         return new WorldMap(mapManager, floor);
     }

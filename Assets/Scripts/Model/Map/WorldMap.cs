@@ -108,8 +108,8 @@ public class WorldMap
 
     public WorldMap(MapManager map = null, int floor = 1, int w = 49, int h = 49)
     {
-        this.map = map ?? new MapManager(w, h).SetDownStairs().SetPitAndMessageBoards(floor);
-        stairsBottom = floor == 1 ? this.map.SetStartDoor().stairsBottom : this.map.SetUpStairs().stairsBottom;
+        this.map = map?.SetStairs(floor) ?? new MapManager(w, h).InitMap(floor);
+        stairsBottom = this.map.stairsBottom;
 
         this.floor = floor;
 

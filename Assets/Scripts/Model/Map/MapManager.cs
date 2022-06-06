@@ -95,10 +95,11 @@ public class MapManager
         CreateDirMap();
     }
 
+    public MapManager SetDownStairs(int floor) => floor == GameInfo.Instance.LastFloor ? this : SetDownStairs();
     public MapManager SetDownStairs() => SetDownStairs(deadEndPos.First().Key);
-    public MapManager SetDownStairs(Pos pos) => SetDownStairs(pos, GetDownStairsDir);
-    public MapManager SetDownStairs(Pos pos, IDirection dir) => SetDownStairs(pos, _ => dir);
-    public MapManager SetDownStairs(Pos pos, Func<Pos, IDirection> DirGetter)
+    private MapManager SetDownStairs(Pos pos) => SetDownStairs(pos, GetDownStairsDir);
+    private MapManager SetDownStairs(Pos pos, IDirection dir) => SetDownStairs(pos, _ => dir);
+    private MapManager SetDownStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         if (IsDownstairsSet) return this;
 
@@ -124,10 +125,10 @@ public class MapManager
         return dir;
     }
 
-    public MapManager SetStartDoor() => SetStartDoor(GetStartPos());
-    public MapManager SetStartDoor(Pos pos) => SetStartDoor(pos, GetUpStairsDir);
-    public MapManager SetStartDoor(Pos pos, IDirection dir) => SetStartDoor(pos, _ => dir);
-    public MapManager SetStartDoor(Pos pos, Func<Pos, IDirection> DirGetter)
+    private MapManager SetStartDoor() => SetStartDoor(GetStartPos());
+    private MapManager SetStartDoor(Pos pos) => SetStartDoor(pos, GetUpStairsDir);
+    private MapManager SetStartDoor(Pos pos, IDirection dir) => SetStartDoor(pos, _ => dir);
+    private MapManager SetStartDoor(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         if (!stairsBottom.Key.IsNull) return this;
 
@@ -143,17 +144,17 @@ public class MapManager
         if (IsAroundWall(doorPos = dir.GetLeft(pos)))
         {
             SetExitDoor(doorPos, dir.Right);
-            SetExitDoorMessage(dir.GetBackward(pos), dir);
+            SetFixedMessage(dir.GetBackward(pos), dir);
         }
         else if (IsAroundWall(doorPos = dir.GetRight(pos)))
         {
             SetExitDoor(doorPos, dir.Left);
-            SetExitDoorMessage(dir.GetBackward(pos), dir);
+            SetFixedMessage(dir.GetBackward(pos), dir);
         }
         else if (IsAroundWall(doorPos = dir.GetBackward(pos)))
         {
             SetExitDoor(doorPos, dir);
-            SetExitDoorMessage(dir.GetLeft(pos), dir.Right);
+            SetFixedMessage(dir.GetLeft(pos), dir.Right);
         }
         else
         {
@@ -205,10 +206,12 @@ public class MapManager
     protected bool IsNextToAroundWall(Pos pos) => IsNextToAroundWall(pos.x, pos.y);
     protected bool IsNextToAroundWall(int x, int y) => x == 1 || x == width - 2 || y == 1 || y == height - 2;
 
-    public MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
+    public MapManager SetUpStairsOrStartDoor(int floor)
+        => floor == 1 ? SetStartDoor() : SetUpStairs();
+    private MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
     public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir);
-    public MapManager SetUpStairs(Pos pos, IDirection dir) => SetUpStairs(pos, _ => dir);
-    public MapManager SetUpStairs(Pos pos, Func<Pos, IDirection> DirGetter)
+    private MapManager SetUpStairs(Pos pos, IDirection dir) => SetUpStairs(pos, _ => dir);
+    private MapManager SetUpStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         if (IsUpstairsSet) return this;
 
@@ -268,12 +271,13 @@ public class MapManager
         return dir;
     }
 
-    public MapManager SetPitAndMessageBoards(int floor)
+    public MapManager SetStairs(int floor) => SetDownStairs(floor).SetUpStairsOrStartDoor(floor);
+    public MapManager InitMap(int floor) => SetStairs(floor).SetPitAndMessageBoards(floor);
+
+    private MapManager SetPitAndMessageBoards(int floor)
     {
         var pitCandidates = new List<Pos>();
         var boardCandidates = new Dictionary<Pos, IDirection>();
-
-        var inFrontOfDeadEnds = deadEndPos.Select(kv => kv.Value.GetForward(kv.Key)).ToList();
 
         for (int y = 1; y < height; y++)
         {
@@ -286,16 +290,18 @@ public class MapManager
 
                 if ((x + y) % 2 == 0)
                 {
-                    // Forbid placing boards on dead end position
+                    // Forbid placing boards on around walls of dead end position
                     if (!deadEndPos.ContainsKey(pos)) SetBoardCandidate(boardCandidates, x, y);
                 }
                 else
                 {
-                    // Forbid placing pit traps in front of items
-                    if (!inFrontOfDeadEnds.Contains(pos)) pitCandidates.Add(pos);
+                    pitCandidates.Add(pos);
                 }
             }
         }
+
+        // Forbid placing pit traps in front of items
+        deadEndPos.ForEach(kv => pitCandidates.Remove(kv.Value.GetForward(kv.Key)));
 
         FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
@@ -331,6 +337,9 @@ public class MapManager
                     IDirection dir;
                     if (boardCandidates.TryGetValue(dest, out dir)) boardCandidates[dest] = BoardDirection(pos, dest, dir).Backward;
                 });
+
+                // Makes up for decrease of Pit Trap Attentions
+                if (!isSet) numOfRandomMessages++;
             });
         }
 

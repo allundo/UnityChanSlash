@@ -165,6 +165,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[1] = 35;
         mapSize[LastFloor - 1] = 29;
 
-        maps[LastFloor - 1] = new CustomMap(29, FinalMapMatrix(), FinalMapDeadEnds()).CreateMap(LastFloor, true);
+        maps[LastFloor - 1] = new CustomMap(29, FinalMapMatrix(), FinalMapDeadEnds()).CreateMap(LastFloor);
     }
 }

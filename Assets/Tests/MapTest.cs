@@ -7,9 +7,10 @@ using System.Linq;
 public class MapTest
 {
     [OneTimeSetUp]
-    public void SetUp()
+    public void OneTimeSetUp()
     {
         Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
     }
 
     [Test]
@@ -37,15 +38,15 @@ public class MapTest
     public void _002_1F_PitAttentionMessageBoardDirectionTest()
     {
         // setup
-        MapManager sut = new MapManager().SetDownStairs();
+        MapManager sut = new MapManager();
 
         // when
-        sut.SetPitAndMessageBoards(1);
+        sut.InitMap(1);
 
         // then
         Assert.AreEqual(4, sut.pitTrapPos.Count);
-        Assert.AreEqual(4, sut.fixedMessagePos.Count);
 
+        bool isExitDoorFound = false;
         sut.fixedMessagePos.ForEach(pos =>
         {
             IDirection messageDir = Direction.Convert(sut.dirMap[pos.x, pos.y]);
@@ -58,18 +59,27 @@ public class MapTest
             Terrain pitCandidateL = sut.matrix[posL.x, posL.y];
             Terrain pitCandidateR = sut.matrix[posR.x, posR.y];
 
+            // Skip message board for exit door
+            if (pitCandidateL == Terrain.ExitDoor || pitCandidateR == Terrain.ExitDoor)
+            {
+                isExitDoorFound = true;
+                return;
+            }
+
             Assert.That(Terrain.Pit, Is.EqualTo(pitCandidateL).Or.EqualTo(pitCandidateR));
         });
+
+        Assert.True(isExitDoorFound);
     }
 
     [Test]
     public void _003_1F_ExitDoorAndMessageBoardPlacingTest()
     {
         // setup
-        MapManager sut = new MapManager(49, 49).SetDownStairs().SetPitAndMessageBoards(1);
+        MapManager sut = new MapManager(49, 49);
 
         // when
-        sut.SetStartDoor();
+        sut.InitMap(1);
 
         // then
         Pos startPos = sut.stairsBottom.Key;
