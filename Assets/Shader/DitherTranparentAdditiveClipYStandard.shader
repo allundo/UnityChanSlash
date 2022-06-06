@@ -63,12 +63,6 @@ Shader "Custom/Standard/DitherTransparentAdditiveClipY"
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 300
 
-        Stencil
-        {
-            Ref 1 // Hole flag
-            Comp NotEqual
-        }
-
         // ------------------------------------------------------------------
         //  Base forward pass (directional light, emission, lightmaps, ...)
         Pass
