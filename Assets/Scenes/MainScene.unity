@@ -45695,7 +45695,6 @@ MonoBehaviour:
   messageController: {fileID: 8337679455110417430}
   gameOverUI: {fileID: 5465461844953474837}
   itemGenerator: {fileID: 1345430765}
-  itemInventory: {fileID: 528637049}
 --- !u!1 &3442943665555868992
 GameObject:
   m_ObjectHideFlags: 0

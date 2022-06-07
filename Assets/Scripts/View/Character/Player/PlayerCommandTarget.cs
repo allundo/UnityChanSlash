@@ -24,7 +24,8 @@ public class PlayerCommandTarget : CommandTarget
 
     // Item and item UI icon generator for PlayerHandle Command execution.
     [SerializeField] public ItemGenerator itemGenerator = default;
-    [SerializeField] public ItemInventory itemInventory = default;
+
+    public ItemInventory itemInventory => (input as PlayerInput).GetItemInventory;
 
     /// <summary>
     /// Hide plate handler to update HidePlate positions at players Move and Turn Command execution.

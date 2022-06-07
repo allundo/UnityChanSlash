@@ -190,7 +190,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public Pos PlayerPos => map.onTilePos;
     public IDirection PlayerDir => map.dir;
-    public bool IsPlayerHavingKeyBlade => player.GetComponent<PlayerCommandTarget>().itemInventory.hasKeyBlade();
+    public bool IsPlayerHavingKeyBlade => input.GetItemInventory.hasKeyBlade();
 
     public Vector3 PlayerWorldPos
         => new Vector3(playerTransform.position.x, 0f, playerTransform.position.z);
@@ -301,6 +301,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void Exit()
     {
         Pause(true);
+
+        GameInfo.Instance.moneyAmount = input.GetItemInventory.SumUpPrices();
 
         cover.color = new Color(1f, 1f, 1f, 0f);
         cover.FadeOut(3f).SetEase(Ease.InCubic)

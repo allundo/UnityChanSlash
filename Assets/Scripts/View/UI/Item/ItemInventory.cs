@@ -83,4 +83,13 @@ public class ItemInventory : MonoBehaviour
         }
         return false;
     }
+
+    public ulong SumUpPrices()
+    {
+        ulong amount = 0;
+        itemIndex
+            .Select(itemIcon => itemIcon != null ? itemIcon.itemInfo.Price : 0)
+            .ForEach(price => amount += (ulong)price);
+        return amount;
+    }
 }

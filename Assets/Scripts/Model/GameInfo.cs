@@ -11,9 +11,9 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     private WorldMap[] maps;
     private int[] mapSize;
 
-    private CustomMap customMap;
-
     public int currentFloor = 1;
+
+    public ulong moneyAmount = 0;
 
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;

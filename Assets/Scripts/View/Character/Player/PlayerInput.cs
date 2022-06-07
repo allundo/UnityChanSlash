@@ -63,6 +63,8 @@ public class PlayerInput : ShieldInput
     /// </summary>
     protected bool isInputVisible = false;
 
+    public ItemInventory GetItemInventory => itemInventory;
+
     // Reserved ICommand input applied by other classes.
     // FIXME: need to implement game events handling system.
     public ICommand EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f, 0.99f, 0.99f));

@@ -36,18 +36,18 @@ public class WagesAnimation : MonoBehaviour
             .Join(wagesFade.In(duration));
     }
 
-    public Tween ValueZoomIn(int addValue, float duration = 2f)
+    public Tween ValueZoomIn(ulong addValue, float duration = 2f)
     {
         return DOTween.Sequence()
             .AppendCallback(() =>
             {
                 valueUI.ResetSize(0f);
                 prevValue = value;
-                value += (ulong)addValue;
+                value += addValue;
             })
             .Join(valueUI.Resize(1f, duration))
             .Join(valueFade.In(duration * 0.5f, 0, null, null, false))
-            .Join(DOVirtual.Int(0, addValue, duration, count => UpdateDisplay(count)));
+            .Join(DOVirtual.Int(0, (int)addValue, duration, count => UpdateDisplay(count)));
     }
 
     public Tween AddValue(int addValue, float duration = 0.5f)

@@ -6,16 +6,34 @@ using UnityEngine.TestTools;
 
 public class UITest
 {
-    [UnityTest]
-    public IEnumerator _001_ItemInventoryKeyBladeSetTest()
+    private ItemInventory itemInventory;
+    private ItemInventory prefabItemInventory;
+    private ItemIconGenerator itemIconGenerator;
+    private GameObject testCanvas;
+    private Dictionary<ItemType, ItemInfo> itemInfo;
+
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
     {
         Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
 
         // Load from test resources
         var mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
-        var testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
-        var itemInventory = Object.Instantiate(Resources.Load<ItemInventory>("Prefabs/UI/Item/ItemInventory"));
         var eventSystem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/EventSystem"));
+
+        testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+
+        itemInfo = new ItemInfoLoader(ResourceLoader.Instance.itemData).LoadItemInfo();
+        prefabItemInventory = Resources.Load<ItemInventory>("Prefabs/UI/Item/ItemInventory");
+        itemIconGenerator = Object.Instantiate(Resources.Load<ItemIconGenerator>("Prefabs/UI/Item/ItemIconGenerator"));
+    }
+
+    [SetUp]
+    public void SetUp()
+    {
+        itemInventory = Object.Instantiate(prefabItemInventory);
+
+        itemIconGenerator.Init(itemInventory.transform);
 
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         RectTransform rectTf = itemInventory.GetComponent<RectTransform>();
@@ -24,14 +42,71 @@ public class UITest
         Vector2 size = rectTf.sizeDelta;
         rectTf.anchorMin = rectTf.anchorMax = new Vector2(0f, 0.5f);
         rectTf.anchoredPosition = new Vector2(size.x, size.y + 280f) * 0.5f;
+    }
 
+    [TearDown]
+    public void TearDown()
+    {
+        Object.Destroy(itemInventory);
+    }
+
+    [UnityTest]
+    public IEnumerator _001_ItemInventoryKeyBladeSetTest()
+    {
         yield return null;
 
-        var itemInfo = new ItemInfoLoader(ResourceLoader.Instance.itemData).LoadItemInfo();
         itemInventory.PickUp(itemInfo[ItemType.KeyBlade]);
 
         yield return new WaitForSeconds(5f);
 
         Assert.True(itemInventory.hasKeyBlade());
+    }
+
+    [UnityTest]
+    public IEnumerator _002_ItemPriceSumUpTest()
+    {
+        // Setup
+        const int MAX_ITEMS = 30;
+
+        yield return null;
+
+        // When
+        itemInventory.PickUp(itemInfo[ItemType.KeyBlade]);
+        ulong price1 = itemInventory.SumUpPrices();
+
+        yield return null;
+
+        itemInventory.PickUp(itemInfo[ItemType.Potion]);
+        yield return null;
+
+        itemInventory.PickUp(itemInfo[ItemType.Coin]);
+        ulong price2 = itemInventory.SumUpPrices();
+        yield return null;
+
+        for (int i = 0; i < MAX_ITEMS; i++)
+        {
+            itemInventory.PickUp(itemInfo[ItemType.Coin]);
+            yield return null;
+        }
+        ulong price3 = itemInventory.SumUpPrices();
+        yield return null;
+
+        itemInventory.PickUp(itemInfo[ItemType.KeyBlade]);
+        ulong price4 = itemInventory.SumUpPrices();
+        yield return null;
+
+        var dummyCoinIcon = itemIconGenerator.Spawn(Vector2.zero, itemInfo[ItemType.Coin]).SetIndex(2);
+        dummyCoinIcon.Inactivate();
+
+        itemInventory.Remove(dummyCoinIcon);
+        ulong price5 = itemInventory.SumUpPrices();
+        yield return null;
+
+        // Then
+        Assert.AreEqual(100000, price1);
+        Assert.AreEqual(952400, price2);
+        Assert.AreEqual(23964500, price3);
+        Assert.AreEqual(23964500, price4);
+        Assert.AreEqual(23112200, price5);
     }
 }

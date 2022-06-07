@@ -2,6 +2,7 @@ using UnityEngine;
 using UniRx;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 public class ItemIndexHandler
 {
@@ -144,5 +145,30 @@ public class ItemIndexHandler
         {
             action(GetItem(i));
         }
+    }
+
+    public T[] Select<T>(Func<ItemIcon, T> func)
+    {
+        T[] ret = new T[MAX_ITEMS];
+
+        for (int i = 0; i < MAX_ITEMS; i++)
+        {
+            ret[i] = func(GetItem(i));
+        }
+
+        return ret;
+    }
+
+    public ItemIcon[] Where(Func<ItemIcon, bool> func)
+    {
+        var icons = new List<ItemIcon>();
+
+        for (int i = 0; i < MAX_ITEMS; i++)
+        {
+            var icon = GetItem(i);
+            if (func(icon)) icons.Add(icon);
+        }
+
+        return icons.ToArray();
     }
 }

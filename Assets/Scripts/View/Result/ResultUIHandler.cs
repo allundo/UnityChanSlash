@@ -26,7 +26,7 @@ public class ResultUIHandler : MonoBehaviour
         return DOTween.Sequence()
             .Append(fade.FadeIn(3f))
             .Append(wagesAnimation.WagesFadeIn())
-            .Append(wagesAnimation.ValueZoomIn(1000000))
+            .Append(wagesAnimation.ValueZoomIn(GameInfo.Instance.moneyAmount))
             .Append(wagesAnimation.AddValue(5000))
             .AppendCallback(() => titleButton.Show().Play());
     }
