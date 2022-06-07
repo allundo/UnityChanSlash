@@ -532,12 +532,18 @@ public class PlayerPutItem : PlayerAction
 
     protected override bool Action()
     {
+        // Cancel if hand is not on yet.
+        if (!playerAnim.handOn.Bool) return false;
+
+        // Cancel if guarding
+        if (playerAnim.guard.Bool) return HandOff(false);
+
         // Cancel if forward tile is Box and the Box isn't Open or Controllable.
         Box boxTile = mobMap.ForwardTile as Box;
         if (boxTile != null && (!boxTile.IsOpen || !boxTile.IsControllable)) return HandOff(false);
 
-        // Cancel if player isn't handling or putting item is invalid.
-        if (!playerAnim.handOn.Bool || !itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir)) return HandOff(false);
+        // Cancel if putting item is invalid.
+        if (!itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir)) return HandOff(false);
 
         if (boxTile != null) boxTile.Handle();
 
