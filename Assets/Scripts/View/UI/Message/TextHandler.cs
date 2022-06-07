@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using UniRx;
@@ -8,9 +7,10 @@ using TMPro;
 public class TextHandler : MonoBehaviour
 {
     [SerializeField] private CharacterUI characterUI = default;
-    [SerializeField] private Image icon = default;
+    [SerializeField] private ImageIcon imageIcon = default;
 
     private RectTransform rectTransform;
+    private RectTransform iconRT;
     private Vector2 defaultPos;
     private Vector2 defaultSize;
     private string currentSentence = "";
@@ -36,7 +36,7 @@ public class TextHandler : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         defaultPos = rectTransform.anchoredPosition;
         defaultSize = rectTransform.sizeDelta;
-        icon.enabled = false;
+        imageIcon.SetEnabled(false);
     }
 
     void Update()
@@ -107,7 +107,7 @@ public class TextHandler : MonoBehaviour
         currentSentence = currentData.sentence;
         currentLength = currentSentence.Length;
         characterUI.DispFace(currentData.face);
-        SetImage(currentData.spriteImage, currentData.matImage);
+        SetImage(currentData.spriteImage, currentData.matImage, currentData.caption);
 
         if (currentData.literalsPerSec > 999.9f)
         {
@@ -129,20 +129,20 @@ public class TextHandler : MonoBehaviour
     }
 
     private void DisableIcon() => SetImage(null, null);
-    private void SetImage(Sprite sprite, Material material)
+    private void SetImage(Sprite sprite, Material material, string caption = null)
     {
-        icon.sprite = sprite;
-        icon.material = material;
+        imageIcon.SetCaption(caption);
 
         if (sprite == null && material == null)
         {
-            icon.enabled = false;
+            imageIcon.SetEnabled(false);
             ResetTransform();
             return;
         }
 
-        icon.enabled = true;
-        SpaceLeft(icon.rectTransform.sizeDelta.x);
+        imageIcon.SetSource(sprite, material);
+        imageIcon.SetEnabled(true);
+        SpaceLeft(imageIcon.ImageSpace);
     }
 
     private void SpaceLeft(float sizeX) => SetPosX(sizeX * 0.5f);

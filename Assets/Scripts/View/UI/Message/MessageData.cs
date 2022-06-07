@@ -26,6 +26,7 @@ public struct MessageData
     public TextAlignmentOptions alignment;
     public Sprite spriteImage;
     public Material matImage;
+    public string caption;
     public bool ignoreIfRead;
     public bool isRead;
 
@@ -37,6 +38,7 @@ public struct MessageData
         TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
         Sprite spriteImage = null,
         Material matImage = null,
+        string caption = null,
         bool ignoreIfRead = false
     )
     {
@@ -47,6 +49,7 @@ public struct MessageData
         this.alignment = alignment;
         this.spriteImage = spriteImage;
         this.matImage = matImage;
+        this.caption = caption;
         this.ignoreIfRead = ignoreIfRead;
         this.isRead = false;
     }
@@ -55,12 +58,13 @@ public struct MessageData
         string sentence,
         Sprite spriteImage = null,
         Material matImage = null,
+        string caption = null,
         TextAlignmentOptions alignment = TextAlignmentOptions.Center,
         float fontSize = 72f,
         float literalsPerSec = 1000f
     )
     {
-        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, spriteImage, matImage) };
+        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, spriteImage, matImage, caption) };
     }
 
     public static MessageData[] ItemDescription(ItemInfo itemInfo)
@@ -69,6 +73,7 @@ public struct MessageData
             "【" + itemInfo.name + "】 × " + itemInfo.numOfItem + "\n\n" + itemInfo.description,
             null,
             itemInfo.material,
+            "価格\n" + itemInfo.Price + " 円",
             TextAlignmentOptions.MidlineLeft,
             64f
         );

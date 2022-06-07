@@ -77,6 +77,7 @@ public class ItemSource
     [SerializeField] public AudioSource sfx = default;
     [SerializeField] public float duration = 0.2f;
     [SerializeField] public string description = "説明";
+    [SerializeField] public int unitPrice = 0;
 }
 
 [System.Serializable]
@@ -128,6 +129,7 @@ public class MessageSource
     [SerializeField] public TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft;
     [SerializeField] public Sprite spriteImage = null;
     [SerializeField] public Material matImage = null;
+    [SerializeField] public string caption = "";
     [SerializeField] public bool ignoreIfRead = false;
 
     public MessageSource(
@@ -138,6 +140,7 @@ public class MessageSource
         TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
         Sprite spriteImage = null,
         Material matImage = null,
+        string caption = null,
         bool ignoreIfRead = false
     )
     {
@@ -148,11 +151,12 @@ public class MessageSource
         this.alignment = alignment;
         this.spriteImage = spriteImage;
         this.matImage = matImage;
+        this.caption = caption;
         this.ignoreIfRead = ignoreIfRead;
     }
 
     public MessageData Convert()
-        => new MessageData(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, spriteImage, matImage, ignoreIfRead);
+        => new MessageData(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, spriteImage, matImage, caption, ignoreIfRead);
 }
 
 [System.Serializable]
