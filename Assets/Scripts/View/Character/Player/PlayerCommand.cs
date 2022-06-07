@@ -501,7 +501,7 @@ public class PlayerHandleBox : PlayerAction
 
         Item item = boxTile.PickItem();
 
-        // Cancel pickking up an item if player failed to get item from the Box.
+        // Cancel picking up an item if player failed to get item from the Box.
         if (item == null || !itemInventory.PickUp(item.itemInfo))
         {
             boxTile.PutItem(item);
@@ -524,23 +524,28 @@ public class PlayerPutItem : PlayerAction
         return this;
     }
 
+    private bool HandOff(bool returnValue)
+    {
+        playerAnim.handOn.Bool = false;
+        return returnValue;
+    }
+
     protected override bool Action()
     {
         // Cancel if forward tile is Box and the Box isn't Open or Controllable.
         Box boxTile = mobMap.ForwardTile as Box;
-        if (boxTile != null && (!boxTile.IsOpen || !boxTile.IsControllable)) return false;
+        if (boxTile != null && (!boxTile.IsOpen || !boxTile.IsControllable)) return HandOff(false);
 
         // Cancel if player isn't handling or putting item is invalid.
-        if (!playerAnim.handOn.Bool || !itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir)) return false;
+        if (!playerAnim.handOn.Bool || !itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir)) return HandOff(false);
 
         if (boxTile != null) boxTile.Handle();
 
         itemInventory.Remove(itemIcon);
         playerAnim.putItem.Fire();
-        playerAnim.handOn.Bool = false;
         itemIcon = null;
 
-        return true;
+        return HandOff(true);
     }
 }
 
