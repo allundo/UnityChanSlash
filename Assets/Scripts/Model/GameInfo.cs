@@ -14,6 +14,12 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public int currentFloor = 1;
 
     public ulong moneyAmount = 0;
+    public float mapComp = 0f;
+    public ulong clearTimeSec = 0;
+    public int defeatCount = 0;
+    public int level = 1;
+    public int strength = 10;
+    public int magic = 10;
 
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
