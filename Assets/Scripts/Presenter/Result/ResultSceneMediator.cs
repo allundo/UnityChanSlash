@@ -15,11 +15,7 @@ public class ResultSceneMediator : SceneMediator
         Time.timeScale = 1f;
 
         resultUIHandler.TransitSignal
-            .Subscribe(_ =>
-            {
-                Debug.Log("To title");
-                SceneTransition(0, GameInfo.Instance.ClearMaps);
-            })
+            .Subscribe(_ => SceneTransition(0, GameInfo.Instance.ClearMaps))
             .AddTo(this);
 
 #if UNITY_EDITOR
