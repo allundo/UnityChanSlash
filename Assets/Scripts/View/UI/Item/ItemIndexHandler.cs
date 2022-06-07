@@ -111,7 +111,12 @@ public class ItemIndexHandler
         }
     }
 
-    public void UpdateItemNum(ItemIcon itemIcon) => panels[itemIcon.index].SetItemNum(itemIcon.itemInfo.numOfItem);
+    public bool UpdateItemNum(ItemIcon itemIcon)
+    {
+        if (items[itemIcon.index] == null) return false;
+        panels[itemIcon.index].SetItemNum(itemIcon.itemInfo.numOfItem);
+        return true;
+    }
 
     public ItemIcon GetItem(Pos index) => GetItem(index.x, index.y);
     public ItemIcon GetItem(int x, int y) => IsValidIndex(x, y) ? items[x + WIDTH * y] : null;

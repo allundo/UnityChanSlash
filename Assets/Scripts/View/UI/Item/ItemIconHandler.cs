@@ -383,6 +383,7 @@ public class ItemIconHandler : IItemIconHandler
             currentSelected.ResetSize();
             currentSelected.SetParent(selector.transform.parent, true);
             handler.Play(currentSelected.Move(itemIndex.UIPos(currentSelected.index)));
+            itemIndex.UpdateItemNum(currentSelected);
 
             return BaseCleanUp();
         }
