@@ -307,7 +307,8 @@ public class ItemIconHandler : IItemIconHandler
             {
                 if (currentSelected.TryMerge(currentTarget.itemInfo))
                 {
-                    // currentTarget will be null and its icon disappears if the merging is succeeded.
+                    // currentTarget icon is inactivated if the merging is succeeded.
+                    currentTarget = null;
                 }
                 else
                 {
