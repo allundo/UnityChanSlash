@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Lava02
-  m_Shader: {fileID: 4800000, guid: 7314027385a594f2491691d964879d9d, type: 3}
+  m_Shader: {fileID: 4800000, guid: afeee34d5a02a4a829ba1551dbbfa539, type: 3}
   m_ValidKeywords:
   - _METALLICGLOSSMAP
   - _NORMALMAP

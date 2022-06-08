@@ -8,12 +8,14 @@
 
     SubShader
     {
-        Tags {"Queue"="Transparent+1" "RenderType"="TransparentCutout"}
+        Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout"}
         LOD 100
 
-        Pass{
+        Pass
+        {
             ZWrite ON
             ColorMask 0
+            Lighting OFF
         }
 
         CGPROGRAM
