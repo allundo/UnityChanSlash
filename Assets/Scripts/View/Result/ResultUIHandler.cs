@@ -21,15 +21,14 @@ public class ResultUIHandler : MonoBehaviour
 
     void Awake()
     {
-
         TransitSignal = titleButton.OnPush.First() // ContinueWith() cannot handle duplicated click events
                 .ContinueWith(_ => ToTitleEffect().OnCompleteAsObservable());
-
-        fade.SetAlpha(1f);
     }
 
     public Tween ViewResult()
     {
+        fade.color = Color.black;
+
         return DOTween.Sequence()
             .Append(fade.FadeIn(3f))
             .Append(wagesAnimation.LabelFadeIn())

@@ -6,7 +6,6 @@ public class ScrollText : UISymbol
     private TextMeshProUGUI tmpScroll;
     private FadeTween fadeTween;
     private float fadeDuration;
-    private Vector2 startPos;
 
     protected override void Awake()
     {
@@ -15,11 +14,15 @@ public class ScrollText : UISymbol
         fadeTween = new FadeTween(tmpScroll);
     }
 
-    public override UISymbol OnSpawn(Vector3 pos, IDirection dir = null, float duration = 2f)
+    public ScrollText OnSpawn(Vector2 startPos, float duration, string text, Color fontColor)
     {
-        rectTransform.anchoredPosition = startPos = pos;
+        tmpScroll.text = text;
+        tmpScroll.color = fontColor;
+
+        rectTransform.anchoredPosition = startPos;
         fadeDuration = duration;
         Activate();
+
         return this;
     }
 
@@ -41,11 +44,5 @@ public class ScrollText : UISymbol
             .Join(rectTransform.DOAnchorPosY(moveY, duration).SetEase(Ease.Linear).SetRelative())
             .InsertCallback(duration - fadeDuration, Disappear)
             .SetUpdate(false);
-    }
-
-    public ScrollText SetText(string text)
-    {
-        tmpScroll.text = text;
-        return this;
     }
 }
