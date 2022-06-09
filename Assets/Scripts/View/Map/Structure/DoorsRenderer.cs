@@ -1,33 +1,22 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class DoorsRenderer
+public class DoorsRenderer : StructuresRenderer<DoorControl>
 {
-    private WorldMap map;
-    private FloorMaterialsData floorMaterialsData;
-
     private DoorControl prefabDoorV;
     private DoorHControl prefabDoorH;
     private ExitDoorControl prefabExitDoorN;
 
-    private Transform parentTransform;
-
-    private Stack<DoorControl> doorsPool = new Stack<DoorControl>();
-
     private Material floorMatDoor;
     private Material floorMatGate;
 
-    public DoorsRenderer(Transform parent)
+    public DoorsRenderer(Transform parent) : base(parent)
     {
-        this.parentTransform = parent;
-        this.floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
-
         prefabDoorV = Resources.Load<DoorControl>("Prefabs/Map/DoorV");
         prefabDoorH = Resources.Load<DoorHControl>("Prefabs/Map/DoorH");
         prefabExitDoorN = Resources.Load<ExitDoorControl>("Prefabs/Map/ExitDoorN");
     }
 
-    public virtual void LoadFloorMaterials(WorldMap map)
+    public override void LoadFloorMaterials(WorldMap map)
     {
         this.map = map;
         var floorMaterials = floorMaterialsData.Param(map.floor - 1);
@@ -48,16 +37,6 @@ public class DoorsRenderer
         InitDoorData(pos, PlacePrefab(pos, prefabExitDoorN, dir.Rotate).SetDir(dir), ItemType.KeyBlade);
     }
 
-    private T PlacePrefab<T>(Pos pos, T prefab) where T : DoorControl
-        => PlacePrefab(pos, prefab, Quaternion.identity);
-
-    private T PlacePrefab<T>(Pos pos, T prefab, Quaternion rotation) where T : DoorControl
-    {
-        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, parentTransform);
-        doorsPool.Push(instance);
-        return instance;
-    }
-
     private void InitDoorData(Pos pos, DoorControl doorInstance, ItemType lockType = ItemType.Null)
     {
         var state = new DoorState(lockType);
@@ -66,12 +45,5 @@ public class DoorsRenderer
         (map.GetTile(pos) as Door).state = state;
     }
 
-    public virtual void DestroyObjects()
-    {
-        doorsPool.ForEach(door =>
-        {
-            door.KillTween();
-            Object.Destroy(door);
-        });
-    }
+    protected override void OnDestroyObject(DoorControl door) => door.KillTween();
 }
