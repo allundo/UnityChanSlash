@@ -53,6 +53,7 @@ public class MapRenderer : MonoBehaviour
     private PitTrapsRenderer pitTrapsRenderer;
     private BoxesRenderer boxesRenderer;
     private MessageBoardsRenderer messageBoardsRenderer;
+    private IStructuresRenderer[] renderers;
 
     void Awake()
     {
@@ -65,6 +66,8 @@ public class MapRenderer : MonoBehaviour
         pitTrapsRenderer = new PitTrapsRenderer(transform);
         boxesRenderer = new BoxesRenderer(transform);
         messageBoardsRenderer = new MessageBoardsRenderer(transform);
+
+        renderers = new IStructuresRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer };
     }
 
     ///  <summary>
@@ -102,11 +105,7 @@ public class MapRenderer : MonoBehaviour
 
     public void DestroyObjects()
     {
-        doorsRenderer.DestroyObjects();
-        stairsRenderer.DestroyObjects();
-        pitTrapsRenderer.DestroyObjects();
-        boxesRenderer.DestroyObjects();
-        messageBoardsRenderer.DestroyObjects();
+        renderers.ForEach(renderer => renderer.DestroyObjects());
     }
 
     public void Render(WorldMap map)
@@ -124,11 +123,7 @@ public class MapRenderer : MonoBehaviour
     {
         this.map = map;
         floorMaterials = floorMaterialsData.Param(map.floor - 1);
-        doorsRenderer.SwitchWorldMap(map);
-        stairsRenderer.SwitchWorldMap(map);
-        pitTrapsRenderer.SwitchWorldMap(map);
-        boxesRenderer.SwitchWorldMap(map);
-        messageBoardsRenderer.SwitchWorldMap(map);
+        renderers.ForEach(renderer => renderer.SwitchWorldMap(map));
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
