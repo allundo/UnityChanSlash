@@ -76,7 +76,8 @@ public class ItemSource
     [SerializeField] public ParticleSystem vfx = default;
     [SerializeField] public AudioSource sfx = default;
     [SerializeField] public float duration = 0.2f;
-    [SerializeField] public string description = "説明";
+    [SerializeField] private string description = "説明";
+    public string Description => description.Replace("\\n", "\n"); // strings on DataAsset cannot include NEW_LINE and escapes \
     [SerializeField] public int unitPrice = 0;
 }
 

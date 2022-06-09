@@ -45,7 +45,7 @@ public class ItemInfo : ICloneable
     public float duration => itemSource.duration;
 
     public string name => itemSource.name;
-    public string description => itemSource.description.Replace("\\n", "\n"); // strings on DataAsset cannot include NEW_LINE and escapes \
+    public string description => itemSource.Description;
     public int Price => itemSource.unitPrice * numOfItem;
 
     protected AudioSource sfx = null;
