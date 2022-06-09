@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.UI;
 using UniRx;
 using System.Linq;
 
@@ -9,13 +10,14 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
     [SerializeField] protected FadeEnable window = default;
     [SerializeField] protected TextHandler textHandler = default;
 
-    protected bool isUIActive = false;
+    protected Image image;
 
     protected Tween activateTween = null;
 
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
+        image = GetComponent<Image>();
         Inactivate();
     }
 
@@ -36,6 +38,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
         activateTween =
             DOTween.Sequence()
+            .AppendCallback(() => image.raycastTarget = false)
             .Join(
                 FadeIn(
                     0.5f,
@@ -48,6 +51,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
                 )
             )
             .Join(window.FadeIn(0.5f))
+            .AppendCallback(() => image.raycastTarget = true)
             .SetUpdate(true)
             .Play();
     }
