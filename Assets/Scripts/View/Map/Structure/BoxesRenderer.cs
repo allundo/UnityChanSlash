@@ -9,7 +9,7 @@ public class BoxesRenderer : StructuresRenderer<BoxControl>
         prefabBoxN = Resources.Load<BoxControl>("Prefabs/Map/TreasureBoxN");
     }
 
-    public override void LoadFloorMaterials(WorldMap map)
+    public override void SwitchWorldMap(WorldMap map)
     {
         this.map = map;
     }

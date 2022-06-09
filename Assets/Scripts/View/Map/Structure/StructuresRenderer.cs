@@ -1,11 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class StructuresRenderer<T>
-    where T : MonoBehaviour
+public interface IStructuresRenderer
+{
+    void SwitchWorldMap(WorldMap map);
+    void DestroyObjects();
+}
+
+public abstract class StructuresRenderer<T> : IStructuresRenderer
+    where T : UnityEngine.Object
 {
     protected WorldMap map;
-    protected FloorMaterialsData floorMaterialsData;
+    protected FloorMaterialsSource floorMaterials;
 
     private Transform parentTransform;
 
@@ -14,10 +20,13 @@ public abstract class StructuresRenderer<T>
     public StructuresRenderer(Transform parent)
     {
         this.parentTransform = parent;
-        this.floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
     }
 
-    public abstract void LoadFloorMaterials(WorldMap map);
+    public virtual void SwitchWorldMap(WorldMap map)
+    {
+        this.map = map;
+        floorMaterials = ResourceLoader.Instance.floorMaterialsData.Param(map.floor - 1);
+    }
 
     protected TControl PlacePrefab<TControl>(Pos pos, TControl prefab) where TControl : T
         => PlacePrefab(pos, prefab, Quaternion.identity);

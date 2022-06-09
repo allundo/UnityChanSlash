@@ -8,12 +8,6 @@ public class MapRenderer : MonoBehaviour
     private FloorMaterialsData floorMaterialsData;
     private FloorMaterialsSource floorMaterials;
 
-    private FloorMessagesData floorMessagesData;
-    private FloorMessagesSource floorMessages;
-
-    private MessageData[] FixedMessage(int index) => floorMessages.fixedMessages[index].Convert();
-    private MessageData[] RandomMessage() => floorMessages.randomMessages[Random.Range(0, floorMessages.randomMessages.Length)].Convert();
-
     private List<Pos>[] tileOpenData;
 
     public WorldMap map { get; private set; }
@@ -46,9 +40,6 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject pillar = default;
     [SerializeField] private GameObject ground = default;
 
-    // Prefabs
-    [SerializeField] private GameObject messageBoardN = default;
-
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
 
@@ -61,11 +52,11 @@ public class MapRenderer : MonoBehaviour
     private StairsRenderer stairsRenderer;
     private PitTrapsRenderer pitTrapsRenderer;
     private BoxesRenderer boxesRenderer;
+    private MessageBoardsRenderer messageBoardsRenderer;
 
     void Awake()
     {
         floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
-        floorMessagesData = ResourceLoader.Instance.floorMessagesData;
 
         tileOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
 
@@ -73,6 +64,7 @@ public class MapRenderer : MonoBehaviour
         stairsRenderer = new StairsRenderer(transform);
         pitTrapsRenderer = new PitTrapsRenderer(transform);
         boxesRenderer = new BoxesRenderer(transform);
+        messageBoardsRenderer = new MessageBoardsRenderer(transform);
     }
 
     ///  <summary>
@@ -108,41 +100,13 @@ public class MapRenderer : MonoBehaviour
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
     }
 
-    private void SetMessageBoard(Pos pos, IDirection dir)
-    {
-        PlacePrefab(pos, messageBoardN, dir.Rotate);
-        MessageWall tile = map.GetTile(pos) as MessageWall;
-        tile.boardDir = dir;
-
-        if (tile.Read == null)
-        {
-            int fixedIndex = map.fixedMessagePos.IndexOf(pos);
-            tile.data = fixedIndex != -1 ? FixedMessage(fixedIndex) : RandomMessage();
-        }
-    }
-
-    private Stack<GameObject> objectPool = new Stack<GameObject>();
-
-    // For prefab GameObjects
-    private GameObject PlacePrefab(Pos pos, GameObject prefab)
-        => PlacePrefab(pos, prefab, Quaternion.identity) as GameObject;
-
-    private GameObject PlacePrefab(Pos pos, GameObject prefab, Quaternion rotation)
-    {
-        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, transform);
-        objectPool.Push(instance);
-        return instance;
-    }
-
     public void DestroyObjects()
     {
         doorsRenderer.DestroyObjects();
         stairsRenderer.DestroyObjects();
         pitTrapsRenderer.DestroyObjects();
         boxesRenderer.DestroyObjects();
-
-        objectPool.ForEach(obj => Destroy(obj));
-        objectPool.Clear();
+        messageBoardsRenderer.DestroyObjects();
     }
 
     public void Render(WorldMap map)
@@ -160,11 +124,11 @@ public class MapRenderer : MonoBehaviour
     {
         this.map = map;
         floorMaterials = floorMaterialsData.Param(map.floor - 1);
-        floorMessages = floorMessagesData.Param(map.floor - 1);
-        doorsRenderer.LoadFloorMaterials(map);
-        stairsRenderer.LoadFloorMaterials(map);
-        pitTrapsRenderer.LoadFloorMaterials(map);
-        boxesRenderer.LoadFloorMaterials(map);
+        doorsRenderer.SwitchWorldMap(map);
+        stairsRenderer.SwitchWorldMap(map);
+        pitTrapsRenderer.SwitchWorldMap(map);
+        boxesRenderer.SwitchWorldMap(map);
+        messageBoardsRenderer.SwitchWorldMap(map);
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
@@ -194,7 +158,7 @@ public class MapRenderer : MonoBehaviour
 
                     case Terrain.MessagePillar:
                         // Render a message board
-                        SetMessageBoard(pos, Direction.Convert(dirMap[i, j]));
+                        messageBoardsRenderer.SetMessageBoard(pos, Direction.Convert(dirMap[i, j]));
 
                         // Render a pillar
                         terrainMeshes.Add(GetMeshInstance(gateMesh[(int)map.GetDoorDir(i, j)], pos));
@@ -215,7 +179,7 @@ public class MapRenderer : MonoBehaviour
                         if (matrix[i, j] == Terrain.MessageWall)
                         {
                             var dir = Direction.Convert(dirMap[i, j]);
-                            SetMessageBoard(pos, dir);
+                            messageBoardsRenderer.SetMessageBoard(pos, dir);
 
                             // Change back Dir data for rendering wall
                             dirMap[i, j] = dir.Left.Enum | dir.Right.Enum;

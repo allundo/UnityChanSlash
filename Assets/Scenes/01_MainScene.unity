@@ -1036,20 +1036,7 @@ MonoBehaviour:
   gateS: {fileID: 1352475922}
   gateW: {fileID: 420251380}
   pillar: {fileID: 2128184632}
-  doorV: {fileID: 7630895998581611990, guid: 752f66cf1eab8491485d085e1fcd90e2, type: 3}
-  doorH: {fileID: 2790598104398771217, guid: eb989be90ef9e4f0e9af2ec0d7ad9eeb, type: 3}
   ground: {fileID: 1795681735}
-  exitDoorN: {fileID: 4523986769115520068, guid: 6aac3f791bcf3476585a4ffed7e7dade,
-    type: 3}
-  upStairsN: {fileID: 5672300880596749038, guid: c4e746f0d2d7e4354b8596d4a2660257,
-    type: 3}
-  downStairsN: {fileID: 4578704803065865090, guid: 23ba178c5a0be4877997045dcd5971e4,
-    type: 3}
-  messageBoardN: {fileID: 3282614018368345247, guid: b969b524644b74050918337276ade17a,
-    type: 3}
-  treasureBoxN: {fileID: 6235967488727333423, guid: 39f6b5cb8fc8d4c4eab980aa22959fff,
-    type: 3}
-  pitTrap: {fileID: 920897704280759343, guid: 29d908bdbf29c4d318b4b8b278418a89, type: 3}
 --- !u!1 &216915114 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5458697468453608663, guid: 5f9905a4f724c43c0ae9f96ffac1b8ac,

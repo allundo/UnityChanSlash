@@ -6,22 +6,11 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
     private DoorHControl prefabDoorH;
     private ExitDoorControl prefabExitDoorN;
 
-    private Material floorMatDoor;
-    private Material floorMatGate;
-
     public DoorsRenderer(Transform parent) : base(parent)
     {
         prefabDoorV = Resources.Load<DoorControl>("Prefabs/Map/DoorV");
         prefabDoorH = Resources.Load<DoorHControl>("Prefabs/Map/DoorH");
         prefabExitDoorN = Resources.Load<ExitDoorControl>("Prefabs/Map/ExitDoorN");
-    }
-
-    public override void LoadFloorMaterials(WorldMap map)
-    {
-        this.map = map;
-        var floorMaterials = floorMaterialsData.Param(map.floor - 1);
-        floorMatDoor = floorMaterials.door;
-        floorMatGate = floorMaterials.gate;
     }
 
     public void SetDoorV(Pos pos) => SetDoor(pos, prefabDoorV);
@@ -41,7 +30,7 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
     {
         var state = new DoorState(lockType);
 
-        doorInstance.SetMaterials(floorMatGate, floorMatDoor).SetState(state);
+        doorInstance.SetMaterials(floorMaterials.gate, floorMaterials.door).SetState(state);
         (map.GetTile(pos) as Door).state = state;
     }
 
