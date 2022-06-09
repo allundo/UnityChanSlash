@@ -3,12 +3,15 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UniRx;
 using System;
+using System.Linq;
 using DG.Tweening;
 
 public class EndingUIHandler : UISymbolGenerator, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] private Sprite[] bgSprites = default;
+    public EndingMessagesSource msgSource { get; private set; }
+
     private Vector2 startPos;
     private float moveY;
 
@@ -20,23 +23,27 @@ public class EndingUIHandler : UISymbolGenerator, IPointerEnterHandler, IPointer
 
         backGround = GetComponent<Image>();
         backGround.raycastTarget = true;
+
     }
 
-    public IObservable<Unit> StartScroll(int periodIndex = 0, float scrollSpeed = 1f, float intervalRate = 0.1f)
+    public IObservable<Unit> StartScroll(int periodIndex = 0, float scrollSpeed = 1f, float intervalRate = 0.2f)
     {
         backGround.sprite = bgSprites[periodIndex];
+        msgSource = Resources.Load<EndingMessagesData>("DataAssets/Message/EndingMessagesData").Param(periodIndex);
+
         fade.color = Color.white;
         startPos = new Vector2(0f, -Screen.height * 0.2f);
         moveY = Screen.height * 0.5f;
 
-        float scrollDuration = 10f / scrollSpeed;
+        float scrollDuration = 20f / scrollSpeed;
         float intervalTime = scrollDuration * intervalRate;
+
 
         var seq = DOTween.Sequence()
             .Append(fade.FadeIn(3f, 0, false))
             .AppendCallback(() => fade.color = new Color(0, 0, 0, 0));
 
-        foreach (var text in new string[] { "TEST" })
+        foreach (var text in msgSource.Messages)
         {
             seq.AppendCallback(() => GenerateText(text, scrollDuration))
                 .AppendInterval(intervalTime);
@@ -58,7 +65,7 @@ public class EndingUIHandler : UISymbolGenerator, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Time.timeScale = 3f;
+        Time.timeScale = 5f;
     }
 
     public void OnPointerExit(PointerEventData eventData)

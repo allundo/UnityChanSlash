@@ -30,6 +30,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool isPaused { get; private set; } = false;
     public bool isScaled { get; private set; } = false;
 
+    private double elapsedTimeSec = 0;
+
     public WorldMap worldMap { get; protected set; }
     private ResourceFX resourceFX;
 
@@ -101,8 +103,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void Start()
     {
+        elapsedTimeSec = 0;
         eventManager.EventInit(worldMap);
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+    }
+
+    void Update()
+    {
+        elapsedTimeSec += Time.deltaTime;
     }
 
     public void DropStart()
@@ -303,6 +311,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Pause(true);
 
         GameInfo.Instance.moneyAmount = input.GetItemInventory.SumUpPrices();
+        GameInfo.Instance.clearTimeSec = (ulong)elapsedTimeSec;
 
         cover.color = new Color(1f, 1f, 1f, 0f);
         cover.FadeOut(3f).SetEase(Ease.InCubic)

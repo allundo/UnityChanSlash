@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Linq;
 using TMPro;
 
 public class DataAsset<T> : ScriptableObject
@@ -165,4 +166,13 @@ public class FloorMessagesSource
 {
     [SerializeField] public BoardMessageData[] fixedMessages = default;
     [SerializeField] public BoardMessageData[] randomMessages = default;
+}
+
+[System.Serializable]
+public class EndingMessagesSource
+{
+    [SerializeField] public string name = "時間帯";
+    [SerializeField] private string[] messages = default;
+
+    public string[] Messages => messages.Select(str => str.Replace("\\n", "\n")).ToArray();
 }

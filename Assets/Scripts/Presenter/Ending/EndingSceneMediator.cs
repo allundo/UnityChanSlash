@@ -1,10 +1,9 @@
 using UnityEngine;
 using UniRx;
-using DG.Tweening;
 
 public class EndingSceneMediator : SceneMediator
 {
-    [SerializeField] EndingUIHandler endingUIHandler = default;
+    [SerializeField] public EndingUIHandler endingUIHandler = default;
 
     protected override void InitBeforeStart()
     {
@@ -22,7 +21,7 @@ public class EndingSceneMediator : SceneMediator
 
     private void StartScene()
     {
-        endingUIHandler.StartScroll()
+        endingUIHandler.StartScroll(SelectPeriodIndex(GameInfo.Instance.clearTimeSec))
            .Subscribe(_ => SceneTransition(0))
            .AddTo(this);
     }
@@ -32,5 +31,14 @@ public class EndingSceneMediator : SceneMediator
         endingUIHandler.StartScroll()
            .Subscribe(_ => SceneTransition(0))
            .AddTo(this);
+    }
+
+    private int SelectPeriodIndex(ulong clearTimeSec)
+    {
+        int period = 0;
+
+        for (ulong elapsed = 3600; clearTimeSec > elapsed && period < 3; elapsed += 3600, period++) ;
+
+        return period;
     }
 }
