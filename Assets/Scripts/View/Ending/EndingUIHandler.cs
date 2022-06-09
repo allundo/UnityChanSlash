@@ -22,24 +22,27 @@ public class EndingUIHandler : UISymbolGenerator, IPointerEnterHandler, IPointer
         backGround.raycastTarget = true;
     }
 
-    void Start()
+    public IObservable<Unit> StartScroll(int periodIndex = 0, float scrollSpeed = 1f, float intervalRate = 0.1f)
     {
+        backGround.sprite = bgSprites[periodIndex];
         fade.color = Color.white;
         startPos = new Vector2(0f, -Screen.height * 0.2f);
         moveY = Screen.height * 0.5f;
-    }
 
-    public IObservable<Unit> StartScroll(int periodIndex = 0)
-    {
-        backGround.sprite = bgSprites[periodIndex];
+        float scrollDuration = 10f / scrollSpeed;
+        float intervalTime = scrollDuration * intervalRate;
 
         var seq = DOTween.Sequence()
             .Append(fade.FadeIn(3f, 0, false))
             .AppendCallback(() => fade.color = new Color(0, 0, 0, 0));
 
-        seq.Append(GenerateText("TEST"));
+        foreach (var text in new string[] { "TEST" })
+        {
+            seq.AppendCallback(() => GenerateText(text, scrollDuration))
+                .AppendInterval(intervalTime);
+        }
 
-        seq.AppendInterval(1f)
+        seq.AppendInterval(scrollDuration)
             .AppendCallback(() => fade.FadeOut(3f, 0, false).Play())
             .AppendInterval(3f)
             .AppendCallback(() => backGround.raycastTarget = false);
@@ -47,9 +50,10 @@ public class EndingUIHandler : UISymbolGenerator, IPointerEnterHandler, IPointer
         return seq.SetUpdate(false).OnCompleteAsObservable(Unit.Default);
     }
 
-    private Tween GenerateText(string text)
+    private void GenerateText(string text, float duration, float fadeDuration = 2f)
     {
-        return (Spawn(startPos, 2f) as ScrollText).SetText(text).ScrollY(moveY);
+        (Spawn(startPos, Mathf.Min(fadeDuration, duration * 0.5f)) as ScrollText)
+            .SetText(text).ScrollY(moveY, duration).Play();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

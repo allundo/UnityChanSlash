@@ -20,16 +20,26 @@ public class ScrollText : UISymbol
         rectTransform.anchoredPosition = startPos = pos;
         fadeDuration = duration;
         Activate();
-        fadeTween.SetAlpha(0f);
         return this;
+    }
+
+    public override void Activate()
+    {
+        gameObject.SetActive(true);
+        fadeTween.SetAlpha(0f);
+        fadeTween.In(fadeDuration).SetEase(Ease.Linear).Play();
+    }
+
+    private void Disappear()
+    {
+        fadeTween.Out(fadeDuration, 0, null, Inactivate).SetEase(Ease.Linear).Play();
     }
 
     public Sequence ScrollY(float moveY, float duration = 10f)
     {
         return DOTween.Sequence()
-            .Join(fadeTween.In(fadeDuration).SetEase(Ease.Linear))
             .Join(rectTransform.DOAnchorPosY(moveY, duration).SetEase(Ease.Linear).SetRelative())
-            .InsertCallback(duration - fadeDuration, () => fadeTween.Out(fadeDuration).SetEase(Ease.Linear).Play())
+            .InsertCallback(duration - fadeDuration, Disappear)
             .SetUpdate(false);
     }
 
