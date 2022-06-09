@@ -44,12 +44,9 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject gateS = default;
     [SerializeField] private GameObject gateW = default;
     [SerializeField] private GameObject pillar = default;
-    [SerializeField] private DoorControl doorV = default;
-    [SerializeField] private DoorControl doorH = default;
     [SerializeField] private GameObject ground = default;
 
     // Prefabs
-    [SerializeField] private ExitDoorControl exitDoorN = default;
     [SerializeField] private StairsControl upStairsN = default;
     [SerializeField] private StairsControl downStairsN = default;
     [SerializeField] private GameObject messageBoardN = default;
@@ -64,6 +61,7 @@ public class MapRenderer : MonoBehaviour
 
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
 
+    private DoorsRenderer doorsRenderer;
 
     void Awake()
     {
@@ -71,6 +69,8 @@ public class MapRenderer : MonoBehaviour
         floorMessagesData = ResourceLoader.Instance.floorMessagesData;
 
         tileOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
+
+        doorsRenderer = new DoorsRenderer(transform);
     }
 
     ///  <summary>
@@ -106,11 +106,6 @@ public class MapRenderer : MonoBehaviour
         gateMesh[(int)Dir.NESW] = GetMeshFromObject(gateCross);
     }
 
-    private void SetDoor(Pos pos, DoorControl doorPrefab)
-    {
-        InitAndStoreDoorData(pos, PlacePrefab(pos, doorPrefab));
-    }
-
     private void SetMessageBoard(Pos pos, IDirection dir)
     {
         PlacePrefab(pos, messageBoardN, dir.Rotate);
@@ -122,21 +117,6 @@ public class MapRenderer : MonoBehaviour
             int fixedIndex = map.fixedMessagePos.IndexOf(pos);
             tile.data = fixedIndex != -1 ? FixedMessage(fixedIndex) : RandomMessage();
         }
-    }
-
-    private void SetExitDoor(Pos pos, IDirection dir)
-    {
-        InitAndStoreDoorData(pos, PlacePrefab(pos, exitDoorN, dir.Rotate).SetDir(dir), ItemType.KeyBlade);
-    }
-
-    private void InitAndStoreDoorData(Pos pos, DoorControl doorInstance, ItemType lockType = ItemType.Null)
-    {
-        var state = new DoorState(lockType);
-
-        doorInstance.SetMaterials(floorMaterials.gate, floorMaterials.door).SetState(state);
-        (map.GetTile(pos) as Door).state = state;
-
-        doorsPool.Push(doorInstance);
     }
 
     private void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
@@ -167,7 +147,6 @@ public class MapRenderer : MonoBehaviour
     }
 
     private Stack<GameObject> objectPool = new Stack<GameObject>();
-    private Stack<DoorControl> doorsPool = new Stack<DoorControl>();
     private Stack<BoxControl> boxesPool = new Stack<BoxControl>();
 
     // For prefab components
@@ -193,8 +172,7 @@ public class MapRenderer : MonoBehaviour
 
     public void DestroyObjects()
     {
-        doorsPool.ForEach(door => door.KillTween());
-        doorsPool.Clear();
+        doorsRenderer.DestroyObjects();
 
         boxesPool.ForEach(box => box.KillTween());
         boxesPool.Clear();
@@ -219,6 +197,7 @@ public class MapRenderer : MonoBehaviour
         this.map = map;
         floorMaterials = floorMaterialsData.Param(map.floor - 1);
         floorMessages = floorMessagesData.Param(map.floor - 1);
+        doorsRenderer.LoadFloorMaterials(map);
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
@@ -255,12 +234,12 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.Door:
-                        if (dirMap[i, j] == Dir.NS) SetDoor(pos, doorV);
-                        if (dirMap[i, j] == Dir.EW) SetDoor(pos, doorH);
+                        if (dirMap[i, j] == Dir.NS) doorsRenderer.SetDoorV(pos);
+                        if (dirMap[i, j] == Dir.EW) doorsRenderer.SetDoorH(pos);
                         break;
 
                     case Terrain.ExitDoor:
-                        SetExitDoor(pos, Direction.Convert(dirMap[i, j]));
+                        doorsRenderer.SetExitDoor(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.Wall:
