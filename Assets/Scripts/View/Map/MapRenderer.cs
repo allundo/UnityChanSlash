@@ -47,8 +47,6 @@ public class MapRenderer : MonoBehaviour
     [SerializeField] private GameObject ground = default;
 
     // Prefabs
-    [SerializeField] private StairsControl upStairsN = default;
-    [SerializeField] private StairsControl downStairsN = default;
     [SerializeField] private GameObject messageBoardN = default;
     [SerializeField] private BoxControl treasureBoxN = default;
     [SerializeField] private PitControl pitTrap = default;
@@ -62,6 +60,7 @@ public class MapRenderer : MonoBehaviour
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
 
     private DoorsRenderer doorsRenderer;
+    private StairsRenderer stairsRenderer;
 
     void Awake()
     {
@@ -71,6 +70,7 @@ public class MapRenderer : MonoBehaviour
         tileOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
 
         doorsRenderer = new DoorsRenderer(transform);
+        stairsRenderer = new StairsRenderer(transform);
     }
 
     ///  <summary>
@@ -119,16 +119,6 @@ public class MapRenderer : MonoBehaviour
         }
     }
 
-    private void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
-    {
-        PlacePrefab(pos, isDownStairs ? downStairsN : upStairsN, dir.Rotate)
-            .SetMaterials(floorMaterials.stairs, isDownStairs ? floorMaterials.wall : null);
-
-        Stairs tileStairs = map.GetTile(pos) as Stairs;
-        tileStairs.enterDir = dir;
-        tileStairs.isDownStairs = isDownStairs;
-    }
-
     private void SetPitTrap(Pos pos)
     {
         var state = new PitState(floorMaterials.pitDamage);
@@ -173,6 +163,7 @@ public class MapRenderer : MonoBehaviour
     public void DestroyObjects()
     {
         doorsRenderer.DestroyObjects();
+        stairsRenderer.DestroyObjects();
 
         boxesPool.ForEach(box => box.KillTween());
         boxesPool.Clear();
@@ -198,6 +189,7 @@ public class MapRenderer : MonoBehaviour
         floorMaterials = floorMaterialsData.Param(map.floor - 1);
         floorMessages = floorMessagesData.Param(map.floor - 1);
         doorsRenderer.LoadFloorMaterials(map);
+        stairsRenderer.LoadFloorMaterials(map);
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
@@ -266,11 +258,11 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.DownStairs:
-                        SetStairs(pos, Direction.Convert(dirMap[i, j]), true);
+                        stairsRenderer.SetStairs(pos, Direction.Convert(dirMap[i, j]), true);
                         break;
 
                     case Terrain.UpStairs:
-                        SetStairs(pos, Direction.Convert(dirMap[i, j]), false);
+                        stairsRenderer.SetStairs(pos, Direction.Convert(dirMap[i, j]), false);
                         break;
 
                     case Terrain.Box:

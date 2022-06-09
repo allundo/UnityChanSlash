@@ -48,7 +48,6 @@ public class DoorsRenderer
         InitDoorData(pos, PlacePrefab(pos, prefabExitDoorN, dir.Rotate).SetDir(dir), ItemType.KeyBlade);
     }
 
-    // For prefab GameObjects
     private T PlacePrefab<T>(Pos pos, T prefab) where T : DoorControl
         => PlacePrefab(pos, prefab, Quaternion.identity);
 
@@ -67,7 +66,7 @@ public class DoorsRenderer
         (map.GetTile(pos) as Door).state = state;
     }
 
-    public void DestroyObjects()
+    public virtual void DestroyObjects()
     {
         doorsPool.ForEach(door =>
         {
