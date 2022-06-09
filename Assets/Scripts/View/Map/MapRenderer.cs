@@ -48,7 +48,6 @@ public class MapRenderer : MonoBehaviour
 
     // Prefabs
     [SerializeField] private GameObject messageBoardN = default;
-    [SerializeField] private BoxControl treasureBoxN = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -61,6 +60,7 @@ public class MapRenderer : MonoBehaviour
     private DoorsRenderer doorsRenderer;
     private StairsRenderer stairsRenderer;
     private PitTrapsRenderer pitTrapsRenderer;
+    private BoxesRenderer boxesRenderer;
 
     void Awake()
     {
@@ -72,6 +72,7 @@ public class MapRenderer : MonoBehaviour
         doorsRenderer = new DoorsRenderer(transform);
         stairsRenderer = new StairsRenderer(transform);
         pitTrapsRenderer = new PitTrapsRenderer(transform);
+        boxesRenderer = new BoxesRenderer(transform);
     }
 
     ///  <summary>
@@ -120,27 +121,7 @@ public class MapRenderer : MonoBehaviour
         }
     }
 
-    private void SetBox(Pos pos, IDirection dir)
-    {
-        var state = new BoxState();
-        var box = PlacePrefab(pos, treasureBoxN, dir.Rotate).SetState(state) as BoxControl;
-        (map.GetTile(pos) as Box).state = state;
-
-        boxesPool.Push(box);
-    }
-
     private Stack<GameObject> objectPool = new Stack<GameObject>();
-    private Stack<BoxControl> boxesPool = new Stack<BoxControl>();
-
-    // For prefab components
-    private T PlacePrefab<T>(Pos pos, T prefab) where T : MonoBehaviour
-        => PlacePrefab(pos, prefab, Quaternion.identity);
-    private T PlacePrefab<T>(Pos pos, T prefab, Quaternion rotation) where T : MonoBehaviour
-    {
-        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, transform);
-        objectPool.Push(instance.gameObject); // MonoBehaviour components cannot be CASTed to GameObject by "as".
-        return instance;
-    }
 
     // For prefab GameObjects
     private GameObject PlacePrefab(Pos pos, GameObject prefab)
@@ -158,9 +139,7 @@ public class MapRenderer : MonoBehaviour
         doorsRenderer.DestroyObjects();
         stairsRenderer.DestroyObjects();
         pitTrapsRenderer.DestroyObjects();
-
-        boxesPool.ForEach(box => box.KillTween());
-        boxesPool.Clear();
+        boxesRenderer.DestroyObjects();
 
         objectPool.ForEach(obj => Destroy(obj));
         objectPool.Clear();
@@ -185,6 +164,7 @@ public class MapRenderer : MonoBehaviour
         doorsRenderer.LoadFloorMaterials(map);
         stairsRenderer.LoadFloorMaterials(map);
         pitTrapsRenderer.LoadFloorMaterials(map);
+        boxesRenderer.LoadFloorMaterials(map);
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
@@ -261,7 +241,7 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.Box:
-                        SetBox(pos, Direction.Convert(dirMap[i, j]));
+                        boxesRenderer.SetBox(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.Pit:
