@@ -26,7 +26,6 @@ public class ItemInventory : MonoBehaviour
     void Awake()
     {
         iconGenerator = GetComponent<ItemIconGenerator>();
-        iconGenerator.Init(transform);
 
         itemIndex = new ItemIndexHandler(GetComponent<RectTransform>(), WIDTH, HEIGHT).SetPanels(prefabItemPanel);
 

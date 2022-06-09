@@ -5,7 +5,7 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class EndingUIHandler : MobGenerator<UISymbol>, IPointerEnterHandler, IPointerExitHandler
+public class EndingUIHandler : UISymbolGenerator, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] private Sprite[] bgSprites = default;
@@ -16,8 +16,7 @@ public class EndingUIHandler : MobGenerator<UISymbol>, IPointerEnterHandler, IPo
 
     protected override void Awake()
     {
-        pool = transform;
-        spawnPoint = Vector2.zero;
+        base.Awake();
 
         backGround = GetComponent<Image>();
         backGround.raycastTarget = true;
@@ -50,7 +49,7 @@ public class EndingUIHandler : MobGenerator<UISymbol>, IPointerEnterHandler, IPo
 
     private Tween GenerateText(string text)
     {
-        return (Spawn(startPos, null, 2f) as ScrollText).SetText(text).ScrollY(moveY);
+        return (Spawn(startPos, 2f) as ScrollText).SetText(text).ScrollY(moveY);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

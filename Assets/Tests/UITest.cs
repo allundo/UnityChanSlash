@@ -33,7 +33,7 @@ public class UITest
     {
         itemInventory = Object.Instantiate(prefabItemInventory);
 
-        itemIconGenerator.Init(itemInventory.transform);
+        itemIconGenerator.SetParent(itemInventory.transform);
 
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         RectTransform rectTf = itemInventory.GetComponent<RectTransform>();

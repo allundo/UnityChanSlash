@@ -39,9 +39,6 @@ public class MiniMap : MonoBehaviour
 
         // Depth is set to 0 for current 2D map use
         image.texture = renderTexture = new RenderTexture((int)portraitSize.x, (int)portraitSize.y, 0);
-
-        // Use only local anchored position from parent for UI object
-        enemyPointGenerator.spawnPoint = Vector3.zero;
     }
 
     public void ResetOrientation(DeviceOrientation orientation)
