@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class EndingScreen : UISymbolGenerator, IPointerEnterHandler, IPointerExitHandler
+public class EndingScreen : ScrollTextGenerator, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Sprite[] bgSprites = default;
     [SerializeField] private Color[] textColors = default;
@@ -49,11 +49,6 @@ public class EndingScreen : UISymbolGenerator, IPointerEnterHandler, IPointerExi
     private void GenerateText(string text, Color fontColor, float duration, float fadeDuration = 2f)
     {
         Spawn(startPos, Mathf.Min(fadeDuration, duration * 0.5f), text, fontColor).ScrollY(moveY, duration).Play();
-    }
-
-    private ScrollText Spawn(Vector2 startPos, float duration, string text, Color fontColor)
-    {
-        return (GetInstance(fixedPrefab) as ScrollText).OnSpawn(startPos, duration, text, fontColor);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

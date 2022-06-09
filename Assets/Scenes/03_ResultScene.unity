@@ -946,6 +946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 877740977}
   - component: {fileID: 877740978}
+  - component: {fileID: 877740979}
   m_Layer: 5
   m_Name: Wages
   m_TagString: Untagged
@@ -989,6 +990,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   valueTxt: {fileID: 1435355656}
   wagesTxt: {fileID: 1831442597}
+  addEffectColor: {r: 1, g: 0.61752665, b: 0, a: 1}
+--- !u!114 &877740979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877740976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c494d32451b4a0ca6d78f08f59ccd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {x: 0, y: 0, z: 0}
+  fixedPrefab: {fileID: 7657500367018114300, guid: 1e0f26c7cdf7d49899f46c02e2dbbdc4,
+    type: 3}
 --- !u!1 &971789545
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,8 +2174,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 220
-  m_fontSizeBase: 220
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
