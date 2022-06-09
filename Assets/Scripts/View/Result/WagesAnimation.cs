@@ -15,9 +15,11 @@ public class WagesAnimation : ResultAnimation
 
     public Tween AddValue(int addValue, float duration = 0.5f)
     {
+        if (addValue == 0) return null;
+
         valueTween?.Complete(true);
 
-        float strength = Mathf.Min(addValue, 10000) * 0.0001f;
+        float strength = Mathf.Min(addValue, 1000000) * 0.000001f;
         valueTween = DOTween.Sequence()
             .AppendCallback(() =>
             {
