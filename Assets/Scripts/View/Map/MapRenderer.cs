@@ -49,7 +49,6 @@ public class MapRenderer : MonoBehaviour
     // Prefabs
     [SerializeField] private GameObject messageBoardN = default;
     [SerializeField] private BoxControl treasureBoxN = default;
-    [SerializeField] private PitControl pitTrap = default;
 
     private Mesh[] wallMesh = new Mesh[0b10000];
     private Mesh[] gateMesh = new Mesh[0b10000];
@@ -61,6 +60,7 @@ public class MapRenderer : MonoBehaviour
 
     private DoorsRenderer doorsRenderer;
     private StairsRenderer stairsRenderer;
+    private PitTrapsRenderer pitTrapsRenderer;
 
     void Awake()
     {
@@ -71,6 +71,7 @@ public class MapRenderer : MonoBehaviour
 
         doorsRenderer = new DoorsRenderer(transform);
         stairsRenderer = new StairsRenderer(transform);
+        pitTrapsRenderer = new PitTrapsRenderer(transform);
     }
 
     ///  <summary>
@@ -119,14 +120,6 @@ public class MapRenderer : MonoBehaviour
         }
     }
 
-    private void SetPitTrap(Pos pos)
-    {
-        var state = new PitState(floorMaterials.pitDamage);
-
-        PlacePrefab(pos, pitTrap).SetState(state).SetMaterials(floorMaterials.pitLid, floorMaterials.wall);
-        (map.GetTile(pos) as Pit).state = state;
-    }
-
     private void SetBox(Pos pos, IDirection dir)
     {
         var state = new BoxState();
@@ -164,6 +157,7 @@ public class MapRenderer : MonoBehaviour
     {
         doorsRenderer.DestroyObjects();
         stairsRenderer.DestroyObjects();
+        pitTrapsRenderer.DestroyObjects();
 
         boxesPool.ForEach(box => box.KillTween());
         boxesPool.Clear();
@@ -190,6 +184,7 @@ public class MapRenderer : MonoBehaviour
         floorMessages = floorMessagesData.Param(map.floor - 1);
         doorsRenderer.LoadFloorMaterials(map);
         stairsRenderer.LoadFloorMaterials(map);
+        pitTrapsRenderer.LoadFloorMaterials(map);
     }
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
@@ -270,7 +265,7 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.Pit:
-                        SetPitTrap(pos);
+                        pitTrapsRenderer.SetPitTrap(pos);
                         break;
                 }
             }
