@@ -53,7 +53,7 @@ public class MapRenderer : MonoBehaviour
     private PitTrapsRenderer pitTrapsRenderer;
     private BoxesRenderer boxesRenderer;
     private MessageBoardsRenderer messageBoardsRenderer;
-    private IStructuresRenderer[] renderers;
+    private IObjectsRenderer[] renderers;
 
     void Awake()
     {
@@ -67,7 +67,7 @@ public class MapRenderer : MonoBehaviour
         boxesRenderer = new BoxesRenderer(transform);
         messageBoardsRenderer = new MessageBoardsRenderer(transform);
 
-        renderers = new IStructuresRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer };
+        renderers = new IObjectsRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer };
     }
 
     ///  <summary>

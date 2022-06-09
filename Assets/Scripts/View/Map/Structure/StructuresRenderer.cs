@@ -1,50 +1,26 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public interface IStructuresRenderer
+public abstract class StructuresRenderer<T> : ObjectsRenderer<T>
+    where T : MonoBehaviour
 {
-    void SwitchWorldMap(WorldMap map);
-    void DestroyObjects();
-}
-
-public abstract class StructuresRenderer<T> : IStructuresRenderer
-    where T : UnityEngine.Object
-{
-    protected WorldMap map;
     protected FloorMaterialsSource floorMaterials;
 
-    private Transform parentTransform;
+    public StructuresRenderer(Transform parent) : base(parent) { }
 
-    private Stack<T> structuresPool = new Stack<T>();
-
-    public StructuresRenderer(Transform parent)
-    {
-        this.parentTransform = parent;
-    }
-
-    public virtual void SwitchWorldMap(WorldMap map)
+    public override void SwitchWorldMap(WorldMap map)
     {
         this.map = map;
         floorMaterials = ResourceLoader.Instance.floorMaterialsData.Param(map.floor - 1);
     }
 
-    protected TControl PlacePrefab<TControl>(Pos pos, TControl prefab) where TControl : T
-        => PlacePrefab(pos, prefab, Quaternion.identity);
-
-    protected TControl PlacePrefab<TControl>(Pos pos, TControl prefab, Quaternion rotation) where TControl : T
+    public override void DestroyObjects()
     {
-        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, parentTransform);
-        structuresPool.Push(instance);
-        return instance;
-    }
-
-    public void DestroyObjects()
-    {
-        structuresPool.ForEach(structure =>
+        objectsPool.ForEach(structure =>
         {
             OnDestroyObject(structure);
-            Object.Destroy(structure);
+            Object.Destroy(structure.gameObject); // !! Make sure to Destroy a `GameObject`, not a `component`
         });
+        objectsPool.Clear();
     }
 
     protected virtual void OnDestroyObject(T structure) { }

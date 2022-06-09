@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MessageBoardsRenderer : StructuresRenderer<GameObject>
+public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 {
     private GameObject prefabMessageBoardN;
     private FloorMessagesSource floorMessages;
