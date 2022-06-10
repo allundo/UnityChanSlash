@@ -192,11 +192,11 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.DownStairs:
-                        stairsRenderer.SetStairs(pos, Direction.Convert(dirMap[i, j]), true);
+                        stairsRenderer.SetDownStairs(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.UpStairs:
-                        stairsRenderer.SetStairs(pos, Direction.Convert(dirMap[i, j]), false);
+                        stairsRenderer.SetUpStairs(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.Box:

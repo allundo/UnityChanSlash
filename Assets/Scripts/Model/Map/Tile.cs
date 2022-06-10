@@ -194,5 +194,4 @@ public class Stairs : Tile, ITile
     public override Item PickItem() => null;
 
     public IDirection enterDir { protected get; set; }
-    public bool isDownStairs;
 }

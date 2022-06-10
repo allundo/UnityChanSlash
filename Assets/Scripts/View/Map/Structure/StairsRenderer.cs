@@ -11,13 +11,14 @@ public class StairsRenderer : StructuresRenderer<StairsControl>
         prefabDownStairsN = Resources.Load<StairsControl>("Prefabs/Map/DownStairsN");
     }
 
-    public void SetStairs(Pos pos, IDirection dir, bool isDownStairs)
+    public void SetDownStairs(Pos pos, IDirection dir)
     {
-        PlacePrefab(pos, isDownStairs ? prefabDownStairsN : prefabUpStairsN, dir.Rotate)
-            .SetMaterials(floorMaterials.stairs, isDownStairs ? floorMaterials.wall : null);
-
-        Stairs tileStairs = map.GetTile(pos) as Stairs;
-        tileStairs.enterDir = dir;
-        tileStairs.isDownStairs = isDownStairs;
+        PlacePrefab(pos, prefabDownStairsN, dir.Rotate).SetMaterials(floorMaterials.stairs, floorMaterials.wall);
+        (map.GetTile(pos) as Stairs).enterDir = dir;
+    }
+    public void SetUpStairs(Pos pos, IDirection dir)
+    {
+        PlacePrefab(pos, prefabUpStairsN, dir.Rotate).SetMaterials(floorMaterials.stairs, null);
+        (map.GetTile(pos) as Stairs).enterDir = dir;
     }
 }
