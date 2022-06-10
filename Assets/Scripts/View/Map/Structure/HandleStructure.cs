@@ -18,6 +18,11 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
         movingControl?.Kill();
     }
 
+    public void CompleteTween()
+    {
+        movingControl?.Complete(true);
+    }
+
     protected virtual void Start()
     {
         handleState.State.Subscribe(state => OnStateChange(state)).AddTo(this);

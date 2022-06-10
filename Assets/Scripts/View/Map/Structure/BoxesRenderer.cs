@@ -22,4 +22,5 @@ public class BoxesRenderer : StructuresRenderer<BoxControl>
     }
 
     protected override void OnDestroyObject(BoxControl box) => box.KillTween();
+    public void CompleteTween() => objectsPool.ForEach(box => box.CompleteTween());
 }

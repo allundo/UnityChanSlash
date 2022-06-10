@@ -35,4 +35,5 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
     }
 
     protected override void OnDestroyObject(DoorControl door) => door.KillTween();
+    public void CompleteTween() => objectsPool.ForEach(door => door.CompleteTween());
 }

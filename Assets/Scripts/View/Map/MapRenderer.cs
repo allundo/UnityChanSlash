@@ -227,6 +227,9 @@ public class MapRenderer : MonoBehaviour
         var restore = tileOpenData[map.floor - 1];
         restore.ForEach(pos => (map.GetTile(pos) as IOpenable).Open());
         restore.Clear();
+
+        doorsRenderer.CompleteTween();
+        boxesRenderer.CompleteTween();
     }
 
     private CombineInstance GetMeshInstance(Mesh src, Pos pos)
