@@ -159,14 +159,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void DebugStartFloor(int floor)
     {
         Debug.Log("DEBUG MODE: floor = " + floor);
-        if (floor == 2)
-        {
-            debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
-        }
-        else
-        {
-            placeEnemyGenerator.Place();
-        }
+
+        if (floor == 2) debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
+
+        placeEnemyGenerator.Place();
     }
 
     public void DebugStart()
@@ -252,13 +248,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         mainCamera.SwitchFloor(worldMap.floor);
         yield return new WaitForEndOfFrame();
 
+        placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
+
         debugEnemyGenerators.ForEach(gen =>
         {
             gen.DestroyAll();
             gen.gameObject.SetActive(false);
         });
 
-        placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
         bulletGeneratorLoader.DestroyAll();
 
         lightGenerator.DestroyAll();
