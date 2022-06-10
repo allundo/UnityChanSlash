@@ -9323,7 +9323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
-  type: 8
+  type: 1
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0
