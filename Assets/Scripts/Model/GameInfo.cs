@@ -11,6 +11,20 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     private WorldMap[] maps;
     private int[] mapSize;
 
+    public void SetMapComp()
+    {
+        float totalMapArea = 0;
+        float totalMapDiscovered = 0;
+
+        for (int i = 0; i < LastFloor; i++)
+        {
+            totalMapArea += mapSize[i] * mapSize[i];
+            totalMapDiscovered += (maps[i] != null) ? maps[i].SumUpDiscovered() : 0;
+        }
+
+        mapComp = totalMapDiscovered / totalMapArea;
+    }
+
     public int currentFloor = 1;
 
     public ulong moneyAmount = 0;

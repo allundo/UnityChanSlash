@@ -36,7 +36,7 @@ public class ResultUIHandler : MonoBehaviour
             .Join(itemPrice.ValueFadeIn(GameInfo.Instance.moneyAmount, 2f))
             .AppendCallback(() => wagesAnimation.AddValue((int)(1000000f * GameInfo.Instance.mapComp))?.Play())
             .Join(mapComp.LabelFadeIn())
-            .Join(mapComp.ValueFadeIn((ulong)(GameInfo.Instance.mapComp * 10f)))
+            .Join(mapComp.ValueFadeIn((ulong)(GameInfo.Instance.mapComp * 1000f)))
             .AppendCallback(() => wagesAnimation.AddValue((int)(10000f * (Mathf.Max(0, 3600 - GameInfo.Instance.clearTimeSec))))?.Play())
             .Join(clearTime.LabelFadeIn())
             .Join(clearTime.ValueFadeIn((ulong)(GameInfo.Instance.clearTimeSec)))

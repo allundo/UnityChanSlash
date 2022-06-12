@@ -307,8 +307,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         Pause(true);
 
-        GameInfo.Instance.moneyAmount = input.GetItemInventory.SumUpPrices();
-        GameInfo.Instance.clearTimeSec = (ulong)elapsedTimeSec;
+        var gameInfo = GameInfo.Instance;
+
+        gameInfo.moneyAmount = input.GetItemInventory.SumUpPrices();
+        gameInfo.clearTimeSec = (ulong)elapsedTimeSec;
+        gameInfo.SetMapComp();
 
         cover.color = new Color(1f, 1f, 1f, 0f);
         cover.FadeOut(3f).SetEase(Ease.InCubic)

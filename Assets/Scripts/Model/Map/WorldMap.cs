@@ -247,6 +247,19 @@ public class WorldMap
         }
     }
 
+    public int SumUpDiscovered()
+    {
+        int discoveredCount = 0;
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                if (discovered[x, y]) discoveredCount++;
+            }
+        }
+        return discoveredCount;
+    }
+
     private Color[] MiniMapPixels(Color[] texPixels, int x, int y, int blockWidth, int blockHeight)
     {
         Color[] pixels = Enumerable.Repeat(Color.clear, texPixels.Length).ToArray();
