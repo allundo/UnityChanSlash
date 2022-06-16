@@ -416,22 +416,6 @@ public class MapManager
         return false;
     }
 
-    private MapManager SetPitTraps(List<Pos> pitCandidates, int numOfPits)
-    {
-        deadEndPos.Select(kv => kv.Value.GetForward(kv.Key))
-                .ForEach(nextToDeadEnd => pitCandidates.Remove(nextToDeadEnd));
-
-        for (int i = 0; i < numOfPits && pitCandidates.Count > 0; i++)
-        {
-            var pos = pitCandidates.GetRandom();
-            matrix[pos.x, pos.y] = Terrain.Pit;
-            pitCandidates.Remove(pos);
-            pitTrapPos.Add(pos);
-        }
-
-        return this;
-    }
-
     private void CreateDirMap()
     {
         // Set direction to door and wall
