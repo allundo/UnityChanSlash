@@ -17,8 +17,8 @@ TagManager:
   - Enemy
   - Structure
   - Bullet
-  - 
-  - 
+  - Coin
+  - CoinContainer
   - 
   - 
   - 
