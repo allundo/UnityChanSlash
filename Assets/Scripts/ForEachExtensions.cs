@@ -10,21 +10,14 @@ static public class ForEachExtensions
         foreach (T elem in sequence) action(elem);
     }
 
-    static public void ForEach<T>(this IEnumerable<T> sequence, Action<T> action, T exceptFor)
+    static public void ForEach<T>(this IEnumerable<T> sequence, Action<T> action, params T[] exceptFor)
     {
         Filter(sequence, exceptFor).ForEach(action);
     }
 
-    static public void ForEach<T>(this IEnumerable<T> sequence, Action<T> action, T exceptFor, params T[] filters)
+    static public void ForEach<T>(this IEnumerable<T> sequence, Action<T> action, IEnumerable<T> filters)
     {
-        sequence = Filter(sequence, exceptFor);
-
-        foreach (T e in filters)
-        {
-            sequence = Filter(sequence, e);
-        }
-
-        sequence.ForEach(action);
+        Filter(sequence, filters).ForEach(action);
     }
 
     /// <summary>
@@ -38,25 +31,22 @@ static public class ForEachExtensions
         return true;
     }
 
-    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor)
+    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, params T[] exceptFor)
+        => Filter(sequence, exceptFor).ForEach(func);
+
+    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, IEnumerable<T> filter)
+        => Filter(sequence, filter).ForEach(func);
+
+    static private IEnumerable<T> Filter<T>(IEnumerable<T> sequence, IEnumerable<T> filters)
     {
-        return Filter(sequence, exceptFor).ForEach(func);
+        if (filters == null) return sequence.Where(elem => elem != null);
+        return sequence.Where(elem => !filters.Contains(elem));
     }
 
-    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor, params T[] filters)
-    {
-        sequence = Filter(sequence, exceptFor);
+    static private bool Equals<T>(T x, T y) => EqualityComparer<T>.Default.Equals(x, y);
 
-        foreach (T e in filters)
-        {
-            sequence = Filter(sequence, e);
-        }
-
-        return sequence.ForEach(func);
-    }
-
-    static private IEnumerable<T> Filter<T>(IEnumerable<T> sequence, T exceptFor)
-        => sequence.Where(elem => !EqualityComparer<T>.Default.Equals(elem, exceptFor));
+    static private bool Contains<T>(IEnumerable<T> sequence, T searchFor)
+        => !sequence.ForEach(elem => !Equals(elem, searchFor));
 
     /// <summary>
     /// Iterate children of specified transform
