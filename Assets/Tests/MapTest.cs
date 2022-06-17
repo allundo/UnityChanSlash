@@ -6,11 +6,21 @@ using System.Linq;
 
 public class MapTest
 {
+    private ResourceLoader resourceLoader;
+    private GameInfo gameInfo;
+
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
-        Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        Object.Destroy(resourceLoader.gameObject);
+        Object.Destroy(gameInfo.gameObject);
     }
 
     [Test]

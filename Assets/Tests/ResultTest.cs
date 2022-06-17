@@ -3,17 +3,28 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using DG.Tweening;
 
 public class ResultTest
 {
+    private Camera mainCamera;
+    private GameObject ground;
+
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        var camera = Object.Instantiate(Resources.Load<Camera>("Prefabs/Result/ResultCamera"));
-        Object.Instantiate(Resources.Load<GameObject>("Prefabs/Result/Ground"));
+        mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/Result/ResultCamera"));
+        ground = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Result/Ground"));
 
-        var defaultPos = camera.transform.position;
-        camera.transform.position = new Vector3(0, defaultPos.y, defaultPos.z);
+        var defaultPos = mainCamera.transform.position;
+        mainCamera.transform.position = new Vector3(0, defaultPos.y, defaultPos.z);
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        Object.Destroy(mainCamera.gameObject);
+        Object.Destroy(ground);
     }
 
     [SetUp]
@@ -24,6 +35,7 @@ public class ResultTest
     [TearDown]
     public void TearDown()
     {
+        DOTween.KillAll();
     }
 
     [UnityTest]
@@ -34,6 +46,10 @@ public class ResultTest
         bag.target = target;
 
         yield return new WaitForSeconds(15f);
+
+        // TearDown
+        Object.Destroy(target.gameObject);
+        bag.Destroy();
     }
 
 }

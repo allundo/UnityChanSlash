@@ -3,14 +3,24 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+[Ignore("Only for spec confirmation.")]
 public class UnityEngineSpecTest
 {
+    private ResourceLoader resourceLoader;
+    private GameInfo gameInfo;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
-        Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        Object.Destroy(resourceLoader.gameObject);
+        Object.Destroy(gameInfo.gameObject);
     }
 
     [UnityTest]

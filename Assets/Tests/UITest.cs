@@ -3,29 +3,44 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using DG.Tweening;
 
 public class UITest
 {
+    private ResourceLoader resourceLoader;
+
     private ItemInventory itemInventory;
     private ItemInventory prefabItemInventory;
     private ItemIconGenerator itemIconGenerator;
     private GameObject testCanvas;
     private Dictionary<ItemType, ItemInfo> itemInfo;
+    private Camera mainCamera;
+    private GameObject eventSystem;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
 
         // Load from test resources
-        var mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
-        var eventSystem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/EventSystem"));
+        mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
+        eventSystem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/EventSystem"));
 
         testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
 
         itemInfo = new ItemInfoLoader(ResourceLoader.Instance.itemData).LoadItemInfo();
         prefabItemInventory = Resources.Load<ItemInventory>("Prefabs/UI/Item/ItemInventory");
         itemIconGenerator = Object.Instantiate(Resources.Load<ItemIconGenerator>("Prefabs/UI/Item/ItemIconGenerator"));
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        Object.Destroy(itemIconGenerator.gameObject);
+        Object.Destroy(testCanvas.gameObject);
+        Object.Destroy(mainCamera.gameObject);
+        Object.Destroy(eventSystem);
+        Object.Destroy(resourceLoader.gameObject);
     }
 
     [SetUp]
@@ -47,7 +62,10 @@ public class UITest
     [TearDown]
     public void TearDown()
     {
-        Object.Destroy(itemInventory);
+        DOTween.KillAll();
+
+        Object.Destroy(itemInventory.gameObject);
+        itemIconGenerator.DestroyAll();
     }
 
     [UnityTest]
@@ -108,5 +126,6 @@ public class UITest
         Assert.AreEqual(23964500, price3);
         Assert.AreEqual(23964500, price4);
         Assert.AreEqual(23112200, price5);
+
     }
 }

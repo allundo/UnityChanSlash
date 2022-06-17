@@ -1,19 +1,29 @@
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using DG.Tweening;
 
 public class EndingTest
 {
+    private ResourceLoader resourceLoader;
+    private GameInfo gameInfo;
+
     private EndingUIHandler endingUIHandler;
     private EndingSceneMediator endingSceneMediator;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
-        Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        Object.Destroy(resourceLoader.gameObject);
+        Object.Destroy(gameInfo.gameObject);
     }
 
     [SetUp]
@@ -28,7 +38,9 @@ public class EndingTest
     [TearDown]
     public void TearDown()
     {
-        Object.Destroy(endingUIHandler);
+        DOTween.KillAll();
+        Object.Destroy(endingSceneMediator.gameObject);
+        Object.Destroy(endingUIHandler.gameObject);
     }
 
     [UnityTest]
@@ -44,9 +56,6 @@ public class EndingTest
 
         // Then
         Assert.AreEqual("昼", endingUIHandler.periodType);
-
-        // TearDown
-        Object.Destroy(endingSceneMediator);
     }
 
     [UnityTest]
@@ -62,9 +71,6 @@ public class EndingTest
 
         // Then
         Assert.AreEqual("夕", endingUIHandler.periodType);
-
-        // TearDown
-        Object.Destroy(endingSceneMediator);
     }
 
     [UnityTest]
@@ -80,9 +86,6 @@ public class EndingTest
 
         // Then
         Assert.AreEqual("夜", endingUIHandler.periodType);
-
-        // TearDown
-        Object.Destroy(endingSceneMediator);
     }
 
     [UnityTest]
@@ -98,8 +101,5 @@ public class EndingTest
 
         // Then
         Assert.AreEqual("朝", endingUIHandler.periodType);
-
-        // TearDown
-        Object.Destroy(endingSceneMediator);
     }
 }

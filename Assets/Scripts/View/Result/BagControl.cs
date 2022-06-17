@@ -41,4 +41,14 @@ public class BagControl : MonoBehaviour
 
         sphereBody.useGravity = true;
     }
+
+    public void Destroy()
+    {
+        for (int i = 1; i < 15; i++)
+        {
+            Object.Destroy(coins[i].gameObject);
+        }
+
+        Destroy(gameObject);
+    }
 }

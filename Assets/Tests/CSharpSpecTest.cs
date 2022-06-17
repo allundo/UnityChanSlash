@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using UniRx;
 
+
+[Ignore("Only for spec confirmation.")]
 public class CSharpSpecTest
 {
     [Test]
