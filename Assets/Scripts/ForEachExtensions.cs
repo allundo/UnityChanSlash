@@ -27,17 +27,23 @@ static public class ForEachExtensions
         sequence.ForEach(action);
     }
 
-    static public void ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func)
+    /// <summary>
+    /// Short hand foreach statement. Loop is breakable with false return value of loop function.
+    /// </summary>
+    /// <param name="func">Function applies to enumerable element. The loop breaks when this function returned false.</param>
+    /// <returns>TRUE if the loop is completed.</returns>
+    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func)
     {
-        foreach (T elem in sequence) if (!func(elem)) break;
+        foreach (T elem in sequence) if (!func(elem)) return false;
+        return true;
     }
 
-    static public void ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor)
+    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor)
     {
-        Filter(sequence, exceptFor).ForEach(func);
+        return Filter(sequence, exceptFor).ForEach(func);
     }
 
-    static public void ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor, params T[] filters)
+    static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, T exceptFor, params T[] filters)
     {
         sequence = Filter(sequence, exceptFor);
 
@@ -46,7 +52,7 @@ static public class ForEachExtensions
             sequence = Filter(sequence, e);
         }
 
-        sequence.ForEach(func);
+        return sequence.ForEach(func);
     }
 
     static private IEnumerable<T> Filter<T>(IEnumerable<T> sequence, T exceptFor)

@@ -121,4 +121,30 @@ public class MapTest
             Assert.Fail();
         }
     }
+
+    [Test]
+    /// <summary>
+    /// Pit traps are never placed in front of Items.
+    /// </summary>
+    public void _004_PitPlacingTest()
+    {
+        // setup
+        MapManager[] sut = new MapManager[5].Select(_ => new MapManager(49, 49)).ToArray();
+
+        // when
+        for (int floor = 1; floor <= 5; floor++)
+        {
+            sut[floor - 1].InitMap(floor);
+        }
+
+        // then
+        sut.ForEach(sutFloor =>
+        {
+            sutFloor.deadEndPos.ForEach(kv =>
+            {
+                Pos inFrontOfDeadEnd = kv.Value.GetForward(kv.Key);
+                Assert.AreNotEqual(Terrain.Pit, sutFloor.matrix[inFrontOfDeadEnd.x, inFrontOfDeadEnd.y]);
+            });
+        });
+    }
 }

@@ -86,7 +86,7 @@ public class ItemGenerator : MobGenerator<Item>
             map.deadEndPos.Remove(last.Key);
         }
 
-        map.deadEndPos.ForEach(kvp => Put(RandomItemType, kvp.Key, kvp.Value.Backward));
+        map.deadEndPos.ForEach(kvp => { Put(RandomItemType, kvp.Key, kvp.Value.Backward); });
         map.deadEndPos.Clear();
     }
 
