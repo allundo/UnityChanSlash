@@ -684,7 +684,7 @@ public class PlayerDropFloor : PlayerCommand
 
     protected override bool Action()
     {
-        SetUIInvisible();
+        SetUIInvisible(false);
         playerAnim.dropFloor.Fire();
         playingTween = tweenMove.Drop(25.0f, 0f, 0.66f, 1.34f).Play();
         return true;
@@ -696,7 +696,7 @@ public class PlayerMessage : PlayerAction
     protected MessageData[] data;
     protected bool isUIVisibleOnCompleted;
 
-    public PlayerMessage(PlayerCommandTarget target, MessageData[] data, bool isUIVisibleOnCompleted = true) : base(target, 30f)
+    public PlayerMessage(PlayerCommandTarget target, MessageData[] data, bool isUIVisibleOnCompleted = true) : base(target, 5f, 0.999f)
     {
         this.data = data;
         this.isUIVisibleOnCompleted = isUIVisibleOnCompleted;
