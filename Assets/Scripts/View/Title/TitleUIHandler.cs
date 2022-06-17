@@ -12,7 +12,7 @@ public class TitleUIHandler : MonoBehaviour
     [SerializeField] private TitleAnimation txtUnity = default;
     [SerializeField] private TitleAnimation txtSlash = default;
     [SerializeField] private SelectButtons selectButtons = default;
-    [SerializeField] private FaceAnimator unityChanAnim = default;
+    [SerializeField] private TitleFaceAnimator unityChanAnim = default;
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] public Button[] debugStart = default;
 

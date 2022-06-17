@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8d3730ae50784a9fb1b62cadc0c64fe, type: 3}
+  m_Name: FaceClipsData
+  m_EditorClassIdentifier: 
+  setParams:
+  - normal: {fileID: 7400000, guid: 6394472d24c9347e5bb789ec1f15e5bb, type: 2}
+    angry1: {fileID: 7400000, guid: 689da6f371ad8441395f39acaf2c7ae3, type: 2}
+    angry2: {fileID: 7400000, guid: 66c6a39c175f346f6b2e3016fa5ae35b, type: 2}
+    eyeClose: {fileID: 7400000, guid: 73cb3ae8fc1de47a0a307cb5f95ec701, type: 2}
+    smile1: {fileID: 7400000, guid: 06b76ba9895174fc19d91c361e7c911b, type: 2}
+    smile2: {fileID: 7400000, guid: 901d9b98ec9a64ade8f264b6e32c1341, type: 2}
+    surprise: {fileID: 7400000, guid: ff0ec808b24b748e482e13ebfc9305ad, type: 2}
+    disattract1: {fileID: 7400000, guid: fc07439899bf64b59b05471e3d59be6a, type: 2}
+    disattract2: {fileID: 7400000, guid: 4f32f4345ffde43aca2270c41dcf6e81, type: 2}
+    ashamed: {fileID: 7400000, guid: 3555863ff4ef948e298b8d11ea795ec4, type: 2}
+    mouth:
+    - {fileID: 7400000, guid: aaf4f40e5f852472f9eb781bef3a2c17, type: 2}
+    - {fileID: 7400000, guid: 5da03c4c995e34f35a8c17702e9d6012, type: 2}
+    - {fileID: 7400000, guid: 69a5af149623d4592b3764b7cb6a7482, type: 2}
+    - {fileID: 7400000, guid: 63e3bd86527074923b9dc38ddb715245, type: 2}
+    - {fileID: 7400000, guid: 8564dc45968774e70ad835503fda627e, type: 2}

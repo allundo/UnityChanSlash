@@ -3,14 +3,14 @@ using UnityEngine;
 public class UnityChanResultReactor : MonoBehaviour
 {
     private CapsuleCollider col;
-    private FaceAnimator anim;
+    private ResultFaceAnimator anim;
 
     private bool isFalling = false;
 
     void Awake()
     {
         col = GetComponent<CapsuleCollider>();
-        anim = GetComponent<FaceAnimator>();
+        anim = GetComponent<ResultFaceAnimator>();
 
         isFalling = false;
         col.direction = 1;
@@ -20,7 +20,7 @@ public class UnityChanResultReactor : MonoBehaviour
 
     public void SetNormal() => anim.normal.Fire();
     public void SetSmile() => anim.smile.Fire();
-    public void SetEyeClose() => anim.normal.Fire();
+    public void SetEyeClose() => anim.eyeClose.Fire();
 
     private void OnTriggerEnter(Collider other)
     {

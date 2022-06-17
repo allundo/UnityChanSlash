@@ -18,6 +18,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public FloorMaterialsData floorMaterialsData { get; private set; }
     public FloorMessagesData floorMessagesData { get; private set; }
 
+    public FaceClipsSet faceClipsSet { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -48,5 +50,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         floorMaterialsData = Resources.Load<FloorMaterialsData>("DataAssets/Map/FloorMaterialsData");
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
+
+        faceClipsSet = Resources.Load<FaceClipsData>("DataAssets/Character/FaceClipsData").Param(0);
     }
 }

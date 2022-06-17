@@ -176,3 +176,19 @@ public class EndingMessagesSource
 
     public string[] Messages => messages.Select(str => str.Replace("\\n", "\n")).ToArray();
 }
+
+[System.Serializable]
+public class FaceClipsSet
+{
+    [SerializeField] public AnimationClip normal = default;
+    [SerializeField] public AnimationClip angry1 = default;
+    [SerializeField] public AnimationClip angry2 = default;
+    [SerializeField] public AnimationClip eyeClose = default;
+    [SerializeField] public AnimationClip smile1 = default;
+    [SerializeField] public AnimationClip smile2 = default;
+    [SerializeField] public AnimationClip surprise = default;
+    [SerializeField] public AnimationClip disattract1 = default;
+    [SerializeField] public AnimationClip disattract2 = default;
+    [SerializeField] public AnimationClip ashamed = default;
+    [SerializeField] public AnimationClip[] mouth = default;
+}

@@ -1,22 +1,9 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class FaceAnimator : MobAnimator
+public abstract class FaceAnimator : MobAnimator
 {
-    [SerializeField] private AnimationClip faceNormal = default;
-    [SerializeField] private AnimationClip faceAngry = default;
-    [SerializeField] private AnimationClip faceEyeClose = default;
-    [SerializeField] private AnimationClip faceSmile = default;
-    [SerializeField] private AnimationClip faceSurprise = default;
-
-    public FaceSwitch normal { get; protected set; }
-    public FaceSwitch angry { get; protected set; }
-    public FaceSwitch eyeClose { get; protected set; }
-    public FaceSwitch smile { get; protected set; }
-    public FaceSwitch surprise { get; protected set; }
-
-    public TriggerFace drop { get; protected set; }
-    public TriggerFace stagger { get; protected set; }
+    protected FaceClipsSet face;
 
     protected Tween faceLayerCanceler;
     protected int faceLayerIndex;
@@ -34,16 +21,15 @@ public class FaceAnimator : MobAnimator
     {
         anim = GetComponent<Animator>();
         faceLayerIndex = anim.GetLayerIndex("Face");
-
-        normal = new FaceSwitch(this, faceNormal.name, 1.0f);
-        angry = new FaceSwitch(this, faceAngry.name, 1.0f);
-        eyeClose = new FaceSwitch(this, faceEyeClose.name, 1.0f);
-        smile = new FaceSwitch(this, faceSmile.name, 1.0f);
-        surprise = new FaceSwitch(this, faceSurprise.name, 1.0f);
-
-        drop = new TriggerFace("Drop", surprise);
-        stagger = new TriggerFace("Stagger", surprise);
     }
+
+    protected virtual void Start()
+    {
+        face = ResourceLoader.Instance.faceClipsSet;
+        SetParams();
+    }
+
+    protected abstract void SetParams();
 
     public class TriggerFace : AnimatorParam
     {
