@@ -16,8 +16,7 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "DOTween.dll",
-        "Moq.dll",
-        "Pose.dll"
+        "Moq.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
