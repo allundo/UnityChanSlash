@@ -36,7 +36,6 @@ public class TextHandler : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         defaultPos = rectTransform.anchoredPosition;
         defaultSize = rectTransform.sizeDelta;
-        imageIcon.SetEnabled(false);
     }
 
     void Update()
