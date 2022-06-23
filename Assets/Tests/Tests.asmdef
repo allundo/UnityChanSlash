@@ -15,7 +15,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "DOTween.dll"
+        "DOTween.dll",
+        "Moq.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
