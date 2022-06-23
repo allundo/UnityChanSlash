@@ -32,9 +32,9 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
         textHandler.TapNext();
     }
 
-    public void InputMessageData(MessageData[] data)
+    public void InputMessageData(MessageData[] data, bool isUIVisibleOnCompleted = true)
     {
-        textHandler.Sentence.Subscribe(null, CloseMessage).AddTo(this);
+        textHandler.Sentence.Subscribe(null, () => CloseMessage(isUIVisibleOnCompleted)).AddTo(this);
 
         activateTween =
             DOTween.Sequence()
@@ -56,9 +56,9 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
             .Play();
     }
 
-    private void CloseMessage()
+    private void CloseMessage(bool isUIVisibleOnCompleted = true)
     {
-        FadeOut(0.5f, null, () => GameManager.Instance.Resume()).Play();
+        FadeOut(0.5f, null, () => GameManager.Instance.Resume(isUIVisibleOnCompleted)).Play();
         window.FadeOut(0.5f).Play();
     }
 }

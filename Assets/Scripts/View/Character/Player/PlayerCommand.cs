@@ -706,7 +706,7 @@ public class PlayerMessage : PlayerAction
     {
         if (data == null) return false;
         SetUIInvisible(isUIVisibleOnCompleted);
-        messageController.InputMessageData(data);
+        messageController.InputMessageData(data, isUIVisibleOnCompleted);
         return true;
     }
 }

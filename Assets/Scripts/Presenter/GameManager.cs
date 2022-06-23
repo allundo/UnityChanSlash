@@ -67,11 +67,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         isPaused = isScaled = true;
     }
 
-    public void Resume()
+    public void Resume(bool isShowUIs = true)
     {
         if (!isScaled) return;
 
-        input.SetInputVisible(true);
+        if (isShowUIs) input.SetInputVisible(true);
         Time.timeScale = 1f;
 
         isPaused = isScaled = false;
