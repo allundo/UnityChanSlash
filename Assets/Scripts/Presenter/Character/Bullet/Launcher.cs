@@ -13,7 +13,7 @@ public class Launcher : ILauncher
     public Launcher(IStatus status, BulletType type)
     {
         this.status = status;
-        bulletGenerator = GameManager.Instance.GetBulletGenerator(type);
+        bulletGenerator = SpawnHandler.Instance.GetBulletGenerator(type);
     }
 
     public virtual Tween AttackSequence(float attackDuration)

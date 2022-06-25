@@ -71,7 +71,7 @@ public class EventManager : MobGenerator<EventInvoker>
         input.InputStop();
         input.SetInputVisible(false);
 
-        GameManager.Instance.EraseAllEnemies();
+        SpawnHandler.Instance.EraseAllEnemies();
 
         ICommand message = input.EnqueueMessage(
             new MessageData[]
@@ -117,7 +117,7 @@ public class EventManager : MobGenerator<EventInvoker>
         }
 
         seq
-            .InsertCallback(0.5f, () => GameManager.Instance.PlaceWitch(witchPos, witchDir.Backward, 300f))
+            .InsertCallback(0.5f, () => SpawnHandler.Instance.PlaceWitch(witchPos, witchDir.Backward, 300f))
             .Append(lightManager.DirectionalFadeOut(1.5f))
             .Join(lightManager.PointFadeOut(1.5f))
             .Join(lightManager.SpotFadeIn(map.WorldPos(witchPos) + new Vector3(0, 4f, 0), 1f, 30f, 1.0f))

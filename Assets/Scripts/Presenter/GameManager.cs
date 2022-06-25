@@ -8,15 +8,12 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 {
     [SerializeField] private MapRenderer mapRenderer = default;
     [SerializeField] private GameObject player = default;
-    [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
-    [SerializeField] private ItemGenerator itemGenerator = default;
-    [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
-    [SerializeField] private WitchLightGenerator lightGenerator = default;
     [SerializeField] private EventManager eventManager = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
-    [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
+
+    private SpawnHandler spawnHandler;
 
     // Player info
     private HidePlateHandler hidePlateHandler;
@@ -31,24 +28,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     public IObservable<Unit> ExitObservable => exitSubject.IgnoreElements();
     private ISubject<Unit> exitSubject = new Subject<Unit>();
 
-    public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
-
-    public void SpawnLight(Vector3 pos) => lightGenerator.Spawn(pos);
-    public void DistributeLight(Vector3 pos, float range) => lightGenerator.Spawn(pos + UnityEngine.Random.insideUnitSphere * range);
-
-    public IEnemyStatus PlaceEnemy(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
-        => placeEnemyGenerator.ManualSpawn(type, pos, dir, option, life);
-
-    public IEnemyStatus PlaceEnemyRandom(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
-        => placeEnemyGenerator.RandomSpawn(pos, dir, option, life);
-
-    public IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f)
-        => placeEnemyGenerator.SpawnWitch(pos, dir, waitFrames);
-
     public void PlayVFX(VFXType type, Vector3 pos) => resourceFX.PlayVFX(type, pos);
     public void PlaySnd(SNDType type, Vector3 pos) => resourceFX.PlaySnd(type, pos);
-
-    public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
 
     protected override void Awake()
     {
@@ -62,6 +43,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.Render(worldMap);
 
         resourceFX = new ResourceFX();
+        spawnHandler = SpawnHandler.Instance;
     }
 
     /// <summary>
@@ -83,7 +65,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         yield return new WaitForSeconds(delay);
 
-        placeEnemyGenerator.Place();
+        spawnHandler.PlaceEnemyGenerators();
         yield return new WaitForEndOfFrame();
 
         player.SetActive(true);
@@ -98,7 +80,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     /// </summary>
     public void Restart()
     {
-        placeEnemyGenerator.Place();
+        spawnHandler.PlaceEnemyGenerators();
 
         InitPlayerPos();
 
@@ -124,9 +106,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         Debug.Log("DEBUG MODE: floor = " + floor);
 
-        if (floor == 2) debugEnemyGenerators.ForEach(gen => gen.gameObject.SetActive(true));
+        if (floor == 2) spawnHandler.ActivateDebugEnemyGenerators();
 
-        placeEnemyGenerator.Place();
+        spawnHandler.PlaceEnemyGenerators();
     }
 
     private void InitPlayerPos()
@@ -199,8 +181,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.OnMoveFloor();
 
         // Deny enemies to access WorldMap
-        debugEnemyGenerators.ForEach(gen => gen.DisableInputAll());
-        placeEnemyGenerator.DisableAllEnemiesInput();
+        spawnHandler.DisableAllEnemiesInput();
 
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
@@ -213,18 +194,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mainCamera.SwitchFloor(worldMap.floor);
         yield return new WaitForEndOfFrame();
 
-        placeEnemyGenerator.SwitchWorldMap(worldMap, map.onTilePos);
-
-        debugEnemyGenerators.ForEach(gen =>
-        {
-            gen.DestroyAll();
-            gen.gameObject.SetActive(false);
-        });
-
-        bulletGeneratorLoader.DestroyAll();
-
-        lightGenerator.DestroyAll();
-
+        spawnHandler.MoveFloorCharacters(worldMap, map.onTilePos);
         eventManager.SwitchWorldMap(worldMap);
 
         yield return new WaitForEndOfFrame();
@@ -259,12 +229,11 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.RestoreMapData(worldMap);
         yield return new WaitForEndOfFrame();
 
-        itemGenerator.SwitchWorldMap(worldMap);
-        itemGenerator.Turn(map.dir);
+        spawnHandler.MoveFloorItems(worldMap, map.dir);
         yield return new WaitForEndOfFrame();
 
-        placeEnemyGenerator.Place();
-        placeEnemyGenerator.RespawnWitch();
+        spawnHandler.PlaceEnemyGenerators();
+        spawnHandler.RespawnWitch();
         yield return new WaitForEndOfFrame();
     }
 

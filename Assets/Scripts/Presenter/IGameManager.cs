@@ -21,16 +21,6 @@ public interface IGameManager
     void Restart();
     void DebugStart();
 
-    void EraseAllEnemies();
-    IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f);
-    IEnemyStatus PlaceEnemy(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f);
-    IEnemyStatus PlaceEnemyRandom(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f);
-
-    BulletGenerator GetBulletGenerator(BulletType type);
-
-    void SpawnLight(Vector3 pos);
-    void DistributeLight(Vector3 pos, float range);
-
     void Exit();
     void EnterStair(bool isDownStairs);
 

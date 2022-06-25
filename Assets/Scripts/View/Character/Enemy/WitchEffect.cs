@@ -10,13 +10,17 @@ public class WitchEffect : GhostEffect
     protected MatClipEffect matClipEffect;
     protected Tween lightGenerateTimer;
 
+    private SpawnHandler spawnHandler;
+
     protected override void Awake()
     {
         base.Awake();
         matClipEffect = new MatClipEffect(matColEffect.CopyMaterials());
 
+        spawnHandler = SpawnHandler.Instance;
+
         // Spawn light periodically from hat position.
-        lightGenerateTimer = DOVirtual.DelayedCall(0.3f, () => GameManager.Instance.DistributeLight(hatTf.position, 0.2f), false)
+        lightGenerateTimer = DOVirtual.DelayedCall(0.3f, () => spawnHandler.DistributeLight(hatTf.position, 0.2f), false)
             .SetLoops(-1, LoopType.Restart)
             .AsReusable(gameObject);
     }

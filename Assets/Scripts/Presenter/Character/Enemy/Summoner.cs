@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class Summoner
 {
-    private IGameManager gm;
+    private SpawnHandler spawnHandler;
     private IMobMapUtil map;
 
     private IDisposable summonDisposable = null;
@@ -19,15 +19,15 @@ public class Summoner
 
     public Summoner(IMobMapUtil map)
     {
-        gm = GameManager.Instance;
+        spawnHandler = SpawnHandler.Instance;
         this.map = map;
     }
 
     public IEnemyStatus Summon(EnemyType type, Pos pos, IDirection dir)
-        => gm.PlaceEnemy(type, pos, dir, new EnemyStatus.ActivateOption(1.5f, true));
+        => spawnHandler.PlaceEnemy(type, pos, dir, new EnemyStatus.ActivateOption(1.5f, true));
 
     public IEnemyStatus SummonRandom(Pos pos, IDirection dir)
-        => gm.PlaceEnemyRandom(pos, dir, new EnemyStatus.ActivateOption(1.5f, true));
+        => spawnHandler.PlaceEnemyRandom(pos, dir, new EnemyStatus.ActivateOption(1.5f, true));
 
     public void SummonMulti(int count)
     {
