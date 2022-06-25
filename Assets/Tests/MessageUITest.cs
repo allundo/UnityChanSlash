@@ -90,4 +90,55 @@ public class MessageUITest
 
         yield return new WaitForSeconds(10f);
     }
+
+    [UnityTest]
+    public IEnumerator _002_FixedBoardMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
+    {
+        var fixedMsgs = resourceLoader.floorMessagesData.Param(floor - 1).fixedMessages;
+        yield return null;
+
+        yield return messageUI.StartCoroutine(ReadMessages(fixedMsgs));
+
+        yield return new WaitForSeconds(1f);
+    }
+
+    private IEnumerator ReadMessages(BoardMessageData[] msgs)
+    {
+        foreach (var msg in msgs)
+        {
+            MessageData[] data = msg.Convert();
+            messageUI.InputMessageData(data);
+            yield return null;
+            timeManager.Resume(false);
+            yield return new WaitForSeconds(0.5f);
+
+            foreach (var mes in data)
+            {
+                var duration = mes.sentence.Length / mes.literalsPerSec;
+                yield return new WaitForSeconds(0.25f);
+
+                messageUI.OnPointerUp(null);
+                yield return null;
+
+                if (duration > 0.25f)
+                {
+                    yield return new WaitForSeconds(0.25f);
+                    messageUI.OnPointerUp(null);
+                }
+            }
+
+            yield return new WaitForSeconds(0.6f);
+        }
+    }
+
+    [UnityTest]
+    public IEnumerator _003_RandomBoardMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
+    {
+        var randomMsgs = resourceLoader.floorMessagesData.Param(floor - 1).randomMessages;
+        yield return null;
+
+        yield return messageUI.StartCoroutine(ReadMessages(randomMsgs));
+
+        yield return new WaitForSeconds(1f);
+    }
 }
