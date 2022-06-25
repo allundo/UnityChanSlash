@@ -3,13 +3,18 @@ using UnityEngine.UI;
 using UniRx;
 using System;
 
+public interface IPlayerInput : IInput
+{
+    void SetInputVisible(bool isVisible = true, bool withInventory = true);
+}
+
 /// <summary>
 /// Convert player input UIs operation into a ICommand and enqueue it to PlayerCommander.<br />
 /// In addition to MobInput, there is 'Trigger type' input implemented to improve usability.<br />
 /// </summary>
 [RequireComponent(typeof(PlayerCommandTarget))]
 [RequireComponent(typeof(PlayerMapUtil))]
-public class PlayerInput : ShieldInput
+public class PlayerInput : ShieldInput, IPlayerInput
 {
     // Fight UI to fight against Enemy on front Tile
     [SerializeField] protected FightCircle fightCircle = default;

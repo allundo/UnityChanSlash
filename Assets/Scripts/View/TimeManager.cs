@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class TimeManager : SingletonMonoBehaviour<TimeManager>
 {
-    [SerializeField] private PlayerCommandTarget target = default;
+    [SerializeField] private PlayerCommandTarget playerTarget = default;
+    public ICommandTarget target;
 
-    private PlayerInput input;
+    private IPlayerInput input;
 
     public bool isPaused { get; private set; } = false;
     public bool isScaled { get; private set; } = false;
@@ -14,11 +15,12 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     protected override void Awake()
     {
         base.Awake();
-        input = target.input as PlayerInput;
+        target = playerTarget;
     }
 
     void Start()
     {
+        input = target.input as IPlayerInput;
         elapsedTimeSec = 0;
     }
 
