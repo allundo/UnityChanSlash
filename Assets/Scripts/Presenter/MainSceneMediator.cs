@@ -26,7 +26,7 @@ public class MainSceneMediator : SceneMediator
             .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.ClearMaps))
             .AddTo(this);
 
-        GameManager.Instance.ExitObservable
+        gm.ExitObservable
             .Subscribe(null, () => LoadSceneAndTransit(2, 0))
             .AddTo(this);
 
