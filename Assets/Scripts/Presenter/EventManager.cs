@@ -57,9 +57,9 @@ public class EventManager : MobGenerator<EventInvoker>
         currentFloor = map.floor;
     }
 
-    private void SetEvent(int floor, Pos pos, Action<IDirection> eventAct, Func<PlayerCommandTarget, bool> isEventValid, bool isOneShot = true, IDirection dir = null)
+    private void SetEvent(int floor, Pos pos, Action<IDirection> eventAct, Func<PlayerCommandTarget, bool> predicateEventValid, bool isOneShot = true, IDirection dir = null)
     {
-        var eventInvoker = Spawn(pos, isEventValid, isOneShot);
+        var eventInvoker = Spawn(pos, predicateEventValid, isOneShot);
 
         eventInvoker.DetectPlayer.Subscribe(_ => eventAct(dir), () => eventInvokers[floor - 1].Remove(pos)).AddTo(playerTarget.gameObject);
 
