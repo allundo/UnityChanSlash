@@ -17,11 +17,6 @@ public interface IGameManager
 
     IObservable<Unit> ExitObservable { get; }
 
-    bool isPaused { get; }
-    void Pause(bool isHideUIs = false);
-    void Resume(bool isShowUIs = true);
-    void TimeScale(float scale = 5f);
-
     void DropStart();
     void Restart();
     void DebugStart();

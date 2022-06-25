@@ -71,7 +71,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
     /// </summary>
     protected virtual void Update()
     {
-        if (GameManager.Instance.isPaused) return;
+        if (TimeManager.Instance.isPaused) return;
 
         if (isCommandValid) InputCommand(GetCommand());
     }

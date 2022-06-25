@@ -25,11 +25,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     private bool isInitialOrientation = true;
 
-    public bool isPaused { get; private set; } = false;
-    public bool isScaled { get; private set; } = false;
-
-    private double elapsedTimeSec = 0;
-
     public WorldMap worldMap { get; protected set; }
     private ResourceFX resourceFX;
 
@@ -54,35 +49,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     public void PlaySnd(SNDType type, Vector3 pos) => resourceFX.PlaySnd(type, pos);
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
-
-    public void Pause(bool isHideUIs = false)
-    {
-        if (isPaused) return;
-
-        if (isHideUIs) input.SetInputVisible(false);
-        Time.timeScale = 0f;
-
-        isPaused = isScaled = true;
-    }
-
-    public void Resume(bool isShowUIs = true)
-    {
-        if (!isScaled) return;
-
-        if (isShowUIs) input.SetInputVisible(true);
-        Time.timeScale = 1f;
-
-        isPaused = isScaled = false;
-    }
-
-    public void TimeScale(float scale = 5f)
-    {
-        if (isPaused) return;
-
-        Time.timeScale = scale;
-
-        isScaled = true;
-    }
 
     protected override void Awake()
     {
@@ -177,14 +143,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     void Start()
     {
-        elapsedTimeSec = 0;
         eventManager.EventInit(worldMap);
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
-    }
-
-    void Update()
-    {
-        elapsedTimeSec += Time.deltaTime;
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
@@ -310,12 +270,14 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     public void Exit()
     {
-        Pause(true);
+        var tm = TimeManager.Instance;
+
+        tm.Pause(true);
 
         var gameInfo = GameInfo.Instance;
 
         gameInfo.moneyAmount = input.GetItemInventory.SumUpPrices();
-        gameInfo.clearTimeSec = (ulong)elapsedTimeSec;
+        gameInfo.clearTimeSec = (ulong)tm.elapsedTimeSec;
         gameInfo.SetMapComp();
 
         cover.color = new Color(1f, 1f, 1f, 0f);

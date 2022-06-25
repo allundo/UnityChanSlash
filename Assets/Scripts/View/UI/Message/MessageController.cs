@@ -42,7 +42,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
             .Join(
                 FadeIn(
                     0.5f,
-                    () => GameManager.Instance.Pause(),
+                    () => TimeManager.Instance.Pause(),
                     () =>
                     {
                         textHandler.InputMessageData(data);
@@ -58,7 +58,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     private void CloseMessage(bool isUIVisibleOnCompleted = true)
     {
-        FadeOut(0.5f, null, () => GameManager.Instance.Resume(isUIVisibleOnCompleted)).Play();
+        FadeOut(0.5f, null, () => TimeManager.Instance.Resume(isUIVisibleOnCompleted)).Play();
         window.FadeOut(0.5f).Play();
     }
 }

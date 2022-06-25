@@ -65,7 +65,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void Activate()
     {
         cover.FadeOut(0.01f).OnComplete(ShowUIs).Play();
-        GameManager.Instance.TimeScale();
+        TimeManager.Instance.TimeScale();
 
         healSubject.OnNext(0f);
         healTween.Restart();
@@ -85,7 +85,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Inactivate()
     {
-        GameManager.Instance.TimeScale(1f);
+        TimeManager.Instance.TimeScale(1f);
         cover.FadeIn(0.01f).Play();
 
         healPoint = 0.005f;
