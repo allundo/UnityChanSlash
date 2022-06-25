@@ -142,7 +142,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         restore.ForEach(data => Respawn(data));
 
         // Reserve spawning witch if player has KeyBlade.
-        isWitchReserved = GameManager.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.type == EnemyType.Witch).Count() == 0;
+        isWitchReserved = PlayerInfo.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.type == EnemyType.Witch).Count() == 0;
 
         restore.Clear();
     }
@@ -154,8 +154,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
     {
         if (!isWitchReserved) return;
 
-        var gm = GameManager.Instance;
-        SpawnWitch(map.SearchSpaceNearBy(gm.PlayerPos, 3), gm.PlayerDir.Backward, 300f);
+        var info = PlayerInfo.Instance;
+        SpawnWitch(map.SearchSpaceNearBy(info.PlayerPos, 3), info.PlayerDir.Backward, 300f);
         isWitchReserved = false;
     }
     public void DisableAllEnemiesInput()

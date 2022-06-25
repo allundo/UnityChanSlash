@@ -72,7 +72,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     public Pos GetBackward => dir.GetBackward(onTilePos);
     public Pos GetJump => dir.GetForward(dir.GetForward(onTilePos));
 
-    public static bool IsOnPlayer(Pos destPos) => GameManager.Instance.IsOnPlayer(destPos);
+    public static bool IsOnPlayer(Pos destPos) => PlayerInfo.Instance.IsOnPlayer(destPos);
 
     public bool IsPlayerFound() => IsPlayerFound(onTilePos);
     /// <summary>

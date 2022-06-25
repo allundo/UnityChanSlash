@@ -24,7 +24,7 @@ public abstract class RabbitAttack : RabbitCommand
         somersault = target.Attack(1);
     }
 
-    protected bool IsPlayerOnTile(Pos pos) => GameManager.Instance.IsOnPlayerTile(pos);
+    protected bool IsPlayerOnTile(Pos pos) => PlayerInfo.Instance.IsOnPlayerTile(pos);
 
     protected Tween JumpAttack(int distance = 0)
     {

@@ -224,7 +224,7 @@ public class WorldMap
 
     private Pos MiniMapCenterPos(int mapSize = 15)
     {
-        Pos pos = GameManager.Instance.PlayerPos;
+        Pos pos = PlayerInfo.Instance.PlayerPos;
         int half = mapSize / 2;
 
         return new Pos(

@@ -142,15 +142,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         isInitialOrientation = false;
     }
 
-    public Pos PlayerPos => map.onTilePos;
-    public IDirection PlayerDir => map.dir;
-    public bool IsPlayerHavingKeyBlade => input.GetItemInventory.hasKeyBlade();
-
-    public bool IsOnPlayer(Pos pos) => player.activeSelf && !map.isInPit && PlayerPos == pos;
-    public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
-    public bool IsOnPlayerTile(Pos pos) => player.activeSelf && !map.isInPit && map.onTilePos == pos;
-    public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
-
     public void EnterStair(bool isDownStairs)
     {
         input.ClearAll();
