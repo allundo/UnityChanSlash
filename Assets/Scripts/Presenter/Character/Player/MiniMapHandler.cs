@@ -15,7 +15,7 @@ public class MiniMapHandler : MonoBehaviour
 
     public void OnStartFloor()
     {
-        miniMap.UpdateMiniMap();
+        miniMap.UpdateMiniMap(transform.position);
         miniMap.enabled = true;
         enemyDetector.enabled = true;
     }
@@ -26,7 +26,7 @@ public class MiniMapHandler : MonoBehaviour
         enemyDetector.enabled = false;
     }
 
-    public void UpdateMiniMap() => miniMap.UpdateMiniMap();
+    public void UpdateMiniMap() => miniMap.UpdateMiniMap(transform.position);
     public PlayerSymbol Turn(IDirection dir) => miniMap.Turn(dir);
 
     private void OnTriggerEnter(Collider col)

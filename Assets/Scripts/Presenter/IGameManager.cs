@@ -7,7 +7,6 @@ public interface IGameManager
     WorldMap worldMap { get; }
 
     Pos PlayerPos { get; }
-    Vector3 PlayerWorldPos { get; }
     IDirection PlayerDir { get; }
     bool IsPlayerHavingKeyBlade { get; }
 

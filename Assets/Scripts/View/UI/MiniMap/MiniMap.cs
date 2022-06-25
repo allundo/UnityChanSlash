@@ -102,12 +102,12 @@ public class MiniMap : MonoBehaviour
         return new Vector2(Mathf.Round(tileUnitVec.x) * uiTileUnit.x, Mathf.Round(tileUnitVec.z) * uiTileUnit.y);
     }
 
-    public void UpdateMiniMap()
+    public void UpdateMiniMap(Vector3 playerPos)
     {
         Graphics.Blit(map.GetMiniMap(MINIMAP_SIZE), renderTexture);
 
         center = map.MiniMapCenterWorldPos(MINIMAP_SIZE);
-        playerSymbol.SetPos(UIOffsetDiscrete(GameManager.Instance.PlayerWorldPos));
+        playerSymbol.SetPos(UIOffsetDiscrete(playerPos));
         MoveEnemySymbols();
         isUpdated = true;
     }
