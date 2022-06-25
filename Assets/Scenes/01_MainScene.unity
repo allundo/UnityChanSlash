@@ -908,7 +908,6 @@ MonoBehaviour:
   lightGenerator: {fileID: 1632812994}
   eventManager: {fileID: 1086912729}
   cover: {fileID: 6691234942917525759}
-  uiPosition: {fileID: 3530082429098461079}
   mainCamera: {fileID: 963194229}
   rotate: {fileID: 458642054}
   debugEnemyGenerators:
@@ -52766,6 +52765,7 @@ MonoBehaviour:
   landscapeFromLeft: 480
   lifeGaugeFromBottom: 60
   lifeGaugeFromLeftTop: {x: 420, y: -100}
+  rotate: {fileID: 458642054}
 --- !u!222 &3542432310817820549
 CanvasRenderer:
   m_ObjectHideFlags: 0

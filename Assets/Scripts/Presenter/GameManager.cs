@@ -14,7 +14,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     [SerializeField] private WitchLightGenerator lightGenerator = default;
     [SerializeField] private EventManager eventManager = default;
     [SerializeField] private CoverScreen cover = default;
-    [SerializeField] private UIPosition uiPosition = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
     [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
@@ -191,8 +190,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     private void ResetOrientation(DeviceOrientation orientation)
     {
         cover.sizeDelta = new Vector2(Screen.width, Screen.height);
-
-        uiPosition.ResetOrientation(orientation);
 
         if (!isInitialOrientation)
         {

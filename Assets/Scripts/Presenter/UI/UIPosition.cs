@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UniRx;
 
 public class UIPosition : MonoBehaviour
 {
@@ -13,12 +14,18 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private float landscapeFromLeft = 480f;
     [SerializeField] private float lifeGaugeFromBottom = 60f;
     [SerializeField] private Vector2 lifeGaugeFromLeftTop = new Vector2(420f, -100f);
+    [SerializeField] private ScreenRotateHandler rotate = default;
 
     private Vector2 itemListSize;
 
     void Awake()
     {
         itemListSize = rtItemList.sizeDelta;
+    }
+
+    void Start()
+    {
+        rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
     }
 
     public void ResetOrientation(DeviceOrientation orientation)
