@@ -17,17 +17,32 @@ public class RaycastHandler
 
     public RaycastHandler(GameObject gameObject) : this(gameObject.GetComponent<MaskableGraphic>()) { }
 
-    public void ExecutePointerDown(PointerEventData eventData) => Execute(target, eventData, eventPointerDown);
-    public void ExecutePointerUp(PointerEventData eventData) => Execute(target, eventData, eventPointerUp);
-    public void ExecutePointerEnter(PointerEventData eventData) => Execute(target, eventData, eventPointerEnter);
-    public void ExecutePointerExit(PointerEventData eventData) => Execute(target, eventData, eventPointerExit);
-    public void ExecuteDrag(PointerEventData eventData) => Execute(target, eventData, eventDrag);
+    public bool ExecutePointerDown(Vector2 screenPos) => ExecutePointerDown(SimplePointerEventData(screenPos));
+    public bool ExecutePointerUp(Vector2 screenPos) => ExecutePointerUp(SimplePointerEventData(screenPos));
 
-    public void RaycastPointerDown(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerDown, includeTarget);
-    public void RaycastPointerUp(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerUp, includeTarget);
-    public void RaycastPointerEnter(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerEnter, includeTarget);
-    public void RaycastPointerExit(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerExit, includeTarget);
-    public void RaycastDrag(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventDrag, includeTarget);
+    public bool RaycastPointerDown(Vector2 screenPos, bool includeTarget = false)
+        => RaycastPointerDown(SimplePointerEventData(screenPos), includeTarget);
+    public bool RaycastPointerUp(Vector2 screenPos, bool includeTarget = false)
+        => RaycastPointerUp(SimplePointerEventData(screenPos), includeTarget);
+
+    private PointerEventData SimplePointerEventData(Vector2 screenPos)
+    {
+        var eventData = new PointerEventData(EventSystem.current);
+        eventData.position = screenPos;
+        return eventData;
+    }
+
+    public bool ExecutePointerDown(PointerEventData eventData) => Execute(target, eventData, eventPointerDown);
+    public bool ExecutePointerUp(PointerEventData eventData) => Execute(target, eventData, eventPointerUp);
+    public bool ExecutePointerEnter(PointerEventData eventData) => Execute(target, eventData, eventPointerEnter);
+    public bool ExecutePointerExit(PointerEventData eventData) => Execute(target, eventData, eventPointerExit);
+    public bool ExecuteDrag(PointerEventData eventData) => Execute(target, eventData, eventDrag);
+
+    public bool RaycastPointerDown(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerDown, includeTarget);
+    public bool RaycastPointerUp(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerUp, includeTarget);
+    public bool RaycastPointerEnter(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerEnter, includeTarget);
+    public bool RaycastPointerExit(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventPointerExit, includeTarget);
+    public bool RaycastDrag(PointerEventData eventData, bool includeTarget = false) => RaycastEvent(eventData, eventDrag, includeTarget);
 
     private EventFunction<IPointerDownHandler> eventPointerDown = (handler, data) => handler.OnPointerDown(data as PointerEventData);
     private EventFunction<IPointerUpHandler> eventPointerUp = (handler, data) => handler.OnPointerUp(data as PointerEventData);
@@ -35,7 +50,7 @@ public class RaycastHandler
     private EventFunction<IPointerExitHandler> eventPointerExit = (handler, data) => handler.OnPointerExit(data as PointerEventData);
     private EventFunction<IDragHandler> eventDrag = (handler, data) => handler.OnDrag(data as PointerEventData);
 
-    private void RaycastEvent<T>(PointerEventData eventData, EventFunction<T> eventFunc, bool includeTarget = false) where T : IEventSystemHandler
+    private bool RaycastEvent<T>(PointerEventData eventData, EventFunction<T> eventFunc, bool includeTarget = false) where T : IEventSystemHandler
     {
         var objectsHit = new List<RaycastResult>();
 
@@ -53,8 +68,9 @@ public class RaycastHandler
                 continue;
             }
 
-            Execute<T>(objectHit.gameObject, eventData, eventFunc);
-            break;
+            return Execute<T>(objectHit.gameObject, eventData, eventFunc);
         }
+
+        return false;
     }
 }
