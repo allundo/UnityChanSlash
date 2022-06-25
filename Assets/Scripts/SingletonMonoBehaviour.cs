@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
+public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField] private bool isPersistent = false;
 
