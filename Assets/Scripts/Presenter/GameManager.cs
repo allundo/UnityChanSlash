@@ -99,28 +99,15 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         resourceFX = new ResourceFX();
     }
 
-    void Start()
-    {
-        elapsedTimeSec = 0;
-        eventManager.EventInit(worldMap);
-        rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
-    }
-
-    void Update()
-    {
-        elapsedTimeSec += Time.deltaTime;
-    }
-
+    /// <summary>
+    /// One of the start processes called before Start()
+    /// </summary>
     public void DropStart()
     {
         input.SetInputVisible(false);
         cover.SetAlpha(1f);
 
-        // Need to set player position before initialize HidePlateHandler.
-        // MiniMap controlled by HidePlateHandler refers to player position and direction.
-        map.SetPosition(worldMap);
-        hidePlateHandler.Init();
-        mainCamera.SwitchFloor(worldMap.floor);
+        InitPlayerPos();
 
         player.SetActive(false);
 
@@ -141,17 +128,31 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         eventManager.DropStartEvent();
     }
 
+    /// <summary>
+    /// One of the start processes called before Start()
+    /// </summary>
     public void Restart()
     {
         placeEnemyGenerator.Place();
 
-        map.SetPosition(worldMap);
-        hidePlateHandler.Init();
-        mainCamera.SwitchFloor(worldMap.floor);
+        InitPlayerPos();
 
         cover.FadeIn(1f, 0.5f, false).Play();
 
         eventManager.RestartEvent();
+    }
+
+    /// <summary>
+    /// One of the start processes called before Start()
+    /// </summary>
+    public void DebugStart()
+    {
+        DebugStartFloor(GameInfo.Instance.currentFloor);
+
+        InitPlayerPos();
+
+        cover.SetAlpha(0f);
+        input.SetInputVisible(true);
     }
 
     public void DebugStartFloor(int floor)
@@ -163,16 +164,28 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         placeEnemyGenerator.Place();
     }
 
-    public void DebugStart()
+    private void InitPlayerPos()
     {
-        DebugStartFloor(GameInfo.Instance.currentFloor);
-
+        // Need to set player position before initialize HidePlateHandler.
+        // MiniMap controlled by HidePlateHandler refers to player position and direction.
         map.SetPosition(worldMap);
         hidePlateHandler.Init();
-        mainCamera.SwitchFloor(worldMap.floor);
 
-        cover.SetAlpha(0f);
-        input.SetInputVisible(true);
+        // Initialize the point light position.
+        // The point light refers to player position but need to be fixed at Camera looking position before DropStart().
+        mainCamera.SwitchFloor(worldMap.floor);
+    }
+
+    void Start()
+    {
+        elapsedTimeSec = 0;
+        eventManager.EventInit(worldMap);
+        rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+    }
+
+    void Update()
+    {
+        elapsedTimeSec += Time.deltaTime;
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
