@@ -67,12 +67,44 @@ public class MessageUITest
 
         Object.Destroy(messageUI.gameObject);
     }
+    private IEnumerator ReadMessages(BoardMessageData[] msgs)
+    {
+        foreach (var msg in msgs)
+        {
+            yield return messageUI.StartCoroutine(ReadMessageData(msg.Convert()));
+            yield return new WaitForSeconds(0.6f);
+        }
+    }
+
+    private IEnumerator ReadMessageData(MessageData[] data, float readTime = 0.25f)
+    {
+        messageUI.InputMessageData(data);
+        yield return null;
+        timeManager.Resume(false);
+        yield return new WaitForSeconds(0.5f);
+
+        foreach (var mes in data)
+        {
+            var duration = mes.sentence.Length / mes.literalsPerSec;
+            yield return new WaitForSeconds(readTime);
+
+            messageUI.OnPointerUp(null);
+            yield return null;
+
+            if (duration > readTime)
+            {
+                yield return new WaitForSeconds(readTime);
+                messageUI.OnPointerUp(null);
+            }
+        }
+    }
 
     [UnityTest]
     public IEnumerator _001_PlayerMessageTest()
     {
         yield return null;
-        messageUI.InputMessageData(new MessageData[]
+
+        yield return messageUI.StartCoroutine(ReadMessageData(new MessageData[]
         {
             new MessageData("00_デフォルト", FaceID.DEFAULT),
             new MessageData("01_怒り1", FaceID.ANGRY),
@@ -86,9 +118,9 @@ public class MessageUITest
             new MessageData("09_恥ずかし", FaceID.ASHAMED),
             new MessageData("10_びっくり", FaceID.SURPRISE),
             new MessageData("-1_なし", FaceID.NONE),
-        });
+        }, 0.75f));
 
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(0.6f);
     }
 
     [UnityTest]
@@ -102,34 +134,7 @@ public class MessageUITest
         yield return new WaitForSeconds(1f);
     }
 
-    private IEnumerator ReadMessages(BoardMessageData[] msgs)
-    {
-        foreach (var msg in msgs)
-        {
-            MessageData[] data = msg.Convert();
-            messageUI.InputMessageData(data);
-            yield return null;
-            timeManager.Resume(false);
-            yield return new WaitForSeconds(0.5f);
 
-            foreach (var mes in data)
-            {
-                var duration = mes.sentence.Length / mes.literalsPerSec;
-                yield return new WaitForSeconds(0.25f);
-
-                messageUI.OnPointerUp(null);
-                yield return null;
-
-                if (duration > 0.25f)
-                {
-                    yield return new WaitForSeconds(0.25f);
-                    messageUI.OnPointerUp(null);
-                }
-            }
-
-            yield return new WaitForSeconds(0.6f);
-        }
-    }
 
     [UnityTest]
     public IEnumerator _003_RandomBoardMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
