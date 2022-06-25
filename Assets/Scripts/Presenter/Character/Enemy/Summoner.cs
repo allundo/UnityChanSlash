@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class Summoner
 {
-    private GameManager gm;
+    private IGameManager gm;
     private IMobMapUtil map;
 
     private IDisposable summonDisposable = null;

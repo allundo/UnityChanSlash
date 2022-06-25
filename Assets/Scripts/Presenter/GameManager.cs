@@ -4,7 +4,7 @@ using UniRx;
 using System;
 using System.Collections;
 
-public class GameManager : SingletonMonoBehaviour<GameManager>
+public class GameManager : SingletonComponent<IGameManager>, IGameManager
 {
     [SerializeField] private MapRenderer mapRenderer = default;
     [SerializeField] private GameObject player = default;
