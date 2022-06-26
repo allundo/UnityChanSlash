@@ -10,7 +10,8 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     public bool isPaused { get; private set; } = false;
     public bool isScaled { get; private set; } = false;
 
-    public double elapsedTimeSec { get; private set; } = 0;
+    public float elapsedTimeSecBuffer { get; private set; } = 0f;
+    public ulong elapsedTimeSec { get; private set; } = 0;
 
     protected override void Awake()
     {
@@ -21,12 +22,19 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     void Start()
     {
         input = target.input as IPlayerInput;
+        elapsedTimeSecBuffer = 0f;
         elapsedTimeSec = 0;
     }
 
     void Update()
     {
-        elapsedTimeSec += Time.deltaTime;
+        // Avoid loss of trailing digits
+        elapsedTimeSecBuffer += Time.deltaTime;
+        ushort deltaSec = (ushort)elapsedTimeSecBuffer;
+
+        // Add integer part of elapsed second
+        elapsedTimeSecBuffer -= deltaSec;
+        elapsedTimeSec += deltaSec;
     }
 
     public void Pause(bool isHideUIs = false)

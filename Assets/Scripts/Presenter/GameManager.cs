@@ -237,7 +237,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         var gameInfo = GameInfo.Instance;
 
         gameInfo.moneyAmount = input.GetItemInventory.SumUpPrices();
-        gameInfo.clearTimeSec = (ulong)tm.elapsedTimeSec;
+        gameInfo.clearTimeSec = tm.elapsedTimeSec;
         gameInfo.SetMapComp();
 
         cover.color = new Color(1f, 1f, 1f, 0f);
