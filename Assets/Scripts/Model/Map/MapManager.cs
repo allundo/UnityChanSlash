@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class MapManager
 {
+    public int floor { get; private set; } = 0;
     public int width { get; private set; }
     public int height { get; private set; }
 
@@ -50,8 +51,9 @@ public class MapManager
 
 #endif
 
-    public MapManager(int width = 49, int height = 49)
+    public MapManager(int floor, int width = 49, int height = 49)
     {
+        this.floor = floor;
         this.width = width;
         this.height = height;
 
@@ -67,13 +69,17 @@ public class MapManager
         roomCenterPos = new List<Pos>(maze.roomCenterPos);
 
         CreateDirMap();
+
+        SetDownStairs(floor);
+        SetUpStairsOrStartDoor(floor);
+        SetPitAndMessageBoards(floor);
     }
 
-    public MapManager(int[] matrix, int width, Dictionary<Pos, IDirection> deadEndPos = null)
+    public MapManager(int floor, int[] matrix, int width, Dictionary<Pos, IDirection> deadEndPos = null)
     {
+        this.floor = floor;
         this.width = width;
         this.height = matrix.Length / width;
-        this.deadEndPos = deadEndPos ?? new Dictionary<Pos, IDirection>();
         this.roomCenterPos = new List<Pos>();
 
         this.matrix = new Terrain[width, height];
@@ -93,10 +99,28 @@ public class MapManager
 
         this.dirMap = new Dir[width, height];
         CreateDirMap();
+
+        // deadEndPos is set by user
+        if (deadEndPos != null)
+        {
+            this.deadEndPos = deadEndPos;
+            SetDownStairs(floor);
+            SetUpStairs(deadEndPos.Last().Key);
+        }
+        else
+        {
+            this.deadEndPos = new MatrixHandler(matrix, width).SearchDeadEnds();
+            SetDownStairs(floor);
+            SetUpStairsOrStartDoor(floor);
+        }
     }
 
-    public MapManager SetDownStairs(int floor) => floor == GameInfo.Instance.LastFloor ? this : SetDownStairs();
-    public MapManager SetDownStairs() => SetDownStairs(deadEndPos.First().Key);
+    public MapManager SetDownStairs(int floor)
+    {
+        this.floor = floor;
+        return floor == GameInfo.Instance.LastFloor ? this : SetDownStairs();
+    }
+    private MapManager SetDownStairs() => SetDownStairs(deadEndPos.First().Key);
     private MapManager SetDownStairs(Pos pos) => SetDownStairs(pos, GetDownStairsDir);
     private MapManager SetDownStairs(Pos pos, IDirection dir) => SetDownStairs(pos, _ => dir);
     private MapManager SetDownStairs(Pos pos, Func<Pos, IDirection> DirGetter)
@@ -207,7 +231,10 @@ public class MapManager
     protected bool IsNextToAroundWall(int x, int y) => x == 1 || x == width - 2 || y == 1 || y == height - 2;
 
     public MapManager SetUpStairsOrStartDoor(int floor)
-        => floor == 1 ? SetStartDoor() : SetUpStairs();
+    {
+        this.floor = floor;
+        return floor == 1 ? SetStartDoor() : SetUpStairs();
+    }
     private MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
     public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir);
     private MapManager SetUpStairs(Pos pos, IDirection dir) => SetUpStairs(pos, _ => dir);

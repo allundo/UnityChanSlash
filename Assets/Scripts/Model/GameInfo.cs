@@ -63,7 +63,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         if (floor > 0 && floor <= LastFloor)
         {
             int size = mapSize[floor - 1];
-            return maps[floor - 1] = (maps[floor - 1] ?? new WorldMap(null, floor, size, size));
+            return maps[floor - 1] = (maps[floor - 1] ?? new WorldMap(floor, size, size));
         }
 
         return null;
@@ -115,7 +115,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(1, 1),    Direction.south },
         };
 
-        maps[MAX_FLOOR] = new CustomMap(15, matrix, deadEnds).CreateMap(2);
+        maps[MAX_FLOOR] = new WorldMap(new MapManager(2, matrix, 15, deadEnds));
     }
 
     private int[] FinalMapMatrix()
@@ -185,6 +185,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[1] = 35;
         mapSize[LastFloor - 1] = 29;
 
-        maps[LastFloor - 1] = new CustomMap(29, FinalMapMatrix(), FinalMapDeadEnds()).CreateMap(LastFloor);
+        maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds()));
     }
 }

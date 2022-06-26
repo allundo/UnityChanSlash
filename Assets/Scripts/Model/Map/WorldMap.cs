@@ -106,20 +106,20 @@ public class WorldMap
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 
-    public WorldMap(MapManager map = null, int floor = 1, int w = 49, int h = 49)
+    public WorldMap(MapManager map)
     {
-        this.map = map?.SetStairs(floor) ?? new MapManager(w, h).InitMap(floor);
-        stairsBottom = this.map.stairsBottom;
+        this.map = map;
 
-        this.floor = floor;
+        floor = map.floor;
+        stairsBottom = map.stairsBottom;
 
-        stairsTop = this.map.stairsTop;
+        stairsTop = map.stairsTop;
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
         fixedMessagePos = new List<Pos>(this.map.fixedMessagePos);
 
-        Width = this.map.width;
-        Height = this.map.height;
+        Width = map.width;
+        Height = map.height;
 
         tileInfo = new ITile[Width, Height];
 
@@ -187,6 +187,9 @@ public class WorldMap
         texMap.SetPixels(pixels);
         texMap.Apply();
     }
+
+    public WorldMap(int floor = 1, int w = 49, int h = 49) : this(new MapManager(floor, w, h))
+    { }
 
     public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
     public Vector3 WorldPos(int x, int y) => new Vector3((0.5f + x - Width * 0.5f) * TILE_UNIT, 0.0f, (-0.5f - y + Height * 0.5f) * TILE_UNIT);

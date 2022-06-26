@@ -27,31 +27,67 @@ public class MapTest
     public void _001_StairDownPlacingTest()
     {
         // setup
-        MapManager sut = new MapManager();
-        var firstDeadEndPos = sut.deadEndPos.First();
+        int[] matrix =
+        {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 0, 2, 1, 1, 1, 4, 1,12, 1, 1, 1, 1,11, 2,
+            6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+           10, 0, 4, 1, 1,11, 2, 1,12, 1, 1, 1, 1, 1, 2,
+            2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            5, 1,12, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 7, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
+
+        var deadEnds = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(5, 5),    Direction.west  },
+            { new Pos(1, 3),    Direction.north },
+            { new Pos(1, 5),    Direction.north },
+            { new Pos(13, 13),  Direction.north },
+            { new Pos(1, 1),    Direction.south },
+        };
+
+        var firstDeadEndPos = deadEnds.First();
         Pos downStairsPos = firstDeadEndPos.Key;
         IDirection downStairsDir = firstDeadEndPos.Value;
         Pos inFrontOfDownStairsPos = downStairsDir.GetForward(downStairsPos);
 
         // when
-        sut.SetDownStairs();
+        MapManager sut1 = new MapManager(1, matrix, 15, deadEnds);
+        MapManager sut5 = new MapManager(5, matrix, 15, deadEnds); // Down stairs isn't set to last floor
 
         // then
-        Assert.False(sut.deadEndPos.ContainsKey(downStairsPos));
-        Assert.AreEqual(Terrain.DownStairs, sut.matrix[downStairsPos.x, downStairsPos.y]);
-        Assert.AreEqual(downStairsDir.Enum, sut.dirMap[downStairsPos.x, downStairsPos.y]);
-        Assert.AreEqual(Terrain.Ground, sut.matrix[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
-        Assert.AreEqual(new KeyValuePair<Pos, IDirection>(inFrontOfDownStairsPos, downStairsDir), sut.stairsTop);
+        Assert.False(sut1.deadEndPos.ContainsKey(downStairsPos));
+        Assert.AreEqual(Terrain.DownStairs, sut1.matrix[downStairsPos.x, downStairsPos.y]);
+        Assert.AreEqual(downStairsDir.Enum, sut1.dirMap[downStairsPos.x, downStairsPos.y]);
+        Assert.AreEqual(Terrain.Ground, sut1.matrix[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
+        Assert.AreEqual(new KeyValuePair<Pos, IDirection>(inFrontOfDownStairsPos, downStairsDir), sut1.stairsTop);
+
+        // then last floor
+        Pos itemPlacedPos = downStairsPos;
+        Pos inFrontOfItemPlacedPos = inFrontOfDownStairsPos;
+
+        Assert.False(sut5.deadEndPos.ContainsKey(itemPlacedPos));
+        Assert.AreEqual(Terrain.Path, sut5.matrix[itemPlacedPos.x, itemPlacedPos.y]);
+        Assert.AreEqual(Dir.NES, sut5.dirMap[itemPlacedPos.x, itemPlacedPos.y]);
+        Assert.AreEqual(Terrain.Door, sut5.matrix[inFrontOfItemPlacedPos.x, inFrontOfItemPlacedPos.y]);
+        Assert.AreEqual(new KeyValuePair<Pos, IDirection>(new Pos(0, 0), null), sut5.stairsTop);
     }
 
     [Test]
     public void _002_1F_PitAttentionMessageBoardDirectionTest()
     {
         // setup
-        MapManager sut = new MapManager();
-
         // when
-        sut.InitMap(1);
+        MapManager sut = new MapManager(1);
 
         // then
         Assert.AreEqual(4, sut.pitTrapPos.Count);
@@ -86,10 +122,8 @@ public class MapTest
     public void _003_1F_ExitDoorAndMessageBoardPlacingTest()
     {
         // setup
-        MapManager sut = new MapManager(49, 49);
-
         // when
-        sut.InitMap(1);
+        MapManager sut = new MapManager(1, 49, 49);
 
         // then
         Pos startPos = sut.stairsBottom.Key;
@@ -139,12 +173,12 @@ public class MapTest
     public void _004_PitPlacingTest()
     {
         // setup
-        MapManager[] sut = new MapManager[5].Select(_ => new MapManager(49, 49)).ToArray();
+        MapManager[] sut = new MapManager[5];
 
         // when
         for (int floor = 1; floor <= 5; floor++)
         {
-            sut[floor - 1].InitMap(floor);
+            sut[floor - 1] = new MapManager(floor, 49, 49);
         }
 
         // then
