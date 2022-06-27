@@ -11,9 +11,24 @@ public interface IAttackHitDetect : IAttack
 [RequireComponent(typeof(Collider))]
 public class MobAttack : Attack, IAttackHitDetect
 {
+    /// <summary>
+    /// Attack hit starting frame on animation clip
+    /// </summary>
     [SerializeField] protected int startFrame = 0;
+
+    /// <summary>
+    /// Attack hit finishing frame on animation clip
+    /// </summary>
     [SerializeField] protected int finishFrame = 0;
+
+    /// <summary>
+    /// Animation speed set on Mecanim Animator
+    /// </summary>
     [SerializeField] protected int speed = 1;
+
+    /// <summary>
+    /// Motion frame rate of animation clip
+    /// </summary>
     [SerializeField] protected int frameRate = 30;
 
     protected float startSec;
