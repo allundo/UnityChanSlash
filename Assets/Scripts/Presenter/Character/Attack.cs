@@ -12,7 +12,7 @@ public class Attack : AttackBehaviour
     [SerializeField] protected AttackType attackType = default;
     [SerializeField] protected AttackAttr attackAttr = default;
 
-    private Collider attackCollider = default;
+    protected Collider attackCollider = default;
     protected IStatus status;
 
     [SerializeField] protected float attackMultiplier = 1f;
