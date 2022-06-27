@@ -37,6 +37,7 @@ public class Item : SpawnObject<Item>
     {
         itemInfo = info;
         meshRenderer.material = info.material;
+        gameObject.name = info.type.ToString();
         return this;
     }
 
