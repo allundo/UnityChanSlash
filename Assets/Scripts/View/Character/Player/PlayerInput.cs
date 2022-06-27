@@ -350,7 +350,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         doorHandler.Inactivate();
         boxHandler.Inactivate();
         itemHandler.Inactivate();
-        fightCircle.Inactivate();
+        fightCircle.Inactivate(true);
 
         inspectUI.Inactivate();
 

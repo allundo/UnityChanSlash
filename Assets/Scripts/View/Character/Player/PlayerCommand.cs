@@ -669,10 +669,10 @@ public class PlayerDie : PlayerCommand
 
     public override IObservable<Unit> Execute()
     {
-        mobReact.OnDie();
+        itemInventory.Cancel();
+        react.OnDie();
         playerAnim.die.Bool = true;
         playerTarget.gameOverUI.Play();
-        itemInventory.Cancel();
 
         return ExecOnCompleted(() => mobReact.OnDisappear());
     }

@@ -217,9 +217,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         enemyTarget.FadeActivate(status);
     }
 
-    public void Inactivate()
+    public void Inactivate(bool isForce = false)
     {
-        if (IsPressed || !isActive) return;
+        if (!isForce && IsPressed || !isActive) return;
 
         ButtonCancel(true);
         isActive = false;

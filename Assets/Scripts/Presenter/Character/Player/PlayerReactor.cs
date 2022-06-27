@@ -128,4 +128,12 @@ public class PlayerReactor : MobReactor
         bodyCollider.enabled = true;
         playerInput.SetInputVisible(true, !(map as PlayerMapUtil).isInPit);
     }
+
+    public override void OnDie()
+    {
+        map.ResetTile();
+        effect.OnDie();
+        playerInput.SetInputVisible(false);
+        bodyCollider.enabled = false;
+    }
 }
