@@ -191,11 +191,16 @@ public class PlayerInput : ShieldInput, IPlayerInput
     /// <summary>
     /// Switch visibilities of all input UIs.
     /// </summary>
-    public void SetInputVisible(bool isVisible = true, bool withInventory = true)
+    public void SetInputVisible(bool isVisible = true, bool withSubUIs = true)
     {
         isInputVisible = isVisible;
-        restButton.gameObject.SetActive(isVisible);
-        if (withInventory) itemInventory.SetEnable(isVisible);
+
+        if (withSubUIs)
+        {
+            restButton.gameObject.SetActive(isVisible);
+            itemInventory.SetEnable(isVisible);
+        }
+
         if (!isVisible) InactivateUIs();
     }
 

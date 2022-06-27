@@ -300,7 +300,7 @@ public class PlayerPitJump : PlayerCommand
             map.MoveObjectOn(map.GetForward);
             moveVec = map.DestVec;
             completeTween = tweenMove.DelayedCall(0.8f, hidePlateHandler.Move).Play();
-            itemInventory.SetEnable(true);
+            playerInput.SetInputVisible();
         }
         else
         {
