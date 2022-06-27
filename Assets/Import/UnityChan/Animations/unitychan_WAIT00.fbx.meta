@@ -1805,7 +1805,17 @@ ModelImporter:
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
       to improve retargeting quality.\n\t'Character1_Spine' is inbetween humanoid
       transforms and has rotation animation that will be discarded.\n"
-    animationRetargetingWarnings: 
+    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Take 001':\n\tLeftLowerLeg
+      average position error 2.7 mm and maximum position error 4.7 mm at time 0:-1
+      (0.0%) Frame -1\n\tRightLowerLeg average position error 3.1 mm and maximum
+      position error 4.8 mm at time 0:-1 (0.0%) Frame -1\n\tLeftUpperArm average
+      position error 1.4 mm and maximum position error 2.9 mm at time 1:17 (53.9%)
+      Frame 47\n\tLeftLowerArm average position error 0.7 mm and maximum position
+      error 4.4 mm at time 0:-1 (0.0%) Frame -1\n\tRightUpperArm average position
+      error 1.4 mm and maximum position error 2.9 mm at time 1:17 (53.9%) Frame 47\n\tRightLowerArm
+      average position error 0.8 mm and maximum position error 4.4 mm at time 0:-1
+      (0.0%) Frame -1\n\tHead average position error 1.4 mm and maximum position
+      error 2.9 mm at time 1:17 (53.9%) Frame 47\n"
     animationDoRetargetingWarnings: 1
     importAnimatedCustomProperties: 0
     importConstraints: 0
@@ -1836,7 +1846,7 @@ ModelImporter:
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
