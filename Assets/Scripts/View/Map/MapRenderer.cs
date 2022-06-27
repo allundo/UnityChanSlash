@@ -46,6 +46,8 @@ public class MapRenderer : MonoBehaviour
     private Mesh wallVMesh;
     private Mesh wallHMesh;
 
+    private Mesh wallParentMesh;
+
     private Mesh GetMeshFromObject(GameObject go) => go.GetComponent<MeshFilter>().sharedMesh;
 
     private DoorsRenderer doorsRenderer;
@@ -248,7 +250,8 @@ public class MapRenderer : MonoBehaviour
         combinedMesh.CombineMeshes(meshes.ToArray(), true);
 
         // ProBuilder managed Mesh needs MeshUtility.CopyTo() to apply another Mesh object
-        MeshUtility.CopyTo(combinedMesh, wallParent.GetComponent<MeshFilter>().sharedMesh);
+        wallParentMesh = wallParent.GetComponent<MeshFilter>().mesh;
+        MeshUtility.CopyTo(combinedMesh, wallParentMesh);
 
         Destroy(combinedMesh);
     }
@@ -263,5 +266,10 @@ public class MapRenderer : MonoBehaviour
     {
         wallParent.SetActive(isActive);
         ground.gameObject.SetActive(isActive);
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(wallParentMesh);
     }
 }
