@@ -51,18 +51,19 @@ public abstract class FaceAnimator : MobAnimator
         public FaceAnimator faceAnim { get; protected set; }
         protected int hashedFaceVar;
         protected float duration;
+        protected float transitionDuration;
 
-        public FaceSwitch(FaceAnimator faceAnim, string faceName, float duration)
+        public FaceSwitch(FaceAnimator faceAnim, string faceName, float duration = 1f, float transitionDuration = 0.05f)
         {
-
             this.faceAnim = faceAnim;
             hashedFaceVar = Animator.StringToHash(faceName);
             this.duration = duration;
+            this.transitionDuration = transitionDuration;
         }
 
         public void Fire()
         {
-            faceAnim.anim.CrossFade(hashedFaceVar, 0.05f);
+            faceAnim.anim.CrossFade(hashedFaceVar, transitionDuration);
             faceAnim.applyFaceLayer(duration);
         }
     }
