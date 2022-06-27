@@ -58,4 +58,10 @@ public class ExitDoorControl : DoorControl
             GameManager.Instance.Exit();
         }
     }
+
+    private void OnDestroy()
+    {
+        // Destroy cloned material
+        Destroy(materialExit);
+    }
 }

@@ -130,4 +130,6 @@ public class FadeTween
             .SetUpdate(isValidOnPause)
             .SetDelay(delay);
     }
+
+    public virtual void OnDestroy() { }
 }

@@ -70,4 +70,9 @@ public class CoverScreen : FadeScreen
             .Append(base.FadeOut(duration, delay, isContinuous))
             .SetUpdate(true);
     }
+
+    private void OnDestroy()
+    {
+        fadeMC.OnDestroy();
+    }
 }

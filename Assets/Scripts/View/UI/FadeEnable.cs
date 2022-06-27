@@ -70,4 +70,9 @@ public class FadeEnable : MonoBehaviour
             },
             isContinuous);
     }
+
+    private void OnDestroy()
+    {
+        fade?.OnDestroy();
+    }
 }
