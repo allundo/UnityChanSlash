@@ -10,16 +10,21 @@ public class SingletonComponent<T> : MonoBehaviour where T : class
     {
         get
         {
-            if (instance == null)
+            // Type of T(class) cannot be compared with {null} GameObject
+            var component = instance as MonoBehaviour;
+
+            if (component == null)
             {
-                instance = FindObjectOfInterface();
-                if (instance == null)
+                // Type of T(class) cannot be compared with {null} GameObject
+                component = FindObjectOfInterface() as MonoBehaviour;
+
+                if (component == null)
                 {
                     Debug.LogError(typeof(T) + " を実装したコンポーネントが見つかりません");
                 }
             }
 
-            return instance;
+            return component as T;
         }
     }
 
@@ -27,7 +32,7 @@ public class SingletonComponent<T> : MonoBehaviour where T : class
     {
         foreach (var component in GameObject.FindObjectsOfType<Component>())
         {
-            if (component is T) return component as T;
+            if (component is T && component is MonoBehaviour) return component as T;
         }
         return null;
     }
