@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-[Ignore("Only for spec confirmation.")]
 public class UnityEngineSpecTest
 {
     private ResourceLoader resourceLoader;
@@ -23,6 +22,7 @@ public class UnityEngineSpecTest
         Object.Destroy(gameInfo.gameObject);
     }
 
+    [Ignore("Only for spec confirmation.")]
     [UnityTest]
     /// <summary>
     /// Destroy([componentReference]) destroys only attached component. </ br>
@@ -75,6 +75,7 @@ public class UnityEngineSpecTest
         DoorHControl.Destroy(doorH2Tf.gameObject);
     }
 
+    [Ignore("Only for spec confirmation.")]
     [UnityTest]
     /// <summary>
     /// Any Object inherited class Destroy can destroy GameObject.
@@ -120,4 +121,44 @@ public class UnityEngineSpecTest
 
         yield return new WaitForSeconds(1f);
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Destroyed GameObject cannot be compared with interface type. </ br>
+    /// Interface variable contains {null} GameObject after Destroy() the GameObject. </ br>
+    /// </summary>
+    public IEnumerator NullComparisonTestWithDestroyedGameObject()
+    {
+        TestInterface component = new GameObject("TestComponent").AddComponent(typeof(TestComponent)) as TestInterface;
+        yield return null;
+
+        Assert.IsNotNull(component);
+        Assert.IsNotNull(component.gameObject);
+
+        yield return null;
+
+        Object.Destroy(component.gameObject);
+
+        yield return null;
+
+        // component contains {null} GameObject
+        Assert.IsNotNull(component);
+        Assert.False(component == null);
+
+        // component cannot access destroyed gameObject
+        Assert.That(
+            () => component.gameObject,
+            Throws.TypeOf<MissingReferenceException>()
+        );
+
+        // MonoBehaviour can be compared with destroyed({null}) GameObject
+        Assert.True(component as MonoBehaviour == null);
+    }
+
+    public interface TestInterface
+    {
+        GameObject gameObject { get; }
+    }
+    public class TestComponent : MonoBehaviour, TestInterface { }
 }
