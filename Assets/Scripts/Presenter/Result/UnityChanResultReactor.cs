@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityChan;
 
 public class UnityChanResultReactor : MonoBehaviour
 {
     private CapsuleCollider col;
     private ResultFaceAnimator anim;
+    private RandomWind randomWind;
 
     private bool isFalling = false;
 
@@ -11,6 +13,7 @@ public class UnityChanResultReactor : MonoBehaviour
     {
         col = GetComponent<CapsuleCollider>();
         anim = GetComponent<ResultFaceAnimator>();
+        randomWind = GetComponent<RandomWind>();
 
         isFalling = false;
         col.direction = 1;
@@ -32,5 +35,7 @@ public class UnityChanResultReactor : MonoBehaviour
         isFalling = true;
 
         anim.drop.Fire();
+
+        randomWind.isWindActive = false;
     }
 }
