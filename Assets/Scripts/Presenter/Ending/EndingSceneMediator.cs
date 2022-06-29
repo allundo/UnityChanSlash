@@ -33,11 +33,11 @@ public class EndingSceneMediator : SceneMediator
            .AddTo(this);
     }
 
-    private int SelectPeriodIndex(ulong clearTimeSec)
+    private int SelectPeriodIndex(int clearTimeSec)
     {
         int period = 0;
 
-        for (ulong elapsed = 3600; clearTimeSec > elapsed && period < 3; elapsed += 3600, period++) ;
+        for (int elapsed = 3600; clearTimeSec > elapsed && period < 3; elapsed += 3600, period++) ;
 
         return period;
     }

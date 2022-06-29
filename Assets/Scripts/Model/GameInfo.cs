@@ -29,7 +29,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     public ulong moneyAmount = 0;
     public float mapComp = 0f;
-    public ulong clearTimeSec = 0;
+    public int clearTimeSec = 0;
     public int defeatCount = 0;
     public int level = 1;
     public int strength = 10;

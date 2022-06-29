@@ -525,6 +525,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7746881989862519469}
+  - component: {fileID: 7202540316281686691}
+  - component: {fileID: 221515978634430261}
   m_Layer: 8
   m_Name: Character1_RightHand
   m_TagString: Untagged
@@ -552,6 +554,31 @@ Transform:
   m_Father: {fileID: 7746881989862519597}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7202540316281686691
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746881989863009933}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: -0.08, y: 0.015, z: 0}
+--- !u!114 &221515978634430261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746881989863009933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da21fc8d1fa684d5f9e4d49a6a7078da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7746881989863009935
 GameObject:
   m_ObjectHideFlags: 0
@@ -6810,6 +6837,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headCollider: {fileID: 5549617245165884512}
   footCollider: {fileID: 4578909965998607248}
+  handCollider: {fileID: 7202540316281686691}
 --- !u!54 &7746881990545652430
 Rigidbody:
   m_ObjectHideFlags: 0

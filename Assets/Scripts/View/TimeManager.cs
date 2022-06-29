@@ -11,7 +11,7 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     public bool isScaled { get; private set; } = false;
 
     public float elapsedTimeSecBuffer { get; private set; } = 0f;
-    public ulong elapsedTimeSec { get; private set; } = 0;
+    public int elapsedTimeSec { get; private set; } = 0;
 
     protected override void Awake()
     {

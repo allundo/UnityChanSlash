@@ -58,6 +58,11 @@ public class ResultAnimation : MonoBehaviour
             .Join(DOVirtual.Int(0, (int)addValue, duration, count => UpdateDisplay(count)));
     }
 
+    public virtual Tween Centering(float vecX, float duration)
+    {
+        return labelUI.MoveX(vecX, duration);
+    }
+
     protected void UpdateDisplay(int count)
     {
         valueTxt.text = ValueFormat(prevValue + (ulong)count);

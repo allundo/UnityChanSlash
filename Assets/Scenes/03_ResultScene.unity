@@ -441,6 +441,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resultUIHandler: {fileID: 760657576}
+  unityChanReactor: {fileID: 2525379823478100163}
+  mainCameraTf: {fileID: 9193389508254536407}
 --- !u!1 &734047637
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +712,7 @@ MonoBehaviour:
   wagesAnimation: {fileID: 877740978}
   titleButton: {fileID: 139435443}
   fade: {fileID: 1074547711}
+  resultsTf: {fileID: 1317243534}
   itemPrice: {fileID: 734047641}
   mapComp: {fileID: 971789549}
   clearTime: {fileID: 1596793693}
@@ -2348,79 +2351,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   valueTxt: {fileID: 2081590297}
---- !u!1001 &1592047948
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 44867599, guid: e41b5396754f84b8485d972ca5ada2ea, type: 3}
-      propertyPath: unityChanReactor
-      value: 
-      objectReference: {fileID: 2525379823478100163}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769105, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550552778845769108, guid: e41b5396754f84b8485d972ca5ada2ea,
-        type: 3}
-      propertyPath: m_Name
-      value: BagControls
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e41b5396754f84b8485d972ca5ada2ea, type: 3}
 --- !u!1 &1596793689
 GameObject:
   m_ObjectHideFlags: 0
@@ -3606,3 +3536,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff2724fe6025b4a338395c21f706da1d, type: 3}
+--- !u!4 &9193389508254536407 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9193389508528406070, guid: ff2724fe6025b4a338395c21f706da1d,
+    type: 3}
+  m_PrefabInstance: {fileID: 9193389508254536406}
+  m_PrefabAsset: {fileID: 0}

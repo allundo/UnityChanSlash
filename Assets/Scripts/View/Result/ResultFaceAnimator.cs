@@ -6,7 +6,8 @@
     public FaceSwitch surprise { get; protected set; }
 
     public TriggerFace drop { get; protected set; }
-    public TriggerFace stagger { get; protected set; }
+    public AnimatorTrigger catchTrigger { get; protected set; }
+    public AnimatorInt catchSize { get; protected set; }
 
     protected override void SetParams()
     {
@@ -16,5 +17,7 @@
         surprise = new FaceSwitch(this, face.surprise.name, 10.0f, 0.05f);
 
         drop = new TriggerFace("Drop", surprise);
+        catchTrigger = new AnimatorTrigger(anim, "Catch");
+        catchSize = new AnimatorInt(anim, "Size");
     }
 }

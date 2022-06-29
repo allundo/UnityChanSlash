@@ -9,6 +9,8 @@ public class ResultUIHandler : MonoBehaviour
     [SerializeField] private ToTitleButton titleButton = default;
     [SerializeField] private FadeScreen fade = default;
 
+    [SerializeField] private RectTransform resultsTf = default;
+
     [SerializeField] private ResultAnimation itemPrice = default;
     [SerializeField] private ResultAnimation mapComp = default;
     [SerializeField] private ResultAnimation clearTime = default;
@@ -25,34 +27,35 @@ public class ResultUIHandler : MonoBehaviour
                 .ContinueWith(_ => ToTitleEffect().OnCompleteAsObservable());
     }
 
-    public Tween ViewResult()
+    public IObservable<Unit> ViewResult(ResultBonus result)
     {
         fade.color = Color.black;
 
         return DOTween.Sequence()
             .Append(fade.FadeIn(3f))
             .Append(wagesAnimation.LabelFadeIn())
-            .Append(wagesAnimation.ValueFadeIn(GameInfo.Instance.moneyAmount, 2f, 0f))
-            .Join(itemPrice.ValueFadeIn(GameInfo.Instance.moneyAmount, 2f))
-            .AppendCallback(() => wagesAnimation.AddValue((int)(1000000f * GameInfo.Instance.mapComp))?.Play())
+            .Append(wagesAnimation.ValueFadeIn(result.itemPrice, 2f, 0f))
+            .Join(itemPrice.ValueFadeIn(result.itemPrice, 2f))
+            .AppendCallback(() => wagesAnimation.AddValue(result.mapCompBonus)?.Play())
             .Join(mapComp.LabelFadeIn())
-            .Join(mapComp.ValueFadeIn((ulong)(GameInfo.Instance.mapComp * 1000f)))
-            .AppendCallback(() => wagesAnimation.AddValue((int)(10000f * (Mathf.Max(0, 3600 - GameInfo.Instance.clearTimeSec))))?.Play())
+            .Join(mapComp.ValueFadeIn(result.mapComp))
+            .AppendCallback(() => wagesAnimation.AddValue(result.clearTimeBonus)?.Play())
             .Join(clearTime.LabelFadeIn())
-            .Join(clearTime.ValueFadeIn((ulong)(GameInfo.Instance.clearTimeSec)))
-            .AppendCallback(() => wagesAnimation.AddValue((int)(1000f * GameInfo.Instance.defeatCount))?.Play())
+            .Join(clearTime.ValueFadeIn(result.clearTimeSec))
+            .AppendCallback(() => wagesAnimation.AddValue(result.defeatBonus)?.Play())
             .Join(defeat.LabelFadeIn())
-            .Join(defeat.ValueFadeIn((ulong)(GameInfo.Instance.defeatCount)))
-            .AppendCallback(() => wagesAnimation.AddValue((int)(10000f * GameInfo.Instance.level))?.Play())
+            .Join(defeat.ValueFadeIn(result.defeatCount))
+            .AppendCallback(() => wagesAnimation.AddValue(result.levelBonus)?.Play())
             .Join(level.LabelFadeIn())
-            .Join(level.ValueFadeIn((ulong)(GameInfo.Instance.level)))
-            .AppendCallback(() => wagesAnimation.AddValue((int)(10000f * GameInfo.Instance.strength))?.Play())
+            .Join(level.ValueFadeIn(result.level))
+            .AppendCallback(() => wagesAnimation.AddValue(result.strengthBonus)?.Play())
             .Join(strength.LabelFadeIn())
-            .Join(strength.ValueFadeIn((ulong)(GameInfo.Instance.strength)))
-            .AppendCallback(() => wagesAnimation.AddValue((int)(10000f * GameInfo.Instance.magic))?.Play())
+            .Join(strength.ValueFadeIn(result.strength))
+            .AppendCallback(() => wagesAnimation.AddValue(result.magicBonus)?.Play())
             .Join(magic.LabelFadeIn())
-            .Join(magic.ValueFadeIn((ulong)(GameInfo.Instance.magic)))
-            .AppendCallback(() => titleButton.Show().Play());
+            .Join(magic.ValueFadeIn(result.magic))
+            .AppendInterval(2f)
+            .OnCompleteAsObservable(Unit.Default);
     }
 
     private Tween ToTitleEffect()
@@ -60,5 +63,24 @@ public class ResultUIHandler : MonoBehaviour
         return DOTween.Sequence()
             .Join(titleButton.Apply(1f))
             .Join(fade.FadeOut(3f, 0.5f));
+    }
+
+    public Tween SweepResults(float duration)
+    {
+        return resultsTf.DOAnchorPosX(1080f, duration).SetRelative(true);
+    }
+
+    public Tween CenterResults(float duration)
+    {
+        return DOTween.Sequence()
+            .Join(resultsTf.DOAnchorPosX(0f, duration))
+            .Join(itemPrice.Centering(0f, duration))
+            .Join(mapComp.Centering(0f, duration))
+            .Join(clearTime.Centering(0f, duration))
+            .Join(defeat.Centering(0f, duration))
+            .Join(level.Centering(0f, duration))
+            .Join(strength.Centering(0f, duration))
+            .Join(magic.Centering(0f, duration))
+            .AppendCallback(() => titleButton.Show().Play());
     }
 }

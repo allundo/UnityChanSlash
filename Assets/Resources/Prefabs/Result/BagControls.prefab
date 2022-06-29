@@ -129,7 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f38bd0e862b094ea1974d3717a8751c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unityChanReactor: {fileID: 0}
   prefabCoin: {fileID: 2589062248049785016, guid: d739e406851514a3ab1af1fb5b31e261,
     type: 3}
   bag: {fileID: 13}
@@ -314,6 +313,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7550552777303076532, guid: e19e64791117f4a29af4ba7885af0788,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7708263013825444838, guid: e19e64791117f4a29af4ba7885af0788,
         type: 3}
