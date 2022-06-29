@@ -528,3 +528,11 @@ public enum ObjectLayerEnum
     Structure,
     Bullet,
 }
+
+public enum BagSize
+{
+    Small = 0,
+    Middle,
+    Big,
+    Gigantic,
+}

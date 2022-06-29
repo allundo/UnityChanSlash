@@ -129,11 +129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f38bd0e862b094ea1974d3717a8751c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  unityChanReactor: {fileID: 0}
   prefabCoin: {fileID: 2589062248049785016, guid: d739e406851514a3ab1af1fb5b31e261,
     type: 3}
   bag: {fileID: 13}
   box: {fileID: 7550552779065667520}
+  bagSize: 3
 --- !u!1 &7550552779065667522
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,8 +163,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7550552779065667522}
   m_LocalRotation: {x: 0, y: 0, z: 0.13052616, w: 0.9914449}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -0.05, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7550552778845769105}

@@ -42,14 +42,27 @@ public class ResultTest
     public IEnumerator _001_MoneyBagDropTest()
     {
         var bag = Object.Instantiate(Resources.Load<BagControl>("Prefabs/Result/BagControls"), new Vector3(0, 5f, 0f), Quaternion.identity);
-        var target = Object.Instantiate(Resources.Load<CapsuleCollider>("Prefabs/Result/TargetCapsule"));
+        var prefabSphere = Resources.Load<SphereCollider>("Prefabs/Result/TargetSphere");
+        var headCollider = Object.Instantiate(prefabSphere, new Vector3(0, 0.05f, 0.6f), Quaternion.identity);
+        var footCollider = Object.Instantiate(prefabSphere, new Vector3(0, 0.05f, -0.6f), Quaternion.identity);
+        var target = new TestSphereColliderPair(headCollider, footCollider);
         bag.target = target;
 
         yield return new WaitForSeconds(15f);
 
         // TearDown
-        Object.Destroy(target.gameObject);
+        Object.Destroy(headCollider);
+        Object.Destroy(footCollider);
         bag.Destroy();
+    }
+
+    public class TestSphereColliderPair : ISphereColliderPair
+    {
+        public ClothSphereColliderPair sphereColliderPair { get; private set; }
+        public TestSphereColliderPair(SphereCollider head, SphereCollider foot)
+        {
+            sphereColliderPair = new ClothSphereColliderPair(head, foot);
+        }
     }
 
 }

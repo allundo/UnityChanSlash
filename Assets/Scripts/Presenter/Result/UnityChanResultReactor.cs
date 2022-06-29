@@ -1,13 +1,21 @@
 using UnityEngine;
 using UnityChan;
 
-public class UnityChanResultReactor : MonoBehaviour
+public interface ISphereColliderPair
 {
+    ClothSphereColliderPair sphereColliderPair { get; }
+}
+
+public class UnityChanResultReactor : MonoBehaviour, ISphereColliderPair
+{
+    [SerializeField] private SphereCollider headCollider = default;
+    [SerializeField] private SphereCollider footCollider = default;
+
     private CapsuleCollider col;
     private ResultFaceAnimator anim;
     private RandomWind randomWind;
 
-    private bool isFalling = false;
+    public ClothSphereColliderPair sphereColliderPair { get; private set; }
 
     void Awake()
     {
@@ -15,10 +23,9 @@ public class UnityChanResultReactor : MonoBehaviour
         anim = GetComponent<ResultFaceAnimator>();
         randomWind = GetComponent<RandomWind>();
 
-        isFalling = false;
-        col.direction = 1;
-        col.center = Vector3.up * 0.8f;
-        col.isTrigger = true;
+        col.enabled = true;
+
+        sphereColliderPair = new ClothSphereColliderPair(headCollider, footCollider);
     }
 
     public void SetNormal() => anim.normal.Fire();
@@ -27,12 +34,9 @@ public class UnityChanResultReactor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isFalling || other.GetComponent<BagControl>() == null) return;
+        if (other.GetComponent<BagControl>() == null) return;
 
-        col.direction = 2;
-        col.center = Vector3.zero;
-        col.isTrigger = false;
-        isFalling = true;
+        col.enabled = false;
 
         anim.drop.Fire();
 
