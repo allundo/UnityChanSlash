@@ -6,6 +6,9 @@ ModelImporter:
   - first:
       74: -3826437141266125818
     second: CATCH_SMALL
+  - first:
+      74: 5964220184489138430
+    second: RESULT_POSE
   externalObjects: {}
   materials:
     materialImportMode: 2
