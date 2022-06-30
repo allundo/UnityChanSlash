@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 using System;
 
 public class ResultCharactersHandler
@@ -30,12 +31,17 @@ public class ResultCharactersHandler
     private void StartPress()
     {
         yenBag.SetPressTarget(unityChanReactor.GetPressTarget());
-        yenBag.Drop();
+        DropBag();
     }
 
     private void StartCatch()
     {
         unityChanReactor.StartCatch(yenBag.bagSize);
-        yenBag.Drop();
+        DropBag();
+    }
+
+    private void DropBag()
+    {
+        Observable.Timer(TimeSpan.FromSeconds(0.625f)).Subscribe(_ => yenBag.Drop()).AddTo(yenBag);
     }
 }

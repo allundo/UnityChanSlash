@@ -21,16 +21,16 @@ public class BagControl : MonoBehaviour
 
     private readonly Dictionary<BagSize, Vector3> startPositions = new Dictionary<BagSize, Vector3>()
     {
-        { BagSize.Small, new Vector3(0, 5f, 0.1f) },
-        { BagSize.Middle, new Vector3(0, 5f, 0.15f) },
-        { BagSize.Big, new Vector3(0, 5f, 0.2f) },
+        { BagSize.Small, new Vector3(0, 5f, 0.35f) },
+        { BagSize.Middle, new Vector3(0, 5f, 0.5f) },
+        { BagSize.Big, new Vector3(0, 5f, 0.65f) },
         { BagSize.Gigantic, new Vector3(0, 5f, -0.25f) },
     };
     private readonly Dictionary<BagSize, Vector3> rightHandOffsets = new Dictionary<BagSize, Vector3>()
     {
-        { BagSize.Small, new Vector3(0, 5f, 0.1f) },
-        { BagSize.Middle, new Vector3(0, 5f, 0.15f) },
-        { BagSize.Big, new Vector3(0, 5f, 0.2f) },
+        { BagSize.Small, new Vector3(-0.1233f, 0.0695f, -0.0513f) },
+        { BagSize.Middle, Vector3.zero },
+        { BagSize.Big, Vector3.zero },
         { BagSize.Gigantic, Vector3.zero },
     };
 
@@ -46,9 +46,12 @@ public class BagControl : MonoBehaviour
     {
         transform.position = startPositions[bagSize];
 
+        sphereBody = GetComponent<Rigidbody>();
+        sphereBody.useGravity = false;
+
         for (int i = 0; i < 32; i++)
         {
-            coins[i] = Instantiate(prefabCoin);
+            coins[i] = Instantiate(prefabCoin, transform);
             coins[i].transform.localScale *= coinScales[bagSize];
             coins[i].gameObject.SetActive(false);
         }
@@ -56,14 +59,9 @@ public class BagControl : MonoBehaviour
 
     void Start()
     {
-        sphereBody = GetComponent<Rigidbody>();
-        sphereBody.useGravity = false;
-
         bag.capsuleColliders = coins.Select(ball => ball.GetComponent<CapsuleCollider>()).ToArray();
         StartCoroutine(ActiveSequence());
 
-        // BUG: Instantiated object without gravity still has small down velocity.
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     private IEnumerator ActiveSequence()
@@ -83,8 +81,11 @@ public class BagControl : MonoBehaviour
     public void CaughtBy(Transform parent)
     {
         sphereBody.useGravity = false;
+        sphereBody.velocity = Vector3.zero;
+
         transform.SetParent(parent);
         transform.DOLocalMove(rightHandOffsets[bagSize], 0.5f).Play();
+        transform.DOLocalRotate(new Vector3(53.7f, -18.2f, 36.475f), 0.5f).Play();
     }
 
     public void Destroy()
