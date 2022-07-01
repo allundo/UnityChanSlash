@@ -32,6 +32,8 @@ public class UnityChanResultReactor : MonoBehaviour
     public void SetNormal() => anim.normal.Fire();
     public void SetSmile() => anim.smile.Fire();
     public void SetEyeClose() => anim.eyeClose.Fire();
+    public void SetSurprise() => anim.surprise.Fire();
+    public void SetDisattract() => anim.disattract.Fire();
 
     public void WalkStart() => screenOutSubject.OnNext(Unit.Default);
     public void WalkEnd()
