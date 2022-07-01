@@ -4,15 +4,17 @@ using System;
 
 public class ResultCharactersHandler
 {
-    private UnityChanResultReactor unityChanReactor = default;
+    private UnityChanResultReactor unityChanReactor;
+    private ResultSpotLight spotLight;
     private BagControl yenBag;
     private int numOfCoins;
 
     public Action StartAction { get; private set; }
 
-    public ResultCharactersHandler(UnityChanResultReactor reactor, ulong wagesAmount)
+    public ResultCharactersHandler(UnityChanResultReactor reactor, ResultSpotLight spotLight, ulong wagesAmount)
     {
-        unityChanReactor = reactor;
+        this.unityChanReactor = reactor;
+        this.spotLight = spotLight;
 
         numOfCoins = (int)(wagesAmount / 500);
 
@@ -31,6 +33,7 @@ public class ResultCharactersHandler
     private void StartPress()
     {
         yenBag.SetPressTarget(unityChanReactor.GetPressTarget());
+        spotLight.SetRange(30f);
         DropBag();
     }
 
@@ -42,6 +45,7 @@ public class ResultCharactersHandler
 
     private void DropBag()
     {
+        spotLight.SetTrackTarget(yenBag.transform);
         Observable.Timer(TimeSpan.FromSeconds(0.625f)).Subscribe(_ => yenBag.Drop()).AddTo(yenBag);
     }
 }

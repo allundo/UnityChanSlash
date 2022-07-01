@@ -7,6 +7,7 @@ public class ResultSceneMediator : SceneMediator
     [SerializeField] ResultUIHandler resultUIHandler = default;
     [SerializeField] UnityChanResultReactor unityChanReactor = default;
     [SerializeField] Transform mainCameraTf = default;
+    [SerializeField] ResultSpotLight spotLight = default;
 
     protected override void InitBeforeStart()
     {
@@ -31,7 +32,7 @@ public class ResultSceneMediator : SceneMediator
     private void Result()
     {
         var resultBonus = new ResultBonus(GameInfo.Instance);
-        var charactersHandler = new ResultCharactersHandler(unityChanReactor, resultBonus.wagesAmount);
+        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, resultBonus.wagesAmount);
 
         resultUIHandler
             .ViewResult(resultBonus)
@@ -59,7 +60,7 @@ public class ResultSceneMediator : SceneMediator
         gameInfo.clearTimeSec = 7200;
 
         var resultBonus = new ResultBonus(gameInfo);
-        var charactersHandler = new ResultCharactersHandler(unityChanReactor, resultBonus.wagesAmount);
+        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, resultBonus.wagesAmount);
 
         resultUIHandler
             .ViewResult(resultBonus)

@@ -82,11 +82,11 @@ public class CameraWork : MonoBehaviour
                 break;
 
             case State.START:
-                Trail(EyePosition + new Vector3(0f, -0.4f, 0f));
+                Track(EyePosition + new Vector3(0f, -0.4f, 0f));
                 break;
 
             case State.TRAIL:
-                Trail(EyePosition, 0.25f);
+                Track(EyePosition, 0.25f);
                 break;
         }
     }
@@ -98,7 +98,7 @@ public class CameraWork : MonoBehaviour
         standByCamera.transform.LookAt(lookAt);
     }
 
-    private void Trail(Vector3 target, float rate = 0.025f)
+    private void Track(Vector3 target, float rate = 0.025f)
     {
         LookAt(currentLookAt * (1.0f - rate) + target * rate);
     }
