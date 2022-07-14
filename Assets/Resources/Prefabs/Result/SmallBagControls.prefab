@@ -134,6 +134,7 @@ MonoBehaviour:
   bag: {fileID: 6702405631144064398}
   box: {fileID: 8552721988162750363}
   bagSize: 0
+  surplusCoins: 0
 --- !u!1 &8552721988162750361
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +372,7 @@ Cloth:
   m_UseTethers: 1
   m_UseGravity: 1
   m_Damping: 0.5
-  m_ExternalAcceleration: {x: -1, y: 0, z: 0}
+  m_ExternalAcceleration: {x: 0, y: 0, z: 0}
   m_RandomAcceleration: {x: 0, y: 0, z: 0}
   m_WorldVelocityScale: 0.5
   m_WorldAccelerationScale: 1

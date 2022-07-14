@@ -44,8 +44,9 @@ public class ResultCharactersHandler
     private void DropBag()
     {
         DOTween.Sequence()
-            .InsertCallback(0.625f, yenBag.Drop)
-            .InsertCallback(1.2f, () => spotLight.SetTrackTarget(yenBag.transform))
+            .Append(yenBag.Drop())
+            .AppendInterval(1f)
+            .AppendCallback(() => spotLight.SetTrackTarget(yenBag.transform))
             .Play();
     }
 }

@@ -52,7 +52,11 @@ public class ResultSceneMediator : SceneMediator
             .Subscribe(_ =>
             {
                 resultUIHandler.CenterResults(3f).Play();
-                if (yenBag.bagSize == BagSize.Gigantic) mainCameraTf.DOMove(Vector3.forward * -5f, 30f).SetRelative().Play();
+                if (yenBag.bagSize == BagSize.Gigantic)
+                {
+                    mainCameraTf.DOMove(mainCameraTf.forward * -3f + Vector3.up * 2f, 30f).SetRelative().SetEase(Ease.OutCubic).Play();
+                    mainCameraTf.DORotate(new Vector3(18f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
+                }
             })
             .AddTo(this);
 
@@ -63,7 +67,7 @@ public class ResultSceneMediator : SceneMediator
         Debug.Log("DEBUG MODE");
 
         GameInfo gameInfo = GameInfo.Instance;
-        gameInfo.clearTimeSec = 7200;
+        gameInfo.clearTimeSec = 0;
 
         var resultBonus = new ResultBonus(gameInfo);
         var yenBag = LoadYenBag(resultBonus.wagesAmount);

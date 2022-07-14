@@ -24,16 +24,24 @@ public class BagControl : MonoBehaviour
     private readonly Dictionary<BagSize, Vector3> startPositions = new Dictionary<BagSize, Vector3>()
     {
         { BagSize.Small, new Vector3(0, 5f, 0.35f) },
-        { BagSize.Middle, new Vector3(0, 5f, 0.5f) },
+        { BagSize.Middle, new Vector3(0, 5f, 0.4f) },
         { BagSize.Big, new Vector3(0, 5f, 0.65f) },
         { BagSize.Gigantic, new Vector3(0, 5f, -0.25f) },
     };
     private readonly Dictionary<BagSize, Vector3> rightHandOffsets = new Dictionary<BagSize, Vector3>()
     {
         { BagSize.Small, new Vector3(-0.1233f, 0.0695f, -0.0513f) },
-        { BagSize.Middle, Vector3.zero },
+        { BagSize.Middle, new Vector3(-0.272f, 0.221f, -0.1f) },
         { BagSize.Big, Vector3.zero },
         { BagSize.Gigantic, Vector3.zero },
+    };
+
+    private readonly Dictionary<BagSize, float> dropDelay = new Dictionary<BagSize, float>()
+    {
+        { BagSize.Small, 0.65f },
+        { BagSize.Middle, 1f },
+        { BagSize.Big, 1.2f },
+        { BagSize.Gigantic, 0.65f },
     };
 
     private CapsuleCollider[] coins = new CapsuleCollider[32];
@@ -77,9 +85,9 @@ public class BagControl : MonoBehaviour
         }
     }
 
-    public void Drop()
+    public Tween Drop()
     {
-        sphereBody.useGravity = true;
+        return DOVirtual.DelayedCall(dropDelay[bagSize], () => sphereBody.useGravity = true);
     }
 
     public void CaughtBy(Transform parent)
