@@ -11,6 +11,8 @@ public class BagControl : MonoBehaviour
     [SerializeField] public ReverseMeshBox box = default;
     [SerializeField] public BagSize bagSize = default;
 
+    public int surplusCoins = 0;
+
     private readonly Dictionary<BagSize, float> coinScales = new Dictionary<BagSize, float>()
     {
         { BagSize.Small, 0.1f },

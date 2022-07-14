@@ -11,21 +11,19 @@ public class ResultCharactersHandler
 
     public Action StartAction { get; private set; }
 
-    public ResultCharactersHandler(UnityChanResultReactor reactor, ResultSpotLight spotLight, ulong wagesAmount)
+    public ResultCharactersHandler(UnityChanResultReactor reactor, ResultSpotLight spotLight, BagControl yenBag)
     {
         this.unityChanReactor = reactor;
         this.spotLight = spotLight;
 
-        numOfCoins = (int)(wagesAmount / 500);
+        this.yenBag = yenBag;
 
-        if (numOfCoins > 20000)
+        if (yenBag.bagSize == BagSize.Gigantic)
         {
-            yenBag = GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/BagControls"));
             StartAction = StartPress;
         }
         else
         {
-            yenBag = GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/SmallBagControls"));
             StartAction = StartCatch;
         }
     }

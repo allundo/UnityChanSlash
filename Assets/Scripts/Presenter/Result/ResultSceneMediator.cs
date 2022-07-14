@@ -32,7 +32,9 @@ public class ResultSceneMediator : SceneMediator
     private void Result()
     {
         var resultBonus = new ResultBonus(GameInfo.Instance);
-        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, resultBonus.wagesAmount);
+        var yenBag = LoadYenBag(resultBonus.wagesAmount);
+
+        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
 
         resultUIHandler
             .ViewResult(resultBonus)
@@ -47,7 +49,11 @@ public class ResultSceneMediator : SceneMediator
             .AddTo(this);
 
         unityChanReactor.ScreenOut
-            .Subscribe(_ => resultUIHandler.CenterResults(3f).Play())
+            .Subscribe(_ =>
+            {
+                resultUIHandler.CenterResults(3f).Play();
+                if (yenBag.bagSize == BagSize.Gigantic) mainCameraTf.DOMove(Vector3.forward * -5f, 30f).SetRelative().Play();
+            })
             .AddTo(this);
 
     }
@@ -60,7 +66,9 @@ public class ResultSceneMediator : SceneMediator
         gameInfo.clearTimeSec = 7200;
 
         var resultBonus = new ResultBonus(gameInfo);
-        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, resultBonus.wagesAmount);
+        var yenBag = LoadYenBag(resultBonus.wagesAmount);
+
+        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
 
         resultUIHandler
             .ViewResult(resultBonus)
@@ -75,7 +83,28 @@ public class ResultSceneMediator : SceneMediator
             .AddTo(this);
 
         unityChanReactor.ScreenOut
-            .Subscribe(_ => resultUIHandler.CenterResults(3f).Play())
+            .Subscribe(_ =>
+            {
+                resultUIHandler.CenterResults(3f).Play();
+                if (yenBag.bagSize == BagSize.Gigantic)
+                {
+                    mainCameraTf.DOMove(mainCameraTf.forward * -3f + Vector3.up * 2f, 30f).SetRelative().SetEase(Ease.OutCubic).Play();
+                    mainCameraTf.DORotate(new Vector3(18f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
+                }
+            })
             .AddTo(this);
+    }
+
+    private BagControl LoadYenBag(ulong wagesAmount)
+    {
+        if (wagesAmount > 10000000)
+        {
+            var yenBag = GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/BagControls"));
+            yenBag.surplusCoins = (int)((wagesAmount - 10000000) / 500);
+            return yenBag;
+        }
+        if (wagesAmount > 500000) return GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/MiddleBagControls"));
+
+        return GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/SmallBagControls"));
     }
 }
