@@ -1,19 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 using System.Collections;
 using UniRx;
+using Random = UnityEngine.Random;
 
 public class CameraWork : MonoBehaviour
 {
-    private enum State
-    {
-        NONE,
-        TRACK,
-        START,
-        TRAIL
-    }
-
     [SerializeField] private Transform tfUnityChan = default;
     [SerializeField] private RawImage crossFade = default;
     [SerializeField] private Camera secondCamera = default;
@@ -27,7 +21,8 @@ public class CameraWork : MonoBehaviour
     private readonly Vector3 EyeHeight = new Vector3(0f, 1.35f, 0f);
 
     private Tween cameraWorkTween = null;
-    private State state = State.NONE;
+
+    private Action<Vector3> TrackAction = eyePosition => { };
     private Vector3 currentLookAt = Vector3.zero;
 
     private Coroutine angleChangeLoop = null;
@@ -75,33 +70,24 @@ public class CameraWork : MonoBehaviour
 
     void Update()
     {
-        switch (state)
-        {
-            case State.TRACK:
-                LookAt(EyePosition);
-                break;
-
-            case State.START:
-                Track(EyePosition + new Vector3(0f, -0.4f, 0f));
-                break;
-
-            case State.TRAIL:
-                Track(EyePosition, 0.25f);
-                break;
-        }
+        TrackAction(EyePosition);
     }
 
-    private void LookAt(Vector3 lookAt)
+    private void Track(Vector3 lookAt)
     {
         currentLookAt = lookAt;
         currentCamera.transform.LookAt(lookAt);
         standByCamera.transform.LookAt(lookAt);
     }
 
-    private void Track(Vector3 target, float rate = 0.025f)
+    private void Trail(Vector3 target, float rate)
     {
-        LookAt(currentLookAt * (1.0f - rate) + target * rate);
+        Track(currentLookAt * (1.0f - rate) + target * rate);
     }
+
+    private void TrailBody(Vector3 eyePosition) => Trail(eyePosition + new Vector3(0f, -0.4f, 0f), 0.025f);
+
+    private void TrailEye(Vector3 eyePosition) => Trail(eyePosition, 0.25f);
 
     public Tween TitleTween()
     {
@@ -126,7 +112,7 @@ public class CameraWork : MonoBehaviour
 
     public Tween StartTween()
     {
-        state = State.START;
+        TrackAction = TrailBody;
         return currentCamera.transform
             .DOMove(EyePosition + new Vector3(0f, -0.4f, 1.8f), 1f)
             .OnPlay(() => cameraWorkTween?.Kill());
@@ -142,7 +128,7 @@ public class CameraWork : MonoBehaviour
 
     public void StartCameraWork()
     {
-        state = State.TRACK;
+        TrackAction = Track;
         standByCamera.transform.position = currentCamera.transform.position;
         angleChangeLoop = StartCoroutine(AngleChangeLoop());
     }
@@ -151,12 +137,12 @@ public class CameraWork : MonoBehaviour
     {
         cameraWorkTween?.Kill();
         StopCoroutine(angleChangeLoop);
-        state = State.NONE;
+        TrackAction = eyePosition => { };
     }
 
     public void StartTrail()
     {
-        state = State.TRAIL;
+        TrackAction = TrailEye;
     }
 
     private void SetFadeOut(float duration = 2f, float startAlpha = 1f)
