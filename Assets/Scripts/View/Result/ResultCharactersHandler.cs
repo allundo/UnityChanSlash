@@ -1,6 +1,6 @@
 using UnityEngine;
-using UniRx;
 using System;
+using DG.Tweening;
 
 public class ResultCharactersHandler
 {
@@ -45,7 +45,9 @@ public class ResultCharactersHandler
 
     private void DropBag()
     {
-        spotLight.SetTrackTarget(yenBag.transform);
-        Observable.Timer(TimeSpan.FromSeconds(0.625f)).Subscribe(_ => yenBag.Drop()).AddTo(yenBag);
+        DOTween.Sequence()
+            .InsertCallback(0.625f, yenBag.Drop)
+            .InsertCallback(1.2f, () => spotLight.SetTrackTarget(yenBag.transform))
+            .Play();
     }
 }

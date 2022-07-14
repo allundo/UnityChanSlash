@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityChan;
 using UniRx;
 using System;
-using DG.Tweening;
 
 public class UnityChanResultReactor : MonoBehaviour
 {
@@ -36,11 +35,7 @@ public class UnityChanResultReactor : MonoBehaviour
     public void SetDisattract() => anim.disattract.Fire();
 
     public void WalkStart() => screenOutSubject.OnNext(Unit.Default);
-    public void WalkEnd()
-    {
-        transform.DOMoveX(2.5f, 1f).SetEase(Ease.Linear).Play(); // Screen out completely.
-        screenOutSubject.OnCompleted();
-    }
+    public void WalkEnd() => screenOutSubject.OnCompleted();
 
     public void FallGround() =>
         Observable

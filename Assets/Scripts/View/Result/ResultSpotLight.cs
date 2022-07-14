@@ -14,7 +14,7 @@ public class ResultSpotLight : MonoBehaviour
 
     void Update()
     {
-        if (trailTarget != null) Track(trailTarget.position - transform.position);
+        if (trailTarget != null) Trail(trailTarget.position);
     }
 
     private void LookAt(Vector3 lookAt)
@@ -23,7 +23,7 @@ public class ResultSpotLight : MonoBehaviour
         transform.LookAt(lookAt);
     }
 
-    private void Track(Vector3 target, float rate = 0.025f)
+    private void Trail(Vector3 target, float rate = 0.025f)
     {
         LookAt(currentLookAt * (1.0f - rate) + target * rate);
     }
