@@ -134,7 +134,7 @@ Cloth:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7708263013825444838}
   m_Enabled: 1
-  m_StretchingStiffness: 0.2
+  m_StretchingStiffness: 0.75
   m_BendingStiffness: 1
   m_UseTethers: 1
   m_UseGravity: 1

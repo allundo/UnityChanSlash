@@ -16,7 +16,7 @@ public class BagControl : MonoBehaviour
         { BagSize.Small, 0.1f },
         { BagSize.Middle, 0.25f },
         { BagSize.Big, 0.5f },
-        { BagSize.Gigantic, 1f },
+        { BagSize.Gigantic, 0.5f },
     };
 
     private readonly Dictionary<BagSize, Vector3> startPositions = new Dictionary<BagSize, Vector3>()
