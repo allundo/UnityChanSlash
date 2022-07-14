@@ -47,7 +47,11 @@ public class ResultTest
         var footCollider = Object.Instantiate(prefabSphere, new Vector3(0, 0.05f, -0.6f), Quaternion.identity);
         bag.SetPressTarget(new ClothSphereColliderPair(headCollider, footCollider));
 
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(2f);
+
+        bag.Drop();
+
+        yield return new WaitForSeconds(8f);
 
         // TearDown
         Object.Destroy(headCollider);
