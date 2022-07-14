@@ -31,7 +31,7 @@ public class ResultCharactersHandler
     private void StartPress()
     {
         yenBag.SetPressTarget(unityChanReactor.GetPressTarget());
-        spotLight.SetRange(30f);
+        spotLight.SetAngle(15f);
         DropBag();
     }
 
