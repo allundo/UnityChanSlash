@@ -55,7 +55,7 @@ MeshRenderer:
   m_GameObject: {fileID: 7550552778845769108}
   m_Enabled: 0
   m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -134,6 +134,7 @@ MonoBehaviour:
   bag: {fileID: 13}
   box: {fileID: 7550552779065667520}
   bagSize: 3
+  surplusCoins: 0
 --- !u!1 &7550552779065667522
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,11 +255,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7550552778845769105}
     m_Modifications:
-    - target: {fileID: 5191296794955270030, guid: e19e64791117f4a29af4ba7885af0788,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 7039848538417176924, guid: e19e64791117f4a29af4ba7885af0788,
         type: 3}
       propertyPath: m_RootOrder
@@ -314,20 +310,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 30
       objectReference: {fileID: 0}
-    - target: {fileID: 7550552777303076532, guid: e19e64791117f4a29af4ba7885af0788,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7708263013825444838, guid: e19e64791117f4a29af4ba7885af0788,
         type: 3}
       propertyPath: m_Name
       value: YenBag
-      objectReference: {fileID: 0}
-    - target: {fileID: 7708263013825444838, guid: e19e64791117f4a29af4ba7885af0788,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e19e64791117f4a29af4ba7885af0788, type: 3}

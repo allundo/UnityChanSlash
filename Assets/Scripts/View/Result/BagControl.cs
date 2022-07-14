@@ -51,6 +51,8 @@ public class BagControl : MonoBehaviour
         sphereBody = GetComponent<Rigidbody>();
         sphereBody.useGravity = false;
 
+        bag.clothSolverFrequency = 240;
+
         for (int i = 0; i < 32; i++)
         {
             coins[i] = Instantiate(prefabCoin, transform);
