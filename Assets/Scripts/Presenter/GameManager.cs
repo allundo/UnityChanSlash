@@ -42,7 +42,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         worldMap = GameInfo.Instance.Map(0);
         mapRenderer.Render(worldMap);
 
-        resourceFX = new ResourceFX();
+        resourceFX = new ResourceFX(transform);
         spawnHandler = SpawnHandler.Instance;
     }
 

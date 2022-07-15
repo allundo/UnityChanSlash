@@ -3,25 +3,42 @@ using System.Collections.Generic;
 
 public class ResourceFX
 {
-    protected Dictionary<VFXType, ParticleSystem> bodyVfxSource = new Dictionary<VFXType, ParticleSystem>();
+    private Transform parent;
+    private Dictionary<VFXType, ParticleSystem> vfxSources = new Dictionary<VFXType, ParticleSystem>();
+    private Dictionary<SNDType, AudioSource> sndSources = new Dictionary<SNDType, AudioSource>();
+
+    public ResourceFX(Transform parent = null)
+    {
+        this.parent = parent;
+    }
+
     public void PlayVFX(VFXType type, Vector3 pos)
     {
-        var vfx = bodyVfxSource.LazyLoad(type, ResourceLoader.Instance.LoadVFX);
+        var vfx = vfxSources.LazyLoad(type, type => ResourceLoader.Instance.LoadVFX(type, parent));
         if (vfx == null) return;
 
         vfx.transform.position = pos;
         vfx.Play();
     }
-    public void StopVFX(VFXType type) => bodyVfxSource.LazyLoad(type, ResourceLoader.Instance.LoadVFX).Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
-    protected Dictionary<SNDType, AudioSource> bodySndSource = new Dictionary<SNDType, AudioSource>();
+    public void StopVFX(VFXType type)
+    {
+        ParticleSystem vfx;
+        if (vfxSources.TryGetValue(type, out vfx)) vfx.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+    }
+
     public void PlaySnd(SNDType type, Vector3 pos)
     {
-        var snd = bodySndSource.LazyLoad(type, ResourceLoader.Instance.LoadSnd);
+        var snd = sndSources.LazyLoad(type, type => ResourceLoader.Instance.LoadSnd(type, parent));
         if (snd == null) return;
 
         snd.transform.position = pos;
         snd.PlayEx();
     }
-    public void StopSnd(SNDType type) => bodySndSource.LazyLoad(type, ResourceLoader.Instance.LoadSnd).StopEx();
+
+    public void StopSnd(SNDType type)
+    {
+        AudioSource snd;
+        if (sndSources.TryGetValue(type, out snd)) snd.StopEx();
+    }
 }

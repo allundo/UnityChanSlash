@@ -51,7 +51,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
         matColEffect = new MobMatColorEffect(transform, excludeBody);
         sndData = Resources.Load<DamageSndData>("DataAssets/Sound/DamageSndData");
         animFX = GetComponent<AnimationFX>();
-        resourceFX = new ResourceFX();
+        resourceFX = new ResourceFX(transform);
     }
 
     public virtual void OnActive()

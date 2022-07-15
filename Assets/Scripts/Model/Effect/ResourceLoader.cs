@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 {
-    public ParticleSystem LoadVFX(VFXType type) => Util.Instantiate(prefabVFXs[type]);
+    public ParticleSystem LoadVFX(VFXType type, Transform parent = null) => Util.Instantiate(prefabVFXs[type], parent);
     private Dictionary<VFXType, ParticleSystem> prefabVFXs;
 
-    public AudioSource LoadSnd(SNDType type) => Util.Instantiate(prefabSNDs[type]);
+    public AudioSource LoadSnd(SNDType type, Transform parent = null) => Util.Instantiate(prefabSNDs[type], parent);
     private Dictionary<SNDType, AudioSource> prefabSNDs;
 
     public EnemyData enemyData { get; private set; }

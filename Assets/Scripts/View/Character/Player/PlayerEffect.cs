@@ -9,7 +9,7 @@ public class PlayerEffect : MobEffect
         matColEffect = new MobMatColorEffect(transform);
         sndData = Resources.Load<PlayerDamageSndData>("DataAssets/Sound/PlayerDamageSndData");
         animFX = GetComponent<AnimationFX>();
-        resourceFX = new ResourceFX();
+        resourceFX = new ResourceFX(transform);
         anim = GetComponent<PlayerAnimator>();
     }
 
