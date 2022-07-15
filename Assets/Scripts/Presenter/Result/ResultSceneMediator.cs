@@ -32,7 +32,7 @@ public class ResultSceneMediator : SceneMediator
     private void Result()
     {
         var resultBonus = new ResultBonus(GameInfo.Instance);
-        var yenBag = LoadYenBag(resultBonus.wagesAmount);
+        var yenBag = new BagControl(resultBonus.wagesAmount);
 
         var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
 
@@ -70,7 +70,7 @@ public class ResultSceneMediator : SceneMediator
         gameInfo.clearTimeSec = 0;
 
         var resultBonus = new ResultBonus(gameInfo);
-        var yenBag = LoadYenBag(resultBonus.wagesAmount);
+        var yenBag = new BagControl(resultBonus.wagesAmount);
 
         var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
 
@@ -97,18 +97,5 @@ public class ResultSceneMediator : SceneMediator
                 }
             })
             .AddTo(this);
-    }
-
-    private BagControl LoadYenBag(ulong wagesAmount)
-    {
-        if (wagesAmount > 10000000)
-        {
-            var yenBag = GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/BagControls"));
-            yenBag.surplusCoins = (int)((wagesAmount - 10000000) / 500);
-            return yenBag;
-        }
-        if (wagesAmount > 500000) return GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/MiddleBagControls"));
-
-        return GameObject.Instantiate(Resources.Load<BagControl>("Prefabs/Result/SmallBagControls"));
     }
 }

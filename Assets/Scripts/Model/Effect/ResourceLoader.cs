@@ -20,6 +20,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     public FaceClipsSet faceClipsSet { get; private set; }
 
+    private YenBagData yenBagData;
+    public YenBagSource YenBagSource(BagSize size) => yenBagData.Param((int)size);
+
     protected override void Awake()
     {
         base.Awake();
@@ -52,5 +55,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
 
         faceClipsSet = Resources.Load<FaceClipsData>("DataAssets/Character/FaceClipsData").Param(0);
+
+        yenBagData = Resources.Load<YenBagData>("DataAssets/Result/YenBagData");
     }
 }

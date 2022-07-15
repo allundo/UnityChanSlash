@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7550552778845769107}
   - component: {fileID: 7550552778845769106}
   - component: {fileID: 7550552778845769109}
-  - component: {fileID: 44867599}
+  - component: {fileID: 8504761741954600432}
   m_Layer: 9
   m_Name: BagControls
   m_TagString: Untagged
@@ -117,7 +117,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &44867599
+--- !u!114 &8504761741954600432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,15 +126,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7550552778845769108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bd0e862b094ea1974d3717a8751c6, type: 3}
+  m_Script: {fileID: 11500000, guid: f9e3fee38dc31460697ea9779a2d922f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   prefabCoin: {fileID: 2589062248049785016, guid: d739e406851514a3ab1af1fb5b31e261,
     type: 3}
-  bag: {fileID: 13}
+  cloth: {fileID: 13}
   box: {fileID: 7550552779065667520}
-  bagSize: 3
-  surplusCoins: 0
 --- !u!1 &7550552779065667522
 GameObject:
   m_ObjectHideFlags: 0

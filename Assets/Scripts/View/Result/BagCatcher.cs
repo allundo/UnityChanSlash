@@ -11,7 +11,7 @@ public class BagCatcher : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var bag = other.GetComponent<BagControl>();
+        var bag = other.GetComponent<YenBag>();
         if (bag == null) return;
 
         rightHandCollider.enabled = false;

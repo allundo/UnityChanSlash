@@ -1,4 +1,3 @@
-using UnityEngine;
 using System;
 using DG.Tweening;
 
@@ -46,7 +45,7 @@ public class ResultCharactersHandler
         DOTween.Sequence()
             .Append(yenBag.Drop())
             .AppendInterval(1f)
-            .AppendCallback(() => spotLight.SetTrackTarget(yenBag.transform))
+            .AppendCallback(() => spotLight.SetTrackTarget(yenBag.bagTf))
             .Play();
     }
 }

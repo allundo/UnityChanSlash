@@ -192,3 +192,14 @@ public class FaceClipsSet
     [SerializeField] public AnimationClip ashamed = default;
     [SerializeField] public AnimationClip[] mouth = default;
 }
+
+[System.Serializable]
+public class YenBagSource
+{
+    [SerializeField] public string name = "サイズ";
+    [SerializeField] public float coinScale = 1f;
+    [SerializeField] public Vector3 startPosition = default;
+    [SerializeField] public Vector3 rightHandOffset = default;
+    [SerializeField] public float dropDelay = 0.65f;
+    [SerializeField] public YenBag prefabYenBag = default;
+}

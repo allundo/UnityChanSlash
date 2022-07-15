@@ -66,7 +66,7 @@ public class UnityChanResultReactor : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // If the object has Rigidbody, OnTriggerEnter() is called also when collision of child objects is detected.
-        if (!col.enabled || other.GetComponent<BagControl>() == null) return;
+        if (!col.enabled || other.GetComponent<YenBag>() == null) return;
 
         col.enabled = false;
 
