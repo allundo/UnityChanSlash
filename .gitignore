@@ -80,3 +80,6 @@ crashlytics-build.properties
 # Code Coverage Report
 /[Cc]odeCoverage/
 
+# Temporary Test Runner Data
+/[Aa]ssets/InitTestScene*
+
