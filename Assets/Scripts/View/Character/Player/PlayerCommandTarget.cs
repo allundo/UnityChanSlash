@@ -22,7 +22,9 @@ public class PlayerCommandTarget : CommandTarget
     /// </summary>
     [SerializeField] public GameOverUI gameOverUI = default;
 
-    // Item and item UI icon generator for PlayerHandle Command execution.
+    /// <summary>
+    /// Item and item UI icon generator for PlayerHandle Command execution.
+    /// </summary>
     [SerializeField] public ItemGenerator itemGenerator = default;
 
     public ItemInventory itemInventory => (input as PlayerInput).GetItemInventory;

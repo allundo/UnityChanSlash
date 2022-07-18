@@ -13,6 +13,11 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
 
+    /// <summary>
+    /// Active message controller for notifications.
+    /// </summary>
+    [SerializeField] public ActiveMessageController activeMessageUI = default;
+
     private SpawnHandler spawnHandler;
 
     // Player info
@@ -30,6 +35,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     public void PlayVFX(VFXType type, Vector3 pos) => resourceFX.PlayVFX(type, pos);
     public void PlaySnd(SNDType type, Vector3 pos) => resourceFX.PlaySnd(type, pos);
+
+    public void ActiveMessage(string message) => ActiveMessage(new ActiveMessageData(message));
+    public void ActiveMessage(ActiveMessageData data) => activeMessageUI.InputMessageData(data);
 
     protected override void Awake()
     {

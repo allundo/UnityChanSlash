@@ -8,6 +8,9 @@ public interface IGameManager
 
     IObservable<Unit> ExitObservable { get; }
 
+    void ActiveMessage(string message);
+    void ActiveMessage(ActiveMessageData messageData);
+
     void DropStart();
     void Restart();
     void DebugStart();

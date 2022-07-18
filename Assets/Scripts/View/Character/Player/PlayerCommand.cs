@@ -470,6 +470,7 @@ public class PlayerGetItem : PlayerAction
 
         if (playerAnim.handOn.Bool && itemInventory.PickUp(item.itemInfo))
         {
+            GameManager.Instance.ActiveMessage(ActiveMessageData.GetItem(item.itemInfo));
             playerAnim.getItem.Fire();
         }
         else
