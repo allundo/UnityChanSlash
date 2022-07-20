@@ -58,7 +58,7 @@ public class BaseHandler : MonoBehaviour
 
         image.raycastTarget = isActive;
         isPressed = isActive;
-        otherHandleUI?.SetActive(isOtherActive, fadeDuration);
+        otherHandleUI?.SetActive(isOtherActive);
     }
 
     protected virtual void Update()
@@ -92,7 +92,7 @@ public class BaseHandler : MonoBehaviour
         isActive = true;
         gameObject.SetActive(true);
 
-        SetActiveButtons(true);
+        SetActiveButtons(true, fadeDuration);
     }
 
     protected virtual void SetActiveButtons(bool isActive, float duration = 0.2f)
