@@ -316,7 +316,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 .Join(fade.In(duration))
                 .Append(ui.Resize(1.5f, duration))
                 .InsertCallback(duration, () => flick.FadeOutActive(duration, true))
-                .SetUpdate(true)
+                .SetUpdate(false)
                 .Play();
 
             FlickOnNext();
