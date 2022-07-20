@@ -109,7 +109,7 @@ public class HandleUI : MonoBehaviour
         SetUIsActive(moveArrows, false);
 
         buttonFade?.Kill();
-        flick.FadeOut(duration, null, () => gameObject.SetActive(false)).Play();
+        buttonFade = flick.FadeOut(duration, null, () => gameObject.SetActive(false)).Play();
     }
 
     public void SetActive(bool isActive, float duration = 0.2f)

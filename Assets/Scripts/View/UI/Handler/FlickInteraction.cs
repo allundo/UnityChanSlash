@@ -55,6 +55,9 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     private ISubject<Unit> isPressed = new Subject<Unit>();
     public IObservable<Unit> IsPressed => isPressed;
 
+    private ISubject<Unit> reactivated = new Subject<Unit>();
+    public IObservable<Unit> Reactivated => reactivated;
+
     /// <summary>
     /// Notifies the end of dragging UI.
     /// </summary>
@@ -95,6 +98,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 InitImage();
                 Clear();
                 FadeIn(0.1f).Play();
+                reactivated.OnNext(Unit.Default);
             })
             .SetUpdate(isValidOnPause)
             .Play();
