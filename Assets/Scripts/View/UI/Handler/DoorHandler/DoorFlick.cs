@@ -23,7 +23,7 @@ public class DoorFlick : FlickInteraction
     {
         private DoorFlickRight(DoorFlick flick) : base(flick)
         {
-            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f);
+            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f).AddTo(flick);
         }
 
         public static DoorFlickRight New(DoorFlick flick)
@@ -36,7 +36,7 @@ public class DoorFlick : FlickInteraction
     {
         private DoorFlickLeft(DoorFlick flick) : base(flick)
         {
-            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f);
+            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f).AddTo(flick);
         }
 
         public static DoorFlickLeft New(DoorFlick flick)

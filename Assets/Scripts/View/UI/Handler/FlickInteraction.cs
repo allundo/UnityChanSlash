@@ -263,7 +263,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         /// <summary>
         /// Returns drag directional factor limited by 'limit' property.
         /// </summary>
-        protected virtual Vector2 LimitedVec(Vector2 dragVector) => Vector2.zero;
+        protected abstract Vector2 LimitedVec(Vector2 dragVector);
 
         private void FlickOnNext()
         {
@@ -279,32 +279,29 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         public void UpdateImage(Vector2 dragVector)
         {
             SetSprite();
-
-            Vector2 limitedVec = LimitedVec(dragVector);
-
-            dragRatio.SetValueAndForceNotify(DragRatio(limitedVec.magnitude));
-
-            ui.SetPosOffset(limitedVec);
+            UpdateIconPos(dragVector);
 
             float degree = 1f - dragRatio.Value * 0.5f;
             ui.ResetSize(0.5f + degree);
             fade.SetAlpha(degree);
         }
 
-        /// <summary>
-        /// Returns drag directional ratio to 'limit' property.
-        /// </summary>
-        /// <param name="abs">Absolute value of drag directional factor</param>
-        private float DragRatio(float abs) => abs / limit;
-        private float DragRatio(Vector2 dragVector) => DragRatio(LimitedVec(dragVector).magnitude);
+        private void UpdateIconPos(Vector2 dragVector)
+        {
+            Vector2 limitedVec = LimitedVec(dragVector);
+            ui.SetPosOffset(limitedVec);
+            dragRatio.SetValueAndForceNotify(limitedVec.magnitude / limit);
+        }
 
         /// <summary>
-        /// Applies or cancels flick according to drag distance on release draging.
+        /// Applies or cancels flick according to drag distance on release dragging.
         /// </summary>
         /// <returns>true: flick applied, false: flick canceled</returns>
         public bool Release(Vector2 dragVector, float duration = 0.2f)
         {
-            if (DragRatio(dragVector) < 0.5f)
+            UpdateIconPos(dragVector);
+
+            if (dragRatio.Value < 0.5f)
             {
                 flick.Cancel(duration);
                 return false;
