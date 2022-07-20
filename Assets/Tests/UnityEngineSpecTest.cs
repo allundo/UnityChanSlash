@@ -161,4 +161,26 @@ public class UnityEngineSpecTest
         GameObject gameObject { get; }
     }
     public class TestComponent : MonoBehaviour, TestInterface { }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    public IEnumerator AnimatorParamChangeIsAppliedOnTheSameFrame()
+    {
+
+        var slime = Object.Instantiate(Resources.Load<GameObject>("Prefabs/TestSlimeGreen"));
+        var anim = slime.GetComponent<Animator>();
+        var hashedParam = Animator.StringToHash("Die");
+        anim.SetBool(hashedParam, false);
+
+        yield return new WaitForSeconds(1f);
+
+        anim.SetBool(hashedParam, true);
+
+        Assert.True(anim.GetBool(hashedParam));
+
+        yield return null;
+
+        Object.Destroy(slime);
+    }
 }
