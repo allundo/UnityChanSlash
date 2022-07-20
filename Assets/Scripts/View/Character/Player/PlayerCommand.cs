@@ -712,6 +712,22 @@ public class PlayerMessage : PlayerAction
     }
 }
 
+public class PlayerInspect : PlayerAction
+{
+    protected ActiveMessageData data;
+
+    public PlayerInspect(PlayerCommandTarget target, ActiveMessageData data) : base(target, 2f, 0.999f)
+    {
+        this.data = data;
+    }
+
+    protected override bool Action()
+    {
+        GameManager.Instance.ActiveMessage(data);
+        return true;
+    }
+}
+
 public class PlayerIcedCommand : PlayerCommand
 {
     public override int priority => 20;

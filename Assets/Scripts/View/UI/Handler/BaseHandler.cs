@@ -11,6 +11,7 @@ public class BaseHandler : MonoBehaviour
     [SerializeField] protected FlickInteraction flickR = default;
     [SerializeField] protected FlickInteraction flickL = default;
     [SerializeField] protected float maxAlpha = 0.8f;
+    [SerializeField] protected float fadeDuration = 0.2f;
 
     protected IObservable<Unit> ObserveUp => Observable.Merge(flickR.UpSubject, flickL.UpSubject);
     protected IObservable<Unit> ObserveDown => Observable.Merge(flickR.DownSubject, flickL.DownSubject);
@@ -57,7 +58,7 @@ public class BaseHandler : MonoBehaviour
 
         image.raycastTarget = isActive;
         isPressed = isActive;
-        otherHandleUI?.SetActive(isOtherActive);
+        otherHandleUI?.SetActive(isOtherActive, fadeDuration);
     }
 
     protected virtual void Update()

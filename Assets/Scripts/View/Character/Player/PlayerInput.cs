@@ -22,6 +22,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
     [SerializeField] protected ItemHandler itemHandler = default;
+    [SerializeField] protected InspectHandler inspectHandler = default;
     [SerializeField] protected BoxHandler boxHandler = default;
     [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] protected HandleIcon handleIcon = default;
@@ -311,7 +312,18 @@ public class PlayerInput : ShieldInput, IPlayerInput
             itemHandler.Inactivate();
         }
 
-        bool isHandleIconOn = isFaceToDoor || isFaceToBox || isFaceToItem || itemInventory.IsPutItem;
+        bool isFaceToSpecialTile = !playerMap.isInPit && IsIdling && !fightCircle.isActive && forwardTile is Pit;
+        if (isFaceToSpecialTile)
+        {
+            inspectHandler.Activate(forwardTile);
+            forwardUI.Resize(0.5f, 1f);
+        }
+        else
+        {
+            inspectHandler.Inactivate();
+        }
+
+        bool isHandleIconOn = isFaceToDoor || isFaceToBox || isFaceToItem || isFaceToSpecialTile || itemInventory.IsPutItem;
         if (!isHandleIconOn)
         {
             forwardUI.Resize(1f, 1f);
@@ -328,7 +340,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             inspectUI.Inactivate();
         }
 
-        bool isHandleUIOn = doorHandler.isPressed || boxHandler.isPressed || itemHandler.isPressed || itemInventory.IsPutItem;
+        bool isHandleUIOn = doorHandler.isPressed || boxHandler.isPressed || itemHandler.isPressed || inspectHandler.isPressed || itemInventory.IsPutItem;
 
         uiMask.SetActive(isHandleUIOn || IsAttack || fightCircle.IsPressed);
 
@@ -430,6 +442,10 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         itemHandler.ObserveInspect
             .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
+            .AddTo(this);
+
+        inspectHandler.ObserveInspect
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInspect(playerTarget, data)))
             .AddTo(this);
 
         itemInventory.OnPutApply

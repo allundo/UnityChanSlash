@@ -35,4 +35,22 @@ public struct ActiveMessageData
     {
         return new ActiveMessageData(item.name + " を手に入れた！", SDFaceID.SMILE);
     }
+
+    public static ActiveMessageData InspectTile(ITile tile)
+    {
+        if (tile is Pit)
+        {
+            var pit = tile as Pit;
+            if (pit.IsOpen)
+            {
+                return new ActiveMessageData("落とし穴がある。", SDFaceID.DISATTRACT);
+            }
+            else
+            {
+                return new ActiveMessageData("落とし穴はっけん！", SDFaceID.ANGRY2);
+            }
+        }
+
+        return new ActiveMessageData("なにもない");
+    }
 }
