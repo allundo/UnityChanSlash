@@ -470,7 +470,7 @@ public class PlayerGetItem : PlayerAction
 
         if (playerAnim.handOn.Bool && itemInventory.PickUp(item.itemInfo))
         {
-            GameManager.Instance.ActiveMessage(ActiveMessageData.GetItem(item.itemInfo));
+            ActiveMessageController.Instance.InputMessageData(ActiveMessageData.GetItem(item.itemInfo));
             playerAnim.getItem.Fire();
         }
         else
@@ -723,7 +723,7 @@ public class PlayerInspect : PlayerAction
 
     protected override bool Action()
     {
-        GameManager.Instance.ActiveMessage(data);
+        ActiveMessageController.Instance.InputMessageData(data);
         return true;
     }
 }

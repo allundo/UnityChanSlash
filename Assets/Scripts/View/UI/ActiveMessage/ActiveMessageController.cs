@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UniRx;
 
-public class ActiveMessageController : MonoBehaviour
+public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageController>
 {
     [SerializeField] protected ActiveMessageBox messageBox = default;
     [SerializeField] protected SDIcon sdIcon = default;
@@ -13,12 +13,13 @@ public class ActiveMessageController : MonoBehaviour
             .AddTo(this);
     }
 
-    private void Close()
+    public void Close()
     {
         sdIcon.Inactivate();
         messageBox.Inactivate();
     }
 
+    public void InputMessageData(string message) => InputMessageData(new ActiveMessageData(message));
     public void InputMessageData(ActiveMessageData messageData)
     {
         sdIcon.Activate(messageData);
