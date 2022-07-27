@@ -541,10 +541,27 @@ public class PlayerPutItem : PlayerAction
 
         // Cancel if forward tile is Box and the Box isn't Open or Controllable.
         Box boxTile = mobMap.ForwardTile as Box;
-        if (boxTile != null && (!boxTile.IsOpen || !boxTile.IsControllable)) return HandOff(false);
+        if (boxTile != null)
+        {
+            if (!boxTile.IsOpen)
+            {
+                ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("箱の蓋が開いていない！", SDFaceID.SAD, SDEmotionID.CONFUSE));
+                return HandOff(false);
+            }
+
+            if (!boxTile.IsControllable)
+            {
+                ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("箱の蓋を閉じられない！", SDFaceID.SURPRISE, SDEmotionID.SURPRISE));
+                return HandOff(false);
+            }
+        }
 
         // Cancel if putting item is invalid.
-        if (!itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir)) return HandOff(false);
+        if (!itemGenerator.Put(itemIcon.itemInfo, mobMap.GetForward, map.dir))
+        {
+            ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("そこには捨てられない！", SDFaceID.EYECLOSE, SDEmotionID.CONFUSE));
+            return HandOff(false);
+        }
 
         if (boxTile != null) boxTile.Handle();
 
