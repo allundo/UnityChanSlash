@@ -419,7 +419,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         PlayerPutItem putItem = new PlayerPutItem(playerTarget, 14.4f);
         PlayerHandleBox handleBox = new PlayerHandleBox(playerTarget, 14.4f);
 
-        Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo)
+        Observable.Merge(doorHandler.ObserveGo, itemHandler.ObserveGo, inspectHandler.ObserveGo)
             .Subscribe(_ => InputCommand(forward))
             .AddTo(this);
 
