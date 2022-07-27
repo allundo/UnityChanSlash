@@ -11,29 +11,46 @@ public enum SDFaceID
     SURPRISE
 }
 
+public enum SDEmotionID
+{
+    NONE = -1,
+    SURPRISE = 0,
+    QUESTION,
+    EXSURPRISE,
+    EXQUESTION,
+    SIGH,
+    IRRITATE,
+    WAIWAI,
+    BLUE,
+    CONFUSE,
+}
+
 public struct ActiveMessageData
 {
     public string sentence;
     public SDFaceID face;
+    public SDEmotionID emotion;
     public float fontSize;
     public float literalsPerSec;
 
     public ActiveMessageData(
         string sentence,
         SDFaceID face = SDFaceID.DEFAULT,
+        SDEmotionID emotion = SDEmotionID.NONE,
         float fontSize = 56,
         float literalsPerSec = 40f
     )
     {
         this.sentence = sentence;
         this.face = face;
+        this.emotion = emotion;
         this.fontSize = fontSize;
         this.literalsPerSec = literalsPerSec;
     }
 
     public static ActiveMessageData GetItem(ItemInfo item)
     {
-        return new ActiveMessageData(item.name + " を手に入れた！", SDFaceID.SMILE);
+        return new ActiveMessageData(item.name + " を手に入れた！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
     }
 
     public static ActiveMessageData InspectTile(ITile tile)
@@ -43,11 +60,11 @@ public struct ActiveMessageData
             var pit = tile as Pit;
             if (pit.IsOpen)
             {
-                return new ActiveMessageData("落とし穴がある。", SDFaceID.DISATTRACT);
+                return new ActiveMessageData("落とし穴がある。", SDFaceID.DISATTRACT, SDEmotionID.BLUE);
             }
             else
             {
-                return new ActiveMessageData("落とし穴はっけん！", SDFaceID.ANGRY2);
+                return new ActiveMessageData("落とし穴はっけん！", SDFaceID.ANGRY2, SDEmotionID.SURPRISE);
             }
         }
 

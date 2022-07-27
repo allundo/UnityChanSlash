@@ -72,8 +72,11 @@ public class UITween
     public Tween Rotate(float endValue, float duration = 1f, bool isBeyond360 = true)
         => Rotate(new Vector3(0f, 0f, endValue), duration, isBeyond360);
 
-    public Tween PunchY(float strength, float duration = 1f, int vibrato = 10)
-        => rectTransform.DOPunchAnchorPos(new Vector2(0f, strength), duration, vibrato);
+    public Tween Punch(Vector2 punchVec, float duration = 1f, int vibrato = 10, float elasticity = 1)
+        => rectTransform.DOPunchAnchorPos(punchVec, duration, vibrato, elasticity);
+
+    public Tween PunchY(float strength, float duration = 1f, int vibrato = 10, float elasticity = 1)
+        => rectTransform.DOPunchAnchorPos(new Vector2(0f, strength), duration, vibrato, elasticity);
 
     /// <summary>
     /// Set position and move immediately.

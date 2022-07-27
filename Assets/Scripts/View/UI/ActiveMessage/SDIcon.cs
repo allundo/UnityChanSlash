@@ -8,6 +8,7 @@ using System;
 public class SDIcon : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField] private Sprite[] sdFaces = default;
+    [SerializeField] private SDEmotionFX[] emotionFXs = default;
 
     private FadeTween fade;
     private UITween uiTween;
@@ -20,6 +21,8 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
 
     private Tween activateTween;
     private Tween inactivateTween;
+
+    private SDEmotionFX currentEmotion = null;
 
     void Awake()
     {
@@ -39,6 +42,10 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
         inactivateTween.Kill();
 
         image.sprite = sdFaces[(int)messageData.face];
+
+        int emotionID = (int)messageData.emotion;
+        currentEmotion = emotionID >= 0 ? emotionFXs[emotionID] : null;
+
         uiTween.ResetPos();
 
         activateTween = DOTween.Sequence()
@@ -46,6 +53,8 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
             .Join(uiTween.MoveOffset(new Vector2(-120f, 0f), 0.25f).SetEase(Ease.OutCubic))
             .SetUpdate(true)
             .Play();
+
+        currentEmotion?.Activate();
 
         isActive = true;
     }
@@ -61,6 +70,8 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
             .Join(uiTween.MoveBack(0.5f).SetEase(Ease.Linear))
             .SetUpdate(true)
             .Play();
+
+        currentEmotion?.Inactivate();
 
         isActive = false;
     }
