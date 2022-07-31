@@ -37,6 +37,8 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
 
     public void Activate(ActiveMessageData messageData)
     {
+        currentEmotion?.Inactivate();
+
         gameObject.SetActive(true);
 
         inactivateTween.Kill();

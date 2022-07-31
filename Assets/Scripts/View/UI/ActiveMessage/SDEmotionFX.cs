@@ -38,8 +38,6 @@ public abstract class SDEmotionFX : MonoBehaviour
 
     public void Activate()
     {
-        prevTween?.Complete();
-
         gameObject.SetActive(true);
 
         uiTween.ResetPos();
