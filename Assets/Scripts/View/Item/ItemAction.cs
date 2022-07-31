@@ -17,7 +17,17 @@ public class PotionAction : ItemAction
 {
     public PotionAction(ItemAttr attr) : base(attr) { }
     public override int Action(PlayerCommandTarget target)
-         => (target.react as IMobReactor).HealRatio(1f) ? 1 : 0;
+    {
+        if ((target.react as IMobReactor).HealRatio(1f))
+        {
+            return 1;
+        }
+        else
+        {
+            ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("飲む必要なし！"));
+            return 0;
+        }
+    }
 }
 
 public class KeyBladeAction : ItemAction
