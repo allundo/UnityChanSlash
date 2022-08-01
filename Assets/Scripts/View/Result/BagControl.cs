@@ -20,6 +20,10 @@ public class BagControl
             bagSize = BagSize.Gigantic;
             surplusCoins = (int)((wagesAmount - 10000000) / 500);
         }
+        else if (wagesAmount > 2000000)
+        {
+            bagSize = BagSize.Big;
+        }
         else if (wagesAmount > 500000)
         {
             bagSize = BagSize.Middle;

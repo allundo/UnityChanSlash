@@ -30,9 +30,9 @@ MonoBehaviour:
   - name: "\u5927\u888B"
     coinScale: 0.5
     startPosition: {x: 0, y: 5, z: 0.65}
-    rightHandOffset: {x: -0.272, y: 0.221, z: -0.1}
+    rightHandOffset: {x: -0.243, y: 0.306, z: -0.219}
     dropDelay: 1
-    prefabYenBag: {fileID: 616785935331266334, guid: 92898bc3d24ed41bfb7057bc37b99d95,
+    prefabYenBag: {fileID: 5303064818832279925, guid: 9d720bed7abbc4d889f83f10e498a8bb,
       type: 3}
   - name: "\u5DE8\u888B"
     coinScale: 1
