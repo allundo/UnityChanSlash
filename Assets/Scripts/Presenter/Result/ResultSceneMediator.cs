@@ -69,33 +69,6 @@ public class ResultSceneMediator : SceneMediator
         GameInfo gameInfo = GameInfo.Instance;
         gameInfo.clearTimeSec = 0;
 
-        var resultBonus = new ResultBonus(gameInfo);
-        var yenBag = new BagControl(resultBonus.wagesAmount);
-
-        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
-
-        resultUIHandler
-            .ViewResult(resultBonus)
-            .Subscribe(_ =>
-            {
-                DOTween.Sequence()
-                    .Join(resultUIHandler.SweepResults(2f))
-                    .Join(mainCameraTf.DOMoveX(0f, 2f).SetEase(Ease.OutCubic))
-                    .AppendCallback(() => charactersHandler.StartAction())
-                    .Play();
-            })
-            .AddTo(this);
-
-        unityChanReactor.ScreenOut
-            .Subscribe(_ =>
-            {
-                resultUIHandler.CenterResults(3f).Play();
-                if (yenBag.bagSize == BagSize.Gigantic)
-                {
-                    mainCameraTf.DOMove(mainCameraTf.forward * -3f + Vector3.up * 2f, 30f).SetRelative().SetEase(Ease.OutCubic).Play();
-                    mainCameraTf.DORotate(new Vector3(18f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
-                }
-            })
-            .AddTo(this);
+        Result();
     }
 }
