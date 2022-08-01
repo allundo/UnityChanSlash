@@ -76,7 +76,7 @@ public class MessageUITest
         }
     }
 
-    private IEnumerator ReadMessageData(MessageData[] data, float readTime = 0.25f)
+    private IEnumerator ReadMessageData(MessageData[] data, float readSecPerLiteral = 0.1f)
     {
         messageUI.InputMessageData(data);
         yield return null;
@@ -86,6 +86,7 @@ public class MessageUITest
         foreach (var mes in data)
         {
             var duration = mes.sentence.Length / mes.literalsPerSec;
+            var readTime = mes.sentence.Length * readSecPerLiteral;
             yield return new WaitForSeconds(readTime);
 
             messageUI.OnPointerUp(null);
