@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using DG.Tweening;
 using UniRx;
@@ -19,12 +20,17 @@ public class ResultUIHandler : MonoBehaviour
     [SerializeField] private ResultAnimation strength = default;
     [SerializeField] private ResultAnimation magic = default;
 
+    private Image resultBGImage;
+
     public IObservable<object> TransitSignal;
 
     void Awake()
     {
         TransitSignal = titleButton.OnPush.First() // ContinueWith() cannot handle duplicated click events
                 .ContinueWith(_ => ToTitleEffect().OnCompleteAsObservable());
+
+        resultBGImage = resultsTf.GetComponent<Image>();
+        resultBGImage.enabled = false;
     }
 
     public IObservable<Unit> ViewResult(ResultBonus result)
@@ -67,7 +73,9 @@ public class ResultUIHandler : MonoBehaviour
 
     public Tween SweepResults(float duration)
     {
-        return resultsTf.DOAnchorPosX(1080f, duration).SetRelative(true);
+        return resultsTf.DOAnchorPosX(1080f, duration)
+            .OnComplete(() => resultBGImage.enabled = true)
+            .SetRelative(true);
     }
 
     public Tween CenterResults(float duration)
