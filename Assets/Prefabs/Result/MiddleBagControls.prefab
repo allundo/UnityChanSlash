@@ -131,6 +131,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabCoin: {fileID: 2589062248049785016, guid: d739e406851514a3ab1af1fb5b31e261,
     type: 3}
+  prefabOuterCoin: {fileID: 4252673459171234702, guid: 84c12f94a0e4a48c0bc8e992f3a1c602,
+    type: 3}
   cloth: {fileID: 2115217517134039377}
   box: {fileID: 5190578759111675758}
 --- !u!1 &5190578759111675756

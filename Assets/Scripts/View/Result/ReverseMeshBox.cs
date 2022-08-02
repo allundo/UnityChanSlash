@@ -7,7 +7,7 @@ public class ReverseMeshBox : MonoBehaviour
     {
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         mesh.triangles = mesh.triangles.Reverse().ToArray();
-        MeshCollider col = gameObject.AddComponent<MeshCollider>();
+        gameObject.AddComponent<MeshCollider>();
     }
 
     public void InsertCoin(GameObject coin)
