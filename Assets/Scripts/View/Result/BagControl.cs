@@ -55,7 +55,7 @@ public class BagControl
 
     public Tween Drop()
     {
-        bag.CoinShower(surplusCoins);
+        if (bagSize == BagSize.Gigantic) bag.CoinShower(surplusCoins);
         return DOVirtual.DelayedCall(bagSource.dropDelay, () => sphereBody.useGravity = true);
     }
 
