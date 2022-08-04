@@ -66,7 +66,7 @@ public class BagControl
 
         bagTf.SetParent(parent);
         bagTf.DOLocalMove(bagSource.rightHandOffset, 0.5f).Play();
-        bagTf.DOLocalRotate(new Vector3(53.7f, -18.2f, 36.475f), 0.5f).Play();
+        bagTf.DOLocalRotate(bagSource.catchAngle, 0.5f).Play();
     }
 
     public void Destroy() => bag.Destroy();

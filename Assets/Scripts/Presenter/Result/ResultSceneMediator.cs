@@ -71,7 +71,7 @@ public class ResultSceneMediator : SceneMediator
         Debug.Log("DEBUG MODE");
 
         GameInfo gameInfo = GameInfo.Instance;
-        gameInfo.clearTimeSec = 0;
+        gameInfo.clearTimeSec = 2800;
 
         Result();
     }

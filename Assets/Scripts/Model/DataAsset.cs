@@ -200,6 +200,7 @@ public class YenBagSource
     [SerializeField] public float coinScale = 1f;
     [SerializeField] public Vector3 startPosition = default;
     [SerializeField] public Vector3 rightHandOffset = default;
+    [SerializeField] public Vector3 catchAngle = default;
     [SerializeField] public float dropDelay = 0.65f;
     [SerializeField] public YenBag prefabYenBag = default;
 }

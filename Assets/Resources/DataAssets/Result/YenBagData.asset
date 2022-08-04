@@ -17,6 +17,7 @@ MonoBehaviour:
     coinScale: 0.1
     startPosition: {x: 0, y: 5, z: 0.35}
     rightHandOffset: {x: -0.1233, y: 0.0695, z: -0.0513}
+    catchAngle: {x: 53.7, y: -18.2, z: 36.475}
     dropDelay: 0.65
     prefabYenBag: {fileID: 7311533902124115277, guid: c6b58027e66504b569d912388fc94a8f,
       type: 3}
@@ -24,13 +25,15 @@ MonoBehaviour:
     coinScale: 0.25
     startPosition: {x: 0, y: 5, z: 0.4}
     rightHandOffset: {x: -0.272, y: 0.221, z: -0.1}
+    catchAngle: {x: 53.7, y: -18.2, z: 36.475}
     dropDelay: 1
     prefabYenBag: {fileID: 616785935331266334, guid: 92898bc3d24ed41bfb7057bc37b99d95,
       type: 3}
   - name: "\u5927\u888B"
     coinScale: 0.5
     startPosition: {x: 0, y: 5, z: 0.65}
-    rightHandOffset: {x: -0.243, y: 0.306, z: -0.219}
+    rightHandOffset: {x: -0.271, y: 0.331, z: -0.23}
+    catchAngle: {x: 17.318, y: -78.041, z: -51.378}
     dropDelay: 1
     prefabYenBag: {fileID: 5303064818832279925, guid: 9d720bed7abbc4d889f83f10e498a8bb,
       type: 3}
@@ -38,6 +41,7 @@ MonoBehaviour:
     coinScale: 1
     startPosition: {x: 0, y: 5, z: -0.25}
     rightHandOffset: {x: 0, y: 0, z: 0}
+    catchAngle: {x: 0, y: 0, z: 0}
     dropDelay: 0.65
     prefabYenBag: {fileID: 8504761741954600432, guid: e41b5396754f84b8485d972ca5ada2ea,
       type: 3}
