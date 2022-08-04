@@ -24,6 +24,7 @@ public class CapsuleCoin : MonoBehaviour
             var coin = Object.Instantiate(prefabGroundCoin, transform.position, transform.rotation);
 
             coin.velocity = body.velocity;
+            coin.angularVelocity = body.angularVelocity;
 
             col.enabled = false;
             gameObject.SetActive(false);
