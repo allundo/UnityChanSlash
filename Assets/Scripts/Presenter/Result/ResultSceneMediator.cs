@@ -20,7 +20,11 @@ public class ResultSceneMediator : SceneMediator
         GameInfo gameInfo = GameInfo.Instance;
 
         resultUIHandler.TransitSignal
-            .Subscribe(_ => SceneTransition(0, gameInfo.ClearMaps))
+            .Subscribe(_ => SceneTransition(0, () =>
+            {
+                gameInfo.ClearMaps();
+                GroundCoin.Release();
+            }))
             .AddTo(this);
 
 #if UNITY_EDITOR
