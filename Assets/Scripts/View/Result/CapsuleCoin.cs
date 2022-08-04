@@ -23,8 +23,6 @@ public class CapsuleCoin : MonoBehaviour
         {
             var coin = Object.Instantiate(prefabGroundCoin, transform.position, transform.rotation);
 
-            Debug.Log("OuterCoin: " + coin.gameObject.name, coin.gameObject);
-
             coin.velocity = body.velocity;
 
             col.enabled = false;

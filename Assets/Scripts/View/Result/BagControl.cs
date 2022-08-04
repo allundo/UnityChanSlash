@@ -55,7 +55,6 @@ public class BagControl
 
     public Tween Drop()
     {
-        Debug.Log("coins: " + surplusCoins);
         bag.CoinShower(surplusCoins);
         return DOVirtual.DelayedCall(bagSource.dropDelay, () => sphereBody.useGravity = true);
     }
