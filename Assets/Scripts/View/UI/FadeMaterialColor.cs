@@ -59,19 +59,6 @@ public class FadeMaterialColor : FadeTween
         this.material = material;
     }
 
-    protected class GraphicMaterial
-    {
-        private Material copiedMaterial;
-        private MaskableGraphic graphic;
-
-        public GraphicMaterial(MaskableGraphic graphic)
-        {
-            this.graphic = graphic;
-            copiedMaterial = graphic.materialForRendering;
-            graphic.material = copiedMaterial;
-        }
-    }
-
     public override void OnDestroy()
     {
         // Destroy the cloned material
