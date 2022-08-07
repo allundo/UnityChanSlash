@@ -1,7 +1,10 @@
 using DG.Tweening;
+using UnityEngine;
 
 public class TargetCorner : FadeEnable
 {
+    [SerializeField] private Color pointerOnColor = default;
+
     private UITween uiTween;
     private Tween activate;
     private Tween expansionLoop;
@@ -39,5 +42,19 @@ public class TargetCorner : FadeEnable
         expansionLoop.Pause();
         activate.SmoothRewind();
         FadeOut(0.1f).Play();
+    }
+
+    public void SetPointerOn()
+    {
+        expansionLoop.Pause();
+        fade.KillTweens();
+        uiTween.ResetSize(1.1f);
+        fade.color = pointerOnColor;
+    }
+
+    public void SetPointerOff()
+    {
+        expansionLoop.Restart();
+        fade.ResetColor();
     }
 }

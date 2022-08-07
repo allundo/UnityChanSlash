@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class FadeMaterialColor : FadeTween
 {
@@ -15,6 +16,8 @@ public class FadeMaterialColor : FadeTween
 
         material = new Material(image.material);
         image.material = material;
+
+        if (material != null) defaultColor = material.color;
     }
 
     public FadeMaterialColor(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
@@ -34,6 +37,8 @@ public class FadeMaterialColor : FadeTween
             material = gameObject.GetComponent<Renderer>()?.material;
             if (material == null) Debug.LogError("GameObject " + gameObject.name + " は Material を持っていません", gameObject);
         }
+
+        if (material != null) defaultColor = material.color;
     }
 
     public override Color color
@@ -64,4 +69,6 @@ public class FadeMaterialColor : FadeTween
         // Destroy the cloned material
         Object.Destroy(material);
     }
+
+    public override Tween DOColor(Color endValue, float duration) => material.DOColor(endValue, duration);
 }

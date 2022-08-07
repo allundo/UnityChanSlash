@@ -1,7 +1,10 @@
 using DG.Tweening;
+using UnityEngine;
 
 public class TargetCenter : FadeEnable
 {
+    [SerializeField] private Color pointerOnColor = default;
+
     private UITween uiTween;
     private Tween blinkLoop;
     protected override void Awake()
@@ -22,5 +25,19 @@ public class TargetCenter : FadeEnable
     {
         blinkLoop.Rewind();
         FadeOut(0.1f).Play();
+    }
+
+    public void SetPointerOn()
+    {
+        blinkLoop.Pause();
+        fade.KillTweens();
+        uiTween.ResetSize(1.1f);
+        fade.color = pointerOnColor;
+    }
+
+    public void SetPointerOff()
+    {
+        blinkLoop.Restart();
+        fade.ResetColor();
     }
 }

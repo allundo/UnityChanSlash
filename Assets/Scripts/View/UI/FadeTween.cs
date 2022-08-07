@@ -7,6 +7,7 @@ public class FadeTween
 {
     protected MaskableGraphic image;
     protected float maxAlpha;
+    protected Color defaultColor;
     protected bool isValidOnPause;
 
     private Tween fadeIn = null;
@@ -50,6 +51,7 @@ public class FadeTween
         this.image = image;
         this.maxAlpha = maxAlpha;
         this.isValidOnPause = isValidOnPause;
+        if (image != null) defaultColor = image.color;
     }
     public FadeTween(GameObject gameObject, float maxAlpha = 1f, bool isValidOnPause = false)
         : this(gameObject.GetComponent<MaskableGraphic>(), maxAlpha, isValidOnPause) { }
@@ -69,6 +71,11 @@ public class FadeTween
     public void SetAlpha(float alpha, bool isScaledByMaxAlpha = true)
     {
         color = new Color(color.r, color.g, color.b, isScaledByMaxAlpha ? alpha * maxAlpha : alpha);
+    }
+
+    public void ResetColor(bool setAlphaDefault = false)
+    {
+        color = setAlphaDefault ? defaultColor : new Color(defaultColor.r, defaultColor.g, defaultColor.b, color.a);
     }
 
     public void SetEnabled(bool isEnable = true)
@@ -132,4 +139,6 @@ public class FadeTween
     }
 
     public virtual void OnDestroy() { }
+
+    public virtual Tween DOColor(Color endValue, float duration) => image.DOColor(endValue, duration);
 }

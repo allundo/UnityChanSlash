@@ -16,6 +16,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     [SerializeField] private EnemyLifeGauge circle = default;
     [SerializeField] private Target enemyTarget = default;
+    [SerializeField] private PivotPoint pivotPoint = default;
+    [SerializeField] private EffortPoint effortPoint = default;
+    [SerializeField] private TargetPointer targetPointer = default;
 
     public IObservable<Unit> JabButton => jabButton.ObservableAtk;
     public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
@@ -40,13 +43,15 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector2 pressPos = Vector2.zero;
 
     public bool IsPressed => currentButton != null;
+    public bool isChargingUp { get; private set; }
 
     private float DrawComponent(Vector2 screenPos) => IsPressed ? Vector2.Dot(UIPos(pressPos).normalized, DragVector(screenPos)) : 0.0f;
     private float radius;
+    private float sqrRadius;
 
     private Vector2 UIPos(Vector2 screenPos) => screenPos - UICenter;
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
-    private bool InCircle(Vector2 screenPos) => UIPos(screenPos).magnitude < radius;
+    private bool InCircle(Vector2 screenPos) => UIPos(screenPos).sqrMagnitude < sqrRadius;
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
 
@@ -60,6 +65,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Start()
     {
         radius = 260.0f;
+        sqrRadius = radius * radius;
         kickUICenter = new Vector2(0, -(radius - 100.0f));
         forwardUICenter = new Vector2(0, 12f);
 
@@ -150,6 +156,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         currentButton?.Release();
         currentButton = null;
+
+        pivotPoint.Hide();
+        effortPoint.Hide();
+        targetPointer.Hide();
+        enemyTarget.SetPointer(Vector2.zero);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -192,6 +203,27 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             raycastHandler.RaycastDrag(eventData);
             return;
+        }
+
+        pivotPoint.Show(pressPos);
+        effortPoint.Show(eventData.position);
+        targetPointer.Show(pressPos);
+
+        var pointerVec = pressPos - eventData.position;
+        targetPointer.SetVerticesPos(pointerVec);
+
+        if (InCircle(eventData.position))
+        {
+            pivotPoint.DisableChargingUp();
+            effortPoint.DisableChargingUp();
+            targetPointer.DisableChargingUp();
+        }
+        else
+        {
+            pivotPoint.EnableChargingUp();
+            effortPoint.EnableChargingUp();
+            targetPointer.EnableChargingUp();
+            enemyTarget.SetPointer(pressPos + pointerVec);
         }
     }
 
@@ -236,6 +268,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             currentButton?.Cancel();
         }
+
+        pivotPoint.Hide();
+        effortPoint.Hide();
+        targetPointer.Hide();
+        enemyTarget.SetPointer(Vector2.zero);
 
         var eventData = new PointerEventData(EventSystem.current);
         eventData.pressPosition = pressPos;
