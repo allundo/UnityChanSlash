@@ -20,9 +20,20 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private EffortPoint effortPoint = default;
     [SerializeField] private TargetPointer targetPointer = default;
 
+    private ICommand jabCommand;
+    private ICommand straightCommand;
+    private ICommand kickCommand;
+
     public IObservable<Unit> JabButton => jabButton.ObservableAtk;
     public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
     public IObservable<Unit> KickButton => kickButton.ObservableAtk;
+
+    public IObservable<ICommand> AttackButtons
+        => Observable.Merge(
+            JabButton.Select(_ => jabCommand),
+            StraightButton.Select(_ => straightCommand),
+            KickButton.Select(_ => kickCommand)
+        );
 
     private RectTransform rectTransform;
     private RaycastHandler raycastHandler;
@@ -60,6 +71,13 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         rectTransform = GetComponent<RectTransform>();
 
         raycastHandler = new RaycastHandler(gameObject);
+    }
+
+    public void SetCommands(PlayerCommandTarget target)
+    {
+        jabCommand = new PlayerJab(target, 21.6f);
+        straightCommand = new PlayerStraight(target, 30f);
+        kickCommand = new PlayerKick(target, 43f);
     }
 
     void Start()

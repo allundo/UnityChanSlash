@@ -103,6 +103,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 120f);
+        fightCircle.SetCommands(playerTarget);
     }
 
     protected override void SetInputs()
@@ -391,20 +392,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected void InitFightInput()
     {
         // TODO: Refer duration and cancel time value from AttackButton object
-        ICommand jab = new PlayerJab(playerTarget, 21.6f);
-        ICommand straight = new PlayerStraight(playerTarget, 30f);
-        ICommand kick = new PlayerKick(playerTarget, 43f);
-
-        fightCircle.JabButton
-            .Subscribe(_ => InputCommand(jab))
-            .AddTo(this);
-
-        fightCircle.StraightButton
-            .Subscribe(_ => InputCommand(straight))
-            .AddTo(this);
-
-        fightCircle.KickButton
-            .Subscribe(_ => InputCommand(kick))
+        fightCircle.AttackButtons
+            .Subscribe(cmd => InputCommand(cmd))
             .AddTo(this);
     }
 
