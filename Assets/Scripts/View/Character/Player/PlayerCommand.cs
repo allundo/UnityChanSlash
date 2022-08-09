@@ -575,19 +575,13 @@ public class PlayerPutItem : PlayerAction
 
 public abstract class PlayerAttack : PlayerAction
 {
-    protected IAttack jab;
-    protected IAttack straight;
-    protected IAttack kick;
+    protected IAttack attack;
 
     protected Tween cancelTimer = null;
     protected float cancelStart;
 
     public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
     {
-        jab = target.Attack(0);
-        straight = target.Attack(1);
-        kick = target.Attack(2);
-
         this.cancelStart = cancelStart;
 
         if (cancelStart < 1f)
@@ -632,34 +626,43 @@ public abstract class PlayerAttack : PlayerAction
 
 public class PlayerJab : PlayerAttack
 {
-    public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f) { }
+    public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f)
+    {
+        attack = target.Attack(0);
+    }
 
     protected override void Attack()
     {
         playerAnim.jab.Fire();
-        completeTween = jab.AttackSequence(duration).Play();
+        completeTween = attack.AttackSequence(duration).Play();
     }
 }
 
 public class PlayerStraight : PlayerAttack
 {
-    public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f) { }
+    public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f)
+    {
+        attack = target.Attack(1);
+    }
 
     protected override void Attack()
     {
         playerAnim.straight.Fire();
-        completeTween = straight.AttackSequence(duration).Play();
+        completeTween = attack.AttackSequence(duration).Play();
     }
 }
 
 public class PlayerKick : PlayerAttack
 {
-    public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration) { }
+    public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration)
+    {
+        attack = target.Attack(2);
+    }
 
     protected override void Attack()
     {
         playerAnim.kick.Fire();
-        completeTween = kick.AttackSequence(duration).Play();
+        completeTween = attack.AttackSequence(duration).Play();
     }
 }
 
