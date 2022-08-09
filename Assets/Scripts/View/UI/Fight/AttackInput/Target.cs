@@ -13,7 +13,7 @@ public class Target : FadeActivate
     private RectTransform rectTransform;
     public Vector2 ScreenPos => rectTransform.position;
 
-    private bool isPointerOn;
+    public bool isPointerOn { get; private set; }
     private bool IsPointerOn(Vector2 pointerPos)
     {
         isPointerOn = (ScreenPos - pointerPos).sqrMagnitude < (isPointerOn ? sqrActiveBullEyeRadius : sqrBullEyeRadius);

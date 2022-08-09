@@ -20,9 +20,13 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private EffortPoint effortPoint = default;
     [SerializeField] private TargetPointer targetPointer = default;
 
-    private ICommand jabCommand;
-    private ICommand straightCommand;
-    private ICommand kickCommand;
+    private ICommand jabCmd;
+    private ICommand straightCmd;
+    private ICommand kickCmd;
+
+    private ICommand jabCriticalCmd;
+    private ICommand straightCriticalCmd;
+    private ICommand kickCriticalCmd;
 
     public IObservable<Unit> JabButton => jabButton.ObservableAtk;
     public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
@@ -30,9 +34,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public IObservable<ICommand> AttackButtons
         => Observable.Merge(
-            JabButton.Select(_ => jabCommand),
-            StraightButton.Select(_ => straightCommand),
-            KickButton.Select(_ => kickCommand)
+            JabButton.Select(_ => enemyTarget.isPointerOn ? jabCriticalCmd : jabCmd),
+            StraightButton.Select(_ => enemyTarget.isPointerOn ? straightCriticalCmd : straightCmd),
+            KickButton.Select(_ => enemyTarget.isPointerOn ? kickCriticalCmd : kickCmd)
         );
 
     private RectTransform rectTransform;
@@ -75,9 +79,12 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void SetCommands(PlayerCommandTarget target)
     {
-        jabCommand = new PlayerJab(target, 21.6f);
-        straightCommand = new PlayerStraight(target, 30f);
-        kickCommand = new PlayerKick(target, 43f);
+        jabCmd = new PlayerJab(target, 21.6f);
+        straightCmd = new PlayerStraight(target, 30f);
+        kickCmd = new PlayerKick(target, 43f);
+        jabCriticalCmd = new PlayerJabCritical(target, 18.5f);
+        straightCriticalCmd = new PlayerStraightCritical(target, 24f);
+        kickCriticalCmd = new PlayerKickCritical(target, 35f);
     }
 
     void Start()

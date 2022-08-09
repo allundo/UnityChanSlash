@@ -8,8 +8,13 @@ public interface IAttackHitDetect : IAttack
     IObservable<IReactor> Hit { get; }
 }
 
-[RequireComponent(typeof(Collider))]
-public class MobAttack : Attack, IAttackHitDetect
+public interface IMobAttack : IAttack
+{
+    Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 1.5f, float expandScale = 1.5f);
+}
+
+[RequireComponent(typeof(BoxCollider))]
+public class MobAttack : Attack, IAttackHitDetect, IMobAttack
 {
     /// <summary>
     /// Attack hit starting frame on animation clip
@@ -37,13 +42,23 @@ public class MobAttack : Attack, IAttackHitDetect
     protected ISubject<IReactor> hitSubject = new Subject<IReactor>();
     public IObservable<IReactor> Hit => hitSubject;
 
+    protected BoxCollider boxCollider;
+    protected Vector3 defaultSize;
+    protected float defaultAttack;
+
     void Start()
     {
+        boxCollider = attackCollider as BoxCollider;
+        defaultSize = boxCollider.size;
+        defaultAttack = attackMultiplier;
+
         startSec = FrameToSec(startFrame);
         finishSec = FrameToSec(finishFrame);
     }
 
-    private float FrameToSec(int frame)
+    private float FrameToSec(int frame) => FrameToSec(frame, this.speed);
+
+    private float FrameToSec(int frame, int speed)
     {
         return (float)frame / (float)frameRate / (float)speed;
     }
@@ -62,12 +77,33 @@ public class MobAttack : Attack, IAttackHitDetect
         Observable.NextFrame().Subscribe(_ => attackCollider.enabled = false).AddTo(this);
     }
 
-
     public override Tween AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
             .InsertCallback(startSec, OnHitStart)
             .InsertCallback(finishSec, OnHitFinished)
             .SetUpdate(false);
+    }
+
+    public virtual Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 1.5f, float expandScale = 1.5f)
+    {
+        return DOTween.Sequence()
+            .AppendCallback(() => CriticalGain(criticalMultiplier, expandScale))
+            .InsertCallback(FrameToSec(startFrame, speed + additionalSpeed), OnHitStart)
+            .InsertCallback(FrameToSec(finishFrame, speed + additionalSpeed), OnHitFinished)
+            .OnComplete(ResetAttackPower)
+            .SetUpdate(false);
+    }
+
+    protected void CriticalGain(float criticalMultiplier = 1.5f, float expandScale = 1.5f)
+    {
+        boxCollider.size *= expandScale;
+        attackMultiplier *= criticalMultiplier;
+    }
+
+    protected void ResetAttackPower()
+    {
+        boxCollider.size = defaultSize;
+        attackMultiplier = defaultAttack;
     }
 }

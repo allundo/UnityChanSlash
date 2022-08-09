@@ -436,6 +436,7 @@ public class PlayerTurnR : PlayerCommand
         return true;
     }
 }
+
 public abstract class PlayerAction : PlayerCommand
 {
     public PlayerAction(PlayerCommandTarget target, float duration, float validateTiming = 0.5f)
@@ -574,7 +575,7 @@ public class PlayerPutItem : PlayerAction
 
 public abstract class PlayerAttack : PlayerAction
 {
-    protected IAttack attack;
+    protected IMobAttack attack;
 
     protected Tween cancelTimer = null;
     protected float cancelStart;
@@ -617,7 +618,14 @@ public abstract class PlayerAttack : PlayerAction
     {
         cancelTimer?.Restart();
         Attack();
+        SetOnCompleted(() => playerAnim.critical.Bool = false);
         return true;
+    }
+
+    public override void Cancel()
+    {
+        playerAnim.critical.Bool = false;
+        base.Cancel();
     }
 
     protected abstract void Attack();
@@ -627,13 +635,26 @@ public class PlayerJab : PlayerAttack
 {
     public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f)
     {
-        attack = target.Attack(0);
+        attack = target.Attack(0) as IMobAttack;
     }
 
     protected override void Attack()
     {
+        playerAnim.critical.Bool = false;
         playerAnim.jab.Fire();
         completeTween = attack.AttackSequence(duration).Play();
+    }
+}
+
+public class PlayerJabCritical : PlayerJab
+{
+    public PlayerJabCritical(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override void Attack()
+    {
+        playerAnim.critical.Bool = true;
+        playerAnim.jab.Fire();
+        completeTween = attack.CriticalAttackSequence().Play();
     }
 }
 
@@ -641,13 +662,26 @@ public class PlayerStraight : PlayerAttack
 {
     public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f)
     {
-        attack = target.Attack(1);
+        attack = target.Attack(1) as IMobAttack;
     }
 
     protected override void Attack()
     {
+        playerAnim.critical.Bool = false;
         playerAnim.straight.Fire();
         completeTween = attack.AttackSequence(duration).Play();
+    }
+}
+
+public class PlayerStraightCritical : PlayerStraight
+{
+    public PlayerStraightCritical(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override void Attack()
+    {
+        playerAnim.critical.Bool = true;
+        playerAnim.straight.Fire();
+        completeTween = attack.CriticalAttackSequence().Play();
     }
 }
 
@@ -655,13 +689,26 @@ public class PlayerKick : PlayerAttack
 {
     public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration)
     {
-        attack = target.Attack(2);
+        attack = target.Attack(2) as IMobAttack;
     }
 
     protected override void Attack()
     {
+        playerAnim.critical.Bool = false;
         playerAnim.kick.Fire();
         completeTween = attack.AttackSequence(duration).Play();
+    }
+}
+
+public class PlayerKickCritical : PlayerKick
+{
+    public PlayerKickCritical(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override void Attack()
+    {
+        playerAnim.critical.Bool = true;
+        playerAnim.kick.Fire();
+        completeTween = attack.CriticalAttackSequence().Play();
     }
 }
 

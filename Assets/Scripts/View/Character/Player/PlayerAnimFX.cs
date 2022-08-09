@@ -14,6 +14,11 @@ public class PlayerAnimFX : AnimationFX
     [SerializeField] private AudioSource kickSfx = null;
     [SerializeField] protected ParticleSystem kickVfx = default;
 
+    [SerializeField] private AudioSource criticalSfx = null;
+    [SerializeField] protected ParticleSystem jabCriticalVfx = default;
+    [SerializeField] protected ParticleSystem straightCriticalVfx = default;
+    [SerializeField] protected ParticleSystem kickCriticalVfx = default;
+
     [SerializeField] private AudioSource jumpSfx = null;
     [SerializeField] private AudioSource jumpLandingSfx = null;
 
@@ -24,11 +29,18 @@ public class PlayerAnimFX : AnimationFX
 
     // Called as Animation Event functions
     public void OnShield() => fx.Play(shieldSfx, shieldVfx);
+
     public void OnJab() => fx.PlayPitch(jabSfx, jabVfx);
     public void OnStraight() => fx.PlayPitch(straightSfx, straightVfx);
     public void OnKick() => fx.PlayPitch(kickSfx, kickVfx);
+
+    public void OnJabCritical() => fx.PlayPitch(criticalSfx, jabCriticalVfx, 1f, 1.05f);
+    public void OnStraightCritical() => fx.PlayPitch(criticalSfx, straightCriticalVfx, 0.95f, 1f);
+    public void OnKickCritical() => fx.PlayPitch(criticalSfx, kickCriticalVfx, 0.9f, 0.95f);
+
     public void OnJump() => fx.Play(jumpSfx);
     public void OnJumpLanding() => fx.Play(jumpLandingSfx);
+
     public void OnBrake() => fx.PlayPitch(brakeSfx, 0.9f, 1.1f);
     public void OnBrakeAndStep() => fx.Play(brakeAndStepSfx);
 
