@@ -24,7 +24,6 @@ public abstract class PlayerCommand : MobCommand
 
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
-        mobReact = react as IMobReactor;
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
         itemGenerator = target.itemGenerator;
