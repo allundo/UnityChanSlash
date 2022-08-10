@@ -78,6 +78,12 @@ public class ShieldAnimator : MobAnimator
             triggers.Add(this);
         }
 
+        public override void Reset()
+        {
+            triggers.Remove(this);
+            anim.ResetTrigger(hashedVar);
+        }
+
         public virtual void Execute()
         {
             anim.SetTrigger(hashedVar);

@@ -41,6 +41,11 @@ public class MobAnimator : MonoBehaviour
             Debug.Log(varName + " is not a Trigger");
         }
 
+        public virtual void Reset()
+        {
+            Debug.Log(varName + " is not a Trigger");
+        }
+
         public virtual bool Bool
         {
             get
@@ -86,6 +91,11 @@ public class MobAnimator : MonoBehaviour
         public override void Fire()
         {
             anim.SetTrigger(hashedVar);
+        }
+
+        public override void Reset()
+        {
+            anim.ResetTrigger(hashedVar);
         }
     }
 

@@ -573,14 +573,15 @@ public class PlayerPutItem : PlayerAction
     }
 }
 
-public abstract class PlayerAttack : PlayerAction
+public class PlayerAttack : PlayerAction
 {
     protected IMobAttack attack;
+    protected PlayerAnimator.AnimatorTrigger trigger;
 
     protected Tween cancelTimer = null;
     protected float cancelStart;
 
-    public PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
+    protected PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
     {
         this.cancelStart = cancelStart;
 
@@ -618,17 +619,40 @@ public abstract class PlayerAttack : PlayerAction
     {
         cancelTimer?.Restart();
         Attack();
-        SetOnCompleted(() => playerAnim.critical.Bool = false);
+        SetOnCompleted(ResetAnimatorParams);
         return true;
     }
 
     public override void Cancel()
     {
-        playerAnim.critical.Bool = false;
+        ResetAnimatorParams();
         base.Cancel();
     }
 
-    protected abstract void Attack();
+    protected virtual void Attack()
+    {
+        trigger.Fire();
+        completeTween = attack.AttackSequence(duration).Play();
+    }
+
+    protected virtual void ResetAnimatorParams() => trigger.Reset();
+}
+
+public class PlayerCriticalAttack : PlayerAttack
+{
+    protected PlayerCriticalAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, cancelStart) { }
+    protected override void Attack()
+    {
+        playerAnim.critical.Bool = true;
+        trigger.Fire();
+        completeTween = attack.CriticalAttackSequence().Play();
+    }
+
+    protected override void ResetAnimatorParams()
+    {
+        trigger.Reset();
+        playerAnim.critical.Bool = false;
+    }
 }
 
 public class PlayerJab : PlayerAttack
@@ -636,25 +660,16 @@ public class PlayerJab : PlayerAttack
     public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f)
     {
         attack = target.Attack(0) as IMobAttack;
-    }
-
-    protected override void Attack()
-    {
-        playerAnim.critical.Bool = false;
-        playerAnim.jab.Fire();
-        completeTween = attack.AttackSequence(duration).Play();
+        trigger = playerAnim.jab;
     }
 }
 
-public class PlayerJabCritical : PlayerJab
+public class PlayerJabCritical : PlayerCriticalAttack
 {
-    public PlayerJabCritical(PlayerCommandTarget target, float duration) : base(target, duration) { }
-
-    protected override void Attack()
+    public PlayerJabCritical(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f)
     {
-        playerAnim.critical.Bool = true;
-        playerAnim.jab.Fire();
-        completeTween = attack.CriticalAttackSequence().Play();
+        attack = target.Attack(0) as IMobAttack;
+        trigger = playerAnim.jab;
     }
 }
 
@@ -663,25 +678,16 @@ public class PlayerStraight : PlayerAttack
     public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f)
     {
         attack = target.Attack(1) as IMobAttack;
-    }
-
-    protected override void Attack()
-    {
-        playerAnim.critical.Bool = false;
-        playerAnim.straight.Fire();
-        completeTween = attack.AttackSequence(duration).Play();
+        trigger = playerAnim.straight;
     }
 }
 
-public class PlayerStraightCritical : PlayerStraight
+public class PlayerStraightCritical : PlayerCriticalAttack
 {
-    public PlayerStraightCritical(PlayerCommandTarget target, float duration) : base(target, duration) { }
-
-    protected override void Attack()
+    public PlayerStraightCritical(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f)
     {
-        playerAnim.critical.Bool = true;
-        playerAnim.straight.Fire();
-        completeTween = attack.CriticalAttackSequence().Play();
+        attack = target.Attack(1) as IMobAttack;
+        trigger = playerAnim.straight;
     }
 }
 
@@ -690,25 +696,16 @@ public class PlayerKick : PlayerAttack
     public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration)
     {
         attack = target.Attack(2) as IMobAttack;
-    }
-
-    protected override void Attack()
-    {
-        playerAnim.critical.Bool = false;
-        playerAnim.kick.Fire();
-        completeTween = attack.AttackSequence(duration).Play();
+        trigger = playerAnim.kick;
     }
 }
 
-public class PlayerKickCritical : PlayerKick
+public class PlayerKickCritical : PlayerCriticalAttack
 {
-    public PlayerKickCritical(PlayerCommandTarget target, float duration) : base(target, duration) { }
-
-    protected override void Attack()
+    public PlayerKickCritical(PlayerCommandTarget target, float duration) : base(target, duration)
     {
-        playerAnim.critical.Bool = true;
-        playerAnim.kick.Fire();
-        completeTween = attack.CriticalAttackSequence().Play();
+        attack = target.Attack(2) as IMobAttack;
+        trigger = playerAnim.kick;
     }
 }
 
