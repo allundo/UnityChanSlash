@@ -1,43 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using DG.Tweening;
 using UniRx;
 using System;
 
 [RequireComponent(typeof(MaskableGraphic))]
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField] private AttackButton jabButton = default;
-    [SerializeField] private AttackButton straightButton = default;
-    [SerializeField] private AttackButton kickButton = default;
-    [SerializeField] private float maxAlpha = 0.8f;
-    [SerializeField] private float attackCancelThreshold = 2.0f;
+    [SerializeField] private AttackInputController attackInputUI = default;
+    [SerializeField] private float maxAlpha = 1f;
 
     [SerializeField] private EnemyLifeGauge circle = default;
     [SerializeField] private Target enemyTarget = default;
-    [SerializeField] private PivotPoint pivotPoint = default;
-    [SerializeField] private EffortPoint effortPoint = default;
-    [SerializeField] private TargetPointer targetPointer = default;
 
-    private ICommand jabCmd;
-    private ICommand straightCmd;
-    private ICommand kickCmd;
+    [SerializeField] private RectTransform forwardUIRT = default;
+    [SerializeField] private float radius = 260f;
+    [SerializeField] private float forwardRadius = 80f;
 
-    private ICommand jabCriticalCmd;
-    private ICommand straightCriticalCmd;
-    private ICommand kickCriticalCmd;
-
-    public IObservable<Unit> JabButton => jabButton.ObservableAtk;
-    public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
-    public IObservable<Unit> KickButton => kickButton.ObservableAtk;
-
-    public IObservable<ICommand> AttackButtons
-        => Observable.Merge(
-            JabButton.Select(_ => enemyTarget.isPointerOn ? jabCriticalCmd : jabCmd),
-            StraightButton.Select(_ => enemyTarget.isPointerOn ? straightCriticalCmd : straightCmd),
-            KickButton.Select(_ => enemyTarget.isPointerOn ? kickCriticalCmd : kickCmd)
-        );
+    public IObservable<ICommand> AttackButtons => attackInputUI.AttackButtons;
 
     private RectTransform rectTransform;
     private RaycastHandler raycastHandler;
@@ -45,28 +25,15 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private float alpha = 0.0f;
     public bool isActive { get; private set; } = false;
     private bool isFingerDown = false;
-    public bool isForwardMovable = false;
+    public bool isForwardMovable { private get; set; } = false;
 
-    private Vector2 UICenter;
-    private Vector2 kickUICenter;
-    private Vector2 forwardUICenter;
+    private Vector2 forwardUIPos;
 
-    private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).magnitude < 100.0f;
-    private bool InForward(Vector2 screenPos) => (forwardUICenter - UIPos(screenPos)).magnitude < 80.0f;
+    private float sqrForwardRadius;
 
-    private AttackButton currentButton = null;
-    private Vector2 pressPos = Vector2.zero;
+    private bool InForward(Vector2 screenPos) => (forwardUIPos - screenPos).sqrMagnitude < sqrForwardRadius;
 
-    public bool IsPressed => currentButton != null;
-    public bool isChargingUp { get; private set; }
-
-    private float DrawComponent(Vector2 screenPos) => IsPressed ? Vector2.Dot(UIPos(pressPos).normalized, DragVector(screenPos)) : 0.0f;
-    private float radius;
-    private float sqrRadius;
-
-    private Vector2 UIPos(Vector2 screenPos) => screenPos - UICenter;
-    private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
-    private bool InCircle(Vector2 screenPos) => UIPos(screenPos).sqrMagnitude < sqrRadius;
+    public bool IsPressed => attackInputUI.IsPressed;
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
 
@@ -77,24 +44,15 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         raycastHandler = new RaycastHandler(gameObject);
     }
 
-    public void SetCommands(PlayerCommandTarget target)
-    {
-        jabCmd = new PlayerJab(target, 21.6f);
-        straightCmd = new PlayerStraight(target, 30f);
-        kickCmd = new PlayerKick(target, 43f);
-        jabCriticalCmd = new PlayerJabCritical(target, 18.5f);
-        straightCriticalCmd = new PlayerStraightCritical(target, 24f);
-        kickCriticalCmd = new PlayerKickCritical(target, 35f);
-    }
+    public void SetCommands(PlayerCommandTarget target) => attackInputUI.SetCommands(target);
 
     void Start()
     {
-        radius = 260.0f;
-        sqrRadius = radius * radius;
-        kickUICenter = new Vector2(0, -(radius - 100.0f));
-        forwardUICenter = new Vector2(0, 12f);
+        sqrForwardRadius = forwardRadius * forwardRadius;
 
         ResetCenterPos();
+
+        attackInputUI.SetUIRadius(radius);
 
         circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
@@ -110,27 +68,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             .RepeatUntilDestroy(gameObject)
             .Subscribe(life => circle.OnLifeChange(life))
             .AddTo(this);
-
-        JabButton.Subscribe(_ =>
-        {
-            straightButton.SetCoolTime(jabButton.CancelTime);
-            kickButton.SetCoolTime(jabButton.CancelTime);
-        })
-        .AddTo(this);
-
-        StraightButton.Subscribe(_ =>
-        {
-            jabButton.SetCoolTime(straightButton.CancelTime);
-            kickButton.SetCoolTime(straightButton.CoolTime);
-        })
-        .AddTo(this);
-
-        KickButton.Subscribe(_ =>
-        {
-            jabButton.SetCoolTime(kickButton.CoolTime);
-            straightButton.SetCoolTime(kickButton.CoolTime);
-        })
-        .AddTo(this);
     }
 
     void Update()
@@ -156,15 +93,21 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         circle.SetAlpha(alpha);
     }
 
+    public void ResetCenterPos()
+    {
+        forwardUIPos = forwardUIRT.position;
+        attackInputUI.SetUICenter(rectTransform.position);
+    }
+
     public void OnPointerUp(PointerEventData eventData)
     {
         if (!isFingerDown) return;
 
         isFingerDown = false;
 
-        if (!IsPressed)
+        if (!attackInputUI.IsPressed)
         {
-            if (!InCircle(eventData.position))
+            if (!attackInputUI.InCircle(eventData.position))
             {
                 raycastHandler.RaycastPointerUp(eventData);
                 return;
@@ -179,13 +122,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        currentButton?.Release();
-        currentButton = null;
-
-        pivotPoint.Hide();
-        effortPoint.Hide();
-        targetPointer.Hide();
-        enemyTarget.SetPointer(Vector2.zero);
+        attackInputUI.Release();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -194,7 +131,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isFingerDown = true;
 
-        if (!InCircle(eventData.position))
+        if (!attackInputUI.InCircle(eventData.position))
         {
             raycastHandler.RaycastPointerDown(eventData);
             return;
@@ -208,59 +145,26 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (!isActive) return;
 
-        pressPos = eventData.position;
-        currentButton = GetAttack(UIPos(eventData.position));
-
-        currentButton.Press(pressPos);
+        attackInputUI.Press(eventData.position);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (!isFingerDown) return;
 
-        if (DrawComponent(eventData.position) < -attackCancelThreshold)
+        if (attackInputUI.IsDragCancel(eventData.position))
         {
             ButtonCancel();
             return;
         }
 
-        if (!IsPressed)
+        if (!attackInputUI.IsPressed)
         {
             raycastHandler.RaycastDrag(eventData);
             return;
         }
 
-        pivotPoint.Show(pressPos);
-        effortPoint.Show(eventData.position);
-        targetPointer.Show(pressPos);
-
-        var pointerVec = pressPos - eventData.position;
-        targetPointer.SetVerticesPos(pointerVec);
-
-        if (InCircle(eventData.position))
-        {
-            pivotPoint.DisableChargingUp();
-            effortPoint.DisableChargingUp();
-            targetPointer.DisableChargingUp();
-        }
-        else
-        {
-            pivotPoint.EnableChargingUp();
-            effortPoint.EnableChargingUp();
-            targetPointer.EnableChargingUp();
-            enemyTarget.SetPointer(pressPos + pointerVec);
-        }
-    }
-
-    public void ResetCenterPos()
-    {
-        UICenter = rectTransform.position;
-    }
-
-    private AttackButton GetAttack(Vector2 uiPos)
-    {
-        if (InKick(uiPos)) return kickButton;
-        return uiPos.x <= 0.0f ? jabButton : straightButton;
+        attackInputUI.ChargeUp(eventData.position);
     }
 
     public void Activate(IEnemyStatus status)
@@ -276,7 +180,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Inactivate(bool isForce = false)
     {
-        if (!isForce && IsPressed || !isActive) return;
+        if (!isForce && attackInputUI.IsPressed || !isActive) return;
 
         ButtonCancel(true);
         isActive = false;
@@ -285,26 +189,13 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void ButtonCancel(bool isFadeOnly = false)
     {
-        if (isFadeOnly)
-        {
-            currentButton?.FadeOut()?.Play();
-        }
-        else
-        {
-            currentButton?.Cancel();
-        }
+        attackInputUI.ButtonCancel(isFadeOnly);
 
-        pivotPoint.Hide();
-        effortPoint.Hide();
-        targetPointer.Hide();
         enemyTarget.SetPointer(Vector2.zero);
 
         var eventData = new PointerEventData(EventSystem.current);
-        eventData.pressPosition = pressPos;
+        eventData.pressPosition = attackInputUI.pressPos;
         raycastHandler.RaycastPointerUp(eventData);
-
-        currentButton = null;
-        pressPos = Vector2.zero;
     }
 
     public void SetActive(bool value, IEnemyStatus status)
