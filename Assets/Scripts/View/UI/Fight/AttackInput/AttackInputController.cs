@@ -60,6 +60,9 @@ public class AttackInputController : MonoBehaviour
 
     public bool InCircle(Vector2 screenPos) => UIPos(screenPos).sqrMagnitude < sqrRadius;
 
+    private bool isChargingUp = false;
+    private Vector2 pointerVec = Vector2.zero;
+
     private float sqrKickRadius;
     private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).sqrMagnitude < sqrKickRadius;
 
@@ -99,6 +102,11 @@ public class AttackInputController : MonoBehaviour
         .AddTo(this);
     }
 
+    void Update()
+    {
+        if (isChargingUp) enemyTarget.SetPointer(pressPos + pointerVec);
+    }
+
     public void Release()
     {
         currentButton?.Release();
@@ -107,6 +115,8 @@ public class AttackInputController : MonoBehaviour
         pivotPoint.Hide();
         effortPoint.Hide();
         targetPointer.Hide();
+
+        isChargingUp = false;
         enemyTarget.SetPointer(Vector2.zero);
     }
 
@@ -124,21 +134,22 @@ public class AttackInputController : MonoBehaviour
         effortPoint.Show(screenPos);
         targetPointer.Show(pressPos);
 
-        var pointerVec = pressPos - screenPos;
+        pointerVec = pressPos - screenPos;
         targetPointer.SetVerticesPos(pointerVec);
 
-        if (InCircle(screenPos))
-        {
-            pivotPoint.DisableChargingUp();
-            effortPoint.DisableChargingUp();
-            targetPointer.DisableChargingUp();
-        }
-        else
+        isChargingUp = !InCircle(screenPos);
+
+        if (isChargingUp)
         {
             pivotPoint.EnableChargingUp();
             effortPoint.EnableChargingUp();
             targetPointer.EnableChargingUp();
-            enemyTarget.SetPointer(pressPos + pointerVec);
+        }
+        else
+        {
+            pivotPoint.DisableChargingUp();
+            effortPoint.DisableChargingUp();
+            targetPointer.DisableChargingUp();
         }
     }
 
@@ -162,6 +173,8 @@ public class AttackInputController : MonoBehaviour
         pivotPoint.Hide();
         effortPoint.Hide();
         targetPointer.Hide();
+
+        isChargingUp = false;
 
         currentButton = null;
         pressPos = Vector2.zero;
