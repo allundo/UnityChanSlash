@@ -56064,6 +56064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fightCircle: {fileID: 4719329011268037073}
+  attackInputUI: {fileID: 1931400859}
   doorHandler: {fileID: 1506115883}
   itemHandler: {fileID: 1266231270}
   inspectHandler: {fileID: 292638575}

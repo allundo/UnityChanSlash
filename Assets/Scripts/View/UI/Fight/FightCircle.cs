@@ -17,8 +17,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private float radius = 260f;
     [SerializeField] private float forwardRadius = 80f;
 
-    public IObservable<ICommand> AttackButtons => attackInputUI.AttackButtons;
-
     private RectTransform rectTransform;
     private RaycastHandler raycastHandler;
 
@@ -32,8 +30,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private float sqrForwardRadius;
 
     private bool InForward(Vector2 screenPos) => (forwardUIPos - screenPos).sqrMagnitude < sqrForwardRadius;
-
-    public bool IsPressed => attackInputUI.IsPressed;
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
 

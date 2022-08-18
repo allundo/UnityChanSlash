@@ -18,6 +18,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 {
     // Fight UI to fight against Enemy on front Tile
     [SerializeField] protected FightCircle fightCircle = default;
+    [SerializeField] protected AttackInputController attackInputUI = default;
 
     // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
@@ -103,7 +104,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 120f);
-        fightCircle.SetCommands(playerTarget);
+        attackInputUI.SetCommands(playerTarget);
     }
 
     protected override void SetInputs()
@@ -343,7 +344,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         bool isHandleUIOn = doorHandler.isPressed || boxHandler.isPressed || itemHandler.isPressed || inspectHandler.isPressed || itemInventory.IsPutItem;
 
-        uiMask.SetActive(isHandleUIOn || IsAttack || fightCircle.IsPressed);
+        uiMask.SetActive(isHandleUIOn || IsAttack || attackInputUI.IsPressed);
 
         forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !playerMap.isInPit && !isHandleUIOn);
         backwardUI.SetActive(playerMap.IsBackwardMovable);
@@ -392,7 +393,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected void InitFightInput()
     {
         // TODO: Refer duration and cancel time value from AttackButton object
-        fightCircle.AttackButtons
+        attackInputUI.AttackButtons
             .Subscribe(cmd => InputCommand(cmd))
             .AddTo(this);
     }
