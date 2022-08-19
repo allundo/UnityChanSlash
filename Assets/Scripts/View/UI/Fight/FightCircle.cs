@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UniRx;
-using System;
 
 [RequireComponent(typeof(MaskableGraphic))]
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
@@ -22,13 +21,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private float alpha = 0.0f;
     public bool isActive { get; private set; } = false;
-    private bool isFingerDown = false;
+    private PointerEventData pointerDownEventData = null;
+
     public bool isForwardMovable { private get; set; } = false;
-
     private Vector2 forwardUIPos;
-
     private float sqrForwardRadius;
-
     private bool InForward(Vector2 screenPos) => (forwardUIPos - screenPos).sqrMagnitude < sqrForwardRadius;
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
@@ -97,9 +94,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!isFingerDown) return;
-
-        isFingerDown = false;
+        pointerDownEventData = null;
 
         if (!attackInputUI.IsPressed)
         {
@@ -123,9 +118,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (isFingerDown) return;
-
-        isFingerDown = true;
+        pointerDownEventData = eventData;
 
         if (!attackInputUI.InCircle(eventData.position))
         {
@@ -146,8 +139,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!isFingerDown) return;
-
         if (attackInputUI.IsDragCancel(eventData.position))
         {
             ButtonCancel();
@@ -189,9 +180,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         enemyTarget.SetPointer(Vector2.zero);
 
-        var eventData = new PointerEventData(EventSystem.current);
-        eventData.pressPosition = attackInputUI.pressPos;
-        raycastHandler.RaycastPointerUp(eventData);
+        if (pointerDownEventData != null)
+        {
+            raycastHandler.RaycastPointerUp(pointerDownEventData, true);
+        }
     }
 
     public void SetActive(bool value, IEnemyStatus status)
