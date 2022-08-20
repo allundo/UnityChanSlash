@@ -15,9 +15,9 @@ public class PlayerAnimFX : AnimationFX
     [SerializeField] protected ParticleSystem kickVfx = default;
 
     [SerializeField] private AudioSource criticalSfx = null;
-    [SerializeField] protected ParticleSystem jabCriticalVfx = default;
-    [SerializeField] protected ParticleSystem straightCriticalVfx = default;
-    [SerializeField] protected ParticleSystem kickCriticalVfx = default;
+    [SerializeField] protected MoveParticle jabCriticalVfx = default;
+    [SerializeField] protected MoveParticle straightCriticalVfx = default;
+    [SerializeField] protected MoveParticle kickCriticalVfx = default;
 
     [SerializeField] private AudioSource jumpSfx = null;
     [SerializeField] private AudioSource jumpLandingSfx = null;
