@@ -54,6 +54,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             .Where(status => status != null)
             .SelectMany(status =>
             {
+                enemyTarget.FadeActivate(status);
                 circle.OnEnemyChange(status.Life.Value, status.LifeMax.Value);
                 return status.Life;
             })
@@ -162,7 +163,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         isActive = true;
         gameObject.SetActive(true);
-        enemyTarget.FadeActivate(status);
     }
 
     public void Inactivate(bool isForce = false)
@@ -171,6 +171,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         ButtonCancel(true);
         isActive = false;
+        EnemyStatus.Value = null;
         enemyTarget.FadeInactivate();
     }
 
