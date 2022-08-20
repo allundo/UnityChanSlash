@@ -605,7 +605,7 @@ public class PlayerAttack : PlayerAction
         return Observable.Create<Unit>(o =>
         {
             Tween onNext = DOTweenTimer(duration * cancelStart, null).OnComplete(() => o.OnNext(Unit.Default)).Play();
-            Tween complete = DOTweenTimer(duration, null).OnComplete(o.OnCompleted).Play();
+            Tween complete = DOTweenTimer(duration, DoOnCompleted).OnComplete(o.OnCompleted).Play();
 
             return Disposable.Create(() =>
             {
