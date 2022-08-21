@@ -396,6 +396,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
         attackInputUI.AttackButtons
             .Subscribe(cmd => InputCommand(cmd))
             .AddTo(this);
+
+        PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
+        attackInputUI.IsChargingUp
+            .Subscribe(isChargingUp => anim.chargeUp.Bool = isChargingUp)
+            .AddTo(this);
     }
 
     /// <summary>
@@ -565,11 +570,15 @@ public class PlayerInput : ShieldInput, IPlayerInput
         public override bool IsShieldOn(IDirection attackDir)
             => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
-        public override void SetShield()
+        public override float SetShield()
         {
+            // Don't play shield motion when charging up.
+            if ((anim as PlayerAnimator).chargeUp.Bool) return 0.5f;
+
             input.ClearAll(true, false, 9);
             input.Interrupt(shieldOn);
             if (playerInput.isGuardOn) (input.commander as PlayerCommander).SetGuard(true);
+            return 1f;
         }
 
         public PlayerGuardState(PlayerInput input, float duration = 15f, float timeToReady = 0.15f) : base(input, duration, timeToReady)

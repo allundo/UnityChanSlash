@@ -28,6 +28,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorBool handOn { get; protected set; }
     public AnimatorBool cancel { get; protected set; }
     public AnimatorBool critical { get; protected set; }
+    public AnimatorBool chargeUp { get; protected set; }
     public AnimatorBool fall { get; protected set; }
     public AnimatorFloat lifeRatio { get; protected set; }
     public AnimatorFloat jumpHeight { get; protected set; }
@@ -54,6 +55,7 @@ public class PlayerAnimator : ShieldAnimator
         brake = new TriggerEx(triggers, anim, "Brake");
         cancel = new AnimatorBool(anim, "Cancel");
         critical = new AnimatorBool(anim, "Critical");
+        chargeUp = new AnimatorBool(anim, "ChargeUp");
         lifeRatio = new AnimatorFloat(anim, "LifeRatio");
         jumpHeight = new AnimatorFloat(anim, "JumpHeight");
         brakeOverRun = new AnimatorFloat(anim, "BrakeOverRun");

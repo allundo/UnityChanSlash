@@ -23,8 +23,8 @@ public class ShieldEnemyReactor : EnemyReactor
 
         if (guardState.IsShieldOn(dir))
         {
-            shield = mobStatus.Shield;
-            guardState.SetShield();
+            var shieldEffectiveness = guardState.SetShield();
+            shield = mobStatus.Shield * shieldEffectiveness;
             shieldEffect.DamageFlash(0.1f);
         }
 

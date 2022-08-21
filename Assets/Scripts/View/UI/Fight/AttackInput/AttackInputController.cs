@@ -60,7 +60,8 @@ public class AttackInputController : MonoBehaviour
 
     public bool InCircle(Vector2 screenPos) => UIPos(screenPos).sqrMagnitude < sqrRadius;
 
-    private bool isChargingUp = false;
+    public IReadOnlyReactiveProperty<bool> IsChargingUp => isChargingUp;
+    private IReactiveProperty<bool> isChargingUp = new ReactiveProperty<bool>(false);
     private Vector2 pointerVec = Vector2.zero;
 
     private float sqrKickRadius;
@@ -104,7 +105,7 @@ public class AttackInputController : MonoBehaviour
 
     void Update()
     {
-        if (isChargingUp) enemyTarget.SetPointer(pressPos + pointerVec);
+        if (isChargingUp.Value) enemyTarget.SetPointer(pressPos + pointerVec);
     }
 
     public void Release()
@@ -116,7 +117,7 @@ public class AttackInputController : MonoBehaviour
         effortPoint.Hide();
         targetPointer.Hide();
 
-        isChargingUp = false;
+        isChargingUp.Value = false;
         enemyTarget.SetPointer(Vector2.zero);
     }
 
@@ -137,9 +138,9 @@ public class AttackInputController : MonoBehaviour
         pointerVec = pressPos - screenPos;
         targetPointer.SetVerticesPos(pointerVec);
 
-        isChargingUp = !InCircle(screenPos);
+        isChargingUp.Value = !InCircle(screenPos);
 
-        if (isChargingUp)
+        if (isChargingUp.Value)
         {
             pivotPoint.EnableChargingUp();
             effortPoint.EnableChargingUp();
@@ -174,7 +175,7 @@ public class AttackInputController : MonoBehaviour
         effortPoint.Hide();
         targetPointer.Hide();
 
-        isChargingUp = false;
+        isChargingUp.Value = false;
 
         currentButton = null;
         pressPos = Vector2.zero;

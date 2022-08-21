@@ -107,15 +107,18 @@ public class PlayerReactor : MobReactor
     {
         if (restUI.isActive) return Mathf.Max(mobStatus.CalcAttack(attack, null, attr), 0.0f);
 
-        float shield = 0.0f;
+        float shield = 0f;
+        float minDamage = 0f;
 
         if (guardState.IsShieldOn(dir))
         {
-            shield = mobStatus.Shield;
-            guardState.SetShield();
+            float shieldEffectiveness = guardState.SetShield();
+            shield = mobStatus.Shield * shieldEffectiveness;
+
+            if (shieldEffectiveness < 1f) minDamage = 0.1f;
         }
 
-        return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, 0.0f);
+        return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, minDamage);
     }
 
     public void PitFall(float damage)

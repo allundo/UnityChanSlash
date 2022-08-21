@@ -61,10 +61,16 @@ public abstract class ShieldInput : MobInput
         }
 
         public virtual bool IsShieldOn(IDirection attackDir) => isShieldReady && map.dir.IsInverse(attackDir);
-        public virtual void SetShield()
+
+        /// <summary>
+        /// Input ShieldCommand and execute immediately
+        /// </summary>
+        /// <returns>Effectiveness of shield</returns>
+        public virtual float SetShield()
         {
             input.ClearAll(true, false, 9);
             input.Interrupt(shieldOn);
+            return 1f;
         }
 
         protected Tween readyTween = null;
