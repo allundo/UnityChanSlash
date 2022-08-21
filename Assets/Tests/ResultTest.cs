@@ -71,6 +71,16 @@ public class ResultTest
 
         yield return new WaitForSeconds(8f);
 
+        float sqrMaxDistance = (0.85f * 0.85f) * 3f;
+
+        bag.bagTf.ForEach(child =>
+        {
+            if ("Big500yen(Clone)" == child.gameObject.name)
+            {
+                Assert.Less((child.transform.position - bag.bagTf.position).sqrMagnitude, sqrMaxDistance, "A coin is out of the bag.");
+            }
+        });
+
         // tear down
         bag.Destroy();
     }
@@ -93,6 +103,16 @@ public class ResultTest
 
         yield return new WaitForSeconds(8f);
 
+        float sqrMaxDistance = (0.1f * 0.1f) * 3f;
+
+        bag.bagTf.ForEach(child =>
+        {
+            if ("Big500yen(Clone)" == child.gameObject.name)
+            {
+                Assert.Less((child.transform.position - bag.bagTf.position).sqrMagnitude, sqrMaxDistance, "A coin is out of the bag.");
+            }
+        });
+
         // tear down
         bag.Destroy();
     }
@@ -114,6 +134,47 @@ public class ResultTest
         Assert.AreEqual(BagSize.Middle, bag.bagSize);
 
         yield return new WaitForSeconds(8f);
+
+        float sqrMaxDistance = (0.25f * 0.25f) * 3f;
+
+        bag.bagTf.ForEach(child =>
+        {
+            if ("Big500yen(Clone)" == child.gameObject.name)
+            {
+                Assert.Less((child.transform.position - bag.bagTf.position).sqrMagnitude, sqrMaxDistance, "A coin is out of the bag.");
+            }
+        });
+
+        // tear down
+        bag.Destroy();
+    }
+    [UnityTest]
+    public IEnumerator _004_BigMoneyBagDropTest()
+    {
+        // setup
+        var bag = new BagControl(2000001);
+        var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
+
+        yield return new WaitForSeconds(4f);
+
+        // when
+        handler.StartAction();
+
+        // then
+        // Check visual by your own eyes
+        Assert.AreEqual(BagSize.Big, bag.bagSize);
+
+        yield return new WaitForSeconds(8f);
+
+        float sqrMaxDistance = (0.5f * 0.5f) * 3f;
+
+        bag.bagTf.ForEach(child =>
+        {
+            if ("Big500yen(Clone)" == child.gameObject.name)
+            {
+                Assert.Less((child.transform.position - bag.bagTf.position).sqrMagnitude, sqrMaxDistance, "A coin is out of the bag.");
+            }
+        });
 
         // tear down
         bag.Destroy();
