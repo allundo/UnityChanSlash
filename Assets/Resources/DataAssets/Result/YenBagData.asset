@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u5C0F\u888B"
-    coinScale: 0.1
+    coinScale: 0.05
     startPosition: {x: 0, y: 5, z: 0.35}
     rightHandOffsets:
     - {x: -0.125, y: 0.068, z: -0.053}
