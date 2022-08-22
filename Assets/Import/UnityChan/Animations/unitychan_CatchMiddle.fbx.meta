@@ -1,13 +1,13 @@
 fileFormatVersion: 2
 guid: 9bc7199c6493e4d3284581ad06a7c807
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
     second: Character1_Reference|Character1_ReferenceAction
   - first:
-      74: 5964220184489138430
+      74: 4009914833736653537
     second: CATCH_MIDDLE
   externalObjects: {}
   materials:
@@ -34,13 +34,13 @@ ModelImporter:
       0 (0.0%) Frame 0\n\tRightLowerLeg average position error 0.5 mm and maximum
       position error 12.6 mm at time 2: 4 (24.8%) Frame 52\n\tLeftUpperArm average
       position error 1.8 mm and maximum position error 9.3 mm at time 1:20 (21.0%)
-      Frame 44\n\tLeftLowerArm average position error 2.0 mm and maximum position
+      Frame 44\n\tLeftLowerArm average position error 2.1 mm and maximum position
       error 12.8 mm at time 0:10 (4.8%) Frame 10\n\tLeftHand average position error
-      1.1 mm and maximum position error 8.0 mm at time 3:23 (45.2%) Frame 95\n\tRightUpperArm
+      1.1 mm and maximum position error 7.8 mm at time 3:23 (45.2%) Frame 95\n\tRightUpperArm
       average position error 1.8 mm and maximum position error 9.3 mm at time 1:20
       (21.0%) Frame 44\n\tRightLowerArm average position error 1.8 mm and maximum
       position error 8.6 mm at time 0:17 (8.1%) Frame 17\n\tRightHand average position
-      error 1.2 mm and maximum position error 7.9 mm at time 3:23 (45.2%) Frame 95\n\tHead
+      error 1.2 mm and maximum position error 7.5 mm at time 3:23 (45.2%) Frame 95\n\tHead
       average position error 1.8 mm and maximum position error 9.3 mm at time 1:20
       (21.0%) Frame 44\n"
     animationDoRetargetingWarnings: 1
@@ -1167,6 +1167,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

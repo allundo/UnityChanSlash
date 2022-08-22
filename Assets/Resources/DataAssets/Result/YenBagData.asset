@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: "\u5C0F\u888B"
     coinScale: 0.1
     startPosition: {x: 0, y: 5, z: 0.35}
-    rightHandOffset: {x: -0.1233, y: 0.0695, z: -0.0513}
+    rightHandOffset: {x: -0.125, y: 0.068, z: -0.053}
     catchAngle: {x: 53.7, y: -18.2, z: 36.475}
     dropDelay: 0.65
     prefabYenBag: {fileID: 7311533902124115277, guid: c6b58027e66504b569d912388fc94a8f,
@@ -24,8 +24,8 @@ MonoBehaviour:
   - name: "\u4E2D\u888B"
     coinScale: 0.25
     startPosition: {x: 0, y: 5, z: 0.4}
-    rightHandOffset: {x: -0.272, y: 0.221, z: -0.1}
-    catchAngle: {x: 53.7, y: -18.2, z: 36.475}
+    rightHandOffset: {x: -0.032, y: 0.291, z: -0.198}
+    catchAngle: {x: 18.704, y: -60.842, z: -20.551}
     dropDelay: 1
     prefabYenBag: {fileID: 616785935331266334, guid: 92898bc3d24ed41bfb7057bc37b99d95,
       type: 3}
