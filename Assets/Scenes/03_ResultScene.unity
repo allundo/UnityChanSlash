@@ -3179,6 +3179,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 938733893717316175, guid: 1f19322abd2144e299c48eee70efdb51,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 938733893717316175, guid: 1f19322abd2144e299c48eee70efdb51,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -3964,6 +3969,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7746881989863010207, guid: 844bcd31b1883468b90078de04dde00f,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746881989863010207, guid: 844bcd31b1883468b90078de04dde00f,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -4318,6 +4328,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ceil
+      objectReference: {fileID: 0}
+    - target: {fileID: 3373339022193556799, guid: 5598aa51052274a9c9779b0ca7f4e5d3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3373339022193556799, guid: 5598aa51052274a9c9779b0ca7f4e5d3,
         type: 3}
