@@ -1,14 +1,14 @@
 fileFormatVersion: 2
 guid: 8214134d3037f4ecea62d7f54a9415bb
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
-    second: CATCH_SMALL
+    second: Character1_Reference|Character1_ReferenceAction
   - first:
-      74: 5964220184489138430
-    second: RESULT_POSE
+      74: 8016684635596440417
+    second: CATCH_SMALL
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -1154,6 +1154,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
