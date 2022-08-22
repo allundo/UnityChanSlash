@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public abstract class SceneMediator : MonoBehaviour
 {
@@ -62,6 +63,12 @@ public abstract class SceneMediator : MonoBehaviour
     {
         updateGameInfo();
         SceneTransition(startActionID);
+    }
+
+    protected void ForceTransitScene(int sceneBuildIndex, int startActionID)
+    {
+        GameInfo.Instance.startActionID = startActionID;
+        SceneManager.LoadScene(sceneBuildIndex);
     }
 
     /// <summary>

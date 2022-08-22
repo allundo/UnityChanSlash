@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
+using System.Threading;
 using UniRx;
 using DG.Tweening;
 
@@ -17,9 +18,9 @@ public class SceneLoader
     /// <param name="waitSec">Waiting unit time[sec]. Waiting is repeated until scene loading has finished.</param>
     /// <returns></returns>
     public IObservable<Unit> LoadSceneAsync(int sceneBuildIndex, float waitSec = 0f)
-        => Observable.FromCoroutine(() => LoadScene(sceneBuildIndex, waitSec));
+        => Observable.FromCoroutine(token => LoadScene(token, sceneBuildIndex, waitSec));
 
-    private IEnumerator LoadScene(int sceneBuildIndex, float waitSec = 0f)
+    private IEnumerator LoadScene(CancellationToken token, int sceneBuildIndex, float waitSec = 0f)
     {
         StartLoadScene(sceneBuildIndex);
 
@@ -29,6 +30,8 @@ public class SceneLoader
         {
             yield return waitFor;
         }
+
+        if (token.IsCancellationRequested) UnloadCurrentLoadingScene();
     }
 
     /// <summary>
@@ -51,6 +54,18 @@ public class SceneLoader
         }
 
         asyncLoad.allowSceneActivation = false;
+    }
+
+    public void UnloadCurrentLoadingScene()
+    {
+        if (currentLoading == -1) return;
+
+        // SceneManager can unload only activated scene.
+        DOTween.KillAll();
+        asyncLoad.allowSceneActivation = true;
+
+        asyncLoad = SceneManager.UnloadSceneAsync(currentLoading);
+        currentLoading = -1;
     }
 
     /// <summary>

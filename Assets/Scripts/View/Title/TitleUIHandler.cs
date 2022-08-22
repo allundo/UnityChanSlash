@@ -15,6 +15,8 @@ public class TitleUIHandler : MonoBehaviour
     [SerializeField] private TitleFaceAnimator unityChanAnim = default;
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] public Button[] debugStart = default;
+    [SerializeField] public Button[] debugEnding = default;
+    [SerializeField] public Button[] debugResult = default;
 
     private Transform tfUnityChan;
 
@@ -33,6 +35,8 @@ public class TitleUIHandler : MonoBehaviour
 
         // DEBUG ONLY
         debugStart.ForEach(btn => btn.gameObject.SetActive(Debug.isDebugBuild));
+        debugEnding.ForEach(btn => btn.gameObject.SetActive(Debug.isDebugBuild));
+        debugResult.ForEach(btn => btn.gameObject.SetActive(Debug.isDebugBuild));
     }
 
     public IObservable<Tween> Logo()
