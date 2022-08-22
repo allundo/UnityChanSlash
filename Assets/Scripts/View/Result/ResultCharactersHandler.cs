@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using UniRx;
 
 public class ResultCharactersHandler
 {
@@ -25,6 +26,16 @@ public class ResultCharactersHandler
         {
             StartAction = StartCatch;
         }
+
+        unityChanReactor.ReHold
+            .Subscribe(_ =>
+            {
+                yenBag.UpHoldResetPosition();
+            }, () =>
+            {
+                yenBag.CarryingResetPosition();
+            })
+            .AddTo(reactor.gameObject);
     }
 
     private void StartPress()

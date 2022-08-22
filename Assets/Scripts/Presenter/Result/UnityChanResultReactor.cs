@@ -18,6 +18,9 @@ public class UnityChanResultReactor : MonoBehaviour
     public IObservable<Unit> ScreenOut => screenOutSubject;
     private ISubject<Unit> screenOutSubject = new Subject<Unit>();
 
+    public IObservable<Unit> ReHold => reHoldSubject;
+    private ISubject<Unit> reHoldSubject = new Subject<Unit>();
+
     void Awake()
     {
         col = GetComponent<CapsuleCollider>();
@@ -33,6 +36,9 @@ public class UnityChanResultReactor : MonoBehaviour
     public void SetEyeClose() => anim.eyeClose.Fire();
     public void SetSurprise() => anim.surprise.Fire();
     public void SetDisattract() => anim.disattract.Fire();
+
+    public void UpHold() => reHoldSubject.OnNext(Unit.Default);
+    public void Carrying() => reHoldSubject.OnCompleted();
 
     public void WalkStart() => screenOutSubject.OnNext(Unit.Default);
     public void WalkEnd() => screenOutSubject.OnCompleted();

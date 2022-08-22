@@ -176,6 +176,8 @@ public class ResultTest
             }
         });
 
+        yield return new WaitForSeconds(4f);
+
         // tear down
         bag.Destroy();
     }

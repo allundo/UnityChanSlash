@@ -9,6 +9,9 @@ public class BagControl
     public Transform bagTf { get; private set; }
     public BagSize bagSize { get; private set; }
 
+    private Tween bagMoveTween;
+    private Tween bagRotateTween;
+
     public int surplusCoins { get; private set; } = 0;
 
     private Rigidbody sphereBody;
@@ -65,9 +68,24 @@ public class BagControl
         sphereBody.velocity = Vector3.zero;
 
         bagTf.SetParent(parent);
-        bagTf.DOLocalMove(bagSource.rightHandOffset, 0.5f).Play();
-        bagTf.DOLocalRotate(bagSource.catchAngle, 0.5f).Play();
+        bagMoveTween = bagTf.DOLocalMove(bagSource.rightHandOffsets[0], 0.5f).Play();
+        bagRotateTween = bagTf.DOLocalRotate(bagSource.catchAngles[0], 0.5f).Play();
     }
+
+    public void UpHoldResetPosition()
+    {
+        bagMoveTween?.Kill();
+        bagRotateTween?.Kill();
+        bagTf.DOLocalMove(bagSource.rightHandOffsets[1], 0.5f).Play();
+        bagTf.DOLocalRotate(bagSource.catchAngles[1], 0.5f).Play();
+    }
+
+    public void CarryingResetPosition()
+    {
+        bagTf.DOLocalMove(bagSource.rightHandOffsets[2], 0.5f).Play();
+        bagTf.DOLocalRotate(bagSource.catchAngles[2], 0.5f).Play();
+    }
+
 
     public void Destroy() => bag.Destroy();
 }

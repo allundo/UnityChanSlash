@@ -63,7 +63,6 @@ public class ResultSceneMediator : SceneMediator
                 }
             })
             .AddTo(this);
-
     }
 
     private void DebugResult()

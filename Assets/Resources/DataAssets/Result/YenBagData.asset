@@ -16,32 +16,56 @@ MonoBehaviour:
   - name: "\u5C0F\u888B"
     coinScale: 0.1
     startPosition: {x: 0, y: 5, z: 0.35}
-    rightHandOffset: {x: -0.125, y: 0.068, z: -0.053}
-    catchAngle: {x: 53.7, y: -18.2, z: 36.475}
+    rightHandOffsets:
+    - {x: -0.125, y: 0.068, z: -0.053}
+    - {x: -0.14, y: 0.016, z: -0.059}
+    - {x: -0.14, y: 0.016, z: -0.059}
+    catchAngles:
+    - {x: 53.7, y: -18.2, z: 36.475}
+    - {x: 53.7, y: -18.2, z: 36.475}
+    - {x: 53.7, y: -18.2, z: 36.475}
     dropDelay: 0.65
     prefabYenBag: {fileID: 7311533902124115277, guid: c6b58027e66504b569d912388fc94a8f,
       type: 3}
   - name: "\u4E2D\u888B"
     coinScale: 0.25
     startPosition: {x: 0, y: 5, z: 0.4}
-    rightHandOffset: {x: -0.032, y: 0.291, z: -0.198}
-    catchAngle: {x: 18.704, y: -60.842, z: -20.551}
+    rightHandOffsets:
+    - {x: -0.033, y: 0.385, z: -0.202}
+    - {x: -0.306, y: 0.12, z: -0.264}
+    - {x: -0.147, y: 0.25, z: -0.191}
+    catchAngles:
+    - {x: 18.704, y: -60.842, z: -20.551}
+    - {x: 23.425, y: -57.882, z: -14.892}
+    - {x: -5.606, y: -58.089, z: -27.344}
     dropDelay: 1
     prefabYenBag: {fileID: 616785935331266334, guid: 92898bc3d24ed41bfb7057bc37b99d95,
       type: 3}
   - name: "\u5927\u888B"
     coinScale: 0.5
     startPosition: {x: 0, y: 5, z: 0.65}
-    rightHandOffset: {x: -0.271, y: 0.331, z: -0.23}
-    catchAngle: {x: 17.318, y: -78.041, z: -51.378}
+    rightHandOffsets:
+    - {x: -0.125272, y: 0.199148, z: -0.3862475}
+    - {x: -0.271, y: 0.331, z: -0.23}
+    - {x: -0.235, y: 0.396, z: -0.116}
+    catchAngles:
+    - {x: 4.977, y: -92.198, z: -54.752}
+    - {x: 17.318, y: -78.041, z: -51.378}
+    - {x: 17.318, y: -78.041, z: -51.378}
     dropDelay: 1
     prefabYenBag: {fileID: 5303064818832279925, guid: 9d720bed7abbc4d889f83f10e498a8bb,
       type: 3}
   - name: "\u5DE8\u888B"
     coinScale: 1
     startPosition: {x: 0, y: 5, z: -0.25}
-    rightHandOffset: {x: 0, y: 0, z: 0}
-    catchAngle: {x: 0, y: 0, z: 0}
+    rightHandOffsets:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    catchAngles:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
     dropDelay: 0.65
     prefabYenBag: {fileID: 8504761741954600432, guid: e41b5396754f84b8485d972ca5ada2ea,
       type: 3}
