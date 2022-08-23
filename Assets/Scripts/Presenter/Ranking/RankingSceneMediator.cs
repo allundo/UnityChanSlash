@@ -1,6 +1,5 @@
 using UnityEngine;
 using UniRx;
-using DG.Tweening;
 
 public class RankingSceneMediator : SceneMediator
 {

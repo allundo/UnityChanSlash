@@ -8,20 +8,20 @@ using DG.Tweening;
 public class RankingUIHandler : MonoBehaviour
 {
     [SerializeField] private FadeScreen fade = default;
-    [SerializeField] private Image infoUI = default;
-    [SerializeField] private Image deadRankUI = default;
-    [SerializeField] private Image clearRankUI = default;
+    [SerializeField] private RecordsUI infoUI = default;
+    [SerializeField] private RecordsUI deadRankUI = default;
+    [SerializeField] private RecordsUI clearRankUI = default;
     [SerializeField] private Button toTitleBtn = default;
     [SerializeField] private Button rightBtn = default;
     [SerializeField] private Button leftBtn = default;
 
     private Button[] buttons;
-    private void SetEnableBtns(bool isEnable) => buttons.ForEach(btn => btn.enabled = isEnable);
+    private void SetInteractableBtns(bool isInteractable) => buttons.ForEach(btn => { btn.interactable = isInteractable; });
     public IObservable<object> TransitSignal;
 
-    private UITween leftUI;
-    private UITween centerUI;
-    private UITween rightUI;
+    private RecordsUI leftUI;
+    private RecordsUI centerUI;
+    private RecordsUI rightUI;
 
     private float width;
 
@@ -35,13 +35,13 @@ public class RankingUIHandler : MonoBehaviour
                 .ContinueWith(_ => fade.FadeOut(2f).OnCompleteAsObservable());
 
         buttons = new Button[] { toTitleBtn, rightBtn, leftBtn };
-        SetEnableBtns(false);
+        SetInteractableBtns(false);
 
         width = Screen.width;
 
-        leftUI = new UITween(deadRankUI.gameObject);
-        centerUI = new UITween(infoUI.gameObject);
-        rightUI = new UITween(clearRankUI.gameObject);
+        leftUI = deadRankUI;
+        centerUI = infoUI;
+        rightUI = clearRankUI;
 
         leftLabel = leftBtn.GetComponentInChildren<TextMeshProUGUI>();
         rightLabel = rightBtn.GetComponentInChildren<TextMeshProUGUI>();
@@ -65,16 +65,17 @@ public class RankingUIHandler : MonoBehaviour
     public void ViewInfo()
     {
         fade.color = Color.black;
-        fade.FadeIn(2f).OnComplete(() => SetEnableBtns(true)).Play();
+        fade.FadeIn(2f).OnComplete(() => SetInteractableBtns(true)).Play();
+        centerUI.DisplayRecords();
     }
 
     private Tween GoToRight()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetEnableBtns(false))
-            .Join(rightUI.MoveX(-width, 1f).SetEase(Ease.OutCubic))
-            .Join(centerUI.MoveX(-width, 1f).SetEase(Ease.OutCubic))
-            .Join(leftUI.MoveX(-width, 1f).SetEase(Ease.OutCubic))
+            .AppendCallback(() => SetInteractableBtns(false))
+            .Join(rightUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
+            .Join(centerUI.MoveX(-width, 0.6f).SetEase(Ease.Linear))
+            .Join(leftUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
             .OnComplete(() =>
             {
                 leftUI.SetPosX(width);
@@ -89,17 +90,21 @@ public class RankingUIHandler : MonoBehaviour
                 currentDisplay = rightLabel.text;
                 rightLabel.text = tmpLabel;
 
-                SetEnableBtns(true);
+                centerUI.DisplayRecords();
+                leftUI.HideRecords();
+                rightUI.HideRecords();
+
+                SetInteractableBtns(true);
             });
     }
 
     private Tween GoToLeft()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetEnableBtns(false))
-            .Join(rightUI.MoveX(width, 1f).SetEase(Ease.OutCubic))
-            .Join(centerUI.MoveX(width, 1f).SetEase(Ease.OutCubic))
-            .Join(leftUI.MoveX(width, 1f).SetEase(Ease.OutCubic))
+            .AppendCallback(() => SetInteractableBtns(false))
+            .Join(rightUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
+            .Join(centerUI.MoveX(width, 0.6f).SetEase(Ease.Linear))
+            .Join(leftUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
             .OnComplete(() =>
             {
                 rightUI.SetPosX(-width);
@@ -114,7 +119,11 @@ public class RankingUIHandler : MonoBehaviour
                 currentDisplay = leftLabel.text;
                 leftLabel.text = tmpLabel;
 
-                SetEnableBtns(true);
+                centerUI.DisplayRecords();
+                leftUI.HideRecords();
+                rightUI.HideRecords();
+
+                SetInteractableBtns(true);
             });
     }
 }
