@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 public abstract class SceneMediator : MonoBehaviour
@@ -68,6 +69,7 @@ public abstract class SceneMediator : MonoBehaviour
     protected void ForceTransitScene(int sceneBuildIndex, int startActionID)
     {
         GameInfo.Instance.startActionID = startActionID;
+        DOTween.KillAll();
         SceneManager.LoadScene(sceneBuildIndex);
     }
 

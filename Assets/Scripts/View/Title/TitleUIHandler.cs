@@ -21,6 +21,7 @@ public class TitleUIHandler : MonoBehaviour
     private Transform tfUnityChan;
 
     public IObservable<object> TransitSignal;
+    public IObservable<object> ResultsButtonSignal;
 
     void Awake()
     {
@@ -30,6 +31,12 @@ public class TitleUIHandler : MonoBehaviour
             selectButtons.startButton
                 .OnClickAsObservable()
                 .ContinueWith(_ => StartSequence().OnCompleteAsObservable());
+
+        ResultsButtonSignal =
+            selectButtons.resultsButton
+                .OnClickAsObservable()
+                .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable());
+
 
         fade.SetAlpha(1f);
 
@@ -99,5 +106,12 @@ public class TitleUIHandler : MonoBehaviour
                 .Append(unityChanDropTween)
                 .Join(fadeOutTween.SetDelay(0.75f))
                 .AppendInterval(0.5f);
+    }
+
+    private Tween ButtonSequence(TwoPushButton button)
+    {
+        return DOTween.Sequence()
+            .Append(button.PressedTween())
+            .Append(fade.FadeOut(1f));
     }
 }

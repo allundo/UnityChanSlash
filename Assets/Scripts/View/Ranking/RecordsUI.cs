@@ -11,13 +11,12 @@ public class RecordsUI : MonoBehaviour
     protected virtual void SetRecordsActive(bool isActive)
         => records.ForEach(record => record.gameObject.SetActive(isActive));
 
-    protected float width;
+    protected float width = 1080f;
     protected Tween slideInTween;
 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        width = Screen.width;
     }
 
     protected virtual void Start()

@@ -23,7 +23,7 @@ public class RankingUIHandler : MonoBehaviour
     private RecordsUI centerUI;
     private RecordsUI rightUI;
 
-    private float width;
+    private float width = 1080f;
 
     private string currentDisplay;
     private TextMeshProUGUI leftLabel;
@@ -36,8 +36,6 @@ public class RankingUIHandler : MonoBehaviour
 
         buttons = new Button[] { toTitleBtn, rightBtn, leftBtn };
         SetInteractableBtns(false);
-
-        width = Screen.width;
 
         leftUI = deadRankUI;
         centerUI = infoUI;
