@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using UniRx;
 using System;
+using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 
 [Ignore("Only for spec confirmation.")]
 public class CSharpSpecTest
@@ -23,8 +25,12 @@ public class CSharpSpecTest
         var encrypted = aesGcm.Encrypt(hexValueStr);
         var extractedStr = aesGcm.Decrypt(encrypted.Value, encrypted.Key);
 
+        var fabricated = Convert.ToBase64String(Convert.FromBase64String(encrypted.Value).Select(value => (byte)(value / 2)).ToArray());
+        var exception = Assert.Throws<CryptographicException>(() => aesGcm.Decrypt(fabricated, encrypted.Key));
+
         // then
         Assert.AreEqual(hexValueStr, extractedStr);
+        StringAssert.StartsWith("Bad PKCS7 padding. Invalid length", exception.Message);
     }
 
     private struct TestScores
