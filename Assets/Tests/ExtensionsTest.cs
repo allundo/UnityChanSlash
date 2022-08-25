@@ -79,4 +79,53 @@ public class ExtensionsTest
             Assert.IsNotNull(dir);
         }, null);
     }
+
+    private struct TestBooleanStruct
+    {
+        public TestBooleanStruct(bool value) { this.value = value; }
+        public bool value;
+    };
+
+    private class TestBooleanClass
+    {
+        public TestBooleanClass(bool value) { this.value = value; }
+        public bool value;
+    };
+
+    [Test]
+    /// <summary>
+    /// param T exceptFor mutable arguments of ForEach() can filter null. <br />
+    /// "pass by value" elements aren't updated by ForEach()
+    /// </summary>
+    public void _005_ForEachVariableAssignWithBoolCausesUnexpectedBreakTest()
+    {
+        // setup
+        var sutPrimitiveArray = new bool[4].Select(_ => true).ToArray();
+        var sutStruct = new TestBooleanStruct[4].Select(_ => new TestBooleanStruct(true)).ToArray();
+        var sutClass = new TestBooleanClass[4].Select(_ => new TestBooleanClass(true)).ToArray();
+
+        // when
+        bool resultPrimitiveArray = sutPrimitiveArray.ForEach(value => value = false);
+        bool resultStruct = sutStruct.ForEach(tb => tb.value = false);
+        bool resultClass = sutClass.ForEach(tb => tb.value = false);
+
+        // then
+        Assert.AreEqual(false, resultPrimitiveArray);   // ForEach loop breaks.
+        Assert.AreEqual(true, sutPrimitiveArray[0]);    // Primitive type elements aren't updated.
+        Assert.AreEqual(true, sutPrimitiveArray[1]);
+        Assert.AreEqual(true, sutPrimitiveArray[2]);
+        Assert.AreEqual(true, sutPrimitiveArray[3]);
+
+        Assert.AreEqual(false, resultStruct);           // ForEach loop breaks.
+        Assert.AreEqual(true, sutStruct[0].value);      // struct elements also aren't updated.
+        Assert.AreEqual(true, sutStruct[1].value);
+        Assert.AreEqual(true, sutStruct[2].value);
+        Assert.AreEqual(true, sutStruct[3].value);
+
+        Assert.AreEqual(false, resultClass);            // ForEach loop breaks.
+        Assert.AreEqual(false, sutClass[0].value);      // Only the first element is updated.
+        Assert.AreEqual(true, sutClass[1].value);
+        Assert.AreEqual(true, sutClass[2].value);
+        Assert.AreEqual(true, sutClass[3].value);
+    }
 }
