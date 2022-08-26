@@ -9,18 +9,33 @@ public abstract class AttackBehaviour : MonoBehaviour, IAttack
 [RequireComponent(typeof(Collider))]
 public class Attack : AttackBehaviour
 {
+    public struct AttackData
+    {
+        public AttackType type;
+        public AttackAttr attr;
+        public float multiplier;
+        public AttackData(float multiplier = 1f, AttackType type = AttackType.Smash, AttackAttr attr = AttackAttr.None)
+        {
+            this.multiplier = multiplier;
+            this.type = type;
+            this.attr = attr;
+        }
+    }
+
     [SerializeField] protected AttackType attackType = default;
     [SerializeField] protected AttackAttr attackAttr = default;
+    [SerializeField] protected float attackMultiplier = 1f;
 
     protected Collider attackCollider = default;
     protected IStatus status;
 
-    [SerializeField] protected float attackMultiplier = 1f;
+    protected AttackData data;
 
     protected virtual void Awake()
     {
         attackCollider = GetComponent<Collider>();
         status = GetComponentInParent<Status>();
+        data = new AttackData(attackMultiplier, attackType, attackAttr);
 
         attackCollider.enabled = false;
     }
@@ -41,7 +56,7 @@ public class Attack : AttackBehaviour
 
         if (null == targetMob) return null;
 
-        targetMob.Damage(status.attack * attackMultiplier, status.dir, attackType, attackAttr);
+        targetMob.Damage(status, data);
 
         return targetMob;
     }

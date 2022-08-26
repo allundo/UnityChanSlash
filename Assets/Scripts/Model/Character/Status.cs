@@ -2,15 +2,34 @@ using UnityEngine;
 using UniRx;
 using System;
 
-public interface IStatus
+public interface IAttacker
 {
     float attack { get; }
+    IDirection dir { get; }
+    string Name { get; }
+}
+
+public class Attacker : IAttacker
+{
+    public float attack { get; private set; }
+    public IDirection dir { get; private set; }
+    private string name;
+    public string Name => name;
+    public Attacker(float attack, IDirection dir, string name)
+    {
+        this.attack = attack;
+        this.dir = dir;
+        this.name = name;
+    }
+}
+
+public interface IStatus : IAttacker
+{
     GameObject gameObject { get; }
     bool IsAlive { get; }
 
     Vector3 Position { get; }
 
-    IDirection dir { get; }
     void SetDir(IDirection dir);
 
     IObservable<Unit> Active { get; }
@@ -36,13 +55,15 @@ public class Status : SpawnObject<Status>, IStatus
 {
     protected Param param;
 
+    public string Name => param.name;
+
     protected virtual float DefaultLifeMax => param.defaultLifeMax;
 
     public float attack { get; protected set; }
 
     public bool isOnGround { get; protected set; }
 
-    public virtual IDirection dir { get; protected set; }
+    public IDirection dir { get; protected set; }
     public void SetDir(IDirection dir) => this.dir = dir;
     private static readonly IDirection defaultDir = new South();
 

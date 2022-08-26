@@ -16,6 +16,8 @@ public class PlayerReactor : MobReactor
     protected PlayerInput playerInput;
     protected ParticleSystem iceCrashVFX;
 
+    public IAttacker lastAttacker { get; protected set; }
+
     protected GuardState guardState => playerInput.guardState;
 
     protected override void Awake()
@@ -91,6 +93,12 @@ public class PlayerReactor : MobReactor
         restUI.OnLifeChange(life, status.LifeMax.Value);
         playerAnim.lifeRatio.Float = LifeRatio(life);
 
+    }
+
+    public override float Damage(IAttacker attacker, Attack.AttackData attackData)
+    {
+        lastAttacker = attacker;
+        return base.Damage(attacker, attackData);
     }
 
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
