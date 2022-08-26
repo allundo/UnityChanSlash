@@ -10,9 +10,10 @@ public class MyAesGcm
     private byte[] key;
     private SHA256Hash hash = new SHA256Hash();
     private NonceStore nonceStore;
+    public KeyValuePair<string, byte[]> GetNonceData(string tag) => nonceStore.GetNanceData(tag);
 
     private RNGCryptoServiceProvider rngCSP = new RNGCryptoServiceProvider();
-    private byte[] GetBytes(int size)
+    public byte[] GetBytes(int size)
     {
         byte[] ret = new byte[size];
         rngCSP.GetBytes(ret);
@@ -22,14 +23,14 @@ public class MyAesGcm
     public MyAesGcm(byte[] key, byte[] tagHashKey = null)
     {
         this.key = key;
-        nonceStore = new NonceStore(tagHashKey ?? key);
+        nonceStore = new NonceStore(key, tagHashKey ?? key.Take(key.Length / 2).ToArray());
     }
 
     public KeyValuePair<string, string> Encrypt(string plainText)
     {
         using (Aes aesAlg = Aes.Create())
         {
-            byte[] nonce = GetBytes(aesAlg.BlockSize / 8);
+            byte[] nonce = GetBytes(key.Length / 2);
 
             aesAlg.Key = key;
             aesAlg.IV = nonce;
@@ -37,10 +38,8 @@ public class MyAesGcm
             var tag = hash.String(plainText, nonce);
             nonceStore[tag] = nonce;
 
-            // Create an encryptor to perform the stream transform.
             ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
-            // Create the streams used for encryption.
             using (MemoryStream msEncrypt = new MemoryStream())
             {
                 using (var gzipEncrypt = new GZipStream(msEncrypt, CompressionMode.Compress))
@@ -67,7 +66,6 @@ public class MyAesGcm
             aesAlg.Key = key;
             aesAlg.IV = nonceStore[tag];
 
-            // Create a decryptor to perform the stream transform.
             ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
             // Create the streams used for decryption.
@@ -97,12 +95,21 @@ public class MyAesGcm
     private class NonceStore
     {
         private byte[] key;
+        private byte[] tagHashKey;
         private Dictionary<string, byte[]> nonceStore;
+
+        public KeyValuePair<string, byte[]> GetNanceData(string tag)
+        {
+            var tagHash = hash.String(tag, tagHashKey);
+            return new KeyValuePair<string, byte[]>(tagHash, nonceStore[tagHash]);
+        }
+
         private SHA256Hash hash = new SHA256Hash();
 
-        public NonceStore(byte[] key, Dictionary<string, byte[]> nonceStore = null)
+        public NonceStore(byte[] key, byte[] tagHashKey, Dictionary<string, byte[]> nonceStore = null)
         {
             this.key = key;
+            this.tagHashKey = tagHashKey;
             this.nonceStore = nonceStore ?? new Dictionary<string, byte[]>();
         }
 
@@ -111,20 +118,66 @@ public class MyAesGcm
             get
             {
                 byte[] nonce;
-                if (!nonceStore.TryGetValue(hash.String(tag, key), out nonce))
+
+                if (!nonceStore.TryGetValue(hash.String(tag, tagHashKey), out nonce))
                 {
                     throw new CryptographicException("復号失敗: 不正タグ");
                 }
-                return nonce;
+                return Decrypt(nonce);
             }
             set
             {
-                nonceStore[hash.String(tag, key)] = value;
+                nonceStore[hash.String(tag, tagHashKey)] = Encrypt(value);
+            }
+        }
+
+        public byte[] Encrypt(byte[] src)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = key;
+                aesAlg.IV = tagHashKey;
+
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            swEncrypt.Write(Convert.ToBase64String(src));
+                        }
+                        return msEncrypt.ToArray();
+                    }
+                }
+            }
+        }
+
+        public byte[] Decrypt(byte[] src)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = key;
+                aesAlg.IV = tagHashKey;
+
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msDecrypt = new MemoryStream(src))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            return Convert.FromBase64String(srDecrypt.ReadToEnd());
+                        }
+                    }
+                }
             }
         }
     }
 
-    public class SHA256Hash
+    private class SHA256Hash
     {
         public bool Check(byte[] hash, byte[] raw, byte[] key)
             => Convert.ToBase64String(hash).Equals(String(raw, key));
