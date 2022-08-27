@@ -12,6 +12,8 @@ public interface IGameManager
     void Restart();
     void DebugStart();
 
+    ulong SumUpItemValue();
+
     void Exit();
     void EnterStair(bool isDownStairs);
 

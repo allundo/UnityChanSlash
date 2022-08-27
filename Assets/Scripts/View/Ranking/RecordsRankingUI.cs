@@ -1,29 +1,49 @@
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Linq;
 
 public class RecordsRankingUI : RecordsUI
 {
-    [SerializeField] private Image rank = default;
+    private Vector2 rankBasePos;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        rank.rectTransform.anchoredPosition = new Vector2(-20f + width, -80f);
-        rank.gameObject.SetActive(false);
+        rectTransform = GetComponent<RectTransform>();
+        rankBasePos = new Vector2(-20f + width, -80f);
+    }
 
-        records = new Image[10];
-        records[0] = rank;
+    public void LoadRecords<T>(List<T> rankRecords) where T : DataStoreAgent.DataArray
+    {
+        var length = rankRecords.Count;
+
+        if (length > 0)
+        {
+            records = new BaseRecord[length];
+            record.SetValues(rankRecords[0].GetValues(1));
+        }
+        else
+        {
+            records = new BaseRecord[1];
+        }
+
+        records[0] = record;
+        records[0].rectTransform.anchoredPosition = rankBasePos;
 
         var seq = DOTween.Sequence()
-            .Join(rank.rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative());
+            .Join(records[0].rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative());
 
-        for (int i = 1; i < 10; i++)
+        for (int i = 1; i < length; i++)
         {
-            records[i] = Instantiate(rank, transform);
-            records[i].gameObject.name = "Rank" + (i + 1);
-            records[i].rectTransform.anchoredPosition = new Vector2(-20f + i * 4 + width, -80f - 160f * i);
+            int rank = i + 1;
+            records[i] = Instantiate(record, transform);
+            records[i].gameObject.name = "Rank" + rank;
+            records[i].SetValues(rankRecords[i].GetValues(rank));
+            records[i].rectTransform.anchoredPosition = rankBasePos + new Vector2(4 * i, -160f * i);
             seq.Join(records[i].rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative().SetDelay(0.01f * i));
         }
+
+        SetRecordsActive(false);
 
         slideInTween = seq.AsReusable(gameObject);
     }

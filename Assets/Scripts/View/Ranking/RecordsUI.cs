@@ -1,12 +1,12 @@
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
-[RequireComponent(typeof(Image))]
 public class RecordsUI : MonoBehaviour
 {
+    [SerializeField] protected BaseRecord record = default;
+
     protected RectTransform rectTransform;
-    protected Image[] records;
+    protected BaseRecord[] records;
 
     protected virtual void SetRecordsActive(bool isActive)
         => records.ForEach(record => record.gameObject.SetActive(isActive));
@@ -14,17 +14,19 @@ public class RecordsUI : MonoBehaviour
     protected float width = 1080f;
     protected Tween slideInTween;
 
-    void Awake()
+    protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }
 
-    protected virtual void Start()
+    public void LoadRecords<T>(T rankRecord) where T : DataStoreAgent.DataArray
     {
-        records = new Image[] { transform.GetChild(1).GetComponent<Image>() };
+        records = new BaseRecord[] { record };
 
         records[0].rectTransform.anchoredPosition = new Vector2(width, 0f);
         slideInTween = records[0].rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative().AsReusable(gameObject);
+
+        records[0].gameObject.SetActive(false);
     }
 
     public void DisplayRecords()

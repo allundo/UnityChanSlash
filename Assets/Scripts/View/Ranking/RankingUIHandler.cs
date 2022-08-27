@@ -9,8 +9,8 @@ public class RankingUIHandler : MonoBehaviour
 {
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] private RecordsUI infoUI = default;
-    [SerializeField] private RecordsUI deadRankUI = default;
-    [SerializeField] private RecordsUI clearRankUI = default;
+    [SerializeField] private RecordsRankingUI deadRankUI = default;
+    [SerializeField] private RecordsRankingUI clearRankUI = default;
     [SerializeField] private Button toTitleBtn = default;
     [SerializeField] private Button rightBtn = default;
     [SerializeField] private Button leftBtn = default;
@@ -64,6 +64,11 @@ public class RankingUIHandler : MonoBehaviour
     {
         fade.color = Color.black;
         fade.FadeIn(2f).OnComplete(() => SetInteractableBtns(true)).Play();
+
+        deadRankUI.LoadRecords(DataStoreAgent.Instance.LoadDeadRecords());
+        clearRankUI.LoadRecords(DataStoreAgent.Instance.LoadClearRecords());
+        infoUI.LoadRecords(DataStoreAgent.Instance.LoadInfoRecord());
+
         centerUI.DisplayRecords();
     }
 

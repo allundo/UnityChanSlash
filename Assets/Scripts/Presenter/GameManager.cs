@@ -236,7 +236,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var gameInfo = GameInfo.Instance;
 
-        gameInfo.moneyAmount = input.GetItemInventory.SumUpPrices();
+        SumUpItemValue();
         gameInfo.clearTimeSec = tm.elapsedTimeSec;
         gameInfo.SetMapComp();
 
@@ -244,5 +244,12 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         cover.FadeOut(3f).SetEase(Ease.InCubic)
             .OnComplete(exitSubject.OnCompleted)
             .Play();
+    }
+
+    public ulong SumUpItemValue()
+    {
+        ulong moneyAmount = input.GetItemInventory.SumUpPrices();
+        GameInfo.Instance.moneyAmount = moneyAmount;
+        return moneyAmount;
     }
 }

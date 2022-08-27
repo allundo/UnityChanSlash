@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -182,5 +184,59 @@ public class UnityEngineSpecTest
         yield return null;
 
         Object.Destroy(slime);
+    }
+
+    public class NonSerializableClass
+    {
+        public int num = 64;
+        public string text = "default";
+
+        public byte[] byteArray = new byte[] { 0x23, 0xF4, 0x45, 0x33 };
+    }
+
+    [System.Serializable]
+    public class SerializableClass
+    {
+        public int num = 64;
+        public string text = "default";
+
+        public byte[] byteArray = new byte[] { 0x23, 0xF4, 0x45, 0x33 };
+    }
+
+    [System.Serializable]
+    public class NestedSerializableClass
+    {
+        public SerializableClass[] serializableClasses = new object[2].Select(_ => new SerializableClass()).ToArray();
+        public SerializableClass singleClass = new SerializableClass();
+    }
+
+    public List<int> intList = new List<int>() { 1, 2, 3, 4 };
+
+    public List<SerializableClass> serializableClassList = new object[3].Select(_ => new SerializableClass()).ToList();
+    public List<NonSerializableClass> nonSerializableClassList = new object[3].Select(_ => new NonSerializableClass()).ToList();
+
+    [Ignore("Only for spec confirmation.")]
+    [Test]
+    /// <summary>
+    /// Nested serializable class can be convert to JSON. <br />
+    /// Arrays can be convert to JSON only inside serializable class.
+    /// </summary>
+    public void UnityJsonSerializeTest()
+    {
+        Assert.AreEqual("{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}", JsonUtility.ToJson(new SerializableClass()));
+        Assert.AreEqual("{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}", JsonUtility.ToJson(new NonSerializableClass()));
+        Assert.AreEqual("{}", JsonUtility.ToJson(intList));
+        Assert.AreEqual("{}", JsonUtility.ToJson(intList.ToArray()));
+        Assert.AreEqual("{}", JsonUtility.ToJson(serializableClassList));
+        Assert.AreEqual("{}", JsonUtility.ToJson(serializableClassList.ToArray()));
+        Assert.AreEqual("{}", JsonUtility.ToJson(nonSerializableClassList));
+        Assert.AreEqual("{}", JsonUtility.ToJson(nonSerializableClassList.ToArray()));
+
+        Assert.AreEqual(
+            "{\"serializableClasses\":"
+                + "[{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]},{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}],"
+                + "\"singleClass\":{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}}",
+                JsonUtility.ToJson(new NestedSerializableClass())
+        );
     }
 }
