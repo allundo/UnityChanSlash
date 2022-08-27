@@ -3,97 +3,69 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System;
 using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 public class DataIOTest
 {
-    [Test]
-    /// <summary>
-    /// string encryption testing
-    /// </summary>
-    public void MyAesGcmEncryptTest()
+    private DataStoreAgent dataStoreAgent;
+    private string[] tempFiles;
+    private string[] fileNames;
+
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
     {
-        // setup
-        var nonceStore = new NonceStore(Encoding.UTF8.GetBytes("32byteSizeNonceKeyForUnitTesting"), Encoding.UTF8.GetBytes("16byteTagHashKey"));
-        var aesGcm = new MyAesGcm(Encoding.UTF8.GetBytes(@"<5s=-%s'2faHjUWs>?sd#aoY#f1GUfEa"), nonceStore);
-        var hexValueStr = "F0458";
+        dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgent>("Prefabs/System/DataStoreAgent"), Vector3.zero, Quaternion.identity); ;
 
-        // when
-        var encrypted = aesGcm.Encrypt(hexValueStr);
-        var encrypted2 = aesGcm.Encrypt(hexValueStr);
-        var extractedStr = aesGcm.Decrypt(encrypted.Value, encrypted.Key);
+        // Keep data files
 
-        var fabricated = Convert.ToBase64String(Convert.FromBase64String(encrypted.Value).Select(value => (byte)(value / 2)).ToArray());
-        var exception = Assert.Throws<CryptographicException>(() => aesGcm.Decrypt(fabricated, encrypted.Key));
-        var exception2 = Assert.Throws<CryptographicException>(() => aesGcm.Decrypt(encrypted.Value, nonceStore.GetNanceData(encrypted.Key).Key));
-
-        // then
-        Assert.AreEqual(hexValueStr, extractedStr);
-        Assert.AreNotEqual(encrypted.Value, encrypted2.Value, "The other encryption results should not match.");
-        Assert.AreNotEqual(encrypted.Key, encrypted2.Key, "The other encryption tags should not match.");
-        StringAssert.StartsWith("Bad PKCS7 padding. Invalid length", exception.Message);
-        StringAssert.StartsWith("Bad PKCS7 padding. Invalid length", exception.Message);
-    }
-
-    private struct TestScores
-    {
-        public UInt16 value1;
-        public UInt32 value2;
-        public UInt64 value3;
-    }
-
-    [Test]
-    /// <summary>
-    /// string compress testing
-    /// </summary>
-    public void JsonConvertTest()
-    {
-        // setup
-        var aesGcm = new MyAesGcm(Encoding.UTF8.GetBytes(@"<5s=-%s'2faHjUWs>?sd#aoY#f1GUfEa"));
-        var sut = new TestScores
-        {
-            value1 = 62222,
-            value2 = 1948987999,
-            value3 = 11234123441292997999,
+        fileNames = new string[] {
+            dataStoreAgent.DEAD_RECORD_FILE_NAME,
+            dataStoreAgent.CLEAR_RECORD_FILE_NAME,
+            dataStoreAgent.INFO_RECORD_FILE_NAME,
+            dataStoreAgent.SAVE_DATA_FILE_NAME
         };
+        tempFiles = fileNames.Select(name => LoadText(name)).ToArray();
+    }
 
-        // when
+    private string LoadText(string fileName)
+    {
+        try
+        {
+            return dataStoreAgent.LoadText(fileName);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("failed to open file: " + e.Message);
+            return "";
+        }
+    }
 
-        var jsonStr = JsonUtility.ToJson(sut);
-        var encrypted = aesGcm.Encrypt(jsonStr);
-        var decodedStruct = JsonUtility.FromJson<TestScores>(aesGcm.Decrypt(encrypted.Value, encrypted.Key));
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        // Restore data files
+        for (int i = 0; i < fileNames.Length; i++)
+        {
+            dataStoreAgent.SaveText(fileNames[i], tempFiles[i]);
+        }
 
-        // then
-        Assert.AreEqual("{\"value1\":62222,\"value2\":1948987999,\"value3\":11234123441292997999}", jsonStr);
-        Assert.AreEqual(sut.value1, decodedStruct.value1);
-        Assert.AreEqual(sut.value2, decodedStruct.value2);
-        Assert.AreEqual(sut.value3, decodedStruct.value3);
+        UnityEngine.Object.Destroy(dataStoreAgent.gameObject);
     }
 
     [Test]
-    /// <summary>
-    /// string SHA256 hash testing
-    /// </summary>
-    public void MySHA256HashTest()
+    public void _001_DeadRecordSaveAndLoadTest()
     {
         // setup
-        var key = Encoding.UTF8.GetBytes(@"<5s=-%s'2faHjUWs>?sd#aoY#f1GUfEa");
-        var key2 = Encoding.UTF8.GetBytes(@"s>?sd#aoY#f1GUfE");
-        var sha256Hash = new SHA256Hash();
-        var text = "test text for SHA256 customized class.";
-        var byteText = Encoding.UTF8.GetBytes(text);
+        LogAssert.Expect(LogType.Error, new Regex($"ファイルのロードに失敗: Could not find file \".*/{dataStoreAgent.DEAD_RECORD_FILE_NAME}\""));
 
-        // when
-        var hashByteText = sha256Hash.String(byteText);
-        var hashWithKey = sha256Hash.String(text, key);
+        dataStoreAgent.DeleteFile(dataStoreAgent.DEAD_RECORD_FILE_NAME);
+        dataStoreAgent.SaveDeadRecords(new Attacker(1f, null, "test"), 10000, 3);
 
-        // then
-        Assert.AreEqual(hashByteText, sha256Hash.String(text));
-        Assert.AreEqual(hashWithKey, sha256Hash.String(byteText, key));
+        var records = dataStoreAgent.LoadDeadRecords();
 
-        Assert.True(sha256Hash.Check(hashWithKey, text, key));
-        Assert.False(sha256Hash.Check(hashWithKey, text + "a", key));
-        Assert.False(sha256Hash.Check(hashWithKey, text, key2));
+        Assert.AreEqual(10000, records[0].moneyAmount);
+        Assert.AreEqual(3, records[0].floor);
+        Assert.AreEqual("testにやられた", records[0].causeOfDeath);
+        Assert.AreEqual("1,3,10000,testにやられた", string.Join(",", records[0].GetValues(1).Select(obj => obj.ToString())));
     }
 }

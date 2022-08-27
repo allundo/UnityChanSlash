@@ -738,7 +738,7 @@ public class PlayerDie : PlayerCommand
         playerAnim.die.Bool = true;
         playerTarget.gameOverUI.Play();
 
-        DataStoreAgent.Instance.SaveDeadRecords((react as PlayerReactor).lastAttacker);
+        DataStoreAgent.Instance.SaveDeadRecords((react as PlayerReactor).lastAttacker, GameManager.Instance.SumUpItemValue(), GameInfo.Instance.currentFloor);
 
         return ExecOnCompleted(() => mobReact.OnDisappear());
     }

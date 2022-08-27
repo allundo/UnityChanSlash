@@ -6,7 +6,10 @@ using System.Collections.Generic;
 
 public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 {
-    private readonly string DEAD_RECORD_FILE_NAME = "dead_r.dat";
+    public readonly string DEAD_RECORD_FILE_NAME = "dead_r.dat";
+    public readonly string CLEAR_RECORD_FILE_NAME = "clear_r.dat";
+    public readonly string INFO_RECORD_FILE_NAME = "info_r.dat";
+    public readonly string SAVE_DATA_FILE_NAME = "save_data.dat";
 
     private class RecordSet
     {
@@ -111,18 +114,24 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         aesGcm = new MyAesGcm(key, nonceStore);
     }
 
-    public void SaveDeadRecords(IAttacker attacker)
+    public void SaveDeadRecords(IAttacker attacker, ulong moneyAmount, int currentFloor)
     {
         deadRecords = LoadDeadRecords();
 
         var causeOfDeath = attacker.Name + "にやられた";
-        deadRecords.Add(new DeadRecord(GameManager.Instance.SumUpItemValue(), causeOfDeath, GameInfo.Instance.currentFloor));
+        deadRecords.Add(new DeadRecord(moneyAmount, causeOfDeath, currentFloor));
 
         deadRecords = deadRecords.OrderByDescending(record => record.moneyAmount).Where((r, index) => index < 10).ToList();
 
-        var encrypt = aesGcm.Encrypt(JsonUtility.ToJson(new RecordList<DeadRecord>(deadRecords)));
-        var nonceData = nonceStore.GetNanceData(tag);
-        SaveText(DEAD_RECORD_FILE_NAME, JsonUtility.ToJson(
+        SaveEncryptedRecords(deadRecords, DEAD_RECORD_FILE_NAME);
+    }
+
+    private void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
+    {
+        var encrypt = aesGcm.Encrypt(JsonUtility.ToJson(new RecordList<T>(records)));
+        var nonceData = nonceStore.GetNanceData(encrypt.Key);
+
+        SaveText(fileName, JsonUtility.ToJson(
             new RecordSet()
             {
                 tag = encrypt.Key,
@@ -132,13 +141,18 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             }));
     }
 
+    private List<T> LoadRecords<T>(string fileName) where T : DataArray
+    {
+        return JsonUtility.FromJson<RecordList<T>>(LoadJsonData(fileName)).records;
+    }
+
     public List<DeadRecord> LoadDeadRecords()
     {
         if (deadRecords != null) return deadRecords;
 
         try
         {
-            deadRecords = JsonUtility.FromJson<RecordList<DeadRecord>>(LoadJsonData(DEAD_RECORD_FILE_NAME)).records;
+            deadRecords = LoadRecords<DeadRecord>(DEAD_RECORD_FILE_NAME);
         }
         catch (Exception e)
         {
@@ -155,7 +169,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         try
         {
-            clearRecords = JsonUtility.FromJson<RecordList<ClearRecord>>(LoadJsonData("clear_r.dat")).records;
+            clearRecords = LoadRecords<ClearRecord>(CLEAR_RECORD_FILE_NAME);
         }
         catch (Exception e)
         {
@@ -171,7 +185,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         try
         {
-            infoRecord = JsonUtility.FromJson<InfoRecord>(LoadJsonData("info_r.dat"));
+            infoRecord = JsonUtility.FromJson<InfoRecord>(LoadJsonData(INFO_RECORD_FILE_NAME));
         }
         catch (Exception e)
         {
@@ -188,7 +202,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         try
         {
-            saveData = JsonUtility.FromJson<SaveData>(LoadJsonData("save_data.dat"));
+            saveData = JsonUtility.FromJson<SaveData>(LoadJsonData(SAVE_DATA_FILE_NAME));
         }
         catch (Exception e)
         {
@@ -199,14 +213,14 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return saveData;
     }
 
-    public string LoadJsonData(string fileName)
+    private string LoadJsonData(string fileName)
     {
         RecordSet set = JsonUtility.FromJson<RecordSet>(LoadText(fileName));
         nonceStore.SetNanceData(set.hash, set.nonce);
         return aesGcm.Decrypt(set.data, set.tag);
     }
 
-    private void SaveText(string fileName, string textToSave)
+    public void SaveText(string fileName, string textToSave)
     {
         var combinedPath = Path.Combine(GetSecureDataPath(), fileName);
         using (var streamWriter = new StreamWriter(combinedPath))
@@ -215,13 +229,18 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
     }
 
-    private string LoadText(string fileName)
+    public string LoadText(string fileName)
     {
         var combinedPath = Path.Combine(GetSecureDataPath(), fileName);
         using (var streamReader = new StreamReader(combinedPath))
         {
             return streamReader.ReadToEnd();
         }
+    }
+
+    public void DeleteFile(string fileName)
+    {
+        File.Delete(Path.Combine(GetSecureDataPath(), fileName));
     }
 
     ///  <summary>
