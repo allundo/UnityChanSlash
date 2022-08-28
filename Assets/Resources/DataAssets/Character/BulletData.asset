@@ -28,6 +28,10 @@ MonoBehaviour:
     attack: 1
     prefab: {fileID: 3117267473990809161, guid: 272a623016afd4f069287733f54d9183,
       type: 3}
+  - name: "\u30D7\u30EC\u30A4\u30E4\u30FC\u30C0\u30FC\u30AF\u30CF\u30A6\u30F3\u30C9"
+    defaultLifeMax: 20
+    attack: 1
+    prefab: {fileID: 876447074738078674, guid: 7370c86026237481a9b2a31145221f70, type: 3}
   - name: "\u56DE\u5FA9\u9B42"
     defaultLifeMax: 20
     attack: 1
