@@ -442,6 +442,9 @@ public enum ItemType
     Potion,
     KeyBlade,
     Coin,
+    FireRing,
+    IceRing,
+    DarkRing,
 }
 
 public enum ItemAttr

@@ -86,7 +86,7 @@ public class Commander
     }
 
     /// <summary>
-    /// Reserve new Command at first of command queue to execute immediately.
+    /// Reserve new Command at first in command queue to execute immediately.
     /// </summary>
     /// <param name="cmd">New Command to execute as interruption</param>
     /// <param name="isCancel">Cancels current executing command if TRUE</param>

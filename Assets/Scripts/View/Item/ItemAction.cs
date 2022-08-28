@@ -54,3 +54,20 @@ public class CoinAction : ItemAction
         return 0;
     }
 }
+
+public class MagicRingAction : ItemAction
+{
+    private BulletType bulletType;
+    private ICommand cmdFire;
+    public MagicRingAction(ItemAttr attr, BulletType bulletType) : base(attr)
+    {
+        this.bulletType = bulletType;
+    }
+
+    public override int Action(PlayerCommandTarget target)
+    {
+        // Force command input while PlayerInput.isCommandValid is false.
+        target.input.Interrupt(new PlayerFire(target, 0.5f, bulletType), false);
+        return 1;
+    }
+}

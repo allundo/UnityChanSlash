@@ -41,3 +41,24 @@ MonoBehaviour:
     duration: 0.2
     description: "\u30B3\u30E2\u30C9\u30C9\u30E9\u30B4\u30F3\u304C\u5F6B\u3089\u308C\u305F\u91D1\u8CA8\u3002\u3069\u3046\u3084\u3089\u4FA1\u5024\u306E\u3042\u308B\u672C\u7269\u3002\\n\u305C\u3072\u3068\u3082\u6301\u3063\u3066\u5E30\u308A\u305F\u3044\u3002"
     unitPrice: 852300
+  - name: "\u708E\u306E\u6307\u8F2A"
+    material: {fileID: 2100000, guid: 9804ad87caaa84909b4cc0740ffbec68, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.4
+    description: "\u708E\u306E\u9B54\u529B\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u706B\u7403\u3092\u653E\u3064\u3002"
+    unitPrice: 1000
+  - name: "\u6C37\u306E\u6307\u8F2A"
+    material: {fileID: 2100000, guid: 52d7adce0f9c84bb39e25dc008a8c734, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.4
+    description: "\u6C37\u306E\u9B54\u529B\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u51B7\u51CD\u5F3E\u3092\u653E\u3064\u3002"
+    unitPrice: 2000
+  - name: "\u95C7\u54AC\u306E\u6307\u8F2A"
+    material: {fileID: 2100000, guid: 137422c4669a9402480f7846693a5f75, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.4
+    description: "\u546A\u3044\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u57F7\u5FF5\u6DF1\u3044\u546A\u3044\u5F3E\u3092\u653E\u3064\u3002\\n\u6575\u306B\u5F53\u305F\u308B\u3068\u751F\u547D\u529B\u3092\u5438\u53CE\u3059\u308B\u3002"
+    unitPrice: 4000

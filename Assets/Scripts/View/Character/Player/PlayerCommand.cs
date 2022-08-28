@@ -709,6 +709,22 @@ public class PlayerKickCritical : PlayerCriticalAttack
     }
 }
 
+public class PlayerFire : PlayerAction
+{
+    protected BulletType type;
+    public PlayerFire(PlayerCommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
+    {
+        this.type = type;
+    }
+
+    protected override bool Action()
+    {
+        playerAnim.fire.Fire();
+        playingTween = target.magic?.MagicSequence(type, duration)?.Play();
+        return true;
+    }
+}
+
 public class PlayerItem : PlayerAction
 {
     protected ItemInfo itemInfo;

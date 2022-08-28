@@ -15,11 +15,11 @@ MonoBehaviour:
   setParams:
   - randomTypes: 0300000001000000
     singleTypes: 
-  - randomTypes: 0100000003000000
+  - randomTypes: 010000000300000004000000
     singleTypes: 
-  - randomTypes: 0100000003000000
+  - randomTypes: 01000000030000000400000004000000
     singleTypes: 
-  - randomTypes: 0100000003000000
+  - randomTypes: 0100000003000000050000000500000006000000
     singleTypes: 
-  - randomTypes: 0100000003000000
+  - randomTypes: 0100000003000000040000000500000006000000
     singleTypes: 02000000
