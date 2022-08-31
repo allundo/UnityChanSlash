@@ -46,7 +46,6 @@ public class DarkHoundReactor : BulletReactor
         var spiritsPower = Mathf.Abs(drain) * 0.5f;
 
         // Spirits refers to shooter(DarkHound's) status to calculate attack or heal power.
-        // TODO: Make sure not to refer to DarkHound's status after its destroying. e.g. Moving floor
         (status as IBulletStatus).SetAttack(Mathf.Max(spiritsPower * 0.2f, 0.05f));
 
         for (float power = 0f; power < spiritsPower; power += status.attack) launcher.Fire();

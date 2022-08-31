@@ -42,6 +42,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void MoveFloorCharacters(WorldMap map, Pos playerPos)
     {
+        // Enemies and bullets must be destroyed during the same frame.
         placeEnemyGenerator.SwitchWorldMap(map, playerPos);
 
         debugEnemyGenerators.ForEach(gen =>
@@ -50,6 +51,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
             gen.gameObject.SetActive(false);
         });
 
+        // Some bullets refer to a character status, so don't call Update() after the enemies had been destroyed.
         bulletGeneratorLoader.DestroyAll();
 
         lightGenerator.DestroyAll();
