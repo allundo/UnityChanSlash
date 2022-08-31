@@ -499,6 +499,7 @@ public enum BulletType
     DarkHound,
     PlayerDarkHound,
     HealSpirit,
+    DarkSpirit,
     WitchDouble,
 }
 

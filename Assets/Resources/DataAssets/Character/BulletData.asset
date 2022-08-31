@@ -35,7 +35,12 @@ MonoBehaviour:
   - name: "\u56DE\u5FA9\u9B42"
     defaultLifeMax: 20
     attack: 1
-    prefab: {fileID: 5802984532098829686, guid: 6d927ced0a9fe4b8fa38b4f43e817c0f,
+    prefab: {fileID: -3974267471264169496, guid: 6d927ced0a9fe4b8fa38b4f43e817c0f,
+      type: 3}
+  - name: "\u546A\u3044\u306E\u9B42"
+    defaultLifeMax: 20
+    attack: 1
+    prefab: {fileID: 2136232387469843385, guid: 581883ec8239b41feb1cf63e91ca58e4,
       type: 3}
   - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093\u5206\u8EAB"
     defaultLifeMax: 1

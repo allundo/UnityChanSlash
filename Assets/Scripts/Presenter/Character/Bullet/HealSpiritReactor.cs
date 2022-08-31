@@ -30,7 +30,7 @@ public class HealSpiritReactor : Reactor, IBulletReactor
         if (life <= 0.0f) OnDie();
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         MobReactor targetMob = other.GetComponent<MobReactor>();
         if (bulletStatus.shotBy.gameObject != targetMob?.gameObject) return;

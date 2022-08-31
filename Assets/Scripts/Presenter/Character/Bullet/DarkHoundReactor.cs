@@ -8,11 +8,13 @@ public class DarkHoundReactor : BulletReactor
     protected Transform targetTf = null;
     public float TargetAngle => targetTf == null ? 0f : Vector3.SignedAngle(transform.forward, targetTf.position - transform.position, Vector3.up);
     protected ILauncher healSpiritLauncher;
+    protected ILauncher darkSpiritLauncher;
 
     protected override void Awake()
     {
         base.Awake();
         healSpiritLauncher = new Launcher(status, BulletType.HealSpirit);
+        darkSpiritLauncher = new Launcher(status, BulletType.DarkSpirit);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,19 +42,21 @@ public class DarkHoundReactor : BulletReactor
 
         var lifeMax = status.LifeMax.Value;
 
-        (status as IBulletStatus).SetAttack(Mathf.Max(drain * 0.1f, 0.05f));
+        var launcher = drain < 0 ? darkSpiritLauncher : healSpiritLauncher;
+        var spiritsPower = Mathf.Abs(drain) * 0.5f;
 
-        while (drain > 0.0001f)
-        {
-            healSpiritLauncher.Fire();
-            drain -= status.attack * 2f;
-        }
+        // Spirits refers to shooter(DarkHound's) status to calculate attack or heal power.
+        // TODO: Make sure not to refer to DarkHound's status after its destroying. e.g. Moving floor
+        (status as IBulletStatus).SetAttack(Mathf.Max(spiritsPower * 0.2f, 0.05f));
+
+        for (float power = 0f; power < spiritsPower; power += status.attack) launcher.Fire();
 
         effect.OnDamage(lifeMax, type, attr);
         status.LifeChange(-lifeMax);
 
         return lifeMax;
     }
+
     public override void OnDie()
     {
         bodyCollider.enabled = false;

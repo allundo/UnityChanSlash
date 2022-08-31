@@ -8,14 +8,12 @@ public interface IBulletStatus : IStatus
 
 public class BulletStatus : Status, IBulletStatus
 {
-    [SerializeField] protected BulletType type;
-
     public IStatus shotBy { get; protected set; }
     public void SetAttack(float attack) => this.attack = attack;
 
     public virtual BulletStatus SetShooter(IStatus shooter)
     {
-        shotBy = type == BulletType.HealSpirit ? (shooter as IBulletStatus).shotBy : shooter;
+        shotBy = shooter;
         attack = shooter.attack;
         return this;
     }
