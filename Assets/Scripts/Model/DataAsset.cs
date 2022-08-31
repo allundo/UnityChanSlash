@@ -80,6 +80,8 @@ public class ItemSource
     [SerializeField] private string description = "説明";
     public string Description => description.Replace("\\n", "\n"); // strings on DataAsset cannot include NEW_LINE and escapes \
     [SerializeField] public int unitPrice = 0;
+    [SerializeField] public int numOfItemMin = 1;
+    [SerializeField] public int numOfItemMax = 1;
 }
 
 [System.Serializable]

@@ -54,7 +54,10 @@ public class ItemInfo : ICloneable
     protected ItemAction itemAction;
     public ItemAttr attr => itemAction.attr;
 
-    public ItemInfo(ItemSource itemSource, ItemType type, ItemAction itemAction, int numOfItem = 1)
+    public ItemInfo(ItemSource itemSource, ItemType type, ItemAction itemAction)
+        : this(itemSource, type, itemAction, UnityEngine.Random.Range(itemSource.numOfItemMin, itemSource.numOfItemMax + 1)) { }
+
+    public ItemInfo(ItemSource itemSource, ItemType type, ItemAction itemAction, int numOfItem)
     {
         this.onNumOfItemChange = new ReactiveProperty<int>(numOfItem);
 
@@ -67,6 +70,9 @@ public class ItemInfo : ICloneable
 
     public object Clone(int numOfItem)
         => new ItemInfo(itemSource, type, itemAction, numOfItem);
+
+    public object Generate()
+        => new ItemInfo(itemSource, type, itemAction);
 
     protected virtual void FXStart(Transform user)
     {

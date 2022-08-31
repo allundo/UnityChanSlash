@@ -82,11 +82,11 @@ public class ItemGenerator : MobGenerator<Item>
         for (int i = 0; i < singleItemTypes.Length && map.deadEndPos.Count > 0; i++)
         {
             var last = map.deadEndPos.Last();
-            Put(singleItemTypes[i], last.Key, last.Value.Backward);
+            PutNew(singleItemTypes[i], last.Key, last.Value.Backward);
             map.deadEndPos.Remove(last.Key);
         }
 
-        map.deadEndPos.ForEach(kvp => { Put(RandomItemType, kvp.Key, kvp.Value.Backward); });
+        map.deadEndPos.ForEach(kvp => { PutNew(RandomItemType, kvp.Key, kvp.Value.Backward); });
         map.deadEndPos.Clear();
     }
 
@@ -108,7 +108,10 @@ public class ItemGenerator : MobGenerator<Item>
         return false;
     }
 
-    public bool Put(ItemType itemType, Pos pos, IDirection dir = null, int numOfItem = 1)
+    public bool PutNew(ItemType itemType, Pos pos, IDirection dir = null)
+        => Put(itemInfo[itemType].Generate() as ItemInfo, pos, dir);
+
+    public bool PutNew(ItemType itemType, int numOfItem, Pos pos, IDirection dir = null)
         => Put(itemInfo[itemType].Clone(numOfItem) as ItemInfo, pos, dir);
 
     public void Turn(IDirection dir)
