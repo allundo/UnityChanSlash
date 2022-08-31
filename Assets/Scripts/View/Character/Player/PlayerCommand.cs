@@ -720,7 +720,7 @@ public class PlayerFire : PlayerAction
     protected override bool Action()
     {
         playerAnim.fire.Fire();
-        playingTween = target.magic?.MagicSequence(type, duration)?.Play();
+        completeTween = target.magic?.MagicSequence(type, duration * 2.5f)?.Play();
         return true;
     }
 }
