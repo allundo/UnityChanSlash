@@ -51,7 +51,7 @@ MonoBehaviour:
     numOfItemMax: 4
   - name: "\u708E\u306E\u6307\u8F2A"
     material: {fileID: 2100000, guid: 9804ad87caaa84909b4cc0740ffbec68, type: 2}
-    vfx: {fileID: 0}
+    vfx: {fileID: 5345454869224519677, guid: 0f60548c57a78426190d8ee4731e2972, type: 3}
     sfx: {fileID: 0}
     duration: 0.4
     description: "\u708E\u306E\u9B54\u529B\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u706B\u7403\u3092\u653E\u3064\u3002"
@@ -60,7 +60,7 @@ MonoBehaviour:
     numOfItemMax: 20
   - name: "\u6C37\u306E\u6307\u8F2A"
     material: {fileID: 2100000, guid: 52d7adce0f9c84bb39e25dc008a8c734, type: 2}
-    vfx: {fileID: 0}
+    vfx: {fileID: 8399426352192713591, guid: 7ab49c5ab65064fb48665c0d1eae6086, type: 3}
     sfx: {fileID: 0}
     duration: 0.4
     description: "\u6C37\u306E\u9B54\u529B\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u51B7\u51CD\u5F3E\u3092\u653E\u3064\u3002"
@@ -69,7 +69,7 @@ MonoBehaviour:
     numOfItemMax: 20
   - name: "\u95C7\u306E\u6307\u8F2A"
     material: {fileID: 2100000, guid: 137422c4669a9402480f7846693a5f75, type: 2}
-    vfx: {fileID: 0}
+    vfx: {fileID: 3340609606120145378, guid: 3e214edc0251b4a04a2d73f8093d9044, type: 3}
     sfx: {fileID: 0}
     duration: 0.4
     description: "\u546A\u3044\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u57F7\u5FF5\u6DF1\u3044\u546A\u3044\u5F3E\u3092\u653E\u3064\u3002\\n\u6575\u306B\u5F53\u305F\u308B\u3068\u751F\u547D\u529B\u3092\u5438\u53CE\u3059\u308B\u3002"
