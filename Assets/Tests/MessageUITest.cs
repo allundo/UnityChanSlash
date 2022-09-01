@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using DG.Tweening;
 using Moq;
+using Object = UnityEngine.Object;
 
 public class MessageUITest
 {
@@ -67,11 +70,14 @@ public class MessageUITest
 
         Object.Destroy(messageUI.gameObject);
     }
-    private IEnumerator ReadMessages(BoardMessageData[] msgs)
+    private IEnumerator ReadMessages(BoardMessageData[] boardMessages)
+        => ReadMessages(boardMessages.Select(msg => msg.Convert()));
+
+    private IEnumerator ReadMessages(IEnumerable<MessageData[]> msgs)
     {
         foreach (var msg in msgs)
         {
-            yield return messageUI.StartCoroutine(ReadMessageData(msg.Convert()));
+            yield return messageUI.StartCoroutine(ReadMessageData(msg));
             yield return new WaitForSeconds(0.6f);
         }
     }
@@ -135,8 +141,6 @@ public class MessageUITest
         yield return new WaitForSeconds(1f);
     }
 
-
-
     [UnityTest]
     public IEnumerator _003_RandomBoardMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
     {
@@ -144,6 +148,23 @@ public class MessageUITest
         yield return null;
 
         yield return messageUI.StartCoroutine(ReadMessages(randomMsgs));
+
+        yield return new WaitForSeconds(1f);
+    }
+
+    [UnityTest]
+    public IEnumerator _004_ItemInspectMessagesTest()
+    {
+        List<MessageData[]> itemDescriptions = new List<MessageData[]>();
+
+        foreach (var type in Enum.GetValues(typeof(ItemType)))
+        {
+            itemDescriptions.Add(MessageData.ItemDescription(new ItemInfo(resourceLoader.itemData.Param((int)type), (ItemType)type, null)));
+        }
+
+        yield return null;
+
+        yield return messageUI.StartCoroutine(ReadMessages(itemDescriptions));
 
         yield return new WaitForSeconds(1f);
     }
