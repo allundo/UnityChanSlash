@@ -98,9 +98,11 @@ public class MessageUITest
             messageUI.OnPointerUp(null);
             yield return null;
 
+            // Full sentence is displayed by a tap simulation.
             if (duration > readTime)
             {
                 yield return new WaitForSeconds(readTime);
+                // Tap to next message.
                 messageUI.OnPointerUp(null);
             }
         }
@@ -125,7 +127,7 @@ public class MessageUITest
             new MessageData("09_恥ずかし", FaceID.ASHAMED),
             new MessageData("10_びっくり", FaceID.SURPRISE),
             new MessageData("-1_なし", FaceID.NONE),
-        }, 0.75f));
+        }, 0.25f));
 
         yield return new WaitForSeconds(0.6f);
     }
