@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setParams:
   - name: "ExitDoor\u8AAC\u660E"
-    sentence: "\u3010\u8A66\u7DF4\u306E\u8FF7\u5BAE\u3011\\n\u8FF7\u5BAE\u306E\u756A\u4EBA\u3092\u5012\u305B\uFF01\uFF01\\n\u5C01\u5370\u3055\u308C\u3057\u5263\u304C\u9375\u3068\u306A\u308A\u3001\u9053\u306F\u958B\u3051\u308B\u3067\u3042\u308D\u3046\u3002"
+    sentence: "\u8FF7\u5BAE\u306E\u756A\u4EBA\u3092\u5012\u305B\uFF01\uFF01\\n\u5C01\u5370\u3055\u308C\u3057\u5263\u304C\u9375\u3068\u306A\u308A\u3001\u9053\u306F\u958B\u3051\u308B\u3067\u3042\u308D\u3046\u3002"
     face: -1
     fontSize: 72
     literalsPerSec: 1000
     alignment: 514
+    title: "\u3010\u8A66\u7DF4\u306E\u8FF7\u5BAE\u3011"
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}
+    caption: 
     ignoreIfRead: 0
   - name: "ExitDoor\u53CD\u5FDC1"
     sentence: "\u9375\u63A2\u3057\u306E\u304A\u3064\u304B\u3044\u30FB\u30FB\u30FB"
@@ -28,8 +30,10 @@ MonoBehaviour:
     fontSize: 64
     literalsPerSec: 20
     alignment: 257
+    title: 
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}
+    caption: 
     ignoreIfRead: 1
   - name: "ExitDoor\u53CD\u5FDC2"
     sentence: "\u7D42\u308F\u3063\u305F\u3089\u3001\u305F\u3093\u307E\u308A\u30AE\u30E3\u30E9\u9802\u304D\u307E\u3059\u304B\u3089\u306D\u3063\uFF01"
@@ -37,6 +41,8 @@ MonoBehaviour:
     fontSize: 64
     literalsPerSec: 20
     alignment: 257
+    title: 
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}
+    caption: 
     ignoreIfRead: 1

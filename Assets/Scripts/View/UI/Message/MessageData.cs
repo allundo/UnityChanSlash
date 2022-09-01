@@ -24,6 +24,7 @@ public struct MessageData
     public float fontSize;
     public float literalsPerSec;
     public TextAlignmentOptions alignment;
+    public string title;
     public Sprite spriteImage;
     public Material matImage;
     public string caption;
@@ -36,6 +37,7 @@ public struct MessageData
         float fontSize = 64f,
         float literalsPerSec = 20f,
         TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
+        string title = null,
         Sprite spriteImage = null,
         Material matImage = null,
         string caption = null,
@@ -47,6 +49,7 @@ public struct MessageData
         this.fontSize = fontSize;
         this.literalsPerSec = literalsPerSec;
         this.alignment = alignment;
+        this.title = title;
         this.spriteImage = spriteImage;
         this.matImage = matImage;
         this.caption = caption;
@@ -56,6 +59,7 @@ public struct MessageData
 
     public static MessageData[] Inspect(
         string sentence,
+        string title,
         Sprite spriteImage = null,
         Material matImage = null,
         string caption = null,
@@ -64,18 +68,19 @@ public struct MessageData
         float literalsPerSec = 1000f
     )
     {
-        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, spriteImage, matImage, caption) };
+        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption) };
     }
 
     public static MessageData[] ItemDescription(ItemInfo itemInfo)
     {
         return Inspect(
-            "【" + itemInfo.name + "】 × " + itemInfo.numOfItem + "\n\n" + itemInfo.description,
+            itemInfo.description,
+            "【" + itemInfo.name + "】 × " + itemInfo.numOfItem,
             null,
             itemInfo.material,
             "価格\n" + itemInfo.Price + " 円",
-            TextAlignmentOptions.MidlineLeft,
-            64f
+            TextAlignmentOptions.TopLeft,
+            52f
         );
     }
 }

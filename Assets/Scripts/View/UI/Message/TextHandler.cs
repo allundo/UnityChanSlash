@@ -8,11 +8,13 @@ public class TextHandler : MonoBehaviour
 {
     [SerializeField] private CharacterUI characterUI = default;
     [SerializeField] private ImageIcon imageIcon = default;
+    [SerializeField] private TextMeshProUGUI tmTitle = default;
 
     private RectTransform rectTransform;
     private RectTransform iconRT;
     private Vector2 defaultPos;
     private Vector2 defaultSize;
+    private Vector2 titleSize;
     private string currentSentence = "";
     private int currentLength = 0;
     private float currentLiterals = 0;
@@ -36,6 +38,7 @@ public class TextHandler : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
         defaultPos = rectTransform.anchoredPosition;
         defaultSize = rectTransform.sizeDelta;
+        titleSize = tmTitle.GetComponent<RectTransform>().sizeDelta;
     }
 
     void Update()
@@ -80,7 +83,9 @@ public class TextHandler : MonoBehaviour
         {
             tm.text = currentSentence = "";
             characterUI.DispFace(FaceID.NONE);
-            DisableIcon();
+            SetImage(null, null);
+            SetTitle(null);
+            ResetTransform(Vector2.zero);
 
             sentence.OnCompleted();
             // Initialize a Subject again because RepeatUntilDestroy() operator sends OnCompleted message ONLY ONCE when destroyed.
@@ -106,7 +111,10 @@ public class TextHandler : MonoBehaviour
         currentSentence = currentData.sentence;
         currentLength = currentSentence.Length;
         characterUI.DispFace(currentData.face);
-        SetImage(currentData.spriteImage, currentData.matImage, currentData.caption);
+
+        var deltaX = SetImage(currentData.spriteImage, currentData.matImage, currentData.caption);
+        var deltaY = SetTitle(currentData.title);
+        ResetTransform(new Vector2(deltaX, deltaY));
 
         if (currentData.literalsPerSec > 999.9f)
         {
@@ -127,35 +135,37 @@ public class TextHandler : MonoBehaviour
                 .Play();
     }
 
-    private void DisableIcon() => SetImage(null, null);
-    private void SetImage(Sprite sprite, Material material, string caption = null)
+    private float SetImage(Sprite sprite, Material material, string caption = null)
     {
         imageIcon.SetCaption(caption);
 
         if (sprite == null && material == null)
         {
             imageIcon.SetEnabled(false);
-            ResetTransform();
-            return;
+            return 0f;
         }
 
         imageIcon.SetSource(sprite, material);
         imageIcon.SetEnabled(true);
-        SpaceLeft(imageIcon.ImageSpace);
+        return imageIcon.ImageSpace * 0.5f;
     }
 
-    private void SpaceLeft(float sizeX) => SetPosX(sizeX * 0.5f);
-    private void SpaceRight(float sizeX) => SetPosX(-sizeX * 0.5f);
-
-    private void SetPosX(float deltaX)
+    private float SetTitle(string title = null)
     {
-        rectTransform.anchoredPosition += new Vector2(deltaX, 0f);
-        rectTransform.sizeDelta = defaultSize - new Vector2(Mathf.Abs(deltaX) * 2f, 0);
+        if (title == null || title == "")
+        {
+            tmTitle.enabled = false;
+            return 0f;
+        }
+
+        tmTitle.text = title;
+        tmTitle.enabled = true;
+        return -titleSize.y * 0.4f;
     }
 
-    private void ResetTransform()
+    private void ResetTransform(Vector2 delta)
     {
-        rectTransform.anchoredPosition = defaultPos;
-        rectTransform.sizeDelta = defaultSize;
+        rectTransform.anchoredPosition = defaultPos + delta;
+        rectTransform.sizeDelta = defaultSize - new Vector2(Mathf.Abs(delta.x), Mathf.Abs(delta.y)) * 2f;
     }
 }

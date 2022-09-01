@@ -131,6 +131,7 @@ public class MessageSource
     [SerializeField] public float fontSize = 64f;
     [SerializeField] public float literalsPerSec = 20f;
     [SerializeField] public TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft;
+    [SerializeField] public string title = null;
     [SerializeField] public Sprite spriteImage = null;
     [SerializeField] public Material matImage = null;
     [SerializeField] public string caption = "";
@@ -142,6 +143,7 @@ public class MessageSource
         float fontSize = 64f,
         float literalsPerSec = 20f,
         TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
+        string title = null,
         Sprite spriteImage = null,
         Material matImage = null,
         string caption = null,
@@ -153,6 +155,7 @@ public class MessageSource
         this.fontSize = fontSize;
         this.literalsPerSec = literalsPerSec;
         this.alignment = alignment;
+        this.title = title;
         this.spriteImage = spriteImage;
         this.matImage = matImage;
         this.caption = caption;
@@ -160,7 +163,7 @@ public class MessageSource
     }
 
     public MessageData Convert()
-        => new MessageData(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, spriteImage, matImage, caption, ignoreIfRead);
+        => new MessageData(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption, ignoreIfRead);
 }
 
 [System.Serializable]
