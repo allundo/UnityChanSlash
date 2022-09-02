@@ -8,6 +8,7 @@ public class Target : FadeActivate
     [SerializeField] ParticleSystem pointerOnFX = default;
     [SerializeField] float bullEyeRadius = 25f;
     [SerializeField] float activeBullEyeRadius = 60f;
+    [SerializeField] TargetName targetName = default;
 
     private IEnemyStatus status;
     private RectTransform rectTransform;
@@ -53,6 +54,7 @@ public class Target : FadeActivate
     {
         corner.FadeActivate();
         center.FadeActivate();
+        targetName.Activate(status.Name);
     }
 
     public void FadeInactivate()
@@ -64,6 +66,7 @@ public class Target : FadeActivate
     {
         corner.FadeInactivate();
         center.FadeInactivate();
+        targetName.Inactivate();
     }
 
     public void SetPointer(Vector2 pointerPos)
