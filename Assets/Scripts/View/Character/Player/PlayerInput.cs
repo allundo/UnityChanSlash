@@ -450,7 +450,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         itemInventory.OnUseItem
-            .Subscribe(itemInfo => Interrupt(new PlayerItem(playerTarget, itemInfo), false))
+            .Subscribe(itemInfo => { if (!IsItemUse) Interrupt(new PlayerItem(playerTarget, itemInfo), false); })
             .AddTo(this);
 
         itemInventory.OnInspectItem
