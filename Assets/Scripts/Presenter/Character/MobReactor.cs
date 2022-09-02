@@ -100,7 +100,7 @@ public class MobReactor : Reactor, IMobReactor
     public bool Heal(float life, bool isEffectOn = true, bool healAnyway = false)
         => HealRatio(LifeRatio(life), isEffectOn, healAnyway);
 
-    protected float LifeRatio(float life) => Mathf.Clamp01(life / mobStatus.LifeMax.Value);
+    protected float LifeRatio(float life) => Mathf.Clamp(life / mobStatus.LifeMax.Value, -1f, 1f);
 
     protected virtual float CalcDamage(float attack, IDirection dir, AttackAttr attr)
     {

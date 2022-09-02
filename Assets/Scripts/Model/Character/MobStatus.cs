@@ -52,7 +52,12 @@ public class MobStatus : Status, IMobStatus
 
     public virtual float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None)
     {
-        return attack * ArmorMultiplier * dirDamageMultiplier[GetDamageType(attackDir)] * attrDamageMultiplier[attr];
+        var attrDM = attrDamageMultiplier[attr];
+
+        // Direction doesn't affect attack power when absorbing attribute of the attack.
+        var dirDM = attrDM > 0f ? dirDamageMultiplier[GetDamageType(attackDir)] : 1f;
+
+        return attack * ArmorMultiplier * dirDM * attrDM;
     }
 
     protected DamageType GetDamageType(IDirection attackerDir)
