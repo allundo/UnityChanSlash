@@ -77,7 +77,11 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         // Taming process
         if (attackData.attr == AttackAttr.Coin)
         {
-            if (enemyStatus.TryTame())
+            if (IsTamed)
+            {
+                ActiveMessageController.Instance.InputMessageData(ActiveMessageData.AlreadyTamed(enemyStatus));
+            }
+            else if (enemyStatus.TryTame())
             {
                 ActiveMessageController.Instance.InputMessageData(ActiveMessageData.TameSucceeded(enemyStatus));
             }
