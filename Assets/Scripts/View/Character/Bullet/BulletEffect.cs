@@ -12,14 +12,14 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
 
     [SerializeField] protected Transform meshTf = null;
     [SerializeField] protected float dyingFXDuration = 0f;
-    [SerializeField] protected float cycle = 0f;
+    [SerializeField] protected float cycleTimeSec = 0f;
     [SerializeField] protected Color blinkColor = default;
 
     protected MatColorEffect bulletMatEffect = null;
 
     protected virtual void Awake()
     {
-        bulletMatEffect = new BulletMatEffect(meshTf, dyingFXDuration, cycle, blinkColor);
+        bulletMatEffect = new BulletMatEffect(meshTf, dyingFXDuration, cycleTimeSec, blinkColor);
     }
 
     protected virtual Tween RollingTween(float duration = 0.25f)

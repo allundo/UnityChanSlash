@@ -19661,7 +19661,7 @@ MonoBehaviour:
   fireSound: {fileID: 7336173056944310187}
   meshTf: {fileID: 1640280623493695043}
   dyingFXDuration: 2
-  cycle: 10
+  cycleTimeSec: 0.25
   blinkColor: {r: 1, g: 0.975, b: 0, a: 1}
 --- !u!114 &979957346593184715
 MonoBehaviour:

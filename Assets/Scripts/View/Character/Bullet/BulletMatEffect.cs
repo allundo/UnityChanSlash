@@ -13,15 +13,15 @@ public class BulletMatEffect : MatColorEffect
 
     protected override void InitProperty(Material mat, int propID) => mat.color = new Color(0, 0, 0, 1);
 
-    public BulletMatEffect(Transform targetTf, float dyingFXDuration = 0f, float cycle = 0f, Color blinkColor = default) : base(targetTf)
+    public BulletMatEffect(Transform targetTf, float dyingFXDuration = 0f, float cycleTimeSec = 0f, Color blinkColor = default) : base(targetTf)
     {
         meshTf = targetTf;
         defaultScale = meshTf.localScale;
         this.dyingFXDuration = dyingFXDuration;
 
-        if (cycle > 0f)
+        if (cycleTimeSec > 0f)
         {
-            rollingTween = meshTf.DOLocalRotate(new Vector3(0f, 0f, 90f), cycle * 0.25f, RotateMode.FastBeyond360)
+            rollingTween = meshTf.DOLocalRotate(new Vector3(0f, 0f, 90f), cycleTimeSec * 0.25f, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear)
                 .SetRelative()
                 .SetLoops(-1, LoopType.Incremental);
