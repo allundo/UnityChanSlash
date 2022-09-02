@@ -724,6 +724,17 @@ public class PlayerFire : PlayerAction
         return true;
     }
 }
+public class PlayerCoinThrow : PlayerAction
+{
+    public PlayerCoinThrow(PlayerCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool Action()
+    {
+        playerAnim.coin.Fire();
+        completeTween = target.magic?.MagicSequence(BulletType.Coin, duration * 2.5f)?.Play();
+        return true;
+    }
+}
 
 public class PlayerItem : PlayerAction
 {

@@ -51,7 +51,8 @@ public class CoinAction : ItemAction
 
     public override int Action(PlayerCommandTarget target)
     {
-        return 0;
+        target.input.Interrupt(new PlayerCoinThrow(target, 1.5f), false);
+        return 1;
     }
 }
 

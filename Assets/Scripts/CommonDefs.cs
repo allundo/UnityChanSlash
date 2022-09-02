@@ -501,6 +501,7 @@ public enum BulletType
     HealSpirit,
     DarkSpirit,
     WitchDouble,
+    Coin,
 }
 
 public enum VFXType
