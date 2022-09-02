@@ -358,7 +358,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         forwardUI.SetDashInputActive(IsForward || IsDash || isTriggerActive);
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
-        jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
+        jumpUI.SetActive(IsDash || isTriggerActive, fightCircle.isActive);
 
         guardUI.SetActive(!fightCircle.isActive && !playerMap.isInPit);
     }
@@ -542,7 +542,15 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         jumpUI.PressObservable
-            .Subscribe(_ => InputTrigger(playerMap.isInPit ? pitJump : jump))
+            .Subscribe(_ =>
+            {
+                if (commander.NextCommand is PlayerDash)
+                {
+                    commander.ReplaceNext(jump);
+                    return;
+                }
+                InputTrigger(playerMap.isInPit ? pitJump : jump);
+            })
             .AddTo(this);
 
         guardUI.IsPressed
