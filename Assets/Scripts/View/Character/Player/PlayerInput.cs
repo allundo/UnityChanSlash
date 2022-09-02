@@ -50,6 +50,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected IPlayerMapUtil playerMap;
     protected PlayerCommandTarget playerTarget;
     protected bool IsAttack => commander.currentCommand is PlayerAttack;
+    protected bool IsItemUse => commander.currentCommand is PlayerItem || IsFiring;
+    protected bool IsFiring => commander.currentCommand is PlayerCoinThrow || commander.currentCommand is PlayerFire;
     protected bool IsDash => commander.currentCommand is PlayerDash;
     protected bool IsForward => commander.currentCommand is PlayerForward;
     protected bool IsMessage => commander.currentCommand is PlayerMessage;
@@ -266,7 +268,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         bool isFaceToEnemy = !playerMap.isInPit && forwardTile.IsEnemyOn;
         if (isFaceToEnemy)
         {
-            fightCircle.SetActive(IsFightValid || IsAttack, forwardTile.GetEnemyStatus());
+            fightCircle.SetActive(IsFightValid || IsAttack || IsItemUse, forwardTile.GetEnemyStatus());
             fightCircle.isForwardMovable = forwardTile.IsEnterable();
         }
         else
