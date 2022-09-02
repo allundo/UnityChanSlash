@@ -38783,7 +38783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5083e69d48e6847218e2d3e5f1dbef1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
 --- !u!114 &290249210931567040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38827,7 +38826,7 @@ MonoBehaviour:
   fireSound: {fileID: 2294812715281089802}
   meshTf: {fileID: 2406052561114265406}
   dyingFXDuration: 0.9
-  cycle: 1
+  cycleTimeSec: 1
   blinkColor: {r: 1, g: 0.36659658, b: 0, a: 1}
 --- !u!114 &1900991498281850552
 MonoBehaviour:
