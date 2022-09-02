@@ -77,7 +77,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         DOTween.SetTweensCapacity(500, 500);
 
-        ClearMaps();
+        InitData();
 
         // DEBUG ONLY
         if (Debug.isDebugBuild) CreateDebugMap();
@@ -186,5 +186,17 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[LastFloor - 1] = 29;
 
         maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds()));
+    }
+
+    public void InitData()
+    {
+        ClearMaps();
+        moneyAmount = 0;
+        mapComp = 0f;
+        clearTimeSec = 0;
+        defeatCount = 0;
+        level = 1;
+        strength = 10;
+        magic = 10;
     }
 }

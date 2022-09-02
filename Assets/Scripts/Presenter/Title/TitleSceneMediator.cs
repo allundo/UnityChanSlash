@@ -17,7 +17,7 @@ public class TitleSceneMediator : SceneMediator
         SetStartActions(Logo, SkipLogo);
 
         titleUIHandler.TransitSignal
-            .Subscribe(_ => SceneTransition(0, GameInfo.Instance.ClearMaps))
+            .Subscribe(_ => SceneTransition(0, GameInfo.Instance.InitData))
             .AddTo(this);
 
         titleUIHandler.ResultsButtonSignal
@@ -112,7 +112,7 @@ public class TitleSceneMediator : SceneMediator
         }
         else
         {
-            GameInfo.Instance.ClearMaps();
+            GameInfo.Instance.InitData();
         }
 
         GameInfo.Instance.currentFloor = floor;

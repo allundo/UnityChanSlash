@@ -18,15 +18,15 @@ public class ClearRecord : RankRecord
         textFormats.Add(wages => $"・お給金: ￥{wages:#,0}");
 
         textObjects.Add(clearTime);
-        textFormats.Add(sec => "・踏破時間: " + ValueFormat((ulong)sec));
+        textFormats.Add(sec => "・踏破時間: " + ValueFormat((int)sec));
 
         textObjects.Add(defeat);
         textFormats.Add(count => "・敵撃破数: " + count);
     }
 
-    private string ValueFormat(ulong sec)
+    private string ValueFormat(int sec)
     {
-        int min = (int)(sec / 60);
+        int min = sec / 60;
         int hour = min / 60;
         return $"{hour,3:D}:{min % 60:00}:{sec % 60:00}";
     }

@@ -22,7 +22,7 @@ public class ResultSceneMediator : SceneMediator
         resultUIHandler.TransitSignal
             .Subscribe(_ => SceneTransition(0, () =>
             {
-                gameInfo.ClearMaps();
+                gameInfo.InitData();
                 GroundCoin.Release();
             }))
             .AddTo(this);

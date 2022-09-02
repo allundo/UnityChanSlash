@@ -16,14 +16,14 @@ public class MainSceneMediator : SceneMediator
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ => LoadSceneWithCoverOn(1))
             .IgnoreElements()
-            .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.ClearMaps))
+            .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.InitData))
             .AddTo(this);
 
         gameOver.titleButton
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ => LoadSceneWithCoverOn(0))
             .IgnoreElements()
-            .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.ClearMaps))
+            .Subscribe(null, () => SceneTransition(1, GameInfo.Instance.InitData))
             .AddTo(this);
 
         gm.ExitObservable

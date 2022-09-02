@@ -158,6 +158,8 @@ public class EnemyDie : EnemyCommand
         anim.die.Bool = true;
         react.OnDie();
 
+        GameInfo.Instance.defeatCount++;
+
         return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
     }
 }

@@ -240,6 +240,10 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         gameInfo.clearTimeSec = tm.elapsedTimeSec;
         gameInfo.SetMapComp();
 
+        var result = new ResultBonus(gameInfo);
+
+        DataStoreAgent.Instance.SaveClearRecords("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+
         cover.color = new Color(1f, 1f, 1f, 0f);
         cover.FadeOut(3f).SetEase(Ease.InCubic)
             .OnComplete(exitSubject.OnCompleted)

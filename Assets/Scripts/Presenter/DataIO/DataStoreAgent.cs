@@ -60,9 +60,17 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class ClearRecord : DataArray
     {
+        public ClearRecord(string title, ulong wagesAmount, int clearTimeSec, int defeatCount)
+        {
+            this.title = title;
+            this.wagesAmount = wagesAmount;
+            this.clearTimeSec = clearTimeSec;
+            this.defeatCount = defeatCount;
+        }
+
         public string title = "なし";
         public ulong wagesAmount = 0;
-        public ulong clearTimeSec = 0;
+        public int clearTimeSec = 0;
         public int defeatCount = 0;
 
         public override object[] GetValues() => new object[] { title, wagesAmount, clearTimeSec, defeatCount };
@@ -124,6 +132,17 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         deadRecords = deadRecords.OrderByDescending(record => record.moneyAmount).Where((r, index) => index < 10).ToList();
 
         SaveEncryptedRecords(deadRecords, DEAD_RECORD_FILE_NAME);
+    }
+
+    public void SaveClearRecords(string title, ulong wagesAmount, int clearTimeSec, int defeatCount)
+    {
+        clearRecords = LoadClearRecords();
+
+        clearRecords.Add(new ClearRecord(title, wagesAmount, clearTimeSec, defeatCount));
+
+        clearRecords = clearRecords.OrderByDescending(record => record.wagesAmount).Where((r, index) => index < 10).ToList();
+
+        SaveEncryptedRecords(clearRecords, CLEAR_RECORD_FILE_NAME);
     }
 
     private void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
