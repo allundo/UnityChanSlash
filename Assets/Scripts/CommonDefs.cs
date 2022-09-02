@@ -476,6 +476,7 @@ public enum AttackAttr
     Thunder,
     Light,
     Dark,
+    Coin,
 }
 
 public enum EnemyType

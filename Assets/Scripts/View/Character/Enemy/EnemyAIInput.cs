@@ -14,7 +14,9 @@ public class EnemyAIInput : MobInput, IEnemyInput
     protected ICommand doubleAttack;
     protected ICommand fire;
 
-    protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
+    // Doesn't pay attention to the player if tamed.
+    protected bool IsOnPlayer(Pos pos) => !(target.react as IEnemyReactor).IsTamed && MapUtil.IsOnPlayer(pos);
+    protected bool IsPlayerFound(Pos pos) => !(target.react as IEnemyReactor).IsTamed && mobMap.IsPlayerFound(pos);
 
     public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
@@ -60,7 +62,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
         bool isForwardMovable = mobMap.IsMovable(forward);
 
         // Move forward if player found in front
-        if (mobMap.IsPlayerFound(forward) && isForwardMovable) return moveForward;
+        if (IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
         bool isLeftMovable = mobMap.IsMovable(left);
         bool isRightMovable = mobMap.IsMovable(right);

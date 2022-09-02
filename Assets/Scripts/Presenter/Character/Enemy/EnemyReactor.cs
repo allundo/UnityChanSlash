@@ -6,6 +6,7 @@ public interface IEnemyReactor : IMobReactor
 {
     void OnSummoned();
     void OnTeleportEnd();
+    bool IsTamed { get; }
 }
 
 [RequireComponent(typeof(EnemyEffect))]
@@ -15,13 +16,17 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     protected IEnemyEffect enemyEffect;
     protected IEnemyInput enemyInput;
+    protected IEnemyStatus enemyStatus;
     private IDisposable inactiveNextFrame;
+
+    public bool IsTamed => enemyStatus.isTamed;
 
     protected override void Awake()
     {
         base.Awake();
         enemyEffect = effect as IEnemyEffect;
         enemyInput = input as IEnemyInput;
+        enemyStatus = status as IEnemyStatus;
     }
 
     protected override void Start()
@@ -31,7 +36,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
             .Subscribe(life => OnLifeChange(life))
             .AddTo(this);
 
-        (status as EnemyStatus).ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
+        enemyStatus.ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
     }
 
     /// <summary>
@@ -63,6 +68,26 @@ public class EnemyReactor : MobReactor, IEnemyReactor
             map.ResetTile();
             OnDead();
         });
+    }
+
+    public override float Damage(IAttacker attacker, Attack.AttackData attackData)
+    {
+        var damage = Damage(attacker.attack * attackData.multiplier, attacker.dir, attackData.type, attackData.attr);
+
+        // Taming process
+        if (attackData.attr == AttackAttr.Coin)
+        {
+            if (enemyStatus.TryTame())
+            {
+                ActiveMessageController.Instance.InputMessageData(ActiveMessageData.TameSucceeded(enemyStatus));
+            }
+        }
+        else if (damage > 0.1f)
+        {
+            enemyStatus.CancelTamed();
+        }
+
+        return damage;
     }
 
     public override void Destroy()

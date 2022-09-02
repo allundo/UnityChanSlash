@@ -67,6 +67,7 @@ public class EnemyParam : MobParam
 {
     [SerializeField] public EnemyType type = EnemyType.None;
     [SerializeField] public Vector3 enemyCore = Vector3.zero;
+    [SerializeField] public float tamingProbability = 0f;
 }
 
 [System.Serializable]

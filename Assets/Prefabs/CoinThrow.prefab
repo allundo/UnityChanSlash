@@ -9838,7 +9838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
-  attackAttr: 0
+  attackAttr: 6
   attackMultiplier: 0.1
 --- !u!1 &979957346378636786
 GameObject:

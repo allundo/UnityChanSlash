@@ -53,6 +53,11 @@ public struct ActiveMessageData
         return new ActiveMessageData(item.name + " を手に入れた！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
     }
 
+    public static ActiveMessageData TameSucceeded(IEnemyStatus status)
+    {
+        return new ActiveMessageData(status.Name + " を懐柔した", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+    }
+
     public static ActiveMessageData InspectTile(ITile tile)
     {
         if (tile is Pit)

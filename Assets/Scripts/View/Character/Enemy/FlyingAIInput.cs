@@ -26,7 +26,7 @@ public class FlyingAIInput : EnemyAIInput
         bool isForwardMovable = map.ForwardTile.IsViewOpen;
 
         // Move forward if player found in front
-        if (map.IsPlayerFound(forward) && isForwardMovable) return moveForward;
+        if (IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
         // Turn if player found at left, right or backward
         Pos left = map.GetLeft;

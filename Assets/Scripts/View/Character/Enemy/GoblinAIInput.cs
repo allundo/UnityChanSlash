@@ -14,7 +14,9 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
     protected ICommand guard;
     protected ICommand attack;
 
-    protected bool IsOnPlayer(Pos pos) => MapUtil.IsOnPlayer(pos);
+    // Doesn't pay attention to the player if tamed.
+    protected bool IsOnPlayer(Pos pos) => !(target.react as IEnemyReactor).IsTamed && MapUtil.IsOnPlayer(pos);
+    protected bool IsPlayerFound(Pos pos) => !(target.react as IEnemyReactor).IsTamed && mobMap.IsPlayerFound(pos);
     protected T RandomChoice<T>(params T[] choices) => choices[Random.Range(0, choices.Length)];
 
     protected override void SetCommands()
@@ -75,7 +77,7 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         bool isForwardMovable = mobMap.IsMovable(forward);
 
         // Move forward if player found in front
-        if (mobMap.IsPlayerFound(forward) && isForwardMovable) return run;
+        if (IsPlayerFound(forward) && isForwardMovable) return run;
 
         bool isLeftMovable = mobMap.IsMovable(left);
         bool isRightMovable = mobMap.IsMovable(right);

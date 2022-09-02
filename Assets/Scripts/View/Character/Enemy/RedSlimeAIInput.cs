@@ -55,7 +55,7 @@ public class RedSlimeAIInput : EnemyAIInput
 
         // Shoot if player found in front
         bool isForwardOpen = mobMap.GetTile(forward).IsViewOpen;
-        if (mobMap.IsPlayerFound(forward) && isForwardOpen) return fire;
+        if (IsPlayerFound(forward) && isForwardOpen) return fire;
 
         Pos backward2 = mobMap.dir.GetBackward(backward);
         Pos left2 = mobMap.dir.GetLeft(left);

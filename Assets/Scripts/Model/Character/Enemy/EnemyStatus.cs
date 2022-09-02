@@ -4,8 +4,20 @@ using UnityEngine;
 
 public interface IEnemyStatus : IMobStatus
 {
+
     EnemyType type { get; }
     EnemyStatus OnSpawn(Vector3 pos, IDirection dir, EnemyStatus.ActivateOption option);
+
+    IObservable<EnemyStatus.ActivateOption> ActiveWithOption { get; }
+
+    /// <summary>
+    /// Try taming to the enemy.
+    /// </summary>
+    /// <param name="tamingPower">Value to multiply to taming probability</param>
+    /// <returns>True if the taming succeeded.</returns>
+    bool TryTame(float tamingPower = 1f);
+    bool isTamed { get; }
+    void CancelTamed();
 }
 
 public class EnemyStatus : MobStatus, IEnemyStatus
@@ -25,6 +37,15 @@ public class EnemyStatus : MobStatus, IEnemyStatus
 
     protected ISubject<ActivateOption> activeWithOptionSubject = new BehaviorSubject<ActivateOption>(new ActivateOption());
     public IObservable<ActivateOption> ActiveWithOption => activeWithOptionSubject;
+
+    public bool isTamed { get; protected set; } = false;
+    public bool TryTame(float tamingPower = 1f)
+    {
+        isTamed = UnityEngine.Random.Range(0f, 1f) < enemyParam.tamingProbability * tamingPower;
+        return isTamed;
+    }
+
+    public void CancelTamed() => isTamed = false;
 
     protected EnemyParam enemyParam;
 

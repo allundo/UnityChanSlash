@@ -99,6 +99,7 @@ public class MobStatus : Status, IMobStatus
             { AttackAttr.Thunder,     mobParam.thunderDamageMultiplier  },
             { AttackAttr.Light,       mobParam.lightDamageMultiplier    },
             { AttackAttr.Dark,        mobParam.darkDamageMultiplier     },
+            { AttackAttr.Coin,        1f                                },
         };
 
         return base.InitParam(param, life);
