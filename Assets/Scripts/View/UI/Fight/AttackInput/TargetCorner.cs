@@ -32,6 +32,8 @@ public class TargetCorner : FadeEnable
 
     public void FadeActivate()
     {
+        expansionLoop.Pause();
+
         FadeIn(0.2f).Play();
         uiTween.ResetSize(2f);
         activate.Restart();
