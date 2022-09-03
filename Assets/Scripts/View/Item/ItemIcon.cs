@@ -7,8 +7,6 @@ public class ItemIcon : UISymbol
 {
     public ItemInfo itemInfo { get; private set; }
 
-    private UITween ui;
-
     private Vector2 HandleIconPos => new Vector2(-parentPos.x, -parentPos.y - 320f);
     private Vector2 defaultSize;
 
@@ -30,7 +28,6 @@ public class ItemIcon : UISymbol
     protected override void Awake()
     {
         base.Awake();
-        ui = new UITween(gameObject);
         defaultSize = rectTransform.sizeDelta;
     }
 
@@ -90,8 +87,6 @@ public class ItemIcon : UISymbol
         this.index = index;
         return this;
     }
-
-    public Vector2 GetPos() => rectTransform.anchoredPosition;
 
     public void SetParent(Transform parent, bool worldPositionStays = true, bool setAsFirstSibling = false)
     {
