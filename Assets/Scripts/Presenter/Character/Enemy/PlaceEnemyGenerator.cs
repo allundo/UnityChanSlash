@@ -185,22 +185,22 @@ public class PlaceEnemyGenerator : EnemyGenerator
         generatorPool.Clear();
     }
 
-    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
-        => ManualSpawn(RandomEnemyType, pos, dir, option, life);
+    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data = null)
+        => ManualSpawn(RandomEnemyType, pos, dir, option, data);
 
-    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
+    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data = null)
     {
         CreateEnemyPool(type);
-        return Spawn(type, pos, dir, option, life);
+        return Spawn(type, pos, dir, option, data);
     }
 
     public IEnemyStatus SpawnWitch(Pos pos, IDirection dir, float waitFrames = 120f)
         => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, true, waitFrames));
 
-    private IEnemyStatus Respawn(RespawnData data) => ManualSpawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.life);
+    private IEnemyStatus Respawn(RespawnData data) => ManualSpawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.storeData);
 
-    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, float life)
-        => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, life);
+    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data)
+        => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, data);
 
     private struct RespawnData
     {
@@ -209,12 +209,12 @@ public class PlaceEnemyGenerator : EnemyGenerator
             this.type = status.type;
             this.pos = pos;
             this.dir = status.dir;
-            this.life = status.Life.Value;
+            storeData = status.GetStoreData();
         }
 
         public EnemyType type;
         public Pos pos;
         public IDirection dir;
-        public float life;
+        public EnemyStatus.EnemyStoreData storeData;
     }
 }

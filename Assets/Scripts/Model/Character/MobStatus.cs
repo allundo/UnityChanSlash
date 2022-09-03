@@ -17,6 +17,18 @@ public interface IMobStatus : IStatus
 
 public class MobStatus : Status, IMobStatus
 {
+    public class MobStoreData : StoreData
+    {
+        public bool isIced { get; private set; }
+        public bool isHidden { get; private set; }
+
+        public MobStoreData(IMobStatus status) : base(status)
+        {
+            isIced = status.isIced;
+            isHidden = status.isHidden;
+        }
+    }
+
     protected MobParam mobParam;
 
     protected enum DamageType
@@ -84,7 +96,7 @@ public class MobStatus : Status, IMobStatus
         isIced = isHidden = false;
     }
 
-    public override IStatus InitParam(Param param, float life = 0f)
+    public override IStatus InitParam(Param param, Status.StoreData data = null)
     {
         mobParam = param as MobParam;
 
@@ -107,6 +119,15 @@ public class MobStatus : Status, IMobStatus
             { AttackAttr.Coin,        1f                                },
         };
 
-        return base.InitParam(param, life);
+        base.InitParam(param, data);
+
+        if (data != null)
+        {
+            var mobData = data as MobStoreData;
+            isIced = mobData.isIced;
+            isHidden = mobData.isHidden;
+        }
+
+        return this;
     }
 }

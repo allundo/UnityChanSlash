@@ -11,17 +11,17 @@ public class EnemyGenerator : Generator<Status>
     /// <summary>
     /// Instantiate on default object pool
     /// </summary>
-    public virtual IStatus Spawn(MobParam param, Vector3 pos, IDirection dir = null, float life = 0f)
-        => GetInstance(param.prefab).InitParam(param, life).OnSpawn(pos, dir);
+    public virtual IStatus Spawn(MobParam param, Vector3 pos, IDirection dir = null, Status.StoreData data = null)
+        => GetInstance(param.prefab).InitParam(param, data).OnSpawn(pos, dir);
 
     /// <summary>
     /// Instantiate on the object pool specified by 'pool' parameter
     /// </summary>
-    public virtual IEnemyStatus Spawn(Transform pool, MobParam param, Vector3 pos, IDirection dir = null, float life = 0f)
-        => Spawn(pool, param, pos, dir, new EnemyStatus.ActivateOption(), life);
+    public virtual IEnemyStatus Spawn(Transform pool, MobParam param, Vector3 pos, IDirection dir = null, Status.StoreData data = null)
+        => Spawn(pool, param, pos, dir, new EnemyStatus.ActivateOption(), data);
 
-    public virtual IEnemyStatus Spawn(Transform pool, MobParam param, Vector3 pos, IDirection dir, EnemyStatus.ActivateOption option, float life = 0f)
-        => (GetInstance(pool, param.prefab).InitParam(param, life) as IEnemyStatus).OnSpawn(pos, dir, option);
+    public virtual IEnemyStatus Spawn(Transform pool, MobParam param, Vector3 pos, IDirection dir, EnemyStatus.ActivateOption option, Status.StoreData data = null)
+        => (GetInstance(pool, param.prefab).InitParam(param, data) as IEnemyStatus).OnSpawn(pos, dir, option);
 
     public virtual IStatus GetInstance(Transform pool, Status prefab)
         => GetPooledObj(pool) ?? Instantiate(prefab, pool, false);

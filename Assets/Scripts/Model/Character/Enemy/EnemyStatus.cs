@@ -4,7 +4,6 @@ using UnityEngine;
 
 public interface IEnemyStatus : IMobStatus
 {
-
     EnemyType type { get; }
     EnemyStatus OnSpawn(Vector3 pos, IDirection dir, EnemyStatus.ActivateOption option);
 
@@ -18,10 +17,24 @@ public interface IEnemyStatus : IMobStatus
     bool TryTame(float tamingPower = 1f);
     bool isTamed { get; }
     void CancelTamed();
+
+    EnemyStatus.EnemyStoreData GetStoreData();
 }
 
 public class EnemyStatus : MobStatus, IEnemyStatus
 {
+    public class EnemyStoreData : MobStoreData
+    {
+        public bool isTamed { get; private set; }
+
+        public EnemyStoreData(IEnemyStatus status) : base(status)
+        {
+            isTamed = status.isTamed;
+        }
+    }
+
+    public EnemyStoreData GetStoreData() => new EnemyStoreData(this);
+
     public struct ActivateOption
     {
         public float fadeInDuration;
@@ -52,10 +65,14 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public EnemyType type => enemyParam.type;
     public override Vector3 corePos => enemyParam.enemyCore + transform.position;
 
-    public override IStatus InitParam(Param param, float life = 0f)
+    public override IStatus InitParam(Param param, StoreData data = null)
     {
         enemyParam = param as EnemyParam;
-        return base.InitParam(param, life);
+        base.InitParam(param, data);
+
+        if (data != null) isTamed = (data as EnemyStoreData).isTamed;
+
+        return this;
     }
 
     public virtual EnemyStatus OnSpawn(Vector3 pos, IDirection dir, ActivateOption option)

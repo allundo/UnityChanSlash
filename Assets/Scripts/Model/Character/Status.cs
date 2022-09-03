@@ -48,11 +48,21 @@ public interface IStatus : IAttacker
     Status OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f);
 
     void SetPosition(Vector3 pos, IDirection dir = null);
-    IStatus InitParam(Param param, float life = 0f);
+    IStatus InitParam(Param param, Status.StoreData data = null);
 }
 
 public class Status : SpawnObject<Status>, IStatus
 {
+    public class StoreData
+    {
+        public float life { get; private set; }
+
+        public StoreData(IStatus status)
+        {
+            life = status.Life.Value;
+        }
+    }
+
     protected Param param;
 
     public string Name => param.name;
@@ -139,13 +149,13 @@ public class Status : SpawnObject<Status>, IStatus
         transform.LookAt(transform.position + this.dir.LookAt);
     }
 
-    public virtual IStatus InitParam(Param param, float life = 0f)
+    public virtual IStatus InitParam(Param param, StoreData data = null)
     {
         this.param = param;
         attack = param.attack;
         ResetStatus();
 
-        if (life > 0f) this.life.Value = life;
+        if (data != null) this.life.Value = data.life;
         return this;
     }
 }

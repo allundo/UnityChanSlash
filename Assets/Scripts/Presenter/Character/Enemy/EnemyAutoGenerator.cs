@@ -22,8 +22,8 @@ public class EnemyAutoGenerator : EnemyGenerator
         gameObject.SetActive(false);
     }
 
-    public IStatus Spawn(IDirection dir = null, float life = 0f)
-        => base.Spawn(param, spawnPoint, dir, life);
+    public IStatus Spawn(IDirection dir = null, Status.StoreData data = null)
+        => base.Spawn(param, spawnPoint, dir, data);
 
     public EnemyAutoGenerator Init(GameObject enemyPool, ITile tile, MobParam param)
     {
