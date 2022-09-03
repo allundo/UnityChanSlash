@@ -28,6 +28,7 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         rtNumOfItem = tmpNumOfItem.GetComponent<RectTransform>();
         SetItemNum(0);
         ShrinkNum();
+        rtNumOfItem.SetParent(transform.parent);
     }
 
     /// <summary>
@@ -37,23 +38,21 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void SetItemNum(int num)
     {
         tmpNumOfItem.text = num > 0 ? num.ToString() : "";
-        // tmpNumOfItem.transform.SetParent(transform);
-        // rtNumOfItem.anchoredPosition = Vector2.zero;
+        rtNumOfItem.SetAsLastSibling();
+        rtNumOfItem.localPosition = transform.localPosition;
     }
 
     public void ExpandNum(Transform inventoryTf)
     {
         tmpNumOfItem.fontSize = 54f;
         rtNumOfItem.sizeDelta = expand;
-        tmpNumOfItem.transform.SetParent(inventoryTf);
+        rtNumOfItem.SetAsLastSibling();
     }
 
     public void ShrinkNum()
     {
         tmpNumOfItem.fontSize = 36f;
         rtNumOfItem.sizeDelta = shrink;
-        tmpNumOfItem.transform.SetParent(transform);
-        rtNumOfItem.anchoredPosition = Vector2.zero;
     }
 
     public ItemPanel SetPos(Vector2 pos)

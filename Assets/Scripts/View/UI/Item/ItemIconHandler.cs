@@ -211,6 +211,7 @@ public class ItemIconHandler : IItemIconHandler
         {
             handler.StopPressing();
             itemIndex.DeleteNum(handler.pressedIndex);
+            handler.currentSelected.transform.SetAsLastSibling();
             return handler.dragMode.OnDrag(screenPos);
         }
     }
