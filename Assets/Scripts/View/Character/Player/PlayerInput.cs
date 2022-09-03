@@ -578,7 +578,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         private bool isAutoGuard => playerInput.IsEnemyDetected.Value;
 
         public override bool IsShieldOn(IDirection attackDir)
-            => input.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
+            => playerInput.IsFightValid && !playerInput.IsItemUse && isShieldReady && map.dir.IsInverse(attackDir);
 
         public override float SetShield()
         {
