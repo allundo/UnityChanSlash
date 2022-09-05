@@ -14,6 +14,7 @@ public class Attack : AttackBehaviour
         public AttackType type;
         public AttackAttr attr;
         public float multiplier;
+
         public AttackData(float multiplier = 1f, AttackType type = AttackType.Smash, AttackAttr attr = AttackAttr.None)
         {
             this.multiplier = multiplier;

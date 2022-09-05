@@ -11,6 +11,7 @@ public interface IGameManager
     void DropStart();
     void Restart();
     void DebugStart();
+    void LoadDataStart();
 
     ulong SumUpItemValue();
 

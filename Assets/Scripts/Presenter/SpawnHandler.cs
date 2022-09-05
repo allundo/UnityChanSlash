@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Linq;
 
 public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 {
@@ -61,5 +61,26 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     {
         itemGenerator.SwitchWorldMap(map);
         itemGenerator.Turn(playerDir);
+    }
+
+    public DataStoreAgent.RespawnData[] ExportRespawnData()
+    {
+        int lastFloor = GameInfo.Instance.LastFloor;
+
+        var export = new DataStoreAgent.RespawnData[lastFloor];
+        var enemyData = placeEnemyGenerator.ExportRespawnData();
+        var itemData = itemGenerator.ExportRespawnData();
+
+        for (int i = 0; i < lastFloor; i++)
+        {
+            export[i] = new DataStoreAgent.RespawnData(enemyData[i], itemData[i]);
+        }
+        return export;
+    }
+
+    public void ImportRespawnData(DataStoreAgent.RespawnData[] import, WorldMap map)
+    {
+        placeEnemyGenerator.ImportRespawnData(import.Select(data => data.enemyData.ToList()).ToArray(), map);
+        itemGenerator.ImportRespawnData(import.Select(data => data.itemData.ToList()).ToArray(), map);
     }
 }

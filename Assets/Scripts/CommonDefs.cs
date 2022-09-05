@@ -40,6 +40,7 @@ public enum Terrain
     Pit = 12,
 }
 
+[System.Serializable]
 public struct Pos
 {
     public int x;
@@ -213,6 +214,8 @@ public abstract class Direction
                 return south;
             case Dir.W:
                 return west;
+            case Dir.NONE:
+                return null;
             default:
                 throw new ArgumentException("Invalid enum: " + dir + " cannot convert to Direction.");
         }

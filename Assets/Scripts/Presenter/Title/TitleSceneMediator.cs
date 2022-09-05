@@ -17,7 +17,7 @@ public class TitleSceneMediator : SceneMediator
         SetStartActions(Logo, SkipLogo);
 
         titleUIHandler.TransitSignal
-            .Subscribe(_ => SceneTransition(0, GameInfo.Instance.InitData))
+            .Subscribe(_ => SceneTransition(0, () => GameInfo.Instance.InitData()))
             .AddTo(this);
 
         titleUIHandler.ResultsButtonSignal
@@ -85,6 +85,20 @@ public class TitleSceneMediator : SceneMediator
 
     private void Logo()
     {
+        if (DataStoreAgent.Instance.ImportGameData())
+        {
+            // Starts with load data.
+            Debug.Log("Data load");
+
+            disposable = titleUIHandler.Logo()
+                .ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f).Concat(titleUIHandler.FadeOutObservable()))
+                .IgnoreElements()
+                .Subscribe(null, () => SceneTransition(3, () => GameInfo.Instance.InitData(false)))
+                .AddTo(this);
+
+            return;
+        }
+
         disposable = titleUIHandler.Logo()
             .ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f))
             .IgnoreElements()

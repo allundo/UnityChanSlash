@@ -5,10 +5,6 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
     private GameObject prefabMessageBoardN;
     private FloorMessagesSource floorMessages;
 
-    private MessageData[] FixedMessage(int index) => floorMessages.fixedMessages[index].Convert();
-    private MessageData[] RandomMessage() => floorMessages.randomMessages[Random.Range(0, floorMessages.randomMessages.Length)].Convert();
-
-
     public MessageBoardsRenderer(Transform parent) : base(parent)
     {
         prefabMessageBoardN = Resources.Load<GameObject>("Prefabs/Map/Parts/BoardN");
@@ -29,7 +25,21 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
         if (tile.Read == null)
         {
             int fixedIndex = map.fixedMessagePos.IndexOf(pos);
-            tile.data = fixedIndex != -1 ? FixedMessage(fixedIndex) : RandomMessage();
+            if (fixedIndex != -1)
+            {
+                tile.data = floorMessages.fixedMessages[fixedIndex].Convert();
+            }
+            else
+            {
+                int randomIndex;
+                if (!map.randomMessagePos.TryGetValue(pos, out randomIndex))
+                {
+                    randomIndex = Random.Range(0, floorMessages.randomMessages.Length);
+                    map.randomMessagePos[pos] = randomIndex;
+                }
+
+                tile.data = floorMessages.randomMessages[randomIndex].Convert();
+            }
         }
     }
 }

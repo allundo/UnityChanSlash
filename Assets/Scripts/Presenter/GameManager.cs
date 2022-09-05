@@ -59,6 +59,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         player.SetActive(false);
 
         StartCoroutine(DropStartWithDelay());
+
+        DataStoreAgent.Instance.EnableSave();
     }
 
     private IEnumerator DropStartWithDelay(float delay = 0.6f)
@@ -87,6 +89,24 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         cover.FadeIn(1f, 0.5f, false).Play();
 
         eventManager.RestartEvent();
+
+        DataStoreAgent.Instance.EnableSave();
+    }
+
+    public void LoadDataStart()
+    {
+        var saveData = DataStoreAgent.Instance.LoadGameData();
+
+        TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
+        spawnHandler.ImportRespawnData(saveData.respawnData, worldMap);
+        PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
+
+        hidePlateHandler.Init();
+        mainCamera.SwitchFloor(worldMap.floor);
+
+        cover.FadeIn(1f, 0.5f, false).Play();
+
+        DataStoreAgent.Instance.EnableSave();
     }
 
     /// <summary>
@@ -100,6 +120,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         cover.SetAlpha(0f);
         input.SetInputVisible(true);
+
+        DataStoreAgent.Instance.DisableSave();
     }
 
     public void DebugStartFloor(int floor)
@@ -159,6 +181,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     private void StartFloor()
     {
+        DataStoreAgent.Instance.EnableSave();
+
         hidePlateHandler.OnStartFloor();
         mainCamera.ResetCrossFade();
 
@@ -169,6 +193,10 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     private IEnumerator MoveFloor(bool isDownStairs)
     {
+        var dataStoreAgent = DataStoreAgent.Instance;
+        dataStoreAgent.DisableSave();
+        dataStoreAgent.SaveCurrentGameData();
+
         hidePlateHandler.OnMoveFloor();
 
         // Deny enemies to access WorldMap
@@ -227,6 +255,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     public void Exit()
     {
+        var dataStoreAgent = DataStoreAgent.Instance;
+        dataStoreAgent.DisableSave();
+
         var tm = TimeManager.Instance;
 
         tm.Pause(true);
@@ -239,7 +270,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var result = new ResultBonus(gameInfo);
 
-        DataStoreAgent.Instance.SaveClearRecords("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        dataStoreAgent.SaveClearRecords("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
 
         cover.color = new Color(1f, 1f, 1f, 0f);
         cover.FadeOut(3f).SetEase(Ease.InCubic)

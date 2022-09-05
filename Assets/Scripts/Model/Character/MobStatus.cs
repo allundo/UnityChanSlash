@@ -17,6 +17,7 @@ public interface IMobStatus : IStatus
 
 public class MobStatus : Status, IMobStatus
 {
+    [System.Serializable]
     public class MobStoreData : StoreData
     {
         public bool isIced { get; private set; }

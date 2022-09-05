@@ -6,7 +6,7 @@ using UniRx;
 
 public class GameInfo : SingletonMonoBehaviour<GameInfo>
 {
-    private static readonly int MAX_FLOOR = 10;
+    public static readonly int MAX_FLOOR = 10;
 
     private WorldMap[] maps;
     private int[] mapSize;
@@ -188,9 +188,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds()));
     }
 
-    public void InitData()
+    public void InitData(bool clearMaps = true)
     {
-        ClearMaps();
+        if (clearMaps) ClearMaps();
+
         moneyAmount = 0;
         mapComp = 0f;
         clearTimeSec = 0;
@@ -198,5 +199,35 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         level = 1;
         strength = 10;
         magic = 10;
+    }
+
+    public DataStoreAgent.MapData[] ExportMapData()
+    {
+        var export = Enumerable.Repeat<DataStoreAgent.MapData>(null, LastFloor).ToArray();
+        for (int i = 0; i < LastFloor; i++)
+        {
+            if (maps[i] == null) continue;
+            export[i] = new DataStoreAgent.MapData(maps[i]);
+        }
+        return export;
+    }
+
+    public void ImportGameData(DataStoreAgent.SaveData import)
+    {
+        ClearMaps();
+
+        this.currentFloor = import.currentFloor;
+
+        for (int i = 0; i < LastFloor; i++)
+        {
+            var mapData = import.mapData[i];
+
+            if (mapData == null) continue;
+
+            var mapSize = mapData.mapSize;
+
+            maps[i] = new WorldMap(new MapManager(i + 1, mapData));
+            maps[i].ImportMapData(mapData);
+        }
     }
 }

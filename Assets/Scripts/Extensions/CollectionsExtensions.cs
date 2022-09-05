@@ -56,4 +56,6 @@ static public class CollectionsExtensions
 
         return value;
     }
+
+    static public Stack<T> ToStack<T>(this IEnumerable<T> collection) => new Stack<T>(collection);
 }

@@ -23,6 +23,7 @@ public interface IEnemyStatus : IMobStatus
 
 public class EnemyStatus : MobStatus, IEnemyStatus
 {
+    [System.Serializable]
     public class EnemyStoreData : MobStoreData
     {
         public bool isTamed { get; private set; }

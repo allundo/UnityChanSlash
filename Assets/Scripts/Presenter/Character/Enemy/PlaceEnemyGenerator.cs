@@ -213,10 +213,14 @@ public class PlaceEnemyGenerator : EnemyGenerator
     private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData)
         => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, statusData);
 
+    [System.Serializable]
     private struct RespawnData
     {
         public RespawnData(IEnemyStatus status, Pos pos)
         : this(status.type, pos, status.dir, status.GetStoreData()) { }
+
+        public RespawnData(DataStoreAgent.EnemyData data)
+        : this(Util.ConvertTo<EnemyType>(data.enemyType), new Pos(data.posX, data.posY), Direction.Convert((Dir)data.dir), data.statusData) { }
 
         public RespawnData(EnemyType type, Pos pos, IDirection dir, EnemyStatus.EnemyStoreData statusData)
         {
@@ -231,4 +235,28 @@ public class PlaceEnemyGenerator : EnemyGenerator
         public IDirection dir;
         public EnemyStatus.EnemyStoreData statusData;
     }
+
+    public List<DataStoreAgent.EnemyData>[] ExportRespawnData()
+    {
+        var export = Convert(respawnData);
+        export[this.map.floor - 1] = GetRespawnData(new Pos()).Select(data => Convert(data)).ToList();
+        return export;
+    }
+
+    private DataStoreAgent.EnemyData Convert(RespawnData data)
+        => new DataStoreAgent.EnemyData(data.pos, data.type, data.dir, data.statusData);
+
+    private List<DataStoreAgent.EnemyData>[] Convert(List<RespawnData>[] dataSet)
+        => dataSet.Select(dataList => dataList.Select(data => Convert(data)).ToList()).ToArray();
+
+    public void ImportRespawnData(List<DataStoreAgent.EnemyData>[] import, WorldMap currentMap)
+    {
+        respawnData = Convert(import);
+        RespawnEnemies(currentMap);
+    }
+
+    private RespawnData Convert(DataStoreAgent.EnemyData data)
+        => new RespawnData(data);
+    private List<RespawnData>[] Convert(List<DataStoreAgent.EnemyData>[] dataSet)
+        => dataSet.Select(dataList => dataList.Select(data => Convert(data)).ToList()).ToArray();
 }

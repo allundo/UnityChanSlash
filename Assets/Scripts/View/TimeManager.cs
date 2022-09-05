@@ -13,6 +13,11 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     public float elapsedTimeSecBuffer { get; private set; } = 0f;
     public int elapsedTimeSec { get; private set; } = 0;
 
+    public void AddTimeSec(int timeSec)
+    {
+        elapsedTimeSec += timeSec;
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -23,7 +28,6 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     {
         input = target.input as IPlayerInput;
         elapsedTimeSecBuffer = 0f;
-        elapsedTimeSec = 0;
     }
 
     void Update()

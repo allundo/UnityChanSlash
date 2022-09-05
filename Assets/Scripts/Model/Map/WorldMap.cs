@@ -16,10 +16,15 @@ public class WorldMap
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
     public List<Pos> fixedMessagePos { get; private set; }
+    public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
+
+    private List<Pos> openReservedTilePos = null;
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
     public Dir[,] CloneDirMap() => map.dirMap.Clone() as Dir[,];
+    public int[] GetMapMatrix() => map.GetMapData();
+    public int[] GetDirData() => map.GetDirData();
 
     public Dir GetDoorDir(int x, int y) => map.GetDoorDir(x, y);
     public Dir GetPillarDir(int x, int y) => map.GetPillarDir(x, y);
@@ -68,6 +73,13 @@ public class WorldMap
 
     public void ApplyTileOpen()
     {
+        if (openReservedTilePos != null)
+        {
+            openReservedTilePos.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
+            openReservedTilePos = null;
+            return;
+        }
+
         ForEachTiles(tile =>
         {
             if (tile is IOpenable)
@@ -76,6 +88,32 @@ public class WorldMap
                 if (openTile.IsOpen) openTile.Open();
             }
         });
+    }
+
+    public List<Pos> ExportTileOpenData()
+    {
+        var data = new List<Pos>();
+
+        if (randomMessagePos.Count() > 0/* FIXME: use random message count as initialized flag for now */)
+        {
+            ForEachTiles((tile, pos) =>
+            {
+                if (tile is IOpenable && (tile as IOpenable).IsOpen) data.Add(pos);
+            });
+        }
+
+        return data;
+    }
+
+    public void ImportMapData(DataStoreAgent.MapData import)
+    {
+        openReservedTilePos = import.tileOpenData.ToList();
+        fixedMessagePos = import.fixedMessagePos.ToList();
+        for (int i = 0; i < import.randomMessagePos.Length; i++)
+        {
+            var posList = import.randomMessagePos[i];
+            posList.pos.ForEach(pos => randomMessagePos[pos] = i);
+        }
     }
 
     public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= Width || y >= Height;
@@ -321,4 +359,11 @@ public class WorldMap
     }
     private KeyValuePair<Pos, IDirection> stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(), null);
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
+
+    public DataStoreAgent.PosList[] ExportRandomMessagePos()
+    {
+        var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();
+        randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
+        return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();
+    }
 }

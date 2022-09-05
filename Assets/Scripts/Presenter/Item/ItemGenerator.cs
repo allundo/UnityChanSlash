@@ -26,14 +26,13 @@ public class ItemGenerator : MobGenerator<Item>
 
         itemData = ResourceLoader.Instance.itemData;
         itemTypesData = ResourceLoader.Instance.itemTypesData;
+        itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
 
         respawnData = new Stack<RespawnData>[GameInfo.Instance.LastFloor].Select(_ => new Stack<RespawnData>()).ToArray();
     }
 
     void Start()
     {
-        itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
-
         SetWorldMap(GameManager.Instance.worldMap);
         PlaceItems(map);
     }
@@ -143,4 +142,37 @@ public class ItemGenerator : MobGenerator<Item>
         public ItemInfo info;
         public Pos pos;
     }
+
+    public List<DataStoreAgent.ItemData>[] ExportRespawnData()
+    {
+        var export = Convert(respawnData);
+        export[this.map.floor - 1] = GetRespawnData().Select(data => Convert(data)).ToList();
+        return export;
+    }
+
+    private DataStoreAgent.ItemData Convert(RespawnData data)
+        => new DataStoreAgent.ItemData(data.pos, data.info.type, data.info.numOfItem);
+
+    private List<DataStoreAgent.ItemData>[] Convert(Stack<RespawnData>[] dataSet)
+        => dataSet.Select(dataList => dataList.Select(data => Convert(data)).ToList()).ToArray();
+
+    public void ImportRespawnData(List<DataStoreAgent.ItemData>[] import, WorldMap currentMap)
+    {
+        respawnData = Convert(import);
+        RespawnItems(currentMap);
+    }
+
+    private RespawnData Convert(DataStoreAgent.ItemData data)
+        => new RespawnData(itemInfo[Util.ConvertTo<ItemType>(data.itemType)], new Pos(data.posX, data.posY));
+    private Stack<RespawnData>[] Convert(List<DataStoreAgent.ItemData>[] dataSet)
+    {
+        return dataSet.Select(dataList =>
+         {
+             return dataList.Select(data =>
+             {
+                 return Convert(data);
+             }).ToStack();
+         }).ToArray();
+    }
+
 }

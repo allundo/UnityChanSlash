@@ -114,4 +114,9 @@ public class TitleUIHandler : MonoBehaviour
             .Append(button.PressedTween())
             .Append(fade.FadeOut(1f));
     }
+
+    public IObservable<Unit> FadeOutObservable(float duration = 1f)
+    {
+        return fade.FadeOut(duration).OnCompleteAsObservable(Unit.Default);
+    }
 }

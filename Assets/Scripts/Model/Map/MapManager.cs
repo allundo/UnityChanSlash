@@ -32,6 +32,31 @@ public class MapManager
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
 
+    public int[] GetMapData()
+    {
+        var ret = new int[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                ret[x + y * width] = (int)matrix[x, y];
+            }
+        }
+        return ret;
+    }
+
+    public int[] GetDirData()
+    {
+        var ret = new int[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                ret[x + y * width] = (int)dirMap[x, y];
+            }
+        }
+        return ret;
+    }
 
 #if UNITY_EDITOR
     public void DebugMatrix()
@@ -75,6 +100,32 @@ public class MapManager
         SetPitAndMessageBoards(floor);
     }
 
+    public MapManager(int floor, DataStoreAgent.MapData mapData)
+    {
+        var matrix = mapData.mapMatrix;
+        var dirMap = mapData.dirMap;
+
+        this.floor = floor;
+        this.width = mapData.mapSize;
+        this.height = matrix.Length / width;
+        this.roomCenterPos = mapData.roomCenterPos.ToList();
+        this.deadEndPos = new Dictionary<Pos, IDirection>();
+        this.stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(mapData.stairsBottomPosX, mapData.stairsBottomPosY), Direction.Convert(Util.ConvertTo<Dir>(mapData.stairsBottomDir)));
+        this.stairsTop = new KeyValuePair<Pos, IDirection>(new Pos(mapData.stairsTopPosX, mapData.stairsTopPosY), Direction.Convert(Util.ConvertTo<Dir>(mapData.stairsTopDir)));
+
+        this.matrix = new Terrain[width, height];
+        this.dirMap = new Dir[width, height];
+
+        for (int j = 0; j < height; j++)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                this.matrix[i, j] = Util.ConvertTo<Terrain>(matrix[i + j * width]);
+                this.dirMap[i, j] = Util.ConvertTo<Dir>(dirMap[i + j * width]);
+            }
+        }
+    }
+
     public MapManager(int floor, int[] matrix, int width, Dictionary<Pos, IDirection> deadEndPos = null)
     {
         this.floor = floor;
@@ -88,7 +139,7 @@ public class MapManager
         {
             for (int i = 0; i < width; i++)
             {
-                this.matrix[i, j] = (Terrain)Enum.ToObject(typeof(Terrain), matrix[i + j * width]);
+                this.matrix[i, j] = Util.ConvertTo<Terrain>(matrix[i + j * width]);
                 if (this.matrix[i, j] == Terrain.RoomCenter)
                 {
                     this.roomCenterPos.Add(new Pos(i, j));
@@ -240,9 +291,11 @@ public class MapManager
     private MapManager SetUpStairs(Pos pos, IDirection dir) => SetUpStairs(pos, _ => dir);
     private MapManager SetUpStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
-        if (IsUpstairsSet) return this;
-
         IDirection dir = DirGetter(pos);
+
+        if (this.floor == 1) stairsBottom = new KeyValuePair<Pos, IDirection>(pos, dir);
+
+        if (IsUpstairsSet) return this;
 
         matrix[pos.x, pos.y] = Terrain.UpStairs;
         dirMap[pos.x, pos.y] = dir.Enum;

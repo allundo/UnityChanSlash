@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,6 +51,9 @@ public class Util
     /// <param name="bottom">denominator that determines probability</param>
     /// <returns>true if succeed</returns>
     public static bool DiceRoll(int top, int bottom)
-        => Random.Range(0, bottom) < top;
+        => UnityEngine.Random.Range(0, bottom) < top;
 
+
+    public static T ConvertTo<T>(int index) where T : Enum
+        => (T)Enum.ToObject(typeof(T), index);
 }

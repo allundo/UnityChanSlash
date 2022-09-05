@@ -79,10 +79,145 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class SaveData : DataArray
     {
-        public ulong moneyAmount = 0;
-        public string causeOfDeath = "";
-        public int floor = 1;
+        public int currentFloor = 0;
+        public int elapsedTimeSec = 0;
+        public PlayerData playerData = null;
+        public MapData[] mapData = null;
+        public RespawnData[] respawnData = null;
         public override object[] GetValues() => new object[] { };
+    }
+
+    [System.Serializable]
+    public class MapData
+    {
+        public MapData(WorldMap map)
+        {
+            mapMatrix = map.GetMapMatrix();
+            mapSize = map.Width;
+            dirMap = map.GetDirData();
+
+            var bottom = map.StairsBottom;
+            var top = map.stairsTop;
+
+            if (!bottom.Key.IsNull)
+            {
+                stairsBottomPosX = bottom.Key.x;
+                stairsBottomPosY = bottom.Key.y;
+                stairsBottomDir = (int)bottom.Value.Enum;
+            }
+
+            if (!top.Key.IsNull)
+            {
+                stairsTopPosX = top.Key.x;
+                stairsTopPosY = top.Key.y;
+                stairsTopDir = (int)top.Value.Enum;
+            }
+
+            tileOpenData = map.ExportTileOpenData().ToArray();
+            roomCenterPos = map.roomCenterPos.ToArray();
+            randomMessagePos = map.ExportRandomMessagePos();
+            fixedMessagePos = map.fixedMessagePos.ToArray();
+        }
+
+        public int[] mapMatrix = null;
+        public int[] dirMap = null;
+        public int mapSize = 0;
+        public int stairsBottomPosX = 0;
+        public int stairsBottomPosY = 0;
+        public int stairsBottomDir = 0;
+        public int stairsTopPosX = 0;
+        public int stairsTopPosY = 0;
+        public int stairsTopDir = 0;
+        public Pos[] tileOpenData = null;
+        public Pos[] roomCenterPos = null;
+        public Pos[] fixedMessagePos = null;
+        public PosList[] randomMessagePos = null;
+    }
+
+    [System.Serializable]
+    public class PosDirPair
+    {
+        public Pos pos;
+        public int dir = 0;
+    }
+
+    [System.Serializable]
+    public class PosList
+    {
+        public Pos[] pos;
+
+        public PosList(List<Pos> posList)
+        {
+            pos = posList.ToArray();
+        }
+
+        public Pos this[int index] => pos[index];
+    }
+
+    [System.Serializable]
+    public class RespawnData
+    {
+        public RespawnData(IEnumerable<EnemyData> enemyData, IEnumerable<ItemData> itemData)
+        {
+            this.enemyData = enemyData.ToArray();
+            this.itemData = itemData.ToArray();
+        }
+
+        public EnemyData[] enemyData = null;
+        public ItemData[] itemData = null;
+    }
+
+    [System.Serializable]
+    public class EnemyData
+    {
+        public EnemyData(Pos pos, EnemyType type, IDirection dir, EnemyStatus.EnemyStoreData statusData)
+        {
+            posX = pos.x;
+            posY = pos.y;
+            enemyType = (int)type;
+            this.dir = (int)dir.Enum;
+            this.statusData = statusData;
+        }
+
+        public int posX = 0;
+        public int posY = 0;
+        public int enemyType = 0;
+        public int dir = 0;
+        public EnemyStatus.EnemyStoreData statusData = null;
+    }
+
+    [System.Serializable]
+    public class PlayerData
+    {
+        public PlayerData(Pos pos, IDirection dir, MobStatus.MobStoreData statusData)
+        {
+            posX = pos.x;
+            posY = pos.y;
+            this.dir = (int)dir.Enum;
+            this.statusData = statusData;
+        }
+
+        public int posX = 0;
+        public int posY = 0;
+        public int dir = 0;
+        public MobStatus.MobStoreData statusData = null;
+    }
+
+    [System.Serializable]
+    public class ItemData
+    {
+        public ItemData(Pos pos, ItemType type, int numOfItem)
+        {
+            posX = pos.x;
+            posY = pos.y;
+            itemType = (int)type;
+            this.numOfItem = numOfItem;
+        }
+
+        public int posX = 0;
+        public int posY = 0;
+        public int itemType = 0;
+        public int numOfItem = 0;
     }
 
     [System.Serializable]
@@ -102,6 +237,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     private MyAesGcm aesGcm;
     private NonceStore nonceStore;
 
+    private ApplicationExitHandler exitHandler;
+
     protected override void Awake()
     {
         base.Awake();
@@ -120,6 +257,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         nonceStore = new NonceStore(key, tagHashKey);
         aesGcm = new MyAesGcm(key, nonceStore);
+
+        exitHandler = new ApplicationExitHandler(this);
     }
 
     public void SaveDeadRecords(IAttacker attacker, ulong moneyAmount, int currentFloor)
@@ -146,8 +285,28 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     }
 
     private void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
+        => SaveEncryptedRecord(new RecordList<T>(records), fileName);
+
+    public bool SaveCurrentGameData()
     {
-        var encrypt = aesGcm.Encrypt(JsonUtility.ToJson(new RecordList<T>(records)));
+        var gameInfo = GameInfo.Instance;
+
+        saveData = new SaveData()
+        {
+            currentFloor = gameInfo.currentFloor,
+            elapsedTimeSec = TimeManager.Instance.elapsedTimeSec + 1,
+            playerData = PlayerInfo.Instance.ExportRespawnData(),
+            mapData = gameInfo.ExportMapData(),
+            respawnData = SpawnHandler.Instance.ExportRespawnData()
+        };
+
+        SaveEncryptedRecord(saveData, SAVE_DATA_FILE_NAME);
+        return true;
+    }
+
+    private void SaveEncryptedRecord<T>(T record, string fileName)
+    {
+        var encrypt = aesGcm.Encrypt(JsonUtility.ToJson(record));
         var nonceData = nonceStore.GetNanceData(encrypt.Key);
 
         SaveText(fileName, JsonUtility.ToJson(
@@ -222,14 +381,36 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         try
         {
             saveData = JsonUtility.FromJson<SaveData>(LoadJsonData(SAVE_DATA_FILE_NAME));
+            saveData.mapData = saveData.mapData.Select(data => data.mapSize == 0 ? null : data).ToArray();
         }
         catch (Exception e)
         {
-            Debug.LogError("loading is not implemented: " + e.Message);
-            saveData = new SaveData();
+            Debug.LogError("ファイルのロードに失敗: " + e.Message);
         }
 
         return saveData;
+    }
+
+    public bool ImportGameData()
+    {
+        var saveData = LoadGameData();
+
+        if (saveData == null) return false;
+
+        try
+        {
+            GameInfo.Instance.ImportGameData(saveData);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("データのインポートに失敗: " + e.Message);
+            DeleteFile(SAVE_DATA_FILE_NAME);
+            Debug.Log(e.StackTrace);
+            throw e;
+            // return false;
+        }
+
+        return true;
     }
 
     private string LoadJsonData(string fileName)
@@ -279,5 +460,34 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 #else
         return Application.persistentDataPath;
 #endif
+    }
+
+    public void EnableSave() => exitHandler.EnableSave();
+    public void DisableSave() => exitHandler.DisableSave();
+
+
+    private class ApplicationExitHandler
+    {
+        private DataStoreAgent agent;
+        private bool isSaveReserved = false;
+
+        public ApplicationExitHandler(DataStoreAgent agent)
+        {
+            this.agent = agent;
+        }
+
+        public void EnableSave()
+        {
+            if (isSaveReserved) return;
+            Application.wantsToQuit += agent.SaveCurrentGameData;
+            isSaveReserved = true;
+        }
+
+        public void DisableSave()
+        {
+            if (!isSaveReserved) return;
+            Application.wantsToQuit += agent.SaveCurrentGameData;
+            isSaveReserved = false;
+        }
     }
 }
