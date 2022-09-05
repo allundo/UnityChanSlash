@@ -122,9 +122,17 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     public void SwitchWorldMap(WorldMap map, Pos playerPos)
     {
-        var store = respawnData[this.map.floor - 1];
-        var restore = respawnData[map.floor - 1];
+        respawnData[this.map.floor - 1] = GetRespawnData(playerPos);
 
+        DestroyAllEnemies();
+        DestroyAllEnemyGenerators();
+
+        RespawnEnemies(map);
+    }
+
+    private List<RespawnData> GetRespawnData(Pos playerPos)
+    {
+        var store = new List<RespawnData>();
         this.map.ForEachTiles((tile, pos) =>
         {
             tile.OnCharacterDest = tile.AboveEnemy = null;
@@ -134,16 +142,19 @@ public class PlaceEnemyGenerator : EnemyGenerator
                 tile.OnEnemy = null;
             }
         });
+        return store;
+    }
 
-        DestroyAllEnemies();
-        DestroyAllEnemyGenerators();
+    private void RespawnEnemies(WorldMap respawnMap)
+    {
+        // Switch current world map.
+        SetWorldMap(respawnMap);
 
-        SetWorldMap(map);
+        var restore = respawnData[respawnMap.floor - 1];
+
         restore.ForEach(data => Respawn(data));
-
         // Reserve spawning witch if player has KeyBlade.
         isWitchReserved = PlayerInfo.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.type == EnemyType.Witch).Count() == 0;
-
         restore.Clear();
     }
 

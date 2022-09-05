@@ -54,8 +54,13 @@ public class ItemGenerator : MobGenerator<Item>
 
     public void SwitchWorldMap(WorldMap map)
     {
-        var store = respawnData[this.map.floor - 1];
-        var restore = respawnData[map.floor - 1];
+        respawnData[this.map.floor - 1] = GetRespawnData();
+        RespawnItems(map);
+    }
+
+    private Stack<RespawnData> GetRespawnData()
+    {
+        var store = new Stack<RespawnData>();
 
         this.map.ForEachTiles((tile, pos) =>
         {
@@ -65,8 +70,16 @@ public class ItemGenerator : MobGenerator<Item>
             }
         });
 
-        SetWorldMap(map);
-        PlaceItems(map);
+        return store;
+    }
+
+    private void RespawnItems(WorldMap respawnMap)
+    {
+        // Switch current world map.
+        SetWorldMap(respawnMap);
+        PlaceItems(respawnMap);
+
+        var restore = respawnData[respawnMap.floor - 1];
 
         while (restore.Count > 0)
         {
@@ -76,7 +89,6 @@ public class ItemGenerator : MobGenerator<Item>
 
     private void PlaceItems(WorldMap map)
     {
-        // TODO: Need to implement item placing process
         if (map.deadEndPos.Count == 0) return;
 
         for (int i = 0; i < singleItemTypes.Length && map.deadEndPos.Count > 0; i++)
