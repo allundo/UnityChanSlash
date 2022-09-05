@@ -172,15 +172,13 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public EnemyData(Pos pos, EnemyType type, IDirection dir, EnemyStatus.EnemyStoreData statusData)
         {
-            posX = pos.x;
-            posY = pos.y;
+            this.pos = pos;
             enemyType = (int)type;
             this.dir = (int)dir.Enum;
             this.statusData = statusData;
         }
 
-        public int posX = 0;
-        public int posY = 0;
+        public Pos pos;
         public int enemyType = 0;
         public int dir = 0;
         public EnemyStatus.EnemyStoreData statusData = null;
@@ -191,14 +189,12 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public PlayerData(Pos pos, IDirection dir, MobStatus.MobStoreData statusData)
         {
-            posX = pos.x;
-            posY = pos.y;
+            this.pos = pos;
             this.dir = (int)dir.Enum;
             this.statusData = statusData;
         }
 
-        public int posX = 0;
-        public int posY = 0;
+        public Pos pos;
         public int dir = 0;
         public MobStatus.MobStoreData statusData = null;
     }
@@ -208,14 +204,12 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public ItemData(Pos pos, ItemType type, int numOfItem)
         {
-            posX = pos.x;
-            posY = pos.y;
+            this.pos = pos;
             itemType = (int)type;
             this.numOfItem = numOfItem;
         }
 
-        public int posX = 0;
-        public int posY = 0;
+        public Pos pos;
         public int itemType = 0;
         public int numOfItem = 0;
     }
@@ -405,9 +399,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         {
             Debug.LogError("データのインポートに失敗: " + e.Message);
             DeleteFile(SAVE_DATA_FILE_NAME);
-            Debug.Log(e.StackTrace);
-            throw e;
-            // return false;
+            return false;
         }
 
         return true;

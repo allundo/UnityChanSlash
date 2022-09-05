@@ -220,7 +220,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         : this(status.type, pos, status.dir, status.GetStoreData()) { }
 
         public RespawnData(DataStoreAgent.EnemyData data)
-        : this(Util.ConvertTo<EnemyType>(data.enemyType), new Pos(data.posX, data.posY), Direction.Convert((Dir)data.dir), data.statusData) { }
+        : this(Util.ConvertTo<EnemyType>(data.enemyType), data.pos, Direction.Convert((Dir)data.dir), data.statusData) { }
 
         public RespawnData(EnemyType type, Pos pos, IDirection dir, EnemyStatus.EnemyStoreData statusData)
         {

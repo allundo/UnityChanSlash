@@ -33,7 +33,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
     public void ImportRespawnData(DataStoreAgent.PlayerData data)
     {
-        status.SetPosition(new KeyValuePair<Pos, IDirection>(new Pos(data.posX, data.posY), Direction.Convert(Util.ConvertTo<Dir>(data.dir))));
+        status.SetPosition(new KeyValuePair<Pos, IDirection>(data.pos, Direction.Convert(Util.ConvertTo<Dir>(data.dir))));
         status.SetStatusData(data.statusData);
         input.SetInputVisible();
     }

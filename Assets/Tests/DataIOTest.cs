@@ -95,13 +95,13 @@ public class DataIOTest
         Assert.AreEqual(1, gameInfo.currentFloor);
         Assert.AreEqual(1000, loadData.elapsedTimeSec);
         Assert.AreEqual(0, loadData.playerData.dir);
-        Assert.AreEqual(0, loadData.playerData.posX);
-        Assert.AreEqual(0, loadData.playerData.posY);
+        Assert.AreEqual(0, loadData.playerData.pos.x);
+        Assert.AreEqual(0, loadData.playerData.pos.y);
         Assert.AreEqual(0f, loadData.playerData.statusData.life);
         Assert.False(loadData.playerData.statusData.isIced);
         Assert.False(loadData.playerData.statusData.isHidden);
-        Assert.AreEqual(13, loadData.respawnData[0].itemData[0].posX);
-        Assert.AreEqual(32, loadData.respawnData[0].itemData[0].posY);
+        Assert.AreEqual(13, loadData.respawnData[0].itemData[0].pos.x);
+        Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
         Assert.AreEqual(3, loadData.respawnData[0].itemData[0].itemType);
         Assert.AreEqual(2, loadData.respawnData[0].itemData[0].numOfItem);
     }
