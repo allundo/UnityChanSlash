@@ -10,11 +10,15 @@ public class DataIOTest
     private DataStoreAgentTest dataStoreAgent;
     private string[] tempFiles;
     private string[] fileNames;
+    private GameInfo gameInfo;
+    private ResourceLoader resourceLoader;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
+        resourceLoader = UnityEngine.Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"), Vector3.zero, Quaternion.identity); ;
+        gameInfo = UnityEngine.Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"), Vector3.zero, Quaternion.identity); ;
 
         // Keep data files
 
@@ -50,6 +54,7 @@ public class DataIOTest
         }
 
         UnityEngine.Object.Destroy(dataStoreAgent.gameObject);
+        UnityEngine.Object.Destroy(gameInfo.gameObject);
     }
 
     [Test]
@@ -67,5 +72,37 @@ public class DataIOTest
         Assert.AreEqual(3, records[0].floor);
         Assert.AreEqual("testにやられた", records[0].causeOfDeath);
         Assert.AreEqual("1,3,10000,testにやられた", string.Join(",", records[0].GetValues(1).Select(obj => obj.ToString())));
+    }
+
+
+    [Test]
+    public void _002_SaveGameDataAndLoadTest()
+    {
+        dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
+
+        var saveData = new DataStoreAgent.SaveData()
+        {
+            currentFloor = 1,
+            elapsedTimeSec = 1000,
+            mapData = new DataStoreAgent.MapData[5],
+            respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
+        };
+
+        dataStoreAgent.SaveEncryptedRecordTest(saveData, dataStoreAgent.SAVE_DATA_FILE_NAME);
+        dataStoreAgent.ImportGameData();
+        var loadData = dataStoreAgent.LoadGameData();
+
+        Assert.AreEqual(1, gameInfo.currentFloor);
+        Assert.AreEqual(1000, loadData.elapsedTimeSec);
+        Assert.AreEqual(0, loadData.playerData.dir);
+        Assert.AreEqual(0, loadData.playerData.posX);
+        Assert.AreEqual(0, loadData.playerData.posY);
+        Assert.AreEqual(0f, loadData.playerData.statusData.life);
+        Assert.False(loadData.playerData.statusData.isIced);
+        Assert.False(loadData.playerData.statusData.isHidden);
+        Assert.AreEqual(13, loadData.respawnData[0].itemData[0].posX);
+        Assert.AreEqual(32, loadData.respawnData[0].itemData[0].posY);
+        Assert.AreEqual(3, loadData.respawnData[0].itemData[0].itemType);
+        Assert.AreEqual(2, loadData.respawnData[0].itemData[0].numOfItem);
     }
 }
