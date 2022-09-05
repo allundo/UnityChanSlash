@@ -185,36 +185,39 @@ public class PlaceEnemyGenerator : EnemyGenerator
         generatorPool.Clear();
     }
 
-    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data = null)
-        => ManualSpawn(RandomEnemyType, pos, dir, option, data);
+    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData = null)
+        => ManualSpawn(RandomEnemyType, pos, dir, option, statusData);
 
-    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data = null)
+    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData = null)
     {
         CreateEnemyPool(type);
-        return Spawn(type, pos, dir, option, data);
+        return Spawn(type, pos, dir, option, statusData);
     }
 
     public IEnemyStatus SpawnWitch(Pos pos, IDirection dir, float waitFrames = 120f)
         => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, true, waitFrames));
 
-    private IEnemyStatus Respawn(RespawnData data) => ManualSpawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.storeData);
+    private IEnemyStatus Respawn(RespawnData data) => ManualSpawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.statusData);
 
-    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data)
-        => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, data);
+    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData)
+        => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, statusData);
 
     private struct RespawnData
     {
         public RespawnData(IEnemyStatus status, Pos pos)
+        : this(status.type, pos, status.dir, status.GetStoreData()) { }
+
+        public RespawnData(EnemyType type, Pos pos, IDirection dir, EnemyStatus.EnemyStoreData statusData)
         {
-            this.type = status.type;
+            this.type = type;
             this.pos = pos;
-            this.dir = status.dir;
-            storeData = status.GetStoreData();
+            this.dir = dir;
+            this.statusData = statusData;
         }
 
         public EnemyType type;
         public Pos pos;
         public IDirection dir;
-        public EnemyStatus.EnemyStoreData storeData;
+        public EnemyStatus.EnemyStoreData statusData;
     }
 }
