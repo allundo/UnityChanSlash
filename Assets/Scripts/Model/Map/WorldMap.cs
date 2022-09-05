@@ -66,6 +66,18 @@ public class WorldMap
         }
     }
 
+    public void ApplyTileOpen()
+    {
+        ForEachTiles(tile =>
+        {
+            if (tile is IOpenable)
+            {
+                var openTile = tile as IOpenable;
+                if (openTile.IsOpen) openTile.Open();
+            }
+        });
+    }
+
     public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= Width || y >= Height;
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)

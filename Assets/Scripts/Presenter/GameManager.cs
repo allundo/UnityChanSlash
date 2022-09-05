@@ -188,9 +188,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.MoveFloorCharacters(worldMap, map.onTilePos);
         eventManager.SwitchWorldMap(worldMap);
 
-        yield return new WaitForEndOfFrame();
-
-        mapRenderer.StoreMapData();
         yield return new WaitForSeconds(0.5f);
 
         mapRenderer.SetActiveTerrains(false);
@@ -217,7 +214,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.SetActiveTerrains(true);
         yield return new WaitForEndOfFrame();
 
-        mapRenderer.RestoreMapData(worldMap);
+        mapRenderer.ApplyTileOpen(worldMap);
         yield return new WaitForEndOfFrame();
 
         spawnHandler.MoveFloorItems(worldMap, map.dir);

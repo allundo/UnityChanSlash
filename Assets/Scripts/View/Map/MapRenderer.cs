@@ -8,8 +8,6 @@ public class MapRenderer : MonoBehaviour
     private FloorMaterialsData floorMaterialsData;
     private FloorMaterialsSource floorMaterials;
 
-    private List<Pos>[] tileOpenData;
-
     public WorldMap map { get; private set; }
 
     // Instantiated GameObjects
@@ -60,8 +58,6 @@ public class MapRenderer : MonoBehaviour
     void Awake()
     {
         floorMaterialsData = ResourceLoader.Instance.floorMaterialsData;
-
-        tileOpenData = new List<Pos>[floorMaterialsData.Length].Select(_ => new List<Pos>()).ToArray();
 
         doorsRenderer = new DoorsRenderer(transform);
         stairsRenderer = new StairsRenderer(transform);
@@ -214,21 +210,9 @@ public class MapRenderer : MonoBehaviour
         return terrainMeshes;
     }
 
-    public void StoreMapData()
+    public void ApplyTileOpen(WorldMap map)
     {
-        var store = tileOpenData[this.map.floor - 1];
-
-        this.map.ForEachTiles((tile, pos) =>
-        {
-            if (tile is IOpenable && (tile as IOpenable).IsOpen) store.Add(pos);
-        });
-    }
-
-    public void RestoreMapData(WorldMap map)
-    {
-        var restore = tileOpenData[map.floor - 1];
-        restore.ForEach(pos => (map.GetTile(pos) as IOpenable).Open());
-        restore.Clear();
+        map.ApplyTileOpen();
 
         doorsRenderer.CompleteTween();
         boxesRenderer.CompleteTween();
