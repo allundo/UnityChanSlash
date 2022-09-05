@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using UniRx;
 using System;
+using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 
-[Ignore("Only for spec confirmation.")]
 public class CSharpSpecTest
 {
+    [Ignore("Only for spec confirmation.")]
     [Test]
     /// <summary>
     /// string encryption testing
@@ -40,6 +41,7 @@ public class CSharpSpecTest
         public UInt64 value3;
     }
 
+    [Ignore("Only for spec confirmation.")]
     [Test]
     /// <summary>
     /// string compress testing
@@ -68,6 +70,7 @@ public class CSharpSpecTest
         Assert.AreEqual(sut.value3, decodedStruct.value3);
     }
 
+    [Ignore("Only for spec confirmation.")]
     [Test]
     /// <summary>
     /// Array is handled as reference in method and the fields are editable
@@ -95,6 +98,7 @@ public class CSharpSpecTest
         tests[1].check = true;
     }
 
+    [Ignore("Only for spec confirmation.")]
     [UnityTest]
     /// <summary>
     /// Array is handled as reference in a notification message and the fields can be edited by the receivers;
@@ -119,5 +123,47 @@ public class CSharpSpecTest
         yield return null;
 
         Assert.True(tests[1].check);
+    }
+
+    private event Func<string> sutEvent;
+
+    [Ignore("Only for spec confirmation.")]
+    [Test]
+    /// <summary>
+    /// Multiple delegate events can be assigned to Func/Action but they invoke only the last assigned event.
+    /// </summary>
+    public void DelegateInvokesOnlyTheLastAssignedEvent()
+    {
+        sutEvent = null;
+
+        sutEvent += EventTest;
+        Assert.AreEqual("EventTestString", sutEvent.Invoke());
+
+        sutEvent += EventTest2;
+        Assert.AreEqual("EventTest2String", sutEvent.Invoke());
+
+        sutEvent += EventTest;
+        Assert.AreEqual("EventTestString", sutEvent.Invoke());
+
+        sutEvent -= EventTest2;
+        Assert.AreEqual("EventTestString", sutEvent.Invoke());
+
+        sutEvent -= EventTest;
+        Assert.AreEqual("EventTestString", sutEvent.Invoke());
+
+        // Assigned delegates can be retrieved by GetInvocationList.
+        Assert.AreEqual("EventTest", sutEvent.GetInvocationList()[0].GetMethodInfo().Name);
+
+        sutEvent -= EventTest;
+        Assert.Throws<NullReferenceException>(() => sutEvent.Invoke(), "Should be a null event invocation");
+    }
+
+    private string EventTest()
+    {
+        return "EventTestString";
+    }
+    private string EventTest2()
+    {
+        return "EventTest2String";
     }
 }
