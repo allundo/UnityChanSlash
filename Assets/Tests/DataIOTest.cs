@@ -7,14 +7,14 @@ using System.Text.RegularExpressions;
 
 public class DataIOTest
 {
-    private DataStoreAgent dataStoreAgent;
+    private DataStoreAgentTest dataStoreAgent;
     private string[] tempFiles;
     private string[] fileNames;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgent>("Prefabs/System/DataStoreAgent"), Vector3.zero, Quaternion.identity); ;
+        dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
 
         // Keep data files
 

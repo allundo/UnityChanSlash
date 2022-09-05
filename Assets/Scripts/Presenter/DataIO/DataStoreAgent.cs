@@ -229,15 +229,15 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public override object[] GetValues() => new object[] { };
     }
 
-    private List<DeadRecord> deadRecords = null;
-    private List<ClearRecord> clearRecords = null;
-    private InfoRecord infoRecord = null;
-    private SaveData saveData = null;
+    protected List<DeadRecord> deadRecords = null;
+    protected List<ClearRecord> clearRecords = null;
+    protected InfoRecord infoRecord = null;
+    protected SaveData saveData = null;
 
-    private MyAesGcm aesGcm;
-    private NonceStore nonceStore;
+    protected MyAesGcm aesGcm;
+    protected NonceStore nonceStore;
 
-    private ApplicationExitHandler exitHandler;
+    protected ApplicationExitHandler exitHandler;
 
     protected override void Awake()
     {
@@ -284,7 +284,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         SaveEncryptedRecords(clearRecords, CLEAR_RECORD_FILE_NAME);
     }
 
-    private void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
+    protected void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
         => SaveEncryptedRecord(new RecordList<T>(records), fileName);
 
     public bool SaveCurrentGameData()
@@ -304,7 +304,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return true;
     }
 
-    private void SaveEncryptedRecord<T>(T record, string fileName)
+    protected void SaveEncryptedRecord<T>(T record, string fileName)
     {
         var encrypt = aesGcm.Encrypt(JsonUtility.ToJson(record));
         var nonceData = nonceStore.GetNanceData(encrypt.Key);
@@ -319,7 +319,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             }));
     }
 
-    private List<T> LoadRecords<T>(string fileName) where T : DataArray
+    protected List<T> LoadRecords<T>(string fileName) where T : DataArray
     {
         return JsonUtility.FromJson<RecordList<T>>(LoadJsonData(fileName)).records;
     }
@@ -413,7 +413,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return true;
     }
 
-    private string LoadJsonData(string fileName)
+    protected string LoadJsonData(string fileName)
     {
         RecordSet set = JsonUtility.FromJson<RecordSet>(LoadText(fileName));
         nonceStore.SetNanceData(set.hash, set.nonce);
@@ -447,7 +447,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     /// Secure directory path for data save. Supports Android only for now.
     /// </summary>
     /// <returns>"/data/data/{ApplicationPackageName}/files" for example</returns>
-    private string GetSecureDataPath()
+    protected string GetSecureDataPath()
     {
 #if !UNITY_EDITOR && UNITY_ANDROID
         using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -466,7 +466,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     public void DisableSave() => exitHandler.DisableSave();
 
 
-    private class ApplicationExitHandler
+    protected class ApplicationExitHandler
     {
         private DataStoreAgent agent;
         private bool isSaveReserved = false;
