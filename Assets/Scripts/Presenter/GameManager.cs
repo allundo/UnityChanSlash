@@ -95,13 +95,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     public void LoadDataStart()
     {
-        var saveData = DataStoreAgent.Instance.LoadGameData();
+        DataStoreAgent.Instance.RespawnByGameData(worldMap, hidePlateHandler);
 
-        TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
-        spawnHandler.ImportRespawnData(saveData.respawnData, worldMap);
-        PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
-
-        hidePlateHandler.Init();
         mainCamera.SwitchFloor(worldMap.floor);
 
         cover.FadeIn(1f, 0.5f, false).Play();

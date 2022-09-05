@@ -413,6 +413,25 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return true;
     }
 
+    public void RespawnByGameData(WorldMap map, HidePlateHandler hidePlateHandler)
+    {
+        try
+        {
+            if (saveData == null) throw new Exception("データがロードされていません");
+            TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
+            SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
+            PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
+            hidePlateHandler.Init();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("データのインポートに失敗: " + e.Message);
+            DeleteFile(SAVE_DATA_FILE_NAME);
+            Debug.Log(e.StackTrace);
+            throw e;
+        }
+    }
+
     protected string LoadJsonData(string fileName)
     {
         RecordSet set = JsonUtility.FromJson<RecordSet>(LoadText(fileName));
