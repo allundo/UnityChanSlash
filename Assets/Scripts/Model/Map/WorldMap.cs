@@ -92,6 +92,8 @@ public class WorldMap
 
     public List<Pos> ExportTileOpenData()
     {
+        if (openReservedTilePos != null) return openReservedTilePos;
+
         var data = new List<Pos>();
 
         if (randomMessagePos.Count() > 0/* FIXME: use random message count as initialized flag for now */)
