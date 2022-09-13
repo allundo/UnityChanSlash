@@ -410,8 +410,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         try
         {
             if (saveData == null) throw new Exception("データがロードされていません");
+            var spawnHandler = SpawnHandler.Instance;
             TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
-            SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
+            spawnHandler.ImportRespawnData(saveData.respawnData, map);
+            spawnHandler.PlaceEnemyGenerators();
             PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
             hidePlateHandler.Init();
         }
