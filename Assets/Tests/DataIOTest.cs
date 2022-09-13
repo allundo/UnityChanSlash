@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public class DataIOTest
@@ -84,19 +85,21 @@ public class DataIOTest
         {
             currentFloor = 1,
             elapsedTimeSec = 1000,
-            mapData = new DataStoreAgent.MapData[5],
+            mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(new WorldMap()), null, null, null, null },
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
         };
+        var mapData = saveData.mapData[0];
 
         dataStoreAgent.SaveEncryptedRecordTest(saveData, dataStoreAgent.SAVE_DATA_FILE_NAME);
         dataStoreAgent.ImportGameData();
         var loadData = dataStoreAgent.LoadGameData();
 
+        var map = gameInfo.Map(1);
+
         Assert.AreEqual(1, gameInfo.currentFloor);
         Assert.AreEqual(1000, loadData.elapsedTimeSec);
-        Assert.AreEqual(0, loadData.playerData.dir);
-        Assert.AreEqual(0, loadData.playerData.pos.x);
-        Assert.AreEqual(0, loadData.playerData.pos.y);
+        Assert.AreEqual(0, loadData.playerData.posDir.dir);
+        Assert.AreEqual(new Pos(), loadData.playerData.posDir.pos);
         Assert.AreEqual(0f, loadData.playerData.statusData.life);
         Assert.False(loadData.playerData.statusData.isIced);
         Assert.False(loadData.playerData.statusData.isHidden);
@@ -104,5 +107,8 @@ public class DataIOTest
         Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
         Assert.AreEqual(3, loadData.respawnData[0].itemData[0].itemType);
         Assert.AreEqual(2, loadData.respawnData[0].itemData[0].numOfItem);
+
+        Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
+        Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);
     }
 }

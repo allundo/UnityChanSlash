@@ -99,19 +99,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             var bottom = map.StairsBottom;
             var top = map.stairsTop;
 
-            if (!bottom.Key.IsNull)
-            {
-                stairsBottomPosX = bottom.Key.x;
-                stairsBottomPosY = bottom.Key.y;
-                stairsBottomDir = (int)bottom.Value.Enum;
-            }
-
-            if (!top.Key.IsNull)
-            {
-                stairsTopPosX = top.Key.x;
-                stairsTopPosY = top.Key.y;
-                stairsTopDir = (int)top.Value.Enum;
-            }
+            if (!bottom.Key.IsNull) stairsBottom = new PosDirPair(bottom);
+            if (!top.Key.IsNull) stairsTop = new PosDirPair(bottom);
 
             tileOpenData = map.ExportTileOpenData().ToArray();
             roomCenterPos = map.roomCenterPos.ToArray();
@@ -122,12 +111,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int[] mapMatrix = null;
         public int[] dirMap = null;
         public int mapSize = 0;
-        public int stairsBottomPosX = 0;
-        public int stairsBottomPosY = 0;
-        public int stairsBottomDir = 0;
-        public int stairsTopPosX = 0;
-        public int stairsTopPosY = 0;
-        public int stairsTopDir = 0;
+        public PosDirPair stairsBottom = null;
+        public PosDirPair stairsTop = null;
         public Pos[] tileOpenData = null;
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;
@@ -137,6 +122,16 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class PosDirPair
     {
+        public PosDirPair(KeyValuePair<Pos, IDirection> pair) : this(pair.Key, pair.Value) { }
+
+        public PosDirPair(Pos pos, IDirection dir)
+        {
+            this.pos = pos;
+            this.dir = dir.Int;
+        }
+
+        public KeyValuePair<Pos, IDirection> Convert() => new KeyValuePair<Pos, IDirection>(pos, Direction.Convert(dir));
+
         public Pos pos;
         public int dir = 0;
     }
@@ -174,7 +169,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         {
             this.pos = pos;
             enemyType = (int)type;
-            this.dir = (int)dir.Enum;
+            this.dir = dir.Int;
             this.statusData = statusData;
         }
 
@@ -189,13 +184,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public PlayerData(Pos pos, IDirection dir, MobStatus.MobStoreData statusData)
         {
-            this.pos = pos;
-            this.dir = (int)dir.Enum;
+            this.posDir = new PosDirPair(pos, dir);
             this.statusData = statusData;
         }
 
-        public Pos pos;
-        public int dir = 0;
+        public PosDirPair posDir = null;
         public MobStatus.MobStoreData statusData = null;
     }
 

@@ -110,8 +110,8 @@ public class MapManager
         this.height = matrix.Length / width;
         this.roomCenterPos = mapData.roomCenterPos.ToList();
         this.deadEndPos = new Dictionary<Pos, IDirection>();
-        this.stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(mapData.stairsBottomPosX, mapData.stairsBottomPosY), Direction.Convert(Util.ConvertTo<Dir>(mapData.stairsBottomDir)));
-        this.stairsTop = new KeyValuePair<Pos, IDirection>(new Pos(mapData.stairsTopPosX, mapData.stairsTopPosY), Direction.Convert(Util.ConvertTo<Dir>(mapData.stairsTopDir)));
+        this.stairsBottom = mapData.stairsBottom.Convert();
+        this.stairsTop = mapData.stairsTop.Convert();
 
         this.matrix = new Terrain[width, height];
         this.dirMap = new Dir[width, height];

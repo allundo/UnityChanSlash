@@ -186,6 +186,7 @@ public interface IDirection
     IDirection Backward { get; }
 
     Dir Enum { get; }
+    int Int { get; }
     Vector3 Angle { get; }
     Quaternion Rotate { get; }
 
@@ -193,6 +194,8 @@ public interface IDirection
     bool IsLeft(IDirection dir);
     bool IsRight(IDirection dir);
     bool IsInverse(IDirection dir);
+
+    bool Equals(object obj);
 }
 
 public abstract class Direction
@@ -221,6 +224,8 @@ public abstract class Direction
         }
     }
 
+    public static IDirection Convert(int dir) => Convert(Util.ConvertTo<Dir>(dir));
+
     public static IDirection Convert(Vector3 forward)
     {
         IDirection retDir = null;
@@ -237,6 +242,9 @@ public abstract class Direction
 
         return retDir;
     }
+
+    public virtual Dir Enum => Dir.NONE;
+    public int Int => (int)Enum;
 
     public abstract bool IsSame(IDirection dir);
 
@@ -285,7 +293,7 @@ public class North : Direction, IDirection
     public IDirection Right => Direction.east;
     public IDirection Backward => Direction.south;
 
-    public Dir Enum => Dir.N;
+    public override Dir Enum => Dir.N;
     public override Vector3 Angle => Vector3.zero;
 
     public override bool IsSame(IDirection dir) => dir is North;
@@ -318,7 +326,7 @@ public class East : Direction, IDirection
     public IDirection Right => Direction.south;
     public IDirection Backward => Direction.west;
 
-    public Dir Enum => Dir.E;
+    public override Dir Enum => Dir.E;
     public override Vector3 Angle => new Vector3(0, 90, 0);
 
     public override bool IsSame(IDirection dir) => dir is East;
@@ -351,7 +359,7 @@ public class South : Direction, IDirection
     public IDirection Right => Direction.west;
     public IDirection Backward => Direction.north;
 
-    public Dir Enum => Dir.S;
+    public override Dir Enum => Dir.S;
     public override Vector3 Angle => new Vector3(0, 180, 0);
 
     public override bool IsSame(IDirection dir) => dir is South;
@@ -384,7 +392,7 @@ public class West : Direction, IDirection
     public IDirection Right => Direction.north;
     public IDirection Backward => Direction.east;
 
-    public Dir Enum => Dir.W;
+    public override Dir Enum => Dir.W;
     public override Vector3 Angle => new Vector3(0, -90, 0);
 
     public override bool IsSame(IDirection dir) => dir is West;
