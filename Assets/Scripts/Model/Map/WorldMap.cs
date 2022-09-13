@@ -116,6 +116,14 @@ public class WorldMap
             var posList = import.randomMessagePos[i];
             posList.pos.ForEach(pos => randomMessagePos[pos] = i);
         }
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                discovered[x, y] = import.tileDiscoveredData[x + Width * y];
+            }
+        }
     }
 
     public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= Width || y >= Height;
@@ -367,5 +375,19 @@ public class WorldMap
         var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();
         randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
         return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();
+    }
+
+    public bool[] ExportTileDiscoveredData()
+    {
+        var export = new bool[Width * Height];
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                export[x + Width * y] = discovered[x, y];
+            }
+        }
+        return export;
     }
 }

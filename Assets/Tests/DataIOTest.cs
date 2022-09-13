@@ -110,5 +110,13 @@ public class DataIOTest
 
         Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
         Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);
+
+        for (int y = 0; y < 49; y++)
+        {
+            for (int x = 0; x < 49; x++)
+            {
+                Assert.False(map.discovered[x, y]);
+            }
+        }
     }
 }

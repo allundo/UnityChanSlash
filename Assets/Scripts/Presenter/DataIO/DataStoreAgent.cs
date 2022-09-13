@@ -103,6 +103,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             if (!top.Key.IsNull) stairsTop = new PosDirPair(bottom);
 
             tileOpenData = map.ExportTileOpenData().ToArray();
+            tileDiscoveredData = map.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
             randomMessagePos = map.ExportRandomMessagePos();
             fixedMessagePos = map.fixedMessagePos.ToArray();
@@ -114,6 +115,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public PosDirPair stairsBottom = null;
         public PosDirPair stairsTop = null;
         public Pos[] tileOpenData = null;
+        public bool[] tileDiscoveredData = null;
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;
         public PosList[] randomMessagePos = null;
