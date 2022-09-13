@@ -95,11 +95,33 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     public void LoadDataStart()
     {
+        cover.SetAlpha(1f);
+
         DataStoreAgent.Instance.RespawnByGameData(worldMap, hidePlateHandler);
 
+        StartCoroutine(LoadStartCoroutine());
+    }
+
+    private IEnumerator LoadStartCoroutine(float delay = 0.5f)
+    {
+        TimeManager.Instance.Pause();                       // Set pause to disable enemies' moving
+
+        // Wait for Start() method calls of GameObjects
+        yield return null;
+
+        mapRenderer.ApplyTileOpen(worldMap);
+        spawnHandler.PlaceEnemyGenerators();
         mainCamera.SwitchFloor(worldMap.floor);
 
-        cover.FadeIn(1f, 0.5f, false).Play();
+        yield return null;
+
+        DOTween.Sequence()
+            .Append(cover.FadeIn(1f, 0.5f, false))
+            .InsertCallback(1f, () => TimeManager.Instance.Resume()) // Resume in the middle of fade-in
+            .SetUpdate(true)
+            .Play();
+
+        yield return null;
 
         DataStoreAgent.Instance.EnableSave();
     }
