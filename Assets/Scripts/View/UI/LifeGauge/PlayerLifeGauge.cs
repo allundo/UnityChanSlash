@@ -19,22 +19,25 @@ public class PlayerLifeGauge : MonoBehaviour
 
     private Tween shakeTween = null;
 
+    private bool flashOnUpdate = false;
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         healEffect = new HealEffect(healImage, healVfx, rectTransform.sizeDelta.x);
     }
 
-    public void UpdateLife(float life, float lifeMax, bool isFlash)
+    public void UpdateLife(float life, float lifeMax)
     {
         UpdateLifeText(life, lifeMax);
-        UpdateGauge(life / lifeMax, isFlash);
+        UpdateGauge(life / lifeMax);
     }
 
-    private void UpdateGauge(float lifeRatio, bool isFlash)
+    private void UpdateGauge(float lifeRatio)
     {
-        greenGauge.UpdateGauge(lifeRatio, isFlash);
+        greenGauge.UpdateGauge(lifeRatio, flashOnUpdate);
         redGauge.UpdateGauge(lifeRatio);
+        flashOnUpdate = false;
     }
 
     /// <summary>
@@ -44,16 +47,15 @@ public class PlayerLifeGauge : MonoBehaviour
     /// <param name="lifeRatio">Normalized life ratio after healing to the life max</param>
     public void OnHeal(float healRatio, float lifeRatio)
     {
-        UpdateGauge(lifeRatio, true);
+        flashOnUpdate = true;
         healEffect.PlayEffect(healRatio * 0.5f, lifeRatio);
     }
 
-    public void OnNoEffectHeal(float heal, float prevLife, float lifeMax)
+    public void OnNoEffectHeal(float heal, float prevLife)
     {
         float life = heal + prevLife;
 
-        UpdateGauge(life / lifeMax, true);
-
+        flashOnUpdate = true;
         bool isHealVisible = (int)(life * 10f) > (int)(prevLife * 10f);
         if (isHealVisible) smallHealSound.PlayEx();
     }
@@ -63,17 +65,17 @@ public class PlayerLifeGauge : MonoBehaviour
         lifeMaxSound.PlayEx();
     }
 
-    public void OnDamage(float damageRatio, float lifeRatio)
+    public void OnDamage(float damageRatio)
     {
         if (damageRatio < 0.000001f)
         {
-            UpdateGauge(lifeRatio, false);
+            flashOnUpdate = false;
             return;
         }
 
         healEffect.KillEffect();
 
-        UpdateGauge(lifeRatio, true);
+        flashOnUpdate = true;
 
         shakeTween?.Kill();
         shakeTween = DamageShake(damageRatio);

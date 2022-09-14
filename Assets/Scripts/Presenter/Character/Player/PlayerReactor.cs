@@ -45,12 +45,12 @@ public class PlayerReactor : MobReactor
         // Initialize life text and gauge
         restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
 
-        lifeGauge.UpdateLife(status.Life.Value, status.LifeMax.Value, false);
+        lifeGauge.UpdateLife(status.Life.Value, status.LifeMax.Value);
     }
 
     protected void OnLifeMaxChange(float lifeMax)
     {
-        lifeGauge.UpdateLife(status.Life.Value, lifeMax, false);
+        lifeGauge.UpdateLife(status.Life.Value, lifeMax);
     }
 
     public override bool HealRatio(float healRatio = 0f, bool isEffectOn = true, bool healAnyway = false)
@@ -74,7 +74,7 @@ public class PlayerReactor : MobReactor
         }
         else if (status.Life.Value < status.LifeMax.Value)
         {
-            lifeGauge.OnNoEffectHeal(heal, status.Life.Value, status.LifeMax.Value);
+            lifeGauge.OnNoEffectHeal(heal, status.Life.Value);
             if (lifeRatio == 1f) lifeGauge.OnLifeMax();
         }
 
@@ -86,13 +86,10 @@ public class PlayerReactor : MobReactor
     {
         if (life <= 0.0f) input.InputDie();
 
-        // Update life text only.
-        // Life gauge updating effects should be handled by OnDamage() or OnHealRatio() methods.
-        lifeGauge.UpdateLifeText(life, status.LifeMax.Value);
+        lifeGauge.UpdateLife(life, status.LifeMax.Value);
 
         restUI.OnLifeChange(life, status.LifeMax.Value);
         playerAnim.lifeRatio.Float = LifeRatio(life);
-
     }
 
     public override float Damage(IAttacker attacker, Attack.AttackData attackData)
@@ -106,7 +103,7 @@ public class PlayerReactor : MobReactor
         float damage = base.Damage(attack, dir, type, attr);
         if (restUI.isActive) restUI.OnDamage();
 
-        lifeGauge.OnDamage(LifeRatio(damage), LifeRatio(status.Life.Value));
+        lifeGauge.OnDamage(LifeRatio(damage));
 
         return damage;
     }
