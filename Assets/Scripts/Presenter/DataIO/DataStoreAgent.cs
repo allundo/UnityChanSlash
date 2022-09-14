@@ -81,7 +81,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public int currentFloor = 0;
         public int elapsedTimeSec = 0;
-        public PlayerData playerData = null;
+        public MobData playerData = null;
         public MapData[] mapData = null;
         public RespawnData[] respawnData = null;
         public override object[] GetValues() => new object[] { };
@@ -129,7 +129,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public PosDirPair(Pos pos, IDirection dir)
         {
             this.pos = pos;
-            this.dir = dir.Int;
+            this.dir = dir?.Int ?? 0;
         }
 
         public KeyValuePair<Pos, IDirection> Convert() => new KeyValuePair<Pos, IDirection>(pos, Direction.Convert(dir));
@@ -165,33 +165,63 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     }
 
     [System.Serializable]
-    public class EnemyData
+    public class EnemyData : MobData
     {
-        public EnemyData(Pos pos, EnemyType type, IDirection dir, EnemyStatus.EnemyStoreData statusData)
+        public EnemyData(Pos pos, IEnemyStatus status) : base(pos, status)
         {
-            this.pos = pos;
-            enemyType = (int)type;
-            this.dir = dir.Int;
-            this.statusData = statusData;
+            type = (int)status.type;
+            isTamed = status.isTamed;
         }
 
-        public Pos pos;
-        public int enemyType = 0;
-        public int dir = 0;
-        public EnemyStatus.EnemyStoreData statusData = null;
+        [SerializeField] private int type = 0;
+        public EnemyType enemyType
+        {
+            get { return Util.ConvertTo<EnemyType>(type); }
+            set { type = (int)value; }
+        }
+
+        public bool isTamed = false;
+        public override MobStoreData StoreData() => new EnemyStoreData(life, isIced, isHidden, isTamed);
     }
 
     [System.Serializable]
-    public class PlayerData
+    public class MobData
     {
-        public PlayerData(Pos pos, IDirection dir, MobStatus.MobStoreData statusData)
+        public MobData(Pos pos, IMobStatus status) : this(pos, status.dir, status.Life.Value, status.isIced, status.isHidden)
+        { }
+
+        /// <summary>
+        /// For testing
+        /// </summary>
+        public MobData(Pos pos, IDirection dir, float life, bool isIced, bool isHidden)
         {
-            this.posDir = new PosDirPair(pos, dir);
-            this.statusData = statusData;
+            posDir = new PosDirPair(pos, dir);
+            this.life = life;
+            this.isIced = isIced;
+            this.isHidden = isHidden;
         }
 
-        public PosDirPair posDir = null;
-        public MobStatus.MobStoreData statusData = null;
+        [SerializeField] private PosDirPair posDir = null;
+
+        public KeyValuePair<Pos, IDirection> kvPosDir => posDir.Convert();
+
+        public Pos pos
+        {
+            get { return posDir.pos; }
+            set { posDir.pos = value; }
+        }
+
+        public IDirection dir
+        {
+            get { return Direction.Convert(posDir.dir); }
+            set { posDir.dir = value.Int; }
+        }
+
+        public float life = 0f;
+        public bool isIced = false;
+        public bool isHidden = false;
+
+        public virtual MobStoreData StoreData() => new MobStoreData(life, isIced, isHidden);
     }
 
     [System.Serializable]

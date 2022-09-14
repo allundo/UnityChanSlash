@@ -17,25 +17,10 @@ public interface IEnemyStatus : IMobStatus
     bool TryTame(float tamingPower = 1f);
     bool isTamed { get; }
     void CancelTamed();
-
-    EnemyStatus.EnemyStoreData GetStoreData();
 }
 
 public class EnemyStatus : MobStatus, IEnemyStatus
 {
-    [System.Serializable]
-    public class EnemyStoreData : MobStoreData
-    {
-        public bool isTamed { get; private set; }
-
-        public EnemyStoreData(IEnemyStatus status) : base(status)
-        {
-            isTamed = status.isTamed;
-        }
-    }
-
-    public EnemyStoreData GetStoreData() => new EnemyStoreData(this);
-
     public struct ActivateOption
     {
         public float fadeInDuration;
@@ -66,7 +51,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public EnemyType type => enemyParam.type;
     public override Vector3 corePos => enemyParam.enemyCore + transform.position;
 
-    public override IStatus InitParam(Param param, StoreData data = null)
+    public override IStatus InitParam(Param param, StatusStoreData data = null)
     {
         enemyParam = param as EnemyParam;
         base.InitParam(param, data);

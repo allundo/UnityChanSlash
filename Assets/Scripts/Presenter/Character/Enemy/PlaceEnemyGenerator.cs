@@ -35,7 +35,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
     private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
 
     private List<EnemySpawnPoint> generatorPool = new List<EnemySpawnPoint>();
-    private List<RespawnData>[] respawnData;
+    private List<DataStoreAgent.EnemyData>[] respawnData;
 
     protected override void Awake()
     {
@@ -43,7 +43,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         enemyTypesData = ResourceLoader.Instance.enemyTypesData;
 
         SetWorldMap(GameManager.Instance.worldMap);
-        respawnData = new List<RespawnData>[enemyTypesData.Length].Select(_ => new List<RespawnData>()).ToArray();
+        respawnData = new List<DataStoreAgent.EnemyData>[enemyTypesData.Length].Select(_ => new List<DataStoreAgent.EnemyData>()).ToArray();
     }
 
     /// <summary>
@@ -130,15 +130,15 @@ public class PlaceEnemyGenerator : EnemyGenerator
         RespawnEnemies(map);
     }
 
-    private List<RespawnData> GetRespawnData(Pos playerPos)
+    private List<DataStoreAgent.EnemyData> GetRespawnData(Pos playerPos)
     {
-        var store = new List<RespawnData>();
+        var store = new List<DataStoreAgent.EnemyData>();
         this.map.ForEachTiles((tile, pos) =>
         {
             tile.OnCharacterDest = tile.AboveEnemy = null;
             if (tile.OnEnemy != null)
             {
-                if (pos != playerPos) store.Add(new RespawnData(tile.OnEnemy, pos));
+                if (pos != playerPos) store.Add(new DataStoreAgent.EnemyData(pos, tile.OnEnemy));
                 tile.OnEnemy = null;
             }
         });
@@ -154,7 +154,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         restore.ForEach(data => Respawn(data));
         // Reserve spawning witch if player has KeyBlade.
-        isWitchReserved = PlayerInfo.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.type == EnemyType.Witch).Count() == 0;
+        isWitchReserved = PlayerInfo.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.enemyType == EnemyType.Witch).Count() == 0;
         restore.Clear();
     }
 
@@ -196,10 +196,10 @@ public class PlaceEnemyGenerator : EnemyGenerator
         generatorPool.Clear();
     }
 
-    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData = null)
+    public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData = null)
         => ManualSpawn(RandomEnemyType, pos, dir, option, statusData);
 
-    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData = null)
+    public IEnemyStatus ManualSpawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData = null)
     {
         CreateEnemyPool(type);
         return Spawn(type, pos, dir, option, statusData);
@@ -208,55 +208,20 @@ public class PlaceEnemyGenerator : EnemyGenerator
     public IEnemyStatus SpawnWitch(Pos pos, IDirection dir, float waitFrames = 120f)
         => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, true, waitFrames));
 
-    private IEnemyStatus Respawn(RespawnData data) => ManualSpawn(data.type, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.statusData);
+    private IEnemyStatus Respawn(DataStoreAgent.EnemyData data) => ManualSpawn(data.enemyType, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.StoreData() as EnemyStoreData);
 
-    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData statusData)
+    private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData)
         => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, statusData);
-
-    [System.Serializable]
-    private struct RespawnData
-    {
-        public RespawnData(IEnemyStatus status, Pos pos)
-        : this(status.type, pos, status.dir, status.GetStoreData()) { }
-
-        public RespawnData(DataStoreAgent.EnemyData data)
-        : this(Util.ConvertTo<EnemyType>(data.enemyType), data.pos, Direction.Convert(data.dir), data.statusData) { }
-
-        public RespawnData(EnemyType type, Pos pos, IDirection dir, EnemyStatus.EnemyStoreData statusData)
-        {
-            this.type = type;
-            this.pos = pos;
-            this.dir = dir;
-            this.statusData = statusData;
-        }
-
-        public EnemyType type;
-        public Pos pos;
-        public IDirection dir;
-        public EnemyStatus.EnemyStoreData statusData;
-    }
 
     public List<DataStoreAgent.EnemyData>[] ExportRespawnData()
     {
-        var export = Convert(respawnData);
-        export[this.map.floor - 1] = GetRespawnData(new Pos()).Select(data => Convert(data)).ToList();
-        return export;
+        respawnData[this.map.floor - 1] = GetRespawnData(new Pos());
+        return respawnData;
     }
-
-    private DataStoreAgent.EnemyData Convert(RespawnData data)
-        => new DataStoreAgent.EnemyData(data.pos, data.type, data.dir, data.statusData);
-
-    private List<DataStoreAgent.EnemyData>[] Convert(List<RespawnData>[] dataSet)
-        => dataSet.Select(dataList => dataList.Select(data => Convert(data)).ToList()).ToArray();
 
     public void ImportRespawnData(List<DataStoreAgent.EnemyData>[] import, WorldMap currentMap)
     {
-        respawnData = Convert(import);
+        respawnData = import;
         RespawnEnemies(currentMap);
     }
-
-    private RespawnData Convert(DataStoreAgent.EnemyData data)
-        => new RespawnData(data);
-    private List<RespawnData>[] Convert(List<DataStoreAgent.EnemyData>[] dataSet)
-        => dataSet.Select(dataList => dataList.Select(data => Convert(data)).ToList()).ToArray();
 }

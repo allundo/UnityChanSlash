@@ -17,19 +17,6 @@ public interface IMobStatus : IStatus
 
 public class MobStatus : Status, IMobStatus
 {
-    [System.Serializable]
-    public class MobStoreData : StoreData
-    {
-        public bool isIced { get; private set; }
-        public bool isHidden { get; private set; }
-
-        public MobStoreData(IMobStatus status) : base(status)
-        {
-            isIced = status.isIced;
-            isHidden = status.isHidden;
-        }
-    }
-
     protected MobParam mobParam;
 
     protected enum DamageType
@@ -97,7 +84,7 @@ public class MobStatus : Status, IMobStatus
         isIced = isHidden = false;
     }
 
-    public override IStatus InitParam(Param param, Status.StoreData data = null)
+    public override IStatus InitParam(Param param, StatusStoreData data = null)
     {
         mobParam = param as MobParam;
 

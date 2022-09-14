@@ -21,10 +21,10 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     public void SpawnLight(Vector3 pos) => lightGenerator.Spawn(pos);
     public void DistributeLight(Vector3 pos, float range) => lightGenerator.Spawn(pos + UnityEngine.Random.insideUnitSphere * range);
 
-    public IEnemyStatus PlaceEnemy(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data = null)
+    public IEnemyStatus PlaceEnemy(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData data = null)
         => placeEnemyGenerator.ManualSpawn(type, pos, dir, option, data);
 
-    public IEnemyStatus PlaceEnemyRandom(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStatus.EnemyStoreData data = null)
+    public IEnemyStatus PlaceEnemyRandom(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData data = null)
         => placeEnemyGenerator.RandomSpawn(pos, dir, option, data);
 
     public IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f)

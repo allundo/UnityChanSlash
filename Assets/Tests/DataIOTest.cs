@@ -85,6 +85,7 @@ public class DataIOTest
         {
             currentFloor = 1,
             elapsedTimeSec = 1000,
+            playerData = new DataStoreAgent.MobData(new Pos(1, 1), Direction.north, 12f, false, true),
             mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(new WorldMap()), null, null, null, null },
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
         };
@@ -98,11 +99,11 @@ public class DataIOTest
 
         Assert.AreEqual(1, gameInfo.currentFloor);
         Assert.AreEqual(1000, loadData.elapsedTimeSec);
-        Assert.AreEqual(0, loadData.playerData.posDir.dir);
-        Assert.AreEqual(new Pos(), loadData.playerData.posDir.pos);
-        Assert.AreEqual(0f, loadData.playerData.statusData.life);
-        Assert.False(loadData.playerData.statusData.isIced);
-        Assert.False(loadData.playerData.statusData.isHidden);
+        Assert.AreEqual(Direction.north, loadData.playerData.dir);
+        Assert.AreEqual(new Pos(1, 1), loadData.playerData.pos);
+        Assert.AreEqual(12f, loadData.playerData.life);
+        Assert.False(loadData.playerData.isIced);
+        Assert.True(loadData.playerData.isHidden);
         Assert.AreEqual(13, loadData.respawnData[0].itemData[0].pos.x);
         Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
         Assert.AreEqual(3, loadData.respawnData[0].itemData[0].itemType);

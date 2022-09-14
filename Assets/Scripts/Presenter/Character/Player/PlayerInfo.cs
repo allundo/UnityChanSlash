@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(PlayerMapUtil))]
 [RequireComponent(typeof(PlayerInput))]
@@ -26,15 +25,15 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !map.isInPit && map.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
 
-    public DataStoreAgent.PlayerData ExportRespawnData()
+    public DataStoreAgent.MobData ExportRespawnData()
     {
-        return new DataStoreAgent.PlayerData(PlayerPos, PlayerDir, new MobStatus.MobStoreData(status));
+        return new DataStoreAgent.MobData(PlayerPos, status);
     }
 
-    public void ImportRespawnData(DataStoreAgent.PlayerData data)
+    public void ImportRespawnData(DataStoreAgent.MobData data)
     {
-        status.SetPosition(data.posDir.Convert());
-        status.SetStatusData(data.statusData);
+        status.SetPosition(data.kvPosDir);
+        status.SetStatusData(data.life, data.isIced, data.isHidden);
         input.SetInputVisible();
     }
 }
