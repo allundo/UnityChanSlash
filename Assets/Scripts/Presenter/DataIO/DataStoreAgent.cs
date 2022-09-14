@@ -449,6 +449,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
     }
 
+    public void ImportPlayerStatusData()
+    {
+        PlayerInfo.Instance.ImportStatusData(saveData.playerData.StoreData());
+    }
+
     protected string LoadJsonData(string fileName)
     {
         RecordSet set = JsonUtility.FromJson<RecordSet>(LoadText(fileName));

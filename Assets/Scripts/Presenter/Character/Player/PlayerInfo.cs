@@ -33,7 +33,9 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public void ImportRespawnData(DataStoreAgent.MobData data)
     {
         status.SetPosition(data.kvPosDir);
-        status.SetStatusData(data.life, data.isIced, data.isHidden);
         input.SetInputVisible();
     }
+
+    public void ImportStatusData(MobStoreData data)
+        => status.SetStatusData(data.life, data.isIced, data.isHidden);
 }
