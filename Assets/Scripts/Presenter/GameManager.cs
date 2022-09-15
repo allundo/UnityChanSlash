@@ -59,8 +59,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         player.SetActive(false);
 
         StartCoroutine(DropStartWithDelay());
-
-        DataStoreAgent.Instance.EnableSave();
     }
 
     private IEnumerator DropStartWithDelay(float delay = 0.6f)
@@ -74,7 +72,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start()
 
         cover.FadeIn(1.5f, 0.6f, false).Play();
-        eventManager.DropStartEvent();
+
+        eventManager.EventInit(worldMap);
+        eventManager.InvokeGameEvent(0);
     }
 
     /// <summary>
@@ -88,9 +88,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         cover.FadeIn(1f, 0.5f, false).Play();
 
-        eventManager.RestartEvent();
-
-        DataStoreAgent.Instance.EnableSave();
+        eventManager.EventInit(worldMap);
+        eventManager.InvokeGameEvent(1);
     }
 
     public void LoadDataStart()
@@ -118,13 +117,15 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         DOTween.Sequence()
             .Append(cover.FadeIn(1f, 0.5f, false))
-            .InsertCallback(1f, () => TimeManager.Instance.Resume()) // Resume in the middle of fade-in
+            .InsertCallback(1f, () =>
+            {
+                TimeManager.Instance.Resume();              // Resume in the middle of fade-in
+                eventManager.RestartCurrentEvent();         // Restart the event if it was in progress at exit
+            })
             .SetUpdate(true)
             .Play();
 
         yield return null;
-
-        DataStoreAgent.Instance.EnableSave();
     }
 
     /// <summary>
@@ -139,6 +140,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         cover.SetAlpha(0f);
         input.SetInputVisible(true);
 
+        eventManager.EventInit(worldMap);
         DataStoreAgent.Instance.DisableSave();
     }
 
@@ -165,7 +167,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     void Start()
     {
-        eventManager.EventInit(worldMap);
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
     }
 
@@ -302,4 +303,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         GameInfo.Instance.moneyAmount = moneyAmount;
         return moneyAmount;
     }
+
+    public DataStoreAgent.EventData[] ExportEventData() => eventManager.ExportEventData();
+    public int GetCurrentEvent() => eventManager.currentEvent;
+
+    public void ImportRespawnData(DataStoreAgent.SaveData import) => eventManager.RespawnGameEvents(import.currentEvent, import.eventData, worldMap);
 }

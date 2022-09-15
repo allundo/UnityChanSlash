@@ -27,8 +27,6 @@ public class MapManager
 
     private bool IsDownstairsSet => !stairsTop.Key.IsNull;
 
-    public IDirection exitDoorDir { get; protected set; }
-
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
 
@@ -245,8 +243,6 @@ public class MapManager
     }
     protected void SetExitDoor(Pos pos, IDirection doorDir)
     {
-        this.exitDoorDir = doorDir;
-
         Pos leftPos = doorDir.GetLeft(pos);
         Pos rightPos = doorDir.GetRight(pos);
 

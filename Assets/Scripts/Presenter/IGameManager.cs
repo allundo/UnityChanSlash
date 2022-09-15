@@ -14,6 +14,9 @@ public interface IGameManager
     void LoadDataStart();
 
     ulong SumUpItemValue();
+    DataStoreAgent.EventData[] ExportEventData();
+    int GetCurrentEvent();
+    void ImportRespawnData(DataStoreAgent.SaveData import);
 
     void Exit();
     void EnterStair(bool isDownStairs);

@@ -53,11 +53,11 @@ public class ItemGenerator : MobGenerator<Item>
 
     public void SwitchWorldMap(WorldMap map)
     {
-        respawnData[this.map.floor - 1] = GetRespawnData();
+        respawnData[this.map.floor - 1] = GetRespawnData(true);
         RespawnItems(map);
     }
 
-    private Stack<RespawnData> GetRespawnData()
+    private Stack<RespawnData> GetRespawnData(bool clearItems = false)
     {
         var store = new Stack<RespawnData>();
 
@@ -69,6 +69,8 @@ public class ItemGenerator : MobGenerator<Item>
             }
         });
 
+        if (!clearItems) StackRespawn((store.ToArray().Clone() as RespawnData[]).ToStack());
+
         return store;
     }
 
@@ -78,8 +80,11 @@ public class ItemGenerator : MobGenerator<Item>
         SetWorldMap(respawnMap);
         PlaceItems(respawnMap);
 
-        var restore = respawnData[respawnMap.floor - 1];
+        StackRespawn(respawnData[respawnMap.floor - 1]);
+    }
 
+    private void StackRespawn(Stack<RespawnData> restore)
+    {
         while (restore.Count > 0)
         {
             Respawn(restore.Pop());

@@ -83,8 +83,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     public IObservable<ICommand> ObserveComplete(ICommand cmd)
         => (commander as PlayerCommander).CommandComplete
-            .First(completedCommand => completedCommand == cmd)
-            .IgnoreElements();
+            .First(completedCommand => completedCommand == cmd);
 
     public float RemainingDuration => IsIdling ? 0f : commander.currentCommand.RemainingDuration;
 

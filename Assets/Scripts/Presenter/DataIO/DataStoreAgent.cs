@@ -82,6 +82,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int currentFloor = 0;
         public int elapsedTimeSec = 0;
         public MobData playerData = null;
+        public int currentEvent = -1;
+        public EventData[] eventData = null;
         public MapData[] mapData = null;
         public RespawnData[] respawnData = null;
         public override object[] GetValues() => new object[] { };
@@ -119,6 +121,16 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;
         public PosList[] randomMessagePos = null;
+    }
+
+    [System.Serializable]
+    public class EventData
+    {
+        public EventData(int[] eventList)
+        {
+            this.eventList = eventList;
+        }
+        public int[] eventList;
     }
 
     [System.Serializable]
@@ -309,6 +321,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     public bool SaveCurrentGameData()
     {
         var gameInfo = GameInfo.Instance;
+        var gameManager = GameManager.Instance;
 
         saveData = new SaveData()
         {
@@ -316,6 +329,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             elapsedTimeSec = TimeManager.Instance.elapsedTimeSec + 1,
             playerData = PlayerInfo.Instance.ExportRespawnData(),
             mapData = gameInfo.ExportMapData(),
+            currentEvent = gameManager.GetCurrentEvent(),
+            eventData = gameManager.ExportEventData(),
             respawnData = SpawnHandler.Instance.ExportRespawnData()
         };
 
@@ -438,6 +453,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
             SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
             PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
+            GameManager.Instance.ImportRespawnData(saveData);
             hidePlateHandler.Init();
         }
         catch (Exception e)

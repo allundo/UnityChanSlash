@@ -30,8 +30,6 @@ public class WorldMap
     public Dir GetPillarDir(int x, int y) => map.GetPillarDir(x, y);
     public Dir GetValidDir(int x, int y) => map.GetValidDir(x, y);
 
-    public IDirection exitDoorDir => map.exitDoorDir;
-
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
