@@ -323,6 +323,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
     public void SaveDeadRecords(IAttacker attacker, ulong moneyAmount, int currentFloor)
     {
+        // Delete save data
+        DisableSave();
+        DeleteFile(SAVE_DATA_FILE_NAME);
+
         deadRecords = LoadDeadRecords();
 
         var causeOfDeath = attacker.Name + "にやられた";
