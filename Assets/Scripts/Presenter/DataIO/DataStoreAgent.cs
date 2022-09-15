@@ -527,7 +527,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public void DisableSave()
         {
             if (!isSaveReserved) return;
-            Application.wantsToQuit += agent.SaveCurrentGameData;
+            Application.wantsToQuit -= agent.SaveCurrentGameData;
             isSaveReserved = false;
         }
     }
