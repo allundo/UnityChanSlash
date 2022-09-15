@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public class DataIOTest
@@ -21,38 +19,13 @@ public class DataIOTest
         resourceLoader = UnityEngine.Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"), Vector3.zero, Quaternion.identity); ;
         gameInfo = UnityEngine.Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"), Vector3.zero, Quaternion.identity); ;
 
-        // Keep data files
-
-        fileNames = new string[] {
-            dataStoreAgent.DEAD_RECORD_FILE_NAME,
-            dataStoreAgent.CLEAR_RECORD_FILE_NAME,
-            dataStoreAgent.INFO_RECORD_FILE_NAME,
-            dataStoreAgent.SAVE_DATA_FILE_NAME
-        };
-        tempFiles = fileNames.Select(name => LoadText(name)).ToArray();
-    }
-
-    private string LoadText(string fileName)
-    {
-        try
-        {
-            return dataStoreAgent.LoadText(fileName);
-        }
-        catch (Exception e)
-        {
-            Debug.Log("failed to open file: " + e.Message);
-            return "";
-        }
+        dataStoreAgent.KeepSaveDataFiles();
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        // Restore data files
-        for (int i = 0; i < fileNames.Length; i++)
-        {
-            dataStoreAgent.SaveText(fileNames[i], tempFiles[i]);
-        }
+        dataStoreAgent.RestoreSaveDataFiles();
 
         UnityEngine.Object.Destroy(dataStoreAgent.gameObject);
         UnityEngine.Object.Destroy(gameInfo.gameObject);
@@ -86,6 +59,7 @@ public class DataIOTest
             currentFloor = 1,
             elapsedTimeSec = 1000,
             playerData = new DataStoreAgent.MobData(new Pos(1, 1), Direction.north, 12f, false, true),
+            inventoryItems = new DataStoreAgent.ItemInfo[] { new DataStoreAgent.ItemInfo(ItemType.FireRing, 12), null, null, new DataStoreAgent.ItemInfo(ItemType.Potion, 9), null, null, null },
             mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(new WorldMap()), null, null, null, null },
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
         };
@@ -108,6 +82,11 @@ public class DataIOTest
         Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
         Assert.AreEqual(ItemType.Coin, loadData.respawnData[0].itemData[0].itemType);
         Assert.AreEqual(2, loadData.respawnData[0].itemData[0].numOfItem);
+
+        Assert.AreEqual(ItemType.FireRing, loadData.inventoryItems[0].itemType);
+        Assert.AreEqual(12, loadData.inventoryItems[0].numOfItem);
+        Assert.AreEqual(ItemType.Null, loadData.inventoryItems[2].itemType);
+        Assert.AreEqual(0, loadData.inventoryItems[4].numOfItem);
 
         Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
         Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);

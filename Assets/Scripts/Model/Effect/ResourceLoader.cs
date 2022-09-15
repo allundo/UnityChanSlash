@@ -14,6 +14,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     public ItemData itemData { get; private set; }
     public ItemTypesData itemTypesData { get; private set; }
+    public ItemInfo ItemInfo(ItemType type) => itemInfo[type].Generate() as ItemInfo;
+    public ItemInfo ItemInfo(ItemType type, int numOfItem) => itemInfo[type].Clone(numOfItem) as ItemInfo;
+    private Dictionary<ItemType, ItemInfo> itemInfo;
 
     public FloorMaterialsData floorMaterialsData { get; private set; }
     public FloorMessagesData floorMessagesData { get; private set; }
@@ -50,6 +53,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
         itemTypesData = Resources.Load<ItemTypesData>("DataAssets/Map/ItemTypesData");
+        itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
 
         floorMaterialsData = Resources.Load<FloorMaterialsData>("DataAssets/Map/FloorMaterialsData");
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");

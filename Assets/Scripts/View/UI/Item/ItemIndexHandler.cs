@@ -171,4 +171,7 @@ public class ItemIndexHandler
 
         return icons.ToArray();
     }
+
+    public DataStoreAgent.ItemInfo[] ExportAllItemInfo()
+        => items.Select(icon => icon == null ? null : new DataStoreAgent.ItemInfo(icon.itemInfo.type, icon.itemInfo.numOfItem)).ToArray();
 }

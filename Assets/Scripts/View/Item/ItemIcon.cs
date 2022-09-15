@@ -25,6 +25,13 @@ public class ItemIcon : UISymbol
         return false;
     }
 
+    private Tween getAnimTween;
+    public ItemIcon CancelAnim()
+    {
+        getAnimTween?.Complete(true);
+        return this;
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -44,7 +51,7 @@ public class ItemIcon : UISymbol
         rectTransform.localPosition = HandleIconPos;
 
         // Moving animation from front Tile to item inventory
-        Move(pos, duration).Play();
+        getAnimTween = Move(pos, duration).Play();
     }
 
     public ItemIcon CopyInfo(ItemInfo itemInfo)

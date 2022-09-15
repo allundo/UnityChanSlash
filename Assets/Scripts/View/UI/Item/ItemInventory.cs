@@ -10,7 +10,7 @@ public class ItemInventory : MonoBehaviour
     [SerializeField] private ItemPanel prefabItemPanel = default;
 
     private ItemIconGenerator iconGenerator;
-    private ItemIndexHandler itemIndex;
+    protected ItemIndexHandler itemIndex;
 
     private static readonly int WIDTH = 5;
     private static readonly int HEIGHT = 6;
@@ -90,5 +90,19 @@ public class ItemInventory : MonoBehaviour
             .Select(itemIcon => itemIcon != null ? itemIcon.itemInfo.Price : 0)
             .ForEach(price => amount += (ulong)price);
         return amount;
+    }
+
+    public DataStoreAgent.ItemInfo[] ExportInventoryItems() => itemIndex.ExportAllItemInfo();
+    public void ImportInventoryItems(DataStoreAgent.ItemInfo[] import)
+    {
+        for (int index = 0; index < import.Length; index++)
+        {
+            var itemInfo = import[index];
+
+            // Imported class data cannot be null but filled by default field values.
+            if (itemInfo == null || itemInfo.itemType == ItemType.Null) continue;
+
+            itemIndex.SetItem(index, iconGenerator.Respawn(itemIndex.UIPos(index), itemInfo.itemType, itemInfo.numOfItem).SetIndex(index));
+        }
     }
 }

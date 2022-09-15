@@ -82,6 +82,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int currentFloor = 0;
         public int elapsedTimeSec = 0;
         public MobData playerData = null;
+        public ItemInfo[] inventoryItems = null;
         public int currentEvent = -1;
         public EventData[] eventData = null;
         public MapData[] mapData = null;
@@ -213,7 +214,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             this.isHidden = isHidden;
         }
 
-        [SerializeField] private PosDirPair posDir = null;
+        [SerializeField] private PosDirPair posDir;
 
         public KeyValuePair<Pos, IDirection> kvPosDir => posDir.Convert();
 
@@ -246,7 +247,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 
         public Pos pos;
-        [SerializeField] private ItemInfo itemInfo = null;
+        [SerializeField] private ItemInfo itemInfo;
 
         public ItemType itemType
         {
@@ -350,12 +351,14 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         var gameInfo = GameInfo.Instance;
         var gameManager = GameManager.Instance;
+        var playerInfo = PlayerInfo.Instance;
 
         saveData = new SaveData()
         {
             currentFloor = gameInfo.currentFloor,
             elapsedTimeSec = TimeManager.Instance.elapsedTimeSec + 1,
-            playerData = PlayerInfo.Instance.ExportRespawnData(),
+            playerData = playerInfo.ExportRespawnData(),
+            inventoryItems = playerInfo.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
@@ -478,9 +481,13 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         try
         {
             if (saveData == null) throw new Exception("データがロードされていません");
+
+            var playerInfo = PlayerInfo.Instance;
+
             TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
             SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
-            PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
+            playerInfo.ImportRespawnData(saveData.playerData);
+            playerInfo.ImportInventoryItems(saveData.inventoryItems);
             GameManager.Instance.ImportRespawnData(saveData);
             hidePlateHandler.Init();
         }

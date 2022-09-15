@@ -11,8 +11,6 @@ public class ItemGenerator : MobGenerator<Item>
     private ItemType[] randomItemTypes;
     private ItemType RandomItemType => randomItemTypes[Random.Range(0, randomItemTypes.Length)];
 
-    private Dictionary<ItemType, ItemInfo> itemInfo;
-
     private Stack<RespawnData>[] respawnData;
 
     private WorldMap map;
@@ -26,7 +24,6 @@ public class ItemGenerator : MobGenerator<Item>
 
         itemData = ResourceLoader.Instance.itemData;
         itemTypesData = ResourceLoader.Instance.itemTypesData;
-        itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
 
         respawnData = new Stack<RespawnData>[GameInfo.Instance.LastFloor].Select(_ => new Stack<RespawnData>()).ToArray();
     }
@@ -125,10 +122,10 @@ public class ItemGenerator : MobGenerator<Item>
     }
 
     public bool PutNew(ItemType itemType, Pos pos, IDirection dir = null)
-        => Put(itemInfo[itemType].Generate() as ItemInfo, pos, dir);
+        => Put(ResourceLoader.Instance.ItemInfo(itemType), pos, dir);
 
     public bool PutNew(ItemType itemType, int numOfItem, Pos pos, IDirection dir = null)
-        => Put(itemInfo[itemType].Clone(numOfItem) as ItemInfo, pos, dir);
+        => Put(ResourceLoader.Instance.ItemInfo(itemType, numOfItem), pos, dir);
 
     public void Turn(IDirection dir)
     {
@@ -168,7 +165,7 @@ public class ItemGenerator : MobGenerator<Item>
     }
 
     private RespawnData Convert(DataStoreAgent.ItemData data)
-        => new RespawnData(itemInfo[data.itemType].Clone(data.numOfItem) as ItemInfo, data.pos);
+        => new RespawnData(ResourceLoader.Instance.ItemInfo(data.itemType, data.numOfItem), data.pos);
 
     private Stack<RespawnData>[] Convert(List<DataStoreAgent.ItemData>[] dataSet)
     {
@@ -180,5 +177,4 @@ public class ItemGenerator : MobGenerator<Item>
              }).ToStack();
          }).ToArray();
     }
-
 }

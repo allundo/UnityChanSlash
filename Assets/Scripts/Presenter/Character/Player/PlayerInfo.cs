@@ -30,10 +30,20 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         return new DataStoreAgent.MobData(PlayerPos, status);
     }
 
+    public DataStoreAgent.ItemInfo[] ExportInventoryItems()
+    {
+        return input.GetItemInventory.ExportInventoryItems();
+    }
+
     public void ImportRespawnData(DataStoreAgent.MobData data)
     {
         status.SetPosition(data.kvPosDir);
         input.SetInputVisible();
+    }
+
+    public void ImportInventoryItems(DataStoreAgent.ItemInfo[] items)
+    {
+        input.GetItemInventory.ImportInventoryItems(items);
     }
 
     public void ImportStatusData(MobStoreData data)
