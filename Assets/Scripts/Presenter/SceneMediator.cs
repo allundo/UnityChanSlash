@@ -72,6 +72,10 @@ public abstract class SceneMediator : MonoBehaviour
         GameInfo.Instance.startActionID = startActionID;
         DOTween.KillAll();
         SceneManager.LoadScene(sceneBuildIndex);
+
+#if UNITY_EDITOR
+        GameInfo.Instance.isScenePlayedByEditor = false;
+#endif
     }
 
     /// <summary>
