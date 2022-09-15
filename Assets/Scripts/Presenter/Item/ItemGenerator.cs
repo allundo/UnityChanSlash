@@ -168,7 +168,8 @@ public class ItemGenerator : MobGenerator<Item>
     }
 
     private RespawnData Convert(DataStoreAgent.ItemData data)
-        => new RespawnData(itemInfo[Util.ConvertTo<ItemType>(data.itemType)], data.pos);
+        => new RespawnData(itemInfo[data.itemType].Clone(data.numOfItem) as ItemInfo, data.pos);
+
     private Stack<RespawnData>[] Convert(List<DataStoreAgent.ItemData>[] dataSet)
     {
         return dataSet.Select(dataList =>

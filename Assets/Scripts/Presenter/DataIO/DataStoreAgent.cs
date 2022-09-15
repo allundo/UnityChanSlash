@@ -242,12 +242,40 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public ItemData(Pos pos, ItemType type, int numOfItem)
         {
             this.pos = pos;
-            itemType = (int)type;
-            this.numOfItem = numOfItem;
+            itemInfo = new ItemInfo(type, numOfItem);
         }
 
         public Pos pos;
-        public int itemType = 0;
+        [SerializeField] private ItemInfo itemInfo = null;
+
+        public ItemType itemType
+        {
+            get { return itemInfo.itemType; }
+            set { itemInfo.itemType = value; }
+        }
+        public int numOfItem
+        {
+            get { return itemInfo.numOfItem; }
+            set { itemInfo.numOfItem = value; }
+        }
+    }
+
+    [System.Serializable]
+    public class ItemInfo
+    {
+        public ItemInfo(ItemType type, int numOfItem)
+        {
+            this.type = (int)type;
+            this.numOfItem = numOfItem;
+        }
+
+        [SerializeField] private int type = 0;
+        public ItemType itemType
+        {
+            get { return Util.ConvertTo<ItemType>(type); }
+            set { type = (int)value; }
+        }
+
         public int numOfItem = 0;
     }
 

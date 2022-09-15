@@ -106,7 +106,7 @@ public class DataIOTest
         Assert.True(loadData.playerData.isHidden);
         Assert.AreEqual(13, loadData.respawnData[0].itemData[0].pos.x);
         Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
-        Assert.AreEqual(3, loadData.respawnData[0].itemData[0].itemType);
+        Assert.AreEqual(ItemType.Coin, loadData.respawnData[0].itemData[0].itemType);
         Assert.AreEqual(2, loadData.respawnData[0].itemData[0].numOfItem);
 
         Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
