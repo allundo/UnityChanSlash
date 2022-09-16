@@ -36,7 +36,7 @@ public class UnityEngineSpecTest
     /// <summary>
     /// Destroy([componentReference]) destroys only attached component. </ br>
     /// </summary>
-    public IEnumerator ComponentDestroyTest()
+    public IEnumerator _001_ComponentDestroyTest()
     {
         var prefabDoorV = Resources.Load<DoorControl>("Prefabs/Map/DoorV");
         var prefabDoorH = Resources.Load<DoorHControl>("Prefabs/Map/DoorH");
@@ -89,7 +89,7 @@ public class UnityEngineSpecTest
     /// <summary>
     /// Any Object inherited class Destroy can destroy GameObject.
     /// </summary>
-    public IEnumerator GameObjectDestroyTest()
+    public IEnumerator _002_GameObjectDestroyTest()
     {
         var prefabDoorV = Resources.Load<DoorControl>("Prefabs/Map/DoorV");
         var prefabDoorH = Resources.Load<DoorHControl>("Prefabs/Map/DoorH");
@@ -137,7 +137,7 @@ public class UnityEngineSpecTest
     /// Destroyed GameObject cannot be compared with interface type. </ br>
     /// Interface variable contains {null} GameObject after Destroy() the GameObject. </ br>
     /// </summary>
-    public IEnumerator NullComparisonTestWithDestroyedGameObject()
+    public IEnumerator _003_NullComparisonTestWithDestroyedGameObject()
     {
         TestInterface component = new GameObject("TestComponent").AddComponent(typeof(TestComponent)) as TestInterface;
         yield return null;
@@ -173,7 +173,7 @@ public class UnityEngineSpecTest
 
     [Ignore("Only for spec confirmation.")]
     [UnityTest]
-    public IEnumerator AnimatorParamChangeIsAppliedOnTheSameFrame()
+    public IEnumerator _004_AnimatorParamChangeIsAppliedOnTheSameFrame()
     {
         var mainCamera = Object.Instantiate(prefabCamera);
 
@@ -229,7 +229,7 @@ public class UnityEngineSpecTest
     /// Nested serializable class can be convert to JSON. <br />
     /// Arrays can be convert to JSON only inside serializable class.
     /// </summary>
-    public void UnityJsonSerializeTest()
+    public void _005_UnityJsonSerializeTest()
     {
         Assert.AreEqual("{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}", JsonUtility.ToJson(new SerializableClass()));
         Assert.AreEqual("{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}", JsonUtility.ToJson(new NonSerializableClass()));
@@ -254,7 +254,7 @@ public class UnityEngineSpecTest
     /// ContinueWith receives OnCompleted and passes the last message only.<br />
     /// SelectMany receives OnNext and passes it for each time.
     /// </summary>
-    public void DifferenceBetweenContinueWithAndSelectManyTest()
+    public void _006_DifferenceBetweenContinueWithAndSelectManyTest()
     {
         int count1, count2, count3, count4;
         ISubject<string> subject = new Subject<string>();
@@ -304,9 +304,40 @@ public class UnityEngineSpecTest
     [Ignore("Only for spec confirmation.")]
     [UnityTest]
     /// <summary>
-    /// Different axis tween moves can be applied at the same time.
+    /// Different axis tween moves can be applied at the same time. <br />
     /// </summary>
-    public IEnumerator TweenMoveWithSeparatedAxis()
+    public IEnumerator _007_TweenMoveWithSeparatedAxis()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var slime = Object.Instantiate(prefabSlime, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+
+        var tf = slime.transform;
+
+        yield return null;
+
+        var seq = DOTween.Sequence()
+            .Join(tf.DOMoveX(0.5f, 2f).SetRelative().SetEase(Ease.Linear))
+            .Join(tf.DOMoveY(0.5f, 2f).SetRelative().SetEase(Ease.OutQuad))
+            .Play();
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.AreEqual(0f, tf.position.x, 0.001f);
+        Assert.AreEqual(0.375f, tf.position.y, 0.001f);
+
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.AreEqual(0.25f, tf.position.x, 0.001f);
+        Assert.AreEqual(0.5f, tf.position.y, 0.001f);
+
+        Object.Destroy(slime);
+        Object.Destroy(mainCamera.gameObject);
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _008_AxisBaseTweenMoveAlsoReceivesDestination()
     {
         var mainCamera = Object.Instantiate(prefabCamera);
         var slime = Object.Instantiate(prefabSlime, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
@@ -325,13 +356,12 @@ public class UnityEngineSpecTest
         Assert.AreEqual(0.125f, tf.position.x, 0.001f);
         Assert.AreEqual(0.375f, tf.position.y, 0.001f);
 
-
         yield return new WaitForSeconds(1f);
 
         Assert.AreEqual(0.5f, tf.position.x, 0.001f);
         Assert.AreEqual(0.5f, tf.position.y, 0.001f);
 
         Object.Destroy(slime);
-        Object.Destroy(mainCamera);
+        Object.Destroy(mainCamera.gameObject);
     }
 }
