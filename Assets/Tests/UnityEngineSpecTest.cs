@@ -4,17 +4,24 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UniRx;
+using System.Text;
+using DG.Tweening;
 
 public class UnityEngineSpecTest
 {
     private ResourceLoader resourceLoader;
     private GameInfo gameInfo;
+    private Camera prefabCamera;
+    private GameObject prefabSlime;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
         gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+        prefabCamera = Resources.Load<Camera>("Prefabs/TestCamera");
+        prefabSlime = Resources.Load<GameObject>("Prefabs/TestSlimeGreen");
     }
 
     [OneTimeTearDown]
@@ -166,11 +173,11 @@ public class UnityEngineSpecTest
 
     [Ignore("Only for spec confirmation.")]
     [UnityTest]
-    /// <summary>
     public IEnumerator AnimatorParamChangeIsAppliedOnTheSameFrame()
     {
+        var mainCamera = Object.Instantiate(prefabCamera);
 
-        var slime = Object.Instantiate(Resources.Load<GameObject>("Prefabs/TestSlimeGreen"));
+        var slime = Object.Instantiate(prefabSlime);
         var anim = slime.GetComponent<Animator>();
         var hashedParam = Animator.StringToHash("Die");
         anim.SetBool(hashedParam, false);
@@ -184,6 +191,7 @@ public class UnityEngineSpecTest
         yield return null;
 
         Object.Destroy(slime);
+        Object.Destroy(mainCamera);
     }
 
     public class NonSerializableClass
@@ -238,5 +246,92 @@ public class UnityEngineSpecTest
                 + "\"singleClass\":{\"num\":64,\"text\":\"default\",\"byteArray\":[35,244,69,51]}}",
                 JsonUtility.ToJson(new NestedSerializableClass())
         );
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [Test]
+    /// <summary>
+    /// ContinueWith receives OnCompleted and passes the last message only.<br />
+    /// SelectMany receives OnNext and passes it for each time.
+    /// </summary>
+    public void DifferenceBetweenContinueWithAndSelectManyTest()
+    {
+        int count1, count2, count3, count4;
+        ISubject<string> subject = new Subject<string>();
+        ISubject<string> completeOnly = new Subject<string>();
+
+        StringBuilder sbContinueWith = new StringBuilder("ContinueWith: ");
+        StringBuilder sbSelectMany = new StringBuilder("SelectMany: ");
+
+        StringBuilder sbContinueWithComp = new StringBuilder("ContinueWithComp: ");
+        StringBuilder sbSelectManyComp = new StringBuilder("SelectManyComp: ");
+
+        count1 = count2 = count3 = count4 = 0;
+
+        subject
+            .ContinueWith(str => Observable.Return(count1++ + ":" + str + ", "))
+            .Subscribe(str => sbContinueWith.Append(str));
+
+        subject
+            .SelectMany(str => Observable.Return(count2++ + ":" + str + ", "))
+            .Subscribe(str => sbSelectMany.Append(str));
+
+        completeOnly
+            .ContinueWith(str => Observable.Return(count3++ + ":" + str + ", "))
+            .Subscribe(str => sbContinueWithComp.Append(str));
+
+        completeOnly
+            .SelectMany(str => Observable.Return(count4++ + ":" + str + ", "))
+            .Subscribe(str => sbSelectManyComp.Append(str));
+
+        subject.OnNext("aaaa");
+        subject.OnNext("bbbb");
+        subject.OnNext("cccc");
+
+        Assert.AreEqual("ContinueWith: ", sbContinueWith.ToString());
+        Assert.AreEqual("SelectMany: 0:aaaa, 1:bbbb, 2:cccc, ", sbSelectMany.ToString());
+
+        subject.OnCompleted();
+        completeOnly.OnCompleted();
+
+        Assert.AreEqual("ContinueWith: 0:cccc, ", sbContinueWith.ToString());
+        Assert.AreEqual("SelectMany: 0:aaaa, 1:bbbb, 2:cccc, ", sbSelectMany.ToString());
+
+        Assert.AreEqual("ContinueWithComp: ", sbContinueWithComp.ToString());
+        Assert.AreEqual("SelectManyComp: ", sbSelectManyComp.ToString());
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Different axis tween moves can be applied at the same time.
+    /// </summary>
+    public IEnumerator TweenMoveWithSeparatedAxis()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var slime = Object.Instantiate(prefabSlime, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+
+        var tf = slime.transform;
+
+        yield return null;
+
+        var seq = DOTween.Sequence()
+            .Join(tf.DOMoveX(0.5f, 2f).SetEase(Ease.Linear))
+            .Join(tf.DOMoveY(0.5f, 2f).SetEase(Ease.OutQuad))
+            .Play();
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.AreEqual(0.125f, tf.position.x, 0.001f);
+        Assert.AreEqual(0.375f, tf.position.y, 0.001f);
+
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.AreEqual(0.5f, tf.position.x, 0.001f);
+        Assert.AreEqual(0.5f, tf.position.y, 0.001f);
+
+        Object.Destroy(slime);
+        Object.Destroy(mainCamera);
     }
 }
