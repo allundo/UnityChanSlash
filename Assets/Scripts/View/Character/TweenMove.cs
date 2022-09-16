@@ -53,7 +53,7 @@ public class TweenMove
     /// <summary>
     /// DOTween move with updating IsObjectOn flag to destination Tile
     /// </summary>
-    /// <param name="destPos">Destination Vector3 postion</param>
+    /// <param name="destPos">Destination Vector3 position</param>
     /// <param name="timeScale">Normalized time scale of the move Command duration</param>
     /// <returns>Playing tween for handling</returns>
     public Tween Linear(Vector3 destPos, float timeScale = 1f, TweenCallback onComplete = null)
@@ -156,7 +156,7 @@ public class TweenMove
         => tf.DOJump(moveVec, jumpPower, 1, duration * timeScale).SetRelative();
 
     public Tween JumpRelative(Pos moveVec, float timeScale = 1f, float jumpPower = 1.0f)
-        => JumpRelative(map.WorldPos(moveVec), timeScale, jumpPower);
+        => Jump(map.onTilePos + moveVec, timeScale, jumpPower);
 
     public Tween Jump(Vector3 destPos, float timeScale = 1f, float jumpPower = 1.0f)
         => tf.DOJump(destPos, jumpPower, 1, duration * timeScale);
