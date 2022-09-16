@@ -2,13 +2,13 @@ using UnityEngine;
 
 public interface IInput
 {
-    Commander commander { get; }
     bool isCommandValid { get; }
     bool IsFightValid { get; }
     ICommand InputCommand(ICommand cmd);
     ICommand ForceEnqueue(ICommand cmd);
     ICommand Interrupt(ICommand cmd, bool isCancel = true, bool isQueueClear = false);
     ICommand InputDie();
+    ICommand currentCommand { get; }
     void ValidateInput(bool isTriggerOnly = false);
     void DisableInput(bool isTriggerOnly = false);
     void OnActive();
@@ -110,6 +110,8 @@ public abstract class InputHandler : MonoBehaviour, IInput
     }
 
     protected abstract ICommand GetCommand();
+
+    public ICommand currentCommand => commander.currentCommand;
 
     public virtual ICommand InputDie()
     {

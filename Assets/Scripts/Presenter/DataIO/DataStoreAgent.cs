@@ -81,7 +81,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public int currentFloor = 0;
         public int elapsedTimeSec = 0;
-        public MobData playerData = null;
+        public PlayerData playerData = null;
         public ItemInfo[] inventoryItems = null;
         public int currentEvent = -1;
         public EventData[] eventData = null;
@@ -195,6 +195,29 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         public bool isTamed = false;
         public override MobStoreData StoreData() => new EnemyStoreData(life, isIced, isHidden, isTamed);
+    }
+
+    [System.Serializable]
+    public class PlayerData : MobData
+    {
+        public PlayerData(Pos pos, PlayerStatus status, ExitState state) : this(pos, status.dir, status.Life.Value, status.isIced, status.isHidden, state)
+        { }
+
+        /// <summary>
+        /// For testing
+        /// </summary>
+        public PlayerData(Pos pos, IDirection dir, float life, bool isIced, bool isHidden, ExitState state) : base(pos, dir, life, isIced, isHidden)
+        {
+            this.state = (int)state;
+        }
+
+        [SerializeField] private int state;
+
+        public ExitState exitState
+        {
+            get { return Util.ConvertTo<ExitState>(state); }
+            set { state = (int)value; }
+        }
     }
 
     [System.Serializable]
@@ -504,9 +527,9 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
     }
 
-    public void ImportPlayerStatusData()
+    public void RestorePlayerStatus()
     {
-        PlayerInfo.Instance.ImportStatusData(saveData.playerData.StoreData());
+        PlayerInfo.Instance.RestorePlayerStatus(saveData.playerData);
     }
 
     protected string LoadJsonData(string fileName)

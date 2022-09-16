@@ -78,14 +78,14 @@ public class PlayerInput : ShieldInput, IPlayerInput
     // FIXME: need to implement game events handling system.
     public ICommand EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f, 0.99f, 0.99f));
     public ICommand EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f, 0.99f, 0.99f));
+    public ICommand EnqueueLanding(Vector3 moveVec) => ForceEnqueue(new PlayerLanding(playerTarget, 36f, moveVec));
+    public ICommand InterruptIcedFall(float framesToMelt) => Interrupt(new PlayerIcedFall(playerTarget, framesToMelt, 30f));
     public ICommand EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
     public ICommand InterruptMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
 
     public IObservable<ICommand> ObserveComplete(ICommand cmd)
         => (commander as PlayerCommander).CommandComplete
             .First(completedCommand => completedCommand == cmd);
-
-    public float RemainingDuration => IsIdling ? 0f : commander.currentCommand.RemainingDuration;
 
     protected override void Awake()
     {
@@ -220,8 +220,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         if (current is PlayerJump && current.RemainingTimeScale > 0.25f || current is PlayerRun)
         {
             ClearAll();
-            ICommand iced = new PlayerIcedFall(playerTarget, duration, 30f);
-            Interrupt(iced);
+            ICommand iced = InterruptIcedFall(duration);
             commander.EnqueueCommand(wakeUp);
             return iced;
         }

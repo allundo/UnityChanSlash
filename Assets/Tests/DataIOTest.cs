@@ -58,7 +58,7 @@ public class DataIOTest
         {
             currentFloor = 1,
             elapsedTimeSec = 1000,
-            playerData = new DataStoreAgent.MobData(new Pos(1, 1), Direction.north, 12f, false, true),
+            playerData = new DataStoreAgent.PlayerData(new Pos(1, 1), Direction.north, 12f, false, true, ExitState.PitFall),
             inventoryItems = new DataStoreAgent.ItemInfo[] { new DataStoreAgent.ItemInfo(ItemType.FireRing, 12), null, null, new DataStoreAgent.ItemInfo(ItemType.Potion, 9), null, null, null },
             mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(new WorldMap()), null, null, null, null },
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
@@ -78,6 +78,7 @@ public class DataIOTest
         Assert.AreEqual(12f, loadData.playerData.life);
         Assert.False(loadData.playerData.isIced);
         Assert.True(loadData.playerData.isHidden);
+        Assert.AreEqual(ExitState.PitFall, loadData.playerData.exitState);
         Assert.AreEqual(13, loadData.respawnData[0].itemData[0].pos.x);
         Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
         Assert.AreEqual(ItemType.Coin, loadData.respawnData[0].itemData[0].itemType);

@@ -110,8 +110,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         mapRenderer.ApplyTileOpen(worldMap);
         spawnHandler.PlaceEnemyGenerators();
+        DataStoreAgent.Instance.RestorePlayerStatus();
         mainCamera.SwitchFloor(worldMap.floor);
-        DataStoreAgent.Instance.ImportPlayerStatusData();
 
         yield return null;
 

@@ -555,6 +555,16 @@ public enum BagSize
     Gigantic,
 }
 
+public enum ExitState
+{
+    Normal = 0,
+    Jump,
+    InPit,
+    Iced,
+    PitFall,
+    IcedFall
+}
+
 public enum CurveType
 {
     Linear = 0,

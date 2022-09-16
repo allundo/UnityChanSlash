@@ -24,7 +24,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public FaceClipsSet faceClipsSet { get; private set; }
 
     private AnimationCurveData animationCurveData;
-    private AnimationCurve EaseCurve(CurveType type) => animationCurveData.Param((int)type).curve;
+    public AnimationCurve EaseCurve(CurveType type) => animationCurveData.Param((int)type).curve;
 
     private YenBagData yenBagData;
     public YenBagSource YenBagSource(BagSize size) => yenBagData.Param((int)size);

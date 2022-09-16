@@ -284,6 +284,28 @@ public class PlayerJump : PlayerCommand
         return true;
     }
 }
+public class PlayerLanding : PlayerCommand
+{
+    public PlayerLanding(PlayerCommandTarget target, float duration, Vector3 moveVec) : base(target, duration)
+    {
+        playingTween = tweenMove.Landing(moveVec);
+    }
+
+    public PlayerLanding(PlayerCommandTarget target, float duration, float moveForward = 0.5f, float moveY = 0.75f) : base(target, duration)
+    {
+        Vector3 moveVec = map.dir.LookAt * moveForward + Vector3.up * moveY;
+        playingTween = tweenMove.Landing(moveVec);
+    }
+
+    protected override bool Action()
+    {
+        Debug.Log("PlayerLanding Action");
+        playerAnim.landing.Fire();
+        playingTween.Play();
+
+        return true;
+    }
+}
 
 public class PlayerPitJump : PlayerCommand
 {
@@ -822,8 +844,12 @@ public class PlayerInspect : PlayerAction
 
 public class PlayerIcedCommand : PlayerCommand
 {
+    private float frames;
     public override int priority => 20;
-    public PlayerIcedCommand(PlayerCommandTarget target, float duration) : base(target, duration, 0.98f) { }
+    public PlayerIcedCommand(PlayerCommandTarget target, float duration) : base(target, duration, 0.98f)
+    {
+        frames = duration;
+    }
 
     protected override bool Action()
     {

@@ -14,6 +14,7 @@ public class PlayerAnimator : ShieldAnimator
 
     public TriggerJump jump { get; protected set; }
     public TriggerJump pitJump { get; protected set; }
+    public TriggerJump landing { get; protected set; }
     public TriggerBrakeAndBackStep brakeAndBackStep { get; protected set; }
 
     public TriggerEx handle { get; protected set; }
@@ -80,6 +81,7 @@ public class PlayerAnimator : ShieldAnimator
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
         jump = new TriggerJump(this, jumpHeight, bodyCollider);
         pitJump = new TriggerJump(this, jumpHeight, bodyCollider, "PitJump");
+        landing = new TriggerJump(this, jumpHeight, bodyCollider, "Landing");
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
         fall = new BoolFall(this, fallHeight, bodyCollider);
     }
@@ -137,7 +139,7 @@ public class PlayerAnimator : ShieldAnimator
     public class TriggerJump : TriggerUpdate
     {
         public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider, string triggerName = "Jump")
-            : base(playerAnim, jumpHeight, bodyCollider, triggerName, "Base Layer." + triggerName) { }
+            : base(playerAnim, jumpHeight, bodyCollider, triggerName, "Base Layer.Jump." + triggerName) { }
         protected override void Update(float value) => bodyCollider.JumpCollider(value);
     }
 
