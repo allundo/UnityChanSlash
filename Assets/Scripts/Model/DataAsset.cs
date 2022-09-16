@@ -210,3 +210,11 @@ public class YenBagSource
     [SerializeField] public float dropDelay = 0.65f;
     [SerializeField] public YenBag prefabYenBag = default;
 }
+
+[System.Serializable]
+public class AnimationCurveSource
+{
+    [SerializeField] public string name = "曲線の説明";
+    [SerializeField] public AnimationCurve curve = default;
+}
+

@@ -554,3 +554,10 @@ public enum BagSize
     Big,
     Gigantic,
 }
+
+public enum CurveType
+{
+    Linear = 0,
+    HalfOutQuad,
+    HalfInQuad,
+}

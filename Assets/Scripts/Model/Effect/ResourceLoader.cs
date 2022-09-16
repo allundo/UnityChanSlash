@@ -23,6 +23,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     public FaceClipsSet faceClipsSet { get; private set; }
 
+    private AnimationCurveData animationCurveData;
+    private AnimationCurve EaseCurve(CurveType type) => animationCurveData.Param((int)type).curve;
+
     private YenBagData yenBagData;
     public YenBagSource YenBagSource(BagSize size) => yenBagData.Param((int)size);
 
@@ -59,6 +62,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
 
         faceClipsSet = Resources.Load<FaceClipsData>("DataAssets/Character/FaceClipsData").Param(0);
+
+        animationCurveData = Resources.Load<AnimationCurveData>("DataAssets/System/AnimationCurveData");
 
         yenBagData = Resources.Load<YenBagData>("DataAssets/Result/YenBagData");
     }
