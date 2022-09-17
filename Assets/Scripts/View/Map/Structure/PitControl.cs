@@ -31,13 +31,17 @@ public class PitControl : MonoBehaviour
 
     protected void DropAnim(bool isFXActive)
     {
-        anim.speed = 1f;
         anim.SetTrigger(drop);
 
         if (isFXActive)
         {
+            anim.speed = 1f;
             GameManager.Instance.PlayVFX(VFXType.PitDrop, transform.position);
             GameManager.Instance.PlaySnd(SNDType.PitDrop, transform.position);
+        }
+        else
+        {
+            anim.speed = 100f;
         }
     }
 
