@@ -206,9 +206,9 @@ public class PlaceEnemyGenerator : EnemyGenerator
     }
 
     public IEnemyStatus SpawnWitch(Pos pos, IDirection dir, float waitFrames = 120f)
-        => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, true, waitFrames));
+        => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, 0f, true, waitFrames));
 
-    private IEnemyStatus Respawn(DataStoreAgent.EnemyData data) => ManualSpawn(data.enemyType, data.pos, data.dir, new EnemyStatus.ActivateOption(), data.StoreData() as EnemyStoreData);
+    private IEnemyStatus Respawn(DataStoreAgent.EnemyData data) => ManualSpawn(data.enemyType, data.pos, data.dir, new EnemyStatus.ActivateOption(0.5f, data.icingFrames), data.StoreData() as EnemyStoreData);
 
     private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData)
         => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, statusData);

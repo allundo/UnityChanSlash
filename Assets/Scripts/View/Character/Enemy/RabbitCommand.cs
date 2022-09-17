@@ -155,8 +155,12 @@ public class RabbitWondering : RabbitCommand
 public class RabbitIcedFall : RabbitCommand
 {
     protected float meltFrameTimer;
+    protected float framesToMelt;
+    public override float RemainingFramesToComplete => framesToMelt;
+
     public RabbitIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
+        this.framesToMelt = framesToMelt;
         meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
     }
 
@@ -164,6 +168,8 @@ public class RabbitIcedFall : RabbitCommand
     {
         rabbitAnim.speed.Float = 0f;
         rabbitAnim.icedFall.Bool = true;
+
+        mobReact.Iced(framesToMelt);
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)

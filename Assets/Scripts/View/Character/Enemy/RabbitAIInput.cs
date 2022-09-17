@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(RabbitEffect))]
 public class RabbitAIInput : EnemyAIInput
 {
+    protected override bool IsIced => currentCommand is IcedCommand || currentCommand is RabbitIcedFall;
+
     protected ICommand idle;
     protected ICommand wondering;
     protected ICommand jumpAttack;

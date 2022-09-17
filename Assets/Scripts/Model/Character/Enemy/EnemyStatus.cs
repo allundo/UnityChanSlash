@@ -26,9 +26,11 @@ public class EnemyStatus : MobStatus, IEnemyStatus
         public float fadeInDuration;
         public bool isSummoned;
         public float summoningDuration;
-        public ActivateOption(float fadeInDuration = 0.5f, bool isSummoned = false, float summoningDuration = 120f)
+        public float icingFrames;
+        public ActivateOption(float fadeInDuration = 0.5f, float icingFrames = 0f, bool isSummoned = false, float summoningDuration = 120f)
         {
             this.fadeInDuration = fadeInDuration;
+            this.icingFrames = icingFrames;
             this.isSummoned = isSummoned;
             this.summoningDuration = summoningDuration;
         }

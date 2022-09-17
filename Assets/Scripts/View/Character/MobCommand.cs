@@ -30,12 +30,17 @@ public class DieCommand : MobCommand
 public class IcedCommand : MobCommand
 {
     public override int priority => 20;
-    public IcedCommand(ICommandTarget target, float duration) : base(target, duration, 0.98f) { }
+    private float icingFrames;
+
+    public IcedCommand(ICommandTarget target, float duration) : base(target, duration, 0.98f)
+    {
+        icingFrames = duration;
+    }
 
     protected override bool Action()
     {
         anim.Pause();
-
+        mobReact.Iced(icingFrames);
         completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
         SetOnCompleted(() => mobReact.Melt());
         return true;

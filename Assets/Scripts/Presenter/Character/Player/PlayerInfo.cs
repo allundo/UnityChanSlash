@@ -9,6 +9,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     private PlayerMapUtil map;
     private PlayerInput input;
     private PlayerStatus status;
+    private PlayerEffect effect;
     private PlayerAnimator anim;
 
     protected override void Awake()
@@ -17,6 +18,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         map = GetComponent<PlayerMapUtil>();
         input = GetComponent<PlayerInput>();
         status = GetComponent<PlayerStatus>();
+        effect = GetComponent<PlayerEffect>();
         anim = GetComponent<PlayerAnimator>();
     }
 
@@ -72,14 +74,14 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
     public void RestorePlayerStatus(DataStoreAgent.PlayerData data)
     {
-        status.SetStatusData(data.life, data.isIced, data.isHidden);
+        status.SetStatusData(data.life, data.isHidden);
 
         var state = data.exitState;
 
         switch (state)
         {
             case ExitState.Iced:
-                input.InputIced(60f);
+                input.InputIced(data.icingFrames);
                 return;
 
             case ExitState.InPit:
@@ -93,7 +95,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
                 if (state == ExitState.IcedFall)
                 {
-                    input.InterruptIcedFall(60f);
+                    input.InterruptIcedFall(data.icingFrames);
                     return;
                 }
 

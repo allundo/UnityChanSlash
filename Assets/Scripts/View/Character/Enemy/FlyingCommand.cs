@@ -151,8 +151,12 @@ public class FlyingAttackLeave : FlyingAttack
 public class FlyingIcedFall : FlyingCommand
 {
     protected float meltFrameTimer;
+    protected float framesToMelt;
+    public override float RemainingFramesToComplete => framesToMelt;
+
     public FlyingIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
+        this.framesToMelt = framesToMelt;
         meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
     }
 
@@ -160,6 +164,8 @@ public class FlyingIcedFall : FlyingCommand
     {
         flyingAnim.speed.Float = 0f;
         flyingAnim.icedFall.Bool = true;
+
+        mobReact.Iced(framesToMelt);
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)

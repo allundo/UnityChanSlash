@@ -194,19 +194,19 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 
         public bool isTamed = false;
-        public override MobStoreData StoreData() => new EnemyStoreData(life, isIced, isHidden, isTamed);
+        public override MobStoreData StoreData() => new EnemyStoreData(life, isHidden, isTamed);
     }
 
     [System.Serializable]
     public class PlayerData : MobData
     {
-        public PlayerData(Pos pos, PlayerStatus status, ExitState state) : this(pos, status.dir, status.Life.Value, status.isIced, status.isHidden, state)
+        public PlayerData(Pos pos, PlayerStatus status, ExitState state) : this(pos, status.dir, status.Life.Value, status.isHidden, status.UpdateIcingFrames(), state)
         { }
 
         /// <summary>
         /// For testing
         /// </summary>
-        public PlayerData(Pos pos, IDirection dir, float life, bool isIced, bool isHidden, ExitState state) : base(pos, dir, life, isIced, isHidden)
+        public PlayerData(Pos pos, IDirection dir, float life, bool isHidden, float icingFrames, ExitState state) : base(pos, dir, life, isHidden, icingFrames)
         {
             this.state = (int)state;
         }
@@ -223,18 +223,18 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class MobData
     {
-        public MobData(Pos pos, IMobStatus status) : this(pos, status.dir, status.Life.Value, status.isIced, status.isHidden)
+        public MobData(Pos pos, IMobStatus status) : this(pos, status.dir, status.Life.Value, status.isHidden, status.UpdateIcingFrames())
         { }
 
         /// <summary>
         /// For testing
         /// </summary>
-        public MobData(Pos pos, IDirection dir, float life, bool isIced, bool isHidden)
+        public MobData(Pos pos, IDirection dir, float life, bool isHidden, float icingFrames)
         {
             posDir = new PosDirPair(pos, dir);
             this.life = life;
-            this.isIced = isIced;
             this.isHidden = isHidden;
+            this.icingFrames = icingFrames;
         }
 
         [SerializeField] private PosDirPair posDir;
@@ -254,10 +254,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 
         public float life = 0f;
-        public bool isIced = false;
         public bool isHidden = false;
+        public float icingFrames = 0f;
 
-        public virtual MobStoreData StoreData() => new MobStoreData(life, isIced, isHidden);
+        public virtual MobStoreData StoreData() => new MobStoreData(life, isHidden);
     }
 
     [System.Serializable]

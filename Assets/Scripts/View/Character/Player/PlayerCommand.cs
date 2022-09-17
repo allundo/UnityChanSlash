@@ -340,8 +340,12 @@ public class PlayerIcedFall : PlayerCommand
 {
     public override int priority => 20;
     protected float meltFrameTimer;
+    protected float framesToMelt;
+    public override float RemainingFramesToComplete => framesToMelt;
+
     public PlayerIcedFall(PlayerCommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
+        this.framesToMelt = framesToMelt;
         meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
     }
 
@@ -366,8 +370,8 @@ public class PlayerIcedFall : PlayerCommand
             jumpSeq.InsertCallback(0.5f * duration, hidePlateHandler.Move);
         }
 
+        mobReact.Iced(framesToMelt);
         playingTween = jumpSeq.SetUpdate(false).Play();
-
         completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
 
         return ObservableComplete();
@@ -844,17 +848,17 @@ public class PlayerInspect : PlayerAction
 
 public class PlayerIcedCommand : PlayerCommand
 {
-    private float frames;
+    private float icingFrames;
     public override int priority => 20;
     public PlayerIcedCommand(PlayerCommandTarget target, float duration) : base(target, duration, 0.98f)
     {
-        frames = duration;
+        icingFrames = duration;
     }
 
     protected override bool Action()
     {
         anim.Pause();
-
+        mobReact.Iced(icingFrames);
         completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
         SetUIInvisible();
         SetOnCompleted(() => mobReact.Melt());

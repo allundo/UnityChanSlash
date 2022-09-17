@@ -24,10 +24,10 @@ public class Summoner
     }
 
     public IEnemyStatus Summon(EnemyType type, Pos pos, IDirection dir)
-        => spawnHandler.PlaceEnemy(type, pos, dir, new EnemyStatus.ActivateOption(1.5f, true));
+        => spawnHandler.PlaceEnemy(type, pos, dir, new EnemyStatus.ActivateOption(1.5f, 0f, true));
 
     public IEnemyStatus SummonRandom(Pos pos, IDirection dir)
-        => spawnHandler.PlaceEnemyRandom(pos, dir, new EnemyStatus.ActivateOption(1.5f, true));
+        => spawnHandler.PlaceEnemyRandom(pos, dir, new EnemyStatus.ActivateOption(1.5f, 0f, true));
 
     public void SummonMulti(int count)
     {

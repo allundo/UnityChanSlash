@@ -7,8 +7,9 @@ public interface IMobStatus : IStatus
     bool isOnGround { get; }
     bool isHidden { get; }
     void SetHidden(bool isHidden = true);
-    bool isIced { get; }
-    void SetIsIced(bool isIced);
+    float icingFrames { get; }
+    float SetIcingFrames(float icingFrames);
+    float UpdateIcingFrames();
 
     Vector3 corePos { get; }
 
@@ -39,12 +40,7 @@ public class MobStatus : Status, IMobStatus
         this.isHidden = isHidden;
     }
 
-    public bool isIced { get; protected set; }
-
-    public void SetIsIced(bool isIced)
-    {
-        this.isIced = isIced;
-    }
+    public float icingFrames { get; protected set; }
 
     protected virtual float ArmorMultiplier => mobParam.armorMultiplier;
 
@@ -62,7 +58,7 @@ public class MobStatus : Status, IMobStatus
 
     protected DamageType GetDamageType(IDirection attackerDir)
     {
-        if (attackerDir == null || isIced) return DamageType.Rest;
+        if (attackerDir == null || icingFrames > 0f) return DamageType.Rest;
 
         if (attackerDir.IsInverse(dir))
         {
@@ -81,7 +77,8 @@ public class MobStatus : Status, IMobStatus
     {
         life.Value = lifeMax.Value = DefaultLifeMax;
         isOnGround = mobParam.isOnGround;
-        isIced = isHidden = false;
+        icingFrames = 0f;
+        isHidden = false;
     }
 
     public override IStatus InitParam(Param param, StatusStoreData data = null)
@@ -109,13 +106,16 @@ public class MobStatus : Status, IMobStatus
 
         base.InitParam(param, data);
 
-        if (data != null)
-        {
-            var mobData = data as MobStoreData;
-            isIced = mobData.isIced;
-            isHidden = mobData.isHidden;
-        }
+        if (data != null) isHidden = (data as MobStoreData).isHidden;
 
         return this;
+    }
+
+    public float SetIcingFrames(float icingFrames) => this.icingFrames = icingFrames;
+
+    public float UpdateIcingFrames()
+    {
+        icingFrames = GetComponent<MobInput>().GetIcingFrames();
+        return icingFrames;
     }
 }

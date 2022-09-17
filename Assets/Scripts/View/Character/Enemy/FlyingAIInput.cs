@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(FlyingAnimator))]
 public class FlyingAIInput : EnemyAIInput
 {
+    protected override bool IsIced => currentCommand is IcedCommand || currentCommand is FlyingIcedFall;
+
     protected ICommand wakeUp;
     protected override void SetCommands()
     {

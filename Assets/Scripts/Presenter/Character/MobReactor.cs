@@ -13,6 +13,7 @@ public interface IMobReactor : IReactor
     bool Heal(float life, bool isEffectOn = true, bool healAnyway = false);
     void OnFall();
     void OnWakeUp();
+    void Iced(float icingFrames);
     void Melt(bool isBroken = false);
     void OnDisappear(float duration = 0.5f);
     void Hide();
@@ -65,16 +66,15 @@ public class MobReactor : Reactor, IMobReactor
 
         if (attr == AttackAttr.Ice)
         {
-            if (damage > 0 && !mobStatus.isIced)
+            if (damage > 0 && mobStatus.icingFrames == 0f)
             {
+                var icingFrames = damage * 100f;
+                input.InputIced(icingFrames);
                 effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
-                input.InputIced(damage * 100f);
-                effect.OnIced(mobStatus.corePos);
-                mobStatus.SetIsIced(true);
             }
             return 0f;
         }
-        else if (mobStatus.isIced)
+        else if (mobStatus.icingFrames > 0f)
         {
             Melt(true);
         }
@@ -90,7 +90,7 @@ public class MobReactor : Reactor, IMobReactor
     {
         if (!mobStatus.IsAlive || (mobStatus.IsLifeMax && !healAnyway)) return false;
 
-        if (isEffectOn && !mobStatus.isIced && healRatio > 0.1f) effect.OnHeal(healRatio);
+        if (isEffectOn && mobStatus.icingFrames == 0f && healRatio > 0.1f) effect.OnHeal(healRatio);
 
         mobStatus.LifeChange(healRatio * status.LifeMax.Value);
 
@@ -117,9 +117,15 @@ public class MobReactor : Reactor, IMobReactor
         bodyCollider.enabled = true;
     }
 
+    public virtual void Iced(float icingFrames)
+    {
+        mobStatus.SetIcingFrames(icingFrames);
+        effect.OnIced(mobStatus.corePos);
+    }
+
     public virtual void Melt(bool isBroken = false)
     {
-        if (!mobStatus.isIced) return;
+        if (mobStatus.icingFrames == 0f) return;
 
         effect.OnMelt();
         if (isBroken)
@@ -127,7 +133,7 @@ public class MobReactor : Reactor, IMobReactor
             input.OnIceCrash();
             effect.OnIceCrash(mobStatus.corePos);
         }
-        mobStatus.SetIsIced(false);
+        mobStatus.SetIcingFrames(0f);
     }
 
     public virtual void Hide()

@@ -18,6 +18,9 @@ public interface IUndeadInput : IMobInput
 public abstract class MobInput : InputHandler, IMobInput
 {
     protected IMobMapUtil mobMap;
+
+    protected virtual bool IsIced => currentCommand is IcedCommand;
+
     protected override void Awake()
     {
         base.Awake();
@@ -61,4 +64,6 @@ public abstract class MobInput : InputHandler, IMobInput
 
     protected virtual ICommand GetIcedCommand(float duration)
         => new IcedCommand(target, duration);
+
+    public float GetIcingFrames() => IsIced ? currentCommand.RemainingFramesToComplete : 0.0f;
 }

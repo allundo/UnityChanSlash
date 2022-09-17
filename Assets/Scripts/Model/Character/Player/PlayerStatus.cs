@@ -21,10 +21,9 @@ public class PlayerStatus : MobStatus
         SetPosition(map.WorldPos(initPos.Key), initPos.Value);
     }
 
-    public void SetStatusData(float life, bool isIced, bool isHidden)
+    public void SetStatusData(float life, bool isHidden)
     {
         this.life.Value = life;
-        this.isIced = isIced;
         this.isHidden = isHidden;
     }
 }

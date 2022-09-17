@@ -28,6 +28,7 @@ public interface ICommand
     ICommand GetContinuation();
     float RemainingDuration { get; }
     float RemainingTimeScale { get; }
+    float RemainingFramesToComplete { get; }
 }
 
 public class Command : ICommand
@@ -79,8 +80,9 @@ public class Command : ICommand
     }
 
     private static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
-    public float RemainingDuration => playingTween == null ? 0 : playingTween.Duration() - playingTween.fullPosition;
+    public float RemainingDuration => playingTween == null ? 0f : playingTween.Duration() - playingTween.fullPosition;
     public float RemainingTimeScale => RemainingDuration / duration;
+    public virtual float RemainingFramesToComplete => completeTween == null ? 0f : (1f - completeTween.ElapsedPercentage()) * duration / FRAME_UNIT;
 
     public Tween playingTween { get; protected set; } = null;
     protected Tween completeTween = null;

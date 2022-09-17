@@ -11,12 +11,10 @@ public class StatusStoreData
 [System.Serializable]
 public class MobStoreData : StatusStoreData
 {
-    public bool isIced { get; private set; }
     public bool isHidden { get; private set; }
 
-    public MobStoreData(float life, bool isIced, bool isHidden) : base(life)
+    public MobStoreData(float life, bool isHidden) : base(life)
     {
-        this.isIced = isIced;
         this.isHidden = isHidden;
     }
 }
@@ -26,7 +24,7 @@ public class EnemyStoreData : MobStoreData
 {
     public bool isTamed { get; private set; }
 
-    public EnemyStoreData(float life, bool isIced, bool isHidden, bool isTamed) : base(life, isIced, isHidden)
+    public EnemyStoreData(float life, bool isHidden, bool isTamed) : base(life, isHidden)
     {
         this.isTamed = isTamed;
     }

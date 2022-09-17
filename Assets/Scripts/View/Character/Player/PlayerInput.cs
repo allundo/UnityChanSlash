@@ -49,12 +49,13 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     protected IPlayerMapUtil playerMap;
     protected PlayerCommandTarget playerTarget;
-    protected bool IsAttack => commander.currentCommand is PlayerAttack;
-    protected bool IsItemUse => commander.currentCommand is PlayerItem || IsFiring;
-    protected bool IsFiring => commander.currentCommand is PlayerCoinThrow || commander.currentCommand is PlayerFire;
-    protected bool IsDash => commander.currentCommand is PlayerDash;
-    protected bool IsForward => commander.currentCommand is PlayerForward;
-    protected bool IsMessage => commander.currentCommand is PlayerMessage;
+    protected bool IsAttack => currentCommand is PlayerAttack;
+    protected bool IsItemUse => currentCommand is PlayerItem || IsFiring;
+    protected bool IsFiring => currentCommand is PlayerCoinThrow || currentCommand is PlayerFire;
+    protected bool IsDash => currentCommand is PlayerDash;
+    protected bool IsForward => currentCommand is PlayerForward;
+    protected bool IsMessage => currentCommand is PlayerMessage;
+    protected override bool IsIced => currentCommand is PlayerIcedCommand || currentCommand is PlayerIcedFall;
     protected bool isGuardOn => guardUI.IsPressed.Value;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
@@ -79,7 +80,12 @@ public class PlayerInput : ShieldInput, IPlayerInput
     public ICommand EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f, 0.99f, 0.99f));
     public ICommand EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f, 0.99f, 0.99f));
     public ICommand EnqueueLanding(Vector3 moveVec) => ForceEnqueue(new PlayerLanding(playerTarget, 36f, moveVec));
-    public ICommand InterruptIcedFall(float framesToMelt) => Interrupt(new PlayerIcedFall(playerTarget, framesToMelt, 30f));
+    public ICommand InterruptIcedFall(float framesToMelt)
+    {
+        ICommand cmd = Interrupt(new PlayerIcedFall(playerTarget, framesToMelt, 30f));
+        ForceEnqueue(wakeUp);
+        return cmd;
+    }
     public ICommand EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
     public ICommand InterruptMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
 
@@ -221,7 +227,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
         {
             ClearAll();
             ICommand iced = InterruptIcedFall(duration);
-            commander.EnqueueCommand(wakeUp);
             return iced;
         }
 
