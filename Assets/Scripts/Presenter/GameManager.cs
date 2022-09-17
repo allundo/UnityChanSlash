@@ -69,7 +69,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         yield return new WaitForEndOfFrame();
 
         player.SetActive(true);
-        yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start()
+        yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
         cover.FadeIn(1.5f, 0.6f, false).Play();
 
@@ -82,11 +82,28 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     /// </summary>
     public void Restart()
     {
-        spawnHandler.PlaceEnemyGenerators();
+        input.SetInputVisible(false);
+        cover.SetAlpha(1f);
 
         InitPlayerPos();
 
-        cover.FadeIn(1f, 0.5f, false).Play();
+        player.SetActive(false);
+
+        StartCoroutine(RestartWithDelay());
+    }
+
+    private IEnumerator RestartWithDelay(float delay = 0.2f)
+    {
+        yield return new WaitForSeconds(delay);
+
+        spawnHandler.PlaceEnemyGenerators();
+
+        yield return new WaitForEndOfFrame();
+
+        player.SetActive(true);
+        yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
+
+        cover.FadeIn(1f, 0.3f, false).Play();
 
         eventManager.EventInit(worldMap);
         eventManager.InvokeGameEvent(1);
