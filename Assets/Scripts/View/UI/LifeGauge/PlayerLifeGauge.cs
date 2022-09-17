@@ -19,7 +19,7 @@ public class PlayerLifeGauge : MonoBehaviour
 
     private Tween shakeTween = null;
 
-    private bool flashOnUpdate = false;
+    private bool effectOnUpdate = false;
 
     void Awake()
     {
@@ -35,9 +35,9 @@ public class PlayerLifeGauge : MonoBehaviour
 
     private void UpdateGauge(float lifeRatio)
     {
-        greenGauge.UpdateGauge(lifeRatio, flashOnUpdate);
-        redGauge.UpdateGauge(lifeRatio);
-        flashOnUpdate = false;
+        greenGauge.UpdateGauge(lifeRatio, effectOnUpdate);
+        redGauge.UpdateGauge(lifeRatio, effectOnUpdate);
+        effectOnUpdate = false;
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class PlayerLifeGauge : MonoBehaviour
     /// <param name="lifeRatio">Normalized life ratio after healing to the life max</param>
     public void OnHeal(float healRatio, float lifeRatio)
     {
-        flashOnUpdate = true;
+        effectOnUpdate = true;
         healEffect.PlayEffect(healRatio * 0.5f, lifeRatio);
     }
 
@@ -55,7 +55,7 @@ public class PlayerLifeGauge : MonoBehaviour
     {
         float life = heal + prevLife;
 
-        flashOnUpdate = true;
+        effectOnUpdate = true;
         bool isHealVisible = (int)(life * 10f) > (int)(prevLife * 10f);
         if (isHealVisible) smallHealSound.PlayEx();
     }
@@ -69,13 +69,13 @@ public class PlayerLifeGauge : MonoBehaviour
     {
         if (damageRatio < 0.000001f)
         {
-            flashOnUpdate = false;
+            effectOnUpdate = false;
             return;
         }
 
         healEffect.KillEffect();
 
-        flashOnUpdate = true;
+        effectOnUpdate = true;
 
         shakeTween?.Kill();
         shakeTween = DamageShake(damageRatio);

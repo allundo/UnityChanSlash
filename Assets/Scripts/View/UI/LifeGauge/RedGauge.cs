@@ -16,4 +16,18 @@ public class RedGauge : Gauge
             1f
         ).Play();
     }
+
+    public override void UpdateGauge(float valueRatio, bool enableAnimation = true)
+    {
+        gaugeTween?.Kill();
+
+        if (enableAnimation)
+        {
+            gaugeTween = UpdateTween(valueRatio);
+        }
+        else
+        {
+            SetGauge(valueRatio);
+        }
+    }
 }
