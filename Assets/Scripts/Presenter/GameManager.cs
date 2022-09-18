@@ -105,9 +105,22 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         cover.SetAlpha(1f);
 
-        DataStoreAgent.Instance.RespawnByGameData(worldMap, hidePlateHandler);
+        var dataStoreAgent = DataStoreAgent.Instance;
 
-        StartCoroutine(LoadStartCoroutine());
+        dataStoreAgent.RespawnByGameData(worldMap);
+
+        try
+        {
+            StartCoroutine(LoadStartCoroutine());
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("インポートデータのロード中にエラー発生: " + e.Message);
+            if (!Debug.isDebugBuild) dataStoreAgent.DeleteSaveDataFile();
+            Debug.Log(e.StackTrace);
+            throw e;
+        }
+
     }
 
     private IEnumerator LoadStartCoroutine(float delay = 0.5f)
@@ -123,6 +136,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mainCamera.SwitchFloor(worldMap.floor);
 
         yield return null;
+
+        // Initialize hide plates after ApplyTileOpen();
+        hidePlateHandler.Init();
 
         DOTween.Sequence()
             .Append(cover.FadeIn(1f, 0.5f, false))

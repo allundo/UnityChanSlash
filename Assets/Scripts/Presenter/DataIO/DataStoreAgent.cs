@@ -503,7 +503,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return true;
     }
 
-    public void RespawnByGameData(WorldMap map, HidePlateHandler hidePlateHandler)
+    public void RespawnByGameData(WorldMap map)
     {
         try
         {
@@ -516,12 +516,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             playerInfo.ImportRespawnData(saveData.playerData);
             playerInfo.ImportInventoryItems(saveData.inventoryItems);
             GameManager.Instance.ImportRespawnData(saveData);
-            hidePlateHandler.Init();
         }
         catch (Exception e)
         {
             Debug.LogError("データのインポートに失敗: " + e.Message);
-            DeleteFile(SAVE_DATA_FILE_NAME);
+            DeleteSaveDataFile();
             Debug.Log(e.StackTrace);
             throw e;
         }
@@ -561,6 +560,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         File.Delete(Path.Combine(GetSecureDataPath(), fileName));
     }
+
+    public void DeleteSaveDataFile() => DeleteFile(SAVE_DATA_FILE_NAME);
 
     ///  <summary>
     /// Secure directory path for data save. Supports Android only for now.
