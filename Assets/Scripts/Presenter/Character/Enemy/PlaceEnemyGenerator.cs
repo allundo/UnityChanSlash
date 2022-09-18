@@ -135,7 +135,10 @@ public class PlaceEnemyGenerator : EnemyGenerator
         var store = new List<DataStoreAgent.EnemyData>();
         this.map.ForEachTiles((tile, pos) =>
         {
+            if (tile.AboveEnemy != null) store.Add(new DataStoreAgent.EnemyData(pos, tile.AboveEnemy));
+
             tile.OnCharacterDest = tile.AboveEnemy = null;
+
             if (tile.OnEnemy != null)
             {
                 if (pos != playerPos) store.Add(new DataStoreAgent.EnemyData(pos, tile.OnEnemy));

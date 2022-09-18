@@ -84,9 +84,8 @@ public class Wall : Tile, ITile
     public bool IsLeapable => false;
     public bool IsViewOpen => false;
     public override bool IsCharacterOn => false;
-    public override bool IsEnemyOn => false;
+    public override bool IsEnemyOn => AboveEnemy != null;
     public override IEnemyStatus OnEnemy { get { return null; } set { } }
-    public override IEnemyStatus AboveEnemy { get { return null; } set { } }
     public override IStatus OnCharacterDest { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
