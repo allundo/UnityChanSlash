@@ -52,6 +52,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         }
 
         if (cmd is PlayerIcedFall) exitState = ExitState.IcedFall;
+        if (cmd is PlayerIcedPitFall) exitState = ExitState.IcedPitFall;
 
         return new DataStoreAgent.PlayerData(PlayerPos, status, exitState);
     }
@@ -90,16 +91,17 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
             case ExitState.Jump:
             case ExitState.IcedFall:
+            case ExitState.IcedPitFall:
                 Vector3 landingVec = data.dir.LookAt * 0.5f + Vector3.up * -0.75f;
                 transform.position -= landingVec;
 
-                if (state == ExitState.IcedFall)
+                if (state == ExitState.Jump)
                 {
-                    input.InterruptIcedFall(data.icingFrames);
+                    input.EnqueueLanding(landingVec);
                     return;
                 }
 
-                input.EnqueueLanding(landingVec);
+                input.InterruptIcedFall(data.icingFrames, state == ExitState.IcedPitFall);
                 return;
 
             case ExitState.PitFall:

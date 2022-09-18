@@ -55,7 +55,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected bool IsDash => currentCommand is PlayerDash;
     protected bool IsForward => currentCommand is PlayerForward;
     protected bool IsMessage => currentCommand is PlayerMessage;
-    protected override bool IsIced => currentCommand is PlayerIcedCommand || currentCommand is PlayerIcedFall;
     protected bool isGuardOn => guardUI.IsPressed.Value;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
@@ -80,9 +79,9 @@ public class PlayerInput : ShieldInput, IPlayerInput
     public ICommand EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f, 0.99f, 0.99f));
     public ICommand EnqueueTurnR() => ForceEnqueue(new PlayerTurnR(playerTarget, 18f, 0.99f, 0.99f));
     public ICommand EnqueueLanding(Vector3 moveVec) => ForceEnqueue(new PlayerLanding(playerTarget, 36f, moveVec));
-    public ICommand InterruptIcedFall(float framesToMelt)
+    public ICommand InterruptIcedFall(float framesToMelt, bool isPitFall = false)
     {
-        ICommand cmd = Interrupt(new PlayerIcedFall(playerTarget, framesToMelt, 30f));
+        ICommand cmd = Interrupt(new PlayerIcedFall(playerTarget, isPitFall ? framesToMelt + 30f : framesToMelt, 30f));
         ForceEnqueue(wakeUp);
         return cmd;
     }
@@ -243,19 +242,10 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     protected override ICommand GetIcedCommand(float duration)
         => new PlayerIcedCommand(playerTarget, duration);
+
     public override void OnIceCrash()
     {
-
-#if UNITY_EDITOR
-        ICommand cmd = commander.currentCommand;
-        bool isCurrentlyIced = cmd is PlayerIcedCommand || cmd is PlayerIcedFall || cmd is PlayerIcedPitFall;
-        if (!isCurrentlyIced)
-        {
-            Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + cmd, gameObject);
-        }
-#endif
-
-        commander.Cancel();
+        base.OnIceCrash();
         SetInputVisible();
     }
 

@@ -19,7 +19,7 @@ public abstract class MobInput : InputHandler, IMobInput
 {
     protected IMobMapUtil mobMap;
 
-    protected virtual bool IsIced => currentCommand is IcedCommand;
+    protected virtual bool IsIced => currentCommand is IIcedCommand;
 
     protected override void Awake()
     {
@@ -51,11 +51,9 @@ public abstract class MobInput : InputHandler, IMobInput
     {
 
 #if UNITY_EDITOR
-        ICommand cmd = commander.currentCommand;
-        bool isCurrentlyIced = cmd is IcedCommand || cmd is RabbitIcedFall || cmd is FlyingIcedFall;
-        if (!isCurrentlyIced)
+        if (!IsIced)
         {
-            Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + cmd, gameObject);
+            Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + currentCommand, gameObject);
         }
 #endif
 

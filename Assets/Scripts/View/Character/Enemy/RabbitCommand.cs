@@ -152,16 +152,16 @@ public class RabbitWondering : RabbitCommand
         return true;
     }
 }
-public class RabbitIcedFall : RabbitCommand
+public class RabbitIcedFall : RabbitCommand, IIcedCommand
 {
-    protected float meltFrameTimer;
+    protected float meltTime;
     protected float framesToMelt;
     public override float RemainingFramesToComplete => framesToMelt;
 
     public RabbitIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
         this.framesToMelt = framesToMelt;
-        meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
+        meltTime = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
     }
 
     public override IObservable<Unit> Execute()
@@ -178,7 +178,7 @@ public class RabbitIcedFall : RabbitCommand
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
+        completeTween = DOVirtual.DelayedCall(meltTime, () => mobReact.Melt(), false).Play();
 
         return ObservableComplete();
     }

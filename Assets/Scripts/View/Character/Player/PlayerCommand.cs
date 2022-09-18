@@ -336,7 +336,7 @@ public class PlayerPitJump : PlayerCommand
     }
 }
 
-public class PlayerIcedFall : PlayerCommand
+public class PlayerIcedFall : PlayerCommand, IIcedCommand
 {
     public override int priority => 20;
     protected Tween meltTimer;
@@ -421,9 +421,11 @@ public class PlayerPitFall : PlayerCommand
     }
 }
 
-public class PlayerIcedPitFall : PlayerPitFall
+public class PlayerIcedPitFall : PlayerPitFall, IIcedCommand
 {
     private float meltTime;
+    public override float RemainingFramesToComplete => meltTime / FRAME_UNIT;
+
     public PlayerIcedPitFall(PlayerCommandTarget target, float damage, float duration, float meltTime) : base(target, damage, duration)
     {
         this.meltTime = meltTime;
@@ -876,7 +878,7 @@ public class PlayerInspect : PlayerAction
     }
 }
 
-public class PlayerIcedCommand : PlayerCommand
+public class PlayerIcedCommand : PlayerCommand, IIcedCommand
 {
     private float icingFrames;
     public override int priority => 20;

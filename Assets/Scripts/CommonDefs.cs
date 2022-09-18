@@ -562,7 +562,8 @@ public enum ExitState
     InPit,
     Iced,
     PitFall,
-    IcedFall
+    IcedFall,
+    IcedPitFall,
 }
 
 public enum CurveType

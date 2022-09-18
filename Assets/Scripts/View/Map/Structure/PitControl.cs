@@ -33,7 +33,7 @@ public class PitControl : MonoBehaviour
     {
         anim.SetTrigger(drop);
 
-        if (isFXActive)
+        if (isFXActive && anim.speed == 0f)
         {
             anim.speed = 1f;
             GameManager.Instance.PlayVFX(VFXType.PitDrop, transform.position);

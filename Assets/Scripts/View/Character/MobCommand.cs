@@ -27,7 +27,9 @@ public class DieCommand : MobCommand
     }
 }
 
-public class IcedCommand : MobCommand
+public interface IIcedCommand : ICommand { }
+
+public class IcedCommand : MobCommand, IIcedCommand
 {
     public override int priority => 20;
     private float icingFrames;
