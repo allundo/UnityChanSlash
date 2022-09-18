@@ -46,10 +46,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler = SpawnHandler.Instance;
     }
 
-    /// <summary>
-    /// One of the start processes called before Start()
-    /// </summary>
-    public void DropStart()
+    private void StartSequence(IEnumerator startProcessCoroutine)
     {
         input.SetInputVisible(false);
         cover.SetAlpha(1f);
@@ -58,8 +55,13 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         player.SetActive(false);
 
-        StartCoroutine(DropStartWithDelay());
+        StartCoroutine(startProcessCoroutine);
     }
+
+    /// <summary>
+    /// One of the start processes called before Start()
+    /// </summary>
+    public void DropStart() => StartSequence(DropStartWithDelay());
 
     private IEnumerator DropStartWithDelay(float delay = 0.6f)
     {
@@ -80,17 +82,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     /// <summary>
     /// One of the start processes called before Start()
     /// </summary>
-    public void Restart()
-    {
-        input.SetInputVisible(false);
-        cover.SetAlpha(1f);
-
-        InitPlayerPos();
-
-        player.SetActive(false);
-
-        StartCoroutine(RestartWithDelay());
-    }
+    public void Restart() => StartSequence(RestartWithDelay());
 
     private IEnumerator RestartWithDelay(float delay = 0.2f)
     {
