@@ -58,4 +58,13 @@ static public class CollectionsExtensions
     }
 
     static public Stack<T> ToStack<T>(this IEnumerable<T> collection) => new Stack<T>(collection);
+
+    static public bool Contains<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
+    {
+        foreach (T elem in collection)
+        {
+            if (predicate(elem)) return true;
+        }
+        return false;
+    }
 }

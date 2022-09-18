@@ -61,10 +61,8 @@ public class WitchGenerateEvent : PlayerDetectEvent
     protected override bool IsEventValid()
     {
         var playerHasKeyBlade = target.itemInventory.hasKeyBlade();
-
-        // FIXME: search all items on the event tile.
-        var keyBladeIsOnEventTile = target.map.OnTile.TopItem?.type == ItemType.KeyBlade;
-        var jumpLeapedEventTileWithKeyBlade = target.map.BackwardTile.TopItem?.type == ItemType.KeyBlade;
+        var keyBladeIsOnEventTile = target.map.OnTile.HasItem(ItemType.KeyBlade);
+        var jumpLeapedEventTileWithKeyBlade = target.map.BackwardTile.HasItem(ItemType.KeyBlade);
 
         return playerHasKeyBlade || keyBladeIsOnEventTile || jumpLeapedEventTileWithKeyBlade;
     }

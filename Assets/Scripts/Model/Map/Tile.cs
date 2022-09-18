@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public interface ITile
 {
@@ -14,6 +15,7 @@ public interface ITile
     bool PutItem(Item item);
     Item PickItem();
     ItemInfo TopItem { get; }
+    bool HasItem(ItemType type);
     IEnemyStatus GetEnemyStatus();
 }
 
@@ -60,6 +62,8 @@ public class Tile
     }
 
     public virtual ItemInfo TopItem => items.Count > 0 ? items.Peek().itemInfo : null;
+
+    public bool HasItem(ItemType type) => items.Contains(item => item.itemInfo.type == type);
 
     public virtual IEnemyStatus GetEnemyStatus()
         => OnEnemy ?? (OnCharacterDest is IEnemyStatus ? OnCharacterDest as IEnemyStatus : null) ?? AboveEnemy;
