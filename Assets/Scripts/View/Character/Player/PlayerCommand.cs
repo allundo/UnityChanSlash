@@ -339,14 +339,14 @@ public class PlayerPitJump : PlayerCommand
 public class PlayerIcedFall : PlayerCommand
 {
     public override int priority => 20;
-    protected float meltFrameTimer;
+    protected Tween meltTimer;
     protected float framesToMelt;
     public override float RemainingFramesToComplete => framesToMelt;
 
     public PlayerIcedFall(PlayerCommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
         this.framesToMelt = framesToMelt;
-        meltFrameTimer = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
+        meltTimer = DOVirtual.DelayedCall(Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT, () => mobReact.Melt(), false);
     }
 
     public override IObservable<Unit> Execute()
@@ -361,18 +361,33 @@ public class PlayerIcedFall : PlayerCommand
         var jumpSeq = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.JumpRelative(moveVec, 1f, 0f).SetEase(Ease.Linear))
-            .InsertCallback(0.95f * duration, hidePlateHandler.Move) // Update HidePlate on entering the destination Tile
-            .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash));
+            .InsertCallback(0.95f * duration, hidePlateHandler.Move); // Update HidePlate on entering the destination Tile
 
         // Update HidePlate on entering the leaped Tile
-        if (moveVec.magnitude / TILE_UNIT > 1f)
+        if (moveVec.sqrMagnitude / TILE_UNIT * TILE_UNIT > 1f)
         {
             jumpSeq.InsertCallback(0.5f * duration, hidePlateHandler.Move);
         }
 
+        // If falling tile is an opened pit or closed pit with 3/4 probability, continue with pit fall command.
+        var tile = mobMap.OnTile as Pit;
+        if (tile != null && (tile.IsOpen || Util.DiceRoll(3, 4)))
+        {
+            float pitFallFrames = 40f;
+            float remainingMeltTime = Mathf.Clamp(framesToMelt * FRAME_UNIT - duration, 0f, (pitFallFrames + 1) * FRAME_UNIT);
+            input.Interrupt(new PlayerIcedPitFall(playerTarget, tile.Damage, pitFallFrames, remainingMeltTime), false, false);
+
+            if (remainingMeltTime == 0f) meltTimer.Play();
+        }
+        else
+        {
+            // Reserve ice crushing on completed or ice melting in the middle of the IcedFall.
+            jumpSeq.AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash));
+            completeTween = meltTimer.Play();
+        }
+
         mobReact.Iced(framesToMelt);
         playingTween = jumpSeq.SetUpdate(false).Play();
-        completeTween = DOVirtual.DelayedCall(meltFrameTimer, () => mobReact.Melt(), false).Play();
 
         return ObservableComplete();
     }
@@ -403,6 +418,21 @@ public class PlayerPitFall : PlayerCommand
             .Play();
 
         return ObservableComplete();
+    }
+}
+
+public class PlayerIcedPitFall : PlayerPitFall
+{
+    private float meltTime;
+    public PlayerIcedPitFall(PlayerCommandTarget target, float damage, float duration, float meltTime) : base(target, damage, duration)
+    {
+        this.meltTime = meltTime;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        completeTween = DOVirtual.DelayedCall(meltTime, () => mobReact.Melt(), false).Play();
+        return base.Execute();
     }
 }
 

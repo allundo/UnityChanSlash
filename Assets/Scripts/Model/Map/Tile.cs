@@ -173,6 +173,7 @@ public class Pit : Tile, IOpenable
     public PitState state { protected get; set; }
     public void Open() => state.Drop(false);
     public bool IsOpen => state.isDropped;
+    public float Damage => state.damage;
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;

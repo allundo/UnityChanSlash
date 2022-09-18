@@ -248,7 +248,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
 #if UNITY_EDITOR
         ICommand cmd = commander.currentCommand;
-        bool isCurrentlyIced = cmd is PlayerIcedCommand || cmd is PlayerIcedFall;
+        bool isCurrentlyIced = cmd is PlayerIcedCommand || cmd is PlayerIcedFall || cmd is PlayerIcedPitFall;
         if (!isCurrentlyIced)
         {
             Debug.Log("IcedCrash(): " + gameObject.name + " isn't iced!, Command: " + cmd, gameObject);
