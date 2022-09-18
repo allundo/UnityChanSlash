@@ -37,8 +37,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         raycastHandler = new RaycastHandler(gameObject);
     }
 
-    public void SetCommands(PlayerCommandTarget target) => attackInputUI.SetCommands(target);
-
     void Start()
     {
         sqrForwardRadius = forwardRadius * forwardRadius;
