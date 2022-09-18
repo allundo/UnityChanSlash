@@ -25,6 +25,7 @@ public class EnemyIdle : EnemyCommand
 
 public abstract class EnemyMove : EnemyCommand
 {
+    protected Tween speedTween;
     public EnemyMove(ICommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected abstract bool IsMovable { get; }
@@ -32,12 +33,14 @@ public abstract class EnemyMove : EnemyCommand
 
     protected virtual void SetSpeed()
     {
-        enemyAnim.speed.Float = Speed;
+        speedTween?.Kill();
+        speedTween = DOTween.To(() => enemyAnim.speed.Float, value => enemyAnim.speed.Float = value, Speed, 0.5f).Play();
     }
 
     protected virtual void ResetSpeed()
     {
-        enemyAnim.speed.Float = 0.0f;
+        speedTween?.Kill();
+        speedTween = DOTween.To(() => enemyAnim.speed.Float, value => enemyAnim.speed.Float = value, 0f, 0.25f).Play();
     }
 
     protected Tween LinearMove(Pos destPos)

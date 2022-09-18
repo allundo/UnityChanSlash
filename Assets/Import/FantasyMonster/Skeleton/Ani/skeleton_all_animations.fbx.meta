@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 4bdf1262ca05a4616bc91033c8420a0f
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -8718967029479517697
@@ -62,7 +62,19 @@ ModelImporter:
       that will be discarded.\n\t'Pinky.001.R' has translation animation that will
       be discarded.\n\t'UpperLeg.L' has translation animation that will be discarded.\n\t'UpperLeg.R'
       has translation animation that will be discarded.\n"
-    animationRetargetingWarnings: 
+    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Armature|ArmatureAction.006':\n\tLeftLowerLeg
+      average position error 36.8 mm and maximum position error 509.3 mm at time
+      9:28 (90.3%) Frame 298\n\tLeftFoot average position error 36.5 mm and maximum
+      position error 509.3 mm at time 9:28 (90.3%) Frame 298\n\tRightLowerLeg average
+      position error 26.6 mm and maximum position error 387.9 mm at time 9:28 (90.3%)
+      Frame 298\n\tRightFoot average position error 26.3 mm and maximum position
+      error 387.8 mm at time 9:28 (90.3%) Frame 298\n\tLeftUpperArm average position
+      error 19.1 mm and maximum position error 218.1 mm at time 10: 5 (92.4%) Frame
+      305\n\tLeftLowerArm average position error 19.2 mm and maximum position error
+      218.2 mm at time 10: 3 (91.8%) Frame 303\n\tLeftHand average position error
+      19.1 mm and maximum position error 218.1 mm at time 10: 2 (91.5%) Frame 302\n\tRightLowerArm
+      average position error 0.3 mm and maximum position error 14.7 mm at time 7:
+      9 (66.4%) Frame 219\n"
     animationDoRetargetingWarnings: 1
     importAnimatedCustomProperties: 0
     importConstraints: 0
@@ -147,7 +159,7 @@ ModelImporter:
       loopTime: 1
       loopBlend: 1
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
@@ -1161,6 +1173,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
