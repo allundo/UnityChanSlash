@@ -121,6 +121,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     protected void OnActive(EnemyStatus.ActivateOption option)
     {
         enemyEffect.OnActive(option.fadeInDuration);
+        if (option.isHidden) Hide();
         map.OnActive();
         enemyInput.OnActive(option);
         bodyCollider.enabled = true;

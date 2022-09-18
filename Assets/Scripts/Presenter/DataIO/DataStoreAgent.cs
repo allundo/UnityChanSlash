@@ -194,7 +194,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 
         public bool isTamed = false;
-        public override MobStoreData StoreData() => new EnemyStoreData(life, isHidden, isTamed);
+        public EnemyStoreData StoreData() => new EnemyStoreData(life, isTamed);
     }
 
     [System.Serializable]
@@ -256,8 +256,6 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public float life = 0f;
         public bool isHidden = false;
         public float icingFrames = 0f;
-
-        public virtual MobStoreData StoreData() => new MobStoreData(life, isHidden);
     }
 
     [System.Serializable]

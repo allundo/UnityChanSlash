@@ -106,8 +106,6 @@ public class MobStatus : Status, IMobStatus
 
         base.InitParam(param, data);
 
-        if (data != null) isHidden = (data as MobStoreData).isHidden;
-
         return this;
     }
 

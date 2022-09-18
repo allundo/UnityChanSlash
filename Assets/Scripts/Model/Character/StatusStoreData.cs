@@ -9,22 +9,11 @@ public class StatusStoreData
 }
 
 [System.Serializable]
-public class MobStoreData : StatusStoreData
-{
-    public bool isHidden { get; private set; }
-
-    public MobStoreData(float life, bool isHidden) : base(life)
-    {
-        this.isHidden = isHidden;
-    }
-}
-
-[System.Serializable]
-public class EnemyStoreData : MobStoreData
+public class EnemyStoreData : StatusStoreData
 {
     public bool isTamed { get; private set; }
 
-    public EnemyStoreData(float life, bool isHidden, bool isTamed) : base(life, isHidden)
+    public EnemyStoreData(float life, bool isTamed) : base(life)
     {
         this.isTamed = isTamed;
     }
