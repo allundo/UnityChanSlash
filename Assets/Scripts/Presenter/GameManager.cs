@@ -107,6 +107,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var dataStoreAgent = DataStoreAgent.Instance;
 
+        player.SetActive(false);
         dataStoreAgent.RespawnByGameData(worldMap);
 
         try
@@ -134,6 +135,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.PlaceEnemyGenerators();
         DataStoreAgent.Instance.RestorePlayerStatus();
         mainCamera.SwitchFloor(worldMap.floor);
+        player.SetActive(true);
 
         yield return null;
 

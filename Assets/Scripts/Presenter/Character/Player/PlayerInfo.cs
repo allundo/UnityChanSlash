@@ -42,7 +42,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         if (map.isInPit)
         {
             // Player has already fell into pit if Idling(cmd is null), Turn LR in the pit or failed to escape from the pit by Jump.
-            exitState = (cmd == null || cmd is PlayerTurnL || cmd is PlayerTurnR || cmd is PlayerPitJump) ? ExitState.InPit : ExitState.PitFall;
+            exitState = (cmd == null || cmd is PlayerTurnL || cmd is PlayerTurnR || cmd is PlayerPitJump || cmd is PlayerWakeUp) ? ExitState.InPit : ExitState.PitFall;
         }
 
         if (cmd is PlayerIcedCommand)
@@ -87,6 +87,8 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
             case ExitState.InPit:
                 transform.position -= Vector3.up * Constants.TILE_UNIT;
+                input.SetInputVisible(false);
+                input.SetInputVisible(true, false);
                 return;
 
             case ExitState.Jump:
