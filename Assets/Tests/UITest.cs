@@ -292,6 +292,7 @@ public class UITest
         var forwardUIRT = Object.Instantiate(prefabForwardUI).GetComponent<RectTransform>();
         var attackInput = Object.Instantiate(prefabAttackInput);
         var fightCircle = Object.Instantiate(prefabFightCircle).InjectModules(attackInput, forwardUIRT);
+        var target = attackInput.GetEnemyTarget();
 
         InitAnchoredPosition(fightCircle.gameObject, Vector2.zero);
         InitAnchoredPosition(attackInput.gameObject, Vector2.zero);
@@ -301,15 +302,38 @@ public class UITest
 
         var testEnemyStatus = Object.Instantiate(prefabEnemyStatus);
         var tfEnemy = testEnemyStatus.transform;
-        testEnemyStatus.InitParam(new EnemyParam() { enemyCore = new Vector3(0, 0.5f, 0) });
+        var testEnemyStatus2 = Object.Instantiate(prefabEnemyStatus);
+        var tfEnemy2 = testEnemyStatus2.transform;
+        var param = new EnemyParam() { enemyCore = new Vector3(0, 0.5f, 0) };
+
+        testEnemyStatus.InitParam(param);
+        testEnemyStatus2.InitParam(param);
 
         yield return null;
 
         fightCircle.SetActive(true, testEnemyStatus);
 
-        tfEnemy.DOMoveY(7.5f, 5f).Play();
+        tfEnemy.DOMoveY(7.5f, 3f).Play();
+        tfEnemy2.DOMoveY(-2.5f, 3f).Play();
 
-        yield return new WaitForSeconds(5f);
+        // yield return new WaitForSeconds(1f);
+        yield return null;
+
+        fightCircle.SetActive(false, null);
+
+        yield return null;
+
+        fightCircle.SetActive(true, testEnemyStatus);
+
+        yield return new WaitForSeconds(2f);
+
+        fightCircle.SetActive(true, testEnemyStatus2);
+
+        yield return new WaitForSeconds(1f);
+
+        fightCircle.SetActive(false, null);
+
+        yield return new WaitForSeconds(1f);
 
         Object.Destroy(forwardUIRT.gameObject);
         Object.Destroy(attackInput.gameObject);

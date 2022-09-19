@@ -17,22 +17,28 @@ public class TargetCorner : FadeEnable
         fade.SetAlpha(0f);
 
         activate = uiTween.Resize(1f, 0.2f)
-            .OnComplete(() => expansionLoop.Restart())
+            .OnComplete(ExpansionLoop)
             .SetUpdate(false)
             .AsReusable(gameObject);
+    }
+
+    protected void ExpansionLoop()
+    {
+        expansionLoop?.Kill();
+
+        uiTween.ResetSize();
 
         expansionLoop = DOTween.Sequence()
-            .AppendCallback(() => uiTween.ResetSize())
             .Join(uiTween.Resize(1.1f, 0.5f).SetEase(Ease.InQuad))
             .Join(fade.ToAlpha(0.4f, 0.5f).SetEase(Ease.InQuad))
             .SetUpdate(false)
             .SetLoops(-1, LoopType.Yoyo)
-            .AsReusable(gameObject);
+            .Play();
     }
 
     public void FadeActivate()
     {
-        expansionLoop.Pause();
+        activate.Rewind();
 
         FadeIn(0.2f).Play();
         uiTween.ResetSize(2f);
@@ -41,9 +47,8 @@ public class TargetCorner : FadeEnable
 
     public void FadeInactivate()
     {
-        expansionLoop.Pause();
-        activate.SmoothRewind();
-        FadeOut(0.1f).Play();
+        expansionLoop?.Kill();
+        FadeOut(0.1f, null, () => activate.Rewind()).Play();
     }
 
     public void SetPointerOn()
