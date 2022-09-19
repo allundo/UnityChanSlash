@@ -6,15 +6,18 @@ using UniRx;
 [RequireComponent(typeof(MaskableGraphic))]
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField] private AttackInputController attackInputUI = default;
+    [SerializeField] protected AttackInputController attackInputUI = default;
+    [SerializeField] protected InputRegion inputRegion = default;
+
     [SerializeField] private float maxAlpha = 1f;
 
     [SerializeField] private EnemyLifeGauge circle = default;
-    [SerializeField] private Target enemyTarget = default;
 
-    [SerializeField] private RectTransform forwardUIRT = default;
+    [SerializeField] protected RectTransform forwardUIRT = default;
     [SerializeField] private float radius = 260f;
     [SerializeField] private float forwardRadius = 80f;
+
+    protected Target enemyTarget = default;
 
     private RectTransform rectTransform;
     private RaycastHandler raycastHandler;
@@ -39,10 +42,12 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void Start()
     {
-        sqrForwardRadius = forwardRadius * forwardRadius;
+        enemyTarget = attackInputUI.GetEnemyTarget();
+        attackInputUI.GetAttackButtonsHandler().SetRegions(inputRegion);
 
         ResetCenterPos();
 
+        sqrForwardRadius = forwardRadius * forwardRadius;
         attackInputUI.SetUIRadius(radius);
 
         circle.SetAlpha(0.0f);

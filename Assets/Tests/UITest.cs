@@ -3,14 +3,21 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using DG.Tweening;
+using Moq;
+using UniRx;
 
 public class UITest
 {
     private ResourceLoader resourceLoader;
 
-    private ItemInventoryTest itemInventory;
     private ItemInventoryTest prefabItemInventory;
     private ItemIconGenerator itemIconGenerator;
+
+    private FightCircleTest prefabFightCircle;
+    private AttackInputControllerTest prefabAttackInput;
+    private ForwardUI prefabForwardUI;
+    private EnemyStatus prefabEnemyStatus;
+
     private GameObject testCanvas;
     private Camera mainCamera;
     private GameObject eventSystem;
@@ -30,6 +37,11 @@ public class UITest
 
         prefabItemInventory = Resources.Load<ItemInventoryTest>("Prefabs/UI/Item/ItemInventoryTest");
         itemIconGenerator = Object.Instantiate(Resources.Load<ItemIconGenerator>("Prefabs/UI/Item/ItemIconGenerator"));
+
+        prefabFightCircle = Resources.Load<FightCircleTest>("Prefabs/UI/Fight/FightCircleTest");
+        prefabAttackInput = Resources.Load<AttackInputControllerTest>("Prefabs/UI/Fight/AttackInputUITest");
+        prefabForwardUI = Resources.Load<ForwardUI>("Prefabs/UI/Move/Forward");
+        prefabEnemyStatus = Resources.Load<EnemyStatus>("Prefabs/TestEnemyStatus");
 
         dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
         dataStoreAgent.KeepSaveDataFiles();
@@ -51,15 +63,7 @@ public class UITest
         Object.Destroy(resourceLoader.gameObject);
     }
 
-    [SetUp]
-    public void SetUp()
-    {
-        itemInventory = Object.Instantiate(prefabItemInventory);
-        itemIconGenerator.SetParent(itemInventory.transform);
-        SetItemInventoryPos();
-    }
-
-    private void SetItemInventoryPos()
+    private void InitItemInventory(ItemInventoryTest itemInventory)
     {
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         RectTransform rectTf = itemInventory.GetComponent<RectTransform>();
@@ -68,20 +72,39 @@ public class UITest
         Vector2 size = rectTf.sizeDelta;
         rectTf.anchorMin = rectTf.anchorMax = new Vector2(0f, 0.5f);
         rectTf.anchoredPosition = new Vector2(size.x, size.y + 280f) * 0.5f;
+
+        itemIconGenerator.SetParent(itemInventory.transform);
+    }
+
+    private void DestroyItemIcons()
+    {
+        DOTween.KillAll();
+        itemIconGenerator.DestroyAll();
+    }
+
+    private void InitAnchoredPosition(GameObject uiObject, Vector2 anchoredPosition)
+    {
+        RectTransform rectTf = uiObject.GetComponent<RectTransform>();
+        RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
+        rectTf.SetParent(rectTfCanvas);
+
+        rectTf.anchorMin = rectTf.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTf.anchoredPosition = anchoredPosition;
     }
 
     [TearDown]
     public void TearDown()
     {
         DOTween.KillAll();
-
-        itemIconGenerator.DestroyAll();
-        Object.Destroy(itemInventory.gameObject);
     }
 
     [UnityTest]
     public IEnumerator _001_ItemInventoryKeyBladeSetTest()
     {
+        // Setup
+        var itemInventory = Object.Instantiate(prefabItemInventory);
+        InitItemInventory(itemInventory);
+
         yield return null;
 
         itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.KeyBlade));
@@ -89,6 +112,12 @@ public class UITest
         yield return new WaitForSeconds(5f);
 
         Assert.True(itemInventory.hasKeyBlade());
+
+        // TearDown
+        itemIconGenerator.DestroyAll();
+        Object.Destroy(itemInventory.gameObject);
+
+        yield return null;
     }
 
     [UnityTest]
@@ -96,6 +125,9 @@ public class UITest
     {
         // Setup
         const int MAX_ITEMS = 30;
+
+        var itemInventory = Object.Instantiate(prefabItemInventory);
+        InitItemInventory(itemInventory);
 
         yield return null;
 
@@ -110,7 +142,6 @@ public class UITest
         itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.Coin, 3));
         yield return null;
         ulong price2 = itemInventory.SumUpPrices();
-        yield return null;
 
         for (int i = 0; i < MAX_ITEMS; i++)
         {
@@ -123,14 +154,14 @@ public class UITest
         itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.KeyBlade));
         yield return null;
         ulong price4 = itemInventory.SumUpPrices();
-        yield return null;
 
         var dummyCoinIcon = itemIconGenerator.Spawn(Vector2.zero, resourceLoader.ItemInfo(ItemType.Coin, 1)).SetIndex(2);
         dummyCoinIcon.Inactivate();
+        yield return null;
 
         itemInventory.Remove(dummyCoinIcon);
-        ulong price5 = itemInventory.SumUpPrices();
         yield return null;
+        ulong price5 = itemInventory.SumUpPrices();
 
         // Then
         Assert.AreEqual(100000, price1);
@@ -139,6 +170,11 @@ public class UITest
         Assert.AreEqual(48681300, price4);
         Assert.AreEqual(46124400, price5);
 
+        // TearDown
+        DestroyItemIcons();
+        Object.Destroy(itemInventory.gameObject);
+
+        yield return null;
     }
 
     [UnityTest]
@@ -147,6 +183,9 @@ public class UITest
         // Setup
         const int MAX_ITEMS = 30;
         var items = new ItemInfo[MAX_ITEMS];
+
+        var itemInventory = Object.Instantiate(prefabItemInventory);
+        InitItemInventory(itemInventory);
 
         yield return null;
 
@@ -194,8 +233,7 @@ public class UITest
         dataStoreAgent.SaveEncryptedRecordTest(saveData, dataStoreAgent.SAVE_DATA_FILE_NAME);
         yield return null;
 
-        DOTween.KillAll();
-        itemIconGenerator.DestroyAll();
+        DestroyItemIcons();
         Object.Destroy(itemInventory.gameObject);
         yield return null;
 
@@ -204,8 +242,8 @@ public class UITest
         yield return null;
 
         itemInventory = Object.Instantiate(prefabItemInventory);
-        itemIconGenerator.SetParent(itemInventory.transform);
-        SetItemInventoryPos();
+        InitItemInventory(itemInventory);
+
         itemInventory.ImportInventoryItems(loadData.inventoryItems);
 
         var export2 = itemInventory.ExportInventoryItems();
@@ -223,5 +261,60 @@ public class UITest
             Assert.AreEqual(export[i].itemType, export2[i].itemType);
             Assert.AreEqual(export[i].numOfItem, export2[i].numOfItem);
         }
+
+        // TearDown
+        DestroyItemIcons();
+        Object.Destroy(itemInventory.gameObject);
+
+        yield return null;
+    }
+
+    public class MockEnemy
+    {
+        public Transform transform { get; private set; }
+        public Vector3 corePos => transform.position;
+
+        public IReadOnlyReactiveProperty<float> Life { get; private set; } = new ReactiveProperty<float>(10f);
+        public IReadOnlyReactiveProperty<float> LifeMax { get; private set; } = new ReactiveProperty<float>(10f);
+
+        public MockEnemy() : this(Vector3.zero) { }
+
+        public MockEnemy(Vector3 pos)
+        {
+            transform = new GameObject("MockEnemy").transform;
+            transform.position = pos;
+        }
+    }
+
+    [UnityTest]
+    public IEnumerator _004_FightCircleDisplayTest()
+    {
+        var forwardUIRT = Object.Instantiate(prefabForwardUI).GetComponent<RectTransform>();
+        var attackInput = Object.Instantiate(prefabAttackInput);
+        var fightCircle = Object.Instantiate(prefabFightCircle).InjectModules(attackInput, forwardUIRT);
+
+        InitAnchoredPosition(fightCircle.gameObject, Vector2.zero);
+        InitAnchoredPosition(attackInput.gameObject, Vector2.zero);
+        InitAnchoredPosition(forwardUIRT.gameObject, Vector2.zero);
+
+        attackInput.SetDummyCamera(mainCamera);
+
+        var testEnemyStatus = Object.Instantiate(prefabEnemyStatus);
+        var tfEnemy = testEnemyStatus.transform;
+        testEnemyStatus.InitParam(new EnemyParam() { enemyCore = new Vector3(0, 0.5f, 0) });
+
+        yield return null;
+
+        fightCircle.SetActive(true, testEnemyStatus);
+
+        tfEnemy.DOMoveY(7.5f, 5f).Play();
+
+        yield return new WaitForSeconds(5f);
+
+        Object.Destroy(forwardUIRT.gameObject);
+        Object.Destroy(attackInput.gameObject);
+        Object.Destroy(fightCircle.gameObject);
+
+        yield return null;
     }
 }

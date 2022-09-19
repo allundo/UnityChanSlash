@@ -5,45 +5,30 @@ using System;
 
 public class AttackInputController : MonoBehaviour
 {
-    [SerializeField] private AttackButton jabButton = default;
-    [SerializeField] private AttackButton straightButton = default;
-    [SerializeField] private AttackButton kickButton = default;
+    [SerializeField] private AttackButtonsHandler attackButtonsHandler = default;
 
-    [SerializeField] private Target enemyTarget = default;
+    [SerializeField] protected Target enemyTarget = default;
     [SerializeField] private PivotPoint pivotPoint = default;
     [SerializeField] private EffortPoint effortPoint = default;
     [SerializeField] private TargetPointer targetPointer = default;
 
     [SerializeField] private float attackCancelThreshold = 2.0f;
-    [SerializeField] private float kickRadius = 100f;
 
-    private ICommand jabCmd;
-    private ICommand straightCmd;
-    private ICommand kickCmd;
+    void Awake()
+    {
+        attackButtonsHandler.SetTarget(enemyTarget);
+    }
 
-    private ICommand jabCriticalCmd;
-    private ICommand straightCriticalCmd;
-    private ICommand kickCriticalCmd;
-
-    public IObservable<Unit> JabButton => jabButton.ObservableAtk;
-    public IObservable<Unit> StraightButton => straightButton.ObservableAtk;
-    public IObservable<Unit> KickButton => kickButton.ObservableAtk;
-
-    public IObservable<ICommand> AttackButtons
-        => Observable.Merge(
-            JabButton.Select(_ => enemyTarget.isPointerOn ? jabCriticalCmd : jabCmd),
-            StraightButton.Select(_ => enemyTarget.isPointerOn ? straightCriticalCmd : straightCmd),
-            KickButton.Select(_ => enemyTarget.isPointerOn ? kickCriticalCmd : kickCmd)
-        );
+    public Target GetEnemyTarget() => enemyTarget;
+    public AttackButtonsHandler GetAttackButtonsHandler() => attackButtonsHandler;
 
     private Vector2 UICenter;
-    private Vector2 kickUICenter;
 
     public void SetUICenter(Vector2 pos) => UICenter = pos;
     public void SetUIRadius(float radius)
     {
         sqrRadius = radius * radius;
-        kickUICenter = new Vector2(0, -(radius - kickRadius));
+        attackButtonsHandler.SetUIRadius(radius);
     }
 
     private AttackButton currentButton = null;
@@ -63,45 +48,6 @@ public class AttackInputController : MonoBehaviour
     public IReadOnlyReactiveProperty<bool> IsChargingUp => isChargingUp;
     private IReactiveProperty<bool> isChargingUp = new ReactiveProperty<bool>(false);
     private Vector2 pointerVec = Vector2.zero;
-
-    private float sqrKickRadius;
-    private bool InKick(Vector2 uiPos) => (kickUICenter - uiPos).sqrMagnitude < sqrKickRadius;
-
-    public void SetCommands(PlayerCommandTarget target)
-    {
-        jabCmd = new PlayerJab(target, 21.6f);
-        straightCmd = new PlayerStraight(target, 30f);
-        kickCmd = new PlayerKick(target, 43f);
-        jabCriticalCmd = new PlayerJabCritical(target, 18.5f);
-        straightCriticalCmd = new PlayerStraightCritical(target, 24f);
-        kickCriticalCmd = new PlayerKickCritical(target, 35f);
-    }
-
-    void Start()
-    {
-        sqrKickRadius = kickRadius * kickRadius;
-
-        JabButton.Subscribe(_ =>
-        {
-            straightButton.SetCoolTime(jabButton.CancelTime);
-            kickButton.SetCoolTime(jabButton.CancelTime);
-        })
-        .AddTo(this);
-
-        StraightButton.Subscribe(_ =>
-        {
-            jabButton.SetCoolTime(straightButton.CancelTime);
-            kickButton.SetCoolTime(straightButton.CoolTime);
-        })
-        .AddTo(this);
-
-        KickButton.Subscribe(_ =>
-        {
-            jabButton.SetCoolTime(kickButton.CoolTime);
-            straightButton.SetCoolTime(kickButton.CoolTime);
-        })
-        .AddTo(this);
-    }
 
     void Update()
     {
@@ -124,7 +70,7 @@ public class AttackInputController : MonoBehaviour
     public void Press(Vector2 screenPos)
     {
         pressPos = screenPos;
-        currentButton = GetAttack(UIPos(screenPos));
+        currentButton = attackButtonsHandler.GetAttack(UIPos(screenPos));
 
         currentButton.Press(pressPos);
     }
@@ -152,12 +98,6 @@ public class AttackInputController : MonoBehaviour
             effortPoint.DisableChargingUp();
             targetPointer.DisableChargingUp();
         }
-    }
-
-    private AttackButton GetAttack(Vector2 uiPos)
-    {
-        if (InKick(uiPos)) return kickButton;
-        return uiPos.x <= 0.0f ? jabButton : straightButton;
     }
 
     public void ButtonCancel(bool isFadeOnly = false)

@@ -19,6 +19,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     // Fight UI to fight against Enemy on front Tile
     [SerializeField] protected FightCircle fightCircle = default;
     [SerializeField] protected AttackInputController attackInputUI = default;
+    protected AttackButtonsHandler attackButtonsHandler;
 
     // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
@@ -96,6 +97,9 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         base.Awake();
         playerMap = map as IPlayerMapUtil;
+
+        attackButtonsHandler = attackInputUI.GetAttackButtonsHandler();
+        attackButtonsHandler.SetCommands(playerTarget);
     }
 
     protected override void SetCommander()
@@ -110,7 +114,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 120f);
-        attackInputUI.SetCommands(playerTarget);
     }
 
     protected override void SetInputs()
@@ -387,8 +390,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     /// </summary>
     protected void InitFightInput()
     {
-        // TODO: Refer duration and cancel time value from AttackButton object
-        attackInputUI.AttackButtons
+        attackButtonsHandler.AttackButtons
             .Subscribe(cmd => InputCommand(cmd))
             .AddTo(this);
 

@@ -14,6 +14,8 @@ public class Target : FadeActivate
     private RectTransform rectTransform;
     public Vector2 ScreenPos => rectTransform.position;
 
+    protected virtual Camera MainCamera => Camera.main;
+
     public bool isPointerOn { get; private set; }
     private bool IsPointerOn(Vector2 pointerPos)
     {
@@ -39,7 +41,7 @@ public class Target : FadeActivate
     {
         if (status != null)
         {
-            rectTransform.position = Camera.main.WorldToScreenPoint(status.corePos);
+            rectTransform.position = MainCamera.WorldToScreenPoint(status.corePos);
         }
     }
 

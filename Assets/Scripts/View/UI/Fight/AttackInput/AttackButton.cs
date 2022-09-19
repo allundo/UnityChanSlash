@@ -6,7 +6,13 @@ using System;
 public class AttackButton : FadeEnable
 {
     [SerializeField] private float duration = 0.2f;
-    [SerializeField] private FadeEnable region = default;
+
+    private FadeEnable region;
+    public void SetRegion(FadeEnable region)
+    {
+        this.region = region;
+        region.Activate();
+    }
 
     protected UITween ui;
 
@@ -35,8 +41,6 @@ public class AttackButton : FadeEnable
 
     protected virtual void Start()
     {
-        region.Activate();
-
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
     }
