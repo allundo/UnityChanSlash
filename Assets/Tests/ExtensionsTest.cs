@@ -103,11 +103,13 @@ public class ExtensionsTest
         var sutPrimitiveArray = new bool[4].Select(_ => true).ToArray();
         var sutStruct = new TestBooleanStruct[4].Select(_ => new TestBooleanStruct(true)).ToArray();
         var sutClass = new TestBooleanClass[4].Select(_ => new TestBooleanClass(true)).ToArray();
+        var sutClassSelect = new TestBooleanClass[4].Select(_ => new TestBooleanClass(true)).ToArray();
 
         // when
         bool resultPrimitiveArray = sutPrimitiveArray.ForEach(value => value = false);
         bool resultStruct = sutStruct.ForEach(tb => tb.value = false);
         bool resultClass = sutClass.ForEach(tb => tb.value = false);
+        sutClassSelect.Select(tb => tb.value = false);
 
         // then
         Assert.AreEqual(false, resultPrimitiveArray);   // ForEach loop breaks.
@@ -127,5 +129,10 @@ public class ExtensionsTest
         Assert.AreEqual(true, sutClass[1].value);
         Assert.AreEqual(true, sutClass[2].value);
         Assert.AreEqual(true, sutClass[3].value);
+
+        Assert.AreEqual(true, sutClassSelect[0].value);      // No elements are updated by Select.
+        Assert.AreEqual(true, sutClassSelect[1].value);
+        Assert.AreEqual(true, sutClassSelect[2].value);
+        Assert.AreEqual(true, sutClassSelect[3].value);
     }
 }
