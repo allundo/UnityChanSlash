@@ -87,8 +87,8 @@ public class ItemInventory : MonoBehaviour
     {
         ulong amount = 0;
         itemIndex
-            .Select(itemIcon => itemIcon != null ? itemIcon.itemInfo.Price : 0)
-            .ForEach(price => amount += (ulong)price);
+            .Where(itemIcon => itemIcon != null)
+            .ForEach(itemIcon => amount += (ulong)itemIcon.itemInfo.Price);
         return amount;
     }
 

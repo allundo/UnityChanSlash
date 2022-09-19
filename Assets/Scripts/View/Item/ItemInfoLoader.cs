@@ -12,7 +12,7 @@ public class ItemInfoLoader
 
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
         {
-            retItemInfo[type] = new ItemInfo(itemData.Param((int)type), type, itemActions[type]);
+            retItemInfo[type] = new ItemInfo(itemData.Param((int)type), type, itemActions[type], 1);
         }
 
         return retItemInfo;

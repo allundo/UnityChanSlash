@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -13,7 +12,6 @@ public class UITest
     private ItemInventoryTest prefabItemInventory;
     private ItemIconGenerator itemIconGenerator;
     private GameObject testCanvas;
-    private Dictionary<ItemType, ItemInfo> itemInfo;
     private Camera mainCamera;
     private GameObject eventSystem;
     private DataStoreAgentTest dataStoreAgent;
@@ -30,7 +28,6 @@ public class UITest
 
         testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
 
-        itemInfo = new ItemInfoLoader(ResourceLoader.Instance.itemData).LoadItemInfo();
         prefabItemInventory = Resources.Load<ItemInventoryTest>("Prefabs/UI/Item/ItemInventoryTest");
         itemIconGenerator = Object.Instantiate(Resources.Load<ItemIconGenerator>("Prefabs/UI/Item/ItemIconGenerator"));
 
@@ -87,7 +84,7 @@ public class UITest
     {
         yield return null;
 
-        itemInventory.PickUp(itemInfo[ItemType.KeyBlade]);
+        itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.KeyBlade));
 
         yield return new WaitForSeconds(5f);
 
@@ -103,31 +100,32 @@ public class UITest
         yield return null;
 
         // When
-        itemInventory.PickUp(itemInfo[ItemType.KeyBlade]);
+        itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.KeyBlade));
+        yield return null;
         ulong price1 = itemInventory.SumUpPrices();
 
+        itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.Potion, 2));
         yield return null;
 
-        itemInventory.PickUp(itemInfo[ItemType.Potion]);
+        itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.Coin, 3));
         yield return null;
-
-        itemInventory.PickUp(itemInfo[ItemType.Coin]);
         ulong price2 = itemInventory.SumUpPrices();
         yield return null;
 
         for (int i = 0; i < MAX_ITEMS; i++)
         {
-            itemInventory.PickUp(itemInfo[ItemType.Coin]);
+            itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.Coin, 2));
             yield return null;
         }
         ulong price3 = itemInventory.SumUpPrices();
         yield return null;
 
-        itemInventory.PickUp(itemInfo[ItemType.KeyBlade]);
+        itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.KeyBlade));
+        yield return null;
         ulong price4 = itemInventory.SumUpPrices();
         yield return null;
 
-        var dummyCoinIcon = itemIconGenerator.Spawn(Vector2.zero, itemInfo[ItemType.Coin]).SetIndex(2);
+        var dummyCoinIcon = itemIconGenerator.Spawn(Vector2.zero, resourceLoader.ItemInfo(ItemType.Coin, 1)).SetIndex(2);
         dummyCoinIcon.Inactivate();
 
         itemInventory.Remove(dummyCoinIcon);
@@ -136,10 +134,10 @@ public class UITest
 
         // Then
         Assert.AreEqual(100000, price1);
-        Assert.AreEqual(952400, price2);
-        Assert.AreEqual(23964500, price3);
-        Assert.AreEqual(23964500, price4);
-        Assert.AreEqual(23112200, price5);
+        Assert.AreEqual(2657100, price2);
+        Assert.AreEqual(48681300, price3);
+        Assert.AreEqual(48681300, price4);
+        Assert.AreEqual(46124400, price5);
 
     }
 
