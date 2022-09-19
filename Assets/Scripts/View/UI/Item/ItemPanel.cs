@@ -31,6 +31,8 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         rtNumOfItem.SetParent(transform.parent);
     }
 
+    public void SetEnabled(bool isEnable) => enabled = isEnable;
+
     /// <summary>
     /// Set number of items to display on Item inventory
     /// </summary>

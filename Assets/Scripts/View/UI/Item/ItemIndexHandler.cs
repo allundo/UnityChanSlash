@@ -73,7 +73,7 @@ public class ItemIndexHandler
         return this;
     }
 
-    public void SetEnablePanels(bool isEnable) => panels.ForEach(panel => panel.enabled = isEnable);
+    public void SetEnablePanels(bool isEnable) => panels.ForEach(panel => panel.SetEnabled(isEnable));
 
     public Vector2 ConvertToVec(Vector2 screenPos) => screenPos - inventoryOrigin;
     public bool IsOnUI(Vector2 uiPos) => uiPos.x >= 0f && uiPos.x <= uiSize.x && uiPos.y <= 0f && uiPos.y >= -uiSize.y;
