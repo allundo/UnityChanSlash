@@ -99,6 +99,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
                 if (state == ExitState.Jump)
                 {
+                    input.SetInputVisible();
                     input.EnqueueLanding(landingVec);
                     return;
                 }
@@ -109,6 +110,11 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
             case ExitState.PitFall:
                 // Spawn only and then fires pit drop event
                 return;
+
+            default:
+                input.SetInputVisible();
+                return;
+
         }
     }
 }

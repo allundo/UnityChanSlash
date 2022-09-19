@@ -146,7 +146,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
             .Append(cover.FadeIn(1f, 0.5f, false))
             .InsertCallback(1f, () =>
             {
-                TimeManager.Instance.Resume();              // Resume in the middle of fade-in
+                TimeManager.Instance.Resume(false);         // Resume in the middle of fade-in
                 eventManager.RestartCurrentEvent();         // Restart the event if it was in progress at exit
             })
             .SetUpdate(true)

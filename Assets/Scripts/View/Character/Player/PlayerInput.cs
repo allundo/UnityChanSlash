@@ -123,8 +123,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
         InitFightInput();
         InitHandleInput();
         InitMoveInput();
-
-        SetInputVisible(isInputVisible);
     }
 
     protected override void Update()
