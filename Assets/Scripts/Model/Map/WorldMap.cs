@@ -18,7 +18,8 @@ public class WorldMap
     public List<Pos> fixedMessagePos { get; private set; }
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
-    private List<Pos> openReservedTilePos = null;
+    private List<Pos> tileOpenPosList = null;
+    private bool isTileOpenLatest = false;
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
@@ -71,26 +72,13 @@ public class WorldMap
 
     public void ApplyTileOpen()
     {
-        if (openReservedTilePos != null)
-        {
-            openReservedTilePos.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
-            openReservedTilePos = null;
-            return;
-        }
-
-        ForEachTiles(tile =>
-        {
-            if (tile is IOpenable)
-            {
-                var openTile = tile as IOpenable;
-                if (openTile.IsOpen) openTile.Open();
-            }
-        });
+        tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
+        isTileOpenLatest = false;
     }
 
     public List<Pos> ExportTileOpenData()
     {
-        if (openReservedTilePos != null) return openReservedTilePos;
+        if (isTileOpenLatest) return tileOpenPosList;
 
         var data = new List<Pos>();
 
@@ -102,12 +90,19 @@ public class WorldMap
             });
         }
 
+        // Store tile open positions data on exporting it.
+        // This exporting process must be called at moving floor.
+        tileOpenPosList = data;
+        isTileOpenLatest = true;
+
         return data;
     }
 
     public void ImportMapData(DataStoreAgent.MapData import)
     {
-        openReservedTilePos = import.tileOpenData.ToList();
+        tileOpenPosList = import.tileOpenData.ToList();
+        isTileOpenLatest = true;
+
         fixedMessagePos = import.fixedMessagePos.ToList();
         for (int i = 0; i < import.randomMessagePos.Length; i++)
         {
