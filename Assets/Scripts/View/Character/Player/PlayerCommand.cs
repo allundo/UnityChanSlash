@@ -567,6 +567,7 @@ public class PlayerHandleBox : PlayerAction
         }
 
         playerAnim.getItem.Fire();
+        ActiveMessageController.Instance.InputMessageData(ActiveMessageData.GetItem(item.itemInfo));
         return true;
     }
 }
