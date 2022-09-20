@@ -472,7 +472,7 @@ public class HidePlateHandler : MonoBehaviour
                 }
             }
 
-            map.currentViewOpen.Clear();
+            map.ClearCurrentViewOpen();
 
             var edgePos = playerPos - playerOffsetPos;
             var openStack = new Stack<Pos>();

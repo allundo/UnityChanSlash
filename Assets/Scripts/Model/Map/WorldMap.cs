@@ -11,7 +11,8 @@ public class WorldMap
     public ITile[,] tileInfo { get; protected set; }
     public Texture2D texMap { get; protected set; }
     public bool[,] discovered { get; protected set; }
-    public List<Pos> currentViewOpen { get; protected set; } = new List<Pos>();
+    private List<Pos> currentViewOpen = new List<Pos>();
+    public void ClearCurrentViewOpen() => currentViewOpen.Clear();
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
