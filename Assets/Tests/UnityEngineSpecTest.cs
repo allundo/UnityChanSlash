@@ -364,4 +364,23 @@ public class UnityEngineSpecTest
         Object.Destroy(slime);
         Object.Destroy(mainCamera.gameObject);
     }
+
+    [UnityTest]
+    public IEnumerator _008_CompareTweens()
+    {
+        var list = new List<Tween>();
+        var tween = DOVirtual.DelayedCall(2f, () => Debug.Log("Test Tween"));
+
+        list.Add(tween);
+
+        Assert.AreEqual(tween, tween.OnComplete(() => Debug.Log("OnComplete")));
+
+        Assert.AreEqual(1, list.Count);
+
+        list.Remove(tween.Play());
+
+        Assert.AreEqual(0, list.Count);
+
+        yield return new WaitForSeconds(2f);
+    }
 }

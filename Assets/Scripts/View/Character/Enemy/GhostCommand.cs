@@ -23,6 +23,12 @@ public class GhostThrough : EnemyForward
     protected ICommand throughEnd;
     protected ICommand attack;
 
+    public override void Cancel()
+    {
+        base.Cancel();
+        (anim as GhostAnimator).wallThrough.Bool = false;
+    }
+
     protected override void SetSpeed()
     {
         base.SetSpeed();
@@ -44,11 +50,8 @@ public class GhostThrough : EnemyForward
     public override IObservable<Unit> Execute()
     {
         mobReact.Hide();
-        SetSpeed();
 
         playingTween = LinearMove(GetDest);
-        completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
-
 
         input.Interrupt(MapUtil.IsOnPlayer(mobMap.GetForward) ? attack : throughEnd, false);
 

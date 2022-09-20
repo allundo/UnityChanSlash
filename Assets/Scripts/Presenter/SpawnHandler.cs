@@ -42,6 +42,8 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void MoveFloorCharacters(WorldMap map, Pos playerPos)
     {
+        EnemyCommand.ClearResetTweens();
+
         // Enemies and bullets must be destroyed during the same frame.
         placeEnemyGenerator.SwitchWorldMap(map, playerPos);
 

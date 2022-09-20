@@ -1,10 +1,18 @@
 using UnityEngine;
 using UniRx;
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 
 public abstract class EnemyCommand : MobCommand
 {
+    protected static List<Tween> resetTweens = new List<Tween>();
+    public static void ClearResetTweens()
+    {
+        resetTweens.ForEach(tween => tween.Kill());
+        resetTweens.Clear();
+    }
+
     protected IEnemyReactor enemyReact;
     protected IEnemyAnimator enemyAnim;
     protected EnemyMapUtil enemyMap;
@@ -26,30 +34,48 @@ public class EnemyIdle : EnemyCommand
 public abstract class EnemyMove : EnemyCommand
 {
     protected Tween speedTween;
+    protected Tween resetTween;
     public EnemyMove(ICommandTarget target, float duration) : base(target, duration, 0.95f) { }
 
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
 
-    protected virtual void SetSpeed()
+    public override void Cancel()
     {
         speedTween?.Kill();
+        enemyAnim.speed.Float = 0f;
+
+        playingTween?.Kill();
+        validateTween?.Kill();
+        input.ValidateInput();
+        onCompleted.Clear();
+    }
+
+    protected virtual void SetSpeed()
+    {
+        resetTween?.Kill();
+        resetTweens.Remove(resetTween);
         speedTween = DOTween.To(() => enemyAnim.speed.Float, value => enemyAnim.speed.Float = value, Speed, 0.5f).Play();
     }
 
     protected virtual void ResetSpeed()
     {
         speedTween?.Kill();
-        speedTween = DOTween.To(() => enemyAnim.speed.Float, value => enemyAnim.speed.Float = value, 0f, 0.25f).Play();
+        resetTween = DOTween.To(() => enemyAnim.speed.Float, value => enemyAnim.speed.Float = value, 0f, 0.25f);
+        resetTweens.Add(resetTween);
+        resetTween.OnComplete(() => resetTweens.Remove(resetTween)).Play();
     }
 
     protected Tween LinearMove(Pos destPos)
     {
         mobMap.MoveObjectOn(destPos);
 
+        SetSpeed();
+
         return DOTween.Sequence()
             .Join(tweenMove.Move(destPos))
             .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
+            .AppendCallback(ResetSpeed)
             .Play();
     }
 
@@ -61,8 +87,6 @@ public abstract class EnemyMove : EnemyCommand
         }
 
         playingTween = LinearMove(GetDest);
-        SetSpeed();
-        completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
         return true;
     }
