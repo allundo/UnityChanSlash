@@ -103,7 +103,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             var top = map.stairsTop;
 
             if (!bottom.Key.IsNull) stairsBottom = new PosDirPair(bottom);
-            if (!top.Key.IsNull) stairsTop = new PosDirPair(bottom);
+            if (!top.Key.IsNull) stairsTop = new PosDirPair(top);
 
             tileOpenData = map.ExportTileOpenData().ToArray();
             tileDiscoveredData = map.ExportTileDiscoveredData();

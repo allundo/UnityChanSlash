@@ -54,13 +54,17 @@ public class DataIOTest
     {
         dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
 
+        var floor1Map = new WorldMap();
+        var stairsBottom = floor1Map.StairsBottom;
+        var stairsTop = floor1Map.stairsTop;
+
         var saveData = new DataStoreAgent.SaveData()
         {
             currentFloor = 1,
             elapsedTimeSec = 1000,
             playerData = new DataStoreAgent.PlayerData(new Pos(1, 1), Direction.north, 12f, false, 60f, ExitState.PitFall),
             inventoryItems = new DataStoreAgent.ItemInfo[] { new DataStoreAgent.ItemInfo(ItemType.FireRing, 12), null, null, new DataStoreAgent.ItemInfo(ItemType.Potion, 9), null, null, null },
-            mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(new WorldMap()), null, null, null, null },
+            mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(floor1Map), null, null, null, null },
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
         };
         var mapData = saveData.mapData[0];
@@ -77,7 +81,7 @@ public class DataIOTest
         Assert.AreEqual(new Pos(1, 1), loadData.playerData.pos);
         Assert.AreEqual(12f, loadData.playerData.life);
         Assert.AreEqual(60f, loadData.playerData.icingFrames);
-        Assert.True(loadData.playerData.isHidden);
+        Assert.False(loadData.playerData.isHidden);
         Assert.AreEqual(ExitState.PitFall, loadData.playerData.exitState);
         Assert.AreEqual(13, loadData.respawnData[0].itemData[0].pos.x);
         Assert.AreEqual(32, loadData.respawnData[0].itemData[0].pos.y);
@@ -89,6 +93,8 @@ public class DataIOTest
         Assert.AreEqual(ItemType.Null, loadData.inventoryItems[2].itemType);
         Assert.AreEqual(0, loadData.inventoryItems[4].numOfItem);
 
+        Assert.AreEqual(stairsBottom, map.StairsBottom);
+        Assert.AreEqual(stairsTop, map.stairsTop);
         Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
         Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);
 
