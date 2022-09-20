@@ -34,9 +34,9 @@ public class PlayerAnimFX : AnimationFX
     public void OnStraight() => fx.PlayPitch(straightSfx, straightVfx);
     public void OnKick() => fx.PlayPitch(kickSfx, kickVfx);
 
-    public void OnJabCritical() => fx.PlayPitch(criticalSfx, jabCriticalVfx, 1f, 1.05f);
-    public void OnStraightCritical() => fx.PlayPitch(criticalSfx, straightCriticalVfx, 0.95f, 1f);
-    public void OnKickCritical() => fx.PlayPitch(criticalSfx, kickCriticalVfx, 0.9f, 0.95f);
+    public void OnJabCritical() => fx.PlayPitch(criticalSfx, jabCriticalVfx, 0.98f, 1f);
+    public void OnStraightCritical() => fx.PlayPitch(criticalSfx, straightCriticalVfx, 0.96f, 0.98f);
+    public void OnKickCritical() => fx.PlayPitch(criticalSfx, kickCriticalVfx, 0.94f, 0.96f);
 
     public void OnJump() => fx.Play(jumpSfx);
     public void OnJumpLanding() => fx.Play(jumpLandingSfx);
