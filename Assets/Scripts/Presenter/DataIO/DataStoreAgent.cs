@@ -374,6 +374,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
     public bool SaveCurrentGameData()
     {
+#if UNITY_EDITOR
+        // Never save if played game from MainScene directly.
+        if (GameInfo.Instance.isScenePlayedByEditor) return false;
+#endif
+
         var gameInfo = GameInfo.Instance;
         var gameManager = GameManager.Instance;
         var playerInfo = PlayerInfo.Instance;

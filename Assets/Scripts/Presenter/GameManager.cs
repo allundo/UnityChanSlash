@@ -121,7 +121,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
             Debug.Log(e.StackTrace);
             throw e;
         }
-
     }
 
     private IEnumerator LoadStartCoroutine(float delay = 0.5f)
@@ -168,7 +167,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         input.SetInputVisible(true);
 
         eventManager.EventInit(worldMap);
-        DataStoreAgent.Instance.DisableSave();
     }
 
     public void DebugStartFloor(int floor)
@@ -195,6 +193,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     void Start()
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
+        DataStoreAgent.Instance.EnableSave();
     }
 
     private void ResetOrientation(DeviceOrientation orientation)
