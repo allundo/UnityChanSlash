@@ -299,7 +299,6 @@ public class PlayerLanding : PlayerCommand
 
     protected override bool Action()
     {
-        Debug.Log("PlayerLanding Action");
         playerAnim.landing.Fire();
         playingTween.Play();
 
