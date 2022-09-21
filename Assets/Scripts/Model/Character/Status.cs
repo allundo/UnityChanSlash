@@ -7,6 +7,7 @@ public interface IAttacker
     float attack { get; }
     IDirection dir { get; }
     string Name { get; }
+    string CauseOfDeath(AttackType type = AttackType.None);
 }
 
 public class Attacker : IAttacker
@@ -15,6 +16,8 @@ public class Attacker : IAttacker
     public IDirection dir { get; private set; }
     private string name;
     public string Name => name;
+    public string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
+
     public Attacker(float attack, IDirection dir, string name)
     {
         this.attack = attack;
@@ -56,6 +59,8 @@ public class Status : SpawnObject<Status>, IStatus
     protected Param param;
 
     public string Name => param.name;
+
+    public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
 
     protected virtual float DefaultLifeMax => param.defaultLifeMax;
 

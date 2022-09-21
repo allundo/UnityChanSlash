@@ -71,6 +71,22 @@ public class EnemyParam : MobParam
 }
 
 [System.Serializable]
+public class EnemyCauseSource
+{
+    [SerializeField] public string name = "名前";
+    [SerializeField] public string none = default;
+    [SerializeField] public string smash = default;
+    [SerializeField] public string slash = default;
+    [SerializeField] public string sting = default;
+    [SerializeField] public string bite = default;
+    [SerializeField] public string burn = default;
+    [SerializeField] public string ice = default;
+    [SerializeField] public string thunder = default;
+    [SerializeField] public string light = default;
+    [SerializeField] public string dark = default;
+}
+
+[System.Serializable]
 public class ItemSource
 {
     [SerializeField] public string name = "種別";

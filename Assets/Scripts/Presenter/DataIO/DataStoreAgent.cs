@@ -350,8 +350,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         deadRecords = LoadDeadRecords();
 
-        var causeOfDeath = attacker.Name + "にやられた";
-        deadRecords.Add(new DeadRecord(moneyAmount, causeOfDeath, currentFloor));
+        deadRecords.Add(new DeadRecord(moneyAmount, attacker.CauseOfDeath(), currentFloor));
 
         deadRecords = deadRecords.OrderByDescending(record => record.moneyAmount).Where((r, index) => index < 10).ToList();
 

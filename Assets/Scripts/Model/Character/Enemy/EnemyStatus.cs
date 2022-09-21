@@ -55,6 +55,9 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public EnemyType type => enemyParam.type;
     public override Vector3 corePos => enemyParam.enemyCore + transform.position;
 
+    public override string CauseOfDeath(AttackType attackType = AttackType.None)
+        => ResourceLoader.Instance.GetDeadCause(this.type, attackType);
+
     public override IStatus InitParam(Param param, StatusStoreData data = null)
     {
         enemyParam = param as EnemyParam;

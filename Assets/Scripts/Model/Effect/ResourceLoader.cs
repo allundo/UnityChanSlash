@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
@@ -11,6 +12,28 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     public EnemyData enemyData { get; private set; }
     public EnemyTypesData enemyTypesData { get; private set; }
+    private EnemyCauseData enemyCauseData;
+    private Dictionary<AttackType, Func<EnemyCauseSource, string>> EnemyCauseMap
+        = new Dictionary<AttackType, Func<EnemyCauseSource, string>>()
+        {
+            { AttackType.None,      source => source.none   },
+            { AttackType.Smash,     source => source.smash  },
+            { AttackType.Slash,     source => source.slash  },
+            { AttackType.Sting,     source => source.sting  },
+            { AttackType.Bite,      source => source.bite   },
+            { AttackType.Burn,      source => source.burn   },
+            { AttackType.Ice,       source => source.ice    },
+            { AttackType.Thunder,   source => source.thunder},
+            { AttackType.Light,     source => source.light  },
+            { AttackType.Dark,      source => source.dark   },
+        };
+
+    public string GetDeadCause(EnemyType enemyType, AttackType attackType)
+    {
+        var name = enemyData.Param((int)enemyType).name;
+        var cause = EnemyCauseMap[attackType](enemyCauseData.Param((int)enemyType));
+        return name + cause;
+    }
 
     public ItemData itemData { get; private set; }
     public ItemTypesData itemTypesData { get; private set; }
@@ -53,6 +76,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
         enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");
+        enemyCauseData = Resources.Load<EnemyCauseData>("DataAssets/Character/EnemyCauseData");
 
         itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
         itemTypesData = Resources.Load<ItemTypesData>("DataAssets/Map/ItemTypesData");
@@ -67,4 +91,6 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         yenBagData = Resources.Load<YenBagData>("DataAssets/Result/YenBagData");
     }
+
+
 }

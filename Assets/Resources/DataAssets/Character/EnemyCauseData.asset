@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac595704334f749d0b95ebb8a614e9bf, type: 3}
+  m_Name: EnemyCauseData
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u30AD\u30E3\u30E9\u30AF\u30BF\u30FC"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u30B9\u30E9\u30A4\u30E0"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u30B4\u30D6\u30EA\u30F3"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u9EC4\u3046\u3055\u304E"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u7D2B\u30B3\u30A6\u30E2\u30EA"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u5175"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u9B54\u5C0E"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
+  - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093"
+    none: "\u306B\u3084\u3089\u308C\u305F"
+    smash: 
+    slash: 
+    sting: 
+    bite: 
+    burn: 
+    ice: 
+    thunder: 
+    light: 
+    dark: 
