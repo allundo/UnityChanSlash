@@ -33,7 +33,7 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         sequence = new SequenceEx()
             .Join(gameOverBG.FadeIn(2f))
             .Join(gameOverTxt.FadeIn(2f))
-            .SetSkipable(false)
+            .SetSkippable(false)
             .Append(FadeIn())
             .Join(uiTween.Move(new Vector2(0f, 380f), 1f))
             .Join(selectUI.FadeIn())

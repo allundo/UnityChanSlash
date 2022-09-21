@@ -187,4 +187,11 @@ public class TwoPushButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHa
 
         if (isSelected) isButtonValid = true;
     }
+
+    public void Inactivate()
+    {
+        selectVfx?.Stop();
+        selectVfx?.Clear();
+        gameObject.SetActive(false);
+    }
 }

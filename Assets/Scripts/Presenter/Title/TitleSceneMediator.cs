@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 public class TitleSceneMediator : SceneMediator
 {
-    [SerializeField] TitleUIHandler titleUIHandler = default;
+    [SerializeField] private TitleUIHandler titleUIHandler = default;
+    [SerializeField] private RestartUI restartUI = default;
 
     private IDisposable disposable;
 
@@ -85,22 +86,42 @@ public class TitleSceneMediator : SceneMediator
 
     private void Logo()
     {
+        var logoObservable = titleUIHandler.Logo();
+
+        IObservable<Unit> titleObservable;
+
         if (DataStoreAgent.Instance.ImportGameData())
         {
             // Starts with load data.
             Debug.Log("Data load");
 
-            disposable = titleUIHandler.Logo()
-                .ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f).Concat(titleUIHandler.FadeOutObservable()))
+            var dataLoadObservable = logoObservable.ContinueWith(_ =>
+                Observable.Merge(
+                    restartUI.Play(),
+                    sceneLoader.LoadSceneAsync(1, 1.5f)
+                ));
+
+            var restartDisposable = dataLoadObservable
+                .ContinueWith(_ => restartUI.Restart)
+                .ContinueWith(_ => titleUIHandler.FadeOutObservable())
                 .IgnoreElements()
                 .Subscribe(null, () => SceneTransition(3, () => GameInfo.Instance.InitData(false)))
                 .AddTo(this);
 
-            return;
+            titleObservable = dataLoadObservable
+                .ContinueWith(_ => restartUI.Title)
+                .Select(tween =>
+                {
+                    restartDisposable.Dispose();
+                    return Unit.Default;
+                });
+        }
+        else
+        {
+            titleObservable = logoObservable.ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f));
         }
 
-        disposable = titleUIHandler.Logo()
-            .ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f))
+        disposable = titleObservable
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.ToTitle)
             .AddTo(this);

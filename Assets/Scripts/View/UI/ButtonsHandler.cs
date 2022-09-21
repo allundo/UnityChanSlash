@@ -35,9 +35,6 @@ public class ButtonsHandler
     public void DisableInteraction(TwoPushButton exceptFor = null)
     {
         buttons.ForEach(btn => btn.SetInteractable(false), exceptFor);
-
-        // FIXME: enable interaction again after 300 frames for now
-        Observable.TimerFrame(300).Subscribe(_ => EnableInteraction()).AddTo(buttons[0]);
     }
 
     public void Activate(bool isInteractable = false)
@@ -49,7 +46,7 @@ public class ButtonsHandler
 
     public void Inactivate()
     {
-        buttons.ForEach(btn => btn.gameObject.SetActive(false));
+        buttons.ForEach(btn => btn.Inactivate());
         selectIcon.gameObject.SetActive(false);
     }
 }

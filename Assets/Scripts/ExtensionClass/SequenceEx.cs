@@ -25,12 +25,12 @@ public class SequenceEx
         return this;
     }
 
-    public SequenceEx SetSkipable(bool isSkipable = true)
+    public SequenceEx SetSkippable(bool isSkippable = true)
     {
-        this.isSkipable = isSkipable;
+        this.isSkippable = isSkippable;
         return this;
     }
-    private bool isSkipable = true;
+    private bool isSkippable = true;
 
     private SequenceEx Playing => isPlaying ? this : next?.Playing;
 
@@ -116,7 +116,7 @@ public class SequenceEx
 
     private SequenceEx Complete()
     {
-        if (!isSkipable) return this;
+        if (!isSkippable) return this;
 
         foreach (var seqEx in list)
         {
