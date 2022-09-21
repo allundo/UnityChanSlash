@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(CapsuleCollider))]
@@ -12,7 +13,15 @@ public class PlayerStatus : MobStatus
     {
         base.Awake();
         col = GetComponent<CapsuleCollider>();
+
+        // ResetStatus() is called inside InitParam() method.
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
+    }
+
+    protected override void OnActive()
+    {
+        // Don't call ResetStatus() on active
+        activeSubject.OnNext(Unit.Default);
     }
 
     public void SetPosition(KeyValuePair<Pos, IDirection> initPos)
