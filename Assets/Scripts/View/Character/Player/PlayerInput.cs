@@ -368,6 +368,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         fightCircle.Inactivate(true);
 
         inspectUI.Inactivate();
+        inspectHandler.Inactivate();
 
         forwardUI.Inactivate();
         backwardUI.Inactivate();
