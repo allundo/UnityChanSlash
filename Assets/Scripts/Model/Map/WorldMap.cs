@@ -73,6 +73,7 @@ public class WorldMap
 
     public void ApplyTileOpen()
     {
+        if (tileOpenPosList == null) return;
         tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
         isLoadedDataValid = false;
     }
