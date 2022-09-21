@@ -10,7 +10,14 @@ public interface IAttackHitDetect : IAttack
 
 public interface IMobAttack : IAttack
 {
-    Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 1.5f, float expandScale = 1.5f);
+    /// <summary>
+    /// Returns critical attack sequence as a Tween
+    /// </summary>
+    /// <param name="additionalSpeed">Speed added to normal motion speed multiplier.</param>
+    /// <param name="criticalMultiplier">Multiplier applied to normal attack power.</param>
+    /// <param name="expandScale">Expand scale applied to normal attack collider.</param>
+    /// <returns></returns>
+    Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f);
 }
 
 [RequireComponent(typeof(BoxCollider))]
@@ -85,7 +92,7 @@ public class MobAttack : Attack, IAttackHitDetect, IMobAttack
             .SetUpdate(false);
     }
 
-    public virtual Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 1.5f, float expandScale = 1.5f)
+    public virtual Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f)
     {
         return DOTween.Sequence()
             .AppendCallback(() => CriticalGain(criticalMultiplier, expandScale))
@@ -95,7 +102,7 @@ public class MobAttack : Attack, IAttackHitDetect, IMobAttack
             .SetUpdate(false);
     }
 
-    protected void CriticalGain(float criticalMultiplier = 1.5f, float expandScale = 1.5f)
+    protected void CriticalGain(float criticalMultiplier = 2.5f, float expandScale = 1.5f)
     {
         boxCollider.size *= expandScale;
         attackMultiplier *= criticalMultiplier;
