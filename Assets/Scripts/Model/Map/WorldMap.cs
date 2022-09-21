@@ -20,7 +20,7 @@ public class WorldMap
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
     private List<Pos> tileOpenPosList = null;
-    private bool isTileOpenLatest = false;
+    private bool isLoadedDataValid = false;
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
@@ -74,12 +74,12 @@ public class WorldMap
     public void ApplyTileOpen()
     {
         tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
-        isTileOpenLatest = false;
+        isLoadedDataValid = false;
     }
 
     public List<Pos> ExportTileOpenData()
     {
-        if (isTileOpenLatest) return tileOpenPosList;
+        if (isLoadedDataValid) return tileOpenPosList;
 
         var data = new List<Pos>();
 
@@ -94,7 +94,6 @@ public class WorldMap
         // Store tile open positions data on exporting it.
         // This exporting process must be called at moving floor.
         tileOpenPosList = data;
-        isTileOpenLatest = true;
 
         return data;
     }
@@ -102,7 +101,7 @@ public class WorldMap
     public void ImportMapData(DataStoreAgent.MapData import)
     {
         tileOpenPosList = import.tileOpenData.ToList();
-        isTileOpenLatest = true;
+        isLoadedDataValid = true;
 
         fixedMessagePos = import.fixedMessagePos.ToList();
         for (int i = 0; i < import.randomMessagePos.Length; i++)
