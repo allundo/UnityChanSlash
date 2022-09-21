@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using Object = UnityEngine.Object;
 
 public class MapTest
 {
@@ -190,5 +192,22 @@ public class MapTest
                 Assert.AreNotEqual(Terrain.Pit, sutFloor.matrix[inFrontOfDeadEnd.x, inFrontOfDeadEnd.y]);
             });
         });
+    }
+
+    [Test]
+    public void _005_1F_GeneratedMapMustHaveExitDoorCandidateAsStartPositionTest()
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            try
+            {
+                new MapManager(1, 19, 19);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Generating map failed, count: " + i + ", -> " + e.Message + "\n" + e.StackTrace);
+            }
+        }
+
     }
 }

@@ -306,8 +306,36 @@ public class MapManager
 
     private Pos GetStartPos()
     {
-        return deadEndPos.Keys.Where(pos => IsNextToAroundWall(pos)).Last();
+        Pos startPos = deadEndPos.Keys.Where(pos => IsNextToAroundWall(pos)).LastOrDefault();
+
+        if (!startPos.IsNull) return startPos;
+
+        var posList = new Pos[] { new Pos(1, 1), new Pos(width - 2, 1), new Pos(1, height - 2), new Pos(width - 2, height - 2) }
+            .OrderByDescending(pos => stairsTop.Key.Distance(pos));
+
+        foreach (Pos pos in posList)
+        {
+            var dir = GetPassableDir(pos);
+            if (dir != null)
+            {
+                deadEndPos[pos] = dir;
+                return pos;
+            }
+        }
+
+        throw new InvalidOperationException("Failed to create ExitDoor.");
     }
+
+    private IDirection GetPassableDir(Pos pos)
+    {
+        if (IsPassable(pos.DecX())) return Direction.north;
+        if (IsPassable(pos.IncX())) return Direction.east;
+        if (IsPassable(pos.IncY())) return Direction.south;
+        if (IsPassable(pos.DecX())) return Direction.west;
+        return null;
+    }
+
+    private bool IsPassable(Pos pos) => matrix[pos.x, pos.y] == Terrain.Ground || matrix[pos.x, pos.y] == Terrain.Path;
 
     private Pos GetUpStairsPos()
     {
@@ -750,7 +778,7 @@ public class MapManager
 
         public MazeCreator SearchDeadEnds(Pos startPos)
         {
-            if (!IsPathable(Matrix[startPos.x, startPos.y]))
+            if (!IsPassable(Matrix[startPos.x, startPos.y]))
             {
                 throw new ArgumentException("Position: (" + startPos.x + ", " + startPos.y + ") is not a Path but ... " + Matrix[startPos.x, startPos.y]);
             }
@@ -774,9 +802,9 @@ public class MapManager
 
                 int count = stack.Count;
 
-                if (IsPathable(ft)) stack.Push((dir, forward));
-                if (IsPathable(lt)) stack.Push((dir.Left, left));
-                if (IsPathable(rt)) stack.Push((dir.Right, right));
+                if (IsPassable(ft)) stack.Push((dir, forward));
+                if (IsPassable(lt)) stack.Push((dir.Left, left));
+                if (IsPassable(rt)) stack.Push((dir.Right, right));
 
                 if (stack.Count == count) deadEndPos[pos] = dir.Backward;
 
@@ -786,7 +814,7 @@ public class MapManager
             return this;
         }
 
-        public bool IsPathable(Terrain terrain) => terrain == Terrain.Path || terrain == Terrain.Ground;
+        public bool IsPassable(Terrain terrain) => terrain == Terrain.Path || terrain == Terrain.Ground;
         public bool IsOutWall(Pos pos) => IsOutWall(pos.x, pos.y);
         public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
 
