@@ -36,7 +36,8 @@ public class RestartUI : FadeEnable
             .AppendCallback(selectUI.InactivateButtons)
             .AppendCallback(() => FadeOut(fadeDuration).Play())
             .AppendCallback(() => selectUI.FadeOut(1f).Play())
-            .Append(descriptionTxt.FadeOut(0.5f));
+            .Append(descriptionTxt.FadeOut(0.2f))
+            .AppendInterval(0.3f);
     }
 
     public IObservable<Unit> Play()
