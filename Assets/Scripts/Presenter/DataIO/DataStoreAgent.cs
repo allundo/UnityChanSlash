@@ -584,9 +584,35 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 #endif
     }
 
-    public void EnableSave() => exitHandler.EnableSave();
-    public void DisableSave() => exitHandler.DisableSave();
+#if !UNITY_EDITOR && UNITY_ANDROID
+    private bool isAutoSaveEnabled = false;
+#endif
 
+    public void EnableSave()
+    {
+        exitHandler.EnableSave();
+
+#if !UNITY_EDITOR && UNITY_ANDROID
+        isAutoSaveEnabled = true;
+#endif
+    }
+
+    public void DisableSave()
+    {
+        exitHandler.DisableSave();
+
+#if !UNITY_EDITOR && UNITY_ANDROID
+        isAutoSaveEnabled = false;
+#endif
+    }
+
+#if !UNITY_EDITOR && UNITY_ANDROID
+    private void OnApplicationPause(bool isPauseOn)
+    {
+        if(!(isPauseOn && isAutoSaveEnabled)) return;
+        SaveCurrentGameData();
+    }
+#endif
 
     protected class ApplicationExitHandler
     {
