@@ -365,6 +365,7 @@ public class UnityEngineSpecTest
         Object.Destroy(mainCamera.gameObject);
     }
 
+    [Ignore("Only for spec confirmation.")]
     [UnityTest]
     public IEnumerator _008_CompareTweens()
     {
@@ -382,5 +383,116 @@ public class UnityEngineSpecTest
         Assert.AreEqual(0, list.Count);
 
         yield return new WaitForSeconds(2f);
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _009_OnPlayAndOnCompleteTimingTest()
+    {
+        bool[] flags = new bool[10];
+
+        DOTween.Sequence()
+            .AppendCallback(() =>
+            {
+                flags[0] = true;
+            })
+            .AppendCallback(() =>
+            {
+                flags[1] = true;
+            })
+            .Join(DOVirtual.DelayedCall(0.5f, () =>
+            {
+                flags[2] = true;
+            })
+            .OnPlay(() =>
+            {
+                flags[3] = true;
+            })
+            .OnComplete(() =>
+            {
+                flags[4] = true;
+            }))
+            .Join(
+                DOTween.Sequence()
+                    .AppendCallback(() => flags[8] = true)
+                    .Append(DOVirtual.DelayedCall(0.5f, () => flags[9] = true))
+            )
+            .AppendCallback(() =>
+            {
+                flags[5] = true;
+            })
+            .OnPlay(() =>
+            {
+                flags[6] = true;
+            })
+            .OnComplete(() =>
+            {
+                flags[7] = true;
+            })
+            .Play();
+
+        // No flags are active on Play() called frame
+        Assert.False(flags[0]);
+        Assert.False(flags[1]);
+        Assert.False(flags[2]);
+        Assert.False(flags[3]);
+        Assert.False(flags[4]);
+        Assert.False(flags[5]);
+        Assert.False(flags[6]);
+        Assert.False(flags[7]);
+
+        yield return new WaitForEndOfFrame();
+
+        // Even OnPlay() or first AppendCallback, the flags are still inactive on the next frame of Play() called
+
+        Assert.False(flags[0]);
+        Assert.False(flags[1]);
+        Assert.False(flags[2]);
+        Assert.False(flags[3]);
+        Assert.False(flags[4]);
+        Assert.False(flags[5]);
+        Assert.False(flags[6]);
+        Assert.False(flags[7]);
+        Assert.False(flags[8]);
+        Assert.False(flags[9]);
+
+        yield return new WaitForEndOfFrame();
+
+        Assert.True(flags[0]);      // The first AppendCallback is activated
+        Assert.True(flags[1]);      // The second AppendCallback is activated
+        Assert.False(flags[2]);
+        Assert.True(flags[3]);      // OnPlay() of joined tween is activated
+        Assert.False(flags[4]);
+        Assert.False(flags[5]);
+        Assert.True(flags[6]);      // OnPlay() of the sequence is activated
+        Assert.False(flags[7]);
+        Assert.True(flags[8]);      // The first AppendCallback of the nested sequence is activated
+        Assert.False(flags[9]);
+
+        yield return new WaitForEndOfFrame();
+
+        Assert.True(flags[0]);
+        Assert.True(flags[1]);
+        Assert.False(flags[2]);
+        Assert.True(flags[3]);
+        Assert.False(flags[4]);
+        Assert.False(flags[5]);
+        Assert.True(flags[6]);
+        Assert.False(flags[7]);
+        Assert.True(flags[8]);
+        Assert.False(flags[9]);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Assert.True(flags[0]);
+        Assert.True(flags[1]);
+        Assert.True(flags[2]);      // Appended DelayedCall is activated
+        Assert.True(flags[3]);
+        Assert.True(flags[4]);      // OnComplete() of joined tween is activated
+        Assert.True(flags[5]);      // The last AppendCallback is activated
+        Assert.True(flags[6]);
+        Assert.True(flags[7]);      // OnComplete() of the sequence is activated
+        Assert.True(flags[8]);
+        Assert.True(flags[9]);      // DelayedCall of the nested sequence is activated
     }
 }

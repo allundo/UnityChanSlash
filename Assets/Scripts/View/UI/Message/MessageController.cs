@@ -38,20 +38,19 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
         activateTween =
             DOTween.Sequence()
-            .AppendCallback(() => image.raycastTarget = false)
-            .Join(
-                FadeIn(
-                    0.5f,
-                    () => TimeManager.Instance.Pause(),
-                    () =>
-                    {
-                        textHandler.InputMessageData(data);
-                        activateTween = null;
-                    }
-                )
-            )
+            .AppendCallback(() =>
+            {
+                image.raycastTarget = false;
+                TimeManager.Instance.Pause();
+            })
+            .Join(FadeIn(0.5f))
             .Join(window.FadeIn(0.5f))
-            .AppendCallback(() => image.raycastTarget = true)
+            .AppendCallback(() =>
+            {
+                image.raycastTarget = true;
+                textHandler.InputMessageData(data);
+                activateTween = null;
+            })
             .SetUpdate(true)
             .Play();
     }
