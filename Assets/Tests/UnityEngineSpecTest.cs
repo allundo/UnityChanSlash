@@ -495,4 +495,67 @@ public class UnityEngineSpecTest
         Assert.True(flags[8]);
         Assert.True(flags[9]);      // DelayedCall of the nested sequence is activated
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// ContinueWith() cannot continue the stream with the OnNext() that is fired before the observable is completed.
+    /// </summary>
+    public IEnumerator _010_ContinueWithTest()
+    {
+        var sb1 = new StringBuilder();
+        var sb2 = new StringBuilder();
+        var observable1 = DOVirtual.DelayedCall(0.5f, () => Debug.Log("observable1, ")).OnCompleteAsObservable(Unit.Default).Publish();
+        var observable2 = DOVirtual.DelayedCall(1f, () => Debug.Log("observable2, ")).OnCompleteAsObservable(Unit.Default);
+
+        var subject = new Subject<Unit>();
+
+        var observable4 = Observable.Merge(observable1, observable2);
+
+        observable4.ContinueWith(_ =>           // Continue after 1 sec.
+            {
+                sb1.Append("ContinueWith1");
+                Debug.Log("ContinueWith1, ");
+                return subject;                 // OnNext at 0.75 sec.
+            })
+            .ContinueWith(_ =>                  // Cannot continue
+            {
+                sb2.Append("ContinueWith2");
+                Debug.Log("ContinueWith2, ");
+                return DOVirtual.DelayedCall(0.5f, () => Debug.Log("observable4")).OnCompleteAsObservable(Unit.Default);
+            })
+            .Subscribe(_ => sb1.Append("Observed"));
+
+        observable1.ContinueWith(_ =>           // Continue after 0.5 sec.
+            {
+                sb2.Append("ContinueWith1");
+                return subject;                 // OnNext at 0.75 sec.
+            })
+            .ContinueWith(_ =>                  // Continues the stream OnCompleted at 1.75 sec.
+            {
+                sb2.Append("ContinueWith2");
+                return DOVirtual.DelayedCall(0.5f, () => Debug.Log("observable4")).OnCompleteAsObservable(Unit.Default);
+            })
+            .Subscribe(_ => sb2.Append("Observed"));
+
+        observable1.Connect();
+
+        yield return new WaitForSeconds(0.75f);
+
+        Debug.Log("OnNext, ");
+        subject.OnNext(Unit.Default);
+
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("OnCompleted, ");
+        subject.OnCompleted();
+
+        Assert.AreEqual("ContinueWith1", sb1.ToString());
+        Assert.AreEqual("ContinueWith1ContinueWith2", sb2.ToString());
+
+        yield return new WaitForSeconds(0.75f);
+
+        Assert.AreEqual("ContinueWith1", sb1.ToString());
+        Assert.AreEqual("ContinueWith1ContinueWith2Observed", sb2.ToString());
+    }
 }

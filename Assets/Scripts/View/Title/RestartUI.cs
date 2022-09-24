@@ -23,8 +23,7 @@ public class RestartUI : FadeEnable
     {
         sequence = DOTween.Sequence()
             .Join(FadeIn(1f))
-            .Join(selectUI.FadeIn(0.5f).OnComplete(() => descriptionTxt.FadeIn(0.5f).Play()))
-            .AppendCallback(selectUI.ActivateButtons);
+            .Join(selectUI.FadeIn(0.5f).OnComplete(() => descriptionTxt.FadeIn(0.5f).Play()));
 
         Restart.Subscribe(_ => GetCloseTween(0.5f).Play()).AddTo(this);
         Title.Subscribe(_ => GetCloseTween(1.5f).Play()).AddTo(this);
@@ -45,4 +44,6 @@ public class RestartUI : FadeEnable
         gameObject.SetActive(true);
         return sequence.OnCompleteAsObservable(Unit.Default);
     }
+
+    public void ActivateButtons() => selectUI.ActivateButtons();
 }

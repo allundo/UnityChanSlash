@@ -95,11 +95,14 @@ public class TitleSceneMediator : SceneMediator
             // Starts with load data.
             Debug.Log("Data load");
 
-            var dataLoadObservable = logoObservable.ContinueWith(_ =>
-                Observable.Merge(
-                    restartUI.Play(),
-                    sceneLoader.LoadSceneAsync(1, 1.5f)
-                ));
+            var dataLoadObservable = logoObservable
+                .ContinueWith(_ => Observable.Merge(sceneLoader.LoadSceneAsync(1, 0.99f), restartUI.Play()))
+                .Select(_ =>
+                {
+                    restartUI.ActivateButtons(); // Don't allow to click buttons until the loading has finished.
+                    return Unit.Default;
+                })
+                .Publish();
 
             var restartDisposable = dataLoadObservable
                 .ContinueWith(_ => restartUI.Restart)
@@ -115,6 +118,8 @@ public class TitleSceneMediator : SceneMediator
                     restartDisposable.Dispose();
                     return Unit.Default;
                 });
+
+            dataLoadObservable.Connect();
         }
         else
         {
