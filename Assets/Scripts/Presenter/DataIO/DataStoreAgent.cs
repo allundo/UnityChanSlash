@@ -375,7 +375,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
 #if UNITY_EDITOR
         // Never save if played game from MainScene directly.
-        if (GameInfo.Instance.isScenePlayedByEditor) return false;
+        if (GameInfo.Instance.isScenePlayedByEditor) return true;
 #endif
 
         var gameInfo = GameInfo.Instance;
