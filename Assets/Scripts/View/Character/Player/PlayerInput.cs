@@ -262,7 +262,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         bool isFaceToEnemy = !playerMap.isInPit && forwardTile.IsEnemyOn;
         if (isFaceToEnemy)
         {
-            fightCircle.SetActive(IsFightValid || IsAttack || IsItemUse, forwardTile.GetEnemyStatus());
+            fightCircle.SetActive(IsFightValid || IsAttack || IsItemUse || IsFiring, forwardTile.GetEnemyStatus());
             fightCircle.isForwardMovable = forwardTile.IsEnterable();
         }
         else
@@ -572,7 +572,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         private bool isAutoGuard => playerInput.IsEnemyDetected.Value;
 
         public override bool IsShieldOn(IDirection attackDir)
-            => playerInput.IsFightValid && !playerInput.IsItemUse && isShieldReady && map.dir.IsInverse(attackDir);
+            => playerInput.IsFightValid && isShieldReady && map.dir.IsInverse(attackDir);
 
         public override float SetShield()
         {
