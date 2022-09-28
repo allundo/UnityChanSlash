@@ -769,28 +769,44 @@ public class PlayerKickCritical : PlayerCriticalAttack
 
 public class PlayerFire : PlayerAction
 {
+    public bool isCancelable { get; protected set; } = false;
     protected BulletType type;
     public PlayerFire(PlayerCommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
     {
         this.type = type;
     }
 
-    protected override bool Action()
-    {
-        playerAnim.fire.Fire();
-        completeTween = target.magic?.MagicSequence(type, duration * 2.5f)?.Play();
-        return true;
-    }
-}
-public class PlayerCoinThrow : PlayerAction
-{
-    public PlayerCoinThrow(PlayerCommandTarget target, float duration) : base(target, duration) { }
+    protected virtual void ValidateAction() => isCancelable = true;
 
     protected override bool Action()
     {
-        playerAnim.coin.Fire();
-        completeTween = target.magic?.MagicSequence(BulletType.Coin, duration * 2.5f)?.Play();
+        if (target.magic == null) throw new NotSupportedException("Magic component isn't set.");
+
+        isCancelable = false;
+        playerAnim.fire.Fire();
+
+        completeTween = target.magic
+            .MagicSequence(type, duration) // MagicSequence has completed on time scale 0.3 of the command duration.
+            .OnComplete(ValidateAction)
+            .Play();
+
         return true;
+    }
+}
+
+public class PlayerCoinThrow : PlayerFire
+{
+    public PlayerCoinThrow(PlayerCommandTarget target, float duration) : base(target, duration, BulletType.Coin) { }
+    protected override void ValidateAction()
+    {
+        isCancelable = true;
+        playerAnim.coin.Bool = false;
+    }
+
+    protected override bool Action()
+    {
+        playerAnim.coin.Bool = true;
+        return base.Action();
     }
 }
 

@@ -51,8 +51,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected IPlayerMapUtil playerMap;
     protected PlayerCommandTarget playerTarget;
     protected bool IsAttack => currentCommand is PlayerAttack;
-    protected bool IsItemUse => currentCommand is PlayerItem || IsFiring;
-    protected bool IsFiring => currentCommand is PlayerCoinThrow || currentCommand is PlayerFire;
+    protected bool IsItemUse => currentCommand is PlayerItem || IsFiring && !(currentCommand as PlayerFire).isCancelable;
+    protected bool IsFiring => currentCommand is PlayerFire;
     protected bool IsDash => currentCommand is PlayerDash;
     protected bool IsForward => currentCommand is PlayerForward;
     protected bool IsMessage => currentCommand is PlayerMessage;
@@ -444,7 +444,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         itemInventory.OnUseItem
-            .Subscribe(itemInfo => { if (!IsItemUse) Interrupt(new PlayerItem(playerTarget, itemInfo), false); })
+            .Subscribe(itemInfo => { if (!IsItemUse) Interrupt(new PlayerItem(playerTarget, itemInfo), IsFiring); }) // Cancel current PlayerFire command if cancelable.
             .AddTo(this);
 
         itemInventory.OnInspectItem
