@@ -28,6 +28,7 @@ public class DataIOTest
         dataStoreAgent.RestoreSaveDataFiles();
 
         UnityEngine.Object.Destroy(dataStoreAgent.gameObject);
+        UnityEngine.Object.Destroy(resourceLoader.gameObject);
         UnityEngine.Object.Destroy(gameInfo.gameObject);
     }
 
