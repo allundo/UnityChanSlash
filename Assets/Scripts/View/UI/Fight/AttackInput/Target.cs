@@ -1,7 +1,6 @@
-using DG.Tweening;
 using UnityEngine;
 
-public class Target : FadeActivate
+public class Target : FadeUI
 {
     [SerializeField] TargetCenter center = default;
     [SerializeField] TargetCorner corner = default;
@@ -28,13 +27,13 @@ public class Target : FadeActivate
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, 0.2f);
+        base.Awake();
+
         rectTransform = GetComponent<RectTransform>();
         pointerOnFX.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         isPointerOn = false;
         sqrBullEyeRadius = bullEyeRadius * bullEyeRadius;
         sqrActiveBullEyeRadius = activeBullEyeRadius * activeBullEyeRadius;
-        Inactivate();
     }
 
     void Update()
@@ -45,30 +44,39 @@ public class Target : FadeActivate
         }
     }
 
-    public void FadeActivate(IEnemyStatus status)
+    public void FadeActivate(IEnemyStatus status, float duration = 0.5f)
     {
         isPointerOn = false;
         this.status = status;
-        FadeIn(0.5f).Play();
+        base.FadeActivate(duration);
     }
 
-    protected override void OnFadeIn()
+    protected override void OnFadeEnable(float fadeDuration)
     {
         corner.FadeActivate();
         center.FadeActivate();
         targetName.Activate(status.Name);
     }
 
-    public void FadeInactivate()
-    {
-        FadeOut(0.1f).Play();
-    }
-
-    protected override void OnFadeOut()
+    protected override void BeforeFadeOut()
     {
         corner.FadeInactivate();
         center.FadeInactivate();
         targetName.Inactivate();
+    }
+
+    public override void SetPointerOn()
+    {
+        corner.SetPointerOn();
+        center.SetPointerOn();
+        pointerOnFX.Play();
+    }
+
+    public override void SetPointerOff()
+    {
+        corner.SetPointerOff();
+        center.SetPointerOff();
+        pointerOnFX.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
     public void SetPointer(Vector2 pointerPos)
@@ -77,15 +85,11 @@ public class Target : FadeActivate
 
         if (IsPointerOn(pointerPos))
         {
-            corner.SetPointerOn();
-            center.SetPointerOn();
-            pointerOnFX.Play();
+            SetPointerOn();
         }
         else
         {
-            corner.SetPointerOff();
-            center.SetPointerOff();
-            pointerOnFX.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            SetPointerOff();
         }
     }
 }

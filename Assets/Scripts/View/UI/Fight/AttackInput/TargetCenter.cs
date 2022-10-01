@@ -1,42 +1,33 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class TargetCenter : FadeEnable
+public class TargetCenter : FadeUI
 {
     [SerializeField] private Color pointerOnColor = default;
 
-    private UITween uiTween;
     private Tween blinkLoop;
+    private RectTransform rectTransform;
+    private Vector2 defaultSize;
+
     protected override void Awake()
     {
-        fade = new FadeMaterialColor(gameObject, 0.2f);
-        uiTween = new UITween(gameObject);
-
-        fade.SetAlpha(0f);
-
+        FadeInit(new FadeMaterialColor(gameObject, maxAlpha));
         blinkLoop = fade.ToAlpha(0.25f, 0.5f).SetEase(Ease.InQuad).SetLoops(-1, LoopType.Yoyo).AsReusable(gameObject);
-    }
-    public void FadeActivate()
-    {
-        FadeIn(0.2f, null, () => blinkLoop.Restart()).Play();
+        rectTransform = GetComponent<RectTransform>();
+        defaultSize = rectTransform.sizeDelta;
     }
 
-    public void FadeInactivate()
-    {
-        blinkLoop.Rewind();
-        FadeOut(0.1f).Play();
-    }
-
-    public void SetPointerOn()
+    public override void SetPointerOn()
     {
         blinkLoop.Pause();
         fade.KillTweens();
-        uiTween.ResetSize(1.1f);
+        rectTransform.sizeDelta = defaultSize * 1.1f;
         fade.color = pointerOnColor;
     }
 
-    public void SetPointerOff()
+    public override void SetPointerOff()
     {
+        rectTransform.sizeDelta = defaultSize;
         blinkLoop.Restart();
         fade.ResetColor();
     }

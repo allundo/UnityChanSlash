@@ -5216,6 +5216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3d9b188613f4ccf8e57bcbf4880f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAlpha: 0.2
   pointerOnColor: {r: 1, g: 0, b: 0, a: 0.7490196}
 --- !u!1 &7188478079414399221
 GameObject:
@@ -10166,6 +10167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa62fa354ab6a44778cb85b63a0c478c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAlpha: 0.25
   center: {fileID: 7188478079383199153}
   corner: {fileID: 7188478080107561289}
   pointerOnFX: {fileID: 7188478079254169945}
@@ -10462,6 +10464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bcfe413e5b5d487ab3b705077a99e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAlpha: 0.4
   pointerOnColor: {r: 1, g: 0.5267917, b: 0, a: 0.7490196}
 --- !u!1 &7188478080202938118
 GameObject:

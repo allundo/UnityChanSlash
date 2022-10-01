@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class TargetCorner : FadeEnable
+public class TargetCorner : FadeUI
 {
     [SerializeField] private Color pointerOnColor = default;
 
@@ -11,10 +11,8 @@ public class TargetCorner : FadeEnable
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, 0.4f);
+        base.Awake();
         uiTween = new UITween(gameObject);
-
-        fade.SetAlpha(0f);
     }
 
     protected void ExpansionLoop()
@@ -32,26 +30,18 @@ public class TargetCorner : FadeEnable
             .Play();
     }
 
-    public void FadeActivate()
+    protected override void OnFadeEnable(float fadeDuration)
     {
         activate?.Kill();
         uiTween.ResetSize(2f);
-
-        FadeIn(0.2f).Play();
-
-        activate = uiTween.Resize(1f, 0.2f)
-            .OnComplete(ExpansionLoop)
-            .SetUpdate(false)
-            .Play();
+        activate = uiTween.Resize(1f, fadeDuration).Play();
     }
+    protected override void OnFadeInComplete() => ExpansionLoop();
 
-    public void FadeInactivate()
-    {
-        expansionLoop?.Kill();
-        FadeOut(0.1f, null, () => activate?.Kill()).Play();
-    }
+    protected override void BeforeFadeOut() => expansionLoop?.Kill();
+    protected override void OnFadeDisable() => activate?.Kill();
 
-    public void SetPointerOn()
+    public override void SetPointerOn()
     {
         expansionLoop?.Kill();
         fade.KillTweens();
@@ -59,7 +49,7 @@ public class TargetCorner : FadeEnable
         fade.color = pointerOnColor;
     }
 
-    public void SetPointerOff()
+    public override void SetPointerOff()
     {
         ExpansionLoop();
         fade.ResetColor();
