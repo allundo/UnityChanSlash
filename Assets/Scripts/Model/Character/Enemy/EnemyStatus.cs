@@ -18,6 +18,22 @@ public interface IEnemyStatus : IMobStatus
     bool isTamed { get; }
     void CancelTamed();
 }
+public class Shooter : Attacker, IAttacker
+{
+    private EnemyType type;
+    public override string CauseOfDeath(AttackType attackType = AttackType.None)
+        => ResourceLoader.Instance.GetDeadCause(this.type, attackType);
+
+    public static IAttacker New(float attack, IStatus status)
+    {
+        var enemyStatus = status as IEnemyStatus;
+        return enemyStatus != null ? new Shooter(attack, enemyStatus) : new Attacker(attack, status.dir, status.Name);
+    }
+    private Shooter(float attack, IEnemyStatus status) : base(attack, status.dir, status.Name)
+    {
+        type = status.type;
+    }
+}
 
 public class EnemyStatus : MobStatus, IEnemyStatus
 {

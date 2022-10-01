@@ -12,11 +12,11 @@ public interface IAttacker
 
 public class Attacker : IAttacker
 {
-    public float attack { get; private set; }
-    public IDirection dir { get; private set; }
-    private string name;
+    public float attack { get; protected set; }
+    public IDirection dir { get; protected set; }
+    protected string name;
     public string Name => name;
-    public string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
+    public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
 
     public Attacker(float attack, IDirection dir, string name)
     {
