@@ -15,111 +15,111 @@ MonoBehaviour:
   setParams:
   - name: "\u30AD\u30E3\u30E9\u30AF\u30BF\u30FC"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u3084\u3089\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u30B9\u30E9\u30A4\u30E0"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u565B\u307F\u3064\u304B\u308C\u3066\u5012\u308C\u305F"
+    burn: "\u306B\u71C3\u3084\u3055\u308C\u3066\u5012\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u565B\u307F\u3064\u304B\u308C\u3066\u5012\u308C\u305F"
+    burn: "\u306B\u71C3\u3084\u3055\u308C\u3066\u5012\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u30B4\u30D6\u30EA\u30F3"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u65AC\u308A\u3064\u3051\u3089\u308C\u3066\u606F\u7D76\u3048\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u3084\u3089\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u9EC4\u3046\u3055\u304E"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u8E74\u3089\u308C\u3066\u5012\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u3084\u3089\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u7D2B\u30B3\u30A6\u30E2\u30EA"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u6025\u8972\u3055\u308C\u3066\u5012\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u3084\u3089\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u89E6\u308C\u3089\u308C\u3066\u606F\u306E\u6839\u3092\u6B62\u3081\u3089\u308C\u305F"
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u5175"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u3084\u3089\u308C\u305F"
+    slash: "\u306B\u65AC\u308A\u3064\u3051\u3089\u308C\u3066\u606F\u7D76\u3048\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u3084\u3089\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u3084\u3089\u308C\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u9B54\u5C0E"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306B\u6BB4\u3089\u308C\u3066\u5012\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306B\u3084\u3089\u308C\u305F"
+    burn: "\u306B\u3084\u3089\u308C\u305F"
+    ice: "\u306B\u51B7\u51CD\u3055\u308C\u3066\u7815\u3051\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306E\u546A\u3044\u306B\u8010\u3048\u304B\u306D\u305F"
   - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093"
     none: "\u306B\u3084\u3089\u308C\u305F"
-    smash: 
-    slash: 
-    sting: 
-    bite: 
-    burn: 
-    ice: 
-    thunder: 
-    light: 
-    dark: 
+    smash: "\u306E\u30D5\u30EB\u30B9\u30A4\u30F3\u30B0\u306B\u5012\u308C\u305F"
+    slash: "\u306B\u3084\u3089\u308C\u305F"
+    sting: "\u306B\u3084\u3089\u308C\u305F"
+    bite: "\u306E\u306F\u3055\u307F\u3046\u3061\u306B\u8CAB\u304B\u308C\u305F"
+    burn: "\u306E\u9B54\u6CD5\u3067\u71C3\u3048\u5C3D\u304D\u305F"
+    ice: "\u306B\u51B7\u51CD\u3055\u308C\u3066\u7815\u3051\u305F"
+    thunder: "\u306B\u3084\u3089\u308C\u305F"
+    light: "\u306B\u3084\u3089\u308C\u305F"
+    dark: "\u306B\u3084\u3089\u308C\u305F"

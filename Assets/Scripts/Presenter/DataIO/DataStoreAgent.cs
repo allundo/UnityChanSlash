@@ -342,7 +342,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         exitHandler = new ApplicationExitHandler(this);
     }
 
-    public void SaveDeadRecords(IAttacker attacker, ulong moneyAmount, int currentFloor)
+    public void SaveDeadRecords(string causeOfDeath, ulong moneyAmount, int currentFloor)
     {
         // Delete save data
         DisableSave();
@@ -350,7 +350,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         deadRecords = LoadDeadRecords();
 
-        deadRecords.Add(new DeadRecord(moneyAmount, attacker.CauseOfDeath(), currentFloor));
+        deadRecords.Add(new DeadRecord(moneyAmount, causeOfDeath, currentFloor));
 
         deadRecords = deadRecords.OrderByDescending(record => record.moneyAmount).Where((r, index) => index < 10).ToList();
 

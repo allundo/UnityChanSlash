@@ -17,6 +17,8 @@ public class PlayerReactor : MobReactor
     protected ParticleSystem iceCrashVFX;
 
     public IAttacker lastAttacker { get; protected set; }
+    public AttackType lastAttackType { get; protected set; }
+    public string CauseOfDeath() => lastAttacker.CauseOfDeath(lastAttackType);
 
     protected GuardState guardState => playerInput.guardState;
 
@@ -95,6 +97,7 @@ public class PlayerReactor : MobReactor
     public override float Damage(IAttacker attacker, Attack.AttackData attackData)
     {
         lastAttacker = attacker;
+        lastAttackType = attackData.type;
         return base.Damage(attacker, attackData);
     }
 
