@@ -367,7 +367,7 @@ public class UnityEngineSpecTest
 
     [Ignore("Only for spec confirmation.")]
     [UnityTest]
-    public IEnumerator _008_CompareTweens()
+    public IEnumerator _009_CompareTweens()
     {
         var list = new List<Tween>();
         var tween = DOVirtual.DelayedCall(2f, () => Debug.Log("Test Tween"));
@@ -387,7 +387,7 @@ public class UnityEngineSpecTest
 
     [Ignore("Only for spec confirmation.")]
     [UnityTest]
-    public IEnumerator _009_OnPlayAndOnCompleteTimingTest()
+    public IEnumerator _010_OnPlayAndOnCompleteTimingTest()
     {
         bool[] flags = new bool[10];
 
@@ -501,7 +501,7 @@ public class UnityEngineSpecTest
     /// <summary>
     /// ContinueWith() cannot continue the stream with the OnNext() that is fired before the observable is completed.
     /// </summary>
-    public IEnumerator _010_ContinueWithTest()
+    public IEnumerator _011_ContinueWithTest()
     {
         var sb1 = new StringBuilder();
         var sb2 = new StringBuilder();
