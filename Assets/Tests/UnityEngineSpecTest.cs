@@ -14,6 +14,11 @@ public class UnityEngineSpecTest
     private GameInfo gameInfo;
     private Camera prefabCamera;
     private GameObject prefabSlime;
+    private TestMonoBehaviour prefabTestGameObject;
+    private TestMonoBehaviour prefabTestInactiveMonoBehaviour;
+    private TestNestedMonoBehaviour prefabTestNestedMonoBehaviour;
+    private TestMonoBehaviourTree prefabTestMonoBehaviourTree;
+    private TestUniRxTree prefabTestUniRxTree;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -22,6 +27,11 @@ public class UnityEngineSpecTest
         gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
         prefabCamera = Resources.Load<Camera>("Prefabs/TestCamera");
         prefabSlime = Resources.Load<GameObject>("Prefabs/TestSlimeGreen");
+        prefabTestGameObject = Resources.Load<TestMonoBehaviour>("Prefabs/TestGameObject");
+        prefabTestInactiveMonoBehaviour = Resources.Load<TestMonoBehaviour>("Prefabs/TestInactiveMonoBehaviour");
+        prefabTestNestedMonoBehaviour = Resources.Load<TestNestedMonoBehaviour>("Prefabs/TestNestedMonoBehaviour");
+        prefabTestMonoBehaviourTree = Resources.Load<TestMonoBehaviourTree>("Prefabs/TestMonoBehaviourTree");
+        prefabTestUniRxTree = Resources.Load<TestUniRxTree>("Prefabs/TestUniRxTree");
     }
 
     [OneTimeTearDown]
@@ -557,5 +567,109 @@ public class UnityEngineSpecTest
 
         Assert.AreEqual("ContinueWith1", sb1.ToString());
         Assert.AreEqual("ContinueWith1ContinueWith2Observed", sb2.ToString());
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _012_AwakeIsCalledImmediatelyAfterInstantiated()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+
+        yield return null;
+
+        var sut = Object.Instantiate(prefabTestGameObject, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+        var sutNested = Object.Instantiate(prefabTestNestedMonoBehaviour, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+        var sutTree = Object.Instantiate(prefabTestMonoBehaviourTree, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+        var sutUniRxTree = Object.Instantiate(prefabTestUniRxTree, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+
+        Assert.IsTrue(sut.isAwakeCalled);
+        Assert.IsFalse(sut.isStartCalled);
+        Assert.IsFalse(sut.isUpdateCalled);
+
+        Assert.IsFalse(sutNested.isChildAwakeCalled);
+        Assert.IsFalse(sutNested.isChildStartCalled);
+        Assert.IsFalse(sutNested.isChildUpdateCalled);
+
+        Assert.IsTrue(sutTree.isChildAwakeCalled);
+        Assert.IsFalse(sutTree.isChildStartCalled);
+        Assert.IsFalse(sutTree.isChildUpdateCalled);
+
+        yield return null;
+
+        Assert.IsTrue(sut.isAwakeCalled);
+        Assert.IsTrue(sut.isStartCalled);
+        Assert.IsTrue(sut.isUpdateCalled);
+
+        Assert.IsTrue(sutNested.isChildAwakeCalled);
+        Assert.IsTrue(sutNested.isChildStartCalled);
+        Assert.IsTrue(sutNested.isChildUpdateCalled);
+
+        Assert.IsTrue(sutTree.isChildAwakeCalled);
+        Assert.IsTrue(sutTree.isChildStartCalled);
+        Assert.IsTrue(sutTree.isChildUpdateCalled);
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(sut.gameObject);
+        Object.Destroy(sutNested.gameObject);
+        Object.Destroy(sutTree.gameObject);
+        Object.Destroy(sutUniRxTree.gameObject);
+        Object.Destroy(mainCamera.gameObject);
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _013_AwakeIsNotCalledIfNotActive()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+
+        yield return null;
+
+        var sut = Object.Instantiate(prefabTestInactiveMonoBehaviour, new Vector3(-0.25f, 0f, 0f), Quaternion.identity);
+        var sutChild = Object.Instantiate(prefabTestGameObject, new Vector3(-0.25f, 0f, 0f), Quaternion.identity, sut.transform);
+
+        Assert.IsFalse(sut.isAwakeCalled);          // The inactivated object doesn't call Awake() on instantiated timing.
+        Assert.IsFalse(sut.isStartCalled);
+        Assert.IsFalse(sut.isUpdateCalled);
+
+        Assert.IsFalse(sutChild.isAwakeCalled);     // The child object that is instantiated under an inactivate object also doesn't call Awake().
+        Assert.IsFalse(sutChild.isStartCalled);
+        Assert.IsFalse(sutChild.isUpdateCalled);
+
+        yield return null;
+
+        Assert.IsFalse(sut.isAwakeCalled);
+        Assert.IsFalse(sut.isStartCalled);
+        Assert.IsFalse(sut.isUpdateCalled);
+
+        Assert.IsFalse(sutChild.isAwakeCalled);
+        Assert.IsFalse(sutChild.isStartCalled);
+        Assert.IsFalse(sutChild.isUpdateCalled);
+
+        sut.gameObject.SetActive(true);
+
+        Assert.IsTrue(sut.isAwakeCalled);           // Only Awake() is called on activated timing.
+        Assert.IsFalse(sut.isStartCalled);
+        Assert.IsFalse(sut.isUpdateCalled);
+
+        Assert.IsTrue(sutChild.isAwakeCalled);      // The child object is the same.
+        Assert.IsFalse(sutChild.isStartCalled);
+        Assert.IsFalse(sutChild.isUpdateCalled);
+
+        yield return null;
+
+        Assert.IsTrue(sut.isAwakeCalled);
+        Assert.IsTrue(sut.isStartCalled);
+        Assert.IsTrue(sut.isUpdateCalled);
+
+        Assert.IsTrue(sutChild.isAwakeCalled);
+        Assert.IsTrue(sutChild.isStartCalled);
+        Assert.IsTrue(sutChild.isUpdateCalled);
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(sut.gameObject);
+        Object.Destroy(sutChild.gameObject);
+        Object.Destroy(mainCamera.gameObject);
     }
 }
