@@ -11,7 +11,6 @@ public class AttackButton : FadeEnable
     public void SetRegion(FadeEnable region)
     {
         this.region = region;
-        region.Activate();
     }
 
     protected UITween ui;
@@ -25,8 +24,8 @@ public class AttackButton : FadeEnable
 
     protected bool isFiring = false;
 
-    private ISubject<Unit> attackSubject = new Subject<Unit>();
-    public IObservable<Unit> ObservableAtk => attackSubject;
+    private ISubject<AttackButton> attackSubject = new Subject<AttackButton>();
+    public IObservable<AttackButton> ObservableAtk => attackSubject;
 
     public float CoolTime => duration * 1.2f;
     public float CancelTime => duration * 0.4f;
@@ -67,7 +66,7 @@ public class AttackButton : FadeEnable
 
         StartCoolTime(CoolTime);
 
-        attackSubject.OnNext(Unit.Default);
+        attackSubject.OnNext(this);
     }
 
     public void Cancel(float duration = 0.2f)

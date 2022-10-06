@@ -19,7 +19,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     // Fight UI to fight against Enemy on front Tile
     [SerializeField] protected FightCircle fightCircle = default;
     [SerializeField] protected AttackInputController attackInputUI = default;
-    protected AttackButtonsHandler attackButtonsHandler;
+    private IDisposable attackButtonsDisposable = null;
 
     // Handling UIs to handle Door or Item on front Tile
     [SerializeField] protected DoorHandler doorHandler = default;
@@ -97,9 +97,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         base.Awake();
         playerMap = map as IPlayerMapUtil;
-
-        attackButtonsHandler = attackInputUI.GetAttackButtonsHandler();
-        attackButtonsHandler.SetCommands(playerTarget);
     }
 
     protected override void SetCommander()
@@ -123,6 +120,21 @@ public class PlayerInput : ShieldInput, IPlayerInput
         InitFightInput();
         InitHandleInput();
         InitMoveInput();
+    }
+
+    public void SetFightInput(IEquipments equipments)
+    {
+        attackButtonsDisposable?.Dispose();
+
+        var attackButtonsHandler = attackInputUI.SetAttackButtonsHandler(equipments);
+        var inputRegion = fightCircle.SetInputRegion(equipments);
+
+        attackButtonsHandler.SetCommands(playerTarget);
+        attackButtonsHandler.SetRegions(inputRegion);
+
+        attackButtonsDisposable = attackButtonsHandler.AttackButtons()
+            .Subscribe(cmd => InputCommand(cmd))
+            .AddTo(this);
     }
 
     protected override void Update()
@@ -389,10 +401,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     /// </summary>
     protected void InitFightInput()
     {
-        attackButtonsHandler.AttackButtons
-            .Subscribe(cmd => InputCommand(cmd))
-            .AddTo(this);
-
         PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
         attackInputUI.IsChargingUp
             .Subscribe(isChargingUp => anim.chargeUp.Bool = isChargingUp)

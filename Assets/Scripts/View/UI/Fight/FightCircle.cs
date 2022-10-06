@@ -7,7 +7,7 @@ using UniRx;
 public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] protected AttackInputController attackInputUI = default;
-    [SerializeField] protected InputRegion inputRegion = default;
+    protected InputRegion inputRegion = null;
 
     [SerializeField] private float maxAlpha = 1f;
 
@@ -40,10 +40,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         raycastHandler = new RaycastHandler(gameObject);
     }
 
-    void Start()
+    protected void Start()
     {
         enemyTarget = attackInputUI.GetEnemyTarget();
-        attackInputUI.GetAttackButtonsHandler().SetRegions(inputRegion);
 
         ResetCenterPos();
 
@@ -88,6 +87,13 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
 
         circle.SetAlpha(alpha);
+    }
+
+    public InputRegion SetInputRegion(IEquipments equipments)
+    {
+        if (inputRegion != null) Destroy(inputRegion.gameObject);
+        inputRegion = equipments.LoadInputRegion(transform);
+        return inputRegion;
     }
 
     public void ResetCenterPos()

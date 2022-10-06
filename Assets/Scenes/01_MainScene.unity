@@ -39525,6 +39525,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3442943665555902478}
+  - component: {fileID: 3442943665555902479}
   m_Layer: 8
   m_Name: Character1_RightHand
   m_TagString: Untagged
@@ -41666,6 +41667,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3442943665555902926}
+  - component: {fileID: 3442943665555902927}
   m_Layer: 8
   m_Name: Character1_LeftHand
   m_TagString: Untagged
@@ -42184,6 +42186,18 @@ Transform:
   m_Father: {fileID: 3442943665555902862}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3442943665555902479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442943665555868718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e95a7cae8ee314463a77488cce01e439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3442943665555902480
 Transform:
   m_ObjectHideFlags: 0
@@ -44414,6 +44428,18 @@ Transform:
   m_Father: {fileID: 3442943665555902800}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3442943665555902927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442943665555869136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e95a7cae8ee314463a77488cce01e439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3442943665555902928
 Transform:
   m_ObjectHideFlags: 0
@@ -47732,6 +47758,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeGauge: {fileID: 8337679455544452774}
   restUI: {fileID: 1723596714}
+  handR: {fileID: 3442943665555902479}
+  handL: {fileID: 3442943665555902927}
 --- !u!224 &3504755192342045714
 RectTransform:
   m_ObjectHideFlags: 0
@@ -84537,6 +84565,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1574935736902618774}
     m_Modifications:
+    - target: {fileID: 7188478079254169949, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188478079254169949, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188478079254169949, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188478079414399230, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188478079414399230, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188478079414399230, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7188478080294406248, guid: 5822611b12401460597d1ff676245c26,
         type: 3}
       propertyPath: m_Name

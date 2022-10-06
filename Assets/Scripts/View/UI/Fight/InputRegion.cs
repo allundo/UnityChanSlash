@@ -2,11 +2,7 @@ using UnityEngine;
 
 public class InputRegion : MonoBehaviour
 {
-    [SerializeField] private AttackButtonRegion jabRegion = default;
-    [SerializeField] private AttackButtonRegion straightRegion = default;
-    [SerializeField] private AttackButtonRegion kickRegion = default;
+    [SerializeField] private AttackButtonRegion[] attackButtonRegions = default;
 
-    public AttackButtonRegion JabRegion => jabRegion;
-    public AttackButtonRegion StraightRegion => straightRegion;
-    public AttackButtonRegion KickRegion => kickRegion;
+    public AttackButtonRegion AttackButtonRegion(int index) => attackButtonRegions[index];
 }

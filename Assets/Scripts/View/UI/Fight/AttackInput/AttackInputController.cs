@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using UniRx;
-using System;
 
 public class AttackInputController : MonoBehaviour
 {
-    [SerializeField] private AttackButtonsHandler attackButtonsHandler = default;
+    private AttackButtonsHandler attackButtonsHandler = null;
 
     [SerializeField] protected Target enemyTarget = default;
     [SerializeField] private PivotPoint pivotPoint = default;
@@ -14,21 +13,25 @@ public class AttackInputController : MonoBehaviour
 
     [SerializeField] private float attackCancelThreshold = 2.0f;
 
-    void Awake()
-    {
-        attackButtonsHandler.SetTarget(enemyTarget);
-    }
-
     public Target GetEnemyTarget() => enemyTarget;
-    public AttackButtonsHandler GetAttackButtonsHandler() => attackButtonsHandler;
 
     private Vector2 UICenter;
 
     public void SetUICenter(Vector2 pos) => UICenter = pos;
     public void SetUIRadius(float radius)
     {
+        this.radius = radius;
         sqrRadius = radius * radius;
+    }
+
+    public AttackButtonsHandler SetAttackButtonsHandler(IEquipments equipments)
+    {
+        if (attackButtonsHandler != null) Destroy(attackButtonsHandler.gameObject);
+
+        attackButtonsHandler = equipments.LoadAttackButtonsHandler(transform);
+        attackButtonsHandler.SetTarget(enemyTarget);
         attackButtonsHandler.SetUIRadius(radius);
+        return attackButtonsHandler;
     }
 
     private AttackButton currentButton = null;
@@ -36,6 +39,7 @@ public class AttackInputController : MonoBehaviour
     public Vector2 pressPos { get; private set; } = Vector2.zero;
     public bool IsPressed => currentButton != null;
 
+    private float radius;
     private float sqrRadius;
 
     private Vector2 UIPos(Vector2 screenPos) => screenPos - UICenter;

@@ -11,9 +11,12 @@ public class PlayerReactor : MobReactor
 {
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
     [SerializeField] protected RestUI restUI = default;
+    [SerializeField] protected HandEquipment handR = default;
+    [SerializeField] protected HandEquipment handL = default;
 
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
+    protected PlayerStatus playerStatus;
     protected ParticleSystem iceCrashVFX;
 
     public IAttacker lastAttacker { get; protected set; }
@@ -27,6 +30,7 @@ public class PlayerReactor : MobReactor
         base.Awake();
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
+        playerStatus = status as PlayerStatus;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
@@ -48,6 +52,18 @@ public class PlayerReactor : MobReactor
         restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
 
         lifeGauge.UpdateLife(status.Life.Value, status.LifeMax.Value);
+
+        playerStatus.EquipRObservable
+            .Subscribe(source => handR.Equip(source))
+            .AddTo(this);
+
+        playerStatus.EquipLObservable
+            .Subscribe(source => handL.Equip(source))
+            .AddTo(this);
+
+        playerStatus.FightStyleChange
+            .Subscribe(equipments => playerInput.SetFightInput(equipments))
+            .AddTo(this);
     }
 
     protected void OnLifeMaxChange(float lifeMax)

@@ -41,6 +41,23 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public ItemInfo ItemInfo(ItemType type, int numOfItem) => itemInfo[type].Clone(numOfItem) as ItemInfo;
     private Dictionary<ItemType, ItemInfo> itemInfo;
 
+    private EquipmentData equipmentData;
+    private Dictionary<ItemType, EquipmentType> ItemEquipmentMap
+        = new Dictionary<ItemType, EquipmentType>()
+        {
+            { ItemType.Null,        EquipmentType.BareHand },
+            { ItemType.KeyBlade,    EquipmentType.KeyBlade },
+        };
+    public EquipmentSource GetEquipmentSource(ItemType type)
+    {
+        EquipmentType equipmentType;
+        if (ItemEquipmentMap.TryGetValue(type, out equipmentType))
+        {
+            return equipmentData.Param((int)equipmentType);
+        }
+        return null;
+    }
+
     public FloorMaterialsData floorMaterialsData { get; private set; }
     public FloorMessagesData floorMessagesData { get; private set; }
 
@@ -82,6 +99,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         itemTypesData = Resources.Load<ItemTypesData>("DataAssets/Map/ItemTypesData");
         itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
 
+        equipmentData = Resources.Load<EquipmentData>("DataAssets/Item/EquipmentData");
+
         floorMaterialsData = Resources.Load<FloorMaterialsData>("DataAssets/Map/FloorMaterialsData");
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
 
@@ -91,6 +110,4 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         yenBagData = Resources.Load<YenBagData>("DataAssets/Result/YenBagData");
     }
-
-
 }

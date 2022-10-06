@@ -465,6 +465,19 @@ public enum ItemAttr
     Ring,
 }
 
+public enum EquipmentType
+{
+    BareHand = 0,
+    KeyBlade,
+}
+
+public enum EquipmentCategory
+{
+    Knuckle = 0,
+    Sword,
+    Shield,
+}
+
 public enum AttackType
 {
     None = 0,
