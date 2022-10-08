@@ -36,15 +36,15 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
     public virtual void OnActive()
     {
         fireSound.PlayEx();
-        emitVfx?.Play();
-        fireVfx?.Play();
+        emitVfx.PlayEx();
+        fireVfx.PlayEx();
         bulletMatEffect.Activate();
     }
 
     public virtual void OnDie()
     {
-        eraseVfx?.Play();
-        emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        eraseVfx.PlayEx();
+        emitVfx.StopEmitting();
     }
 
     public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)

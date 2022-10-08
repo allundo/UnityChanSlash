@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public abstract class AttackBehaviour : MonoBehaviour, IAttack
 {
-    public abstract Tween AttackSequence(float attackDuration);
+    public abstract Sequence AttackSequence(float attackDuration);
 }
 
 [RequireComponent(typeof(Collider))]
@@ -67,7 +67,7 @@ public class Attack : AttackBehaviour
         attackCollider.enabled = false;
     }
 
-    public override Tween AttackSequence(float attackDuration)
+    public override Sequence AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
             .AppendCallback(OnHitStart)

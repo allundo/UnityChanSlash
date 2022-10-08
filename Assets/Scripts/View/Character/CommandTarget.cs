@@ -25,7 +25,7 @@ public interface ICommandTarget
     /// <summary>
     /// Attack collider and type handlers invoked on attack commands.
     /// </summary>
-    AttackBehaviour Attack(int index);
+    IAttack Attack(int index);
 
     /// <summary>
     /// Bullet attack source. Not imperative.
@@ -41,6 +41,7 @@ public interface ICommandTarget
 [RequireComponent(typeof(Reactor))]
 [RequireComponent(typeof(InputHandler))]
 [RequireComponent(typeof(MapUtil))]
+[RequireComponent(typeof(FightStyle))]
 public class CommandTarget : MonoBehaviour, ICommandTarget
 {
     public MobAnimator anim { get; protected set; }
@@ -51,8 +52,8 @@ public class CommandTarget : MonoBehaviour, ICommandTarget
 
     public IMapUtil map { get; protected set; }
 
-    [SerializeField] private AttackBehaviour[] attack = default;
-    public AttackBehaviour Attack(int index) => attack[index];
+    protected FightStyle fightStyle;
+    public IAttack Attack(int index) => fightStyle.Attack(index);
 
     public Magic magic { get; protected set; }
 
@@ -63,6 +64,7 @@ public class CommandTarget : MonoBehaviour, ICommandTarget
         input = GetComponent<InputHandler>();
         map = GetComponent<MapUtil>();
         magic = GetComponent<Magic>();
+        fightStyle = GetComponent<FightStyle>();
     }
 }
 

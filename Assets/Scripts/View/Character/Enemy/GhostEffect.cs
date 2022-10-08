@@ -17,14 +17,14 @@ public class GhostEffect : EnemyEffect
 
     public void OnAttackStart()
     {
-        emitVfx?.Play();
+        emitVfx.PlayEx();
         attackSnd.PlayEx();
         matVertEffect.trailTarget = 1.8f;
     }
 
     public void OnAttackEnd()
     {
-        emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        emitVfx.StopEmitting();
         matVertEffect.trailTarget = 0f;
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(UndeadStatus))]
 [RequireComponent(typeof(UndeadEffect))]
 [RequireComponent(typeof(SkeletonSoldierAnimator))]
-[RequireComponent(typeof(ShieldEnemyAnimFX))]
+[RequireComponent(typeof(ShieldAnimFX))]
 public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
 {
     protected IUndeadStatus undeadStatus;

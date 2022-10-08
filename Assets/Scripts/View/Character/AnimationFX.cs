@@ -33,7 +33,7 @@ public abstract class AnimationFX : MonoBehaviour
         public void Play(AudioSource sfx, ParticleSystem vfx)
         {
             sfx.PlayEx();
-            vfx?.Play();
+            vfx.PlayEx();
         }
 
         public void Play(AudioSource sfx, MoveParticle vfx)
@@ -45,7 +45,7 @@ public abstract class AnimationFX : MonoBehaviour
         public void PlayPitch(AudioSource sfx, ParticleSystem vfx, float minPitch = 0.7f, float maxPitch = 1.3f)
         {
             PlayPitch(sfx, minPitch, maxPitch);
-            vfx?.Play();
+            vfx.PlayEx();
         }
 
         public void PlayPitch(AudioSource sfx, MoveParticle vfx, float minPitch = 0.7f, float maxPitch = 1.3f)
@@ -62,22 +62,13 @@ public abstract class AnimationFX : MonoBehaviour
         public void Stop(AudioSource sfx, ParticleSystem vfx)
         {
             sfx.StopEx();
-            vfx?.Stop();
+            vfx.StopEx();
         }
+
         public void Stop(AudioSource sfx, MoveParticle vfx)
         {
             sfx.StopEx();
-            vfx?.Stop();
-        }
-
-        public void StopEmitting(ParticleSystem vfx)
-        {
-            vfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        }
-
-        public void StopEmitting(MoveParticle vfx)
-        {
-            vfx?.Stop(ParticleSystemStopBehavior.StopEmitting);
+            vfx?.StopEmitting();
         }
     }
 }

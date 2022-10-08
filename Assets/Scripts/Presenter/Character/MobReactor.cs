@@ -35,6 +35,7 @@ public interface IUndeadReactor : IMobReactor
 [RequireComponent(typeof(MobMapUtil))]
 [RequireComponent(typeof(MobInput))]
 [RequireComponent(typeof(MobStatus))]
+[RequireComponent(typeof(MobFightStyle))]
 public class MobReactor : Reactor, IMobReactor
 {
     protected IMobStatus mobStatus;
@@ -42,6 +43,7 @@ public class MobReactor : Reactor, IMobReactor
     protected IMobInput input;
     protected IMobEffect effect;
     protected MobAnimator anim;
+    protected MobFightStyle fightStyle;
 
     protected override void Awake()
     {
@@ -51,6 +53,7 @@ public class MobReactor : Reactor, IMobReactor
         map = GetComponent<MobMapUtil>(); ;
         input = GetComponent<MobInput>();
         anim = GetComponent<MobAnimator>();
+        fightStyle = GetComponent<MobFightStyle>();
     }
 
     protected override void OnLifeChange(float life)
@@ -168,6 +171,7 @@ public class MobReactor : Reactor, IMobReactor
     {
         map.ResetTile();
         effect.OnDie();
+        fightStyle.OnDie();
         bodyCollider.enabled = false;
     }
 

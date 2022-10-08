@@ -9,12 +9,12 @@ public class WitchDoubleEffect : BulletEffect
 
     public void OnAttackStart()
     {
-        emitVfx?.Play();
+        emitVfx.PlayEx();
     }
 
     public void OnAttackEnd()
     {
-        emitVfx?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        emitVfx.StopEmitting();
     }
 
     public override void OnActive()

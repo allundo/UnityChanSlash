@@ -29122,6 +29122,7 @@ GameObject:
   - component: {fileID: 3867140944479442219}
   - component: {fileID: 5345091127426973996}
   - component: {fileID: 3117267473990809161}
+  - component: {fileID: 2274899780380496479}
   m_Layer: 9
   m_Name: DarkHound
   m_TagString: Untagged
@@ -29145,8 +29146,8 @@ Transform:
   - {fileID: 9012537963256248486}
   - {fileID: 2819263323339306583}
   - {fileID: 3123038783315253749}
-  - {fileID: 4772670745788162190}
   - {fileID: 6177256038389074875}
+  - {fileID: 4772670745788162190}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -29195,8 +29196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack:
-  - {fileID: 4890569380414530870}
 --- !u!135 &1931141891665843265
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -29246,6 +29245,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5083e69d48e6847218e2d3e5f1dbef1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2274899780380496479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096685746827863711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a151ae050e8a84caeb5030c047ec9da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
+  - {fileID: 4890569380414530870}
 --- !u!1 &1096685747001462497
 GameObject:
   m_ObjectHideFlags: 0
@@ -43802,13 +43815,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2695095847044506300}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1096685746827863708}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &4817898783487553627
 SphereCollider:
@@ -87722,7 +87735,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1096685746827863708}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &6824413191209865846
 AudioSource:

@@ -2,7 +2,7 @@ using UnityEngine;
 using static ShieldInput;
 
 [RequireComponent(typeof(ShieldEnemyAnimator))]
-[RequireComponent(typeof(ShieldEnemyAnimFX))]
+[RequireComponent(typeof(ShieldAnimFX))]
 public class ShieldEnemyReactor : EnemyReactor
 {
     [SerializeField] protected Transform shieldTf;

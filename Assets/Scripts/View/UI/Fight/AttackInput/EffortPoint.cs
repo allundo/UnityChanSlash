@@ -17,7 +17,7 @@ public class EffortPoint : TargetingUI
         targetColor = DefaultColor();
         Enabled = isActive = isChangingColor = false;
 
-        chargingFX?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        chargingFX.StopEmitting();
 
         rotateTween = pointImage.GetComponent<RectTransform>()
             .DORotate(new Vector3(0f, 0f, 90f), 1f, RotateMode.FastBeyond360)
@@ -34,7 +34,7 @@ public class EffortPoint : TargetingUI
 
     protected override void OnInactive()
     {
-        chargingFX?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        chargingFX.StopEmitting();
         rotateTween.Pause();
     }
 
@@ -46,7 +46,7 @@ public class EffortPoint : TargetingUI
 
     public override void DisableChargingUp()
     {
-        chargingFX?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        chargingFX.StopEmitting();
         SwitchColor(false);
     }
 }

@@ -7,6 +7,7 @@ using static ShieldInput;
 [RequireComponent(typeof(PlayerEffect))]
 [RequireComponent(typeof(PlayerAnimFX))]
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(PlayerFightStyle))]
 public class PlayerReactor : MobReactor
 {
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
@@ -62,7 +63,11 @@ public class PlayerReactor : MobReactor
             .AddTo(this);
 
         playerStatus.FightStyleChange
-            .Subscribe(equipments => playerInput.SetFightInput(equipments))
+            .Subscribe(equipments =>
+            {
+                (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
+                playerInput.SetFightInput(equipments);
+            })
             .AddTo(this);
     }
 

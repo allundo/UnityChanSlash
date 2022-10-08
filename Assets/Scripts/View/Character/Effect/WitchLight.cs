@@ -9,9 +9,9 @@ public class WitchLight : SpawnObject<WitchLight>
     void Awake()
     {
         fallDown = DOTween.Sequence()
-            .AppendCallback(() => lightVFX?.Play())
+            .AppendCallback(() => lightVFX.PlayEx())
             .Append(transform.DOMoveY(-0.7f, 0.75f).SetRelative().SetEase(Ease.Linear))
-            .InsertCallback(0.7f, () => lightVFX?.Stop(true, ParticleSystemStopBehavior.StopEmitting))
+            .InsertCallback(0.7f, () => lightVFX.StopEmitting())
             .AppendCallback(Inactivate)
             .AsReusable(gameObject);
     }

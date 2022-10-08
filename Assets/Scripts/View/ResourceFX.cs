@@ -24,7 +24,7 @@ public class ResourceFX
     public void StopVFX(VFXType type)
     {
         ParticleSystem vfx;
-        if (vfxSources.TryGetValue(type, out vfx)) vfx.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        if (vfxSources.TryGetValue(type, out vfx)) vfx.StopEmitting();
     }
 
     public void PlaySnd(SNDType type, Vector3 pos)

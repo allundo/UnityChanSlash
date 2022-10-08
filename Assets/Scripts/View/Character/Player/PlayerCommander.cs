@@ -57,7 +57,7 @@ public class PlayerCommander : ShieldCommander
 
     protected void CheckCancel()
     {
-        if (cmdQueue.First?.Value is PlayerAttack)
+        if (cmdQueue.First?.Value is PlayerAttackCommand)
         {
             Cancel();
         }

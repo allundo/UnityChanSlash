@@ -631,15 +631,15 @@ public class PlayerPutItem : PlayerAction
     }
 }
 
-public class PlayerAttack : PlayerAction
+public class PlayerAttackCommand : PlayerAction
 {
-    protected IMobAttack attack;
+    protected IPlayerAttack attack;
     protected PlayerAnimator.AnimatorTrigger trigger;
 
     protected Tween cancelTimer = null;
     protected float cancelStart;
 
-    protected PlayerAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
+    protected PlayerAttackCommand(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
     {
         this.cancelStart = cancelStart;
 
@@ -696,7 +696,7 @@ public class PlayerAttack : PlayerAction
     protected virtual void ResetAnimatorParams() => trigger.Reset();
 }
 
-public class PlayerCriticalAttack : PlayerAttack
+public class PlayerCriticalAttack : PlayerAttackCommand
 {
     protected PlayerCriticalAttack(PlayerCommandTarget target, float duration, float cancelStart = 1f) : base(target, duration, cancelStart) { }
     protected override void Attack()
@@ -713,11 +713,11 @@ public class PlayerCriticalAttack : PlayerAttack
     }
 }
 
-public class PlayerJab : PlayerAttack
+public class PlayerJab : PlayerAttackCommand
 {
     public PlayerJab(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f)
     {
-        attack = target.Attack(0) as IMobAttack;
+        attack = target.Attack(0) as IPlayerAttack;
         trigger = playerAnim.jab;
     }
 }
@@ -726,16 +726,16 @@ public class PlayerJabCritical : PlayerCriticalAttack
 {
     public PlayerJabCritical(PlayerCommandTarget target, float duration) : base(target, duration, 0.6f)
     {
-        attack = target.Attack(0) as IMobAttack;
+        attack = target.Attack(0) as IPlayerAttack;
         trigger = playerAnim.jab;
     }
 }
 
-public class PlayerStraight : PlayerAttack
+public class PlayerStraight : PlayerAttackCommand
 {
     public PlayerStraight(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f)
     {
-        attack = target.Attack(1) as IMobAttack;
+        attack = target.Attack(1) as IPlayerAttack;
         trigger = playerAnim.straight;
     }
 }
@@ -744,16 +744,16 @@ public class PlayerStraightCritical : PlayerCriticalAttack
 {
     public PlayerStraightCritical(PlayerCommandTarget target, float duration) : base(target, duration, 0.8f)
     {
-        attack = target.Attack(1) as IMobAttack;
+        attack = target.Attack(1) as IPlayerAttack;
         trigger = playerAnim.straight;
     }
 }
 
-public class PlayerKick : PlayerAttack
+public class PlayerKick : PlayerAttackCommand
 {
     public PlayerKick(PlayerCommandTarget target, float duration) : base(target, duration)
     {
-        attack = target.Attack(2) as IMobAttack;
+        attack = target.Attack(2) as IPlayerAttack;
         trigger = playerAnim.kick;
     }
 }
@@ -762,7 +762,7 @@ public class PlayerKickCritical : PlayerCriticalAttack
 {
     public PlayerKickCritical(PlayerCommandTarget target, float duration) : base(target, duration)
     {
-        attack = target.Attack(2) as IMobAttack;
+        attack = target.Attack(2) as IPlayerAttack;
         trigger = playerAnim.kick;
     }
 }

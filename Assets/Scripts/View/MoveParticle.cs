@@ -21,11 +21,13 @@ public class MoveParticle : MonoBehaviour
     public void Play()
     {
         moveTween.Restart();
-        vfx.Play();
+        vfx.PlayEx();
     }
-    public void Stop(ParticleSystemStopBehavior stopBehavior = ParticleSystemStopBehavior.StopEmittingAndClear)
+    private void Stop(bool withChildren = true, ParticleSystemStopBehavior stopBehavior = ParticleSystemStopBehavior.StopEmittingAndClear)
     {
         moveTween.Complete(true);
-        vfx.Stop(true, stopBehavior);
+        vfx.StopEx(withChildren, stopBehavior);
     }
+    public void StopEmitting(bool withChildren = true) => Stop(withChildren, ParticleSystemStopBehavior.StopEmitting);
+    public void StopAndClear(bool withChildren = true) => Stop(withChildren, ParticleSystemStopBehavior.StopEmittingAndClear);
 }

@@ -165,7 +165,7 @@ public class GhostAttackEnd : FlyingAttackEnd
     {
         (react as IGhostReactor).OnAttackEnd();
 
-        // Apply enemymobMap.MoveObjectOn()
+        // Apply enemyMap.MoveObjectOn()
         var observableComplete = base.Execute();
 
         // Appear if destination tile is enterable

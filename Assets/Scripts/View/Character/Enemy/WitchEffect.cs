@@ -28,7 +28,7 @@ public class WitchEffect : GhostEffect
     public void OnSummonStart()
     {
         summonSnd.PlayEx();
-        summonVFX?.Play();
+        summonVFX.PlayEx();
     }
 
     public void TeleportWipe(float duration)

@@ -16,8 +16,11 @@ public class Launcher : ILauncher
         bulletGenerator = SpawnHandler.Instance.GetBulletGenerator(type);
     }
 
-    public virtual Tween AttackSequence(float attackDuration)
-        => DOVirtual.DelayedCall(attackDuration * 0.3f, Fire, false);
+    public virtual Sequence AttackSequence(float attackDuration)
+        => DOTween.Sequence()
+            .AppendInterval(attackDuration * 0.3f)
+            .AppendCallback(Fire)
+            .SetUpdate(false);
 
     public virtual void Fire() => bulletGenerator.Fire(status);
 }

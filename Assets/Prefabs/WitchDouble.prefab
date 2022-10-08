@@ -5150,6 +5150,9 @@ MonoBehaviour:
   finishFrame: 16
   speed: 1
   frameRate: 30
+  attackFX: {fileID: 0}
+  attackSnd: {fileID: 0}
+  fxStartFrame: 0
 --- !u!1 &1492646864858809178
 GameObject:
   m_ObjectHideFlags: 0
@@ -20384,6 +20387,7 @@ GameObject:
   - component: {fileID: 1221216693279130448}
   - component: {fileID: 6368708831664245095}
   - component: {fileID: 25396102096358982}
+  - component: {fileID: 6038444021888070841}
   m_Layer: 9
   m_Name: WitchDouble
   m_TagString: Untagged
@@ -20480,8 +20484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack:
-  - {fileID: 1360957297254660445}
 --- !u!114 &1221216693279130448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20527,6 +20529,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e2bb8c79e144c7893c527e334c62dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6038444021888070841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536938854602372188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce3de70a849c2481b93e9195a0fcf415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
+  - {fileID: 1360957297254660445}
 --- !u!1 &4541233192805926167
 GameObject:
   m_ObjectHideFlags: 0

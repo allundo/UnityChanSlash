@@ -50,7 +50,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     protected IPlayerMapUtil playerMap;
     protected PlayerCommandTarget playerTarget;
-    protected bool IsAttack => currentCommand is PlayerAttack;
+    protected bool IsAttack => currentCommand is PlayerAttackCommand;
     protected bool IsItemUse => currentCommand is PlayerItem || IsFiring && !(currentCommand as PlayerFire).isCancelable;
     protected bool IsFiring => currentCommand is PlayerFire;
     protected bool IsDash => currentCommand is PlayerDash;

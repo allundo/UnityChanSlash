@@ -89,7 +89,7 @@ public class ItemInfo : ICloneable
             if (vfx == null) vfx = Util.Instantiate(itemSource.vfx);
             vfx.transform.position = user.position;
             vfx.transform.SetParent(user);
-            vfx?.Play();
+            vfx.PlayEx();
         }
     }
 

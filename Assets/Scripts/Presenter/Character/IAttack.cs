@@ -2,5 +2,5 @@ using DG.Tweening;
 
 public interface IAttack
 {
-    Tween AttackSequence(float attackDuration);
+    Sequence AttackSequence(float attackDuration);
 }

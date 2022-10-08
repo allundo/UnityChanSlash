@@ -8,6 +8,7 @@ public interface IEquipments
     IEquipments EquipL(EquipmentSource source);
     AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI);
     InputRegion LoadInputRegion(Transform fightCircle);
+    FightStyleHandler LoadFightStyle(Transform player);
 }
 
 public class HandEquipments
@@ -74,6 +75,8 @@ public class HandEquipments
         protected HandEquipments equipments;
         protected AttackButtonsHandler prefabAttackButtonsHandler;
         protected InputRegion prefabInputRegion;
+        protected FightStyleHandler prefabAttackStyleHandler;
+
         public AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI)
         {
             var instance = Util.Instantiate(prefabAttackButtonsHandler, attackInputUI);
@@ -88,6 +91,13 @@ public class HandEquipments
             return instance;
         }
 
+        public FightStyleHandler LoadFightStyle(Transform player)
+        {
+            var instance = Util.Instantiate(prefabAttackStyleHandler, player);
+            instance.transform.SetAsLastSibling();
+            return instance;
+        }
+
         public KnuckleKnuckle(HandEquipments equipments, string name = "KnuckleKnuckle")
         {
             this.equipments = equipments;
@@ -98,6 +108,7 @@ public class HandEquipments
         {
             prefabAttackButtonsHandler = Resources.Load<AttackButtonsHandler>($"Prefabs/UI/Fight/{name}ButtonsHandler");
             prefabInputRegion = Resources.Load<InputRegion>($"Prefabs/UI/Fight/{name}InputRegion");
+            prefabAttackStyleHandler = Resources.Load<FightStyleHandler>($"Prefabs/Character/Player/{name}StyleHandler");
         }
 
         public virtual IEquipments EquipR(EquipmentSource source)

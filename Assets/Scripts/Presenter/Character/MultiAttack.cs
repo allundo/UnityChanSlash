@@ -17,7 +17,7 @@ public class MultiAttack : AttackBehaviour, IAttackHitDetect
         Hit.Subscribe(_ => attackSequence.Complete(true)).AddTo(this);
     }
 
-    public override Tween AttackSequence(float attackDuration)
+    public override Sequence AttackSequence(float attackDuration)
     {
         attackSequence?.Complete(true);
         attackSequence = DOTween.Sequence();

@@ -10,18 +10,11 @@ public interface IAttackHitDetect : IAttack
 
 public interface IMobAttack : IAttack
 {
-    /// <summary>
-    /// Returns critical attack sequence as a Tween
-    /// </summary>
-    /// <param name="additionalSpeed">Speed added to normal motion speed multiplier.</param>
-    /// <param name="criticalMultiplier">Multiplier applied to normal attack power.</param>
-    /// <param name="expandScale">Expand scale applied to normal attack collider.</param>
-    /// <returns></returns>
-    Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f);
+    void OnDie();
 }
 
 [RequireComponent(typeof(BoxCollider))]
-public class MobAttack : Attack, IAttackHitDetect, IMobAttack
+public class MobAttack : Attack, IMobAttack, IAttackHitDetect
 {
     /// <summary>
     /// Attack hit starting frame on animation clip
@@ -43,8 +36,14 @@ public class MobAttack : Attack, IAttackHitDetect, IMobAttack
     /// </summary>
     [SerializeField] protected int frameRate = 30;
 
+    [SerializeField] protected ParticleSystem attackFX = default;
+    [SerializeField] protected AudioSource attackSnd = default;
+    [SerializeField] protected int fxStartFrame = 0;
+
     protected float startSec;
     protected float finishSec;
+    protected float fxStartSec;
+    protected float fxStopSec;
 
     protected ISubject<IReactor> hitSubject = new Subject<IReactor>();
     public IObservable<IReactor> Hit => hitSubject;
@@ -61,13 +60,25 @@ public class MobAttack : Attack, IAttackHitDetect, IMobAttack
 
         startSec = FrameToSec(startFrame);
         finishSec = FrameToSec(finishFrame);
+        fxStartSec = FrameToSec(fxStartFrame);
     }
 
-    private float FrameToSec(int frame) => FrameToSec(frame, this.speed);
+    protected float FrameToSec(int frame) => FrameToSec(frame, this.speed);
 
-    private float FrameToSec(int frame, int speed)
+    protected float FrameToSec(int frame, int speed)
     {
         return (float)frame / (float)frameRate / (float)speed;
+    }
+
+    public virtual void OnDie()
+    {
+        attackFX.StopAndClear();
+    }
+
+    protected virtual void OnFXStart()
+    {
+        attackFX.PlayEx();
+        attackSnd.PlayEx();
     }
 
     protected override IReactor OnHitAttack(Collider collider)
@@ -84,28 +95,13 @@ public class MobAttack : Attack, IAttackHitDetect, IMobAttack
         Observable.NextFrame().Subscribe(_ => attackCollider.enabled = false).AddTo(this);
     }
 
-    public override Tween AttackSequence(float attackDuration)
+    public override Sequence AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
+            .InsertCallback(fxStartSec, OnFXStart)
             .InsertCallback(startSec, OnHitStart)
             .InsertCallback(finishSec, OnHitFinished)
             .SetUpdate(false);
-    }
-
-    public virtual Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f)
-    {
-        return DOTween.Sequence()
-            .AppendCallback(() => CriticalGain(criticalMultiplier, expandScale))
-            .InsertCallback(FrameToSec(startFrame, speed + additionalSpeed), OnHitStart)
-            .InsertCallback(FrameToSec(finishFrame, speed + additionalSpeed), OnHitFinished)
-            .OnComplete(ResetAttackPower)
-            .SetUpdate(false);
-    }
-
-    protected void CriticalGain(float criticalMultiplier = 2.5f, float expandScale = 1.5f)
-    {
-        boxCollider.size *= expandScale;
-        attackMultiplier *= criticalMultiplier;
     }
 
     protected void ResetAttackPower()

@@ -92425,6 +92425,7 @@ GameObject:
   - component: {fileID: 6710468430858598546}
   - component: {fileID: 6710468430858598547}
   - component: {fileID: 1358560897634642497}
+  - component: {fileID: 828473255341541324}
   m_Layer: 0
   m_Name: IceBullet
   m_TagString: Untagged
@@ -92534,7 +92535,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1740ab4a957fd49f19bb94abbe5ad80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack:
+--- !u!114 &828473255341541324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6710468430858598545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a151ae050e8a84caeb5030c047ec9da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
   - {fileID: 6710468429364292472}
 --- !u!1 &6710468430955627237
 GameObject:

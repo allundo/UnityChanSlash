@@ -30,7 +30,7 @@ public class Target : FadeUI
         base.Awake();
 
         rectTransform = GetComponent<RectTransform>();
-        pointerOnFX.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        pointerOnFX.StopAndClear();
         isPointerOn = false;
         sqrBullEyeRadius = bullEyeRadius * bullEyeRadius;
         sqrActiveBullEyeRadius = activeBullEyeRadius * activeBullEyeRadius;
@@ -76,7 +76,7 @@ public class Target : FadeUI
     {
         corner.SetPointerOff();
         center.SetPointerOff();
-        pointerOnFX.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        pointerOnFX.StopAndClear();
     }
 
     public void SetPointer(Vector2 pointerPos)
