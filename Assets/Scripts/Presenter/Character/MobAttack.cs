@@ -36,14 +36,8 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
     /// </summary>
     [SerializeField] protected int frameRate = 30;
 
-    [SerializeField] protected ParticleSystem attackFX = default;
-    [SerializeField] protected AudioSource attackSnd = default;
-    [SerializeField] protected int fxStartFrame = 0;
-
     protected float startSec;
     protected float finishSec;
-    protected float fxStartSec;
-    protected float fxStopSec;
 
     protected ISubject<IReactor> hitSubject = new Subject<IReactor>();
     public IObservable<IReactor> Hit => hitSubject;
@@ -52,7 +46,7 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
     protected Vector3 defaultSize;
     protected float defaultAttack;
 
-    void Start()
+    protected virtual void Start()
     {
         boxCollider = attackCollider as BoxCollider;
         defaultSize = boxCollider.size;
@@ -60,7 +54,6 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
 
         startSec = FrameToSec(startFrame);
         finishSec = FrameToSec(finishFrame);
-        fxStartSec = FrameToSec(fxStartFrame);
     }
 
     protected float FrameToSec(int frame) => FrameToSec(frame, this.speed);
@@ -70,16 +63,7 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
         return (float)frame / (float)frameRate / (float)speed;
     }
 
-    public virtual void OnDie()
-    {
-        attackFX.StopAndClear();
-    }
-
-    protected virtual void OnFXStart()
-    {
-        attackFX.PlayEx();
-        attackSnd.PlayEx();
-    }
+    public virtual void OnDie() { }
 
     protected override IReactor OnHitAttack(Collider collider)
     {
@@ -98,7 +82,6 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
     public override Sequence AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
-            .InsertCallback(fxStartSec, OnFXStart)
             .InsertCallback(startSec, OnHitStart)
             .InsertCallback(finishSec, OnHitFinished)
             .SetUpdate(false);

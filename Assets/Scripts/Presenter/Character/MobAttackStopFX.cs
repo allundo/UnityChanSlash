@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class MobAttackStopFX : MobAttack
+public class MobAttackStopFX : MobAttackFX
 {
     [SerializeField] protected int fxStopFrame = -1;
 

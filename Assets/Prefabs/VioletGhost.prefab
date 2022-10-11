@@ -10492,7 +10492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks:
-  - {fileID: 6646648690421457345}
+  - {fileID: 6353399755794853273}
 --- !u!1 &6183973933191762915
 GameObject:
   m_ObjectHideFlags: 0
@@ -10565,7 +10565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6646648690421457350}
   - component: {fileID: 6646648690421457344}
-  - component: {fileID: 6646648690421457345}
+  - component: {fileID: 6353399755794853273}
   m_Layer: 9
   m_Name: GhostAttackHitDetector
   m_TagString: Untagged
@@ -10601,7 +10601,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6646648690421457345
+--- !u!114 &6353399755794853273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10610,7 +10610,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6646648690421457351}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d51fc77293bc348aba68690350f860d7, type: 3}
+  m_Script: {fileID: 11500000, guid: d13c2a2100a1d4b8b822e8fb8778f0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 14
@@ -10620,9 +10620,6 @@ MonoBehaviour:
   finishFrame: 20
   speed: 1
   frameRate: 30
-  attackFX: {fileID: 0}
-  attackSnd: {fileID: 0}
-  fxStartFrame: 0
 --- !u!1 &7650829557683324966
 GameObject:
   m_ObjectHideFlags: 0

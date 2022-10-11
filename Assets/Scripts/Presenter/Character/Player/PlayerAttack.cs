@@ -13,7 +13,7 @@ public interface IPlayerAttack : IMobAttack
     Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f);
 }
 
-public class PlayerAttack : MobAttack, IPlayerAttack
+public class PlayerAttack : MobAttackFX, IPlayerAttack
 {
     [SerializeField] protected ParticleSystem criticalFX = default;
     [SerializeField] protected AudioSource criticalSnd = default;
