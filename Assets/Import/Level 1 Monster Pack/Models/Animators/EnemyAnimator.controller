@@ -288,7 +288,7 @@ AnimatorState:
   - {fileID: 8131851831011720192}
   m_StateMachineBehaviours: []
   m_Position: {x: 156, y: -48, z: 0}
-  m_IKOnFeet: 1
+  m_IKOnFeet: 0
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -440,7 +440,8 @@ BlendTree:
   m_Name: Move
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: e607f74860c67814e93c914b710142d5, type: 3}
+    m_Motion: {fileID: 4781951162920444690, guid: f885d05161b024e269460c8759f80b22,
+      type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
