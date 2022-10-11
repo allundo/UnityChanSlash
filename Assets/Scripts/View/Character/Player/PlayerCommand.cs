@@ -645,9 +645,8 @@ public class PlayerAttackCommand : PlayerAction
 
         if (cancelStart < 1f)
         {
-            cancelTimer = DOTween.Sequence()
-                .InsertCallback(cancelStart * duration * FRAME_UNIT, () => playerAnim.cancel.Bool = true)
-                .InsertCallback((1 + cancelStart) * duration * FRAME_UNIT, () => playerAnim.cancel.Bool = false)
+            cancelTimer = tweenMove
+                .DelayedCall(cancelStart, () => playerAnim.cancel.Bool = true)
                 .AsReusable(target.gameObject);
         }
     }
@@ -693,7 +692,11 @@ public class PlayerAttackCommand : PlayerAction
         completeTween = attack.AttackSequence(duration).Play();
     }
 
-    protected virtual void ResetAnimatorParams() => trigger.Reset();
+    protected virtual void ResetAnimatorParams()
+    {
+        trigger.Reset();
+        playerAnim.cancel.Bool = false;
+    }
 }
 
 public class PlayerCriticalAttack : PlayerAttackCommand
@@ -708,7 +711,7 @@ public class PlayerCriticalAttack : PlayerAttackCommand
 
     protected override void ResetAnimatorParams()
     {
-        trigger.Reset();
+        base.ResetAnimatorParams();
         playerAnim.critical.Bool = false;
     }
 }
