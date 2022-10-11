@@ -38,18 +38,17 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         rectTransform = GetComponent<RectTransform>();
 
         raycastHandler = new RaycastHandler(gameObject);
+
+        enemyTarget = attackInputUI.GetEnemyTarget();
+        attackInputUI.SetUIRadius(radius);
+        sqrForwardRadius = forwardRadius * forwardRadius;
+
+        ResetCenterPos();
+        circle.SetAlpha(0.0f);
     }
 
     protected void Start()
     {
-        enemyTarget = attackInputUI.GetEnemyTarget();
-
-        ResetCenterPos();
-
-        sqrForwardRadius = forwardRadius * forwardRadius;
-        attackInputUI.SetUIRadius(radius);
-
-        circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
 
         EnemyStatus
