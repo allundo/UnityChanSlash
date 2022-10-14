@@ -5302,7 +5302,7 @@ GameObject:
   - component: {fileID: 2518429830624436976}
   - component: {fileID: 2518429830624436977}
   m_Layer: 8
-  m_Name: SwordKnucleStyleHandler
+  m_Name: SwordKnuckleStyleHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
