@@ -6,13 +6,13 @@ public class KnuckleKnuckleButtonsHandler : AttackButtonsHandler
 
     public override void SetCommands(PlayerCommandTarget target)
     {
-        attackCmds[0] = new PlayerJab(target, 21.6f);
-        attackCmds[1] = new PlayerStraight(target, 30f);
-        attackCmds[2] = new PlayerKick(target, 43f);
+        attackCmds[0] = new PlayerJab(target);
+        attackCmds[1] = new PlayerStraight(target);
+        attackCmds[2] = new PlayerKick(target);
 
-        criticalCmds[0] = new PlayerJabCritical(target, 18.5f);
-        criticalCmds[1] = new PlayerStraightCritical(target, 24f);
-        criticalCmds[2] = new PlayerKickCritical(target, 35f);
+        criticalCmds[0] = new PlayerJabCritical(target);
+        criticalCmds[1] = new PlayerStraightCritical(target);
+        criticalCmds[2] = new PlayerKickCritical(target);
     }
 
     protected override bool[,] GetCancelableTable()

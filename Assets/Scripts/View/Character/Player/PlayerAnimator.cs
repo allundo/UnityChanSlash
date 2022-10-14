@@ -20,9 +20,8 @@ public class PlayerAnimator : ShieldAnimator
     public TriggerEx handle { get; protected set; }
     public TriggerEx putItem { get; protected set; }
     public TriggerEx getItem { get; protected set; }
-    public TriggerEx jab { get; protected set; }
-    public TriggerEx straight { get; protected set; }
-    public TriggerEx kick { get; protected set; }
+    protected TriggerEx[] attack = new TriggerEx[4];
+    public TriggerEx Attack(int index) => attack[index];
     public TriggerEx dropFloor { get; protected set; }
     public TriggerEx brake { get; protected set; }
     public TriggerEx fire { get; protected set; }
@@ -51,9 +50,10 @@ public class PlayerAnimator : ShieldAnimator
         handle = new TriggerEx(triggers, anim, "Handle");
         putItem = new TriggerEx(triggers, anim, "PutItem");
         getItem = new TriggerEx(triggers, anim, "GetItem");
-        jab = new TriggerEx(triggers, anim, "Jab", 5);
-        straight = new TriggerEx(triggers, anim, "Straight", 5);
-        kick = new TriggerEx(triggers, anim, "Kick", 5);
+        attack[0] = new TriggerEx(triggers, anim, "Attack00", 5);
+        attack[1] = new TriggerEx(triggers, anim, "Attack01", 5);
+        attack[2] = new TriggerEx(triggers, anim, "Attack02", 5);
+        attack[3] = new TriggerEx(triggers, anim, "Attack03", 5);
         dropFloor = new TriggerEx(triggers, anim, "DropFloor", 0);
         brake = new TriggerEx(triggers, anim, "Brake");
         fire = new TriggerEx(triggers, anim, "Fire");
