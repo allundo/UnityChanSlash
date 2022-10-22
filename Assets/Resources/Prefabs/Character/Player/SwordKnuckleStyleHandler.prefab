@@ -44,7 +44,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0.25, y: 0.75, z: 2}
 --- !u!114 &7231247433773791640
 MonoBehaviour:
@@ -58,12 +58,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61e1239432240328b31f70e6f9f7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  attackType: 2
   attackAttr: 0
-  attackMultiplier: 1.5
-  startFrame: 27
-  finishFrame: 30
-  speed: 4
+  attackMultiplier: 1.25
+  startFrame: 20
+  finishFrame: 26
+  speed: 6
   frameRate: 30
   attackFX: {fileID: 5362757551852149228}
   attackSnd: {fileID: 6643492367383885600}
@@ -116,7 +116,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 0.8, z: 1.5}
   m_Center: {x: -0.25, y: 0.75, z: 1.75}
 --- !u!114 &951536689231853251
 MonoBehaviour:
@@ -130,11 +130,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61e1239432240328b31f70e6f9f7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  attackType: 2
   attackAttr: 0
-  attackMultiplier: 1
-  startFrame: 15
-  finishFrame: 25
+  attackMultiplier: 1.25
+  startFrame: 16
+  finishFrame: 24
   speed: 6
   frameRate: 30
   attackFX: {fileID: 8412425635502603705}
@@ -10289,8 +10289,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.5}
-  m_Center: {x: 0, y: 0.75, z: 2.25}
+  m_Size: {x: 1, y: 2, z: 2}
+  m_Center: {x: 0, y: 1, z: 2.25}
 --- !u!114 &6790127298360970673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10303,10 +10303,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61e1239432240328b31f70e6f9f7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  attackType: 2
   attackAttr: 0
-  attackMultiplier: 1.8
-  startFrame: 32
+  attackMultiplier: 2
+  startFrame: 28
   finishFrame: 36
   speed: 4
   frameRate: 30
@@ -10361,7 +10361,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.5}
+  m_Size: {x: 0.8, y: 0.8, z: 1.5}
   m_Center: {x: 0, y: 0.75, z: 2.25}
 --- !u!114 &8871610324603898813
 MonoBehaviour:
@@ -10375,11 +10375,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61e1239432240328b31f70e6f9f7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  attackType: 4
   attackAttr: 0
-  attackMultiplier: 1.8
-  startFrame: 32
-  finishFrame: 36
+  attackMultiplier: 1.5
+  startFrame: 14
+  finishFrame: 25
   speed: 4
   frameRate: 30
   attackFX: {fileID: 8787151720884945097}

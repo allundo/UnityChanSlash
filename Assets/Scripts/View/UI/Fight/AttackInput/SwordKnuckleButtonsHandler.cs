@@ -7,15 +7,15 @@ public class SwordKnuckleButtonsHandler : AttackButtonsHandler
 
     public override void SetCommands(PlayerCommandTarget target)
     {
-        attackCmds[0] = new PlayerJab(target);
-        attackCmds[1] = new PlayerStraight(target);
-        attackCmds[2] = new PlayerKick(target);
-        attackCmds[3] = new PlayerKick(target);
+        attackCmds[0] = new PlayerRSlash(target);
+        attackCmds[1] = new PlayerLSlash(target);
+        attackCmds[2] = new PlayerSting(target);
+        attackCmds[3] = new PlayerChop(target);
 
-        criticalCmds[0] = new PlayerJabCritical(target);
-        criticalCmds[1] = new PlayerStraightCritical(target);
-        criticalCmds[2] = new PlayerKickCritical(target);
-        criticalCmds[3] = new PlayerKickCritical(target);
+        criticalCmds[0] = new PlayerRSlashCritical(target);
+        criticalCmds[1] = new PlayerLSlashCritical(target);
+        criticalCmds[2] = new PlayerStingCritical(target);
+        criticalCmds[3] = new PlayerChopCritical(target);
     }
 
     protected override bool[,] GetCancelableTable()

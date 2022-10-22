@@ -725,7 +725,7 @@ public class PlayerJab : PlayerAttackCommand
 }
 public class PlayerJabCritical : PlayerCriticalAttack
 {
-    public PlayerJabCritical(PlayerCommandTarget target) : base(target, 0, 21.6f, 0.6f) { }
+    public PlayerJabCritical(PlayerCommandTarget target) : base(target, 0, 18.5f, 0.6f) { }
 }
 
 public class PlayerStraight : PlayerAttackCommand
@@ -734,7 +734,7 @@ public class PlayerStraight : PlayerAttackCommand
 }
 public class PlayerStraightCritical : PlayerCriticalAttack
 {
-    public PlayerStraightCritical(PlayerCommandTarget target) : base(target, 1, 30f, 0.8f) { }
+    public PlayerStraightCritical(PlayerCommandTarget target) : base(target, 1, 24f, 0.8f) { }
 }
 
 public class PlayerKick : PlayerAttackCommand
@@ -743,7 +743,42 @@ public class PlayerKick : PlayerAttackCommand
 }
 public class PlayerKickCritical : PlayerCriticalAttack
 {
-    public PlayerKickCritical(PlayerCommandTarget target) : base(target, 2, 40f) { }
+    public PlayerKickCritical(PlayerCommandTarget target) : base(target, 2, 34.4f) { }
+}
+public class PlayerRSlash : PlayerAttackCommand
+{
+    public PlayerRSlash(PlayerCommandTarget target) : base(target, 0, 30f, 0.8f) { }
+}
+public class PlayerRSlashCritical : PlayerCriticalAttack
+{
+    public PlayerRSlashCritical(PlayerCommandTarget target) : base(target, 0, 26f, 0.8f) { }
+}
+
+public class PlayerLSlash : PlayerAttackCommand
+{
+    public PlayerLSlash(PlayerCommandTarget target) : base(target, 1, 30f, 0.8f) { }
+}
+public class PlayerLSlashCritical : PlayerCriticalAttack
+{
+    public PlayerLSlashCritical(PlayerCommandTarget target) : base(target, 1, 24f, 0.8f) { }
+}
+
+public class PlayerSting : PlayerAttackCommand
+{
+    public PlayerSting(PlayerCommandTarget target) : base(target, 2, 30f) { }
+}
+public class PlayerStingCritical : PlayerCriticalAttack
+{
+    public PlayerStingCritical(PlayerCommandTarget target) : base(target, 2, 24f) { }
+}
+
+public class PlayerChop : PlayerAttackCommand
+{
+    public PlayerChop(PlayerCommandTarget target) : base(target, 3, 50f) { }
+}
+public class PlayerChopCritical : PlayerCriticalAttack
+{
+    public PlayerChopCritical(PlayerCommandTarget target) : base(target, 3, 40f) { }
 }
 
 public class PlayerFire : PlayerAction
@@ -754,6 +789,8 @@ public class PlayerFire : PlayerAction
     {
         this.type = type;
     }
+
+
 
     protected virtual void ValidateAction() => isCancelable = true;
 

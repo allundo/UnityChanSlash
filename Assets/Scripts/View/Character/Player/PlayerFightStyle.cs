@@ -1,6 +1,12 @@
 public class PlayerFightStyle : MobFightStyle
 {
+    protected PlayerAnimator anim;
     protected FightStyleHandler handler = null;
+
+    protected virtual void Awake()
+    {
+        anim = GetComponent<PlayerAnimator>();
+    }
 
     public override IAttack Attack(int index) => handler.Attack(index);
 
@@ -9,6 +15,7 @@ public class PlayerFightStyle : MobFightStyle
         if (handler != null) Destroy(handler.gameObject);
 
         handler = equipments.LoadFightStyle(transform);
+        anim.SetController(equipments.animatorController);
         return handler;
     }
 

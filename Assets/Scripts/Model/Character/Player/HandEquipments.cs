@@ -9,6 +9,7 @@ public interface IEquipments
     AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI);
     InputRegion LoadInputRegion(Transform fightCircle);
     FightStyleHandler LoadFightStyle(Transform player);
+    RuntimeAnimatorController animatorController { get; }
 }
 
 public class HandEquipments
@@ -76,6 +77,7 @@ public class HandEquipments
         protected AttackButtonsHandler prefabAttackButtonsHandler;
         protected InputRegion prefabInputRegion;
         protected FightStyleHandler prefabAttackStyleHandler;
+        public RuntimeAnimatorController animatorController { get; protected set; }
 
         public AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI)
         {
@@ -109,6 +111,7 @@ public class HandEquipments
             prefabAttackButtonsHandler = Resources.Load<AttackButtonsHandler>($"Prefabs/UI/Fight/{name}ButtonsHandler");
             prefabInputRegion = Resources.Load<InputRegion>($"Prefabs/UI/Fight/{name}InputRegion");
             prefabAttackStyleHandler = Resources.Load<FightStyleHandler>($"Prefabs/Character/Player/{name}StyleHandler");
+            animatorController = Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_{name}");
         }
 
         public virtual IEquipments EquipR(EquipmentSource source)
