@@ -19,6 +19,7 @@ public class UnityEngineSpecTest
     private TestNestedMonoBehaviour prefabTestNestedMonoBehaviour;
     private TestMonoBehaviourTree prefabTestMonoBehaviourTree;
     private TestUniRxTree prefabTestUniRxTree;
+    private GameObject prefabLock;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -32,6 +33,7 @@ public class UnityEngineSpecTest
         prefabTestNestedMonoBehaviour = Resources.Load<TestNestedMonoBehaviour>("Prefabs/TestNestedMonoBehaviour");
         prefabTestMonoBehaviourTree = Resources.Load<TestMonoBehaviourTree>("Prefabs/TestMonoBehaviourTree");
         prefabTestUniRxTree = Resources.Load<TestUniRxTree>("Prefabs/TestUniRxTree");
+        prefabLock = Resources.Load<GameObject>("Prefabs/TestLock");
     }
 
     [OneTimeTearDown]
@@ -670,6 +672,56 @@ public class UnityEngineSpecTest
 
         Object.Destroy(sut.gameObject);
         Object.Destroy(sutChild.gameObject);
+        Object.Destroy(mainCamera.gameObject);
+    }
+
+    [UnityTest]
+    /// <summary>
+    /// Interruption source option "Next state" enables skipping states any times in a row.
+    /// </summary>
+    public IEnumerator _014_AnimatorTransitionTest()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var lockAnim = Object.Instantiate(prefabLock, new Vector3(0f, 0f, -5f), Quaternion.identity).GetComponent<Animator>();
+
+        int[] triggerValues = new string[] { "Unlock00", "Lock00", "Unlock01", "Lock01" }
+            .Select(name => Animator.StringToHash(name)).ToArray();
+
+        foreach (var value in triggerValues)
+        {
+            lockAnim.SetBool("Enable", true);
+            lockAnim.SetTrigger(value);
+            yield return new WaitForSeconds(2f);
+            lockAnim.SetBool("Enable", false);
+        }
+
+        foreach (var value in triggerValues)
+        {
+            lockAnim.SetBool("Enable", true);
+            lockAnim.SetTrigger(value);
+            yield return new WaitForSeconds(1f);
+            lockAnim.SetBool("Enable", false);
+        }
+
+        foreach (var value in triggerValues)
+        {
+            lockAnim.SetBool("Enable", true);
+            lockAnim.SetTrigger(value);
+            yield return new WaitForSeconds(0.5f);
+            lockAnim.SetBool("Enable", false);
+        }
+
+        foreach (var value in triggerValues)
+        {
+            lockAnim.SetBool("Enable", true);
+            lockAnim.SetTrigger(value);
+            yield return new WaitForSeconds(0.25f);
+            lockAnim.SetBool("Enable", false);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(lockAnim.gameObject);
         Object.Destroy(mainCamera.gameObject);
     }
 }
