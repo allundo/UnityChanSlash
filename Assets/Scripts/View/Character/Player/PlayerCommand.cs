@@ -646,7 +646,7 @@ public class PlayerAttackCommand : PlayerAction
         if (cancelStart < 1f)
         {
             cancelTimer = tweenMove
-                .DelayedCall(cancelStart, () => playerAnim.cancel.Bool = true)
+                .DelayedCall(cancelStart, playerInput.SetCancel)
                 .AsReusable(target.gameObject);
         }
 
@@ -660,6 +660,9 @@ public class PlayerAttackCommand : PlayerAction
         return cancelStart < 1f ? ObservableCancelComplete() : ObservableComplete();
     }
 
+    /// <summary>
+    /// Sends cancel signal as OnNext().
+    /// </summary>
     protected IObservable<Unit> ObservableCancelComplete()
     {
         return Observable.Create<Unit>(o =>
@@ -698,7 +701,6 @@ public class PlayerAttackCommand : PlayerAction
     protected virtual void ResetAnimatorParams()
     {
         trigger.Reset();
-        playerAnim.cancel.Bool = false;
     }
 }
 
@@ -714,7 +716,7 @@ public class PlayerCriticalAttack : PlayerAttackCommand
 
     protected override void ResetAnimatorParams()
     {
-        base.ResetAnimatorParams();
+        trigger.Reset();
         playerAnim.critical.Bool = false;
     }
 }

@@ -6,6 +6,7 @@ using System;
 public interface IPlayerInput : IInput
 {
     void SetInputVisible(bool isVisible = true, bool withInventory = true);
+    void SetCancel();
 }
 
 /// <summary>
@@ -225,6 +226,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         if (!isVisible) InactivateUIs();
     }
+
+    public void SetCancel() => (commander as PlayerCommander).SetCancel();
 
     public override ICommand InputDie()
     {

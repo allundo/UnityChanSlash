@@ -12,6 +12,9 @@ public class PlayerCommander : ShieldCommander
     protected ISubject<ICommand> commandComplete = new Subject<ICommand>();
     public IObservable<ICommand> CommandComplete => commandComplete;
 
+    private bool isCancelable = false;
+    public void SetCancel() => isCancelable = true;
+
     public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
         anim = target.anim as PlayerAnimator;
@@ -21,7 +24,9 @@ public class PlayerCommander : ShieldCommander
     public override void EnqueueCommand(ICommand cmd)
     {
         base.EnqueueCommand(cmd);
-        if (anim.cancel.Bool) CheckCancel(); // Cancel current cancelable Attack if newly enqueued command is Attack
+
+        // Cancel current cancelable Attack command if next command is also Attack during cancellable.
+        if (isCancelable) CheckCancel();
     }
 
     public void SetGuard(bool isGuardOn)
@@ -45,14 +50,23 @@ public class PlayerCommander : ShieldCommander
 
         execDisposable = execObservable
             .Subscribe(
-                _ => CheckCancel(), // Cancel current Attack if next is also Attack on cancellation timing
+                // Cancelable Attack commands check cancellation on specified timing and
+                // cancel itself if next is also Attack command.
+                _ => CheckCancel(),
                 () =>
                 {
-                    DispatchCommand();
+                    isCancelable = false;
                     commandComplete.OnNext(cmd);
+                    DispatchCommand();
                 }
             )
             .AddTo(targetObject);
+    }
+
+    public override void Cancel()
+    {
+        isCancelable = false;
+        base.Cancel();
     }
 
     protected void CheckCancel()

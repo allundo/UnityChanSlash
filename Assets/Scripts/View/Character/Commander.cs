@@ -147,7 +147,7 @@ public class Commander
         }
     }
 
-    public void Cancel()
+    public virtual void Cancel()
     {
         currentCommand?.Cancel();
         execDisposable?.Dispose();
