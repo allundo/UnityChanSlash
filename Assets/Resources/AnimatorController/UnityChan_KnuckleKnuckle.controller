@@ -230,9 +230,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack01
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
     m_EventTreshold: 0
@@ -933,9 +930,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack02
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
     m_EventTreshold: 0
@@ -963,9 +957,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack03
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -1203,9 +1194,6 @@ AnimatorStateTransition:
     m_ConditionEvent: Attack01
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: Critical
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -1232,9 +1220,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack00
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
@@ -1263,9 +1248,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack03
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -1345,9 +1327,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack00
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -1578,9 +1557,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack00
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
     m_EventTreshold: 0
@@ -1636,9 +1612,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack02
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -1913,9 +1886,6 @@ AnimatorStateTransition:
     m_ConditionEvent: Attack02
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: Critical
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -2062,9 +2032,6 @@ AnimatorStateTransition:
     m_ConditionEvent: Attack02
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: Critical
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -2091,9 +2058,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack02
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -2172,9 +2136,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack02
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
@@ -3268,20 +3229,20 @@ AnimatorStateMachine:
   - {fileID: -4176311248259377183}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -6035692637434169116}
-    second: []
-  - first: {fileID: 5088034034932548426}
-    second:
-    - {fileID: -3742132335978991641}
-  - first: {fileID: 5661657302172337993}
-    second:
-    - {fileID: -3036322611399001499}
   - first: {fileID: 5728104437682976820}
     second:
     - {fileID: -2474948827806305277}
+  - first: {fileID: -6035692637434169116}
+    second: []
+  - first: {fileID: 5661657302172337993}
+    second:
+    - {fileID: -3036322611399001499}
   - first: {fileID: 9013083783579002969}
     second:
     - {fileID: -1525477076371895745}
+  - first: {fileID: 5088034034932548426}
+    second:
+    - {fileID: -3742132335978991641}
   m_StateMachineBehaviours:
   - {fileID: 6665805449643999134}
   m_AnyStatePosition: {x: 840, y: -90, z: 0}
@@ -3531,9 +3492,6 @@ AnimatorStateTransition:
     m_ConditionEvent: Attack03
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: Critical
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -3610,9 +3568,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack03
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -4010,9 +3965,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack01
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
     m_EventTreshold: 0
@@ -4196,9 +4148,6 @@ AnimatorStateTransition:
     m_ConditionEvent: Attack00
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: Critical
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -4344,9 +4293,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack01
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Critical
@@ -4873,9 +4819,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack02
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
     m_EventTreshold: 0
@@ -4928,9 +4871,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack03
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
@@ -5201,9 +5141,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack02
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
     m_EventTreshold: 0
@@ -5256,9 +5193,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Attack03
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Cancel
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Critical
