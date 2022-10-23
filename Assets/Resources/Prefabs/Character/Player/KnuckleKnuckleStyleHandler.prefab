@@ -10304,9 +10304,9 @@ MonoBehaviour:
   attackType: 1
   attackAttr: 0
   attackMultiplier: 1
-  startFrame: 15
-  finishFrame: 25
-  speed: 6
+  startFrame: 10
+  finishFrame: 17
+  speed: 4
   frameRate: 30
   attackFX: {fileID: 5487364501737759174}
   attackSnd: {fileID: 6073052930225154025}

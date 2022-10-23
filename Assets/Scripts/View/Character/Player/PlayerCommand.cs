@@ -747,38 +747,38 @@ public class PlayerKickCritical : PlayerCriticalAttack
 }
 public class PlayerRSlash : PlayerAttackCommand
 {
-    public PlayerRSlash(PlayerCommandTarget target) : base(target, 0, 30f, 0.8f) { }
+    public PlayerRSlash(PlayerCommandTarget target) : base(target, 0, 35f, 0.75f) { }
 }
 public class PlayerRSlashCritical : PlayerCriticalAttack
 {
-    public PlayerRSlashCritical(PlayerCommandTarget target) : base(target, 0, 26f, 0.8f) { }
+    public PlayerRSlashCritical(PlayerCommandTarget target) : base(target, 0, 28f, 0.75f) { }
 }
 
 public class PlayerLSlash : PlayerAttackCommand
 {
-    public PlayerLSlash(PlayerCommandTarget target) : base(target, 1, 30f, 0.8f) { }
+    public PlayerLSlash(PlayerCommandTarget target) : base(target, 1, 25f, 0.75f) { }
 }
 public class PlayerLSlashCritical : PlayerCriticalAttack
 {
-    public PlayerLSlashCritical(PlayerCommandTarget target) : base(target, 1, 24f, 0.8f) { }
+    public PlayerLSlashCritical(PlayerCommandTarget target) : base(target, 1, 20f, 0.75f) { }
 }
 
 public class PlayerSting : PlayerAttackCommand
 {
-    public PlayerSting(PlayerCommandTarget target) : base(target, 2, 30f) { }
+    public PlayerSting(PlayerCommandTarget target) : base(target, 2, 32.5f) { }
 }
 public class PlayerStingCritical : PlayerCriticalAttack
 {
-    public PlayerStingCritical(PlayerCommandTarget target) : base(target, 2, 24f) { }
+    public PlayerStingCritical(PlayerCommandTarget target) : base(target, 2, 26f) { }
 }
 
 public class PlayerChop : PlayerAttackCommand
 {
-    public PlayerChop(PlayerCommandTarget target) : base(target, 3, 50f) { }
+    public PlayerChop(PlayerCommandTarget target) : base(target, 3, 65f) { }
 }
 public class PlayerChopCritical : PlayerCriticalAttack
 {
-    public PlayerChopCritical(PlayerCommandTarget target) : base(target, 3, 40f) { }
+    public PlayerChopCritical(PlayerCommandTarget target) : base(target, 3, 52f) { }
 }
 
 public class PlayerFire : PlayerAction

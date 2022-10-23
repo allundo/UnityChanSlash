@@ -5,9 +5,9 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
-    second: SwordKnuckle_SHIELD
+    second: Character1_Reference|Character1_ReferenceAction
   - first:
-      74: -2267680757532116252
+      74: 6722656316190513762
     second: SwordKnuckle_GUARD_STATE
   - first:
       74: -1248994613917366734
@@ -21,6 +21,9 @@ ModelImporter:
   - first:
       74: 1124731194211860952
     second: SwordKnuckle_Chop
+  - first:
+      74: -4108219079451020593
+    second: SwordKnuckle_SHIELD
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -87,7 +90,7 @@ ModelImporter:
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
       firstFrame: 40
-      lastFrame: 105
+      lastFrame: 110
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -115,7 +118,7 @@ ModelImporter:
       name: SwordKnuckle_LSlash
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
-      firstFrame: 105
+      firstFrame: 110
       lastFrame: 160
       wrapMode: 0
       orientationOffsetY: 0
@@ -145,7 +148,7 @@ ModelImporter:
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
       firstFrame: 160
-      lastFrame: 220
+      lastFrame: 225
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -173,8 +176,8 @@ ModelImporter:
       name: SwordKnuckle_Chop
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
-      firstFrame: 220
-      lastFrame: 320
+      firstFrame: 225
+      lastFrame: 355
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -202,8 +205,8 @@ ModelImporter:
       name: SwordKnuckle_SHIELD
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
-      firstFrame: 320
-      lastFrame: 345
+      firstFrame: 355
+      lastFrame: 380
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

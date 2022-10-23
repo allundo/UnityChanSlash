@@ -61,9 +61,9 @@ MonoBehaviour:
   attackType: 2
   attackAttr: 0
   attackMultiplier: 1.25
-  startFrame: 20
-  finishFrame: 26
-  speed: 6
+  startFrame: 24
+  finishFrame: 36
+  speed: 4
   frameRate: 30
   attackFX: {fileID: 5362757551852149228}
   attackSnd: {fileID: 6643492367383885600}
@@ -132,10 +132,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 2
   attackAttr: 0
-  attackMultiplier: 1.25
-  startFrame: 16
+  attackMultiplier: 1
+  startFrame: 15
   finishFrame: 24
-  speed: 6
+  speed: 4
   frameRate: 30
   attackFX: {fileID: 8412425635502603705}
   attackSnd: {fileID: 7844752737552595862}
@@ -10306,8 +10306,8 @@ MonoBehaviour:
   attackType: 2
   attackAttr: 0
   attackMultiplier: 2
-  startFrame: 28
-  finishFrame: 36
+  startFrame: 38
+  finishFrame: 52
   speed: 4
   frameRate: 30
   attackFX: {fileID: 8787151720884945097}
@@ -10375,11 +10375,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61e1239432240328b31f70e6f9f7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 4
+  attackType: 3
   attackAttr: 0
-  attackMultiplier: 1.5
-  startFrame: 14
-  finishFrame: 25
+  attackMultiplier: 1.25
+  startFrame: 16
+  finishFrame: 32
   speed: 4
   frameRate: 30
   attackFX: {fileID: 8787151720884945097}

@@ -22,8 +22,8 @@ public class SwordKnuckleButtonsHandler : AttackButtonsHandler
     {
         var cancelable = new bool[4, 4];
 
-        // RSlash -> LSlash, RSlash => Sting , LSlash -> Chop are cancelable.
-        cancelable[0, 1] = cancelable[0, 2] = cancelable[1, 3] = true;
+        // RSlash -> LSlash, LSlash => Sting , LSlash -> Chop are cancelable.
+        cancelable[0, 1] = cancelable[1, 2] = cancelable[1, 3] = true;
 
         return cancelable;
     }

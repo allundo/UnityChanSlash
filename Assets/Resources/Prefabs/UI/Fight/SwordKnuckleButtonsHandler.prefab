@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.4
+  duration: 0.3
 --- !u!1 &527912927885045639
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,7 +467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.56
+  duration: 0.45
 --- !u!1 &8866624962273492175
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,4 +603,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.56
+  duration: 0.7

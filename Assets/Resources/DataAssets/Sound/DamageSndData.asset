@@ -24,13 +24,17 @@ MonoBehaviour:
       type: 3}
     guard: {fileID: 8153764810146711806, guid: 3f89ae31db30d4acf946f9ca5a8c0b6e, type: 3}
   - name: Slash
-    damage: {fileID: 0}
-    critical: {fileID: 0}
+    damage: {fileID: 8125909828012618652, guid: 9be4708c687da40fab19017ba29ce778,
+      type: 3}
+    critical: {fileID: 1636219528001972363, guid: 4d523f77ff5684536bb7f8d3692c0aef,
+      type: 3}
     guard: {fileID: 6328208369918078447, guid: 8b445b131223042dc9f646c7a2dda50b, type: 3}
   - name: Sting
-    damage: {fileID: 0}
-    critical: {fileID: 0}
-    guard: {fileID: 0}
+    damage: {fileID: 8125909828012618652, guid: 9be4708c687da40fab19017ba29ce778,
+      type: 3}
+    critical: {fileID: 1636219528001972363, guid: 4d523f77ff5684536bb7f8d3692c0aef,
+      type: 3}
+    guard: {fileID: 6328208369918078447, guid: 8b445b131223042dc9f646c7a2dda50b, type: 3}
   - name: Bite
     damage: {fileID: 8125909828012618652, guid: 9be4708c687da40fab19017ba29ce778,
       type: 3}
