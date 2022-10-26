@@ -8,9 +8,12 @@ public class ItemInventory : MonoBehaviour
 {
     [SerializeField] private ItemSelector selector = default;
     [SerializeField] private ItemPanel prefabItemPanel = default;
+    [SerializeField] private ItemPanel prefabEquipPanel = default;
+    [SerializeField] private RectTransform rtEquipItems = default;
 
     private ItemIconGenerator iconGenerator;
     protected ItemIndexHandler itemIndex;
+    protected EquipItemsHandler equipItems;
 
     private static readonly int WIDTH = 5;
     private static readonly int HEIGHT = 6;
@@ -28,16 +31,19 @@ public class ItemInventory : MonoBehaviour
         iconGenerator = GetComponent<ItemIconGenerator>();
 
         itemIndex = new ItemIndexHandler(GetComponent<RectTransform>(), WIDTH, HEIGHT).SetPanels(prefabItemPanel);
+        equipItems = new EquipItemsHandler(rtEquipItems, itemIndex.inventoryOrigin).SetPanels(prefabEquipPanel);
 
         selector.transform.SetAsLastSibling(); // Bring selector UI to front
 
-        iconHandler = new ItemIconHandler(selector, itemIndex);
+        iconHandler = new ItemIconHandler(selector, itemIndex, equipItems);
     }
 
     void Start()
     {
         itemIndex.OnPress.Subscribe(index => iconHandler.OnPress(index)).AddTo(this);
-        itemIndex.OnRelease.Subscribe(index => iconHandler.OnRelease()).AddTo(this);
+        equipItems.OnPress.Subscribe(index => iconHandler.OnPressEquipment(index)).AddTo(this);
+        Observable.Merge(itemIndex.OnRelease, equipItems.OnRelease)
+            .Subscribe(index => iconHandler.OnRelease()).AddTo(this);
 
         selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress()).AddTo(this);
         selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos)).AddTo(this);

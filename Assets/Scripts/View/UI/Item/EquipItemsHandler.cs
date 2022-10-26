@@ -4,22 +4,9 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-public interface IItemIndexHandler
+public class EquipItemsHandler : IItemIndexHandler
 {
-    ItemIcon GetItem(int index);
-    Vector2 UIPos(int index);
-    void ExpandNum(int index);
-    void DeleteNum(int index);
-    bool UpdateItemNum(ItemIcon itemIcon);
-    void SetItem(int index, ItemIcon itemIcon = null);
-}
-
-public class ItemIndexHandler : IItemIndexHandler
-{
-    public int WIDTH { get; private set; }
-    public int HEIGHT { get; private set; }
     public int MAX_ITEMS { get; private set; }
-
     private ItemIcon[] items;
     private IDisposable[] itemEmptyCheck;
 
@@ -28,6 +15,7 @@ public class ItemIndexHandler : IItemIndexHandler
     private Vector2 unit;
     private Vector2 offsetCenter;
     public Vector2 inventoryOrigin { get; protected set; }
+    private Vector2 offsetOrigin;
     private Transform inventoryTf;
 
     private Vector2 uiSize;
@@ -48,28 +36,27 @@ public class ItemIndexHandler : IItemIndexHandler
         if (index < MAX_ITEMS) panels[index].SetItemNum(0);
     }
 
-    public ItemIndexHandler(RectTransform rt, int width, int height)
+    public EquipItemsHandler(RectTransform rtEquipItems, Vector2 parentOrigin)
     {
-        this.WIDTH = width;
-        this.HEIGHT = height;
-        MAX_ITEMS = width * height;
+        MAX_ITEMS = 3;
 
         items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
         itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
 
-        uiSize = rt.sizeDelta;
-        unit = new Vector2(uiSize.x / WIDTH, uiSize.y / HEIGHT);
+        uiSize = rtEquipItems.sizeDelta;
+        unit = new Vector2(uiSize.x / MAX_ITEMS, uiSize.y);
 
         // Anchor of ItemIcon is set to left top by default on prefab
         offsetCenter = new Vector2(unit.x, -unit.y) * 0.5f;
 
-        inventoryOrigin = new Vector2(rt.position.x - uiSize.x * 0.5f, rt.position.y + uiSize.y * 0.5f);
-        inventoryTf = rt.transform;
+        inventoryOrigin = new Vector2(rtEquipItems.position.x - uiSize.x * 0.5f, rtEquipItems.position.y + uiSize.y * 0.5f);
+        offsetOrigin = inventoryOrigin - parentOrigin;
+        inventoryTf = rtEquipItems.transform;
 
         currentSelected = MAX_ITEMS;
     }
 
-    public ItemIndexHandler SetPanels(ItemPanel prefabItemPanel)
+    public EquipItemsHandler SetPanels(ItemPanel prefabItemPanel)
     {
         panels = Enumerable
             .Range(0, MAX_ITEMS)
@@ -88,18 +75,8 @@ public class ItemIndexHandler : IItemIndexHandler
     public Vector2 ConvertToVec(Vector2 screenPos) => screenPos - inventoryOrigin;
     public bool IsOnUI(Vector2 uiPos) => uiPos.x >= 0f && uiPos.x <= uiSize.x && uiPos.y <= 0f && uiPos.y >= -uiSize.y;
 
-    protected Vector2 LocalUIPos(int index) => LocalUIPos(Index(index));
-    protected Vector2 LocalUIPos(int x, int y) => offsetCenter + new Vector2(unit.x * x, -unit.y * y);
-    protected Vector2 LocalUIPos(Pos pos) => LocalUIPos(pos.x, pos.y);
-
-    public Vector2 UIPos(int index) => LocalUIPos(index);
-
-    public bool IsValidIndex(int x, int y)
-        => x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
-    public bool IsValidIndex(Pos pos) => IsValidIndex(pos.x, pos.y);
-
-    public int Index(Pos index) => index.x + WIDTH * index.y;
-    public Pos Index(int index) => new Pos(index % WIDTH, index / WIDTH);
+    protected Vector2 LocalUIPos(int index) => offsetCenter + new Vector2(unit.x * index, 0f);
+    public Vector2 UIPos(int index) => offsetOrigin + LocalUIPos(index);
 
     public void SetItem(ItemIcon itemIcon) => SetItem(itemIcon.index, itemIcon);
 
@@ -131,12 +108,9 @@ public class ItemIndexHandler : IItemIndexHandler
         return true;
     }
 
-    public ItemIcon GetItem(Pos index) => GetItem(index.x, index.y);
-    public ItemIcon GetItem(int x, int y) => IsValidIndex(x, y) ? items[x + WIDTH * y] : null;
     public ItemIcon GetItem(int index) => index < MAX_ITEMS ? items[index] : null;
 
-    public bool RemoveItem(Pos index) => RemoveItem(index.x, index.y);
-    public bool RemoveItem(int x, int y) => RemoveItem(GetItem(x, y));
+    public bool RemoveItem(int index) => RemoveItem(GetItem(index));
 
     public bool RemoveItem(ItemIcon itemIcon)
     {

@@ -13,6 +13,13 @@ public interface IItemIconHandler
     IItemIconHandler OnPress(int index);
 
     /// <summary>
+    /// OnPointerEnter into a equipment panel.
+    /// </summary>
+    /// <param name="index">panel index</param>
+    /// <returns>next state icon handler</returns>
+    IItemIconHandler OnPressEquipment(int index);
+
+    /// <summary>
     /// OnPointerExit from pressing panel.
     /// </summary>
     /// <returns>next state icon handler</returns>
@@ -54,7 +61,11 @@ public class ItemIconHandler : IItemIconHandler
     protected int pressedIndex;
     protected ItemIcon currentSelected = null;
 
+    protected IItemIndexHandler pressedInventory;
+    protected IItemIndexHandler selectedInventory;
+
     protected ItemIndexHandler itemIndex;
+    protected EquipItemsHandler equipItems;
     protected ItemSelector selector;
     protected IDisposable cancelSelect = null;
 
@@ -82,12 +93,14 @@ public class ItemIconHandler : IItemIconHandler
     public Tween PlaySize(Tween sizeTween) => sizeUtil.PlayExclusive(sizeTween);
     public Tween PlayMove(Tween moveTween) => moveUtil.PlayExclusive(moveTween);
 
-    public ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex)
+    public ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex, EquipItemsHandler equipItems)
     {
         this.selector = selector;
         this.itemIndex = itemIndex;
-
+        this.equipItems = equipItems;
         pressedIndex = itemIndex.MAX_ITEMS;
+
+        pressedInventory = selectedInventory = null;
 
         currentMode = normalMode = new NormalMode(this);
         selectMode = new SelectMode(this);
@@ -98,6 +111,12 @@ public class ItemIconHandler : IItemIconHandler
     public IItemIconHandler OnPress(int index)
     {
         currentMode = currentMode.OnPress(index);
+        return currentMode;
+    }
+
+    public IItemIconHandler OnPressEquipment(int index)
+    {
+        currentMode = currentMode.OnPressEquipment(index);
         return currentMode;
     }
 
@@ -134,32 +153,73 @@ public class ItemIconHandler : IItemIconHandler
     {
         protected ItemIconHandler handler;
         protected ItemSelector selector;
+
+        protected int pressedIndex
+        {
+            get { return handler.pressedIndex; }
+            set { handler.pressedIndex = value; }
+        }
+        protected ItemIcon currentSelected
+        {
+            get { return handler.currentSelected; }
+            set { handler.currentSelected = value; }
+        }
+        protected IItemIndexHandler pressedInventory
+        {
+            get { return handler.pressedInventory; }
+            set { handler.pressedInventory = value; }
+        }
+        protected IItemIndexHandler selectedInventory
+        {
+            get { return handler.selectedInventory; }
+            set { handler.selectedInventory = value; }
+        }
+        protected IDisposable cancelSelect
+        {
+            get { return handler.cancelSelect; }
+            set { handler.cancelSelect = value; }
+        }
+
         protected ItemIndexHandler itemIndex;
+        protected EquipItemsHandler equipItems;
 
         public NormalMode(ItemIconHandler handler)
         {
             this.handler = handler;
             selector = handler.selector;
             itemIndex = handler.itemIndex;
+            equipItems = handler.equipItems;
         }
 
-        public virtual IItemIconHandler OnPress(int index)
+        public IItemIconHandler OnPress(int index)
+        {
+            pressedInventory = itemIndex;
+            return OnPressInventory(index);
+        }
+
+        public virtual IItemIconHandler OnPressEquipment(int index)
+        {
+            pressedInventory = equipItems;
+            return OnPressInventory(index);
+        }
+
+        protected virtual IItemIconHandler OnPressInventory(int index)
         {
             handler.StopPressing();
 
-            var currentTarget = itemIndex.GetItem(index);
+            var currentTarget = pressedInventory.GetItem(index);
 
             if (currentTarget == null) return this;
 
             handler.StartLongPressing();
 
-            if (currentTarget != handler.currentSelected)
+            if (currentTarget != currentSelected)
             {
                 selector.Enable();
-                selector.SetSelect(itemIndex.UIPos(index));
+                selector.SetSelect(pressedInventory.UIPos(index));
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
-                handler.pressedIndex = index;
-                itemIndex.ExpandNum(index);
+                pressedIndex = index;
+                pressedInventory.ExpandNum(index);
             }
 
             return this;
@@ -169,14 +229,16 @@ public class ItemIconHandler : IItemIconHandler
         {
             handler.StopPressing();
 
-            handler.currentSelected = itemIndex.GetItem(handler.pressedIndex);
+            currentSelected = pressedInventory.GetItem(pressedIndex);
 
-            if (handler.currentSelected == null) return this;
+            if (currentSelected == null) return this;
 
-            handler.cancelSelect?.Dispose();
+            selectedInventory = pressedInventory;
+
+            cancelSelect?.Dispose();
 
             // Disable selector when selected item is empty.
-            handler.cancelSelect = handler.currentSelected.OnItemEmpty.Subscribe(_ => selector.Disable()).AddTo(selector);
+            cancelSelect = currentSelected.OnItemEmpty.Subscribe(_ => selector.Disable()).AddTo(selector);
 
             selector.SetRaycast(true);
             return handler.selectMode;
@@ -186,7 +248,7 @@ public class ItemIconHandler : IItemIconHandler
 
         public IItemIconHandler OnLongPress()
         {
-            var itemInfo = itemIndex.GetItem(handler.pressedIndex)?.itemInfo;
+            var itemInfo = pressedInventory.GetItem(pressedIndex)?.itemInfo;
             if (itemInfo != null) handler.onInspectItem.OnNext(itemInfo);
             return OnRelease();
         }
@@ -195,14 +257,16 @@ public class ItemIconHandler : IItemIconHandler
         {
             handler.StopPressing();
 
-            handler.PlaySize(handler.currentSelected?.Resize(1f, 0.2f));
-            handler.currentSelected = null;
-            handler.pressedIndex = itemIndex.MAX_ITEMS;
-            itemIndex.ExpandNum(itemIndex.MAX_ITEMS);
+            handler.PlaySize(currentSelected?.Resize(1f, 0.2f));
+            currentSelected = null;
+            pressedIndex = itemIndex.MAX_ITEMS;
+            pressedInventory.ExpandNum(itemIndex.MAX_ITEMS);
+
+            pressedInventory = selectedInventory = null;
 
             selector.SetRaycast(false);
             selector.Disable();
-            handler.cancelSelect?.Dispose();
+            cancelSelect?.Dispose();
 
             return handler.normalMode;
         }
@@ -210,8 +274,8 @@ public class ItemIconHandler : IItemIconHandler
         public virtual IItemIconHandler OnDrag(Vector2 screenPos)
         {
             handler.StopPressing();
-            itemIndex.DeleteNum(handler.pressedIndex);
-            handler.currentSelected.transform.SetAsLastSibling();
+            selectedInventory.DeleteNum(pressedIndex);
+            currentSelected.transform.SetAsLastSibling();
             return handler.dragMode.OnDrag(screenPos);
         }
     }
@@ -222,28 +286,28 @@ public class ItemIconHandler : IItemIconHandler
 
         public SelectMode(ItemIconHandler handler) : base(handler) { }
 
-        public override IItemIconHandler OnPress(int index)
+        protected override IItemIconHandler OnPressInventory(int index)
         {
             handler.StopPressing();
 
-            var currentTarget = itemIndex.GetItem(index);
+            var currentTarget = pressedInventory.GetItem(index);
 
             if (currentTarget == null) return this;
 
-            if (currentTarget != handler.currentSelected)
+            if (currentTarget != currentSelected)
             {
                 handler.StartLongPressing();
 
                 selector.SetRaycast(false);
-                selector.SetSelect(itemIndex.UIPos(index));
+                selector.SetSelect(pressedInventory.UIPos(index));
 
-                handler.currentSelected.Resize(1f, 0.2f).Play();
-                handler.currentSelected = null;
-                handler.cancelSelect?.Dispose();
+                currentSelected.Resize(1f, 0.2f).Play();
+                currentSelected = null;
+                cancelSelect?.Dispose();
 
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
-                handler.pressedIndex = index;
-                itemIndex.ExpandNum(index);
+                pressedIndex = index;
+                pressedInventory.ExpandNum(index);
 
                 return handler.normalMode;
             }
@@ -259,20 +323,20 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            ItemIcon pressed = itemIndex.GetItem(handler.pressedIndex);
+            ItemIcon pressed = selectedInventory.GetItem(pressedIndex);
 
             if (pressed == null) return CleanUp();
 
             if (pressed.itemInfo.attr != ItemAttr.Equipment)
             {
                 onUseItem.OnNext(pressed.itemInfo);
-                itemIndex.UpdateItemNum(pressed);
+                selectedInventory.UpdateItemNum(pressed);
             }
 
             // Continue Select mode when the item is remaining after use it.
-            if (itemIndex.GetItem(handler.pressedIndex) != null)
+            if (selectedInventory.GetItem(pressedIndex) != null)
             {
-                handler.PlaySize(handler.currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo));
+                handler.PlaySize(currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo));
                 return this;
             }
 
@@ -286,10 +350,18 @@ public class ItemIconHandler : IItemIconHandler
 
         public DragMode(ItemIconHandler handler) : base(handler) { }
 
-        public override IItemIconHandler OnPress(int index)
+        public override IItemIconHandler OnPressEquipment(int index)
         {
-            selector.SetTarget(itemIndex.UIPos(index));
-            handler.pressedIndex = index;
+            // Don't set target to equip panel if dragging item isn't equipment.
+            if (currentSelected.itemInfo.attr != ItemAttr.Equipment) return this;
+
+            return base.OnPressEquipment(index);
+        }
+
+        protected override IItemIconHandler OnPressInventory(int index)
+        {
+            selector.SetTarget(pressedInventory.UIPos(index));
+            pressedIndex = index;
             return this;
         }
 
@@ -301,10 +373,7 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            var pressedIndex = handler.pressedIndex;
-            var currentSelected = handler.currentSelected;
-
-            var currentTarget = itemIndex.GetItem(pressedIndex);
+            var currentTarget = pressedInventory.GetItem(pressedIndex);
 
             if (currentTarget != null && currentTarget != currentSelected)
             {
@@ -315,27 +384,32 @@ public class ItemIconHandler : IItemIconHandler
                 }
                 else
                 {
-                    currentTarget.Move(itemIndex.UIPos(currentSelected.index)).Play();
+                    currentTarget.Move(selectedInventory.UIPos(currentSelected.index)).Play();
                     currentTarget.SetIndex(currentSelected.index);
                 }
             }
 
-            itemIndex.SetItem(currentSelected.index, currentTarget);
-            handler.PlayMove(currentSelected.Move(itemIndex.UIPos(pressedIndex)));
+            selectedInventory.SetItem(currentSelected.index, currentTarget);
+            handler.PlayMove(currentSelected.Move(pressedInventory.UIPos(pressedIndex)));
             currentSelected.SetIndex(pressedIndex);
-            itemIndex.SetItem(pressedIndex, currentSelected);
-            itemIndex.ExpandNum(pressedIndex);
+            pressedInventory.SetItem(pressedIndex, currentSelected);
+            pressedInventory.ExpandNum(pressedIndex);
 
-            selector.Enable();
-            selector.SetSelect(itemIndex.UIPos(pressedIndex));
-            return handler.selectMode;
+            if (pressedInventory is ItemIndexHandler)
+            {
+                selector.Enable();
+                selector.SetSelect(pressedInventory.UIPos(pressedIndex));
+                selectedInventory = pressedInventory;
+                return handler.selectMode;
+            }
+
+            return BaseCleanUp();
         }
 
         public override IItemIconHandler CleanUp()
         {
             onPutItem.OnNext(null);
-            var currentSelected = handler.currentSelected;
-            handler.PlayMove(currentSelected.Move(itemIndex.UIPos(currentSelected.index)).SetDelay(0.1f));
+            handler.PlayMove(currentSelected.Move(selectedInventory.UIPos(currentSelected.index)).SetDelay(0.1f));
             return BaseCleanUp();
         }
 
@@ -346,13 +420,13 @@ public class ItemIconHandler : IItemIconHandler
             handler.StopPressing();
 
             var vec = itemIndex.ConvertToVec(screenPos);
-            return itemIndex.IsOnUI(vec) ? Drag(vec) : Put();
+            return itemIndex.IsOnUI(vec) || equipItems.IsOnUI(equipItems.ConvertToVec(screenPos)) ? Drag(vec) : Put();
         }
 
         protected virtual IItemIconHandler Drag(Vector2 uiPos)
         {
-            handler.currentSelected.Display(true);
-            handler.currentSelected.SetPos(uiPos);
+            currentSelected.Display(true);
+            currentSelected.SetPos(uiPos);
             onPutItem.OnNext(null);
             return handler.dragMode;
         }
@@ -360,7 +434,7 @@ public class ItemIconHandler : IItemIconHandler
         protected IItemIconHandler Put()
         {
             selector.Hide();
-            onPutItem.OnNext(handler.currentSelected);
+            onPutItem.OnNext(currentSelected);
             return handler.putMode;
         }
     }
@@ -374,19 +448,17 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler OnSubmit()
         {
             // Apply put action if possible
-            onPutApply.OnNext(handler.currentSelected);
+            onPutApply.OnNext(currentSelected);
             return CleanUp();
         }
 
         public override IItemIconHandler CleanUp()
         {
-            var currentSelected = handler.currentSelected;
-
             // Reserve moving back to item inventory
             currentSelected.ResetSize();
             currentSelected.SetParent(selector.transform.parent, true);
-            handler.PlayMove(currentSelected.Move(itemIndex.UIPos(currentSelected.index)));
-            itemIndex.UpdateItemNum(currentSelected);
+            handler.PlayMove(currentSelected.Move(selectedInventory.UIPos(currentSelected.index)));
+            selectedInventory.UpdateItemNum(currentSelected);
 
             return BaseCleanUp();
         }
@@ -394,7 +466,7 @@ public class ItemIconHandler : IItemIconHandler
         protected override IItemIconHandler Drag(Vector2 uiPos)
         {
             selector.Show();
-            handler.currentSelected.Display(false);
+            currentSelected.Display(false);
             onPutItem.OnNext(null);
             return handler.dragMode;
         }
