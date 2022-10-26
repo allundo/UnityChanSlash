@@ -7,14 +7,16 @@ using TMPro;
 public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private TextMeshProUGUI tmpNumOfItem = default;
+    [SerializeField] private float defaultSize = 100f;
+    [SerializeField] private float fontSize = 36f;
 
     private RectTransform rectTransform;
     public int index { get; private set; }
 
     private RectTransform rtNumOfItem;
 
-    private readonly Vector2 expand = new Vector2(140f, 140f);
-    private readonly Vector2 shrink = new Vector2(100f, 100f);
+    private Vector2 expand;
+    private Vector2 shrink;
 
     private ISubject<int> onPress = new Subject<int>();
     public IObservable<int> OnPress => onPress;
@@ -26,9 +28,14 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         rectTransform = GetComponent<RectTransform>();
         rtNumOfItem = tmpNumOfItem.GetComponent<RectTransform>();
+
+        shrink = new Vector2(defaultSize, defaultSize);
+        expand = shrink * 1.4f;
         SetItemNum(0);
         ShrinkNum();
+
         rtNumOfItem.SetParent(transform.parent);
+
     }
 
     public void SetEnabled(bool isEnable) => enabled = isEnable;
@@ -46,14 +53,14 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void ExpandNum(Transform inventoryTf)
     {
-        tmpNumOfItem.fontSize = 54f;
+        tmpNumOfItem.fontSize = fontSize * 1.5f;
         rtNumOfItem.sizeDelta = expand;
         rtNumOfItem.SetAsLastSibling();
     }
 
     public void ShrinkNum()
     {
-        tmpNumOfItem.fontSize = 36f;
+        tmpNumOfItem.fontSize = fontSize;
         rtNumOfItem.sizeDelta = shrink;
     }
 
