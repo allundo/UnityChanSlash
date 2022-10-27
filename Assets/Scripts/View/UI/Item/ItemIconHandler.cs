@@ -63,6 +63,12 @@ public class ItemIconHandler : IItemIconHandler
 
     protected IItemIndexHandler pressedInventory;
     protected IItemIndexHandler selectedInventory;
+    protected EquipmentSource selectedEquipment;
+    protected ResourceLoader resourceLoader;
+    protected void SelectEquipment()
+    {
+        selectedEquipment = resourceLoader.GetEquipmentSource(currentSelected.itemInfo.type);
+    }
 
     protected ItemIndexHandler itemIndex;
     protected EquipItemsHandler equipItems;
@@ -101,11 +107,14 @@ public class ItemIconHandler : IItemIconHandler
         pressedIndex = itemIndex.MAX_ITEMS;
 
         pressedInventory = selectedInventory = null;
+        selectedEquipment = null;
 
         currentMode = normalMode = new NormalMode(this);
         selectMode = new SelectMode(this);
         dragMode = new DragMode(this);
         putMode = new PutMode(this);
+
+        resourceLoader = ResourceLoader.Instance;
     }
 
     public IItemIconHandler OnPress(int index)
@@ -174,6 +183,11 @@ public class ItemIconHandler : IItemIconHandler
             get { return handler.selectedInventory; }
             set { handler.selectedInventory = value; }
         }
+        protected EquipmentSource selectedEquipment
+        {
+            get { return handler.selectedEquipment; }
+            set { handler.selectedEquipment = value; }
+        }
         protected IDisposable cancelSelect
         {
             get { return handler.cancelSelect; }
@@ -233,6 +247,7 @@ public class ItemIconHandler : IItemIconHandler
 
             if (currentSelected == null) return this;
 
+            handler.SelectEquipment();
             selectedInventory = pressedInventory;
 
             cancelSelect?.Dispose();
@@ -263,6 +278,7 @@ public class ItemIconHandler : IItemIconHandler
             pressedInventory.ExpandNum(itemIndex.MAX_ITEMS);
 
             pressedInventory = selectedInventory = null;
+            selectedEquipment = null;
 
             selector.SetRaycast(false);
             selector.Disable();
@@ -347,10 +363,12 @@ public class ItemIconHandler : IItemIconHandler
     protected class DragMode : NormalMode
     {
         public ISubject<ItemIcon> onPutItem { get; protected set; } = new Subject<ItemIcon>();
-        private bool IsEquipmentSelected()
+        private bool IsValidEquipment(int index)
         {
-            var info = currentSelected.itemInfo;
-            return info.attr == ItemAttr.Equipment || info.type == ItemType.KeyBlade;
+            if (selectedEquipment == null) return false;
+
+            if (index == 1) return selectedEquipment.category == EquipmentCategory.Amulet; // Equip body
+            return selectedEquipment.category != EquipmentCategory.Amulet;                 // Equip R or L
         }
 
         public DragMode(ItemIconHandler handler) : base(handler) { }
@@ -358,7 +376,7 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler OnPressEquipment(int index)
         {
             // Don't set target to equip panel if dragging item isn't equipment.
-            return IsEquipmentSelected() ? base.OnPressEquipment(index) : this;
+            return IsValidEquipment(index) ? base.OnPressEquipment(index) : this;
         }
 
         protected override IItemIconHandler OnPressInventory(int index)

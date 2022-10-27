@@ -476,6 +476,7 @@ public enum EquipmentCategory
     Knuckle = 0,
     Sword,
     Shield,
+    Amulet,
 }
 
 public enum AttackType
