@@ -16,6 +16,7 @@ public class EquipItemsHandler : IItemIndexHandler
     private Vector2 offsetCenter;
     public Vector2 inventoryOrigin { get; protected set; }
     private Vector2 offsetOrigin;
+    private RectTransform inventoryRT;
     private Transform inventoryTf;
 
     private Vector2 uiSize;
@@ -40,20 +41,27 @@ public class EquipItemsHandler : IItemIndexHandler
     {
         MAX_ITEMS = 3;
 
-        items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
-        itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
-
+        inventoryRT = rtEquipItems;
+        inventoryTf = rtEquipItems.transform;
         uiSize = rtEquipItems.sizeDelta;
+
         unit = new Vector2(uiSize.x / MAX_ITEMS, uiSize.y);
 
         // Anchor of ItemIcon is set to left top by default on prefab
         offsetCenter = new Vector2(unit.x, -unit.y) * 0.5f;
 
-        inventoryOrigin = new Vector2(rtEquipItems.position.x - uiSize.x * 0.5f, rtEquipItems.position.y + uiSize.y * 0.5f);
+        UpdateOrigin();
         offsetOrigin = inventoryOrigin - parentOrigin;
-        inventoryTf = rtEquipItems.transform;
+
+        items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
+        itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
 
         currentSelected = MAX_ITEMS;
+    }
+
+    public void UpdateOrigin()
+    {
+        inventoryOrigin = new Vector2(inventoryRT.position.x - uiSize.x * 0.5f, inventoryRT.position.y + uiSize.y * 0.5f);
     }
 
     public EquipItemsHandler SetPanels(ItemPanel prefabItemPanel)

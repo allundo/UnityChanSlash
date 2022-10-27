@@ -50,6 +50,13 @@ public class ItemInventory : MonoBehaviour
         selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit()).AddTo(this);
     }
 
+    public void ResetOrientation(DeviceOrientation orientation)
+    {
+        itemIndex.ResetOrientation(orientation);
+        itemIndex.UpdateOrigin();
+        equipItems.UpdateOrigin();
+    }
+
     public bool PickUp(ItemInfo itemInfo)
     {
         for (int index = 0; index < MAX_ITEMS; index++)

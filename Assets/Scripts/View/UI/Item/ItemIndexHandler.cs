@@ -29,6 +29,7 @@ public class ItemIndexHandler : IItemIndexHandler
     private Vector2 offsetCenter;
     public Vector2 inventoryOrigin { get; protected set; }
     private Transform inventoryTf;
+    private RectTransform inventoryRT;
 
     private Vector2 uiSize;
 
@@ -54,19 +55,41 @@ public class ItemIndexHandler : IItemIndexHandler
         this.HEIGHT = height;
         MAX_ITEMS = width * height;
 
-        items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
-        itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
+        inventoryRT = rt;
+        inventoryTf = rt.transform;
 
         uiSize = rt.sizeDelta;
         unit = new Vector2(uiSize.x / WIDTH, uiSize.y / HEIGHT);
 
         // Anchor of ItemIcon is set to left top by default on prefab
         offsetCenter = new Vector2(unit.x, -unit.y) * 0.5f;
+        UpdateOrigin();
 
-        inventoryOrigin = new Vector2(rt.position.x - uiSize.x * 0.5f, rt.position.y + uiSize.y * 0.5f);
-        inventoryTf = rt.transform;
+        items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
+        itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
 
         currentSelected = MAX_ITEMS;
+    }
+
+    public void ResetOrientation(DeviceOrientation orientation)
+    {
+        switch (orientation)
+        {
+            case DeviceOrientation.Portrait:
+                inventoryRT.anchorMin = inventoryRT.anchorMax = new Vector2(0f, 0.5f);
+                inventoryRT.anchoredPosition = new Vector2(uiSize.x, uiSize.y + 280f) * 0.5f;
+                break;
+
+            case DeviceOrientation.LandscapeRight:
+                inventoryRT.anchorMin = inventoryRT.anchorMax = new Vector2(1f, 0f);
+                inventoryRT.anchoredPosition = new Vector2(-uiSize.x, uiSize.y) * 0.5f;
+                break;
+        }
+    }
+
+    public void UpdateOrigin()
+    {
+        inventoryOrigin = new Vector2(inventoryRT.position.x - uiSize.x * 0.5f, inventoryRT.position.y + uiSize.y * 0.5f);
     }
 
     public ItemIndexHandler SetPanels(ItemPanel prefabItemPanel)

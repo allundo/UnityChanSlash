@@ -7,7 +7,7 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private RectTransform rtLifeGauge = default;
     [SerializeField] private FightCircle fightCircle = default;
     [SerializeField] private MiniMap miniMap = default;
-    [SerializeField] private RectTransform rtItemList = default;
+    [SerializeField] private ItemInventory itemInventory = default;
     [SerializeField] private RestButton restButton = default;
     [SerializeField] private ResumeButton resumeButton = default;
     [SerializeField] private float portraitFromBottom = 720f;
@@ -15,13 +15,6 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private float lifeGaugeFromBottom = 60f;
     [SerializeField] private Vector2 lifeGaugeFromLeftTop = new Vector2(420f, -100f);
     [SerializeField] private ScreenRotateHandler rotate = default;
-
-    private Vector2 itemListSize;
-
-    void Awake()
-    {
-        itemListSize = rtItemList.sizeDelta;
-    }
 
     void Start()
     {
@@ -34,26 +27,19 @@ public class UIPosition : MonoBehaviour
         {
             case DeviceOrientation.Portrait:
                 rtUI.anchoredPosition = new Vector2(0f, portraitFromBottom - Screen.height * (0.5f - ThirdPersonCamera.Margin));
-
                 rtLifeGauge.anchoredPosition = new Vector2(0f, lifeGaugeFromBottom - Screen.height * 0.5f);
-
-                rtItemList.anchorMin = rtItemList.anchorMax = new Vector2(0f, 0.5f);
-                rtItemList.anchoredPosition = new Vector2(itemListSize.x, itemListSize.y + 280f) * 0.5f;
                 break;
 
             case DeviceOrientation.LandscapeRight:
                 rtUI.anchoredPosition = new Vector2(landscapeFromLeft - Screen.width * 0.5f, 0f);
-
                 rtLifeGauge.anchoredPosition = lifeGaugeFromLeftTop + new Vector2(-Screen.width * 0.5f, Screen.height * 0.5f);
-
-                rtItemList.anchorMin = rtItemList.anchorMax = new Vector2(1f, 0f);
-                rtItemList.anchoredPosition = new Vector2(-itemListSize.x, itemListSize.y) * 0.5f;
                 break;
         }
 
         miniMap.ResetOrientation(orientation);
         restButton.ResetOrientation(orientation);
         resumeButton.ResetOrientation(orientation);
+        itemInventory.ResetOrientation(orientation);
         fightCircle.ResetCenterPos();
     }
 }

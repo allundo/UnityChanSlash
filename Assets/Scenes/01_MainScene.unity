@@ -47058,7 +47058,7 @@ MonoBehaviour:
   rtLifeGauge: {fileID: 8337679455544452697}
   fightCircle: {fileID: 4719329011268037073}
   miniMap: {fileID: 8337679454959986929}
-  rtItemList: {fileID: 528637048}
+  itemInventory: {fileID: 528637049}
   restButton: {fileID: 314247949}
   resumeButton: {fileID: 1057805256}
   portraitFromBottom: 720
