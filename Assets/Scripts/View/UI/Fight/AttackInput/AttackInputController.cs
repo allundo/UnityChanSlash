@@ -24,7 +24,7 @@ public class AttackInputController : MonoBehaviour
         sqrRadius = radius * radius;
     }
 
-    public AttackButtonsHandler SetAttackButtonsHandler(IEquipments equipments)
+    public AttackButtonsHandler SetAttackButtonsHandler(IEquipmentStyle equipments)
     {
         if (attackButtonsHandler != null) Destroy(attackButtonsHandler.gameObject);
 

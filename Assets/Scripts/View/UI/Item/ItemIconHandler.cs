@@ -275,7 +275,8 @@ public class ItemIconHandler : IItemIconHandler
             handler.PlaySize(currentSelected?.Resize(1f, 0.2f));
             currentSelected = null;
             pressedIndex = itemIndex.MAX_ITEMS;
-            pressedInventory.ExpandNum(itemIndex.MAX_ITEMS);
+            itemIndex.ExpandNum(itemIndex.MAX_ITEMS);
+            equipItems.ExpandNum(itemIndex.MAX_ITEMS);
 
             pressedInventory = selectedInventory = null;
             selectedEquipment = null;
@@ -396,24 +397,14 @@ public class ItemIconHandler : IItemIconHandler
         {
             var currentTarget = pressedInventory.GetItem(pressedIndex);
 
-            if (currentTarget != null && currentTarget != currentSelected)
+            if (currentTarget != null && currentTarget != currentSelected && currentSelected.TryMerge(currentTarget.itemInfo))
             {
-                if (currentSelected.TryMerge(currentTarget.itemInfo))
-                {
-                    // currentTarget icon is inactivated if the merging is succeeded.
-                    currentTarget = null;
-                }
-                else
-                {
-                    currentTarget.Move(selectedInventory.UIPos(currentSelected.index)).Play();
-                    currentTarget.SetIndex(currentSelected.index);
-                }
+                // currentTarget icon is inactivated if the merging is succeeded.
+                currentTarget = null;
             }
 
-            selectedInventory.SetItem(currentSelected.index, currentTarget);
-            handler.PlayMove(currentSelected.Move(pressedInventory.UIPos(pressedIndex)));
-            currentSelected.SetIndex(pressedIndex);
-            pressedInventory.SetItem(pressedIndex, currentSelected);
+            selectedInventory.SetItem(currentSelected.index, currentTarget, true);
+            pressedInventory.SetItem(pressedIndex, currentSelected, true);
             pressedInventory.ExpandNum(pressedIndex);
 
             if (pressedInventory is ItemIndexHandler)
@@ -430,7 +421,7 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler CleanUp()
         {
             onPutItem.OnNext(null);
-            handler.PlayMove(currentSelected.Move(selectedInventory.UIPos(currentSelected.index)).SetDelay(0.1f));
+            currentSelected.MoveExclusive(selectedInventory.UIPos(currentSelected.index), 0.5f, 0.1f);
             return BaseCleanUp();
         }
 
@@ -478,7 +469,7 @@ public class ItemIconHandler : IItemIconHandler
             // Reserve moving back to item inventory
             currentSelected.ResetSize();
             currentSelected.SetParent(selector.transform.parent, true);
-            handler.PlayMove(currentSelected.Move(selectedInventory.UIPos(currentSelected.index)));
+            currentSelected.MoveExclusive(selectedInventory.UIPos(currentSelected.index));
             selectedInventory.UpdateItemNum(currentSelected);
 
             return BaseCleanUp();

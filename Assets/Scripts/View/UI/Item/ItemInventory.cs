@@ -24,6 +24,13 @@ public class ItemInventory : MonoBehaviour
     public IObservable<ItemIcon> OnPutApply => iconHandler.OnPutApply;
     public IObservable<ItemInfo> OnUseItem => iconHandler.OnUseItem;
     public IObservable<MessageData[]> OnInspectItem => iconHandler.OnInspectItem.Select(itemInfo => MessageData.ItemDescription(itemInfo));
+
+    public IObservable<ItemInfo> EquipR => equipItems.EquipR;
+    public IObservable<ItemInfo> EquipL => equipItems.EquipL;
+    public IObservable<ItemInfo> EquipBody => equipItems.EquipBody;
+
+    public IObservable<IEquipmentStyle> FightStyleChange => equipItems.CurrentEquipments;
+
     public bool IsPutItem => iconHandler.IsPutItem;
 
     void Awake()
@@ -73,7 +80,7 @@ public class ItemInventory : MonoBehaviour
     {
         if (itemIndex.GetItem(index) != null) return false;
 
-        itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), itemInfo).SetIndex(index));
+        itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), itemInfo));
         return true;
     }
 
@@ -115,7 +122,7 @@ public class ItemInventory : MonoBehaviour
             // Imported class data cannot be null but filled by default field values.
             if (itemInfo == null || itemInfo.itemType == ItemType.Null) continue;
 
-            itemIndex.SetItem(index, iconGenerator.Respawn(itemIndex.UIPos(index), itemInfo.itemType, itemInfo.numOfItem).SetIndex(index));
+            itemIndex.SetItem(index, iconGenerator.Respawn(itemIndex.UIPos(index), itemInfo.itemType, itemInfo.numOfItem));
         }
     }
 }

@@ -10,7 +10,7 @@ public class PlayerFightStyle : MobFightStyle
 
     public override IAttack Attack(int index) => handler.Attack(index);
 
-    public FightStyleHandler SetFightStyle(IEquipments equipments)
+    public FightStyleHandler SetFightStyle(IEquipmentStyle equipments)
     {
         if (handler != null) Destroy(handler.gameObject);
 

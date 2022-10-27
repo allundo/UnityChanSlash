@@ -123,7 +123,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         InitMoveInput();
     }
 
-    public void SetFightInput(IEquipments equipments)
+    public void SetFightInput(IEquipmentStyle equipments)
     {
         attackButtonsDisposable?.Dispose();
 

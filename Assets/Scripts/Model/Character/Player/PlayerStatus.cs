@@ -10,7 +10,14 @@ public class PlayerStatus : MobStatus
 
     public override Vector3 corePos => transform.position + col.center;
 
-    private HandEquipments handEquipments;
+    public IObservable<EquipmentSource> EquipRObservable => equipR.SkipLatestValueOnSubscribe();
+    public IObservable<EquipmentSource> EquipLObservable => equipL.SkipLatestValueOnSubscribe();
+
+    private IReactiveProperty<EquipmentSource> equipR = new ReactiveProperty<EquipmentSource>();
+    private IReactiveProperty<EquipmentSource> equipL = new ReactiveProperty<EquipmentSource>();
+
+    private ItemInfo equipInfoR = null;
+    private ItemInfo equipInfoL = null;
 
     protected override void Awake()
     {
@@ -19,7 +26,6 @@ public class PlayerStatus : MobStatus
 
         // ResetStatus() is called inside InitParam() method.
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
-        handEquipments = new HandEquipments();
     }
 
     protected override void OnActive()
@@ -40,10 +46,19 @@ public class PlayerStatus : MobStatus
         this.isHidden = isHidden;
     }
 
-    public bool EquipR(ItemType type) => handEquipments.EquipR(type);
-    public bool EquipL(ItemType type) => handEquipments.EquipL(type);
+    public void EquipR(ItemInfo itemInfo)
+    {
+        equipInfoR = itemInfo;
+        equipR.Value = GetEquipmentSource(itemInfo);
+    }
+    public void EquipL(ItemInfo itemInfo)
+    {
+        equipInfoL = itemInfo;
+        equipL.Value = GetEquipmentSource(itemInfo);
+    }
 
-    public IObservable<EquipmentSource> EquipRObservable => handEquipments.SourceR;
-    public IObservable<EquipmentSource> EquipLObservable => handEquipments.SourceL;
-    public IObservable<IEquipments> FightStyleChange => handEquipments.CurrentEquipments;
+    private EquipmentSource GetEquipmentSource(ItemInfo itemInfo)
+    {
+        return ResourceLoader.Instance.GetEquipmentSource(itemInfo != null ? itemInfo.type : ItemType.Null);
+    }
 }

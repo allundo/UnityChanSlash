@@ -73,8 +73,6 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         input.GetItemInventory.ImportInventoryItems(items);
 
         // TODO: Restore equipments from item data.
-        status.EquipR(ItemType.KeyBlade);
-        status.EquipL(ItemType.Null);
     }
 
     public void RestorePlayerStatus(DataStoreAgent.PlayerData data)

@@ -11,7 +11,7 @@ public interface IItemIndexHandler
     void ExpandNum(int index);
     void DeleteNum(int index);
     bool UpdateItemNum(ItemIcon itemIcon);
-    void SetItem(int index, ItemIcon itemIcon = null);
+    void SetItem(int index, ItemIcon itemIcon = null, bool tweenMove = false);
 }
 
 public class ItemIndexHandler : IItemIndexHandler
@@ -126,7 +126,7 @@ public class ItemIndexHandler : IItemIndexHandler
 
     public void SetItem(ItemIcon itemIcon) => SetItem(itemIcon.index, itemIcon);
 
-    public void SetItem(int index, ItemIcon itemIcon = null)
+    public void SetItem(int index, ItemIcon itemIcon = null, bool tweenMove = false)
     {
         items[index] = itemIcon;
 
@@ -134,7 +134,9 @@ public class ItemIndexHandler : IItemIndexHandler
 
         if (itemIcon != null)
         {
-            UpdateItemNum(itemIcon);
+            if (tweenMove) itemIcon.MoveExclusive(UIPos(index));
+
+            UpdateItemNum(itemIcon.SetIndex(index));
 
             itemEmptyCheck[index] = itemIcon.OnItemEmpty
                 .Subscribe(_ => RemoveItem(items[index]))

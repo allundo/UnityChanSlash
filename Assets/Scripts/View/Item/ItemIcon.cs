@@ -25,10 +25,10 @@ public class ItemIcon : UISymbol
         return false;
     }
 
-    private Tween getAnimTween;
+    private Tween moveTween;
     public ItemIcon CancelAnim()
     {
-        getAnimTween?.Complete(true);
+        moveTween?.Complete(true);
         return this;
     }
 
@@ -51,7 +51,7 @@ public class ItemIcon : UISymbol
         rectTransform.localPosition = HandleIconPos;
 
         // Moving animation from front Tile to item inventory
-        getAnimTween = Move(pos, duration).Play();
+        MoveExclusive(pos, duration);
     }
 
     public ItemIcon CopyInfo(ItemInfo itemInfo)
@@ -61,6 +61,13 @@ public class ItemIcon : UISymbol
     {
         this.itemInfo = info;
         return this;
+    }
+
+    public Tween MoveExclusive(Vector2 destPos, float duration = 0.5f, float delay = 0f)
+    {
+        moveTween?.Complete(true);
+        moveTween = Move(destPos, duration).SetDelay(delay).Play();
+        return moveTween;
     }
 
     public Tween Move(Vector2 destPos, float duration = 0.5f)

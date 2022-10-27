@@ -62,13 +62,23 @@ public class PlayerReactor : MobReactor
             .Subscribe(source => handL.Equip(source))
             .AddTo(this);
 
-        playerStatus.FightStyleChange
-            .Subscribe(equipments =>
-            {
-                (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
-                playerInput.SetFightInput(equipments);
-            })
+        var itemInventory = playerInput.GetItemInventory;
+
+        itemInventory.EquipR
+            .Subscribe(itemInfo => playerStatus.EquipR(itemInfo))
             .AddTo(this);
+
+        itemInventory.EquipL
+            .Subscribe(itemInfo => playerStatus.EquipL(itemInfo))
+            .AddTo(this);
+
+        itemInventory.FightStyleChange
+             .Subscribe(equipments =>
+             {
+                 (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
+                 playerInput.SetFightInput(equipments);
+             })
+             .AddTo(this);
     }
 
     protected void OnLifeMaxChange(float lifeMax)

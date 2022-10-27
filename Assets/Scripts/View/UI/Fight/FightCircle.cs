@@ -88,7 +88,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         circle.SetAlpha(alpha);
     }
 
-    public InputRegion SetInputRegion(IEquipments equipments)
+    public InputRegion SetInputRegion(IEquipmentStyle equipments)
     {
         if (inputRegion != null) Destroy(inputRegion.gameObject);
         inputRegion = equipments.LoadInputRegion(transform);

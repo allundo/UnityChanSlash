@@ -24,13 +24,13 @@ public class ItemInfoLoader
 
         itemActions = new Dictionary<ItemType, ItemAction>()
         {
-            { ItemType.Null,        null                                                        },
-            { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)                      },
-            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade) },
-            { ItemType.Coin,        new CoinAction(ItemAttr.Consumption)                        },
-            { ItemType.FireRing,    new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)     },
-            { ItemType.IceRing,     new MagicRingAction(ItemAttr.Ring, BulletType.IceBullet)    },
-            { ItemType.DarkRing,    new MagicRingAction(ItemAttr.Ring, BulletType.PlayerDarkHound)    },
+            { ItemType.Null,        null                                                            },
+            { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)                          },
+            { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)     },
+            { ItemType.Coin,        new CoinAction(ItemAttr.Consumption)                            },
+            { ItemType.FireRing,    new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)         },
+            { ItemType.IceRing,     new MagicRingAction(ItemAttr.Ring, BulletType.IceBullet)        },
+            { ItemType.DarkRing,    new MagicRingAction(ItemAttr.Ring, BulletType.PlayerDarkHound)  },
         };
     }
 }
