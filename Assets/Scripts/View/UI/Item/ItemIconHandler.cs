@@ -347,15 +347,18 @@ public class ItemIconHandler : IItemIconHandler
     protected class DragMode : NormalMode
     {
         public ISubject<ItemIcon> onPutItem { get; protected set; } = new Subject<ItemIcon>();
+        private bool IsEquipmentSelected()
+        {
+            var info = currentSelected.itemInfo;
+            return info.attr == ItemAttr.Equipment || info.type == ItemType.KeyBlade;
+        }
 
         public DragMode(ItemIconHandler handler) : base(handler) { }
 
         public override IItemIconHandler OnPressEquipment(int index)
         {
             // Don't set target to equip panel if dragging item isn't equipment.
-            if (currentSelected.itemInfo.attr != ItemAttr.Equipment) return this;
-
-            return base.OnPressEquipment(index);
+            return IsEquipmentSelected() ? base.OnPressEquipment(index) : this;
         }
 
         protected override IItemIconHandler OnPressInventory(int index)
