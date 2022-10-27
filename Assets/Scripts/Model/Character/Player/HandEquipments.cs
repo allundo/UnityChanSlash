@@ -126,7 +126,7 @@ public class HandEquipments
                     return equipments.swordKnuckle;
 
                 case EquipmentCategory.Shield:
-                    equipments.sourceR = equipments.sourceR ?? equipments.sourceL;
+                    equipments.sourceR = equipments.sourceL ?? equipments.sourceR;
                     equipments.sourceL = source;
                     return equipments.knuckleShield;
             }
@@ -142,12 +142,11 @@ public class HandEquipments
                     return SetL(source);
 
                 case EquipmentCategory.Sword:
-                    equipments.sourceL = equipments.sourceL ?? equipments.sourceR;
+                    equipments.sourceL = equipments.sourceR ?? equipments.sourceL;
                     equipments.sourceR = source;
                     return equipments.swordKnuckle;
 
                 case EquipmentCategory.Shield:
-                    equipments.sourceR = equipments.sourceR ?? equipments.sourceL;
                     equipments.sourceL = source;
                     return equipments.knuckleShield;
             }
