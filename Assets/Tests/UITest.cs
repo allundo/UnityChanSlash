@@ -166,9 +166,9 @@ public class UITest
         // Then
         Assert.AreEqual(100000, price1);
         Assert.AreEqual(2657100, price2);
-        Assert.AreEqual(48681300, price3);
-        Assert.AreEqual(48681300, price4);
-        Assert.AreEqual(46124400, price5);
+        Assert.AreEqual(31635300, price3);
+        Assert.AreEqual(31635300, price4);
+        Assert.AreEqual(29078400, price5);
 
         // TearDown
         DestroyItemIcons();
@@ -212,14 +212,16 @@ public class UITest
         }
         yield return new WaitForSeconds(2f);
 
-        itemInventory.RemoveTest(2 + 3 * 5);
-        itemInventory.RemoveTest(3 + 5 * 5);
-        itemInventory.RemoveTest(4 + 4 * 5);
+        itemInventory.RemoveTest(1 + 0 * 5);
+        itemInventory.RemoveTest(2 + 1 * 5);
+        itemInventory.RemoveTest(3 + 2 * 5);
+        itemInventory.RemoveTest(4 + 3 * 5);
         yield return new WaitForSeconds(2f);
 
-        Assert.IsNull(itemInventory.GetItem(17));
-        Assert.IsNull(itemInventory.GetItem(28));
-        Assert.IsNull(itemInventory.GetItem(24));
+        Assert.IsNull(itemInventory.GetItem(1 + 0 * 5));
+        Assert.IsNull(itemInventory.GetItem(2 + 1 * 5));
+        Assert.IsNull(itemInventory.GetItem(3 + 2 * 5));
+        Assert.IsNull(itemInventory.GetItem(4 + 3 * 5));
 
         var export = itemInventory.ExportInventoryItems();
 

@@ -17,7 +17,7 @@ public class ItemInventory : MonoBehaviour
     public Vector2 uiOrigin => inventoryItems.uiOrigin;
 
     private static readonly int WIDTH = 5;
-    private static readonly int HEIGHT = 6;
+    private static readonly int HEIGHT = 4;
     private static readonly int MAX_ITEMS = WIDTH * HEIGHT;
 
     private ItemIconHandler iconHandler = null;

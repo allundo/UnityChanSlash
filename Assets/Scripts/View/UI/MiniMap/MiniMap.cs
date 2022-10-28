@@ -55,7 +55,7 @@ public class MiniMap : MonoBehaviour
             case DeviceOrientation.LandscapeRight:
                 rectTransform.sizeDelta = landscapeSize;
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 1f);
-                rectTransform.anchoredPosition = new Vector2(-(landscapeSize.x + 40f), -landscapeSize.y) * 0.5f;
+                rectTransform.anchoredPosition = new Vector2(-(landscapeSize.x + 240f + Screen.width * ThirdPersonCamera.Margin), -(landscapeSize.y + 40f)) * 0.5f;
                 break;
         }
 

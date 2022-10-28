@@ -81,7 +81,7 @@ public abstract class ItemIndexHandler : IItemIndexHandler
 
             case DeviceOrientation.LandscapeRight:
                 uiRT.anchorMin = uiRT.anchorMax = new Vector2(1f, 0f);
-                uiRT.anchoredPosition = new Vector2(-uiSize.x, uiSize.y) * 0.5f;
+                uiRT.anchoredPosition = new Vector2(-(uiSize.x + 40f + Screen.width * ThirdPersonCamera.Margin), uiSize.y + 40f) * 0.5f;
                 break;
         }
 
