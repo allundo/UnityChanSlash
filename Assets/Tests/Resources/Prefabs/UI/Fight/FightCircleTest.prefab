@@ -151,21 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackInputUI: {fileID: 0}
-  inputRegion: {fileID: 9119491811571856311}
   maxAlpha: 1
   circle: {fileID: 3214530728939263135}
   forwardUIRT: {fileID: 0}
   radius: 260
   forwardRadius: 80
---- !u!114 &9119491811571856311 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2818162320010798039, guid: 723caa0e0671f482aa1faa89649e4e0f,
-    type: 3}
-  m_PrefabInstance: {fileID: 6454483787382296672}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252336bd1a37a497d9d2e06146acf273, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

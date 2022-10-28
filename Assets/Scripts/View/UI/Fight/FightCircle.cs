@@ -33,7 +33,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
 
-    void Awake()
+    protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
 
