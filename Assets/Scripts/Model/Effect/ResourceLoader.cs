@@ -58,6 +58,22 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         return null;
     }
 
+    public EquipmentSource GetEquipmentOrDefault(ItemType type)
+    {
+        EquipmentType equipmentType;
+        if (!ItemEquipmentMap.TryGetValue(type, out equipmentType))
+        {
+            equipmentType = EquipmentType.BareHand;
+        }
+        return equipmentData.Param((int)equipmentType);
+    }
+
+    public EquipmentSource GetEquipmentOrDefault(ItemInfo itemInfo)
+        => GetEquipmentOrDefault(itemInfo != null ? itemInfo.type : ItemType.Null);
+
+    public EquipmentSource GetEquipmentOrDefault(ItemIcon itemIcon)
+        => GetEquipmentOrDefault(itemIcon?.itemInfo);
+
     public FloorMaterialsData floorMaterialsData { get; private set; }
     public FloorMessagesData floorMessagesData { get; private set; }
 

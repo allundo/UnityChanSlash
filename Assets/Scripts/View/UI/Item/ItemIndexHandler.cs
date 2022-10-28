@@ -11,124 +11,112 @@ public interface IItemIndexHandler
     void ExpandNum(int index);
     void DeleteNum(int index);
     bool UpdateItemNum(ItemIcon itemIcon);
-    void SetItem(int index, ItemIcon itemIcon = null, bool tweenMove = false);
+    void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false);
+    bool hasKeyBlade();
+    ulong SumUpPrices();
 }
 
-public class ItemIndexHandler : IItemIndexHandler
+public abstract class ItemIndexHandler : IItemIndexHandler
 {
-    public int WIDTH { get; private set; }
-    public int HEIGHT { get; private set; }
-    public int MAX_ITEMS { get; private set; }
+    public int WIDTH { get; protected set; }
+    public int HEIGHT { get; protected set; }
+    public int MAX_ITEMS { get; protected set; }
 
-    private ItemIcon[] items;
-    private IDisposable[] itemEmptyCheck;
+    protected IDisposable[] itemEmptyCheck;
+    protected ItemPanel[] panels;
 
-    private ItemPanel[] panels;
+    protected Transform uiTf;
+    protected ItemInventory inventory;
+    protected RectTransform uiRT;
 
-    private Vector2 unit;
-    private Vector2 offsetCenter;
-    public Vector2 inventoryOrigin { get; protected set; }
-    private Transform inventoryTf;
-    private RectTransform inventoryRT;
+    protected Vector2 uiSize;
+    public Vector2 uiOrigin { get; protected set; }
+    protected Vector2 offsetOrigin;
 
-    private Vector2 uiSize;
+    protected Vector2 panelUnit;
+    protected Vector2 panelOffsetCenter;
 
     public IObservable<int> OnPress => Observable.Merge(panels.Select(panel => panel.OnPress));
     public IObservable<int> OnRelease => Observable.Merge(panels.Select(panel => panel.OnRelease));
 
-    private int currentSelected;
-    public void ExpandNum(int index)
-    {
-        if (currentSelected < MAX_ITEMS) panels[currentSelected].ShrinkNum();
-        if (index < MAX_ITEMS) panels[index].ExpandNum(inventoryTf);
-        currentSelected = index;
-    }
+    protected int currentSelected;
 
-    public void DeleteNum(int index)
+    public ItemIndexHandler(ItemInventory inventory, RectTransform uiRT, ItemPanel prefabItemPanel, int width, int height)
     {
-        if (index < MAX_ITEMS) panels[index].SetItemNum(0);
-    }
-
-    public ItemIndexHandler(RectTransform rt, int width, int height)
-    {
-        this.WIDTH = width;
-        this.HEIGHT = height;
+        WIDTH = width;
+        HEIGHT = height;
         MAX_ITEMS = width * height;
 
-        inventoryRT = rt;
-        inventoryTf = rt.transform;
+        this.inventory = inventory;
 
-        uiSize = rt.sizeDelta;
-        unit = new Vector2(uiSize.x / WIDTH, uiSize.y / HEIGHT);
-
-        // Anchor of ItemIcon is set to left top by default on prefab
-        offsetCenter = new Vector2(unit.x, -unit.y) * 0.5f;
+        this.uiRT = uiRT;
+        this.uiTf = uiRT.transform;
+        this.uiSize = uiRT.sizeDelta;
         UpdateOrigin();
 
-        items = Enumerable.Repeat<ItemIcon>(null, MAX_ITEMS).ToArray();
+        panelUnit = new Vector2(uiSize.x / width, uiSize.y / height);
+        panelOffsetCenter = new Vector2(panelUnit.x, -panelUnit.y) * 0.5f;
+        panels = Enumerable
+            .Range(0, MAX_ITEMS)
+            .Select(
+                index => Util.Instantiate(prefabItemPanel, inventory.GetComponent<RectTransform>().transform, false)
+                    .SetPos(UIPos(index))
+                    .SetIndex(index)
+            )
+            .ToArray();
+
         itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
 
         currentSelected = MAX_ITEMS;
     }
 
-    public void ResetOrientation(DeviceOrientation orientation)
+    public virtual void ResetOrientation(DeviceOrientation orientation)
     {
         switch (orientation)
         {
             case DeviceOrientation.Portrait:
-                inventoryRT.anchorMin = inventoryRT.anchorMax = new Vector2(0f, 0.5f);
-                inventoryRT.anchoredPosition = new Vector2(uiSize.x, uiSize.y + 280f) * 0.5f;
+                uiRT.anchorMin = uiRT.anchorMax = new Vector2(0f, 0.5f);
+                uiRT.anchoredPosition = new Vector2(uiSize.x, uiSize.y + 280f) * 0.5f;
                 break;
 
             case DeviceOrientation.LandscapeRight:
-                inventoryRT.anchorMin = inventoryRT.anchorMax = new Vector2(1f, 0f);
-                inventoryRT.anchoredPosition = new Vector2(-uiSize.x, uiSize.y) * 0.5f;
+                uiRT.anchorMin = uiRT.anchorMax = new Vector2(1f, 0f);
+                uiRT.anchoredPosition = new Vector2(-uiSize.x, uiSize.y) * 0.5f;
                 break;
         }
+
+        UpdateOrigin();
     }
 
-    public void UpdateOrigin()
+    protected void UpdateOrigin()
     {
-        inventoryOrigin = new Vector2(inventoryRT.position.x - uiSize.x * 0.5f, inventoryRT.position.y + uiSize.y * 0.5f);
+        uiOrigin = new Vector2(uiRT.position.x - uiSize.x * 0.5f, uiRT.position.y + uiSize.y * 0.5f);
+        offsetOrigin = GetOffsetOrigin();
     }
 
-    public ItemIndexHandler SetPanels(ItemPanel prefabItemPanel)
-    {
-        panels = Enumerable
-            .Range(0, MAX_ITEMS)
-            .Select(
-                index => Util.Instantiate(prefabItemPanel, inventoryTf, false)
-                    .SetPos(LocalUIPos(index))
-                    .SetIndex(index)
-            )
-            .ToArray();
-
-        return this;
-    }
+    protected virtual Vector2 GetOffsetOrigin() => Vector2.zero;
 
     public void SetEnablePanels(bool isEnable) => panels.ForEach(panel => panel.SetEnabled(isEnable));
 
-    public Vector2 ConvertToVec(Vector2 screenPos) => screenPos - inventoryOrigin;
+    public Vector2 ConvertToVec(Vector2 screenPos) => screenPos - uiOrigin;
     public bool IsOnUI(Vector2 uiPos) => uiPos.x >= 0f && uiPos.x <= uiSize.x && uiPos.y <= 0f && uiPos.y >= -uiSize.y;
 
-    protected Vector2 LocalUIPos(int index) => LocalUIPos(Index(index));
-    protected Vector2 LocalUIPos(int x, int y) => offsetCenter + new Vector2(unit.x * x, -unit.y * y);
-    protected Vector2 LocalUIPos(Pos pos) => LocalUIPos(pos.x, pos.y);
+    protected virtual Vector2 LocalUIPos(int index) => LocalUIPos(index % WIDTH, index / WIDTH);
+    protected virtual Vector2 LocalUIPos(int x, int y) => panelOffsetCenter + new Vector2(panelUnit.x * x, -panelUnit.y * y);
 
-    public Vector2 UIPos(int index) => LocalUIPos(index);
+    public Vector2 UIPos(int index) => offsetOrigin + LocalUIPos(index);
 
-    public bool IsValidIndex(int x, int y)
-        => x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
-    public bool IsValidIndex(Pos pos) => IsValidIndex(pos.x, pos.y);
+    public ItemIcon GetItem(int index) => index < MAX_ITEMS ? Items[index] : null;
+    protected abstract ItemIcon[] Items { get; }
 
-    public int Index(Pos index) => index.x + WIDTH * index.y;
-    public Pos Index(int index) => new Pos(index % WIDTH, index / WIDTH);
+    public virtual void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false)
+        => SetItemWithEmptyCheck(index, itemIcon, tweenMove);
 
-    public void SetItem(ItemIcon itemIcon) => SetItem(itemIcon.index, itemIcon);
+    protected virtual void StoreItem(int index, ItemIcon itemIcon) => Items[index] = itemIcon;
 
-    public void SetItem(int index, ItemIcon itemIcon = null, bool tweenMove = false)
+    protected void SetItemWithEmptyCheck(int index, ItemIcon itemIcon, bool tweenMove = false)
     {
-        items[index] = itemIcon;
+        StoreItem(index, itemIcon);
 
         itemEmptyCheck[index]?.Dispose();
 
@@ -136,10 +124,11 @@ public class ItemIndexHandler : IItemIndexHandler
         {
             if (tweenMove) itemIcon.MoveExclusive(UIPos(index));
 
-            UpdateItemNum(itemIcon.SetIndex(index));
+            itemIcon.SetIndex(index);
+            UpdateItemNum(itemIcon);
 
             itemEmptyCheck[index] = itemIcon.OnItemEmpty
-                .Subscribe(_ => RemoveItem(items[index]))
+                .Subscribe(_ => RemoveItem(itemIcon))
                 .AddTo(itemIcon);
         }
         else
@@ -149,20 +138,6 @@ public class ItemIndexHandler : IItemIndexHandler
         }
     }
 
-    public bool UpdateItemNum(ItemIcon itemIcon)
-    {
-        if (items[itemIcon.index] == null) return false;
-        panels[itemIcon.index].SetItemNum(itemIcon.itemInfo.numOfItem);
-        return true;
-    }
-
-    public ItemIcon GetItem(Pos index) => GetItem(index.x, index.y);
-    public ItemIcon GetItem(int x, int y) => IsValidIndex(x, y) ? items[x + WIDTH * y] : null;
-    public ItemIcon GetItem(int index) => index < MAX_ITEMS ? items[index] : null;
-
-    public bool RemoveItem(Pos index) => RemoveItem(index.x, index.y);
-    public bool RemoveItem(int x, int y) => RemoveItem(GetItem(x, y));
-
     public bool RemoveItem(ItemIcon itemIcon)
     {
         if (itemIcon == null) return false;
@@ -171,9 +146,29 @@ public class ItemIndexHandler : IItemIndexHandler
         itemEmptyCheck[itemIcon.index] = null;
 
         itemIcon.Inactivate();
-        items[itemIcon.index] = null;
+        SetItem(itemIcon.index, null);
         panels[itemIcon.index].SetItemNum(0);
+
         return true;
+    }
+
+    public bool UpdateItemNum(ItemIcon itemIcon)
+    {
+        if (GetItem(itemIcon.index) == null) return false;
+        panels[itemIcon.index].SetItemNum(itemIcon.itemInfo.numOfItem);
+        return true;
+    }
+
+    public void ExpandNum(int index)
+    {
+        if (currentSelected < MAX_ITEMS) panels[currentSelected].ShrinkNum();
+        if (index < MAX_ITEMS) panels[index].ExpandNum(uiTf);
+        currentSelected = index;
+    }
+
+    public void DeleteNum(int index)
+    {
+        if (index < MAX_ITEMS) panels[index].SetItemNum(0);
     }
 
     public void ForEach(Action<ItemIcon> action)
@@ -196,7 +191,7 @@ public class ItemIndexHandler : IItemIndexHandler
         return ret;
     }
 
-    public ItemIcon[] Where(Func<ItemIcon, bool> func)
+    protected ItemIcon[] Where(Func<ItemIcon, bool> func)
     {
         var icons = new List<ItemIcon>();
 
@@ -209,6 +204,16 @@ public class ItemIndexHandler : IItemIndexHandler
         return icons.ToArray();
     }
 
+    public bool hasKeyBlade()
+    {
+        return Where(itemIcon => itemIcon != null && itemIcon.itemInfo.type == ItemType.KeyBlade).Count() > 0;
+    }
+
+    public ulong SumUpPrices()
+    {
+        return (ulong)Where(itemIcon => itemIcon != null).Sum(itemIcon => itemIcon.itemInfo.Price);
+    }
+
     public DataStoreAgent.ItemInfo[] ExportAllItemInfo()
-        => items.Select(icon => icon == null ? null : new DataStoreAgent.ItemInfo(icon.itemInfo.type, icon.itemInfo.numOfItem)).ToArray();
+        => Items.Select(icon => icon == null ? null : new DataStoreAgent.ItemInfo(icon.itemInfo.type, icon.itemInfo.numOfItem)).ToArray();
 }

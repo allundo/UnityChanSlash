@@ -12,8 +12,9 @@ public class ItemInventory : MonoBehaviour
     [SerializeField] private RectTransform rtEquipItems = default;
 
     private ItemIconGenerator iconGenerator;
-    protected ItemIndexHandler itemIndex;
+    protected InventoryItemsHandler inventoryItems;
     protected EquipItemsHandler equipItems;
+    public Vector2 uiOrigin => inventoryItems.uiOrigin;
 
     private static readonly int WIDTH = 5;
     private static readonly int HEIGHT = 6;
@@ -37,19 +38,19 @@ public class ItemInventory : MonoBehaviour
     {
         iconGenerator = GetComponent<ItemIconGenerator>();
 
-        itemIndex = new ItemIndexHandler(GetComponent<RectTransform>(), WIDTH, HEIGHT).SetPanels(prefabItemPanel);
-        equipItems = new EquipItemsHandler(rtEquipItems, itemIndex.inventoryOrigin).SetPanels(prefabEquipPanel);
+        inventoryItems = new InventoryItemsHandler(this, prefabItemPanel, WIDTH, HEIGHT);
+        equipItems = new EquipItemsHandler(this, rtEquipItems, prefabEquipPanel);
 
         selector.transform.SetAsLastSibling(); // Bring selector UI to front
 
-        iconHandler = new ItemIconHandler(selector, itemIndex, equipItems);
+        iconHandler = new ItemIconHandler(selector, inventoryItems, equipItems);
     }
 
     void Start()
     {
-        itemIndex.OnPress.Subscribe(index => iconHandler.OnPress(index)).AddTo(this);
+        inventoryItems.OnPress.Subscribe(index => iconHandler.OnPress(index)).AddTo(this);
         equipItems.OnPress.Subscribe(index => iconHandler.OnPressEquipment(index)).AddTo(this);
-        Observable.Merge(itemIndex.OnRelease, equipItems.OnRelease)
+        Observable.Merge(inventoryItems.OnRelease, equipItems.OnRelease)
             .Subscribe(index => iconHandler.OnRelease()).AddTo(this);
 
         selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress()).AddTo(this);
@@ -59,9 +60,8 @@ public class ItemInventory : MonoBehaviour
 
     public void ResetOrientation(DeviceOrientation orientation)
     {
-        itemIndex.ResetOrientation(orientation);
-        itemIndex.UpdateOrigin();
-        equipItems.UpdateOrigin();
+        inventoryItems.ResetOrientation(orientation);
+        equipItems.ResetOrientation(orientation);
     }
 
     public bool PickUp(ItemInfo itemInfo)
@@ -74,19 +74,20 @@ public class ItemInventory : MonoBehaviour
         return false;
     }
 
-    public bool Remove(ItemIcon itemIcon) => itemIndex.RemoveItem(itemIcon);
+    public bool Remove(ItemIcon itemIcon) => inventoryItems.RemoveItem(itemIcon);
 
     private bool SetItem(int index, ItemInfo itemInfo)
     {
-        if (itemIndex.GetItem(index) != null) return false;
+        if (inventoryItems.GetItem(index) != null) return false;
 
-        itemIndex.SetItem(index, iconGenerator.Spawn(itemIndex.UIPos(index), itemInfo));
+        inventoryItems.SetItem(index, iconGenerator.Spawn(inventoryItems.UIPos(index), itemInfo));
         return true;
     }
 
     public void SetEnable(bool isEnable)
     {
-        itemIndex.SetEnablePanels(isEnable);
+        inventoryItems.SetEnablePanels(isEnable);
+        equipItems.SetEnablePanels(isEnable);
         enabled = selector.enabled = isEnable;
     }
 
@@ -94,25 +95,15 @@ public class ItemInventory : MonoBehaviour
 
     public bool hasKeyBlade()
     {
-        for (int index = 0; index < MAX_ITEMS; index++)
-        {
-            var itemIcon = itemIndex.GetItem(index);
-            if (itemIcon == null) continue;
-            if (itemIcon.itemInfo.type == ItemType.KeyBlade) return true;
-        }
-        return false;
+        return inventoryItems.hasKeyBlade() || equipItems.hasKeyBlade();
     }
 
     public ulong SumUpPrices()
     {
-        ulong amount = 0;
-        itemIndex
-            .Where(itemIcon => itemIcon != null)
-            .ForEach(itemIcon => amount += (ulong)itemIcon.itemInfo.Price);
-        return amount;
+        return inventoryItems.SumUpPrices() + equipItems.SumUpPrices();
     }
 
-    public DataStoreAgent.ItemInfo[] ExportInventoryItems() => itemIndex.ExportAllItemInfo();
+    public DataStoreAgent.ItemInfo[] ExportInventoryItems() => inventoryItems.ExportAllItemInfo();
     public void ImportInventoryItems(DataStoreAgent.ItemInfo[] import)
     {
         for (int index = 0; index < import.Length; index++)
@@ -122,7 +113,7 @@ public class ItemInventory : MonoBehaviour
             // Imported class data cannot be null but filled by default field values.
             if (itemInfo == null || itemInfo.itemType == ItemType.Null) continue;
 
-            itemIndex.SetItem(index, iconGenerator.Respawn(itemIndex.UIPos(index), itemInfo.itemType, itemInfo.numOfItem));
+            inventoryItems.SetItem(index, iconGenerator.Respawn(inventoryItems.UIPos(index), itemInfo.itemType, itemInfo.numOfItem));
         }
     }
 }

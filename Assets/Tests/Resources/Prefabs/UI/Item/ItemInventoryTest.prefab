@@ -120,6 +120,12 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8234509767623409022, guid: 7e773a125091745f89ba2b5133395e38, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7e773a125091745f89ba2b5133395e38, type: 3}
+--- !u!224 &952868450376955592 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6699698387023324389, guid: 7e773a125091745f89ba2b5133395e38,
+    type: 3}
+  m_PrefabInstance: {fileID: 5891650461503410733}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2559596963406294877 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8234509767623409008, guid: 7e773a125091745f89ba2b5133395e38,
@@ -141,6 +147,9 @@ MonoBehaviour:
   selector: {fileID: 3542892283343364390}
   prefabItemPanel: {fileID: 8364443433482839339, guid: 95ec41f2f183148c8a0fccdbca6430fe,
     type: 3}
+  prefabEquipPanel: {fileID: 6709910786428337649, guid: 2871f5a853f354d3a932e078ff335c88,
+    type: 3}
+  rtEquipItems: {fileID: 952868450376955592}
 --- !u!114 &3542892283343364390 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6983316259748852491, guid: 7e773a125091745f89ba2b5133395e38,

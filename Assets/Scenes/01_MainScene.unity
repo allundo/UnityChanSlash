@@ -59002,21 +59002,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightCircle
       objectReference: {fileID: 0}
-    - target: {fileID: 6882866220926824044, guid: 723caa0e0671f482aa1faa89649e4e0f,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6882866220926824044, guid: 723caa0e0671f482aa1faa89649e4e0f,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6882866220926824044, guid: 723caa0e0671f482aa1faa89649e4e0f,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 723caa0e0671f482aa1faa89649e4e0f, type: 3}
 --- !u!224 &6909229592954410188

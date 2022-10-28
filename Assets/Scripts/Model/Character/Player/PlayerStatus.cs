@@ -49,16 +49,11 @@ public class PlayerStatus : MobStatus
     public void EquipR(ItemInfo itemInfo)
     {
         equipInfoR = itemInfo;
-        equipR.Value = GetEquipmentSource(itemInfo);
+        equipR.Value = ResourceLoader.Instance.GetEquipmentOrDefault(itemInfo);
     }
     public void EquipL(ItemInfo itemInfo)
     {
         equipInfoL = itemInfo;
-        equipL.Value = GetEquipmentSource(itemInfo);
-    }
-
-    private EquipmentSource GetEquipmentSource(ItemInfo itemInfo)
-    {
-        return ResourceLoader.Instance.GetEquipmentSource(itemInfo != null ? itemInfo.type : ItemType.Null);
+        equipL.Value = ResourceLoader.Instance.GetEquipmentOrDefault(itemInfo);
     }
 }

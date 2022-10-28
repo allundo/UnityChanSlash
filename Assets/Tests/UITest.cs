@@ -212,9 +212,9 @@ public class UITest
         }
         yield return new WaitForSeconds(2f);
 
-        itemInventory.Remove(2, 3);
-        itemInventory.Remove(3, 5);
-        itemInventory.Remove(4, 4);
+        itemInventory.RemoveTest(2 + 3 * 5);
+        itemInventory.RemoveTest(3 + 5 * 5);
+        itemInventory.RemoveTest(4 + 4 * 5);
         yield return new WaitForSeconds(2f);
 
         Assert.IsNull(itemInventory.GetItem(17));

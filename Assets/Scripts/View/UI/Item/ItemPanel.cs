@@ -11,7 +11,7 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private float fontSize = 36f;
 
     private RectTransform rectTransform;
-    public int index { get; private set; }
+    private int index;
 
     private RectTransform rtNumOfItem;
 

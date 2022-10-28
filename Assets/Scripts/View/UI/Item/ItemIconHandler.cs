@@ -70,7 +70,7 @@ public class ItemIconHandler : IItemIconHandler
         selectedEquipment = resourceLoader.GetEquipmentSource(currentSelected.itemInfo.type);
     }
 
-    protected ItemIndexHandler itemIndex;
+    protected InventoryItemsHandler inventoryItems;
     protected EquipItemsHandler equipItems;
     protected ItemSelector selector;
     protected IDisposable cancelSelect = null;
@@ -99,12 +99,12 @@ public class ItemIconHandler : IItemIconHandler
     public Tween PlaySize(Tween sizeTween) => sizeUtil.PlayExclusive(sizeTween);
     public Tween PlayMove(Tween moveTween) => moveUtil.PlayExclusive(moveTween);
 
-    public ItemIconHandler(ItemSelector selector, ItemIndexHandler itemIndex, EquipItemsHandler equipItems)
+    public ItemIconHandler(ItemSelector selector, InventoryItemsHandler inventoryItems, EquipItemsHandler equipItems)
     {
         this.selector = selector;
-        this.itemIndex = itemIndex;
+        this.inventoryItems = inventoryItems;
         this.equipItems = equipItems;
-        pressedIndex = itemIndex.MAX_ITEMS;
+        pressedIndex = inventoryItems.MAX_ITEMS;
 
         pressedInventory = selectedInventory = null;
         selectedEquipment = null;
@@ -194,20 +194,20 @@ public class ItemIconHandler : IItemIconHandler
             set { handler.cancelSelect = value; }
         }
 
-        protected ItemIndexHandler itemIndex;
+        protected InventoryItemsHandler inventoryItems;
         protected EquipItemsHandler equipItems;
 
         public NormalMode(ItemIconHandler handler)
         {
             this.handler = handler;
             selector = handler.selector;
-            itemIndex = handler.itemIndex;
+            inventoryItems = handler.inventoryItems;
             equipItems = handler.equipItems;
         }
 
         public IItemIconHandler OnPress(int index)
         {
-            pressedInventory = itemIndex;
+            pressedInventory = inventoryItems;
             return OnPressInventory(index);
         }
 
@@ -274,9 +274,9 @@ public class ItemIconHandler : IItemIconHandler
 
             handler.PlaySize(currentSelected?.Resize(1f, 0.2f));
             currentSelected = null;
-            pressedIndex = itemIndex.MAX_ITEMS;
-            itemIndex.ExpandNum(itemIndex.MAX_ITEMS);
-            equipItems.ExpandNum(itemIndex.MAX_ITEMS);
+            pressedIndex = inventoryItems.MAX_ITEMS;
+            inventoryItems.ExpandNum(inventoryItems.MAX_ITEMS);
+            equipItems.ExpandNum(inventoryItems.MAX_ITEMS);
 
             pressedInventory = selectedInventory = null;
             selectedEquipment = null;
@@ -407,7 +407,7 @@ public class ItemIconHandler : IItemIconHandler
             pressedInventory.SetItem(pressedIndex, currentSelected, true);
             pressedInventory.ExpandNum(pressedIndex);
 
-            if (pressedInventory is ItemIndexHandler)
+            if (pressedInventory is InventoryItemsHandler)
             {
                 selector.Enable();
                 selector.SetSelect(pressedInventory.UIPos(pressedIndex));
@@ -431,8 +431,8 @@ public class ItemIconHandler : IItemIconHandler
         {
             handler.StopPressing();
 
-            var vec = itemIndex.ConvertToVec(screenPos);
-            return itemIndex.IsOnUI(vec) || equipItems.IsOnUI(equipItems.ConvertToVec(screenPos)) ? Drag(vec) : Put();
+            var vec = inventoryItems.ConvertToVec(screenPos);
+            return inventoryItems.IsOnUI(vec) || equipItems.IsOnUI(equipItems.ConvertToVec(screenPos)) ? Drag(vec) : Put();
         }
 
         protected virtual IItemIconHandler Drag(Vector2 uiPos)
