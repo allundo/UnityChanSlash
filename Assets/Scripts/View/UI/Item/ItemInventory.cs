@@ -103,17 +103,26 @@ public class ItemInventory : MonoBehaviour
         return inventoryItems.SumUpPrices() + equipItems.SumUpPrices();
     }
 
-    public DataStoreAgent.ItemInfo[] ExportInventoryItems() => inventoryItems.ExportAllItemInfo();
+    public DataStoreAgent.ItemInfo[] ExportInventoryItems()
+    {
+        var itemList = inventoryItems.ExportAllItemInfo().ToList();
+        itemList.AddRange(equipItems.ExportAllItemInfo());
+        return itemList.ToArray();
+    }
+
     public void ImportInventoryItems(DataStoreAgent.ItemInfo[] import)
     {
-        for (int index = 0; index < import.Length; index++)
+        for (int i = 0; i < import.Length; i++)
         {
-            var itemInfo = import[index];
+            var itemInfo = import[i];
 
             // Imported class data cannot be null but filled by default field values.
             if (itemInfo == null || itemInfo.itemType == ItemType.Null) continue;
 
-            inventoryItems.SetItem(index, iconGenerator.Respawn(inventoryItems.UIPos(index), itemInfo.itemType, itemInfo.numOfItem));
+            IItemIndexHandler handler = i < MAX_ITEMS ? inventoryItems : equipItems;
+            int index = i % MAX_ITEMS;
+
+            handler.SetItem(index, iconGenerator.Respawn(handler.UIPos(index), itemInfo.itemType, itemInfo.numOfItem));
         }
     }
 }
