@@ -73,23 +73,35 @@ public class EquipItemsHandler : ItemIndexHandler
         protected FightStyleHandler prefabAttackStyleHandler;
         public RuntimeAnimatorController animatorController { get; protected set; }
 
+        private T Instantiate<T>(T prefab, Transform parent) where T : UnityEngine.Object
+        {
+            bool isActive = parent.gameObject.activeSelf;
+
+            // Make sure to call Awake()
+            parent.gameObject.SetActive(true);
+            var instance = Util.Instantiate(prefab, parent);
+            parent.gameObject.SetActive(isActive);
+
+            return instance;
+        }
+
         public AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI)
         {
-            var instance = Util.Instantiate(prefabAttackButtonsHandler, attackInputUI);
+            var instance = Instantiate(prefabAttackButtonsHandler, attackInputUI);
             instance.transform.SetAsFirstSibling();
             return instance;
         }
 
         public InputRegion LoadInputRegion(Transform fightCircle)
         {
-            var instance = UnityEngine.Object.Instantiate(prefabInputRegion, fightCircle);
+            var instance = Instantiate(prefabInputRegion, fightCircle);
             instance.transform.SetAsLastSibling();
             return instance;
         }
 
         public FightStyleHandler LoadFightStyle(Transform player)
         {
-            var instance = Util.Instantiate(prefabAttackStyleHandler, player);
+            var instance = Instantiate(prefabAttackStyleHandler, player);
             instance.transform.SetAsLastSibling();
             return instance;
         }

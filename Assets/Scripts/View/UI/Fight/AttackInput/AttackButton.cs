@@ -58,6 +58,8 @@ public class AttackButton : FadeEnable
     {
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
+
+        Enable();
     }
 
     public void Press(Vector2 pos)
