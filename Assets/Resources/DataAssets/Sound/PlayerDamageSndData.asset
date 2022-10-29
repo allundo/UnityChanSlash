@@ -30,9 +30,11 @@ MonoBehaviour:
       type: 3}
     guard: {fileID: 6328208369918078447, guid: 8b445b131223042dc9f646c7a2dda50b, type: 3}
   - name: Sting
-    damage: {fileID: 0}
-    critical: {fileID: 0}
-    guard: {fileID: 0}
+    damage: {fileID: 6863403767537054293, guid: de9c01a0a4ca44dc08cdc869aa9b3743,
+      type: 3}
+    critical: {fileID: 8317160905736561072, guid: aac29a50fa6d2497281f76f926bd0802,
+      type: 3}
+    guard: {fileID: 8153764810146711806, guid: 491ef87567e9f479fbf7b2dd60e45205, type: 3}
   - name: Bite
     damage: {fileID: 1495889092723307483, guid: d753d60f771ba473e8a63036e3359fe8,
       type: 3}
