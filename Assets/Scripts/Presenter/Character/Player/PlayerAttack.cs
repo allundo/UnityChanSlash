@@ -6,11 +6,10 @@ public interface IPlayerAttack : IMobAttack
     /// <summary>
     /// Returns critical attack sequence as a Tween
     /// </summary>
-    /// <param name="additionalSpeed">Speed added to normal motion speed multiplier.</param>
     /// <param name="criticalMultiplier">Multiplier applied to normal attack power.</param>
     /// <param name="expandScale">Expand scale applied to normal attack collider.</param>
     /// <returns></returns>
-    Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f);
+    Tween CriticalAttackSequence(float criticalMultiplier = 2.5f, float expandScale = 1.5f);
 }
 
 public class PlayerAttack : MobAttackFX, IPlayerAttack
@@ -19,6 +18,11 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
     [SerializeField] protected AudioSource criticalSnd = default;
     [SerializeField] protected float minPitch = 1f;
     [SerializeField] protected float maxPitch = 1f;
+
+    public static readonly float ATTACK_SPEED = Constants.PLAYER_ATTACK_SPEED;
+    public static readonly float CRITICAL_SPEED = Constants.PLAYER_CRITICAL_SPEED;
+
+    protected override float FrameToSec(int frame) => FrameToSec(frame, ATTACK_SPEED);
 
     public override void OnDie()
     {
@@ -49,13 +53,13 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
             .SetUpdate(false);
     }
 
-    public virtual Tween CriticalAttackSequence(int additionalSpeed = 1, float criticalMultiplier = 2.5f, float expandScale = 1.5f)
+    public virtual Tween CriticalAttackSequence(float criticalMultiplier = 2.5f, float expandScale = 1.5f)
     {
         return DOTween.Sequence()
             .AppendCallback(() => CriticalGain(criticalMultiplier, expandScale))
-            .InsertCallback(FrameToSec(fxStartFrame, speed + additionalSpeed), OnCriticalFXStart)
-            .InsertCallback(FrameToSec(startFrame, speed + additionalSpeed), OnHitStart)
-            .InsertCallback(FrameToSec(finishFrame, speed + additionalSpeed), OnHitFinished)
+            .InsertCallback(FrameToSec(fxStartFrame, CRITICAL_SPEED), OnCriticalFXStart)
+            .InsertCallback(FrameToSec(startFrame, CRITICAL_SPEED), OnHitStart)
+            .InsertCallback(FrameToSec(finishFrame, CRITICAL_SPEED), OnHitFinished)
             .OnComplete(ResetAttackPower)
             .SetUpdate(false);
     }

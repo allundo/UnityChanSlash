@@ -4,17 +4,6 @@ public class KnuckleKnuckleButtonsHandler : AttackButtonsHandler
 {
     [SerializeField] private float kickRadius = 100f;
 
-    public override void SetCommands(PlayerCommandTarget target)
-    {
-        attackCmds[0] = new PlayerJab(target);
-        attackCmds[1] = new PlayerStraight(target);
-        attackCmds[2] = new PlayerKick(target);
-
-        criticalCmds[0] = new PlayerJabCritical(target);
-        criticalCmds[1] = new PlayerStraightCritical(target);
-        criticalCmds[2] = new PlayerKickCritical(target);
-    }
-
     protected override bool[,] GetCancelableTable()
     {
         var cancelable = new bool[3, 3];

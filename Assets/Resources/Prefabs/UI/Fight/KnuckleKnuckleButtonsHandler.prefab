@@ -135,7 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.56
+  frames: 81
+  motionFrameRate: 30
+  cancelStart: 1
+  coolTimeRatio: 1
 --- !u!1 &2174243320343955074
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +274,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.2
+  frames: 34
+  motionFrameRate: 30
+  cancelStart: 0.6
+  coolTimeRatio: 1
 --- !u!1 &6690926568892897512
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,7 +413,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.4
+  frames: 61
+  motionFrameRate: 30
+  cancelStart: 0.8
+  coolTimeRatio: 1
 --- !u!1 &6885064247709355974
 GameObject:
   m_ObjectHideFlags: 0

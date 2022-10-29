@@ -639,7 +639,7 @@ public class PlayerAttackCommand : PlayerAction
     protected Tween cancelTimer = null;
     protected float cancelStart;
 
-    protected PlayerAttackCommand(PlayerCommandTarget target, int attackIndex, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
+    public PlayerAttackCommand(PlayerCommandTarget target, int attackIndex, float duration, float cancelStart = 1f) : base(target, duration, 0.04f)
     {
         this.cancelStart = cancelStart;
 
@@ -706,7 +706,7 @@ public class PlayerAttackCommand : PlayerAction
 
 public class PlayerCriticalAttack : PlayerAttackCommand
 {
-    protected PlayerCriticalAttack(PlayerCommandTarget target, int attackIndex, float duration, float cancelStart = 1f) : base(target, attackIndex, duration, cancelStart) { }
+    public PlayerCriticalAttack(PlayerCommandTarget target, int attackIndex, float duration, float cancelStart = 1f) : base(target, attackIndex, duration, cancelStart) { }
     protected override void Attack()
     {
         playerAnim.critical.Bool = true;
@@ -721,68 +721,6 @@ public class PlayerCriticalAttack : PlayerAttackCommand
     }
 }
 
-public class PlayerJab : PlayerAttackCommand
-{
-    public PlayerJab(PlayerCommandTarget target) : base(target, 0, 21.6f, 0.6f) { }
-}
-public class PlayerJabCritical : PlayerCriticalAttack
-{
-    public PlayerJabCritical(PlayerCommandTarget target) : base(target, 0, 18.5f, 0.6f) { }
-}
-
-public class PlayerStraight : PlayerAttackCommand
-{
-    public PlayerStraight(PlayerCommandTarget target) : base(target, 1, 30f, 0.8f) { }
-}
-public class PlayerStraightCritical : PlayerCriticalAttack
-{
-    public PlayerStraightCritical(PlayerCommandTarget target) : base(target, 1, 24f, 0.8f) { }
-}
-
-public class PlayerKick : PlayerAttackCommand
-{
-    public PlayerKick(PlayerCommandTarget target) : base(target, 2, 43f) { }
-}
-public class PlayerKickCritical : PlayerCriticalAttack
-{
-    public PlayerKickCritical(PlayerCommandTarget target) : base(target, 2, 34.4f) { }
-}
-public class PlayerRSlash : PlayerAttackCommand
-{
-    public PlayerRSlash(PlayerCommandTarget target) : base(target, 0, 35f, 0.75f) { }
-}
-public class PlayerRSlashCritical : PlayerCriticalAttack
-{
-    public PlayerRSlashCritical(PlayerCommandTarget target) : base(target, 0, 28f, 0.75f) { }
-}
-
-public class PlayerLSlash : PlayerAttackCommand
-{
-    public PlayerLSlash(PlayerCommandTarget target) : base(target, 1, 25f, 0.75f) { }
-}
-public class PlayerLSlashCritical : PlayerCriticalAttack
-{
-    public PlayerLSlashCritical(PlayerCommandTarget target) : base(target, 1, 20f, 0.75f) { }
-}
-
-public class PlayerSting : PlayerAttackCommand
-{
-    public PlayerSting(PlayerCommandTarget target) : base(target, 2, 32.5f) { }
-}
-public class PlayerStingCritical : PlayerCriticalAttack
-{
-    public PlayerStingCritical(PlayerCommandTarget target) : base(target, 2, 26f) { }
-}
-
-public class PlayerChop : PlayerAttackCommand
-{
-    public PlayerChop(PlayerCommandTarget target) : base(target, 3, 65f) { }
-}
-public class PlayerChopCritical : PlayerCriticalAttack
-{
-    public PlayerChopCritical(PlayerCommandTarget target) : base(target, 3, 52f) { }
-}
-
 public class PlayerFire : PlayerAction
 {
     public bool isCancelable { get; protected set; } = false;
@@ -791,8 +729,6 @@ public class PlayerFire : PlayerAction
     {
         this.type = type;
     }
-
-
 
     protected virtual void ValidateAction() => isCancelable = true;
 

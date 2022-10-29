@@ -29,12 +29,12 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
     /// <summary>
     /// Animation speed set on Mecanim Animator
     /// </summary>
-    [SerializeField] protected int speed = 1;
+    [SerializeField] protected float speed = 1;
 
     /// <summary>
     /// Motion frame rate of animation clip
     /// </summary>
-    [SerializeField] protected int frameRate = 30;
+    [SerializeField] protected float frameRate = 30;
 
     protected float startSec;
     protected float finishSec;
@@ -56,11 +56,11 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
         finishSec = FrameToSec(finishFrame);
     }
 
-    protected float FrameToSec(int frame) => FrameToSec(frame, this.speed);
+    protected virtual float FrameToSec(int frame) => FrameToSec(frame, this.speed);
 
-    protected float FrameToSec(int frame, int speed)
+    protected float FrameToSec(int frame, float speed)
     {
-        return (float)frame / (float)frameRate / (float)speed;
+        return (float)frame / frameRate / speed;
     }
 
     public virtual void OnDie() { }

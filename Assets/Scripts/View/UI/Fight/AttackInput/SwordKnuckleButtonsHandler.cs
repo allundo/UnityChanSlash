@@ -5,19 +5,6 @@ public class SwordKnuckleButtonsHandler : AttackButtonsHandler
     [SerializeField] private float stingRadius = 100f;
     [SerializeField] private float chopRadius = 100f;
 
-    public override void SetCommands(PlayerCommandTarget target)
-    {
-        attackCmds[0] = new PlayerRSlash(target);
-        attackCmds[1] = new PlayerLSlash(target);
-        attackCmds[2] = new PlayerSting(target);
-        attackCmds[3] = new PlayerChop(target);
-
-        criticalCmds[0] = new PlayerRSlashCritical(target);
-        criticalCmds[1] = new PlayerLSlashCritical(target);
-        criticalCmds[2] = new PlayerStingCritical(target);
-        criticalCmds[3] = new PlayerChopCritical(target);
-    }
-
     protected override bool[,] GetCancelableTable()
     {
         var cancelable = new bool[4, 4];

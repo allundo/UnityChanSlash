@@ -5,7 +5,18 @@ using System;
 
 public class AttackButton : FadeEnable
 {
-    [SerializeField] private float duration = 0.2f;
+    [SerializeField] private int frames = 60;
+    [SerializeField] private float motionFrameRate = 30f;
+    [SerializeField] private float cancelStart = 1f;
+    [SerializeField] private float coolTimeRatio = 1f;
+
+    public static readonly float FRAME_RATE = Constants.FRAME_RATE;
+    public static readonly float FRAME_UNIT = Constants.FRAME_SEC_UNIT;
+    public static readonly float ATTACK_SPEED = Constants.PLAYER_ATTACK_SPEED;
+    public static readonly float CRITICAL_SPEED = Constants.PLAYER_CRITICAL_SPEED;
+
+    private float motionFrames;
+    private float duration;
 
     private FadeEnable region;
     public void SetRegion(FadeEnable region)
@@ -27,11 +38,16 @@ public class AttackButton : FadeEnable
     private ISubject<AttackButton> attackSubject = new Subject<AttackButton>();
     public IObservable<AttackButton> ObservableAtk => attackSubject;
 
-    public float CoolTime => duration * 1.2f;
-    public float CancelTime => duration * 0.4f;
+    public float CoolTime => motionFrames * FRAME_UNIT * coolTimeRatio;
+    public float CancelTime => CoolTime * cancelStart * 0.5f;
+    public float MotionFrames => motionFrames;
+    public float CancelStart => cancelStart;
 
     protected override void Awake()
     {
+        motionFrames = (float)frames / motionFrameRate / ATTACK_SPEED * FRAME_RATE;
+        duration = (float)frames / motionFrameRate / CRITICAL_SPEED;
+
         fade = new FadeTween(gameObject);
         ui = new UITween(gameObject);
 
