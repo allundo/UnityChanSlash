@@ -30,13 +30,10 @@ public class Attack : AttackBehaviour
     protected Collider attackCollider = default;
     protected IStatus status;
 
-    protected AttackData data;
-
     protected virtual void Awake()
     {
         attackCollider = GetComponent<Collider>();
         status = GetComponentInParent<Status>();
-        data = new AttackData(attackMultiplier, attackType, attackAttr);
 
         attackCollider.enabled = false;
     }
@@ -57,7 +54,7 @@ public class Attack : AttackBehaviour
 
         if (null == targetMob) return null;
 
-        targetMob.Damage(status, data);
+        targetMob.Damage(status, new AttackData(attackMultiplier, attackType, attackAttr));
 
         return targetMob;
     }

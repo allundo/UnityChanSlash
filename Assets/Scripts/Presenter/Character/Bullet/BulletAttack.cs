@@ -3,10 +3,12 @@ using UnityEngine;
 public class BulletAttack : Attack
 {
     protected BulletReactor reactor;
+    protected AttackData data;
 
     protected override void Awake()
     {
         base.Awake();
+        data = new AttackData(attackMultiplier, attackType, attackAttr);
         reactor = GetComponentInParent<BulletReactor>();
     }
 
