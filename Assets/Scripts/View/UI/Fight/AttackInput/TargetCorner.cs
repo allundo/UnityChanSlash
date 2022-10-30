@@ -36,10 +36,10 @@ public class TargetCorner : FadeUI
         uiTween.ResetSize(2f);
         activate = uiTween.Resize(1f, fadeDuration).Play();
     }
-    protected override void OnFadeInComplete() => ExpansionLoop();
+    protected override void OnCompleteFadeIn() => ExpansionLoop();
 
     protected override void BeforeFadeOut() => expansionLoop?.Kill();
-    protected override void OnFadeDisable() => activate?.Kill();
+    protected override void OnDisable() => activate?.Kill();
 
     public override void SetPointerOn()
     {

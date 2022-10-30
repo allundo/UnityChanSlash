@@ -65,6 +65,11 @@ public class Target : FadeUI
         targetName.Inactivate();
     }
 
+    protected override void OnDisable()
+    {
+        status = null;
+    }
+
     public override void SetPointerOn()
     {
         corner.SetPointerOn();

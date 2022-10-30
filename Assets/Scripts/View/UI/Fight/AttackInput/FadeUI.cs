@@ -19,28 +19,46 @@ public abstract class FadeUI : MonoBehaviour
         fade.Disable();
         isActive = false;
     }
+
+    /// <summary>
+    /// Activate the UI with fade-in
+    /// </summary>
+    /// <param name="duration">fade duration sec</param>
     public virtual void FadeActivate(float duration = 0.2f)
     {
         isActive = true;
         BeforeFadeIn(duration);
-        fade.In(duration, 0f, null, OnFadeInComplete).Play();
+        fade.In(duration, 0f, null, OnCompleteFadeIn).Play();
     }
 
+    /// <summary>
+    /// Called before play fade-in
+    /// </summary>
+    /// <param name="fadeDuration">duration of the fade-in</param>
     protected virtual void OnFadeEnable(float fadeDuration) { }
+
     private void BeforeFadeIn(float fadeDuration)
     {
         fade.Enable();
         OnFadeEnable(fadeDuration);
     }
 
-    protected virtual void OnFadeInComplete() { }
+    /// <summary>
+    /// Called on complete fade-in
+    protected virtual void OnCompleteFadeIn() { }
 
+    /// <summary>
+    /// Called before play fade-out
     protected virtual void BeforeFadeOut() { }
 
-    protected virtual void OnFadeDisable() { }
-    private void OnFadeOutComplete()
+    /// <summary>
+    /// Called on complete fade-out
+    /// </summary>
+    protected virtual void OnDisable() { }
+
+    public void Disable()
     {
-        OnFadeDisable();
+        OnDisable();
         fade.Disable();
     }
 
@@ -48,7 +66,7 @@ public abstract class FadeUI : MonoBehaviour
     {
         isActive = false;
         BeforeFadeOut();
-        fade.Out(duration, 0f, null, OnFadeOutComplete).Play();
+        fade.Out(duration, 0f, null, Disable).Play();
     }
 
     public abstract void SetPointerOn();

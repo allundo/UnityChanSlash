@@ -180,7 +180,15 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         ButtonCancel(true);
         isActive = false;
         EnemyStatus.Value = null;
-        enemyTarget.FadeInactivate();
+
+        if (isForce)
+        {
+            enemyTarget.Disable();
+        }
+        else
+        {
+            enemyTarget.FadeInactivate();
+        }
     }
 
     private void ButtonCancel(bool isFadeOnly = false)
