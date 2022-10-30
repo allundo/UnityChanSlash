@@ -400,7 +400,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     }
 
     /// <summary>
-    /// Reserves fight behavior Commands for each attack button
+    /// Detect player's charging up an attack
     /// </summary>
     protected void InitFightInput()
     {
