@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class TargetCorner : FadeUI
+public class TargetCorner : FadeUI, ITargetUI
 {
     [SerializeField] private Color pointerOnColor = default;
 
@@ -41,7 +41,7 @@ public class TargetCorner : FadeUI
     protected override void BeforeFadeOut() => expansionLoop?.Kill();
     protected override void OnDisable() => activate?.Kill();
 
-    public override void SetPointerOn()
+    public void SetPointerOn()
     {
         expansionLoop?.Kill();
         fade.KillTweens();
@@ -49,7 +49,7 @@ public class TargetCorner : FadeUI
         fade.color = pointerOnColor;
     }
 
-    public override void SetPointerOff()
+    public void SetPointerOff()
     {
         ExpansionLoop();
         fade.ResetColor();

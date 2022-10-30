@@ -1,7 +1,14 @@
 using DG.Tweening;
 using UnityEngine;
 
-public abstract class FadeUI : MonoBehaviour
+public interface IFadeUI
+{
+    void FadeActivate(float duration);
+    void FadeInactivate(float duration);
+    void Disable();
+}
+
+public abstract class FadeUI : MonoBehaviour, IFadeUI
 {
     [SerializeField] protected float maxAlpha = 1f;
     protected FadeTween fade;
@@ -68,7 +75,4 @@ public abstract class FadeUI : MonoBehaviour
         BeforeFadeOut();
         fade.Out(duration, 0f, null, Disable).Play();
     }
-
-    public abstract void SetPointerOn();
-    public abstract void SetPointerOff();
 }

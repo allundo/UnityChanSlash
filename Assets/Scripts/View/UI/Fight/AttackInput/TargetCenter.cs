@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class TargetCenter : FadeUI
+public class TargetCenter : FadeUI, ITargetUI
 {
     [SerializeField] private Color pointerOnColor = default;
 
@@ -17,7 +17,7 @@ public class TargetCenter : FadeUI
         defaultSize = rectTransform.sizeDelta;
     }
 
-    public override void SetPointerOn()
+    public void SetPointerOn()
     {
         blinkLoop.Pause();
         fade.KillTweens();
@@ -25,7 +25,7 @@ public class TargetCenter : FadeUI
         fade.color = pointerOnColor;
     }
 
-    public override void SetPointerOff()
+    public void SetPointerOff()
     {
         rectTransform.sizeDelta = defaultSize;
         blinkLoop.Restart();

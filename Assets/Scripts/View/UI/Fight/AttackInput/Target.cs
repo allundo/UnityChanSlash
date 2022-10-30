@@ -1,6 +1,12 @@
 using UnityEngine;
 
-public class Target : FadeUI
+public interface ITargetUI : IFadeUI
+{
+    void SetPointerOn();
+    void SetPointerOff();
+}
+
+public class Target : FadeUI, ITargetUI
 {
     [SerializeField] TargetCenter center = default;
     [SerializeField] TargetCorner corner = default;
@@ -70,14 +76,14 @@ public class Target : FadeUI
         status = null;
     }
 
-    public override void SetPointerOn()
+    public void SetPointerOn()
     {
         corner.SetPointerOn();
         center.SetPointerOn();
         pointerOnFX.Play();
     }
 
-    public override void SetPointerOff()
+    public void SetPointerOff()
     {
         corner.SetPointerOff();
         center.SetPointerOff();
