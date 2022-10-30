@@ -18,11 +18,23 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
     [SerializeField] protected AudioSource criticalSnd = default;
     [SerializeField] protected float minPitch = 1f;
     [SerializeField] protected float maxPitch = 1f;
+    [SerializeField] protected float handRRatio = 0f;
+    [SerializeField] protected float handLRatio = 0f;
 
     public static readonly float ATTACK_SPEED = Constants.PLAYER_ATTACK_SPEED;
     public static readonly float CRITICAL_SPEED = Constants.PLAYER_CRITICAL_SPEED;
 
     protected override float FrameToSec(int frame) => FrameToSec(frame, ATTACK_SPEED);
+
+    protected override float currentAttack => attackMultiplier + playerStatus.AttackR * handRRatio + playerStatus.AttackL * handLRatio;
+
+    protected PlayerStatus playerStatus;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        playerStatus = status as PlayerStatus;
+    }
 
     public override void OnDie()
     {

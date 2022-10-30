@@ -72,6 +72,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 1903539322842481696}
   minPitch: 0.94
   maxPitch: 0.96
+  handRRatio: 0.2
+  handLRatio: 0.2
 --- !u!1 &1232704346102392186
 GameObject:
   m_ObjectHideFlags: 0
@@ -10243,6 +10245,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 1903539322842481696}
   minPitch: 0.96
   maxPitch: 0.98
+  handRRatio: 1
+  handLRatio: 0
 --- !u!1 &3867872897582574211
 GameObject:
   m_ObjectHideFlags: 0
@@ -10315,6 +10319,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 1903539322842481696}
   minPitch: 0.98
   maxPitch: 1
+  handRRatio: 0
+  handLRatio: 1
 --- !u!1 &5780707117325071552
 GameObject:
   m_ObjectHideFlags: 0

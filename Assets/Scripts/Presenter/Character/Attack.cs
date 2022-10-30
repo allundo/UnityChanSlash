@@ -30,6 +30,8 @@ public class Attack : AttackBehaviour
     protected Collider attackCollider = default;
     protected IStatus status;
 
+    protected virtual float currentAttack => attackMultiplier;
+
     protected virtual void Awake()
     {
         attackCollider = GetComponent<Collider>();
@@ -54,7 +56,7 @@ public class Attack : AttackBehaviour
 
         if (null == targetMob) return null;
 
-        targetMob.Damage(status, new AttackData(attackMultiplier, attackType, attackAttr));
+        targetMob.Damage(status, new AttackData(currentAttack, attackType, attackAttr));
 
         return targetMob;
     }

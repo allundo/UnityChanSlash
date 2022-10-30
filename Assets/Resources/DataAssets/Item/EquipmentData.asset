@@ -14,17 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u7D20\u624B"
-    attackMultiplier: 1
-    shieldPlusR: 0
-    shieldPlusL: 0
+    attackGain: 0
+    shieldGain: 0
     handRPosition: {x: 0, y: 0, z: 0}
     handRRotate: {x: 0, y: 0, z: 0}
     category: 0
     prefabEquipment: {fileID: 0}
   - name: "\u9375\u306E\u5263"
-    attackMultiplier: 2
-    shieldPlusR: 0.5
-    shieldPlusL: 1
+    attackGain: 1
+    shieldGain: 1
     handRPosition: {x: -0.07, y: -0.009, z: -0.003}
     handRRotate: {x: -68.294, y: -39.04, z: -50.364}
     category: 1

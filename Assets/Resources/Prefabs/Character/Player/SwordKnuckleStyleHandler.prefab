@@ -157,18 +157,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 2
   attackAttr: 0
-  attackMultiplier: 1.25
+  attackMultiplier: 1.2
   startFrame: 24
   finishFrame: 36
   speed: 4
   frameRate: 30
   attackFX: {fileID: 7590420919564165166}
   attackSnd: {fileID: 7844752737552595862}
-  fxStartFrame: 0
+  fxStartFrame: 4
   criticalFX: {fileID: 9223355203069206313}
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.96
   maxPitch: 0.98
+  handRRatio: 0.9
+  handLRatio: 0.3
 --- !u!1 &951536689231853308
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +243,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.98
   maxPitch: 1
+  handRRatio: 0.9
+  handLRatio: 0.3
 --- !u!1 &1138550825308345171
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +301,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.04
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -20326,18 +20330,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 2
   attackAttr: 0
-  attackMultiplier: 2
+  attackMultiplier: 1.5
   startFrame: 38
   finishFrame: 52
   speed: 4
   frameRate: 30
   attackFX: {fileID: 8691613199108085378}
   attackSnd: {fileID: 1195564659422648574}
-  fxStartFrame: 0
+  fxStartFrame: 8
   criticalFX: {fileID: 8675165800167827620}
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.94
   maxPitch: 0.96
+  handRRatio: 1
+  handLRatio: 0.5
 --- !u!1 &4382122766833917679
 GameObject:
   m_ObjectHideFlags: 0
@@ -20398,7 +20404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 3
   attackAttr: 0
-  attackMultiplier: 1.25
+  attackMultiplier: 1.2
   startFrame: 16
   finishFrame: 32
   speed: 4
@@ -20408,8 +20414,10 @@ MonoBehaviour:
   fxStartFrame: 0
   criticalFX: {fileID: 8675165800167827620}
   criticalSnd: {fileID: 2518429829761390687}
-  minPitch: 0.94
-  maxPitch: 0.96
+  minPitch: 0.98
+  maxPitch: 1
+  handRRatio: 0.9
+  handLRatio: 0.3
 --- !u!1 &6431635885446623237
 GameObject:
   m_ObjectHideFlags: 0
@@ -25601,7 +25609,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9000895701094216191}
   serializedVersion: 8
-  lengthInSec: 1
+  lengthInSec: 0.5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -25616,7 +25624,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.1
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2

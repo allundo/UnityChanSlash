@@ -16,6 +16,11 @@ public class PlayerStatus : MobStatus
     private IReactiveProperty<EquipmentSource> equipR = new ReactiveProperty<EquipmentSource>();
     private IReactiveProperty<EquipmentSource> equipL = new ReactiveProperty<EquipmentSource>();
 
+    public float AttackR => equipR.Value.attackGain;
+    public float ShieldR => equipR.Value.shieldGain;
+    public float AttackL => equipL.Value.attackGain;
+    public float ShieldL => equipL.Value.shieldGain;
+
     private ItemInfo equipInfoR = null;
     private ItemInfo equipInfoL = null;
 
@@ -24,6 +29,7 @@ public class PlayerStatus : MobStatus
         base.Awake();
         col = GetComponent<CapsuleCollider>();
 
+        // TODO: Refer to PlayerData to get level based player status.
         // ResetStatus() is called inside InitParam() method.
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
     }

@@ -238,9 +238,8 @@ public class AnimationCurveSource
 public class EquipmentSource
 {
     [SerializeField] public string name = "素手";
-    [SerializeField] public float attackMultiplier = 1f;
-    [SerializeField] public float shieldPlusR = 0f;
-    [SerializeField] public float shieldPlusL = 0f;
+    [SerializeField] public float attackGain = 0f;
+    [SerializeField] public float shieldGain = 0f;
     [SerializeField] public Vector3 handRPosition = default;
     [SerializeField] public Vector3 handRRotate = default;
     [SerializeField] public EquipmentCategory category = default;
