@@ -55,7 +55,7 @@ public class AttackInputController : MonoBehaviour
 
     void Update()
     {
-        if (isChargingUp.Value) enemyTarget.SetPointer(pressPos + pointerVec);
+        if (isChargingUp.Value && !currentButton.isPressReserved) enemyTarget.SetPointer(pressPos + pointerVec);
     }
 
     public void Release()

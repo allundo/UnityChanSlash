@@ -33,7 +33,9 @@ public class AttackButton : FadeEnable
     private Tween coolTimer = null;
     private float countTime = 0f;
 
-    protected bool isFiring = false;
+    protected bool isPressEnable = false;
+    public bool isPressReserved { get; protected set; } = false;
+    public Vector2 pressPos { get; private set; } = Vector2.zero;
 
     private ISubject<AttackButton> attackSubject = new Subject<AttackButton>();
     public IObservable<AttackButton> ObservableAtk => attackSubject;
@@ -64,8 +66,18 @@ public class AttackButton : FadeEnable
 
     public void Press(Vector2 pos)
     {
-        if (isFiring) return;
+        if (isPressEnable)
+        {
+            isPressReserved = true;
+            pressPos = pos;
+            return;
+        }
 
+        StartPressing(pos);
+    }
+
+    protected void StartPressing(Vector2 pos)
+    {
         move?.Kill();
         expand.Rewind();
         shrink.Rewind();
@@ -76,6 +88,8 @@ public class AttackButton : FadeEnable
 
     public void Release()
     {
+        isPressReserved = false;
+
         if (!isActive) return;
 
         move = ui.MoveBackRatio(duration, 0.5f).Play();
@@ -89,7 +103,7 @@ public class AttackButton : FadeEnable
 
     public void Cancel(float duration = 0.2f)
     {
-        isFiring = true;
+        isPressReserved = false;
 
         move = ui.MoveBackRatio(duration, 0.25f).Play();
         shrink.Play();
@@ -98,15 +112,25 @@ public class AttackButton : FadeEnable
         Enable();
     }
 
+    protected override void OnFadeOut()
+    {
+        isPressReserved = false;
+    }
+
     private void Disable()
     {
-        isFiring = true;
+        isPressEnable = true;
+        isPressReserved = false;
         region.FadeOut(0.1f).Play();
     }
 
     private void Enable()
     {
-        isFiring = false;
+        isPressEnable = false;
+        if (isPressReserved)
+        {
+            StartPressing(pressPos);
+        }
         region.FadeIn(0.2f).Play();
     }
 
