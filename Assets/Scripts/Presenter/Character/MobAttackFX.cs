@@ -9,7 +9,6 @@ public class MobAttackFX : MobAttack
     [SerializeField] protected int fxStartFrame = 0;
 
     protected float fxStartSec;
-    protected float fxStopSec;
 
     protected override void Start()
     {

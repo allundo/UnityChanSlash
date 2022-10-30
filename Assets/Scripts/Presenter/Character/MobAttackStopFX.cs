@@ -5,6 +5,13 @@ public class MobAttackStopFX : MobAttackFX
 {
     [SerializeField] protected int fxStopFrame = -1;
 
+    protected float fxStopSec;
+
+    protected override void Start()
+    {
+        base.Start();
+        fxStopSec = FrameToSec(fxStopFrame);
+    }
     protected virtual void OnFXStop()
     {
         attackFX.StopEmitting();
@@ -20,6 +27,6 @@ public class MobAttackStopFX : MobAttackFX
     public override Sequence AttackSequence(float attackDuration)
     {
         return base.AttackSequence(attackDuration)
-            .InsertCallback(fxStopFrame > 0 ? FrameToSec(fxStopFrame) : attackDuration, OnFXStop);
+            .InsertCallback(fxStopSec > fxStartSec ? fxStopSec : attackDuration, OnFXStop);
     }
 }
