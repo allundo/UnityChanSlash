@@ -3,7 +3,7 @@ using DG.Tweening;
 using UniRx;
 using System;
 
-public class AttackButton : FadeEnable
+public class AttackButton : FadeUI
 {
     [SerializeField] private int frames = 60;
     [SerializeField] private float motionFrameRate = 30f;
@@ -18,8 +18,8 @@ public class AttackButton : FadeEnable
     private float motionFrames;
     private float duration;
 
-    private FadeEnable region;
-    public void SetRegion(FadeEnable region)
+    private IFadeUI region;
+    public void SetRegion(IFadeUI region)
     {
         this.region = region;
     }
@@ -50,10 +50,8 @@ public class AttackButton : FadeEnable
         motionFrames = (float)frames / motionFrameRate / ATTACK_SPEED * FRAME_RATE;
         duration = (float)frames / motionFrameRate / CRITICAL_SPEED;
 
-        fade = new FadeTween(gameObject);
         ui = new UITween(gameObject);
-
-        Inactivate();
+        FadeInit(new FadeTween(gameObject, maxAlpha));
     }
 
     protected virtual void Start()
@@ -61,7 +59,7 @@ public class AttackButton : FadeEnable
         expand = ui.Resize(1.5f, duration, true).OnComplete(() => ui.ResetSize());
         shrink = ui.Resize(0.5f, 0.2f, true).OnComplete(() => ui.ResetSize());
 
-        Enable();
+        EnableButton();
     }
 
     public void Press(Vector2 pos)
@@ -81,9 +79,10 @@ public class AttackButton : FadeEnable
         move?.Kill();
         expand.Rewind();
         shrink.Rewind();
-        FadeIn(0.1f, () => ui.SetScreenPos(pos), null, false).Play();
+        ui.SetScreenPos(pos);
+        FadeActivate(0.1f);
 
-        Disable();
+        DisableButton();
     }
 
     public void Release()
@@ -94,8 +93,8 @@ public class AttackButton : FadeEnable
 
         move = ui.MoveBackRatio(duration, 0.5f).Play();
         expand.Play();
-        FadeOut(duration, null, null, false).Play();
 
+        FadeInactivate(duration);
         StartCoolTime(CoolTime);
 
         attackSubject.OnNext(this);
@@ -103,42 +102,41 @@ public class AttackButton : FadeEnable
 
     public void Cancel(float duration = 0.2f)
     {
-        isPressReserved = false;
-
         move = ui.MoveBackRatio(duration, 0.25f).Play();
         shrink.Play();
-        FadeOut(duration, null, null, false).Play();
 
-        Enable();
+        FadeInactivate(duration);
+
+        EnableButton();
     }
 
-    protected override void OnFadeOut()
+    protected override void BeforeFadeOut()
     {
         isPressReserved = false;
     }
 
-    private void Disable()
+    private void DisableButton()
     {
         isPressEnable = true;
         isPressReserved = false;
-        region.FadeOut(0.1f).Play();
+        region.FadeInactivate(0.1f);
     }
 
-    private void Enable()
+    private void EnableButton()
     {
         isPressEnable = false;
         if (isPressReserved)
         {
             StartPressing(pressPos);
         }
-        region.FadeIn(0.2f).Play();
+        region.FadeActivate(0.2f);
     }
 
     public void SetCoolTime(float coolTime)
     {
         if (countTime > coolTime) return;
 
-        Disable();
+        DisableButton();
         coolTimer?.Kill();
         coolTimer = StartCoolTime(coolTime);
     }
@@ -146,6 +144,6 @@ public class AttackButton : FadeEnable
     private Tween StartCoolTime(float coolTime)
     {
         countTime = coolTime;
-        return DOTween.To(() => countTime, time => countTime = time, 0f, coolTime).OnComplete(Enable).Play();
+        return DOTween.To(() => countTime, time => countTime = time, 0f, coolTime).OnComplete(EnableButton).Play();
     }
 }

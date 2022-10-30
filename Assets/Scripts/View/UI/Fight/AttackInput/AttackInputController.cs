@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using DG.Tweening;
 using UniRx;
 
 public class AttackInputController : MonoBehaviour
@@ -74,6 +73,7 @@ public class AttackInputController : MonoBehaviour
     public void Press(Vector2 screenPos)
     {
         pressPos = screenPos;
+
         currentButton = attackButtonsHandler.GetAttack(UIPos(screenPos));
 
         currentButton.Press(pressPos);
@@ -108,7 +108,7 @@ public class AttackInputController : MonoBehaviour
     {
         if (isFadeOnly)
         {
-            currentButton?.FadeOut()?.Play();
+            currentButton?.FadeInactivate();
         }
         else
         {
