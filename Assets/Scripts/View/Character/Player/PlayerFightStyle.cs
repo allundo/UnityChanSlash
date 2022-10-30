@@ -3,6 +3,9 @@ public class PlayerFightStyle : MobFightStyle
     protected PlayerAnimator anim;
     protected FightStyleHandler handler = null;
 
+    public float ShieldRatioR => handler.ShieldRatioR;
+    public float ShieldRatioL => handler.ShieldRatioL;
+
     protected virtual void Awake()
     {
         anim = GetComponent<PlayerAnimator>();

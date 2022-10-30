@@ -169,8 +169,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.96
   maxPitch: 0.98
-  handRRatio: 0.9
-  handLRatio: 0.3
+  attackRatioR: 1
+  attackRatioL: 0.2
 --- !u!1 &951536689231853308
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,8 +243,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.98
   maxPitch: 1
-  handRRatio: 0.9
-  handLRatio: 0.3
+  attackRatioR: 1
+  attackRatioL: 0.2
 --- !u!1 &1138550825308345171
 GameObject:
   m_ObjectHideFlags: 0
@@ -10350,6 +10350,8 @@ MonoBehaviour:
   - {fileID: 951536689231853251}
   - {fileID: 8871610324603898813}
   - {fileID: 6790127298360970673}
+  shieldRatioR: 0.8
+  shieldRatioL: 0.2
 --- !u!1 &2851954326824622380
 GameObject:
   m_ObjectHideFlags: 0
@@ -20342,8 +20344,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.94
   maxPitch: 0.96
-  handRRatio: 1
-  handLRatio: 0.5
+  attackRatioR: 1
+  attackRatioL: 0.5
 --- !u!1 &4382122766833917679
 GameObject:
   m_ObjectHideFlags: 0
@@ -20416,8 +20418,8 @@ MonoBehaviour:
   criticalSnd: {fileID: 2518429829761390687}
   minPitch: 0.98
   maxPitch: 1
-  handRRatio: 0.9
-  handLRatio: 0.3
+  attackRatioR: 1
+  attackRatioL: 0.2
 --- !u!1 &6431635885446623237
 GameObject:
   m_ObjectHideFlags: 0

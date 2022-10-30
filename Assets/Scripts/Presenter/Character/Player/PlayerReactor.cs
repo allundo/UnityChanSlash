@@ -18,6 +18,7 @@ public class PlayerReactor : MobReactor
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
     protected PlayerStatus playerStatus;
+    protected PlayerFightStyle playerFightStyle;
     protected ParticleSystem iceCrashVFX;
 
     public IAttacker lastAttacker { get; protected set; }
@@ -32,6 +33,7 @@ public class PlayerReactor : MobReactor
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
         playerStatus = status as PlayerStatus;
+        playerFightStyle = fightStyle as PlayerFightStyle;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
@@ -75,7 +77,7 @@ public class PlayerReactor : MobReactor
         itemInventory.FightStyleChange
              .Subscribe(equipments =>
              {
-                 (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
+                 playerFightStyle.SetFightStyle(equipments);
                  playerInput.SetFightInput(equipments);
              })
              .AddTo(this);
@@ -152,7 +154,7 @@ public class PlayerReactor : MobReactor
         if (guardState.IsShieldOn(dir))
         {
             float shieldEffectiveness = guardState.SetShield();
-            shield = mobStatus.Shield * shieldEffectiveness;
+            shield = (playerStatus.Shield + playerStatus.ShieldR * playerFightStyle.ShieldRatioR + playerStatus.ShieldL * playerFightStyle.ShieldRatioL) * shieldEffectiveness;
 
             if (shieldEffectiveness < 1f) minDamage = 0.1f;
         }
