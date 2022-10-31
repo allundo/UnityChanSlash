@@ -14,7 +14,7 @@ public interface IPlayerAttack : IMobAttack
 
 public class PlayerAttack : MobAttackFX, IPlayerAttack
 {
-    [SerializeField] protected ParticleSystem criticalFX = default;
+    [SerializeField] protected TweenParticle criticalFX = default;
     [SerializeField] protected AudioSource criticalSnd = default;
     [SerializeField] protected float minPitch = 1f;
     [SerializeField] protected float maxPitch = 1f;
@@ -51,7 +51,7 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
 
     protected virtual void OnCriticalFXStart()
     {
-        criticalFX.PlayEx();
+        criticalFX.Play();
         criticalSnd.SetPitch(Random.Range(minPitch, maxPitch));
         criticalSnd.PlayEx();
     }
