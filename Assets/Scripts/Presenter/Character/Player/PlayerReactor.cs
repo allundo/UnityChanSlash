@@ -119,7 +119,8 @@ public class PlayerReactor : MobReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) input.InputDie();
+        // Die if displaying HP is 0
+        if (life < 0.1f) input.InputDie();
 
         lifeGauge.UpdateLife(life, status.LifeMax.Value);
 
