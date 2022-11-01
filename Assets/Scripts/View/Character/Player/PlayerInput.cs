@@ -136,6 +136,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
         attackButtonsDisposable = attackButtonsHandler.AttackButtons()
             .Subscribe(cmd => InputCommand(cmd))
             .AddTo(this);
+
+        // Disable EquipInventory during fight.
+        IsEnemyDetected
+            .Subscribe(isDetected => itemInventory.SetEquipEnable(!isDetected))
+            .AddTo(this);
     }
 
     protected override void Update()

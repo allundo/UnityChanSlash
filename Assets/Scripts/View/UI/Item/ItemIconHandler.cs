@@ -230,7 +230,7 @@ public class ItemIconHandler : IItemIconHandler
             if (currentTarget != currentSelected)
             {
                 selector.Enable();
-                selector.SetSelect(pressedInventory.UIPos(index));
+                selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
                 pressedIndex = index;
                 pressedInventory.ExpandNum(index);
@@ -316,7 +316,7 @@ public class ItemIconHandler : IItemIconHandler
                 handler.StartLongPressing();
 
                 selector.SetRaycast(false);
-                selector.SetSelect(pressedInventory.UIPos(index));
+                selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
 
                 currentSelected.Resize(1f, 0.2f).Play();
                 currentSelected = null;
@@ -410,7 +410,7 @@ public class ItemIconHandler : IItemIconHandler
             if (pressedInventory is InventoryItemsHandler)
             {
                 selector.Enable();
-                selector.SetSelect(pressedInventory.UIPos(pressedIndex));
+                selector.SetSelect(pressedInventory.UIPos(pressedIndex), pressedInventory is EquipItemsHandler);
                 selectedInventory = pressedInventory;
                 return handler.selectMode;
             }

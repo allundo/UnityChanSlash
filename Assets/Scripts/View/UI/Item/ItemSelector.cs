@@ -38,6 +38,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         => (ui.CurrentScreenPos - screenPos).magnitude <= ui.CurrentSize.x * 0.5f;
 
     private bool isDragOn = false;
+    public bool isEquip { get; private set; } = false;
 
     void Awake()
     {
@@ -86,8 +87,9 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
         return SetPosition(pos);
     }
-    public ItemSelector SetSelect(Vector2 pos)
+    public ItemSelector SetSelect(Vector2 pos, bool isEquip)
     {
+        this.isEquip = isEquip;
         image.sprite = select;
         ui.Resize(1.4f, 0.2f).Play();
 

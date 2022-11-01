@@ -93,6 +93,13 @@ public class ItemInventory : MonoBehaviour
         inventoryItems.SetEnablePanels(isEnable);
         equipItems.SetEnablePanels(isEnable);
         enabled = selector.enabled = isEnable;
+        if (!isEnable) Cancel();
+    }
+
+    public void SetEquipEnable(bool isEnable)
+    {
+        equipItems.SetEnablePanels(isEnable);
+        if (!isEnable && selector.isEquip) Cancel();
     }
 
     public void Cancel() => iconHandler.CleanUp();
