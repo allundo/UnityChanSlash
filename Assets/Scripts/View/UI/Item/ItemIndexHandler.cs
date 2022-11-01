@@ -12,6 +12,7 @@ public interface IItemIndexHandler
     void DeleteNum(int index);
     bool UpdateItemNum(ItemIcon itemIcon);
     void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false);
+    bool RemoveItem(ItemIcon itemIcon);
     bool hasKeyBlade();
     ulong SumUpPrices();
 }
@@ -112,7 +113,11 @@ public abstract class ItemIndexHandler : IItemIndexHandler
     public virtual void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false)
         => SetItemWithEmptyCheck(index, itemIcon, tweenMove);
 
-    protected virtual void StoreItem(int index, ItemIcon itemIcon) => Items[index] = itemIcon;
+    protected virtual void StoreItem(int index, ItemIcon itemIcon)
+    {
+        itemIcon?.SetInventoryType(false);
+        Items[index] = itemIcon;
+    }
 
     protected void SetItemWithEmptyCheck(int index, ItemIcon itemIcon, bool tweenMove = false)
     {

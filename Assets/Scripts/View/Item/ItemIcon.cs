@@ -11,6 +11,7 @@ public class ItemIcon : UISymbol
     private Vector2 defaultSize;
 
     public int index { get; private set; }
+    public bool isEquip { get; private set; }
 
     public IObservable<Unit> OnItemEmpty => itemInfo.OnNumOfItemChange.Where(num => num == 0).Select(_ => Unit.Default);
 
@@ -99,6 +100,12 @@ public class ItemIcon : UISymbol
     public ItemIcon SetIndex(int index)
     {
         this.index = index;
+        return this;
+    }
+
+    public ItemIcon SetInventoryType(bool isEquip)
+    {
+        this.isEquip = isEquip;
         return this;
     }
 

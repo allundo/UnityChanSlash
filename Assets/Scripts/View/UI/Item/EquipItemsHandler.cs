@@ -53,7 +53,11 @@ public class EquipItemsHandler : ItemIndexHandler
         this.tweenMove = tweenMove;
         currentEquipments.Value = currentEquipments.Value.Equip(index, itemIcon);
     }
-    protected override void StoreItem(int index, ItemIcon itemIcon) => equips[index].Value = itemIcon;
+    protected override void StoreItem(int index, ItemIcon itemIcon)
+    {
+        itemIcon?.SetInventoryType(true);
+        equips[index].Value = itemIcon;
+    }
 
     protected void SetEquip(int index, ItemIcon itemIcon) => SetItemWithEmptyCheck(index, itemIcon, tweenMove);
     protected void SetEquipR(ItemIcon itemIcon) => SetEquip(2, itemIcon);

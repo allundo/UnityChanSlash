@@ -74,7 +74,11 @@ public class ItemInventory : MonoBehaviour
         return false;
     }
 
-    public bool Remove(ItemIcon itemIcon) => inventoryItems.RemoveItem(itemIcon);
+    public bool Remove(ItemIcon itemIcon)
+    {
+        IItemIndexHandler handler = itemIcon.isEquip ? equipItems : inventoryItems;
+        return handler.RemoveItem(itemIcon);
+    }
 
     private bool SetItem(int index, ItemInfo itemInfo)
     {
