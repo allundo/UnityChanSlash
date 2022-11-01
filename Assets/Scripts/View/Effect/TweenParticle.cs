@@ -3,20 +3,19 @@ using DG.Tweening;
 
 public abstract class TweenParticle : MonoBehaviour
 {
-    [SerializeField] private float duration = 1f;
+    [SerializeField] protected float duration = 1f;
     [SerializeField] private Ease ease = Ease.Linear;
 
     private ParticleSystem vfx;
     private Tween tween;
 
-    void Awake()
+    protected virtual void Awake()
     {
-        vfx = GetVFX();
         tween = DefaultTween;
+        vfx = GetComponent<ParticleSystem>();
     }
 
     private Tween DefaultTween => GetTween(duration).SetEase(ease).AsReusable(gameObject);
-    protected abstract ParticleSystem GetVFX();
     protected abstract Tween GetTween(float duration);
 
     protected void JoinTween(Tween tween)

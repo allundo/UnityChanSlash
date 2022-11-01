@@ -104,4 +104,31 @@ public class UnityChanMotionTest
         Object.Destroy(controller);
         yield return new WaitForSeconds(1f);
     }
+
+    [Ignore("Test for motion visual confirmation.")]
+    [UnityTest]
+    public IEnumerator _002_SingleMotionTest([Values("SwordKnuckle")] string type, [Values(0, 1, 2, 3)] int attackIndex)
+    {
+        var handler = Object.Instantiate(Resources.Load<FightStyleHandler>($"Prefabs/Character/Player/{type}StyleHandler"), unityChan.transform);
+        var controller = Object.Instantiate(Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_{type}"));
+        var moq = new Moq.Mock<IEquipmentStyle>();
+        moq.Setup(x => x.LoadFightStyle(unityChan.transform)).Returns(handler);
+        moq.Setup(x => x.animatorController).Returns(controller);
+
+        fightStyle.SetFightStyle(moq.Object);
+        anim.guard.Bool = true;
+
+        anim.critical.Bool = true;
+        anim.chargeUp.Bool = true;
+
+        yield return null;
+
+        for (int i = 0; i < 10; i++)
+        {
+            (fightStyle.Attack(attackIndex) as PlayerAttack).CriticalAttackSequence(1f).Play();
+            anim.Attack(attackIndex).Fire();
+            yield return new WaitForSeconds(1f);
+        }
+
+    }
 }
