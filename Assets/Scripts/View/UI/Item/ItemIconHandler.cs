@@ -243,7 +243,7 @@ public class ItemIconHandler : IItemIconHandler
         {
             handler.StopPressing();
 
-            currentSelected = pressedInventory.GetItem(pressedIndex);
+            currentSelected = pressedInventory?.GetItem(pressedIndex);
 
             if (currentSelected == null) return this;
 
@@ -413,9 +413,11 @@ public class ItemIconHandler : IItemIconHandler
                 selector.SetSelect(pressedInventory.UIPos(pressedIndex), pressedInventory is EquipItemsHandler);
                 selectedInventory = pressedInventory;
                 return handler.selectMode;
+                // OnRelease() will be fired by the pointed panel immediately.
             }
 
             return BaseCleanUp();
+            // OnRelease() will be fired by the pointed panel immediately.
         }
 
         public override IItemIconHandler CleanUp()
