@@ -50,7 +50,11 @@ public class ThirdPersonCamera : MonoBehaviour
     public void SwitchFloor(int floor)
     {
         pointLight.color = floorMaterialsData.Param(floor - 1).pointLightColor;
+        UpdatePointLightPos();
+    }
 
+    private void UpdatePointLightPos()
+    {
         LateUpdate();
         pointLight.transform.position = lookAt.position + pointLightOffset;
     }
@@ -93,6 +97,9 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (screenShot != null) Destroy(screenShot);
         screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+
+        // Reset point light position
+        UpdatePointLightPos();
     }
 
     public void TurnRight()
