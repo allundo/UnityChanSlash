@@ -46,19 +46,17 @@ public class SpringBone : MonoBehaviour
 
     private Vector3 DeltaTipPos => currTipPos - prevTipPos;
 
-    public void UpdateSpring(float deltaTime)
+    public void UpdateSpring()
     {
         //回転をリセット
         transform.localRotation = defaultLocalRotation;
 
-        float sqrDt = deltaTime * deltaTime;
-
         // Calculate spring force
         Vector3 stiff = transform.rotation * (boneAxis * stiffnessForce);
         Vector3 drag = -DeltaTipPos * dragForce;
-        Vector3 force = (stiff + drag + springForce) / sqrDt;
+        Vector3 force = (stiff + drag + springForce);
 
-        Vector3 deltaTipPosByForce = DeltaTipPos + force * sqrDt;
+        Vector3 deltaTipPosByForce = DeltaTipPos + force;
 
         prevTipPos = currTipPos;
 
