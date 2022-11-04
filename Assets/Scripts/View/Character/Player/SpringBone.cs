@@ -27,57 +27,51 @@ public class SpringBone : MonoBehaviour
     public SpringCollider[] colliders;
 
     private float springLength;
-    private Quaternion defaultLocalRotation;
     private Vector3 currTipPos;
-    private Vector3 prevTipPos;
+    private Vector3 springForce;
 
-    private void Awake()
-    {
-        defaultLocalRotation = transform.localRotation;
-    }
+    private Vector3 BoneVector => currTipPos - transform.position;
 
     private void Start()
     {
         springLength = Vector3.Distance(transform.position, child.position);
         currTipPos = child.position;
-        prevTipPos = child.position;
     }
 
-    private Vector3 DeltaTipPos => currTipPos - prevTipPos;
+    public void RestoreBoneLength()
+    {
+        currTipPos = transform.position + (BoneVector.normalized * springLength);
+    }
 
     public void UpdateSpring(Vector3 windForce)
     {
-        //回転をリセット
-        transform.localRotation = defaultLocalRotation;
+        // Store previous spring bone tip position
+        Vector3 prevTipPos = currTipPos;
 
-        // Calculate spring force
-        Vector3 stiff = transform.rotation * (boneAxis * stiffnessForce);
-        Vector3 drag = -DeltaTipPos * dragForce;
-        Vector3 force = (stiff + drag + windForce);
+        // Apply stored spring force with stiffness
+        currTipPos += springForce + transform.rotation * (boneAxis * stiffnessForce);
+        RestoreBoneLength();
 
-        Vector3 deltaTipPosByForce = DeltaTipPos + force;
-
-        prevTipPos = currTipPos;
-
-        // Update spring bone
-        currTipPos += deltaTipPosByForce;
-        currTipPos = ((currTipPos - transform.position).normalized * springLength) + transform.position;
-
-        //衝突判定
-        for (int i = 0; i < colliders.Length; i++)
+        // Collision with spring colliders
+        colliders.ForEach(collider =>
         {
-            if (Vector3.Distance(currTipPos, colliders[i].transform.position) <= (radius + colliders[i].radius))
+            float distance = radius + collider.radius;
+            float sqrDistance = distance * distance;
+            Vector3 tipToCol = collider.transform.position - currTipPos;
+            if (tipToCol.sqrMagnitude < sqrDistance)
             {
-                Vector3 normal = (currTipPos - colliders[i].transform.position).normalized;
-                currTipPos = colliders[i].transform.position + (normal * (radius + colliders[i].radius));
-                currTipPos = ((currTipPos - transform.position).normalized * springLength) + transform.position;
+                currTipPos = collider.transform.position - tipToCol.normalized * distance;
+                RestoreBoneLength();
             }
-        }
+        });
 
-        //回転を適用；
+        // Apply rotation to the bone
         Vector3 aimVector = transform.TransformDirection(boneAxis);
-        Quaternion aimRotation = Quaternion.FromToRotation(aimVector, currTipPos - transform.position);
+        Quaternion aimRotation = Quaternion.FromToRotation(aimVector, BoneVector);
         transform.rotation = aimRotation * transform.rotation;
+
+        // Calculate next spring force
+        springForce = (currTipPos - prevTipPos) * (1f - dragForce) + windForce;
     }
 
 #if UNITY_EDITOR
