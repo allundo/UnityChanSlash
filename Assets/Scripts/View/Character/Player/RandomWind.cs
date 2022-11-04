@@ -3,7 +3,7 @@
 public class RandomWind
 {
     private Vector3 direction;
-    private Quaternion angle;
+    private Quaternion deltaAngle;
     private int rotateFrames;
     private int frameCount;
     public bool isWindActive;
@@ -18,13 +18,13 @@ public class RandomWind
     private void ResetRotation()
     {
         frameCount = 0;
-        rotateFrames = UnityEngine.Random.Range(200, 2000);
-        angle = Quaternion.Euler(0f, UnityEngine.Random.Range(-120f, 120f) / (float)rotateFrames, 0f);
+        rotateFrames = Random.Range(200, 2000);
+        deltaAngle = Quaternion.Euler(0f, (float)Random.Range(-120, 120) / (float)rotateFrames, 0f);
     }
 
     public Vector3 GetNewWindForce()
     {
-        direction = angle * direction;
+        direction = deltaAngle * direction;
         if (++frameCount == rotateFrames) ResetRotation();
 
         return isWindActive ? Mathf.PerlinNoise(Time.time, 0.0f) * 0.005f * direction : Vector3.zero;
