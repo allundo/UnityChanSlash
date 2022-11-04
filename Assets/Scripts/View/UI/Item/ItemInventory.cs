@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Linq;
 using UniRx;
 using System;
+using TMPro;
 
 [RequireComponent(typeof(ItemIconGenerator))]
 public class ItemInventory : MonoBehaviour
@@ -10,6 +11,9 @@ public class ItemInventory : MonoBehaviour
     [SerializeField] private ItemPanel prefabItemPanel = default;
     [SerializeField] private ItemPanel prefabEquipPanel = default;
     [SerializeField] private RectTransform rtEquipItems = default;
+    [SerializeField] private TextMeshProUGUI tmRightHandNone = default;
+    [SerializeField] private TextMeshProUGUI tmLeftHandNone = default;
+    [SerializeField] private TextMeshProUGUI tmBodyAccessoryNone = default;
 
     private ItemIconGenerator iconGenerator;
     protected InventoryItemsHandler inventoryItems;
@@ -56,6 +60,18 @@ public class ItemInventory : MonoBehaviour
         selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress()).AddTo(this);
         selector.OnDragMode.Subscribe(dragPos => iconHandler.OnDrag(dragPos)).AddTo(this);
         selector.OnReleased.Subscribe(_ => iconHandler.OnSubmit()).AddTo(this);
+
+        EquipR.Select(item => item == null)
+            .Subscribe(isEquipNull => tmRightHandNone.enabled = isEquipNull)
+            .AddTo(this);
+
+        EquipL.Select(item => item == null)
+            .Subscribe(isEquipNull => tmLeftHandNone.enabled = isEquipNull)
+            .AddTo(this);
+
+        EquipBody.Select(item => item == null)
+            .Subscribe(isEquipNull => tmBodyAccessoryNone.enabled = isEquipNull)
+            .AddTo(this);
     }
 
     public void ResetOrientation(DeviceOrientation orientation)
