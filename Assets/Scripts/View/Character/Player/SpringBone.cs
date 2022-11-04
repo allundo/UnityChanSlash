@@ -2,21 +2,31 @@
 
 public class SpringBone : MonoBehaviour
 {
-    //次のボーン
+    /// <summary>
+    /// Child bone
+    /// </summary>
     public Transform child;
 
-    //ボーンの向き
     public Vector3 boneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
+
+    /// <summary>
+    /// Tip radius to use collision.
+    /// </summary>
     public float radius = 0.05f;
 
-    //バネが戻る力
+    /// <summary>
+    /// Spring elastic force that restore to original angle.
+    /// </summary>
     public float stiffnessForce = 0.01f;
 
-    //力の減衰力
+    /// <summary>
+    /// Dampen spring force
+    /// </summary>
     public float dragForce = 0.4f;
+
     public Vector3 springForce = new Vector3(0.0f, -0.0001f, 0.0f);
     public SpringCollider[] colliders;
-    public bool debug = true;
+
     private float springLength;
     private Quaternion defaultLocalRotation;
     private Transform trs;
@@ -79,12 +89,11 @@ public class SpringBone : MonoBehaviour
         trs.rotation = aimRotation * trs.rotation;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (debug)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(currTipPos, radius);
-        }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(currTipPos, radius);
     }
+#endif
 }
