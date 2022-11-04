@@ -340,24 +340,41 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            ItemIcon pressed = selectedInventory.GetItem(pressedIndex);
+            ItemIcon selected = selectedInventory.GetItem(pressedIndex);
 
-            if (pressed == null) return CleanUp();
+            if (selected == null) return CleanUp();
 
-            if (pressed.itemInfo.attr != ItemAttr.Equipment)
+            bool isEquip = selected.itemInfo.attr == ItemAttr.Equipment;
+
+            // In the case of item use. Also KeyBlade is usable.
+            if (!isEquip)
             {
-                onUseItem.OnNext(pressed.itemInfo);
-                selectedInventory.UpdateItemNum(pressed);
+                onUseItem.OnNext(selected.itemInfo);
+                selectedInventory.UpdateItemNum(selected);
             }
 
-            // Continue Select mode when the item is remaining after use it.
-            if (selectedInventory.GetItem(pressedIndex) != null)
+            if (selected.itemInfo.numOfItem == 0) return CleanUp();
+
+            // In the case of item equipment.
+            if (selectedEquipment != null)
             {
-                handler.PlaySize(currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo));
-                return this;
+                int index =
+                    selectedEquipment.category == EquipmentCategory.Shield ? 0
+                    : selectedEquipment.category == EquipmentCategory.Amulet ? 1
+                    : 2;
+
+                ItemIcon replaced = equipItems.GetItem(index);
+                if (selected != replaced)
+                {
+                    equipItems.SetItem(index, selected, true);
+                    selectedInventory.SetItem(pressedIndex, replaced, true);
+                    return CleanUp();
+                }
             }
 
-            return CleanUp();
+            // Item use interaction.
+            handler.PlaySize(currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo));
+            return this;
         }
     }
 

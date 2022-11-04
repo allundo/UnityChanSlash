@@ -52,6 +52,8 @@ public class EquipItemsHandler : ItemIndexHandler
     {
         this.tweenMove = tweenMove;
         currentEquipments.Value = currentEquipments.Value.Equip(index, itemIcon);
+
+        if (itemIcon != null) ActiveMessageController.Instance.InputMessageData(new ActiveMessageData(itemIcon.itemInfo.name + " を装備した！"));
     }
     protected override void StoreItem(int index, ItemIcon itemIcon)
     {
