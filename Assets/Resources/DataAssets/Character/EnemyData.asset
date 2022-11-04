@@ -33,8 +33,8 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0, z: 0}
     tamingProbability: 0
   - name: "\u30B9\u30E9\u30A4\u30E0"
-    defaultLifeMax: 6
-    attack: 1
+    defaultLifeMax: 60
+    attack: 10
     prefab: {fileID: 6806135843735641528, guid: 07d0b5236129543e5a459a629a0b34ba,
       type: 3}
     isOnGround: 1
@@ -53,8 +53,8 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.3, z: 0}
     tamingProbability: 0.1
   - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
-    defaultLifeMax: 6
-    attack: 1
+    defaultLifeMax: 60
+    attack: 10
     prefab: {fileID: 4648225818197331777, guid: b339f0237658d495a88baa1d14ea8395,
       type: 3}
     isOnGround: 1
@@ -73,12 +73,12 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.3, z: 0}
     tamingProbability: 0.1
   - name: "\u30B4\u30D6\u30EA\u30F3"
-    defaultLifeMax: 8
-    attack: 1
+    defaultLifeMax: 80
+    attack: 15
     prefab: {fileID: 7026800704296965620, guid: ff99ea07affb94dfea946d8b36d43fdf,
       type: 3}
     isOnGround: 1
-    shield: 1
+    shield: 15
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
     backDamageMultiplier: 3
@@ -93,8 +93,8 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 1.05, z: 0}
     tamingProbability: 0.8
   - name: "\u9EC4\u3046\u3055\u304E"
-    defaultLifeMax: 6
-    attack: 1
+    defaultLifeMax: 60
+    attack: 10
     prefab: {fileID: 4710703816869286453, guid: 793feef66f23249d0887b342eb836577,
       type: 3}
     isOnGround: 1
@@ -113,12 +113,12 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.5, z: 0}
     tamingProbability: 0.5
   - name: "\u7D2B\u30B3\u30A6\u30E2\u30EA"
-    defaultLifeMax: 5
-    attack: 1
+    defaultLifeMax: 50
+    attack: 8
     prefab: {fileID: 2735492676472821120, guid: fdeecbb6ad9bc4095b516a4cefc5010a,
       type: 3}
     isOnGround: 0
-    shield: 1
+    shield: 0
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -133,12 +133,12 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 1.5, z: 0}
     tamingProbability: 0.1
   - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
-    defaultLifeMax: 6
-    attack: 1
+    defaultLifeMax: 60
+    attack: 10
     prefab: {fileID: 6037122337985102315, guid: a03eb92f0820c44a88b400f98c5cfb97,
       type: 3}
     isOnGround: 1
-    shield: 1
+    shield: 0
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
     backDamageMultiplier: 4
@@ -153,12 +153,12 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.75, z: 0}
     tamingProbability: 1
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u5175"
-    defaultLifeMax: 10
-    attack: 1
+    defaultLifeMax: 100
+    attack: 15
     prefab: {fileID: 1234450232476947528, guid: 2a77346479df447fdbc8731795f33d55,
       type: 3}
     isOnGround: 1
-    shield: 1
+    shield: 15
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
     backDamageMultiplier: 3
@@ -173,8 +173,8 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.75, z: 0}
     tamingProbability: 0.5
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u9B54\u5C0E"
-    defaultLifeMax: 10
-    attack: 1
+    defaultLifeMax: 100
+    attack: 10
     prefab: {fileID: 5783524372521205095, guid: bee73a9397f0e4bb4beb73c1ef5447af,
       type: 3}
     isOnGround: 1
@@ -193,11 +193,11 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.8, z: 0}
     tamingProbability: 0.5
   - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093"
-    defaultLifeMax: 4
-    attack: 1
+    defaultLifeMax: 40
+    attack: 10
     prefab: {fileID: 173471009557050624, guid: e54bb68aa4b0d4d509caf67f4a7777a6, type: 3}
     isOnGround: 1
-    shield: 1
+    shield: 0
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2

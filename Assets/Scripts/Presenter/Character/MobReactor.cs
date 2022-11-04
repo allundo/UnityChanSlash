@@ -71,9 +71,9 @@ public class MobReactor : Reactor, IMobReactor
         {
             if (damage > 0 && mobStatus.icingFrames == 0f)
             {
-                var icingFrames = damage * 100f;
+                var icingFrames = damage * 10f;
                 input.InputIced(icingFrames);
-                effect.OnDamage(Mathf.Min(0.01f, damage), type, attr);
+                effect.OnDamage(Mathf.Min(0.01f, LifeRatio(damage)), type, attr);
             }
             return 0f;
         }

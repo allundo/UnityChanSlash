@@ -56,7 +56,7 @@ public class PlayerLifeGauge : MonoBehaviour
         float life = heal + prevLife;
 
         effectOnUpdate = true;
-        bool isHealVisible = (int)(life * 10f) > (int)(prevLife * 10f);
+        bool isHealVisible = (int)life > (int)prevLife;
         if (isHealVisible) smallHealSound.PlayEx();
     }
 
@@ -83,8 +83,8 @@ public class PlayerLifeGauge : MonoBehaviour
 
     public void UpdateLifeText(float life, float lifeMax)
     {
-        int hp = life > 0.0f ? (int)(life * 10) : 0;
-        lifeText.text = hp + " / " + (int)(lifeMax * 10);
+        int hp = life < 1.0f ? (life > 0.0f ? 1 : 0) : (int)life;
+        lifeText.text = hp + " / " + (int)lifeMax;
     }
 
     private Tween DamageShake(float damageRatio)
