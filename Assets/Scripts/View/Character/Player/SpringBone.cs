@@ -29,46 +29,42 @@ public class SpringBone : MonoBehaviour
 
     private float springLength;
     private Quaternion defaultLocalRotation;
-    private Transform trs;
     private Vector3 currTipPos;
     private Vector3 prevTipPos;
 
     private void Awake()
     {
-        trs = transform;
         defaultLocalRotation = transform.localRotation;
     }
 
     private void Start()
     {
-        springLength = Vector3.Distance(trs.position, child.position);
+        springLength = Vector3.Distance(transform.position, child.position);
         currTipPos = child.position;
         prevTipPos = child.position;
     }
 
+    private Vector3 DeltaTipPos => currTipPos - prevTipPos;
+
     public void UpdateSpring(float deltaTime)
     {
         //回転をリセット
-        trs.localRotation = Quaternion.identity * defaultLocalRotation;
+        transform.localRotation = defaultLocalRotation;
 
         float sqrDt = deltaTime * deltaTime;
 
-        //stiffness
-        Vector3 force = trs.rotation * (boneAxis * stiffnessForce) / sqrDt;
+        // Calculate spring force
+        Vector3 stiff = transform.rotation * (boneAxis * stiffnessForce);
+        Vector3 drag = -DeltaTipPos * dragForce;
+        Vector3 force = (stiff + drag + springForce) / sqrDt;
 
-        //drag
-        force += (prevTipPos - currTipPos) * dragForce / sqrDt;
+        Vector3 deltaTipPosByForce = DeltaTipPos + force * sqrDt;
 
-        force += springForce / sqrDt;
+        prevTipPos = currTipPos;
 
-        //前フレームと値が同じにならないように
-        Vector3 temp = currTipPos;
-
-        //verlet
-        currTipPos = (currTipPos - prevTipPos) + currTipPos + (force * sqrDt);
-
-        //長さを元に戻す
-        currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
+        // Update spring bone
+        currTipPos += deltaTipPosByForce;
+        currTipPos = ((currTipPos - transform.position).normalized * springLength) + transform.position;
 
         //衝突判定
         for (int i = 0; i < colliders.Length; i++)
@@ -77,16 +73,14 @@ public class SpringBone : MonoBehaviour
             {
                 Vector3 normal = (currTipPos - colliders[i].transform.position).normalized;
                 currTipPos = colliders[i].transform.position + (normal * (radius + colliders[i].radius));
-                currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
+                currTipPos = ((currTipPos - transform.position).normalized * springLength) + transform.position;
             }
         }
 
-        prevTipPos = temp;
-
         //回転を適用；
-        Vector3 aimVector = trs.TransformDirection(boneAxis);
-        Quaternion aimRotation = Quaternion.FromToRotation(aimVector, currTipPos - trs.position);
-        trs.rotation = aimRotation * trs.rotation;
+        Vector3 aimVector = transform.TransformDirection(boneAxis);
+        Quaternion aimRotation = Quaternion.FromToRotation(aimVector, currTipPos - transform.position);
+        transform.rotation = aimRotation * transform.rotation;
     }
 
 #if UNITY_EDITOR
