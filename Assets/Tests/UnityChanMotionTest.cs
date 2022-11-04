@@ -131,4 +131,78 @@ public class UnityChanMotionTest
         }
 
     }
+
+    /// <summary>
+    /// Animation Parameters aren't reset even when the overridden Animator Controller of the Runtime Animation Controller is set. <br />
+    /// But all Animation Parameters are reset when the Animator Controller without compatibility is set, <br />
+    /// even though switching from overridden one to the base.
+    /// </summary>
+    /// <returns></returns>
+    [UnityTest]
+    public IEnumerator _003_RuntimeAnimatorControllerSwitchTest()
+    {
+        var baseStyle = Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_BaseStyleMotion");
+        var knuckleKnuckle = Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_KnuckleKnuckle");
+        var swordKnuckle = Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_SwordKnuckle");
+        var knuckleKnuckleDummy = Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_KnuckleKnuckleDummy");
+
+        var animator = unityChan.GetComponent<Animator>();
+
+        yield return null;
+
+        Assert.AreEqual(10f, anim.lifeRatio.Float);
+
+        yield return null;
+
+        // Switch to tha same controller.
+        animator.runtimeAnimatorController = baseStyle;
+
+        yield return null;
+
+        Assert.AreEqual(10f, anim.lifeRatio.Float);
+
+        yield return null;
+
+        // Switch to another controller.
+        animator.runtimeAnimatorController = knuckleKnuckleDummy;
+
+        yield return null;
+
+        // Parameters are reset
+        Assert.AreEqual(0f, anim.lifeRatio.Float);
+
+        yield return null;
+
+        animator.runtimeAnimatorController = baseStyle;
+
+        anim.lifeRatio.Float = 10f;
+
+        // Switch to overridden controller
+        animator.runtimeAnimatorController = swordKnuckle;
+
+        yield return null;
+
+        Assert.AreEqual(10f, anim.lifeRatio.Float);
+
+        yield return null;
+
+        // Switch to the controller overrode the same base controller
+        animator.runtimeAnimatorController = knuckleKnuckle;
+
+        yield return null;
+
+        Assert.AreEqual(10f, anim.lifeRatio.Float);
+
+        yield return null;
+
+        // Switch back to the base controller
+        animator.runtimeAnimatorController = baseStyle;
+
+        yield return null;
+
+        // Parameters are reset
+        Assert.AreEqual(0f, anim.lifeRatio.Float);
+
+        yield return null;
+    }
 }
