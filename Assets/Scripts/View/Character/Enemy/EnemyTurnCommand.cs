@@ -18,7 +18,7 @@ public class EnemyTurnAnimL : EnemyTurnCommand
     {
         turnAnim.turnL.Fire();
         map.TurnLeft();
-        playingTween = tweenMove.TurnToDir.Play();
+        playingTween = tweenMove.TurnToDir().Play();
         return true;
     }
 }
@@ -31,7 +31,7 @@ public class EnemyTurnAnimR : EnemyTurnCommand
     {
         turnAnim.turnR.Fire();
         map.TurnRight();
-        playingTween = tweenMove.TurnToDir.Play();
+        playingTween = tweenMove.TurnToDir().Play();
         return true;
     }
 }

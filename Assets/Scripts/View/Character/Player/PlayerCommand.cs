@@ -471,7 +471,7 @@ public class PlayerTurnL : PlayerCommand
         hidePlateHandler.Turn();
         itemGenerator.Turn(mobMap.dir);
 
-        playingTween = tweenMove.TurnToDir.SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
+        playingTween = tweenMove.TurnToDir().SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
     }
 }
@@ -489,7 +489,7 @@ public class PlayerTurnR : PlayerCommand
         hidePlateHandler.Turn();
         itemGenerator.Turn(mobMap.dir);
 
-        playingTween = tweenMove.TurnToDir.SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
+        playingTween = tweenMove.TurnToDir().SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
     }
 }
@@ -788,6 +788,8 @@ public class PlayerDie : PlayerCommand
 
     public override IObservable<Unit> Execute()
     {
+        playingTween = tweenMove.TurnToDir(1f).Play();
+
         itemInventory.Cancel();
         react.OnDie();
         playerAnim.die.Bool = true;

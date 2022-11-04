@@ -90,6 +90,8 @@ public class UndeadSleep : UndeadCommand
 
     public override IObservable<Unit> Execute()
     {
+        playingTween = tweenMove.TurnToDir(1f).Play();
+
         undeadAnim.die.Bool = undeadAnim.sleep.Bool = true;
         undeadReact.OnSleep();
         input.Interrupt(resurrection, false);

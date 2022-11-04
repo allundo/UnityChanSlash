@@ -110,7 +110,8 @@ public class TweenMove
         return tf.DORotate(new Vector3(0, angle, 0), duration * timeScale).SetRelative();
     }
 
-    public Tween TurnToDir => tf.DORotate(map.dir.Angle, duration);
+    public Tween TurnToDir() => tf.DORotate(map.dir.Angle, this.duration);
+    public Tween TurnToDir(float duration) => tf.DORotate(map.dir.Angle, duration);
 
     /// <summary>
     /// DOTween jump with updating IsObjectOn flag to destination Tile
