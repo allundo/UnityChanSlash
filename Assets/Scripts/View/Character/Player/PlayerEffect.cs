@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerEffect : MobEffect
 {
-    protected PlayerAnimator anim;
-
     protected override void Awake()
     {
         matColEffect = new MobMatColorEffect(transform);
@@ -16,7 +14,7 @@ public class PlayerEffect : MobEffect
     public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         base.OnDamage(damageRatio, type, attr);
-        anim.rest.Bool = false;
+        (anim as PlayerAnimator).rest.Bool = false;
     }
 
     public override void OnActive()

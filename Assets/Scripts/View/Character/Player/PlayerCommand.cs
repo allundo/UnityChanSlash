@@ -859,9 +859,7 @@ public class PlayerIcedCommand : PlayerCommand, IIcedCommand
 
     protected override bool Action()
     {
-        anim.Pause();
         mobReact.Iced(icingFrames);
-        completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
         SetUIInvisible();
         SetOnCompleted(() => mobReact.Melt());
         return true;

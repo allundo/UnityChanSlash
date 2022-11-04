@@ -26,6 +26,8 @@ public class MobEffect : MonoBehaviour, IMobEffect
 
     protected DamageSndData sndData;
 
+    protected MobAnimator anim;
+
     /// <summary>
     /// Animation effects played by Animation clip. They need to stop on dying.
     /// </summary>
@@ -48,6 +50,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
 
     protected virtual void Awake()
     {
+        anim = GetComponent<MobAnimator>();
         matColEffect = new MobMatColorEffect(transform, excludeBody);
         sndData = Resources.Load<DamageSndData>("DataAssets/Sound/DamageSndData");
         animFX = GetComponent<AnimationFX>();
@@ -109,12 +112,14 @@ public class MobEffect : MonoBehaviour, IMobEffect
 
     public virtual void OnIced(Vector3 pos)
     {
+        anim.Pause();
         resourceFX.PlayVFX(VFXType.Iced, pos);
         matColEffect.Flash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
     }
 
     public virtual void OnMelt()
     {
+        anim.Resume();
         resourceFX.StopVFX(VFXType.Iced);
         matColEffect.Flash(Color.black, 0.5f);
     }

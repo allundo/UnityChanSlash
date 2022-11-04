@@ -2,10 +2,9 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System;
-using UnityChan;
 using static UniRx.Triggers.ObservableStateMachineTrigger;
 
-[RequireComponent(typeof(RandomWind))]
+[RequireComponent(typeof(SpringManager))]
 public class PlayerAnimator : ShieldAnimator
 {
     protected ObservableStateMachineTrigger trigger;
@@ -38,7 +37,7 @@ public class PlayerAnimator : ShieldAnimator
     public AnimatorFloat rSpeed { get; protected set; }
 
     private PlayerBodyCollider bodyCollider;
-    private RandomWind randomWind;
+    private SpringManager springManager;
 
     protected override void Awake()
     {
@@ -65,7 +64,7 @@ public class PlayerAnimator : ShieldAnimator
         fallHeight = new AnimatorFloat(anim, "FallHeight");
         rSpeed = new AnimatorFloat(anim, "RSpeed");
 
-        randomWind = GetComponent<RandomWind>();
+        springManager = GetComponent<SpringManager>();
     }
 
     protected void Start()
@@ -87,13 +86,13 @@ public class PlayerAnimator : ShieldAnimator
     public override void Pause()
     {
         anim.speed = 0f;
-        randomWind.isWindActive = false;
+        springManager.Pause();
     }
 
     public override void Resume()
     {
         anim.speed = 1f;
-        randomWind.isWindActive = true;
+        springManager.Resume();
     }
 
     public abstract class TriggerUpdate : TriggerEx

@@ -1,35 +1,41 @@
 ﻿using UnityEngine;
+using System;
 
-public class RandomWind : MonoBehaviour
+public class RandomWind
 {
     private SpringBone[] springBones;
-    public bool isWindActive = true;
+    private Vector3 direction;
+    private Quaternion angle;
+    private int rotateFrames;
+    private int frameCount;
+    public bool isWindActive;
 
-    // Use this for initialization
-    void Start()
+    public RandomWind(SpringBone[] springBones, bool isWindActive = true)
     {
-        springBones = GetComponent<SpringManager>().springBones;
+        this.springBones = springBones;
+        this.isWindActive = isWindActive;
+        direction = new Vector3(1f, 0f, 0f);
+        ResetRotation();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void UpdateDirection()
     {
-        Vector3 force = Vector3.zero;
-        if (isWindActive)
-        {
-            force = new Vector3(Mathf.PerlinNoise(Time.time, 0.0f) * 0.005f, 0, 0);
-        }
-
-        for (int i = 0; i < springBones.Length; i++)
-        {
-            springBones[i].springForce = force;
-        }
+        direction = angle * direction;
+        if (++frameCount == rotateFrames) ResetRotation();
+    }
+    private void ResetRotation()
+    {
+        frameCount = 0;
+        rotateFrames = UnityEngine.Random.Range(200, 2000);
+        angle = Quaternion.Euler(0f, UnityEngine.Random.Range(-120f, 120f) / (float)rotateFrames, 0f);
     }
 
-    void OnGUI()
+    public void UpdateSpringForce()
     {
-        Rect rect1 = new Rect(10, Screen.height - 40, 400, 30);
-        isWindActive = GUI.Toggle(rect1, isWindActive, "Random Wind");
-    }
+        Vector3 force = isWindActive ? Mathf.PerlinNoise(Time.time, 0.0f) * 0.005f * direction : Vector3.zero;
 
+        Array.ForEach(springBones, bone => bone.springForce = force);
+
+        UpdateDirection();
+    }
 }

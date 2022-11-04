@@ -1,7 +1,5 @@
 public class RabbitEffect : EnemyEffect
 {
-    protected RabbitAnimator anim;
-
     protected override void Awake()
     {
         base.Awake();
@@ -11,6 +9,6 @@ public class RabbitEffect : EnemyEffect
     public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         base.OnDamage(damageRatio, type, attr);
-        anim.wondering.Bool = false;
+        (anim as RabbitAnimator).wondering.Bool = false;
     }
 }

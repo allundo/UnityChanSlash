@@ -29,21 +29,6 @@ public class SpringBone : MonoBehaviour
         defaultLocalRotation = transform.localRotation;
     }
 
-    private SpringManager GetParentSpringManager(Transform t)
-    {
-        var springManager = t.GetComponent<SpringManager>();
-
-        if (springManager != null)
-            return springManager;
-
-        if (t.parent != null)
-        {
-            return GetParentSpringManager(t.parent);
-        }
-
-        return null;
-    }
-
     private void Start()
     {
         springLength = Vector3.Distance(trs.position, child.position);

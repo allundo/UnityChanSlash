@@ -10,7 +10,7 @@ public class AttackButton : FadeUI
     [SerializeField] private float cancelStart = 1f;
     [SerializeField] private float coolTimeRatio = 1f;
 
-    public static readonly float FRAME_RATE = Constants.FRAME_RATE;
+    public static readonly int FRAME_RATE = Constants.FRAME_RATE;
     public static readonly float FRAME_UNIT = Constants.FRAME_SEC_UNIT;
     public static readonly float ATTACK_SPEED = Constants.PLAYER_ATTACK_SPEED;
     public static readonly float CRITICAL_SPEED = Constants.PLAYER_CRITICAL_SPEED;
@@ -47,7 +47,7 @@ public class AttackButton : FadeUI
 
     protected override void Awake()
     {
-        motionFrames = (float)frames / motionFrameRate / ATTACK_SPEED * FRAME_RATE;
+        motionFrames = (float)frames / motionFrameRate / ATTACK_SPEED * (float)FRAME_RATE;
         duration = (float)frames / motionFrameRate / CRITICAL_SPEED;
 
         ui = new UITween(gameObject);

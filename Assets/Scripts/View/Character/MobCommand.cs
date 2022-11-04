@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System;
 using UniRx;
 
@@ -41,9 +40,7 @@ public class IcedCommand : MobCommand, IIcedCommand
 
     protected override bool Action()
     {
-        anim.Pause();
         mobReact.Iced(icingFrames);
-        completeTween = tweenMove.DelayedCall(1f, anim.Resume).Play();
         SetOnCompleted(() => mobReact.Melt());
         return true;
     }

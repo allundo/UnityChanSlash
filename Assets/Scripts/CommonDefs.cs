@@ -19,8 +19,8 @@ public class InputControl
 
 public class Constants
 {
-    public static readonly float FRAME_RATE = 60f;
-    public static readonly float FRAME_SEC_UNIT = 1f / FRAME_RATE;
+    public static readonly int FRAME_RATE = 60;
+    public static readonly float FRAME_SEC_UNIT = 1f / (float)FRAME_RATE;
     public static readonly float TILE_UNIT = 2.5f;
     public static readonly float PLAYER_ATTACK_SPEED = 4f;
     public static readonly float PLAYER_CRITICAL_SPEED = 5f;
