@@ -24,7 +24,6 @@ public class SpringBone : MonoBehaviour
     /// </summary>
     public float dragForce = 0.4f;
 
-    public Vector3 springForce = new Vector3(0.0f, -0.0001f, 0.0f);
     public SpringCollider[] colliders;
 
     private float springLength;
@@ -46,7 +45,7 @@ public class SpringBone : MonoBehaviour
 
     private Vector3 DeltaTipPos => currTipPos - prevTipPos;
 
-    public void UpdateSpring()
+    public void UpdateSpring(Vector3 windForce)
     {
         //回転をリセット
         transform.localRotation = defaultLocalRotation;
@@ -54,7 +53,7 @@ public class SpringBone : MonoBehaviour
         // Calculate spring force
         Vector3 stiff = transform.rotation * (boneAxis * stiffnessForce);
         Vector3 drag = -DeltaTipPos * dragForce;
-        Vector3 force = (stiff + drag + springForce);
+        Vector3 force = (stiff + drag + windForce);
 
         Vector3 deltaTipPosByForce = DeltaTipPos + force;
 

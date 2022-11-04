@@ -10,17 +10,13 @@ public class SpringManager : MonoBehaviour
 
     void Awake()
     {
-        randomWind = new RandomWind(springBones, isWindActive);
-    }
-
-    void Update()
-    {
-        randomWind.UpdateSpringForce();
+        randomWind = new RandomWind(isWindActive);
     }
 
     void LateUpdate()
     {
-        Array.ForEach(springBones, bone => bone.UpdateSpring());
+        Vector3 force = randomWind.GetNewWindForce();
+        Array.ForEach(springBones, bone => bone.UpdateSpring(force));
     }
 
     public void Pause()
