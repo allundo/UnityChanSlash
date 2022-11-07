@@ -48,6 +48,6 @@ MonoBehaviour:
     prefab: {fileID: 3304856090153155562, guid: 0d050dfd465784fc4ac75d77162a3ea9,
       type: 3}
   - name: "\u30B3\u30A4\u30F3"
-    defaultLifeMax: 1
+    defaultLifeMax: 4
     attack: 10
     prefab: {fileID: 979957346593184718, guid: 0f53e6b4ffa1e4e0f99a087547a9dc63, type: 3}

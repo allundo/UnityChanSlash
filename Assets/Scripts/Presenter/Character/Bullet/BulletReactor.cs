@@ -3,6 +3,7 @@ using UnityEngine;
 public interface IBulletReactor : IReactor
 {
     void ReduceHP(float reduction = 1f);
+    float CurrentHP { get; }
 }
 
 [RequireComponent(typeof(BulletStatus))]
@@ -36,10 +37,13 @@ public class BulletReactor : Reactor, IBulletReactor
         input.OnActive();
     }
 
+    public float CurrentHP => status.Life.Value;
+
     public void ReduceHP(float reduction = 1f)
     {
         if (status.IsAlive) status.LifeChange(-reduction);
     }
+
 
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {

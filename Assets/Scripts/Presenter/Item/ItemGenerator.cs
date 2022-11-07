@@ -124,8 +124,14 @@ public class ItemGenerator : MobGenerator<Item>
     public bool PutNew(ItemType itemType, Pos pos, IDirection dir = null)
         => Put(ResourceLoader.Instance.ItemInfo(itemType), pos, dir);
 
-    public bool PutNew(ItemType itemType, int numOfItem, Pos pos, IDirection dir = null)
-        => Put(ResourceLoader.Instance.ItemInfo(itemType, numOfItem), pos, dir);
+    public Item PlaceItem(ItemType itemType, int numOfItem, Pos pos, IDirection dir = null)
+    {
+        var item = Spawn(ResourceLoader.Instance.ItemInfo(itemType, numOfItem), pos, dir);
+        if (map.GetTile(pos).PutItem(item)) return item;
+
+        item.Inactivate();
+        return null;
+    }
 
     public void Turn(IDirection dir)
     {

@@ -10,7 +10,6 @@ public class HealSpiritReactor : Reactor, IBulletReactor
     protected bool isTweening = false;
     protected Tween emittingTween = null;
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -40,6 +39,7 @@ public class HealSpiritReactor : Reactor, IBulletReactor
         bodyCollider.enabled = false;
     }
 
+    public float CurrentHP => status.Life.Value;
     public void ReduceHP(float reduction = 1f)
     {
         if (status.IsAlive) status.LifeChange(-reduction);

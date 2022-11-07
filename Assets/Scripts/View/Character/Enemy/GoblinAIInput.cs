@@ -63,15 +63,7 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         // Attack or Guard if fighting
         if (shieldAnim.fighting.Bool)
         {
-            switch (Random.Range(0, 3))
-            {
-                case 0:
-                    return currentCommand is EnemyIdle ? attack : idle;
-                case 1:
-                    return guard;
-                default:
-                    return idle;
-            }
+            return RandomChoice(currentCommand is EnemyIdle ? attack : idle, guard, idle);
         }
 
         bool isForwardMovable = mobMap.IsMovable(forward);

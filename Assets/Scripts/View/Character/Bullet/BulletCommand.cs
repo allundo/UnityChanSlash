@@ -14,8 +14,7 @@ public abstract class BulletCommand : Command
 
     protected virtual Tween MoveForward(float ratio, bool isSpeedConstant = true)
     {
-        if (ratio > 0.5f) map.SetObjectOn(map.GetForward);
-        return tweenMove.Linear(map.CurrentVec3Pos + map.dir.LookAt * TILE_UNIT * ratio, isSpeedConstant ? ratio : 1f);
+        return tweenMove.Linear(map.CurrentVec3Pos + map.GetForwardVector(ratio), isSpeedConstant ? ratio : 1f);
     }
 }
 

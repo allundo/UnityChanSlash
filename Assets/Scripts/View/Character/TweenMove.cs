@@ -165,6 +165,16 @@ public class TweenMove
     public Tween Jump(Pos destPos, float timeScale = 1f, float jumpPower = 1.0f)
         => tf.DOJump(map.WorldPos(destPos), jumpPower, 1, duration * timeScale);
 
+    public Tween JumpHalf(Vector3 moveVec, float timeScale = 1, bool isUp = true)
+    {
+        float time = duration * timeScale;
+        return DOTween.Sequence()
+            .Join(tf.DOMoveX(moveVec.x, time).SetRelative().SetEase(Ease.Linear))
+            .Join(tf.DOMoveY(moveVec.y, time).SetRelative().SetEase(isUp ? Ease.OutQuad : Ease.InQuad))
+            .Join(tf.DOMoveZ(moveVec.z, time).SetRelative().SetEase(Ease.Linear))
+            .SetUpdate(false);
+    }
+
     public Sequence Landing(Vector3 moveVec, float edgeRatio = 0.75f)
     {
         float edgeTime = duration * edgeRatio;
