@@ -77,14 +77,14 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         if (IsOnPlayer(forward3) && isForwardMovable) return RandomChoice(moveForward, fire, ice);
 
         Pos backward = mobMap.GetBackward;
-        if (IsOnPlayer(backward) && Random.Range(0, 3) == 0) return RandomChoice(turnL, turnR);
+        if (IsOnPlayer(backward) && Util.Judge(3)) return RandomChoice(turnL, turnR);
 
         if (isForwardMovable)
         {
             // Turn 50%
-            if (Random.Range(0, 2) == 0)
+            if (Util.Judge(2))
             {
-                if (Random.Range(0, 2) == 0)
+                if (Util.Judge(2))
                 {
                     return (currentCommand == turnR) ? moveForward : turnL;
                 }

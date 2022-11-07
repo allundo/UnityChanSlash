@@ -100,12 +100,12 @@ public class RabbitAIInput : EnemyAIInput
         if (isForwardMovable)
         {
             // Inhibit continuous moving forward by wondering
-            if (currentCommand == moveForward && Random.Range(0, 2) == 0) return wondering;
+            if (currentCommand == moveForward && Util.Judge(2)) return wondering;
 
             // Turn 50% if left or right movable
-            if (Random.Range(0, 2) == 0)
+            if (Util.Judge(2))
             {
-                if (Random.Range(0, 2) == 0)
+                if (Util.Judge(2))
                 {
                     if (currentCommand == turnR) return moveForward;
                     if (isLeftMovable) return turnL;

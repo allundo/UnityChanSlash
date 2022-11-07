@@ -22,7 +22,7 @@ public class RedSlimeAIInput : EnemyAIInput
         {
             if (isBackwardMovable || isLeftMovable && isRightMovable)
             {
-                return Random.Range(0, 2) == 0 ? turnL : turnR;
+                return RandomChoice(turnL, turnR);
             }
 
             if (isLeftMovable) return turnL;
@@ -62,16 +62,16 @@ public class RedSlimeAIInput : EnemyAIInput
         Pos right2 = mobMap.dir.GetRight(right);
 
         // Turn to player if player is found in 2 tile distance
-        if (IsOnPlayer(backward2)) return Random.Range(0, 2) == 0 ? turnL : turnR;
+        if (IsOnPlayer(backward2)) return RandomChoice(turnL, turnR);
         if (IsOnPlayer(left2)) return turnL;
         if (IsOnPlayer(right2)) return turnR;
 
         if (isForwardMovable)
         {
             // Turn 50% if left or right movable
-            if (Random.Range(0, 2) == 0)
+            if (Util.Judge(2))
             {
-                if (Random.Range(0, 2) == 0)
+                if (Util.Judge(2))
                 {
                     if (currentCommand == turnR) return moveForward;
                     if (isLeftMovable) return turnL;
@@ -93,7 +93,7 @@ public class RedSlimeAIInput : EnemyAIInput
             if (isLeftMovable && !isRightMovable) return turnL;
             if (isRightMovable && !isLeftMovable) return turnR;
 
-            return Random.Range(0, 2) == 0 ? turnL : turnR;
+            return RandomChoice(turnL, turnR);
         }
     }
 }

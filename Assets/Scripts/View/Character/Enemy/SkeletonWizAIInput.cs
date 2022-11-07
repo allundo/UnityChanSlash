@@ -61,9 +61,9 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         if (isForwardMovable)
         {
             // Turn 50%
-            if (Random.Range(0, 2) == 0)
+            if (Util.Judge(2))
             {
-                if (Random.Range(0, 2) == 0)
+                if (Util.Judge(2))
                 {
                     return (currentCommand == turnR) ? moveForward : turnL;
                 }

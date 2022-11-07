@@ -79,9 +79,9 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         if (isForwardMovable)
         {
             // Turn 50% if left or right movable
-            if (Random.Range(0, 2) == 0)
+            if (Util.Judge(2))
             {
-                if (Random.Range(0, 2) == 0)
+                if (Util.Judge(2))
                 {
                     if (currentCommand == turnR) return moveForward;
                     if (isLeftMovable) return turnL;
