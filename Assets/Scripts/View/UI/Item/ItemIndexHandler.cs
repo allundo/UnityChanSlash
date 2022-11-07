@@ -98,7 +98,7 @@ public abstract class ItemIndexHandler : IItemIndexHandler
 
     protected virtual Vector2 GetOffsetOrigin() => Vector2.zero;
 
-    public void SetEnablePanels(bool isEnable) => panels.ForEach(panel => panel.SetEnabled(isEnable));
+    public virtual void SetEnablePanels(bool isEnable) => panels.ForEach(panel => panel.SetEnabled(isEnable));
 
     public Vector2 ConvertToVec(Vector2 screenPos) => screenPos - uiOrigin;
     public bool IsOnUI(Vector2 uiPos) => uiPos.x >= 0f && uiPos.x <= uiSize.x && uiPos.y <= 0f && uiPos.y >= -uiSize.y;

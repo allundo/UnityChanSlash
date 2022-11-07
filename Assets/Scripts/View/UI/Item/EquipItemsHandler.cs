@@ -46,6 +46,12 @@ public class EquipItemsHandler : ItemIndexHandler
 
     protected override Vector2 GetOffsetOrigin() => uiOrigin - inventory.uiOrigin;
     protected override ItemIcon[] Items => equips.Select(equip => equip.Value).ToArray();
+    public bool isEnable { get; protected set; } = true;
+    public override void SetEnablePanels(bool isEnable)
+    {
+        this.isEnable = isEnable;
+        panels.ForEach(panel => panel.SetEnabled(isEnable));
+    }
 
     private bool tweenMove = false;
     public override void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false)

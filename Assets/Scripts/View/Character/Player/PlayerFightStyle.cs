@@ -15,7 +15,11 @@ public class PlayerFightStyle : MobFightStyle
 
     public FightStyleHandler SetFightStyle(IEquipmentStyle equipments)
     {
-        if (handler != null) Destroy(handler.gameObject);
+        if (handler != null)
+        {
+            handler.Attacks.ForEach(atk => (atk as IPlayerAttack).CompleteAttack());
+            Destroy(handler.gameObject);
+        }
 
         handler = equipments.LoadFightStyle(transform);
         anim.SetController(equipments.animatorController);

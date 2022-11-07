@@ -366,18 +366,25 @@ public class ItemIconHandler : IItemIconHandler
             // In the case of item equipment.
             if (selectedEquipment != null)
             {
-                int index =
-                    selectedEquipment.category == EquipmentCategory.Shield ? 0
-                    : selectedEquipment.category == EquipmentCategory.Amulet ? 1
-                    : 2;
-
-                ItemIcon replaced = equipItems.GetItem(index);
-                if (selected != replaced)
+                if (equipItems.isEnable)
                 {
-                    EquipMessage(selected);
-                    equipItems.SetItem(index, selected, true);
-                    selectedInventory.SetItem(pressedIndex, replaced, true);
-                    return CleanUp();
+                    int index =
+                        selectedEquipment.category == EquipmentCategory.Shield ? 0
+                        : selectedEquipment.category == EquipmentCategory.Amulet ? 1
+                        : 2;
+
+                    ItemIcon replaced = equipItems.GetItem(index);
+                    if (selected != replaced)
+                    {
+                        EquipMessage(selected);
+                        equipItems.SetItem(index, selected, true);
+                        selectedInventory.SetItem(pressedIndex, replaced, true);
+                        return CleanUp();
+                    }
+                }
+                else
+                {
+                    ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("装備を変えてるスキがない！", SDFaceID.ANGRY2, SDEmotionID.IRRITATE));
                 }
             }
 
