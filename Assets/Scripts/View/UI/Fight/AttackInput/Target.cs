@@ -73,6 +73,8 @@ public class Target : FadeUI, ITargetUI
 
     protected override void OnDisable()
     {
+        corner.Disable();
+        center.Disable();
         status = null;
     }
 
