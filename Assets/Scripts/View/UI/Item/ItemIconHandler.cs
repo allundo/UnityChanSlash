@@ -295,6 +295,14 @@ public class ItemIconHandler : IItemIconHandler
             currentSelected.transform.SetAsLastSibling();
             return handler.dragMode.OnDrag(screenPos);
         }
+
+        protected void EquipMessage(ItemIcon equipment)
+        {
+            if (!equipItems.hasItem(equipment))
+            {
+                ActiveMessageController.Instance.InputMessageData(new ActiveMessageData(equipment.itemInfo.name + " を装備した！"));
+            }
+        }
     }
 
     protected class SelectMode : NormalMode
@@ -366,6 +374,7 @@ public class ItemIconHandler : IItemIconHandler
                 ItemIcon replaced = equipItems.GetItem(index);
                 if (selected != replaced)
                 {
+                    EquipMessage(selected);
                     equipItems.SetItem(index, selected, true);
                     selectedInventory.SetItem(pressedIndex, replaced, true);
                     return CleanUp();
@@ -419,6 +428,8 @@ public class ItemIconHandler : IItemIconHandler
                 // currentTarget icon is inactivated if the merging is succeeded.
                 currentTarget = null;
             }
+
+            if (pressedInventory is EquipItemsHandler) EquipMessage(currentSelected);
 
             selectedInventory.SetItem(currentSelected.index, currentTarget, true);
             pressedInventory.SetItem(pressedIndex, currentSelected, true);

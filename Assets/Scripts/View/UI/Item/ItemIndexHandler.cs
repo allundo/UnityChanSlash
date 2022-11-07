@@ -14,6 +14,7 @@ public interface IItemIndexHandler
     void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false);
     bool RemoveItem(ItemIcon itemIcon);
     bool hasKeyBlade();
+    bool hasItem(ItemIcon itemIcon);
     ulong SumUpPrices();
 }
 
@@ -209,9 +210,19 @@ public abstract class ItemIndexHandler : IItemIndexHandler
         return icons.ToArray();
     }
 
+    protected bool Any(Func<ItemIcon, bool> func)
+    {
+        return Where(itemIcon => itemIcon != null && func(itemIcon)).Count() > 0;
+    }
+
     public bool hasKeyBlade()
     {
-        return Where(itemIcon => itemIcon != null && itemIcon.itemInfo.type == ItemType.KeyBlade).Count() > 0;
+        return Any(itemIcon => itemIcon.itemInfo.type == ItemType.KeyBlade);
+    }
+
+    public bool hasItem(ItemIcon compareSrc)
+    {
+        return Any(itemIcon => itemIcon == compareSrc);
     }
 
     public ulong SumUpPrices()
