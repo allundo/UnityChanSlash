@@ -81,10 +81,15 @@ public class PlayerLifeGauge : MonoBehaviour
         shakeTween = DamageShake(damageRatio);
     }
 
-    public void UpdateLifeText(float life, float lifeMax)
+    public static string GetDisplayHP(float life, float lifeMax)
     {
         int hp = life < 1.0f ? (life > 0.0f ? 1 : 0) : (int)life;
-        lifeText.text = hp + " / " + (int)lifeMax;
+        return hp + " / " + (int)lifeMax;
+    }
+
+    public void UpdateLifeText(float life, float lifeMax)
+    {
+        lifeText.text = GetDisplayHP(life, lifeMax);
     }
 
     private Tween DamageShake(float damageRatio)
