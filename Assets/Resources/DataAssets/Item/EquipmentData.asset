@@ -20,6 +20,14 @@ MonoBehaviour:
     handRRotate: {x: 0, y: 0, z: 0}
     category: 0
     prefabEquipment: {fileID: 0}
+  - name: "\u30AB\u30BF\u30CA"
+    attackGain: 0.5
+    shieldGain: 0.2
+    handRPosition: {x: -0.07, y: -0.009, z: -0.003}
+    handRRotate: {x: -68.294, y: -39.04, z: -50.364}
+    category: 1
+    prefabEquipment: {fileID: 3258786674458538183, guid: 71a0d3b545b5f43d1863a471d2a62162,
+      type: 3}
   - name: "\u9375\u306E\u5263"
     attackGain: 1
     shieldGain: 1

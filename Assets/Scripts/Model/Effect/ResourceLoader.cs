@@ -46,6 +46,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         = new Dictionary<ItemType, EquipmentType>()
         {
             { ItemType.Null,        EquipmentType.BareHand },
+            { ItemType.Katana,      EquipmentType.Katana   },
             { ItemType.KeyBlade,    EquipmentType.KeyBlade },
         };
     public EquipmentSource GetEquipmentSource(ItemType type)
