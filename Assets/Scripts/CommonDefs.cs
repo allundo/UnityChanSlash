@@ -454,6 +454,7 @@ public enum ItemType
 {
     Null = 0,
     Potion,
+    LongSword,
     Katana,
     KeyBlade,
     Coin,
@@ -472,6 +473,7 @@ public enum ItemAttr
 public enum EquipmentType
 {
     BareHand = 0,
+    LongSword,
     Katana,
     KeyBlade,
 }

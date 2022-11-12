@@ -26,6 +26,7 @@ public class ItemInfoLoader
         {
             { ItemType.Null,        null                                                            },
             { ItemType.Potion,      new PotionAction(ItemAttr.Consumption)                          },
+            { ItemType.LongSword,   new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Katana,      new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)     },
             { ItemType.Coin,        new CoinAction(ItemAttr.Consumption)                            },
