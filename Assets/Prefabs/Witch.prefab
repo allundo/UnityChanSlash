@@ -15095,7 +15095,7 @@ MonoBehaviour:
   finishFrame: 64
   speed: 3
   frameRate: 30
-  attackFX: {fileID: 0}
+  attackFX: {fileID: 2989641728139560717}
   attackSnd: {fileID: 8275294749153813388}
   fxStartFrame: 0
 --- !u!1 &1858893863150427022
