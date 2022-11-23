@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityChan;
 using UniRx;
 using System;
 
@@ -11,7 +10,7 @@ public class UnityChanResultReactor : MonoBehaviour
 
     private CapsuleCollider col;
     private ResultFaceAnimator anim;
-    private RandomWind randomWind;
+    private SpringManager springManager;
 
     public ClothSphereColliderPair sphereColliderPair { get; private set; }
 
@@ -25,7 +24,7 @@ public class UnityChanResultReactor : MonoBehaviour
     {
         col = GetComponent<CapsuleCollider>();
         anim = GetComponent<ResultFaceAnimator>();
-        randomWind = GetComponent<RandomWind>();
+        springManager = GetComponent<SpringManager>();
 
         headCollider.enabled = footCollider.enabled = false;
         sphereColliderPair = new ClothSphereColliderPair(headCollider, footCollider);
@@ -78,6 +77,6 @@ public class UnityChanResultReactor : MonoBehaviour
 
         anim.drop.Fire();
 
-        randomWind.isWindActive = false;
+        springManager.Pause();
     }
 }

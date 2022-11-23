@@ -3,8 +3,8 @@ using System;
 
 public class SpringManager : MonoBehaviour
 {
-    [SerializeField] public SpringBone[] springBones;
-    [SerializeField] public bool isWindActive = true;
+    [SerializeField] private SpringBone[] springBones;
+    [SerializeField] private bool isWindActive = true;
 
     private RandomWind randomWind;
 

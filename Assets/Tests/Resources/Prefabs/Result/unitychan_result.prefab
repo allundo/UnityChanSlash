@@ -436,17 +436,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519479}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852764973}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852765135}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009937
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,17 +554,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519779}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852764973}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852765135}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009943
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,13 +640,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519465}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009947
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,17 +691,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519505}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852765179}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009949
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,13 +746,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519799}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.5
   dragForce: 0.01
-  springForce: {x: 0, y: 0, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009951
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,13 +891,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519481}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009959
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,14 +942,10 @@ MonoBehaviour:
   child: {fileID: 7746881989862519473}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,17 +1056,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519619}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852764977}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764929}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009967
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,15 +1111,11 @@ MonoBehaviour:
   child: {fileID: 7746881989862519437}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764983}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009969
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,17 +1164,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519555}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,18 +1591,14 @@ MonoBehaviour:
   child: {fileID: 7746881989862519777}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765179}
   - {fileID: 7746881989852765175}
   - {fileID: 7746881989852764947}
   - {fileID: 7746881991730055805}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863009989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,17 +1950,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519743}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764955}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010003
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,13 +2005,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519569}
   boneAxis: {x: 1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.5
   dragForce: 0.01
-  springForce: {x: 0, y: 0, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,17 +2056,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519725}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764955}
   - {fileID: 7746881989852764947}
   - {fileID: 7746881991146741727}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010007
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,13 +2173,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519487}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.5
   dragForce: 0.01
-  springForce: {x: 0, y: 0, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2315,15 +2255,11 @@ MonoBehaviour:
   child: {fileID: 7746881989862519545}
   boneAxis: {x: 1, y: 0, z: 0}
   radius: 0.02
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764979}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2584,17 +2520,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519443}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.02
   dragForce: 0.1
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852764977}
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852764929}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010057
 GameObject:
   m_ObjectHideFlags: 0
@@ -3035,18 +2967,14 @@ MonoBehaviour:
   child: {fileID: 7746881989862519477}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852765179}
   - {fileID: 7746881989852765157}
   - {fileID: 7746881991730055805}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010069
 GameObject:
   m_ObjectHideFlags: 0
@@ -3203,18 +3131,14 @@ MonoBehaviour:
   child: {fileID: 7746881989862519713}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764955}
   - {fileID: 7746881989852765165}
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852765157}
   - {fileID: 7746881991146741727}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010073
 GameObject:
   m_ObjectHideFlags: 0
@@ -3664,15 +3588,11 @@ MonoBehaviour:
   child: {fileID: 7746881989862519485}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.02
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764983}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010089
 GameObject:
   m_ObjectHideFlags: 0
@@ -3721,13 +3641,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519497}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010091
 GameObject:
   m_ObjectHideFlags: 0
@@ -4124,17 +4040,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519573}
   boneAxis: {x: 1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.02
   dragForce: 0.1
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852764973}
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852765135}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010109
 GameObject:
   m_ObjectHideFlags: 0
@@ -4762,13 +4674,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519627}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010129
 GameObject:
   m_ObjectHideFlags: 0
@@ -5217,13 +5125,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519629}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010149
 GameObject:
   m_ObjectHideFlags: 0
@@ -5525,17 +5429,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519715}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.08
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852764977}
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852764929}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010163
 GameObject:
   m_ObjectHideFlags: 0
@@ -6023,17 +5923,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519643}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010179
 GameObject:
   m_ObjectHideFlags: 0
@@ -6250,15 +6146,11 @@ MonoBehaviour:
   child: {fileID: 7746881989862519563}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764979}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010187
 GameObject:
   m_ObjectHideFlags: 0
@@ -6307,18 +6199,14 @@ MonoBehaviour:
   child: {fileID: 7746881989862519537}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764955}
   - {fileID: 7746881989852765157}
   - {fileID: 7746881991146741727}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010189
 GameObject:
   m_ObjectHideFlags: 0
@@ -6426,7 +6314,6 @@ GameObject:
   - component: {fileID: 7746881989862519717}
   - component: {fileID: 7746881989855583501}
   - component: {fileID: 7746881989852765123}
-  - component: {fileID: 7746881989852765151}
   - component: {fileID: 7746881989852765145}
   - component: {fileID: 4820631490514810122}
   - component: {fileID: 8098515005212457495}
@@ -6491,57 +6378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6514ba86f976d724ab63844a6015b2aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicRatio: 1
-  stiffnessForce: 0.01
-  stiffnessCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  dragForce: 0.4
-  dragCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   springBones:
   - {fileID: 7746881989852765173}
   - {fileID: 7746881989852764965}
@@ -6583,18 +6419,6 @@ MonoBehaviour:
   - {fileID: 7746881989852765125}
   - {fileID: 7746881989852764951}
   - {fileID: 7746881989852764969}
---- !u!114 &7746881989852765151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7746881989863010207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a38e39ada51aaba4db6d352ce218849e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   isWindActive: 1
 --- !u!114 &7746881989852765145
 MonoBehaviour:
@@ -6722,14 +6546,10 @@ MonoBehaviour:
   child: {fileID: 7746881989862519495}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010211
 GameObject:
   m_ObjectHideFlags: 0
@@ -6902,14 +6722,10 @@ MonoBehaviour:
   child: {fileID: 7746881989862519727}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010217
 GameObject:
   m_ObjectHideFlags: 0
@@ -7152,18 +6968,14 @@ MonoBehaviour:
   child: {fileID: 7746881989862519601}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852764955}
   - {fileID: 7746881989852765165}
   - {fileID: 7746881989852764947}
   - {fileID: 7746881991146741727}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010227
 GameObject:
   m_ObjectHideFlags: 0
@@ -7212,14 +7024,10 @@ MonoBehaviour:
   child: {fileID: 7746881989862519489}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010229
 GameObject:
   m_ObjectHideFlags: 0
@@ -7360,13 +7168,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519483}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010235
 GameObject:
   m_ObjectHideFlags: 0
@@ -7618,18 +7422,14 @@ MonoBehaviour:
   child: {fileID: 7746881989862519565}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765179}
   - {fileID: 7746881989852765175}
   - {fileID: 7746881989852764947}
   - {fileID: 7746881989852765157}
   - {fileID: 7746881991730055805}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010249
 GameObject:
   m_ObjectHideFlags: 0
@@ -7679,17 +7479,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519501}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852764977}
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764929}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010251
 GameObject:
   m_ObjectHideFlags: 0
@@ -8009,17 +7805,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519523}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: -0.0001, z: 0}
   colliders:
   - {fileID: 7746881989852765179}
   - {fileID: 7746881989852764947}
   - {fileID: 7746881991730055805}
   - {fileID: 7746881989852765157}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010269
 GameObject:
   m_ObjectHideFlags: 0
@@ -8572,13 +8364,9 @@ MonoBehaviour:
   child: {fileID: 7746881989862519499}
   boneAxis: {x: 1, y: 0, z: 0}
   radius: 0.05
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.5
   dragForce: 0.01
-  springForce: {x: 0, y: 0, z: 0}
   colliders: []
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010297
 GameObject:
   m_ObjectHideFlags: 0
@@ -8627,15 +8415,11 @@ MonoBehaviour:
   child: {fileID: 7746881989862519519}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764983}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010299
 GameObject:
   m_ObjectHideFlags: 0
@@ -8684,17 +8468,13 @@ MonoBehaviour:
   child: {fileID: 7746881989862519581}
   boneAxis: {x: 1, y: 0, z: 0}
   radius: 0.08
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764979}
   - {fileID: 7746881989852764973}
   - {fileID: 7746881989852764983}
   - {fileID: 7746881989852765135}
-  debug: 1
-  threshold: 0.01
 --- !u!1 &7746881989863010301
 GameObject:
   m_ObjectHideFlags: 0
@@ -8775,12 +8555,8 @@ MonoBehaviour:
   child: {fileID: 7746881989862519433}
   boneAxis: {x: 1, y: 0, z: 0}
   radius: 0.04
-  isUseEachBoneForceSettings: 1
   stiffnessForce: 0.01
   dragForce: 0.4
-  springForce: {x: 0, y: 0, z: 0}
   colliders:
   - {fileID: 7746881989852764953}
   - {fileID: 7746881989852764979}
-  debug: 1
-  threshold: 0.01
