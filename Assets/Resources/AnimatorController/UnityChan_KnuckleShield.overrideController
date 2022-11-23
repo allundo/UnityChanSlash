@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UnityChan_KnuckleShield
+  m_Controller: {fileID: 9100000, guid: 3396e255c97254ba58cec2dfed194c22, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 1b718487ea34d49f2a5b0095e47c124a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3c67c36f245c24f2c9971ea3c1e86eb6, type: 2}
+  - m_OriginalClip: {fileID: -3826437141266125818, guid: da3c6d650d7b44d3bb07055f4779e87c,
+      type: 3}
+    m_OverrideClip: {fileID: -3826437141266125818, guid: e4ddd1b2d9e624d72b83ff902102767c,
+      type: 3}
+  - m_OriginalClip: {fileID: -3826437141266125818, guid: 06ad9fccf0a244d8584d8398b921c0a6,
+      type: 3}
+    m_OverrideClip: {fileID: 240512291130801236, guid: e4ddd1b2d9e624d72b83ff902102767c,
+      type: 3}
+  - m_OriginalClip: {fileID: -3826437141266125818, guid: ec74efc94769a4efebb195b421482a2d,
+      type: 3}
+    m_OverrideClip: {fileID: 4817383068470528601, guid: e4ddd1b2d9e624d72b83ff902102767c,
+      type: 3}
+  - m_OriginalClip: {fileID: -3045757474655544445, guid: d37ffbd3b027a421faab6551336d9ecb,
+      type: 3}
+    m_OverrideClip: {fileID: 7632534540612943796, guid: e4ddd1b2d9e624d72b83ff902102767c,
+      type: 3}
+  - m_OriginalClip: {fileID: -3826437141266125818, guid: ef8aa95e641654e079f56fd316a8babd,
+      type: 3}
+    m_OverrideClip: {fileID: -4110751808798027038, guid: e4ddd1b2d9e624d72b83ff902102767c,
+      type: 3}
