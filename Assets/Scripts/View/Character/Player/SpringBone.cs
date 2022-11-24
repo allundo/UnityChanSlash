@@ -5,32 +5,39 @@ public class SpringBone : MonoBehaviour
     /// <summary>
     /// Child bone
     /// </summary>
-    public Transform child;
+    [SerializeField] private Transform child;
 
-    public Vector3 boneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
+    [SerializeField] private Vector3 boneAxis = new Vector3(-1.0f, 0.0f, 0.0f);
 
     /// <summary>
     /// Tip radius to use collision.
     /// </summary>
-    public float radius = 0.05f;
+    [SerializeField] private float radius = 0.05f;
 
     /// <summary>
     /// Spring elastic force that restore to original angle.
     /// </summary>
-    public float stiffnessForce = 0.01f;
+    [SerializeField] private float stiffnessForce = 0.01f;
 
     /// <summary>
     /// Dampen spring force
     /// </summary>
-    public float dragForce = 0.4f;
+    [SerializeField] private float dragForce = 0.4f;
 
-    public SpringCollider[] colliders;
+    [SerializeField] private SpringCollider[] colliders;
 
     private float springLength;
+    private Quaternion defaultLocalRotation;
     private Vector3 currTipPos;
     private Vector3 springForce;
 
     private Vector3 BoneVector => currTipPos - transform.position;
+
+    private void Awake()
+    {
+        // Store local rotations on Awake() because Test Runner overwrites them before Start().
+        defaultLocalRotation = transform.localRotation;
+    }
 
     private void Start()
     {
@@ -45,6 +52,8 @@ public class SpringBone : MonoBehaviour
 
     public void UpdateSpring(Vector3 windForce)
     {
+        transform.localRotation = defaultLocalRotation;
+
         // Store previous spring bone tip position
         Vector3 prevTipPos = currTipPos;
 
