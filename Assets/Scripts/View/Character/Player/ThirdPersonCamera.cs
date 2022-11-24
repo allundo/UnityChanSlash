@@ -16,9 +16,11 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] private Light pointLight = default;
     [SerializeField] public Vector3 pointLightOffset = new Vector3(0, 4f, 0);
 
-    public float fieldOfView { get; private set; }
     public Vector3 followOffset { get; private set; }
-    public Vector3 cameraPosition { get; private set; }
+    public Vector3 position { get; private set; }
+
+    public Rect rect { get { return cam.rect; } private set { cam.rect = value; } }
+    public float fieldOfView { get { return cam.fieldOfView; } private set { cam.fieldOfView = value; } }
 
     public Transform lookAt { get; private set; }
     public void SetLookAt(Transform lookAt) => this.lookAt = lookAt;
@@ -44,7 +46,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        transform.position = lookAt.position + lookAt.rotation * cameraPosition;
+        transform.position = lookAt.position + lookAt.rotation * position;
 
         transform.LookAt(lookAt.position + lookAt.rotation * followOffset);
     }
@@ -71,7 +73,7 @@ public class ThirdPersonCamera : MonoBehaviour
             case DeviceOrientation.Portrait:
                 fieldOfView = fieldOfViewP;
                 followOffset = followOffsetP;
-                cameraPosition = cameraPositionP;
+                position = cameraPositionP;
 
                 viewPortRect = new Rect(0f, margin, 1f, 1f - margin * 2f);
                 break;
@@ -79,16 +81,15 @@ public class ThirdPersonCamera : MonoBehaviour
             case DeviceOrientation.LandscapeRight:
                 fieldOfView = fieldOfViewL;
                 followOffset = followOffsetL;
-                cameraPosition = cameraPositionL;
+                position = cameraPositionL;
 
                 viewPortRect = new Rect(margin, 0f, 1f - margin * 2f, 1f);
                 break;
         }
 
-        cam.fieldOfView = fieldOfView;
-        sideCamera.SetTarget(this);
+        rect = viewPortRect;
+        sideCamera.CopyParams(this);
 
-        cam.rect = sideCamera.rect = viewPortRect;
         renderTexture?.Release();
 
         // Enable stencil by setting depth = 24

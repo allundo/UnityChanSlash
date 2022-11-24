@@ -2,14 +2,11 @@ using UnityEngine;
 
 public class SideCamera : MonoBehaviour
 {
-    private Transform lookAt = default;
-    private Vector3 followOffset = default;
-
-    private Vector3 cameraPosition = default;
+    private Transform lookAt;
+    private Vector3 followOffset;
+    private Vector3 position;
 
     private Camera cam;
-
-    public Rect rect { get { return cam.rect; } set { cam.rect = value; } }
 
     public void Enable()
     {
@@ -28,14 +25,14 @@ public class SideCamera : MonoBehaviour
         Disable();
     }
 
-    public void SetTarget(ThirdPersonCamera camera)
+    public void CopyParams(ThirdPersonCamera camera)
     {
         Disable();
-
+        cam.fieldOfView = camera.fieldOfView;
+        cam.rect = camera.rect;
         lookAt = camera.lookAt;
         followOffset = camera.followOffset;
-        cameraPosition = camera.cameraPosition;
-        cam.fieldOfView = camera.fieldOfView;
+        position = camera.position;
     }
 
     public void SetRightSide(Transform cameraTf)
@@ -50,7 +47,7 @@ public class SideCamera : MonoBehaviour
 
     public void SetSideCamera(Transform cameraTf, bool isRight)
     {
-        Vector3 cameraLocalPos = lookAt.rotation * Quaternion.Euler(0, (isRight ? 90 : -90), 0) * cameraPosition;
+        Vector3 cameraLocalPos = lookAt.rotation * Quaternion.Euler(0, (isRight ? 90 : -90), 0) * position;
         Vector3 localOffset = -new Vector3(cameraLocalPos.x, 0, cameraLocalPos.z).normalized * followOffset.magnitude;
 
         transform.position = lookAt.position + cameraLocalPos;
