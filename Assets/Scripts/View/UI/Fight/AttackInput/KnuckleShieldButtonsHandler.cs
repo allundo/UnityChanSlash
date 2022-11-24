@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class KnuckleShieldButtonsHandler : KnuckleKnuckleButtonsHandler
 {
     protected override bool[,] GetCancelableTable()
