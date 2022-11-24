@@ -9,7 +9,7 @@ public class Magic : MonoBehaviour
 
     public Dictionary<BulletType, ILauncher> launcher { get; protected set; } = new Dictionary<BulletType, ILauncher>();
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         IStatus status = GetComponent<MobStatus>();
 

@@ -3,9 +3,9 @@ public class MagicAndDouble : Magic
     public WitchDoubleLauncher backStepWitchLauncher { get; protected set; }
     public WitchDoubleLauncher jumpOverWitchLauncher { get; protected set; }
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
 
         WitchStatus status = GetComponent<WitchStatus>();
 
