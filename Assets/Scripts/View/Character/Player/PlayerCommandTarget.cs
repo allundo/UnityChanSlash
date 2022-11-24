@@ -37,6 +37,7 @@ public class PlayerCommandTarget : CommandTarget
     protected override void Awake()
     {
         base.Awake();
+        mainCamera.SetLookAt(transform);
         hidePlateHandler = GetComponent<HidePlateHandler>();
     }
 }

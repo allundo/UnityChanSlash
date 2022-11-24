@@ -5,7 +5,6 @@ using System.Collections;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
-    [SerializeField] public Transform lookAt;
     [SerializeField] public float fieldOfViewP = 40f;
     [SerializeField] public float fieldOfViewL = 30f;
     [SerializeField] public Vector3 followOffsetP = new Vector3(0, 0, 6.3f);
@@ -20,6 +19,9 @@ public class ThirdPersonCamera : MonoBehaviour
     public float fieldOfView { get; private set; }
     public Vector3 followOffset { get; private set; }
     public Vector3 cameraPosition { get; private set; }
+
+    public Transform lookAt { get; private set; }
+    public void SetLookAt(Transform lookAt) => this.lookAt = lookAt;
 
     private RenderTexture renderTexture;
     private Texture2D screenShot;
