@@ -44415,8 +44415,8 @@ MonoBehaviour:
   child: {fileID: 3442943665555902564}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  stiffnessForce: 0.01
-  dragForce: 0.4
+  stiffnessForce: 0.03
+  dragForce: 0.8
   colliders:
   - {fileID: 3442943665562974534}
 --- !u!114 &3442943665562974546
@@ -44434,8 +44434,8 @@ MonoBehaviour:
   child: {fileID: 3442943665555902732}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  stiffnessForce: 0.01
-  dragForce: 0.4
+  stiffnessForce: 0.03
+  dragForce: 0.8
   colliders:
   - {fileID: 3442943665562974534}
 --- !u!114 &3442943665562974548
@@ -44683,8 +44683,8 @@ MonoBehaviour:
   child: {fileID: 3442943665555902562}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  stiffnessForce: 0.01
-  dragForce: 0.4
+  stiffnessForce: 0.02
+  dragForce: 0.8
   colliders:
   - {fileID: 3442943665562974534}
 --- !u!114 &3442943665562974570
@@ -45018,8 +45018,8 @@ MonoBehaviour:
   child: {fileID: 3442943665555902482}
   boneAxis: {x: -1, y: 0, z: 0}
   radius: 0.05
-  stiffnessForce: 0.01
-  dragForce: 0.4
+  stiffnessForce: 0.02
+  dragForce: 0.8
   colliders:
   - {fileID: 3442943665562974534}
 --- !u!114 &3442943665562974620

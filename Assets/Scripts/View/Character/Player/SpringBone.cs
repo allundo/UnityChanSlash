@@ -26,6 +26,7 @@ public class SpringBone : MonoBehaviour
 
     [SerializeField] private SpringCollider[] colliders;
 
+    private readonly Vector3 gravity = new Vector3(0, -0.002f, 0);
     private float springLength;
     private Quaternion defaultLocalRotation;
     private Vector3 currTipPos;
@@ -80,7 +81,7 @@ public class SpringBone : MonoBehaviour
         transform.rotation = aimRotation * transform.rotation;
 
         // Calculate next spring force
-        springForce = (currTipPos - prevTipPos) * (1f - dragForce) + windForce;
+        springForce = (currTipPos - prevTipPos) * (1f - dragForce) + windForce + gravity;
     }
 
 #if UNITY_EDITOR
