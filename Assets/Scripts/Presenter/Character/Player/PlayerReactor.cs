@@ -12,8 +12,8 @@ public class PlayerReactor : MobReactor
 {
     [SerializeField] protected PlayerLifeGauge lifeGauge = default;
     [SerializeField] protected RestUI restUI = default;
-    [SerializeField] protected HandEquipment handR = default;
-    [SerializeField] protected HandEquipment handL = default;
+    [SerializeField] protected HandREquipment handR = default;
+    [SerializeField] protected HandLEquipment handL = default;
 
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;

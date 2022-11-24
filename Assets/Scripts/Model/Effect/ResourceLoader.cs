@@ -45,10 +45,11 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     private Dictionary<ItemType, EquipmentType> ItemEquipmentMap
         = new Dictionary<ItemType, EquipmentType>()
         {
-            { ItemType.Null,        EquipmentType.BareHand  },
-            { ItemType.LongSword,   EquipmentType.LongSword },
-            { ItemType.Katana,      EquipmentType.Katana    },
-            { ItemType.KeyBlade,    EquipmentType.KeyBlade  },
+            { ItemType.Null,        EquipmentType.BareHand      },
+            { ItemType.LongSword,   EquipmentType.LongSword     },
+            { ItemType.Katana,      EquipmentType.Katana        },
+            { ItemType.KeyBlade,    EquipmentType.KeyBlade      },
+            { ItemType.LargeShield, EquipmentType.LargeShield   },
         };
     public EquipmentSource GetEquipmentSource(ItemType type)
     {

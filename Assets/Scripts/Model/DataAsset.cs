@@ -242,6 +242,8 @@ public class EquipmentSource
     [SerializeField] public float shieldGain = 0f;
     [SerializeField] public Vector3 handRPosition = default;
     [SerializeField] public Vector3 handRRotate = default;
+    [SerializeField] public Vector3 handLPosition = default;
+    [SerializeField] public Vector3 handLRotate = default;
     [SerializeField] public EquipmentCategory category = default;
     [SerializeField] public GameObject prefabEquipment = default;
 }

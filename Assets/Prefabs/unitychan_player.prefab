@@ -20671,7 +20671,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 3396e255c97254ba58cec2dfed194c22, type: 2}
+      objectReference: {fileID: 22100000, guid: 8fc9dfebe9f3d414eb2729650e978a9d,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 139a7b4a5adc2497d979abbff6aa358b, type: 3}
 --- !u!1 &211460606626757219 stripped
@@ -20680,7 +20681,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6195538793318922606}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1049247869
+--- !u!114 &5865852632900972226
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20689,7 +20690,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 211460606626757219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e95a7cae8ee314463a77488cce01e439, type: 3}
+  m_Script: {fileID: 11500000, guid: 4391de4efc1024d1290828bdda7b21a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &211460606626757263 stripped
@@ -20838,7 +20839,7 @@ MonoBehaviour:
   lifeGauge: {fileID: 0}
   restUI: {fileID: 0}
   handR: {fileID: 987561815}
-  handL: {fileID: 1049247869}
+  handL: {fileID: 5865852632900972226}
 --- !u!114 &53549212
 MonoBehaviour:
   m_ObjectHideFlags: 0

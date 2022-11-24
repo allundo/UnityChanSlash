@@ -29309,11 +29309,6 @@ PrefabInstance:
       propertyPath: miniMap
       value: 
       objectReference: {fileID: 8337679454959986929}
-    - target: {fileID: 211460606617225245, guid: d03c1b22cfba945e29eae6fdd9f1f7be,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 3396e255c97254ba58cec2dfed194c22, type: 2}
     - target: {fileID: 211460606626757263, guid: d03c1b22cfba945e29eae6fdd9f1f7be,
         type: 3}
       propertyPath: m_Name

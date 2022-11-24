@@ -16,7 +16,7 @@ public class UnityChanMotionTest
     private RuntimeAnimatorController knuckleKnuckleController;
     private FightStyleHandler prefabSwordKnuckle;
     private RuntimeAnimatorController swordKnuckleController;
-    private HandEquipment handR;
+    private HandREquipment handR;
 
     protected class EquipTest : IEquipmentStyle
     {
@@ -56,7 +56,7 @@ public class UnityChanMotionTest
         anim = unityChan.GetComponent<PlayerAnimator>();
         anim.lifeRatio.Float = 10f;
         fightStyle = unityChan.GetComponent<PlayerFightStyle>();
-        handR = unityChan.GetComponentsInChildren<HandEquipment>()[0];
+        handR = unityChan.GetComponentsInChildren<HandREquipment>()[0];
     }
 
     [TearDown]

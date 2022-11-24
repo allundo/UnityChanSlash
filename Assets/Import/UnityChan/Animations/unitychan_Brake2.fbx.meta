@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: 0f9a7621cff4244fa95ad0aa2d3c1011
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
-    second: Character1_Reference|Character1_ReferenceAction
+    second: TPose
   - first:
       74: 3227230039308557110
     second: DROP
@@ -41,7 +41,20 @@ ModelImporter:
       has import animation warnings that might lower retargeting quality:\nNote:
       Activate translation DOF on avatar to improve retargeting quality.\n\t'Character1_Spine'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
-    animationRetargetingWarnings: 
+    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Character1_Reference|Character1_ReferenceAction':\n\tLeftLowerLeg
+      average position error 0.7 mm and maximum position error 4.8 mm at time 0:
+      3 (3.0%) Frame 3\n\tRightLowerLeg average position error 2.6 mm and maximum
+      position error 8.1 mm at time 0:23 (23.0%) Frame 23\n\tLeftUpperArm average
+      position error 17.3 mm and maximum position error 42.8 mm at time 0:20 (20.0%)
+      Frame 20\n\tLeftLowerArm average position error 14.7 mm and maximum position
+      error 31.2 mm at time 0:25 (25.0%) Frame 25\n\tLeftHand average position error
+      6.7 mm and maximum position error 24.7 mm at time 2:15 (75.0%) Frame 75\n\tRightUpperArm
+      average position error 17.3 mm and maximum position error 42.8 mm at time 0:20
+      (20.0%) Frame 20\n\tRightLowerArm average position error 10.5 mm and maximum
+      position error 25.4 mm at time 2:16 (76.0%) Frame 76\n\tRightHand average position
+      error 7.0 mm and maximum position error 23.9 mm at time 2:16 (76.0%) Frame
+      76\n\tHead average position error 17.3 mm and maximum position error 42.8 mm
+      at time 0:20 (20.0%) Frame 20\n"
     animationDoRetargetingWarnings: 1
     importAnimatedCustomProperties: 0
     importConstraints: 0
@@ -1229,6 +1242,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
