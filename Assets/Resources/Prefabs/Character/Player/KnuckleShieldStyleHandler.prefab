@@ -24491,6 +24491,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3867872897582574268, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
+      propertyPath: minPitch
+      value: 0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 3867872897582574268, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
       propertyPath: criticalFX
       value: 
       objectReference: {fileID: 827555050590307309}
@@ -24644,6 +24649,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_L_ATTACK
       objectReference: {fileID: 0}
+    - target: {fileID: 6073052930225154025, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f97f030dd50e64bb896ebb53131e521e, type: 3}
     - target: {fileID: 7390316870314067988, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
       propertyPath: m_Name
