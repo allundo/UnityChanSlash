@@ -459,6 +459,7 @@ public enum ItemType
     KeyBlade,
     Buckler,
     LargeShield,
+    BattleShield,
     Coin,
     FireRing,
     IceRing,
