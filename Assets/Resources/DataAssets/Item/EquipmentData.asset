@@ -52,6 +52,16 @@ MonoBehaviour:
     category: 1
     prefabEquipment: {fileID: 5821403241526252485, guid: b55d4adf59cc64c849dfaaaa65e87b66,
       type: 3}
+  - name: "\u30D0\u30C3\u30AF\u30E9\u30FC"
+    attackGain: 0.2
+    shieldGain: 0.5
+    handRPosition: {x: 0, y: 0, z: 0}
+    handRRotate: {x: 0, y: 0, z: 0}
+    handLPosition: {x: 0.003463356, y: 0.01501694, z: -0.02809588}
+    handLRotate: {x: -11.071, y: -173.922, z: 29.098}
+    category: 2
+    prefabEquipment: {fileID: 7390052615647536271, guid: 152091218fb4047e6b7e802271fc2b19,
+      type: 3}
   - name: "\u5927\u76FE"
     attackGain: 0
     shieldGain: 1

@@ -49,6 +49,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { ItemType.LongSword,   EquipmentType.LongSword     },
             { ItemType.Katana,      EquipmentType.Katana        },
             { ItemType.KeyBlade,    EquipmentType.KeyBlade      },
+            { ItemType.Buckler,     EquipmentType.Buckler       },
             { ItemType.LargeShield, EquipmentType.LargeShield   },
         };
     public EquipmentSource GetEquipmentSource(ItemType type)

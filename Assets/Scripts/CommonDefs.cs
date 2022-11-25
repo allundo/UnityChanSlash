@@ -457,6 +457,7 @@ public enum ItemType
     LongSword,
     Katana,
     KeyBlade,
+    Buckler,
     LargeShield,
     Coin,
     FireRing,
@@ -477,6 +478,7 @@ public enum EquipmentType
     LongSword,
     Katana,
     KeyBlade,
+    Buckler,
     LargeShield,
 }
 

@@ -29,6 +29,7 @@ public class ItemInfoLoader
             { ItemType.LongSword,   new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Katana,      new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.KeyBlade,    new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)     },
+            { ItemType.Buckler,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.LargeShield, new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Coin,        new CoinAction(ItemAttr.Consumption)                            },
             { ItemType.FireRing,    new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)         },
