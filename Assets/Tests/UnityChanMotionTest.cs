@@ -67,7 +67,7 @@ public class UnityChanMotionTest
     }
 
     [UnityTest]
-    public IEnumerator _001_PlayerFightMotionTest([Values("KnuckleKnuckle", "KnuckleShield", "SwordKnuckle")] string type)
+    public IEnumerator _001_PlayerFightMotionTest([Values("KnuckleKnuckle", "KnuckleShield", "SwordKnuckle", "SwordShield")] string type)
     {
         var handler = Object.Instantiate(Resources.Load<FightStyleHandler>($"Prefabs/Character/Player/{type}StyleHandler"), unityChan.transform);
         var controller = Object.Instantiate(Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_{type}"));
@@ -107,7 +107,7 @@ public class UnityChanMotionTest
 
     [Ignore("Test for motion visual confirmation.")]
     [UnityTest]
-    public IEnumerator _002_SingleMotionTest([Values("SwordKnuckle")] string type, [Values(0, 1, 2, 3)] int attackIndex)
+    public IEnumerator _002_SingleMotionTest([Values("SwordShield")] string type, [Values(0, 1, 2, 3)] int attackIndex)
     {
         var handler = Object.Instantiate(Resources.Load<FightStyleHandler>($"Prefabs/Character/Player/{type}StyleHandler"), unityChan.transform);
         var controller = Object.Instantiate(Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_{type}"));
