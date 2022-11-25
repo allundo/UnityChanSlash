@@ -57,8 +57,8 @@ MonoBehaviour:
     shieldGain: 0.5
     handRPosition: {x: 0, y: 0, z: 0}
     handRRotate: {x: 0, y: 0, z: 0}
-    handLPosition: {x: 0.003463356, y: 0.01501694, z: -0.02809588}
-    handLRotate: {x: -11.071, y: -173.922, z: 29.098}
+    handLPosition: {x: 0.0003594728, y: 0.0001157179, z: -0.003698}
+    handLRotate: {x: -2.878, y: -164.501, z: -88.91}
     category: 2
     prefabEquipment: {fileID: 7390052615647536271, guid: 152091218fb4047e6b7e802271fc2b19,
       type: 3}
@@ -67,8 +67,8 @@ MonoBehaviour:
     shieldGain: 1
     handRPosition: {x: 0, y: 0, z: 0}
     handRRotate: {x: 0, y: 0, z: 0}
-    handLPosition: {x: 0.003463356, y: 0.01501694, z: -0.02809588}
-    handLRotate: {x: -11.071, y: -173.922, z: 29.098}
+    handLPosition: {x: 0.0003594728, y: 0.0001157179, z: -0.003698}
+    handLRotate: {x: -2.878, y: -164.501, z: -88.91}
     category: 2
     prefabEquipment: {fileID: 2228998929826724217, guid: a04727aedb9164186b243be967871323,
       type: 3}
@@ -77,8 +77,8 @@ MonoBehaviour:
     shieldGain: 0.8
     handRPosition: {x: 0, y: 0, z: 0}
     handRRotate: {x: 0, y: 0, z: 0}
-    handLPosition: {x: 0.003463356, y: 0.01501694, z: -0.02809588}
-    handLRotate: {x: -11.071, y: -173.922, z: 29.098}
+    handLPosition: {x: 0.0003594728, y: 0.0001157179, z: -0.003698}
+    handLRotate: {x: -2.878, y: -164.501, z: -88.91}
     category: 2
     prefabEquipment: {fileID: 1028701897145784222, guid: 4c164bdf326404e0e9e7b5cc243fa58e,
       type: 3}
