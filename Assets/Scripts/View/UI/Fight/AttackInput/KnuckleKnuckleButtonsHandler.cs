@@ -8,8 +8,8 @@ public class KnuckleKnuckleButtonsHandler : AttackButtonsHandler
     {
         var cancelable = new bool[3, 3];
 
-        // Jab -> Straight, Jab => Kick , Straight -> Jab are cancelable.
-        cancelable[0, 1] = cancelable[0, 2] = cancelable[1, 0] = true;
+        // Jab -> Straight, Jab => Kick , Straight -> Jab, Straight -> Kick are cancelable.
+        cancelable[0, 1] = cancelable[0, 2] = cancelable[1, 0] = cancelable[1, 2] = true;
 
         return cancelable;
     }
