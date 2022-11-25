@@ -35087,6 +35087,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_KICK_CRITICAL
       objectReference: {fileID: 0}
+    - target: {fileID: 6527725505761698842, guid: 94ccd6f7158c74e20ba582ba798440dd,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527725505761698842, guid: 94ccd6f7158c74e20ba582ba798440dd,
+        type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94ccd6f7158c74e20ba582ba798440dd, type: 3}
 --- !u!114 &4520472367472388761 stripped
@@ -35114,6 +35124,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1903539323726380687}
     m_Modifications:
+    - target: {fileID: 6704929825424741141, guid: bd16911b80b57471dbeb47baf41ab56c,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704929825424741141, guid: bd16911b80b57471dbeb47baf41ab56c,
+        type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6704929825424741146, guid: bd16911b80b57471dbeb47baf41ab56c,
         type: 3}
       propertyPath: m_Name
@@ -35259,6 +35279,16 @@ PrefabInstance:
     - target: {fileID: 6161503634568012981, guid: 2b34173e8e3c7480190847cb5c3b8b88,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6161503634568012987, guid: 2b34173e8e3c7480190847cb5c3b8b88,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6161503634568012987, guid: 2b34173e8e3c7480190847cb5c3b8b88,
+        type: 3}
+      propertyPath: prewarm
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
