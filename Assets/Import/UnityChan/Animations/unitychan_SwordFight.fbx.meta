@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
-    second: SwordKnucle_ChargeUp
+    second: Character1_Reference|Character1_ReferenceAction
   - first:
       74: 6722656316190513762
     second: SwordKnuckle_GUARD_STATE
@@ -24,6 +24,9 @@ ModelImporter:
   - first:
       74: -4108219079451020593
     second: SwordKnuckle_SHIELD
+  - first:
+      74: -6515985276260703993
+    second: SwordKnucle_ChargeUp
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -206,7 +209,7 @@ ModelImporter:
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
       firstFrame: 355
-      lastFrame: 380
+      lastFrame: 385
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -234,8 +237,8 @@ ModelImporter:
       name: SwordKnucle_ChargeUp
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
-      firstFrame: 380
-      lastFrame: 400
+      firstFrame: 385
+      lastFrame: 405
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
