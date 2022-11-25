@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4479766170763610143}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 2.25}
+  m_LocalRotation: {x: 0, y: -0.043619405, z: 0, w: 0.9990483}
+  m_LocalPosition: {x: -0.2, y: 0, z: 2.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3356260695412101563}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -5, z: 0}
 --- !u!198 &7112425561779513508
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4904,14 +4904,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4835071057760028014}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 2.25}
+  m_LocalRotation: {x: 0, y: -0.043619405, z: 0, w: 0.9990483}
+  m_LocalPosition: {x: -0.2, y: 0, z: 2.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3356260695412101563}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0, y: -5, z: 0}
 --- !u!198 &4909064386108279187
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9761,7 +9761,7 @@ GameObject:
   - component: {fileID: 7291204912635810485}
   - component: {fileID: 4642028527220054667}
   m_Layer: 9
-  m_Name: FX_L_SLASH
+  m_Name: FX_L_ATTACK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13831,7 +13831,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 0.627451}
-        key1: {r: 0, g: 0.54403925, b: 1, a: 0.627451}
+        key1: {r: 0.6839622, g: 0.85623384, b: 1, a: 0.627451}
         key2: {r: 0.6745283, g: 0.85135937, b: 1, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -13956,7 +13956,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 0}
-        key1: {r: 0.020273209, g: 0, b: 1, a: 1}
+        key1: {r: 0.6994081, g: 0.6933962, b: 1, a: 1}
         key2: {r: 1, g: 1, b: 1, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -19507,14 +19507,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8954242362541363032}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 2.25}
+  m_LocalRotation: {x: 0, y: -0.043619405, z: 0, w: 0.9990483}
+  m_LocalPosition: {x: -0.2, y: 0, z: 2.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3356260695412101563}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0, y: -5, z: 0}
 --- !u!198 &5941520325395116760
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -24547,12 +24547,32 @@ PrefabInstance:
     - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
       propertyPath: lengthInSec
-      value: 0.25
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: ForceModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: ForceModule.x.scalar
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
       propertyPath: VelocityModule.x.scalar
-      value: -4
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.y.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.z.scalar
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
@@ -24561,13 +24581,88 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
+      propertyPath: VelocityModule.x.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.y.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.z.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.orbitalZ.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
       propertyPath: InitialModule.startSpeed.scalar
-      value: 20
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 0.25
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487364501737759174, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 5758050055735721765, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
