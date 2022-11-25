@@ -42,35 +42,28 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     private Dictionary<ItemType, ItemInfo> itemInfo;
 
     private EquipmentData equipmentData;
-    private Dictionary<ItemType, EquipmentType> ItemEquipmentMap
-        = new Dictionary<ItemType, EquipmentType>()
-        {
-            { ItemType.Null,        EquipmentType.BareHand      },
-            { ItemType.LongSword,   EquipmentType.LongSword     },
-            { ItemType.Katana,      EquipmentType.Katana        },
-            { ItemType.KeyBlade,    EquipmentType.KeyBlade      },
-            { ItemType.Buckler,     EquipmentType.Buckler       },
-            { ItemType.LargeShield, EquipmentType.LargeShield   },
-        };
+
+    private List<ItemType> ItemEquipmentList = new List<ItemType>()
+    {
+            ItemType.Null,          // bare hand
+            ItemType.LongSword,
+            ItemType.Katana,
+            ItemType.KeyBlade,
+            ItemType.Buckler,
+            ItemType.LargeShield,
+    };
+
     public EquipmentSource GetEquipmentSource(ItemType type)
     {
-        EquipmentType equipmentType;
-        if (ItemEquipmentMap.TryGetValue(type, out equipmentType))
-        {
-            return equipmentData.Param((int)equipmentType);
-        }
-        return null;
+        int index = ItemEquipmentList.IndexOf(type);
+
+        if (index == -1) return null;
+
+        return equipmentData.Param(index);
     }
 
     public EquipmentSource GetEquipmentOrDefault(ItemType type)
-    {
-        EquipmentType equipmentType;
-        if (!ItemEquipmentMap.TryGetValue(type, out equipmentType))
-        {
-            equipmentType = EquipmentType.BareHand;
-        }
-        return equipmentData.Param((int)equipmentType);
-    }
+        => GetEquipmentSource(type) ?? equipmentData.Param(0);
 
     public EquipmentSource GetEquipmentOrDefault(ItemInfo itemInfo)
         => GetEquipmentOrDefault(itemInfo != null ? itemInfo.type : ItemType.Null);

@@ -472,16 +472,6 @@ public enum ItemAttr
     Ring,
 }
 
-public enum EquipmentType
-{
-    BareHand = 0,
-    LongSword,
-    Katana,
-    KeyBlade,
-    Buckler,
-    LargeShield,
-}
-
 public enum EquipmentCategory
 {
     Knuckle = 0,
