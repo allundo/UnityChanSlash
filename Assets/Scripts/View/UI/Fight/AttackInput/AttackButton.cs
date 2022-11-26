@@ -33,7 +33,15 @@ public class AttackButton : FadeUI
     private Tween coolTimer = null;
     private float countTime = 0f;
 
+    /// <summary>
+    /// Player can reserve pressing AttackButton during its on cool time. <br />
+    /// This flag allows player to reserve next attack by pressing AttackButtonRegion on cool time.
+    /// </summary>
     protected bool isPressEnable = false;
+
+    /// <summary>
+    /// True if reserving an AttackButton.
+    /// </summary>
     public bool isPressReserved { get; protected set; } = false;
     public Vector2 pressPos { get; private set; } = Vector2.zero;
 
