@@ -677,7 +677,7 @@ public class UnityEngineSpecTest
 
     [UnityTest]
     /// <summary>
-    /// Interruption source option "Next state" enables skipping states any times in a row.
+    /// Interruption source option "Next state" enables skipping transitions any times but one by one.
     /// </summary>
     public IEnumerator _014_AnimatorTransitionTest()
     {
