@@ -311,11 +311,11 @@ public class UITest
         testEnemyStatus.InitParam(param);
         testEnemyStatus2.InitParam(param);
 
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
 
         fightCircle.SetActive(true, testEnemyStatus);
 
-        tfEnemy.DOMoveY(7.5f, 3f).Play();
+        tfEnemy.DOMoveY(5f, 2f).Play();
         tfEnemy2.DOMoveY(-2.5f, 3f).Play();
 
         // yield return new WaitForSeconds(1f);
@@ -329,9 +329,19 @@ public class UITest
 
         yield return new WaitForSeconds(2f);
 
+        tfEnemy.DOMoveY(2.5f, 1f).Play();
+
         fightCircle.SetActive(true, testEnemyStatus2);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
+
+        fightCircle.SetActive(false, null);
+
+        yield return new WaitForSeconds(0.1f);
+
+        fightCircle.SetActive(true, testEnemyStatus2);
+
+        yield return new WaitForSeconds(2f);
 
         fightCircle.SetActive(false, null);
 

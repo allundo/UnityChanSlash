@@ -13,6 +13,7 @@ public abstract class FadeUI : MonoBehaviour, IFadeUI
     [SerializeField] protected float maxAlpha = 1f;
     protected FadeTween fade;
     protected bool isActive = false;
+    protected Tween prevFade = null;
 
     protected virtual void Awake()
     {
@@ -35,7 +36,8 @@ public abstract class FadeUI : MonoBehaviour, IFadeUI
     {
         isActive = true;
         BeforeFadeIn(duration);
-        fade.In(duration, 0f, null, OnCompleteFadeIn).Play();
+        prevFade?.Kill(); // Make sure to kill the same frame OnComplete callback as playing next tween.
+        prevFade = fade.In(duration, 0f, null, OnCompleteFadeIn).Play();
     }
 
     /// <summary>
@@ -73,6 +75,7 @@ public abstract class FadeUI : MonoBehaviour, IFadeUI
     {
         isActive = false;
         BeforeFadeOut();
-        fade.Out(duration, 0f, null, Disable).Play();
+        prevFade?.Kill(); // Make sure to kill the same frame OnComplete callback as playing next tween.
+        prevFade = fade.Out(duration, 0f, null, Disable).Play();
     }
 }
