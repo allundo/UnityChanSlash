@@ -724,4 +724,61 @@ public class UnityEngineSpecTest
         Object.Destroy(lockAnim.gameObject);
         Object.Destroy(mainCamera.gameObject);
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Tween callback maybe called by "yield WaitForSeconds". <br />
+    /// Execution order is not deterministic.
+    /// </summary>
+    public IEnumerator _015_TweenOnCompleteTimingTest()
+    {
+        yield return null;
+
+        var sb = new StringBuilder();
+        var updateTime = new GameObject("UpdateTime").AddComponent<UpdateTime>();
+        updateTime.SetStringBuilder(sb);
+
+        DOVirtual.DelayedCall(1f, () => sb.Append("DelayedCall(onComplete) 1sec, ")).Play();
+
+        yield return new WaitForSeconds(1f);
+
+        sb.Append("WaitForSeconds 1sec, ");
+
+        // !CAUTION! -> WaitForSeconds can be executed before DelayedCall.
+        Assert.AreEqual("DelayedCall(onComplete) 1sec, WaitForSeconds 1sec, ", sb.ToString());
+        yield return null;
+
+        Assert.AreEqual("DelayedCall(onComplete) 1sec, WaitForSeconds 1sec, Update() 1sec, ", sb.ToString());
+    }
+
+    public class UpdateTime : MonoBehaviour
+    {
+        private float elapsed = 0f;
+        private StringBuilder sb;
+
+        private const float FRAME_SEC_UNIT = 0.01666666667f;
+
+        void Start()
+        {
+            elapsed -= FRAME_SEC_UNIT;
+        }
+
+        void Update()
+        {
+            elapsed += Time.deltaTime;
+            if (elapsed > 1f)
+            {
+                sb.Append($"Update() 1sec, ");
+                elapsed -= 1f;
+                Debug.Log($"Overrun: {elapsed}sec");
+            }
+        }
+
+        public void SetStringBuilder(StringBuilder sb)
+        {
+            this.sb = sb;
+        }
+    }
+
 }
