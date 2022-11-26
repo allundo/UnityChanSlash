@@ -46,6 +46,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     private List<ItemType> ItemEquipmentList = new List<ItemType>()
     {
             ItemType.Null,          // bare hand
+            ItemType.BrassKnuckle,
+            ItemType.BaghNakh,
+            ItemType.Jamadhar,
             ItemType.LongSword,
             ItemType.Katana,
             ItemType.KeyBlade,

@@ -26,6 +26,9 @@ public class ItemInfoLoader
         {
             { ItemType.Null,            null                                                            },
             { ItemType.Potion,          new PotionAction(ItemAttr.Consumption)                          },
+            { ItemType.BrassKnuckle,    new ItemAction(ItemAttr.Equipment)                              },
+            { ItemType.BaghNakh,        new ItemAction(ItemAttr.Equipment)                              },
+            { ItemType.Jamadhar,        new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.LongSword,       new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Katana,          new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.KeyBlade,        new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)     },

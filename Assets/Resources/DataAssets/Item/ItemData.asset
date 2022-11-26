@@ -31,6 +31,33 @@ MonoBehaviour:
     unitPrice: 100
     numOfItemMin: 1
     numOfItemMax: 2
+  - name: "\u30E1\u30EA\u30B1\u30F3\u30B5\u30C3\u30AF"
+    material: {fileID: 2100000, guid: d46d4646f9eeb4e77b0b6d6d6ebacf80, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.2
+    description: "\u6307\u306B\u5D4C\u3081\u308B\u624B\u9803\u306A\u51F6\u5668\u3002\\n\u6C17\u5206\u306F\u55A7\u5629\u756A\u9577\u3002\\n\u756A\u9577\u306F\u6B66\u5668\u306A\u3093\u3066\u4F7F\u308F\u306A\u3044\uFF1F"
+    unitPrice: 10000
+    numOfItemMin: 1
+    numOfItemMax: 1
+  - name: "\u30D0\u30B0\u30CA\u30AF"
+    material: {fileID: 2100000, guid: 6322970d85e3b41f0b25da2620a4b898, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.2
+    description: "\u30A4\u30F3\u30C9\u5F0F\u30A2\u30A4\u30A2\u30F3\u30AF\u30ED\u30FC\u3002\\n\u722A\u304C\u30D1\u30F3\u30C1\u306E\u653B\u6483\u529B\u3092\u304B\u306A\u308A\u4E0A\u3052\u308B\u3002\\n\u3059\u3054\u3044\u75DB\u305D\u3046\u3060\u3002"
+    unitPrice: 30000
+    numOfItemMin: 1
+    numOfItemMax: 1
+  - name: "\u30B8\u30E3\u30DE\u30C0\u30CF\u30EB"
+    material: {fileID: 2100000, guid: 486c2e30f4e084525bd25cfc0ab19f48, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.2
+    description: "\u30A4\u30F3\u30C9\u306E\u5F37\u529B\u306A\u8FD1\u63A5\u6B66\u5668\u3002\\n\u92ED\u3044\u5203\u7269\u304C\u30D1\u30F3\u30C1\u306E\u5A01\u529B\u3092\u5287\u7684\u306B\u4E0A\u3052\u308B\u3002\\n\u30A4\u30F3\u30C9\u306E\u6B66\u5668\u306F\u3059\u3054\u3044\u305E\u3002"
+    unitPrice: 100000
+    numOfItemMin: 1
+    numOfItemMax: 1
   - name: "\u9577\u5263"
     material: {fileID: 2100000, guid: 140439859ee2b4009adc207cebd3fca8, type: 2}
     vfx: {fileID: 0}

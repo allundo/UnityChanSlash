@@ -454,6 +454,9 @@ public enum ItemType
 {
     Null = 0,
     Potion,
+    BrassKnuckle,
+    BaghNakh,
+    Jamadhar,
     LongSword,
     Katana,
     KeyBlade,
