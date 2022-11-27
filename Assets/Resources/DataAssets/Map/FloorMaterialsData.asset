@@ -20,7 +20,7 @@ MonoBehaviour:
     door: {fileID: 2100000, guid: 330a4aaf46ee4416292f67402a840440, type: 2}
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
     pitLid: {fileID: 2100000, guid: a8d9f491604024caf8bcb9be1cad6c3d, type: 2}
-    pitDamage: 1
+    pitDamage: 10
     hidePlate: {fileID: 2100000, guid: 506e4b1f8f1844f688258f4873e081bb, type: 2}
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
     pointLightColor: {r: 1, g: 0.79607844, b: 0.4117647, a: 1}
@@ -31,7 +31,7 @@ MonoBehaviour:
     door: {fileID: 2100000, guid: 330a4aaf46ee4416292f67402a840440, type: 2}
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
     pitLid: {fileID: 2100000, guid: a8d9f491604024caf8bcb9be1cad6c3d, type: 2}
-    pitDamage: 1
+    pitDamage: 10
     hidePlate: {fileID: 2100000, guid: 506e4b1f8f1844f688258f4873e081bb, type: 2}
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
     pointLightColor: {r: 1, g: 0.79607844, b: 0.4117647, a: 1}
@@ -42,7 +42,7 @@ MonoBehaviour:
     door: {fileID: 2100000, guid: 9a526ccb9696d6545b3991e93bfb18bd, type: 2}
     stairs: {fileID: 2100000, guid: 55a512382d8a87e48bf3bb9092ecbf4e, type: 2}
     pitLid: {fileID: 2100000, guid: b70b67f919c334e618deaa0527d55e1b, type: 2}
-    pitDamage: 2
+    pitDamage: 20
     hidePlate: {fileID: 2100000, guid: 45aefc3cd68184c03af330a5b99e0d42, type: 2}
     plateFront: {fileID: 2100000, guid: 9f5d14b4dc00a49ef80c697a38726671, type: 2}
     pointLightColor: {r: 1, g: 0.64699256, b: 0.514151, a: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
     door: {fileID: 2100000, guid: 808e6047c73239f46ac7425fc704306c, type: 2}
     stairs: {fileID: 2100000, guid: 481d1d21c29b1ed41b50472c451abfda, type: 2}
     pitLid: {fileID: 2100000, guid: 119807a64cc1249f9b3615b547d1df81, type: 2}
-    pitDamage: 3
+    pitDamage: 30
     hidePlate: {fileID: 2100000, guid: bd1be0e22b64bc246989849e76c0f37c, type: 2}
     plateFront: {fileID: 2100000, guid: a59c89f02d20a44b1a669ef0cf8d241b, type: 2}
     pointLightColor: {r: 0.61387503, g: 0.8107554, b: 0.8396226, a: 0}
@@ -64,7 +64,7 @@ MonoBehaviour:
     door: {fileID: 2100000, guid: 330a4aaf46ee4416292f67402a840440, type: 2}
     stairs: {fileID: 2100000, guid: 39d9ac5066e1af74cadba0ad038e742b, type: 2}
     pitLid: {fileID: 2100000, guid: a8d9f491604024caf8bcb9be1cad6c3d, type: 2}
-    pitDamage: 4
+    pitDamage: 40
     hidePlate: {fileID: 2100000, guid: 506e4b1f8f1844f688258f4873e081bb, type: 2}
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
     pointLightColor: {r: 1, g: 1, b: 1, a: 0}

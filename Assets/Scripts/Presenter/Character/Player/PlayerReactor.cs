@@ -156,7 +156,7 @@ public class PlayerReactor : MobReactor
             float shieldEffectiveness = guardState.SetShield();
             shield = (playerStatus.Shield + playerStatus.ShieldR * playerFightStyle.ShieldRatioR + playerStatus.ShieldL * playerFightStyle.ShieldRatioL) * shieldEffectiveness;
 
-            if (shieldEffectiveness < 1f) minDamage = 0.1f;
+            if (shieldEffectiveness < 1f) minDamage = 1f;
         }
 
         return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, minDamage);
