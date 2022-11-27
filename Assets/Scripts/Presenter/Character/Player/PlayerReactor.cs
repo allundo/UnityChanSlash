@@ -14,6 +14,7 @@ public class PlayerReactor : MobReactor
     [SerializeField] protected RestUI restUI = default;
     [SerializeField] protected HandREquipment handR = default;
     [SerializeField] protected HandLEquipment handL = default;
+    [SerializeField] protected NeckEquipment neck = default;
 
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
@@ -64,6 +65,10 @@ public class PlayerReactor : MobReactor
             .Subscribe(source => handL.Equip(source))
             .AddTo(this);
 
+        playerStatus.EquipBodyObservable
+            .Subscribe(source => neck.Equip(source))
+            .AddTo(this);
+
         var itemInventory = playerInput.GetItemInventory;
 
         itemInventory.EquipR
@@ -72,6 +77,10 @@ public class PlayerReactor : MobReactor
 
         itemInventory.EquipL
             .Subscribe(itemInfo => playerStatus.EquipL(itemInfo))
+            .AddTo(this);
+
+        itemInventory.EquipBody
+            .Subscribe(itemInfo => playerStatus.EquipBody(itemInfo))
             .AddTo(this);
 
         itemInventory.FightStyleChange

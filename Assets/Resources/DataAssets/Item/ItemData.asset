@@ -112,6 +112,15 @@ MonoBehaviour:
     unitPrice: 10000
     numOfItemMin: 1
     numOfItemMax: 1
+  - name: "\u685C\u306E\u30CD\u30C3\u30AF\u30EC\u30B9"
+    material: {fileID: 2100000, guid: 7bb6b1faa858f4396b122a928af4d471, type: 2}
+    vfx: {fileID: 0}
+    sfx: {fileID: 0}
+    duration: 0.2
+    description: "\u685C\u306E\u7D0B\u7AE0\u304C\u5370\u8C61\u7684\u306A\u88C5\u98FE\u54C1\u3002\\n\u8EAB\u306B\u4ED8\u3051\u308B\u3068\u9632\u5FA1\u529B\u304C\u4E0A\u304C\u308B\u3002"
+    unitPrice: 40000
+    numOfItemMin: 1
+    numOfItemMax: 1
   - name: "\u91D1\u8CA8"
     material: {fileID: 2100000, guid: 88e6c5541cfe94946bcf7a3aa17b37b3, type: 2}
     vfx: {fileID: 0}

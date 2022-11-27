@@ -240,6 +240,8 @@ public class EquipmentSource
     [SerializeField] public string name = "素手";
     [SerializeField] public float attackGain = 0f;
     [SerializeField] public float shieldGain = 0f;
+    [SerializeField] public float armorGain = 0f;
+    [SerializeField] public AttackAttr attribute = AttackAttr.None;
     [SerializeField] public Vector3 handRPosition = default;
     [SerializeField] public Vector3 handRRotate = default;
     [SerializeField] public Vector3 handLPosition = default;

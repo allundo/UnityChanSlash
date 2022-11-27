@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(CapsuleCollider))]
@@ -10,19 +11,37 @@ public class PlayerStatus : MobStatus
 
     public override Vector3 corePos => transform.position + col.center;
 
-    public IObservable<EquipmentSource> EquipRObservable => equipR.SkipLatestValueOnSubscribe();
-    public IObservable<EquipmentSource> EquipLObservable => equipL.SkipLatestValueOnSubscribe();
+    private IObservable<EquipmentSource> EquipObservable(int index) => equips[index].SkipLatestValueOnSubscribe();
+    public IObservable<EquipmentSource> EquipRObservable => EquipObservable(2);
+    public IObservable<EquipmentSource> EquipLObservable => EquipObservable(0);
+    public IObservable<EquipmentSource> EquipBodyObservable => EquipObservable(1);
 
-    private IReactiveProperty<EquipmentSource> equipR = new ReactiveProperty<EquipmentSource>();
-    private IReactiveProperty<EquipmentSource> equipL = new ReactiveProperty<EquipmentSource>();
+    /// <summary>
+    /// [0: Left hand weapon], 
+    /// [1: Body accessory], 
+    /// [2: Right hand weapon]
+    /// </summary>
+    private IReactiveProperty<EquipmentSource>[] equips = new IReactiveProperty<EquipmentSource>[3]
+        .Select(equip => new ReactiveProperty<EquipmentSource>()).ToArray();
 
-    public float AttackR => equipR.Value.attackGain;
-    public float ShieldR => equipR.Value.shieldGain;
-    public float AttackL => equipL.Value.attackGain;
-    public float ShieldL => equipL.Value.shieldGain;
+    private float AttackGain(int index) => equips[index].Value.attackGain;
+    private float ShieldGain(int index) => equips[index].Value.shieldGain;
+    private float ArmorGain(int index) => equips[index].Value.armorGain;
+    private float ArmorSum => equips.Sum(equip => equip.Value.armorGain);
+    private AttackAttr Attribute(int index) => equips[index].Value.attribute;
+    public float AttackR => AttackGain(2);
+    public float ShieldR => ShieldGain(2);
+    public float AttackL => AttackGain(0);
+    public float ShieldL => ShieldGain(0);
 
-    private ItemInfo equipInfoR = null;
-    private ItemInfo equipInfoL = null;
+    /// <summary>
+    /// Item info of equipments - 
+    /// [0: Left hand weapon], 
+    /// [1: Body accessory], 
+    /// [2: Right hand weapon]
+    /// </summary>
+    private ItemInfo[] equipInfo = new ItemInfo[3];
+
 
     protected override void Awake()
     {
@@ -52,14 +71,45 @@ public class PlayerStatus : MobStatus
         this.isHidden = isHidden;
     }
 
-    public void EquipR(ItemInfo itemInfo)
+    /// <summary>
+    /// Set equipment info source as reference of attack and defense powers.
+    /// </summary>
+    /// <param name="index">[0: Left hand], [1: Body accessory], [2: Right hand]</param>
+    /// <param name="itemInfo"></param>
+    private void Equip(int index, ItemInfo itemInfo)
     {
-        equipInfoR = itemInfo;
-        equipR.Value = ResourceLoader.Instance.GetEquipmentOrDefault(itemInfo);
+        equipInfo[index] = itemInfo;
+        equips[index].Value = ResourceLoader.Instance.GetEquipmentOrDefault(itemInfo);
     }
-    public void EquipL(ItemInfo itemInfo)
+
+    public void EquipR(ItemInfo itemInfo) => Equip(2, itemInfo);
+    public void EquipL(ItemInfo itemInfo) => Equip(0, itemInfo);
+    public void EquipBody(ItemInfo itemInfo) => Equip(1, itemInfo);
+
+    public override float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None)
     {
-        equipInfoL = itemInfo;
-        equipL.Value = ResourceLoader.Instance.GetEquipmentOrDefault(itemInfo);
+        var attrDM = CalcAttrDM(attr);
+
+        // Direction doesn't affect attack power when absorbing attribute of the attack.
+        var dirDM = attrDM > 0f ? dirDamageMultiplier[GetDamageType(attackDir)] : 1f;
+
+        return Mathf.Max(attack * (ArmorMultiplier - ArmorSum * 0.25f) * dirDM * attrDM, 1f);
+    }
+
+    /// <summary>
+    /// Reduce damage if equipment attribute is the same with the damage attribute.
+    /// </summary>
+    /// <param name="attr">damage attribute</param>
+    /// <returns>damage multiplier based on the attribute</returns>
+    private float CalcAttrDM(AttackAttr attr)
+    {
+        var attrDM = attrDamageMultiplier[attr];
+
+        for (int index = 0; index < equips.Length; index++)
+        {
+            if (attr == Attribute(index)) attrDM -= ArmorGain(index);
+        }
+
+        return attrDM;
     }
 }

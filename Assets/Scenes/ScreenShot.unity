@@ -623,7 +623,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 36
   orthographic: 0
@@ -658,6 +658,80 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1001 &6500850332355885920
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 149580120770281039, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_Name
+      value: CherryNecklace
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0269
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2988
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.6273
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9107686
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.2954444
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.25743976
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.1301457
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 28.109
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 38.231
+      objectReference: {fileID: 0}
+    - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 26.182
+      objectReference: {fileID: 0}
+    - target: {fileID: 1806952956824084378, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 79b5e329d976b4c1ba228fad3d21f3c3, type: 3}
 --- !u!1001 &6969668013111337453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -669,6 +743,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BrassKnucle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047054583642244063, guid: 882dfa9b992114e62b16cd5f232ed13e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6386285375112124773, guid: 882dfa9b992114e62b16cd5f232ed13e,
         type: 3}

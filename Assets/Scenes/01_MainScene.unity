@@ -29999,6 +29999,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightCircle
       objectReference: {fileID: 0}
+    - target: {fileID: 6882866220926824017, guid: 723caa0e0671f482aa1faa89649e4e0f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6882866220926824044, guid: 723caa0e0671f482aa1faa89649e4e0f,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -30386,6 +30391,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1574935736902618774}
     m_Modifications:
+    - target: {fileID: 7188478079254169948, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7188478079254169949, guid: 5822611b12401460597d1ff676245c26,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -30399,6 +30409,11 @@ PrefabInstance:
     - target: {fileID: 7188478079254169949, guid: 5822611b12401460597d1ff676245c26,
         type: 3}
       propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188478079414399225, guid: 5822611b12401460597d1ff676245c26,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7188478079414399230, guid: 5822611b12401460597d1ff676245c26,

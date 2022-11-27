@@ -463,6 +463,7 @@ public enum ItemType
     Buckler,
     LargeShield,
     BattleShield,
+    CherryNecklace,
     Coin,
     FireRing,
     IceRing,

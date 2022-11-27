@@ -35,6 +35,7 @@ public class ItemInfoLoader
             { ItemType.Buckler,         new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.LargeShield,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.BattleShield,    new ItemAction(ItemAttr.Equipment)                              },
+            { ItemType.CherryNecklace,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Coin,            new CoinAction(ItemAttr.Consumption)                            },
             { ItemType.FireRing,        new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)         },
             { ItemType.IceRing,         new MagicRingAction(ItemAttr.Ring, BulletType.IceBullet)        },

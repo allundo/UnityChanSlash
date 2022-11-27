@@ -66,11 +66,6 @@ public class EquipItemsHandler : ItemIndexHandler
     }
 
     protected void SetEquip(int index, ItemIcon itemIcon) => SetItemWithEmptyCheck(index, itemIcon, tweenMove);
-    protected void SetEquipR(ItemIcon itemIcon) => SetEquip(2, itemIcon);
-    protected void SetEquipL(ItemIcon itemIcon) => SetEquip(0, itemIcon);
-
-    protected ItemIcon GetEquipR() => equipR.Value;
-    protected ItemIcon GetEquipL() => equipL.Value;
 
     protected override Vector2 LocalUIPos(int index) => LocalUIPos(index, 0);
     protected override Vector2 LocalUIPos(int x, int y) => panelOffsetCenter + new Vector2(panelUnit.x * x, 0);
@@ -132,8 +127,12 @@ public class EquipItemsHandler : ItemIndexHandler
 
         public IEquipmentStyle Equip(int index, ItemIcon itemIcon)
         {
-            if (index == 2) return Equip(itemIcon, EquipKnuckleR, EquipSwordR, EquipShieldR);
-            if (index == 0) return Equip(itemIcon, EquipKnuckleL, EquipSwordL, EquipShieldL);
+            switch (index)
+            {
+                case 2: return Equip(itemIcon, EquipKnuckleR, EquipSwordR, EquipShieldR);
+                case 0: return Equip(itemIcon, EquipKnuckleL, EquipSwordL, EquipShieldL);
+                case 1: return SetBody(itemIcon);
+            }
 
             throw new ArgumentException("Invalid index: " + index);
         }
@@ -152,20 +151,19 @@ public class EquipItemsHandler : ItemIndexHandler
         protected abstract IEquipmentStyle EquipSwordL(ItemIcon itemIcon);
         protected abstract IEquipmentStyle EquipShieldL(ItemIcon itemIcon);
 
-        protected IEquipmentStyle SetR(ItemIcon itemIcon)
+        private IEquipmentStyle Set(int index, ItemIcon itemIcon)
         {
-            equipments.SetEquipR(itemIcon);
+            equipments.SetEquip(index, itemIcon);
             return this;
         }
+        protected IEquipmentStyle SetR(ItemIcon itemIcon) => Set(2, itemIcon);
+        protected IEquipmentStyle SetL(ItemIcon itemIcon) => Set(0, itemIcon);
+        protected IEquipmentStyle SetBody(ItemIcon itemIcon) => Set(1, itemIcon);
 
-        protected IEquipmentStyle SetL(ItemIcon itemIcon)
-        {
-            equipments.SetEquipL(itemIcon);
-            return this;
-        }
-
-        protected ItemIcon GetR() => equipments.GetEquipR();
-        protected ItemIcon GetL() => equipments.GetEquipL();
+        private ItemIcon Get(int index) => equipments.equips[index].Value;
+        protected ItemIcon GetR() => Get(2);
+        protected ItemIcon GetL() => Get(0);
+        protected ItemIcon GetBody() => Get(1);
     }
 
     protected class KnuckleKnuckle : EquipmentStyle
