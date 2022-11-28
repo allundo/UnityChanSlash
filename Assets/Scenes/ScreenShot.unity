@@ -658,6 +658,80 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1001 &1712551735
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3379173770217363191, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883722269480990498, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_Name
+      value: SnowNecklace
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0321
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.3195
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.5498
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9107686
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.2954444
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.25743976
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.1301457
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 28.109
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 38.231
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516565615489609112, guid: 6d19e5d2118fd4760a462c1a64bdfd27,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 26.182
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6d19e5d2118fd4760a462c1a64bdfd27, type: 3}
 --- !u!1001 &6500850332355885920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -669,6 +743,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CherryNecklace
+      objectReference: {fileID: 0}
+    - target: {fileID: 149580120770281039, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 673493750035031285, guid: 79b5e329d976b4c1ba228fad3d21f3c3,
         type: 3}

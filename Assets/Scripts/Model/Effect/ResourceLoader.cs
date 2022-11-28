@@ -56,6 +56,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             ItemType.LargeShield,
             ItemType.BattleShield,
             ItemType.CherryNecklace,
+            ItemType.SnowNecklace,
     };
 
     public EquipmentSource GetEquipmentSource(ItemType type)

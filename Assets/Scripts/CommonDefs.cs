@@ -464,6 +464,7 @@ public enum ItemType
     LargeShield,
     BattleShield,
     CherryNecklace,
+    SnowNecklace,
     Coin,
     FireRing,
     IceRing,
