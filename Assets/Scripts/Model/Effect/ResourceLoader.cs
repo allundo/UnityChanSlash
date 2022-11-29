@@ -43,25 +43,10 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     private EquipmentData equipmentData;
 
-    private List<ItemType> ItemEquipmentList = new List<ItemType>()
-    {
-            ItemType.Null,          // bare hand
-            ItemType.BrassKnuckle,
-            ItemType.BaghNakh,
-            ItemType.Jamadhar,
-            ItemType.LongSword,
-            ItemType.Katana,
-            ItemType.KeyBlade,
-            ItemType.Buckler,
-            ItemType.LargeShield,
-            ItemType.BattleShield,
-            ItemType.CherryNecklace,
-            ItemType.SnowNecklace,
-    };
-
+    private List<ItemType> itemEquipmentList;
     public EquipmentSource GetEquipmentSource(ItemType type)
     {
-        int index = ItemEquipmentList.IndexOf(type);
+        int index = itemEquipmentList.IndexOf(type);
 
         if (index == -1) return null;
 
@@ -116,7 +101,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         itemData = Resources.Load<ItemData>("DataAssets/Item/ItemData");
         itemTypesData = Resources.Load<ItemTypesData>("DataAssets/Map/ItemTypesData");
-        itemInfo = new ItemInfoLoader(itemData).LoadItemInfo();
+        var itemInfoLoader = new ItemInfoLoader(itemData);
+        itemInfo = itemInfoLoader.LoadItemInfo();
+        itemEquipmentList = itemInfoLoader.GetEquipmentList();
 
         equipmentData = Resources.Load<EquipmentData>("DataAssets/Item/EquipmentData");
 

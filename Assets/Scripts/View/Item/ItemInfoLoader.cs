@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class ItemInfoLoader
@@ -36,12 +37,20 @@ public class ItemInfoLoader
             { ItemType.LargeShield,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.BattleShield,    new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.CherryNecklace,  new ItemAction(ItemAttr.Equipment)                              },
+            { ItemType.RubyNecklace,    new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.SnowNecklace,    new ItemAction(ItemAttr.Equipment)                              },
+            { ItemType.CrossNecklace,   new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Coin,            new CoinAction(ItemAttr.Consumption)                            },
             { ItemType.FireRing,        new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)         },
             { ItemType.IceRing,         new MagicRingAction(ItemAttr.Ring, BulletType.IceBullet)        },
             { ItemType.DarkRing,        new MagicRingAction(ItemAttr.Ring, BulletType.PlayerDarkHound)  },
         };
     }
+
+    public List<ItemType> GetEquipmentList()
+     => itemActions
+        .Where(act => act.Value == null || act.Value.attr == ItemAttr.Equipment || act.Key == ItemType.KeyBlade)
+        .Select(act => act.Key)
+        .ToList();
 }
 
