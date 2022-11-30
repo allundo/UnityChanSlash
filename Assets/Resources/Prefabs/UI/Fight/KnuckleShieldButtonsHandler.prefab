@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAlpha: 1
-  frames: 50
+  frames: 75
   motionFrameRate: 30
   cancelStart: 0.75
   coolTimeRatio: 1

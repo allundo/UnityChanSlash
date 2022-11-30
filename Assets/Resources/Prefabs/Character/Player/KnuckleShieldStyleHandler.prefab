@@ -24502,12 +24502,12 @@ PrefabInstance:
     - target: {fileID: 3867872897582574268, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
       propertyPath: startFrame
-      value: 24
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 3867872897582574268, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}
       propertyPath: finishFrame
-      value: 32
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 3867872897582574269, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}

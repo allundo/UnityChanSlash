@@ -9,11 +9,9 @@ AnimatorOverrideController:
   m_Name: UnityChan_KnuckleShield
   m_Controller: {fileID: 9100000, guid: 3396e255c97254ba58cec2dfed194c22, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 1b718487ea34d49f2a5b0095e47c124a, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 3c67c36f245c24f2c9971ea3c1e86eb6, type: 2}
   - m_OriginalClip: {fileID: -3826437141266125818, guid: da3c6d650d7b44d3bb07055f4779e87c,
       type: 3}
-    m_OverrideClip: {fileID: -3826437141266125818, guid: e4ddd1b2d9e624d72b83ff902102767c,
+    m_OverrideClip: {fileID: 3419509739131278024, guid: e4ddd1b2d9e624d72b83ff902102767c,
       type: 3}
   - m_OriginalClip: {fileID: -3826437141266125818, guid: 06ad9fccf0a244d8584d8398b921c0a6,
       type: 3}
@@ -33,3 +31,5 @@ AnimatorOverrideController:
       type: 3}
   - m_OriginalClip: {fileID: 7400000, guid: 1e79f5e733df84044a45d6ab05035627, type: 3}
     m_OverrideClip: {fileID: 7400000, guid: e54e2e1fa0a994b389fe0654511fac47, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 1b718487ea34d49f2a5b0095e47c124a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: af87d9d7d1e3649f6b99321c907d55ef, type: 2}

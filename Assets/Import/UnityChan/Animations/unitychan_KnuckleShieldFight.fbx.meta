@@ -5,6 +5,9 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -3826437141266125818
+    second: Character1_Reference|Character1_ReferenceAction
+  - first:
+      74: 3419509739131278024
     second: KnuckleShield_Guard
   - first:
       74: 6606872835466503613
@@ -174,7 +177,7 @@ ModelImporter:
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
       firstFrame: 210
-      lastFrame: 260
+      lastFrame: 285
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -202,8 +205,8 @@ ModelImporter:
       name: KnuckleShield_ChargeUp
       takeName: Character1_Reference|Character1_ReferenceAction
       internalID: 0
-      firstFrame: 260
-      lastFrame: 280
+      firstFrame: 285
+      lastFrame: 305
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
