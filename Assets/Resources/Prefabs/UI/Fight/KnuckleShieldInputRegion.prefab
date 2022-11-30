@@ -7,10 +7,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1219214075797781247, guid: 3ef1466d73e3d400d83d02b01a921871,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 9cbf6d1c1b69349278c8ba32b45aa30d, type: 2}
+    - target: {fileID: 1219214075940877029, guid: 3ef1466d73e3d400d83d02b01a921871,
+        type: 3}
+      propertyPath: m_Name
+      value: LAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1219214075940877031, guid: 3ef1466d73e3d400d83d02b01a921871,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6144b52833bae4d06b108a1b23b328c4, type: 2}
     - target: {fileID: 1219214076311651586, guid: 3ef1466d73e3d400d83d02b01a921871,
         type: 3}
       propertyPath: m_Name
-      value: KnuckleKnuckleInputRegion
+      value: KnuckleShieldInputRegion
       objectReference: {fileID: 0}
     - target: {fileID: 1219214076311651589, guid: 3ef1466d73e3d400d83d02b01a921871,
         type: 3}
@@ -117,5 +132,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1219214077281235467, guid: 3ef1466d73e3d400d83d02b01a921871,
+        type: 3}
+      propertyPath: m_Name
+      value: RStraight
+      objectReference: {fileID: 0}
+    - target: {fileID: 1219214077281235469, guid: 3ef1466d73e3d400d83d02b01a921871,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: e762285aaef0a4488b930abc89738644, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ef1466d73e3d400d83d02b01a921871, type: 3}

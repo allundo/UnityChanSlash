@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1532109997314437013}
   - component: {fileID: 1532109997314437010}
   m_Layer: 5
-  m_Name: StraightButton
+  m_Name: RStraightButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
   - {fileID: 4359190922017711585}
   - {fileID: 1532109997314437010}
   - {fileID: 3416137080027953639}
-  kickRadius: 100
+  centerCircleRadius: 100
 --- !u!1 &6320135123413758458
 GameObject:
   m_ObjectHideFlags: 0
