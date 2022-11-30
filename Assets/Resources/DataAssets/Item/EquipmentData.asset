@@ -97,6 +97,18 @@ MonoBehaviour:
     prefabEquipment: {fileID: 5821403241526252485, guid: b55d4adf59cc64c849dfaaaa65e87b66,
       type: 3}
   - name: "\u30D0\u30C3\u30AF\u30E9\u30FC"
+    attackGain: 0
+    shieldGain: 0.35
+    armorGain: 0
+    attribute: 0
+    handRPosition: {x: 0, y: 0, z: 0}
+    handRRotate: {x: 0, y: 0, z: 0}
+    handLPosition: {x: 0.0003594728, y: 0.0001157179, z: -0.003698}
+    handLRotate: {x: -2.878, y: -164.501, z: -88.91}
+    category: 2
+    prefabEquipment: {fileID: 7390052615647536271, guid: 152091218fb4047e6b7e802271fc2b19,
+      type: 3}
+  - name: "\u30AF\u30ED\u30B9\u30B7\u30FC\u30EB\u30C9"
     attackGain: 0.2
     shieldGain: 0.5
     armorGain: 0
@@ -106,7 +118,7 @@ MonoBehaviour:
     handLPosition: {x: 0.0003594728, y: 0.0001157179, z: -0.003698}
     handLRotate: {x: -2.878, y: -164.501, z: -88.91}
     category: 2
-    prefabEquipment: {fileID: 7390052615647536271, guid: 152091218fb4047e6b7e802271fc2b19,
+    prefabEquipment: {fileID: 6554978802244137270, guid: 7fe53ed2a31924a18ab03b0118292367,
       type: 3}
   - name: "\u5927\u76FE"
     attackGain: 0

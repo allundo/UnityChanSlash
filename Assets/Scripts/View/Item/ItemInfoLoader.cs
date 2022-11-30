@@ -34,6 +34,7 @@ public class ItemInfoLoader
             { ItemType.Katana,          new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.KeyBlade,        new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)     },
             { ItemType.Buckler,         new ItemAction(ItemAttr.Equipment)                              },
+            { ItemType.CrossShield,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.LargeShield,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.BattleShield,    new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.CherryNecklace,  new ItemAction(ItemAttr.Equipment)                              },

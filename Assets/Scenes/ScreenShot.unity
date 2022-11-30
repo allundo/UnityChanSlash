@@ -673,7 +673,7 @@ PrefabInstance:
     - target: {fileID: 1191430872704932029, guid: 886eded52b3584bbe9573cf5a8620f26,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2000443468760121863, guid: 886eded52b3584bbe9573cf5a8620f26,
         type: 3}
@@ -885,6 +885,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ab9aa82a41294b1d8b5ef560d607fac, type: 3}
+--- !u!1001 &6212328298720399506
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.4163182
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.19520386
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9664799
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.061853323
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.15375778
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.19608538
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -10.362
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 16.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889625092644301708, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 21.467
+      objectReference: {fileID: 0}
+    - target: {fileID: 6554978802244137270, guid: 7fe53ed2a31924a18ab03b0118292367,
+        type: 3}
+      propertyPath: m_Name
+      value: VikingShield
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7fe53ed2a31924a18ab03b0118292367, type: 3}
 --- !u!1001 &6500850332355885920
 PrefabInstance:
   m_ObjectHideFlags: 0

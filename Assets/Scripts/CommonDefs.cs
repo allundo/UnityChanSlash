@@ -461,6 +461,7 @@ public enum ItemType
     Katana,
     KeyBlade,
     Buckler,
+    CrossShield,
     LargeShield,
     BattleShield,
     CherryNecklace,
