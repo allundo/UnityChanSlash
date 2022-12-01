@@ -342,7 +342,12 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         exitHandler = new ApplicationExitHandler(this);
     }
 
-    public void SaveDeadRecords(string causeOfDeath, ulong moneyAmount, int currentFloor)
+    /// <summary>
+    /// Update dead records by new record and save it into save data file.
+    /// </summary>
+    /// <param name="newRecord">new dead record data</param>
+    /// <returns>rank of the new dead record, 0 if the rank is out of display.</returns>
+    public int SaveDeadRecords(DataStoreAgent.DeadRecord newRecord)
     {
         // Delete save data
         DisableSave();
@@ -350,11 +355,14 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         deadRecords = LoadDeadRecords();
 
-        deadRecords.Add(new DeadRecord(moneyAmount, causeOfDeath, currentFloor));
+        deadRecords.Add(newRecord);
 
         deadRecords = deadRecords.OrderByDescending(record => record.moneyAmount).Where((r, index) => index < 10).ToList();
 
+        var rank = deadRecords.IndexOf(newRecord) + 1;
+
         SaveEncryptedRecords(deadRecords, DEAD_RECORD_FILE_NAME);
+        return rank;
     }
 
     public void SaveClearRecords(string title, ulong wagesAmount, int clearTimeSec, int defeatCount)

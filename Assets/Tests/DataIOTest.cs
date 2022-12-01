@@ -39,7 +39,9 @@ public class DataIOTest
         LogAssert.Expect(LogType.Error, new Regex($"ファイルのロードに失敗: Could not find file \".*/{dataStoreAgent.DEAD_RECORD_FILE_NAME}\""));
 
         dataStoreAgent.DeleteFile(dataStoreAgent.DEAD_RECORD_FILE_NAME);
-        dataStoreAgent.SaveDeadRecords(new Attacker(1f, null, "test").CauseOfDeath(), 10000, 3);
+
+        var newRecord = new DataStoreAgent.DeadRecord(10000, new Attacker(1f, null, "test").CauseOfDeath(), 3);
+        dataStoreAgent.SaveDeadRecords(newRecord);
 
         var records = dataStoreAgent.LoadDeadRecords();
 

@@ -793,9 +793,11 @@ public class PlayerDie : PlayerCommand
         itemInventory.Cancel();
         react.OnDie();
         playerAnim.die.Bool = true;
-        playerTarget.gameOverUI.Play();
 
-        DataStoreAgent.Instance.SaveDeadRecords((react as PlayerReactor).CauseOfDeath(), GameManager.Instance.SumUpItemValue(), GameInfo.Instance.currentFloor);
+        var newRecord = new DataStoreAgent.DeadRecord(GameManager.Instance.SumUpItemValue(), (react as PlayerReactor).CauseOfDeath(), GameInfo.Instance.currentFloor);
+        var rank = DataStoreAgent.Instance.SaveDeadRecords(newRecord);
+
+        playerTarget.gameOverUI.Play(rank, newRecord);
 
         return ExecOnCompleted(() => mobReact.OnDisappear());
     }

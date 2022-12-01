@@ -19,4 +19,7 @@ public class DeadRecord : RankRecord
         textObjects.Add(causeOfDeath);
         textFormats.Add(cause => "・死因:" + cause);
     }
+
+    public void SetValues(int rank, DataStoreAgent.DeadRecord deadRecord)
+        => base.SetValues(rank, deadRecord.floor, deadRecord.moneyAmount, deadRecord.causeOfDeath);
 }

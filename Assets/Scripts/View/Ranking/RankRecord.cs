@@ -17,7 +17,7 @@ public abstract class RankRecord : BaseRecord
     protected override void SetFormats()
     {
         textObjects.Add(rank);
-        textFormats.Add(rank => "第" + rank + "位");
+        textFormats.Add(rank => (int)rank > 0 ? "第" + rank + "位" : "ランク外");
     }
 
     protected override void SetActive(bool isActive)

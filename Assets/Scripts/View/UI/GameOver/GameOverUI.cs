@@ -1,11 +1,13 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private FadeEnable gameOverTxt = default;
     [SerializeField] private FadeEnable gameOverBG = default;
     [SerializeField] private GameOverWindowUI selectUI = default;
+    [SerializeField] private DeadRecord record = default;
 
     public void OnPointerDown(PointerEventData eventData) { }
 
@@ -21,6 +23,7 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 
     protected override void Awake()
     {
+        record.gameObject.SetActive(false);
         fade = new FadeTween(gameObject, 0.25f, true);
 
         Inactivate();
@@ -40,9 +43,16 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
             .AppendCallback(selectUI.ActivateButtons);
     }
 
-    public void Play()
+    public void Play(int rank, DataStoreAgent.DeadRecord deadRecord)
     {
+        record.rectTransform.anchoredPosition = new Vector2(Screen.width + 20f, -320f);
         gameObject.SetActive(true);
+
+
+        record.SetValues(rank, deadRecord);
+        sequence.Append(record.rectTransform.DOAnchorPosX(-Screen.width, 0.5f).SetEase(Ease.OutQuart).SetRelative());
+        record.gameObject.SetActive(true);
+
         sequence.Play();
     }
 }
