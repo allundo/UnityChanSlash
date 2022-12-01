@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using DG.Tweening;
 
 public abstract class BaseRecord : MonoBehaviour
 {
@@ -30,5 +31,16 @@ public abstract class BaseRecord : MonoBehaviour
     protected virtual void SetActive(bool isActive)
     {
         foreach (var obj in textObjects) obj.gameObject.SetActive(isActive);
+    }
+
+    public void ResetPosition() => ResetPosition(Vector2.zero);
+    public void ResetPosition(Vector2 offset)
+    {
+        rectTransform.anchoredPosition = new Vector2(Screen.width, 0f) + offset;
+    }
+
+    public Tween SlideInTween(float duration = 0.5f)
+    {
+        return rectTransform.DOAnchorPosX(-Screen.width, duration).SetEase(Ease.OutQuart).SetRelative();
     }
 }

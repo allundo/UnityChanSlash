@@ -1,6 +1,5 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
-using DG.Tweening;
 
 public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
@@ -45,12 +44,11 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 
     public void Play(int rank, DataStoreAgent.DeadRecord deadRecord)
     {
-        record.rectTransform.anchoredPosition = new Vector2(Screen.width + 20f, -320f);
+        record.ResetPosition(new Vector2(0, -320f));
         gameObject.SetActive(true);
 
-
         record.SetValues(rank, deadRecord);
-        sequence.Append(record.rectTransform.DOAnchorPosX(-Screen.width, 0.5f).SetEase(Ease.OutQuart).SetRelative());
+        sequence.Append(record.SlideInTween());
         record.gameObject.SetActive(true);
 
         sequence.Play();

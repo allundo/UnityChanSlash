@@ -5,12 +5,9 @@ using System.Linq;
 
 public class RecordsRankingUI : RecordsUI
 {
-    private Vector2 rankBasePos;
-
     protected override void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        rankBasePos = new Vector2(-20f + width, -80f);
     }
 
     public void LoadRecords<T>(List<T> rankRecords) where T : DataStoreAgent.DataArray
@@ -27,11 +24,13 @@ public class RecordsRankingUI : RecordsUI
             records = new BaseRecord[1];
         }
 
+        var rankBaseOffset = new Vector2(-4f * length / 2, -80f);
+
         records[0] = record;
-        records[0].rectTransform.anchoredPosition = rankBasePos;
+        records[0].ResetPosition(rankBaseOffset);
 
         var seq = DOTween.Sequence()
-            .Join(records[0].rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative());
+            .Join(records[0].SlideInTween());
 
         for (int i = 1; i < length; i++)
         {
@@ -39,8 +38,8 @@ public class RecordsRankingUI : RecordsUI
             records[i] = Instantiate(record, transform);
             records[i].gameObject.name = "Rank" + rank;
             records[i].SetValues(rankRecords[i].GetValues(rank));
-            records[i].rectTransform.anchoredPosition = rankBasePos + new Vector2(4 * i, -160f * i);
-            seq.Join(records[i].rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative().SetDelay(0.01f * i));
+            records[i].ResetPosition(rankBaseOffset + new Vector2(4 * i, -160f * i));
+            seq.Join(records[i].SlideInTween().SetDelay(0.01f * i));
         }
 
         SetRecordsActive(false);

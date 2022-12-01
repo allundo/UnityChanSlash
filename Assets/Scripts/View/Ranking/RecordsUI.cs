@@ -23,8 +23,8 @@ public class RecordsUI : MonoBehaviour
     {
         records = new BaseRecord[] { record };
 
-        records[0].rectTransform.anchoredPosition = new Vector2(width, 0f);
-        slideInTween = records[0].rectTransform.DOAnchorPosX(-width, 0.5f).SetEase(Ease.OutQuart).SetRelative().AsReusable(gameObject);
+        records[0].ResetPosition();
+        slideInTween = records[0].SlideInTween().AsReusable(gameObject);
 
         records[0].gameObject.SetActive(false);
     }
