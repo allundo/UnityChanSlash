@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 330108704083822658, guid: eb5466805b02d4daea74f16c65cf435e,
+        type: 3}
+      propertyPath: ShapeModule.m_Rotation.y
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 951536689231853251, guid: eb5466805b02d4daea74f16c65cf435e,
         type: 3}
       propertyPath: attackRatioL
