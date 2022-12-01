@@ -14,6 +14,7 @@ public abstract class BaseRecord : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         SetFormats();
+        ResetPosition();
         SetActive(false);
     }
 

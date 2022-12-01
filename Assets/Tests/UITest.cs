@@ -18,6 +18,8 @@ public class UITest
     private ForwardUI prefabForwardUI;
     private EnemyStatus prefabEnemyStatus;
 
+    private GameOverUI prefabGameOverUI;
+
     private GameObject testCanvas;
     private Camera mainCamera;
     private GameObject eventSystem;
@@ -42,6 +44,8 @@ public class UITest
         prefabAttackInput = Resources.Load<AttackInputControllerTest>("Prefabs/UI/Fight/AttackInputUITest");
         prefabForwardUI = Resources.Load<ForwardUI>("Prefabs/UI/Move/Forward");
         prefabEnemyStatus = Resources.Load<EnemyStatus>("Prefabs/TestEnemyStatus");
+
+        prefabGameOverUI = Resources.Load<GameOverUI>("Prefabs/UI/GameOver/GameOverUI");
 
         dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
         dataStoreAgent.KeepSaveDataFiles();
@@ -352,5 +356,19 @@ public class UITest
         Object.Destroy(fightCircle.gameObject);
 
         yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator _005_GameOverUITest([Values(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)] int rank)
+    {
+        var gameOverUI = Object.Instantiate(prefabGameOverUI, testCanvas.transform);
+
+        yield return null;
+
+        gameOverUI.Play(rank, new DataStoreAgent.DeadRecord((ulong)(10000 * rank), "テスト死因" + rank, rank));
+
+        yield return new WaitForSeconds(7f);
+        DOTween.KillAll();
+        Object.Destroy(gameOverUI.gameObject);
     }
 }

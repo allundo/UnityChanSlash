@@ -7,6 +7,7 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private FadeEnable gameOverBG = default;
     [SerializeField] private GameOverWindowUI selectUI = default;
     [SerializeField] private DeadRecord record = default;
+    [SerializeField] private RankInMessage message = default;
 
     public void OnPointerDown(PointerEventData eventData) { }
 
@@ -22,9 +23,7 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 
     protected override void Awake()
     {
-        record.gameObject.SetActive(false);
         fade = new FadeTween(gameObject, 0.25f, true);
-
         Inactivate();
     }
 
@@ -44,17 +43,18 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 
     public void Play(int rank, DataStoreAgent.DeadRecord deadRecord)
     {
-        record.SetRankEnable(false);
-        record.ResetPosition(new Vector2(0, -320f));
         gameObject.SetActive(true);
 
         record.SetValues(rank, deadRecord);
+        record.ResetPosition(new Vector2(0, -320f));
+        record.SetRankEnable(false);
+
         sequence
             .Append(record.SlideInTween())
             .Append(record.RankEffect(rank))
             .Append(record.RankPunchEffect(rank));
 
-        record.gameObject.SetActive(true);
+        if (rank > 0) sequence.Append(message.RankInTween());
 
         sequence.Play();
     }

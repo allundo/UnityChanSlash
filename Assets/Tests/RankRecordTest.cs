@@ -9,6 +9,7 @@ using UniRx;
 public class RankRecordTest
 {
     private DeadRecord prefabDeadRecord;
+    private RankInMessage prefabRankInMessage;
 
     private GameObject testCanvas;
     private Camera mainCamera;
@@ -18,6 +19,7 @@ public class RankRecordTest
     public void OneTimeSetUp()
     {
         prefabDeadRecord = Resources.Load<DeadRecord>("Prefabs/UI/Ranking/DeadRecord");
+        prefabRankInMessage = Resources.Load<RankInMessage>("Prefabs/UI/Ranking/RankInMessage");
 
         // Load from test resources
         mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
@@ -45,6 +47,7 @@ public class RankRecordTest
     {
         // Setup
         var deadRecord = Object.Instantiate(prefabDeadRecord, testCanvas.transform);
+        var rankInMessage = Object.Instantiate(prefabRankInMessage, testCanvas.transform);
         var offset = new Vector2(0f, -Screen.height * 0.5f);
 
         yield return null;
@@ -60,11 +63,17 @@ public class RankRecordTest
                 .AppendCallback(() => deadRecord.SetRankEnable(false))
                 .Append(deadRecord.SlideInTween())
                 .Append(deadRecord.RankEffect(rank))
-                .Append(deadRecord.RankPunchEffect(rank))
-                .Play();
+                .Append(deadRecord.RankPunchEffect(rank));
+
+            if (rank > 0) seq.Append(rankInMessage.RankInTween());
+
+            seq.Play();
 
             yield return new WaitForSeconds(seq.Duration() + 0.25f);
         }
         yield return null;
+
+        Object.Destroy(deadRecord.gameObject);
+        Object.Destroy(rankInMessage.gameObject);
     }
 }
