@@ -6,9 +6,12 @@ public class TextTween : UITween
 {
     protected TextMeshProUGUI txtMP;
 
-    public TextTween(GameObject gameObject, bool isValidOnPause = false) : base(gameObject, isValidOnPause)
+    public TextTween(GameObject gameObject, bool isValidOnPause = false)
+        : this(gameObject.GetComponent<TextMeshProUGUI>(), isValidOnPause) { }
+
+    public TextTween(TextMeshProUGUI txtMP, bool isValidOnPause = false) : base(txtMP.gameObject, isValidOnPause)
     {
-        txtMP = gameObject.GetComponent<TextMeshProUGUI>();
+        this.txtMP = txtMP;
     }
 
     public override void SetSize(Vector2 size, bool setDefault = false)

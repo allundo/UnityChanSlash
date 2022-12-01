@@ -44,11 +44,16 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 
     public void Play(int rank, DataStoreAgent.DeadRecord deadRecord)
     {
+        record.SetRankEnable(false);
         record.ResetPosition(new Vector2(0, -320f));
         gameObject.SetActive(true);
 
         record.SetValues(rank, deadRecord);
-        sequence.Append(record.SlideInTween());
+        sequence
+            .Append(record.SlideInTween())
+            .Append(record.RankEffect(rank))
+            .Append(record.RankPunchEffect(rank));
+
         record.gameObject.SetActive(true);
 
         sequence.Play();
