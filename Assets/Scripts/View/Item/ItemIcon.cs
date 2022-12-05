@@ -6,6 +6,7 @@ using DG.Tweening;
 public class ItemIcon : UISymbol
 {
     public ItemInfo itemInfo { get; private set; }
+    protected Vector2 parentPos;
 
     private Vector2 HandleIconPos => new Vector2(-parentPos.x, -parentPos.y - 320f);
     private Vector2 defaultSize;
@@ -36,6 +37,7 @@ public class ItemIcon : UISymbol
     protected override void Awake()
     {
         base.Awake();
+        parentPos = transform.parent.GetComponent<RectTransform>().localPosition;
         defaultSize = rectTransform.sizeDelta;
     }
 

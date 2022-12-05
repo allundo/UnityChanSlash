@@ -6,7 +6,7 @@ public class EnemySymbol : UISymbol
     protected FadeTween fade;
     protected override void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
+        base.Awake();
         fade = new FadeTween(gameObject, 1f);
     }
 

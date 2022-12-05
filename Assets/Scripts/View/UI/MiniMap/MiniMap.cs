@@ -2,22 +2,20 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class MiniMap : MonoBehaviour
+public class MiniMap : MiniMapBase
 {
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
     [SerializeField] private PlayerSymbol playerSymbol = default;
-    [SerializeField] private Vector2 landscapeSize = new Vector2(420f, 420f);
-    [SerializeField] private Vector2 portraitSize = new Vector2(480f, 480f);
 
     private static readonly int MINIMAP_SIZE = 15;
+    private static readonly int EXPAND_MAP_SIZE = 41;
     private Vector2 uiTileUnit;
+    private int currentMiniMapSize = MINIMAP_SIZE;
 
-    private RawImage image = default;
-    private RectTransform rectTransform;
+    private RawImage image;
 
     private RenderTexture renderTexture;
 
-    private Vector2 defaultSize;
     private static readonly Vector2 OUT_OF_SCREEN = new Vector2(1024f, 1024f);
 
     private WorldMap map;
@@ -28,39 +26,28 @@ public class MiniMap : MonoBehaviour
 
     private Dictionary<EnemyReactor, UISymbol> enemies = new Dictionary<EnemyReactor, UISymbol>();
 
-    private bool[,] tileViewOpen = new bool[MINIMAP_SIZE, MINIMAP_SIZE];
-
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         map = GameManager.Instance.worldMap;
-
-        image = GetComponent<RawImage>();
-        rectTransform = GetComponent<RectTransform>();
-
-        // Depth is set to 0 for current 2D map use
-        image.texture = renderTexture = new RenderTexture((int)portraitSize.x, (int)portraitSize.y, 0);
     }
 
-    public void ResetOrientation(DeviceOrientation orientation)
+    public override void InitUISize(float landscapeSize, float portraitSize, float expandSize)
     {
+        base.InitUISize(landscapeSize, portraitSize, expandSize);
 
-        switch (orientation)
-        {
-            case DeviceOrientation.Portrait:
-                rectTransform.sizeDelta = portraitSize;
-                rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 0.5f);
-                rectTransform.anchoredPosition = new Vector2(-(portraitSize.x + 40f), portraitSize.y + 280f) * 0.5f;
-                break;
+        image = GetComponent<RawImage>();
 
-            case DeviceOrientation.LandscapeRight:
-                rectTransform.sizeDelta = landscapeSize;
-                rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 1f);
-                rectTransform.anchoredPosition = new Vector2(-(landscapeSize.x + 240f + Screen.width * ThirdPersonCamera.Margin), -(landscapeSize.y + 40f)) * 0.5f;
-                break;
-        }
+        // Depth is set to 0 for current 2D map use
+        image.texture = renderTexture = new RenderTexture((int)portraitSize, (int)portraitSize, 0);
+    }
 
-        uiTileUnit = rectTransform.sizeDelta / MINIMAP_SIZE;
-        playerSymbol.SetSize(uiTileUnit);
+    public override void ResetOrientation(DeviceOrientation orientation)
+    {
+        base.ResetOrientation(orientation);
+
+        ResetUISize(currentSize, currentMiniMapSize, image.color.a);
     }
 
     public void SwitchWorldMap(WorldMap map)
@@ -93,7 +80,6 @@ public class MiniMap : MonoBehaviour
 
         Vector3 tileUnitVec = (worldPos - center) / WorldMap.TILE_UNIT;
         return new Vector2(tileUnitVec.x * uiTileUnit.x, tileUnitVec.z * uiTileUnit.y);
-
     }
 
     private Vector2 UIOffsetDiscrete(Vector3 worldPos)
@@ -102,11 +88,13 @@ public class MiniMap : MonoBehaviour
         return new Vector2(Mathf.Round(tileUnitVec.x) * uiTileUnit.x, Mathf.Round(tileUnitVec.z) * uiTileUnit.y);
     }
 
-    public void UpdateMiniMap(Vector3 playerPos)
-    {
-        Graphics.Blit(map.GetMiniMap(MINIMAP_SIZE), renderTexture);
+    public void UpdateMiniMap(Vector3 playerPos) => UpdateMiniMap(playerPos, MINIMAP_SIZE);
 
-        center = map.MiniMapCenterWorldPos(MINIMAP_SIZE);
+    protected void UpdateMiniMap(Vector3 playerPos, int miniMapSize)
+    {
+        Graphics.Blit(map.GetMiniMap(miniMapSize), renderTexture);
+
+        center = map.MiniMapCenterWorldPos(miniMapSize);
         playerSymbol.SetPos(UIOffsetDiscrete(playerPos));
         MoveEnemySymbols();
         isUpdated = true;
@@ -136,5 +124,44 @@ public class MiniMap : MonoBehaviour
             enemies[enemy].Inactivate();
             enemies.Remove(enemy);
         }
+    }
+
+    public void SetEnable(bool isEnabled)
+    {
+        image.enabled = isEnabled;
+        playerSymbol.SetEnable(isEnabled);
+        enemies.ForEach(kv => kv.Value?.SetEnable(isEnabled));
+    }
+
+    public void ExpandMap()
+    {
+        int miniMapSize = Mathf.Min(EXPAND_MAP_SIZE, map.Width);
+        ResetUISize(expandSize, miniMapSize, 1f);
+        rectTransform.anchoredPosition = anchoredCenter;
+
+        image.color = Color.white;
+        UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos, miniMapSize);
+
+        MoveEnemySymbols();
+    }
+
+    public void ShrinkMap()
+    {
+        ResetUISize(currentSize, MINIMAP_SIZE, 0.4f);
+        rectTransform.anchoredPosition = currentPos;
+
+        UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos);
+
+        MoveEnemySymbols();
+    }
+
+    public void ResetUISize(float size, int miniMapSize, float alpha)
+    {
+        image.texture = renderTexture = new RenderTexture((int)size, (int)size, 0);
+        image.color = new Color(1, 1, 1, alpha);
+        rectTransform.sizeDelta = new Vector2(size, size);
+        uiTileUnit = rectTransform.sizeDelta / (float)miniMapSize;
+        playerSymbol.SetSize(uiTileUnit);
+        currentMiniMapSize = miniMapSize;
     }
 }

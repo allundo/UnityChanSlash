@@ -23,6 +23,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     }
 
     public Pos PlayerPos => map.onTilePos;
+    public Vector3 PlayerVec3Pos => map.CurrentVec3Pos;
     public IDirection PlayerDir => map.dir;
     public bool IsPlayerHavingKeyBlade => input.GetItemInventory.hasKeyBlade();
 

@@ -289,6 +289,13 @@ public class WorldMap
             Mathf.Clamp(pos.y, half, Height - half - 1)
         );
     }
+
+    /// <summary>
+    /// Convert mini map center TILE POSITION to world position by Vector3. <br />
+    /// The mini map size must be 2n + 1 to adjust center position to a tile center.
+    /// </summary>
+    /// <param name="mapSize">!Caution! : accepts only 2n + 1 size</param>
+    /// <returns></returns>
     public Vector3 MiniMapCenterWorldPos(int mapSize = 15) => WorldPos(MiniMapCenterPos(mapSize));
 
     public void SetDiscovered(Pos pos)

@@ -7,12 +7,10 @@ public class UISymbol : SpawnObject<UISymbol>
 {
     protected RectTransform rectTransform;
     protected MaskableGraphic image;
-    protected Vector2 parentPos;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        parentPos = transform.parent.GetComponent<RectTransform>().localPosition;
         image = GetComponent<MaskableGraphic>();
     }
 
@@ -33,5 +31,10 @@ public class UISymbol : SpawnObject<UISymbol>
     {
         rectTransform.sizeDelta = size;
         return this;
+    }
+
+    public void SetEnable(bool isEnabled)
+    {
+        image.enabled = isEnabled;
     }
 }

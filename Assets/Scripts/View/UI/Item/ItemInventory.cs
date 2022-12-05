@@ -152,4 +152,6 @@ public class ItemInventory : MonoBehaviour
             handler.SetItem(index, iconGenerator.Respawn(handler.UIPos(index), itemInfo.itemType, itemInfo.numOfItem));
         }
     }
+
+    public void SetActive(bool isActive) => gameObject.SetActive(isActive);
 }
