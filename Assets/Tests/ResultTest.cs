@@ -8,7 +8,7 @@ public class ResultTest
 {
     private ResourceLoader resourceLoader;
     private Camera mainCamera;
-    private GameObject ground;
+    private GroundCoinGenerator generator;
     private UnityChanResultReactor unityChanReactor;
     private Light directionalLight;
     private ResultSpotLight spotLight;
@@ -19,7 +19,7 @@ public class ResultTest
     {
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
         mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/Result/ResultCamera"));
-        ground = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Result/Ground"));
+        generator = Object.Instantiate(Resources.Load<GroundCoinGenerator>("Prefabs/Result/GroundCoinGenerator"));
         ceil = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Result/Ceil"));
         directionalLight = Object.Instantiate(Resources.Load<Light>("Prefabs/Result/ResultDirectionalLight"));
 
@@ -30,9 +30,9 @@ public class ResultTest
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        Object.Destroy(directionalLight);
+        Object.Destroy(generator.gameObject);
+        Object.Destroy(directionalLight.gameObject);
         Object.Destroy(ceil);
-        Object.Destroy(ground);
         Object.Destroy(mainCamera.gameObject);
         Object.Destroy(resourceLoader.gameObject);
     }
@@ -47,6 +47,7 @@ public class ResultTest
     [TearDown]
     public void TearDown()
     {
+        generator.DestroyAll();
         DOTween.KillAll();
         Object.Destroy(spotLight);
         Object.Destroy(unityChanReactor.gameObject);
@@ -56,7 +57,7 @@ public class ResultTest
     public IEnumerator _001_GiantMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(10000500, ground);
+        var bag = new BagControl(10000500, generator);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);
@@ -89,7 +90,7 @@ public class ResultTest
     public IEnumerator _002_SmallMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(500000, ground);
+        var bag = new BagControl(500000, null);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);
@@ -121,7 +122,7 @@ public class ResultTest
     public IEnumerator _003_MiddleMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(500001, ground);
+        var bag = new BagControl(500001, null);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);
@@ -152,7 +153,7 @@ public class ResultTest
     public IEnumerator _004_BigMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(2000001, ground);
+        var bag = new BagControl(2000001, null);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);

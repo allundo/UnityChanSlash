@@ -18,13 +18,15 @@ public class YenBag : MonoBehaviour
     private ISubject<Transform> caughtSubject = new Subject<Transform>();
     public IObservable<Transform> Caught => caughtSubject;
 
+    private GroundCoinGenerator generator;
+
     public void CaughtBy(Transform catcherTf)
     {
         caughtSubject.OnNext(catcherTf);
         caughtSubject.OnCompleted();
     }
 
-    public void GenerateCoins(float coinScale, GameObject ground)
+    public void GenerateCoins(float coinScale, GroundCoinGenerator generator)
     {
         cloth.clothSolverFrequency = 240;
 
@@ -43,9 +45,10 @@ public class YenBag : MonoBehaviour
             coins[i].gameObject.SetActive(false);
 
             outerCoins[i] = coins[i].GetComponent<CapsuleCoin>();
-            outerCoins[i].SetGround(ground);
-
+            outerCoins[i].SetGenerator(generator);
         }
+
+        this.generator = generator;
     }
 
     public void Activate()
@@ -122,6 +125,7 @@ public class YenBag : MonoBehaviour
             coins[i].gameObject.SetActive(false);
 
             outerCoins[i] = coins[i].GetComponent<CapsuleCoin>();
+            outerCoins[i].SetGenerator(generator);
         }
 
         cloth.capsuleColliders = coins;

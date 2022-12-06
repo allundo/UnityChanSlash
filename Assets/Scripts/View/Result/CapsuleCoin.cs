@@ -4,8 +4,7 @@ using UniRx;
 [RequireComponent(typeof(CapsuleCollider))]
 public class CapsuleCoin : MonoBehaviour
 {
-    [SerializeField] private Rigidbody prefabGroundCoin = default;
-    private GameObject ground;
+    private GroundCoinGenerator generator;
 
     private Rigidbody body;
     private CapsuleCollider col;
@@ -16,21 +15,18 @@ public class CapsuleCoin : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
     }
 
-    public void SetGround(GameObject ground)
+    public void SetGenerator(GroundCoinGenerator generator)
     {
-        this.ground = ground;
+        this.generator = generator;
     }
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject != ground) return;
+        if (collision.gameObject != generator.Ground) return;
 
         Observable.NextFrame().Subscribe(_ =>
         {
-            var coin = Object.Instantiate(prefabGroundCoin, transform.position, transform.rotation);
-
-            coin.velocity = body.velocity;
-            coin.angularVelocity = body.angularVelocity;
+            var coin = generator.Spawn(body);
 
             col.enabled = false;
             gameObject.SetActive(false);
