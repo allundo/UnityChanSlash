@@ -65,13 +65,13 @@ public class SequenceEx
     }
 
     public SequenceEx Append(Tween tween)
-        => (longestTween == null) ? Join(tween) : InitNext().Join(tween);
+        => longestTween == null ? Join(tween) : InitNext().Join(tween);
 
     public SequenceEx AppendInterval(float duration)
         => Append(DOVirtual.DelayedCall(duration, () => { }, isIndependentUpdate));
 
     public SequenceEx AppendCallback(TweenCallback callback)
-        => InitNext().InsertCallback(callback);
+        => longestTween == null ? InsertCallback(callback) : InitNext().InsertCallback(callback);
 
     public SequenceEx InsertCallback(TweenCallback callback)
     {
