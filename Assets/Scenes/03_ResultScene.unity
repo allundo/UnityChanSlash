@@ -456,7 +456,7 @@ MonoBehaviour:
   unityChanReactor: {fileID: 268175040}
   mainCameraTf: {fileID: 9193389508254536407}
   spotLight: {fileID: 895516296}
-  generator: {fileID: 0}
+  generator: {fileID: 2084588975}
 --- !u!1 &734047637
 GameObject:
   m_ObjectHideFlags: 0
@@ -3123,6 +3123,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2081590295}
   m_CullTransparentMesh: 0
+--- !u!114 &2084588975 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1654393434016645204, guid: 8c5eada2728ac495398bc601e959d9a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1654393435168548910}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603d98498dfa5400e94cf13de9764ea1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &938733892964429002
 PrefabInstance:
   m_ObjectHideFlags: 0

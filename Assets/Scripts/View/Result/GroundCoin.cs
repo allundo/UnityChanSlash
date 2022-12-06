@@ -4,7 +4,7 @@ using System.Linq;
 
 public class GroundCoin : MonoBehaviour
 {
-    private static Dictionary<GameObject, CombineInstance> coins = new Dictionary<GameObject, CombineInstance>();
+    private static Dictionary<GroundCoin, CombineInstance> coins = new Dictionary<GroundCoin, CombineInstance>();
     private static Mesh mesh500Yen = null;
     private static List<Mesh> combinedMeshes = new List<Mesh>();
 
@@ -26,35 +26,50 @@ public class GroundCoin : MonoBehaviour
 
         if (body.velocity.sqrMagnitude < 0.001f && body.angularVelocity.sqrMagnitude < 0.01f)
         {
-            StoreMesh(gameObject);
-            Destroy(col);
-            Destroy(body);
-            Destroy(this);
+            StoreMesh();
+            Disable();
         }
     }
 
-    private static void StoreMesh(GameObject coin)
+    private void Disable()
     {
-        if (mesh500Yen == null) mesh500Yen = coin.GetComponent<MeshFilter>().mesh;
+        body.Sleep();
+        body.useGravity = false;
+        col.enabled = false;
+        enabled = false;
+    }
 
-        coins[coin] = new CombineInstance() { mesh = mesh500Yen, transform = coin.transform.localToWorldMatrix };
+    private void Init(bool isActive = false)
+    {
+        body.WakeUp();
+        body.useGravity = true;
+        col.enabled = true;
+        enabled = true;
+        gameObject.SetActive(isActive);
+    }
+
+    private void StoreMesh()
+    {
+        if (mesh500Yen == null) mesh500Yen = GetComponent<MeshFilter>().mesh;
+
+        coins[this] = new CombineInstance() { mesh = mesh500Yen, transform = transform.localToWorldMatrix };
 
         if (coins.Count == 20)
         {
             Mesh combinedMesh = new Mesh();
-            coin.name = combinedMesh.name = "500YenCoins";
+            name = combinedMesh.name = "500YenCoins";
             combinedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             combinedMesh.CombineMeshes(coins.Select(kv => kv.Value).ToArray(), true);
 
-            coin.transform.localScale = Vector3.one;
-            coin.transform.position = Vector3.zero;
-            coin.transform.rotation = Quaternion.identity;
-            coin.GetComponent<MeshFilter>().mesh = combinedMesh;
+            transform.localScale = Vector3.one;
+            transform.position = Vector3.zero;
+            transform.rotation = Quaternion.identity;
+            GetComponent<MeshFilter>().mesh = combinedMesh;
             combinedMeshes.Add(combinedMesh);
 
-            coins.Remove(coin);
-            coins.ForEach(kv => Destroy(kv.Key));
+            coins.Remove(this);
+            coins.ForEach(kv => kv.Key.Init());
             coins.Clear();
         }
     }

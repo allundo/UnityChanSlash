@@ -21,7 +21,8 @@ public class BagControl
         if (wagesAmount > 10000000)
         {
             bagSize = BagSize.Gigantic;
-            surplusCoins = (int)((wagesAmount - 10000000) / 500);
+            surplusCoins = Mathf.Min((int)((wagesAmount - 10000000) / 500), 640); // Accept max 640 coins for shower.
+            generator.PoolCoins(surplusCoins);
         }
         else if (wagesAmount > 2000000)
         {
