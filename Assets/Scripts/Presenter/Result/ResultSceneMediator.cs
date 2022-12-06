@@ -8,6 +8,7 @@ public class ResultSceneMediator : SceneMediator
     [SerializeField] UnityChanResultReactor unityChanReactor = default;
     [SerializeField] Transform mainCameraTf = default;
     [SerializeField] ResultSpotLight spotLight = default;
+    [SerializeField] GameObject ground = default;
 
     protected override void InitBeforeStart()
     {
@@ -36,7 +37,7 @@ public class ResultSceneMediator : SceneMediator
     private void Result()
     {
         var resultBonus = new ResultBonus(GameInfo.Instance);
-        var yenBag = new BagControl(resultBonus.wagesAmount);
+        var yenBag = new BagControl(resultBonus.wagesAmount, ground);
 
         var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
 

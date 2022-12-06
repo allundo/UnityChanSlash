@@ -16,7 +16,7 @@ public class BagControl
 
     private Rigidbody sphereBody;
 
-    public BagControl(ulong wagesAmount)
+    public BagControl(ulong wagesAmount, GameObject ground)
     {
         if (wagesAmount > 10000000)
         {
@@ -45,7 +45,7 @@ public class BagControl
         bagTf = bag.transform;
         bagTf.position = bagSource.startPosition;
 
-        bag.GenerateCoins(bagSource.coinScale);
+        bag.GenerateCoins(bagSource.coinScale, ground);
         bag.Activate();
 
         bag.Caught.Subscribe(catcher => CaughtBy(catcher)).AddTo(bag);

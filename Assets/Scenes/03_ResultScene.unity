@@ -456,6 +456,7 @@ MonoBehaviour:
   unityChanReactor: {fileID: 268175040}
   mainCameraTf: {fileID: 9193389508254536407}
   spotLight: {fileID: 895516296}
+  ground: {fileID: 8673095534677801124}
 --- !u!1 &734047637
 GameObject:
   m_ObjectHideFlags: 0
@@ -3689,6 +3690,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fa969eca7a514c92b4b620c6c0ed853, type: 3}
+--- !u!1 &8673095534677801124 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8673095533814574625, guid: 3fa969eca7a514c92b4b620c6c0ed853,
+    type: 3}
+  m_PrefabInstance: {fileID: 8673095534677801123}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9193389508254536406
 PrefabInstance:
   m_ObjectHideFlags: 0

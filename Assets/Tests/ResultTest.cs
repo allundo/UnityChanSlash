@@ -56,7 +56,7 @@ public class ResultTest
     public IEnumerator _001_GiantMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(10000500);
+        var bag = new BagControl(10000500, ground);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);
@@ -89,7 +89,7 @@ public class ResultTest
     public IEnumerator _002_SmallMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(500000);
+        var bag = new BagControl(500000, ground);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);
@@ -121,7 +121,7 @@ public class ResultTest
     public IEnumerator _003_MiddleMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(500001);
+        var bag = new BagControl(500001, ground);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);
@@ -152,7 +152,7 @@ public class ResultTest
     public IEnumerator _004_BigMoneyBagDropTest()
     {
         // setup
-        var bag = new BagControl(2000001);
+        var bag = new BagControl(2000001, ground);
         var handler = new ResultCharactersHandler(unityChanReactor, spotLight, bag);
 
         yield return new WaitForSeconds(4f);

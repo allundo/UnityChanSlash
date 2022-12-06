@@ -5,6 +5,7 @@ using UniRx;
 public class CapsuleCoin : MonoBehaviour
 {
     [SerializeField] private Rigidbody prefabGroundCoin = default;
+    private GameObject ground;
 
     private Rigidbody body;
     private CapsuleCollider col;
@@ -15,9 +16,14 @@ public class CapsuleCoin : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
     }
 
+    public void SetGround(GameObject ground)
+    {
+        this.ground = ground;
+    }
+
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name != "Ground") return;
+        if (collision.gameObject != ground) return;
 
         Observable.NextFrame().Subscribe(_ =>
         {

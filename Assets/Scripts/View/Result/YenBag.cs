@@ -24,7 +24,7 @@ public class YenBag : MonoBehaviour
         caughtSubject.OnCompleted();
     }
 
-    public void GenerateCoins(float coinScale)
+    public void GenerateCoins(float coinScale, GameObject ground)
     {
         cloth.clothSolverFrequency = 240;
 
@@ -43,6 +43,8 @@ public class YenBag : MonoBehaviour
             coins[i].gameObject.SetActive(false);
 
             outerCoins[i] = coins[i].GetComponent<CapsuleCoin>();
+            outerCoins[i].SetGround(ground);
+
         }
     }
 
