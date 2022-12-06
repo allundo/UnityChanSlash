@@ -20,13 +20,13 @@ public class RankInMessage : MonoBehaviour
     {
         return DOTween.Sequence()
             .AppendCallback(() => uiTween.SetPosX(Screen.width))
+            .AppendCallback(() => textEffect.StopAndClear())
             .AppendCallback(() => textEffect.PlayEx())
             .AppendCallback(() => shootEffect.PlayEx())
             .Append(uiTween.MoveX(-Screen.width, 1.5f).SetEase(Ease.OutExpo))
             .Join(bgFade.In(1.5f, 0, null, null, false))
             .AppendInterval(0.25f)
             .Append(uiTween.MoveX(-Screen.width, 1f).SetEase(Ease.InExpo))
-            .Join(bgFade.Out(1f, 0, null, null, false).SetEase(Ease.InQuad))
-            .AppendCallback(() => textEffect.StopEmitting());
+            .Join(bgFade.Out(1f, 0, null, null, false).SetEase(Ease.InQuad));
     }
 }
