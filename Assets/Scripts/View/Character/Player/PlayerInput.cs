@@ -107,11 +107,13 @@ public class PlayerInput : ShieldInput, IPlayerInput
     }
 
     protected ICommand wakeUp;
+    protected ICommand brake;
 
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 120f);
+        brake = new PlayerBrakeStop(playerTarget, 48f);
     }
 
     protected override void SetInputs()
@@ -162,7 +164,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         bool isTriggerValid = this.isTriggerValid;
         this.isTriggerValid = false; // Disable Trigger input UI
 
-        if (!isTriggerValid || !isCommandValid || cmd == null) return null;
+        if (!BrakeIfRunning() && (!isTriggerValid || !isCommandValid || cmd == null)) return null;
 
         isCommandValid = false;
 
@@ -175,7 +177,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     /// </summary>
     public void InputTrigger(ICommand cmd)
     {
-        if (!isTriggerValid || cmd == null) return;
+        if (!BrakeIfRunning() && (!isTriggerValid || cmd == null)) return;
 
         isCommandValid = !isCommandValid;
         isTriggerValid = !isTriggerValid;
@@ -367,12 +369,12 @@ public class PlayerInput : ShieldInput, IPlayerInput
         rightUI.SetActive(playerMap.IsRightMovable);
         leftUI.SetActive(playerMap.IsLeftMovable);
 
-        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield;
+        bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield || IsDash;
 
-        forwardUI.SetDashInputActive(IsForward || IsDash || isTriggerActive);
+        forwardUI.SetDashInputActive(IsForward || isTriggerActive);
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
-        jumpUI.SetActive(IsDash || isTriggerActive, fightCircle.isActive);
+        jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
 
         guardUI.SetActive(!fightCircle.isActive && !playerMap.isInPit);
     }
@@ -483,51 +485,28 @@ public class PlayerInput : ShieldInput, IPlayerInput
         ICommand backward = new PlayerBack(playerTarget, 43f);
         ICommand run = new PlayerRun(playerTarget, 24f);
         ICommand startRunning = new PlayerStartRunning(playerTarget, 24f);
-        var brake = new PlayerBrakeStop(playerTarget, 48f);
 
         ICommand turnR = new PlayerTurnR(playerTarget, 18f);
         ICommand turnL = new PlayerTurnL(playerTarget, 18f);
         ICommand jump = new PlayerJump(playerTarget, 72f);
         ICommand pitJump = new PlayerPitJump(playerTarget, 60f);
 
-        ICommand guard = new GuardCommand(playerTarget, 2f);
-
         forwardUI.EnterObservable
             .Subscribe(_ => InputCommand(forward))
             .AddTo(this);
 
         forwardUI.DashObservable
-            .Subscribe(isDashOn =>
+            .Subscribe(_ =>
             {
-                if (isDashOn)
+                if (commander.currentCommand is PlayerForward)
                 {
-                    // Input dash
-
-                    if (commander.currentCommand is PlayerForward)
-                    {
-                        // Cancel forward command and start dash
-                        Interrupt(startRunning);
-                        return;
-                    }
-
-                    if (commander.currentCommand is PlayerRun)
-                    {
-                        // Reserve dash command to continue dash state
-                        commander.ReplaceNext(run);
-                        return;
-                    }
-
-                    // Reserve dash on command queue
-                    InputTrigger(run);
+                    // Cancel forward command and start dash
+                    Interrupt(startRunning);
                     return;
                 }
 
-                // Stop dash
-                if (commander.NextCommand is PlayerRun && forwardUI.IsActive)
-                {
-                    // Replace reserved dash command with brake command
-                    commander.ReplaceNext(brake);
-                }
+                // Reserve dash on command queue
+                InputTrigger(run);
             })
             .AddTo(this);
 
@@ -564,20 +543,25 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         guardUI.IsPressed
-            .Subscribe(isPressed => (commander as PlayerCommander).SetGuard(isPressed))
+            .Subscribe(isPressed =>
+            {
+                BrakeIfRunning();
+                (commander as PlayerCommander).SetGuard(isPressed);
+            })
             .AddTo(this);
     }
 
     public void InputStop()
     {
-        if (commander.currentCommand is PlayerRun)
-        {
-            Interrupt(new PlayerBrakeStop(playerTarget, 48f), false, true);
-        }
-        else
-        {
-            commander.ClearAll(true);
-        }
+        if (!BrakeIfRunning()) commander.ClearAll(true);
+    }
+
+    private bool BrakeIfRunning()
+    {
+        bool isRunning = commander.currentCommand is PlayerRun;
+
+        if (isRunning) Interrupt(brake, false, true);
+        return isRunning;
     }
 
     public class PlayerGuardState : GuardState
