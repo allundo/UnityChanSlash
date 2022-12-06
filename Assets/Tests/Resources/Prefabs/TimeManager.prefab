@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistent: 0
-  target: {fileID: 0}
+  playerTarget: {fileID: 0}
