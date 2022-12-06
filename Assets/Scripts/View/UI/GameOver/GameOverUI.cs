@@ -1,5 +1,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
@@ -14,12 +15,12 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     public void OnPointerUp(PointerEventData eventData)
     {
         if (!isActive) return;
-        sequence.Skip();
+        seqEx.Skip();
     }
 
     private UITween uiTween;
 
-    private SequenceEx sequence = null;
+    private SequenceEx seqEx = null;
 
     protected override void Awake()
     {
@@ -31,7 +32,7 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     {
         uiTween = new UITween(gameOverBG.gameObject, true);
 
-        sequence = new SequenceEx()
+        seqEx = new SequenceEx()
             .Join(gameOverBG.FadeIn(2f))
             .Join(gameOverTxt.FadeIn(2f))
             .SetSkippable(false)
@@ -49,13 +50,15 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         record.ResetPosition(new Vector2(0, -320f));
         record.SetRankEnable(false);
 
-        sequence
+        // SequenceEx cannot handle a lot of callbacks so mediate it by original Sequence.
+        // Maybe the implementation with deep nested callback cause stack overflow.
+        var seq = DOTween.Sequence()
             .Append(record.SlideInTween())
             .Append(record.RankEffect(rank))
             .Append(record.RankPunchEffect(rank));
 
-        if (rank > 0) sequence.Append(message.RankInTween());
+        if (rank > 0) seq.Append(message.RankInTween());
 
-        sequence.Play();
+        seqEx.Append(seq).Play();
     }
 }
