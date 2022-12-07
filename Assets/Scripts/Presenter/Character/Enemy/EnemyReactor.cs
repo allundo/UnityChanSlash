@@ -7,6 +7,7 @@ public interface IEnemyReactor : IMobReactor
     void OnSummoned();
     void OnTeleportEnd();
     bool IsTamed { get; }
+    float ExpObtain { get; }
 }
 
 [RequireComponent(typeof(EnemyEffect))]
@@ -20,6 +21,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     private IDisposable inactiveNextFrame;
 
     public bool IsTamed => enemyStatus.isTamed;
+    public float ExpObtain => enemyStatus.ExpObtain;
 
     protected override void Awake()
     {
@@ -72,7 +74,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     public override float Damage(IAttacker attacker, Attack.AttackData attackData)
     {
-        var damage = Damage(attacker.attack * attackData.multiplier, attacker.dir, attackData.type, attackData.attr);
+        var damage = base.Damage(attacker, attackData);
 
         // Taming process
         if (attackData.attr == AttackAttr.Coin)

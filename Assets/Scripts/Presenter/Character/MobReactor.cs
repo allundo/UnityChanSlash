@@ -23,6 +23,9 @@ public interface IMobReactor : IReactor
     /// </summary>
     /// <returns>true if appearing is valid</returns>
     bool Appear();
+
+    IAttacker lastAttacker { get; }
+    AttackType lastAttackType { get; }
 }
 
 public interface IUndeadReactor : IMobReactor
@@ -45,6 +48,9 @@ public class MobReactor : Reactor, IMobReactor
     protected MobAnimator anim;
     protected MobFightStyle fightStyle;
 
+    public IAttacker lastAttacker { get; protected set; }
+    public AttackType lastAttackType { get; protected set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -59,6 +65,13 @@ public class MobReactor : Reactor, IMobReactor
     protected override void OnLifeChange(float life)
     {
         if (life <= 0.0f) input.InputDie();
+    }
+
+    public override float Damage(IAttacker attacker, Attack.AttackData attackData)
+    {
+        lastAttacker = attacker;
+        lastAttackType = attackData.type;
+        return base.Damage(attacker, attackData);
     }
 
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)

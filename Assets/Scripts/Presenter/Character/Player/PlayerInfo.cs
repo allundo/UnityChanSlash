@@ -78,7 +78,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
     public void RestorePlayerStatus(DataStoreAgent.PlayerData data)
     {
-        status.SetStatusData(data.life, data.isHidden);
+        status.SetStatusData(data.life, data.level, data.exp, data.isHidden);
 
         var state = data.exitState;
 

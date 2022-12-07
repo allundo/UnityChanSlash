@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Collider))]
 public class EnemyAutoGenerator : EnemyGenerator
 {
-    protected MobParam param;
+    protected EnemyParam param;
     protected ITile spawnTile;
     protected Collider detectCharacter;
 
@@ -25,7 +25,7 @@ public class EnemyAutoGenerator : EnemyGenerator
     public IStatus Spawn(IDirection dir = null, EnemyStoreData data = null)
         => base.Spawn(param, spawnPoint, dir, data);
 
-    public EnemyAutoGenerator Init(GameObject enemyPool, ITile tile, MobParam param)
+    public EnemyAutoGenerator Init(GameObject enemyPool, ITile tile, EnemyParam param)
     {
         // Set another parent since Collider cannot detect self child GameObjects.
         pool = enemyPool.transform;

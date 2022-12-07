@@ -60,6 +60,8 @@ public class MobParam : Param
     [SerializeField] public float darkDamageMultiplier = 1f;
 
     [SerializeField] public float armorMultiplier = 1.0f;
+
+    [SerializeField] public float baseExp = 100f;
 }
 
 [System.Serializable]
@@ -68,6 +70,22 @@ public class EnemyParam : MobParam
     [SerializeField] public EnemyType type = EnemyType.None;
     [SerializeField] public Vector3 enemyCore = Vector3.zero;
     [SerializeField] public float tamingProbability = 0f;
+    [SerializeField] public LevelGainType gainType = LevelGainType.Balance;
+}
+
+[System.Serializable]
+public class LevelGain
+{
+    [SerializeField] public string name = "バランス";
+    [SerializeField] public float lifeMaxGainRatio = 1.0185f;
+    [SerializeField] public float attackGain = 0.2f;
+    [SerializeField] public float shieldGain = 0.2f;
+    [SerializeField] public float armorReduction = 0.02f;
+    [SerializeField] public float fireReduction = 0.02f;
+    [SerializeField] public float iceReduction = 0.02f;
+    [SerializeField] public float thunderReduction = 0.02f;
+    [SerializeField] public float lightReduction = 0.02f;
+    [SerializeField] public float darkReduction = 0.02f;
 }
 
 [System.Serializable]

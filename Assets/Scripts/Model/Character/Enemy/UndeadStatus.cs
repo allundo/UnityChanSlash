@@ -30,7 +30,7 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
 
     public override void ResetStatus()
     {
-        curse = curseMax = DefaultLifeMax;
+        curse = curseMax = GainedLifeMax;
         base.ResetStatus();
     }
 

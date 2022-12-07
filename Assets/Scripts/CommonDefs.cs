@@ -596,3 +596,16 @@ public enum CurveType
     HalfOutQuad,
     HalfInQuad,
 }
+
+public enum LevelGainType
+{
+    Balance = 0,
+    Attacker,       // Attack main
+    Shielder,       // Shield main
+    Guardian,       // Armor and HP main
+    Magician,       // Magic(not implemented) main
+    Slime,
+    Animal,
+    Ghost,
+}
+

@@ -48,6 +48,11 @@ public struct ActiveMessageData
         this.literalsPerSec = literalsPerSec;
     }
 
+    public static ActiveMessageData LevelUp(int level)
+    {
+        return new ActiveMessageData($"レベル {level + 1} に上がった！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+    }
+
     public static ActiveMessageData GetItem(ItemInfo item)
     {
         return new ActiveMessageData(item.name + " を手に入れた！", SDFaceID.SMILE, SDEmotionID.WAIWAI);

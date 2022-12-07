@@ -7,6 +7,8 @@ public interface IEnemyStatus : IMobStatus
     EnemyType type { get; }
     EnemyStatus OnSpawn(Vector3 pos, IDirection dir, EnemyStatus.ActivateOption option);
 
+    float ExpObtain { get; }
+
     IObservable<EnemyStatus.ActivateOption> ActiveWithOption { get; }
 
     /// <summary>
@@ -18,6 +20,7 @@ public interface IEnemyStatus : IMobStatus
     bool isTamed { get; }
     void CancelTamed();
 }
+
 public class Shooter : Attacker, IAttacker
 {
     private EnemyType type;
@@ -56,6 +59,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
 
     protected ISubject<ActivateOption> activeWithOptionSubject = new BehaviorSubject<ActivateOption>(new ActivateOption());
     public IObservable<ActivateOption> ActiveWithOption => activeWithOptionSubject;
+    public override string Name => $"{param.name} Lv{level + 1}";
 
     public bool isTamed { get; protected set; } = false;
     public bool TryTame(float tamingPower = 1f)
@@ -71,16 +75,29 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public EnemyType type => enemyParam.type;
     public override Vector3 corePos => enemyParam.enemyCore + transform.position;
 
+    public float ExpObtain => enemyParam.baseExp * (1f + 0.4f * level);
+
     public override string CauseOfDeath(AttackType attackType = AttackType.None)
         => ResourceLoader.Instance.GetDeadCause(this.type, attackType);
 
-    public override IStatus InitParam(Param param, StatusStoreData data = null)
+    public override void ResetStatus()
     {
-        enemyParam = param as EnemyParam;
+        base.ResetStatus();
+        isTamed = false;
+    }
+
+    public override IStatus InitParam(Param param, StatusStoreData data = null)
+        => InitParam(param as EnemyParam, data as EnemyStoreData);
+
+    private IEnemyStatus InitParam(EnemyParam param, EnemyStoreData data)
+    {
+        this.enemyParam = param;
+        levelGain = ResourceLoader.Instance.levelGainData.Param((int)param.gainType);
+
+        data = data ?? new EnemyStoreData(param.defaultLifeMax, 0, false);
+
         base.InitParam(param, data);
-
-        if (data != null) isTamed = (data as EnemyStoreData).isTamed;
-
+        isTamed = data.isTamed;
         return this;
     }
 

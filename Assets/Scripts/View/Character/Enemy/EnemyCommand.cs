@@ -182,6 +182,12 @@ public class EnemyDie : EnemyCommand
 
     public override IObservable<Unit> Execute()
     {
+        var attacker = enemyReact.lastAttacker as PlayerStatus;
+        if (attacker != null)
+        {
+            attacker.AddExp(enemyReact.ExpObtain);
+        }
+
         anim.die.Bool = true;
         react.OnDie();
 

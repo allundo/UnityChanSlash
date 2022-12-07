@@ -7,6 +7,9 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CapsuleCollider))]
 public class PlayerStatus : MobStatus
 {
+    private static readonly float EXP_GAIN_RATIO = 1.2f;
+    public float exp { get; protected set; }
+    private float expToNextLevel;
     protected CapsuleCollider col;
 
     public override Vector3 corePos => transform.position + col.center;
@@ -42,13 +45,16 @@ public class PlayerStatus : MobStatus
     /// </summary>
     private ItemInfo[] equipInfo = new ItemInfo[3];
 
+    private LevelGainType gainType;
 
     protected override void Awake()
     {
         base.Awake();
         col = GetComponent<CapsuleCollider>();
 
-        // TODO: Refer to PlayerData to get level based player status.
+        level = 2;
+        gainType = LevelGainType.Balance;
+        levelGain = ResourceLoader.Instance.levelGainData.Param((int)gainType);
         // ResetStatus() is called inside InitParam() method.
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
     }
@@ -65,10 +71,31 @@ public class PlayerStatus : MobStatus
         SetPosition(map.WorldPos(initPos.Key), initPos.Value);
     }
 
-    public void SetStatusData(float life, bool isHidden)
+    public void SetStatusData(float life, int level, float exp, bool isHidden)
     {
-        this.life.Value = life;
         this.isHidden = isHidden;
+        this.exp = exp;
+        InitParam(param, new MobStatusStoreData(life, level));
+    }
+
+    public override IStatus InitParam(Param param, StatusStoreData data = null)
+    {
+        base.InitParam(param, data);
+        expToNextLevel = mobParam.baseExp * Mathf.Pow(EXP_GAIN_RATIO, level);
+        return this;
+    }
+
+    public void AddExp(float expObtain)
+    {
+        exp += expObtain;
+
+        if (exp >= expToNextLevel)
+        {
+            exp -= expToNextLevel;
+            expToNextLevel *= EXP_GAIN_RATIO;
+            InitParam(param, new MobStatusStoreData(life.Value, level + 1));
+            ActiveMessageController.Instance.InputMessageData(ActiveMessageData.LevelUp(level));
+        }
     }
 
     /// <summary>

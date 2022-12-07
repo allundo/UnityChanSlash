@@ -58,11 +58,9 @@ public class Status : SpawnObject<Status>, IStatus
 {
     protected Param param;
 
-    public string Name => param.name;
+    public virtual string Name => param.name;
 
     public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
-
-    protected virtual float DefaultLifeMax => param.defaultLifeMax;
 
     public float attack { get; protected set; }
 
@@ -102,7 +100,7 @@ public class Status : SpawnObject<Status>, IStatus
 
     public virtual void ResetStatus()
     {
-        life.Value = lifeMax.Value = DefaultLifeMax;
+        life.Value = lifeMax.Value = param.defaultLifeMax;
     }
 
     public override void Activate()
@@ -147,10 +145,10 @@ public class Status : SpawnObject<Status>, IStatus
     public virtual IStatus InitParam(Param param, StatusStoreData data = null)
     {
         this.param = param;
+        data = data ?? new StatusStoreData(param.defaultLifeMax);
+
         attack = param.attack;
         ResetStatus();
-
-        if (data != null) this.life.Value = data.life;
         return this;
     }
 }

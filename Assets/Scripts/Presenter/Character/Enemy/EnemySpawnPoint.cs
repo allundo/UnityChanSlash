@@ -12,7 +12,7 @@ public class EnemySpawnPoint : MonoBehaviour
         detectPlayer = GetComponent<Collider>();
     }
 
-    public EnemySpawnPoint Init(GameObject enemyPool, ITile tile, MobParam param)
+    public EnemySpawnPoint Init(GameObject enemyPool, ITile tile, EnemyParam param)
     {
         enemyAutoGenerator.Init(enemyPool, tile, param);
         return this;

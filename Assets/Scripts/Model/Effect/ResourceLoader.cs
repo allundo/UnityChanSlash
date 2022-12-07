@@ -10,6 +10,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
     public AudioSource LoadSnd(SNDType type, Transform parent = null) => Util.Instantiate(prefabSNDs[type], parent);
     private Dictionary<SNDType, AudioSource> prefabSNDs;
 
+    public LevelGainData levelGainData { get; private set; }
+
     public EnemyData enemyData { get; private set; }
     public EnemyTypesData enemyTypesData { get; private set; }
     private EnemyCauseData enemyCauseData;
@@ -94,6 +96,8 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
             { SNDType.PitDrop,              Resources.Load<AudioSource>("Prefabs/Sound/SND_PIT_DROP")           },
         };
+
+        levelGainData = Resources.Load<LevelGainData>("DataAssets/Character/LevelGainData");
 
         enemyData = Resources.Load<EnemyData>("DataAssets/Character/EnemyData");
         enemyTypesData = Resources.Load<EnemyTypesData>("DataAssets/Map/EnemyTypesData");

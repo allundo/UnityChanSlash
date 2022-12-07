@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public interface IMobStatus : IStatus
 {
     float Shield { get; }
+    int level { get; }
     bool isOnGround { get; }
     bool isHidden { get; }
     void SetHidden(bool isHidden = true);
@@ -31,7 +32,11 @@ public class MobStatus : Status, IMobStatus
     protected Dictionary<DamageType, float> dirDamageMultiplier;
     protected Dictionary<AttackAttr, float> attrDamageMultiplier;
 
-    public virtual float Shield => mobParam.shield;
+    public int level { get; protected set; }
+    protected LevelGain levelGain;
+
+    protected float GainedLifeMax => param.defaultLifeMax * Mathf.Pow(levelGain.lifeMaxGainRatio, level);
+    public virtual float Shield => mobParam.shield + levelGain.shieldGain * level;
 
     public bool isHidden { get; protected set; }
 
@@ -42,7 +47,7 @@ public class MobStatus : Status, IMobStatus
 
     public float icingFrames { get; protected set; }
 
-    protected virtual float ArmorMultiplier => mobParam.armorMultiplier;
+    protected virtual float ArmorMultiplier => mobParam.armorMultiplier - levelGain.armorReduction * level;
 
     public virtual Vector3 corePos => transform.position;
 
@@ -75,15 +80,21 @@ public class MobStatus : Status, IMobStatus
 
     public override void ResetStatus()
     {
-        life.Value = lifeMax.Value = DefaultLifeMax;
+        life.Value = lifeMax.Value = GainedLifeMax;
         isOnGround = mobParam.isOnGround;
         icingFrames = 0f;
         isHidden = false;
     }
 
     public override IStatus InitParam(Param param, StatusStoreData data = null)
+        => InitParam(param as MobParam, data as MobStatusStoreData);
+
+    private IMobStatus InitParam(MobParam mobParam, MobStatusStoreData data)
     {
-        mobParam = param as MobParam;
+        this.param = this.mobParam = mobParam;
+        data = data ?? new MobStatusStoreData(param.defaultLifeMax, 0);
+
+        this.level = data.level;
 
         dirDamageMultiplier = new Dictionary<DamageType, float>()
         {
@@ -95,16 +106,18 @@ public class MobStatus : Status, IMobStatus
 
         attrDamageMultiplier = new Dictionary<AttackAttr, float>()
         {
-            { AttackAttr.None,        1f                                },
-            { AttackAttr.Fire,        mobParam.fireDamageMultiplier     },
-            { AttackAttr.Ice,         mobParam.iceDamageMultiplier      },
-            { AttackAttr.Thunder,     mobParam.thunderDamageMultiplier  },
-            { AttackAttr.Light,       mobParam.lightDamageMultiplier    },
-            { AttackAttr.Dark,        mobParam.darkDamageMultiplier     },
-            { AttackAttr.Coin,        1f                                },
+            { AttackAttr.None,        1f                                                                        },
+            { AttackAttr.Fire,        mobParam.fireDamageMultiplier     - (levelGain.fireReduction * level)     },
+            { AttackAttr.Ice,         mobParam.iceDamageMultiplier      - (levelGain.iceReduction * level)      },
+            { AttackAttr.Thunder,     mobParam.thunderDamageMultiplier  - (levelGain.thunderReduction * level)  },
+            { AttackAttr.Light,       mobParam.lightDamageMultiplier    - (levelGain.lightReduction * level)    },
+            { AttackAttr.Dark,        mobParam.darkDamageMultiplier     - (levelGain.darkReduction * level)     },
+            { AttackAttr.Coin,        1f                                                                        },
         };
 
-        base.InitParam(param, data);
+        ResetStatus();
+        attack = mobParam.attack + levelGain.attackGain * level;
+        life.Value = data.life;
 
         return this;
     }
