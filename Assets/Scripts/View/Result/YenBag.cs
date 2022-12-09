@@ -19,6 +19,16 @@ public class YenBag : MonoBehaviour
     public IObservable<Transform> Caught => caughtSubject;
 
     private GroundCoinGenerator generator;
+    private Coroutine coinShowerCoroutine = null;
+
+    public void StopCoinShower()
+    {
+        if (coinShowerCoroutine != null)
+        {
+            StopCoroutine(coinShowerCoroutine);
+            outerCoins.ForEach(coin => coin.gameObject.SetActive(false));
+        }
+    }
 
     public void CaughtBy(Transform catcherTf)
     {
@@ -91,7 +101,7 @@ public class YenBag : MonoBehaviour
 
     public void CoinShower(int surplusCoins)
     {
-        StartCoroutine(GenerateCoinsCoroutine(surplusCoins));
+        coinShowerCoroutine = StartCoroutine(GenerateCoinsCoroutine(surplusCoins));
     }
 
     private bool DropCoin()

@@ -5,8 +5,8 @@ using System.Linq;
 public class GroundCoin : MonoBehaviour
 {
     private static Dictionary<GroundCoin, CombineInstance> coins = new Dictionary<GroundCoin, CombineInstance>();
-    private static Mesh mesh500Yen = null;
     private static List<Mesh> combinedMeshes = new List<Mesh>();
+    private static List<GameObject> combinedCoins = new List<GameObject>();
 
     private MeshCollider col;
     private Rigidbody body;
@@ -50,9 +50,7 @@ public class GroundCoin : MonoBehaviour
 
     private void StoreMesh()
     {
-        if (mesh500Yen == null) mesh500Yen = GetComponent<MeshFilter>().mesh;
-
-        coins[this] = new CombineInstance() { mesh = mesh500Yen, transform = transform.localToWorldMatrix };
+        coins[this] = new CombineInstance() { mesh = GetComponent<MeshFilter>().sharedMesh, transform = transform.localToWorldMatrix };
 
         if (coins.Count == 20)
         {
@@ -67,17 +65,19 @@ public class GroundCoin : MonoBehaviour
             transform.rotation = Quaternion.identity;
             GetComponent<MeshFilter>().mesh = combinedMesh;
             combinedMeshes.Add(combinedMesh);
+            combinedCoins.Add(gameObject);
 
             coins.Remove(this);
             coins.ForEach(kv => kv.Key.Init());
             coins.Clear();
+
         }
     }
 
     public static void Release()
     {
         coins.Clear();
-        Destroy(mesh500Yen);
         combinedMeshes.ForEach(mesh => Destroy(mesh));
+        combinedCoins.ForEach(obj => Destroy(obj));
     }
 }

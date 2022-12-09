@@ -22,12 +22,20 @@ public class ResultUIHandler : MonoBehaviour
 
     private Image resultBGImage;
 
-    public IObservable<object> TransitSignal;
+    public IObservable<Unit> ClickToEnd { get; private set; }
+    public IObservable<object> FadeOutScreen { get; private set; }
+
+    public IObservable<object> TransitSignal { get; private set; }
 
     void Awake()
     {
-        TransitSignal = titleButton.OnPush.First() // ContinueWith() cannot handle duplicated click events
-                .ContinueWith(_ => ToTitleEffect().OnCompleteAsObservable());
+        ClickToEnd = titleButton.OnPush.First();
+
+        FadeOutScreen = ClickToEnd
+            .ContinueWith(_ => ClickTitleEffect().OnCompleteAsObservable());
+
+        TransitSignal = FadeOutScreen
+            .ContinueWith(_ => titleButton.TextFinish().OnCompleteAsObservable());
 
         resultBGImage = resultsTf.GetComponent<Image>();
         resultBGImage.enabled = false;
@@ -64,7 +72,7 @@ public class ResultUIHandler : MonoBehaviour
             .OnCompleteAsObservable(Unit.Default);
     }
 
-    private Tween ToTitleEffect()
+    public Tween ClickTitleEffect()
     {
         return DOTween.Sequence()
             .Join(titleButton.Apply(1f))

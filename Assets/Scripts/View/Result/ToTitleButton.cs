@@ -36,6 +36,8 @@ public class ToTitleButton : FadeEnable
             .AppendCallback(() => button.enabled = false)
             .Join(FadeOut(duration))
             .Join(ui.Resize(1.5f, duration))
-            .Join(txtToTitle.Finish());
+            .Join(txtToTitle.MoveCenter());
     }
+
+    public Tween TextFinish() => txtToTitle.Finish();
 }

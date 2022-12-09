@@ -63,6 +63,8 @@ public class BagControl
         return DOVirtual.DelayedCall(bagSource.dropDelay, () => sphereBody.useGravity = true);
     }
 
+    public void StopCoinShower() => bag.StopCoinShower();
+
     private void CaughtBy(Transform parent)
     {
         sphereBody.useGravity = false;

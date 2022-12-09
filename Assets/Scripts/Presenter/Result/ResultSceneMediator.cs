@@ -18,14 +18,14 @@ public class ResultSceneMediator : SceneMediator
 
         Time.timeScale = 1f;
 
+        resultUIHandler.FadeOutScreen
+            .Subscribe(_ => GroundCoin.Release())
+            .AddTo(this);
+
         GameInfo gameInfo = GameInfo.Instance;
 
         resultUIHandler.TransitSignal
-            .Subscribe(_ => SceneTransition(0, () =>
-            {
-                gameInfo.InitData();
-                GroundCoin.Release();
-            }))
+            .Subscribe(_ => SceneTransition(0, () => gameInfo.InitData()))
             .AddTo(this);
 
 #if UNITY_EDITOR
@@ -37,9 +37,9 @@ public class ResultSceneMediator : SceneMediator
     private void Result()
     {
         var resultBonus = new ResultBonus(GameInfo.Instance);
-        var yenBag = new BagControl(resultBonus.wagesAmount, generator);
+        var bagControl = new BagControl(resultBonus.wagesAmount, generator);
 
-        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, yenBag);
+        var charactersHandler = new ResultCharactersHandler(unityChanReactor, spotLight, bagControl);
 
         resultUIHandler
             .ViewResult(resultBonus)
@@ -57,8 +57,12 @@ public class ResultSceneMediator : SceneMediator
             .Subscribe(_ =>
             {
                 resultUIHandler.CenterResults(3f).Play();
-                if (yenBag.bagSize == BagSize.Gigantic)
+                if (bagControl.bagSize == BagSize.Gigantic)
                 {
+                    resultUIHandler.ClickToEnd
+                        .Subscribe(_ => bagControl.StopCoinShower())
+                        .AddTo(gameObject);
+
                     mainCameraTf.DOMove(mainCameraTf.forward * -3f + Vector3.up * 2f, 30f).SetRelative().SetEase(Ease.OutCubic).Play();
                     mainCameraTf.DORotate(new Vector3(18f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
                 }
