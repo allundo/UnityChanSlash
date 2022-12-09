@@ -1,7 +1,9 @@
-﻿using DG.Tweening;
+﻿using UnityEngine;
+using DG.Tweening;
 
 public class TextEffect : FadeEnable
 {
+    [SerializeField] protected float expandRatio = 1.2f;
     protected TextTween text;
     protected Tween expand;
 
@@ -10,7 +12,7 @@ public class TextEffect : FadeEnable
         fade = new FadeTween(gameObject, 1f);
         text = new TextTween(gameObject);
 
-        expand = ExpandLoop();
+        expand = ExpandLoop(expandRatio);
 
         Inactivate();
     }
