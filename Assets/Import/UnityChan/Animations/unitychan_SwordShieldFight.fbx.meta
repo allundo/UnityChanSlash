@@ -7,27 +7,6 @@ ModelImporter:
       74: -3826437141266125818
     second: Character1_Reference|Character1_ReferenceAction
   - first:
-      74: 6722656316190513762
-    second: SwordKnuckle_GUARD_STATE
-  - first:
-      74: -1248994613917366734
-    second: SwordKnuckle_RSlash
-  - first:
-      74: -7918154246919103508
-    second: SwordKnuckle_LSlash
-  - first:
-      74: 6720535098899962679
-    second: SwordKnuckle_Sting
-  - first:
-      74: 1124731194211860952
-    second: SwordKnuckle_Chop
-  - first:
-      74: -4108219079451020593
-    second: SwordKnuckle_SHIELD
-  - first:
-      74: -6515985276260703993
-    second: SwordKnucle_ChargeUp
-  - first:
       74: 7083017976943760741
     second: SwordShield_GUARD_STATE
   - first:
@@ -45,6 +24,9 @@ ModelImporter:
   - first:
       74: -3953592447605375349
     second: SwordShield_SHIELD
+  - first:
+      74: -6515985276260703993
+    second: SwordKnucle_ChargeUp
   externalObjects: {}
   materials:
     materialImportMode: 2
