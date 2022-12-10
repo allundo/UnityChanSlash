@@ -12,6 +12,7 @@ public interface IItemIndexHandler
     void DeleteNum(int index);
     bool UpdateItemNum(ItemIcon itemIcon);
     void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false);
+    void SwitchItem(int index, ItemIcon itemIcon);
     bool RemoveItem(ItemIcon itemIcon);
     bool hasKeyBlade();
     bool hasItem(ItemIcon itemIcon);
@@ -113,6 +114,12 @@ public abstract class ItemIndexHandler : IItemIndexHandler
 
     public virtual void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false)
         => SetItemWithEmptyCheck(index, itemIcon, tweenMove);
+
+    public virtual void SwitchItem(int destIndex, ItemIcon srcItemIcon)
+    {
+        SetItemWithEmptyCheck(srcItemIcon.index, GetItem(destIndex), true);
+        SetItemWithEmptyCheck(destIndex, srcItemIcon, true);
+    }
 
     protected virtual void StoreItem(int index, ItemIcon itemIcon)
     {

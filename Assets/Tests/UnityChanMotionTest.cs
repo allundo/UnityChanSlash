@@ -24,6 +24,7 @@ public class UnityChanMotionTest
         private RuntimeAnimatorController controller;
         public EquipTest(FightStyleHandler handler, RuntimeAnimatorController controller) { this.handler = handler; }
         public IEquipmentStyle Equip(int index, ItemIcon itemIcon) => null;
+        public IEquipmentStyle Equip(EquipmentCategory category, ItemIcon itemIcon) => null;
         public AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI) => null;
         public InputRegion LoadInputRegion(Transform fightCircle) => null;
         public FightStyleHandler LoadFightStyle(Transform player) => UnityEngine.Object.Instantiate(handler, player);

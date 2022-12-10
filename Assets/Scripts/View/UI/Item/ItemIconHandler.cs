@@ -368,14 +368,8 @@ public class ItemIconHandler : IItemIconHandler
             {
                 if (equipItems.isEnable)
                 {
-                    int index =
-                        selectedEquipment.category == EquipmentCategory.Shield ? 0
-                        : selectedEquipment.category == EquipmentCategory.Amulet ? 1
-                        : 2;
-
                     EquipMessage(selected);
-                    selectedInventory.SetItem(pressedIndex, equipItems.GetItem(index), true);
-                    equipItems.SetItem(index, selected, true);
+                    equipItems.Equip(selectedEquipment.category, selected);
                     return CleanUp();
                 }
                 else
@@ -434,15 +428,16 @@ public class ItemIconHandler : IItemIconHandler
 
             if (pressedInventory is EquipItemsHandler) EquipMessage(currentSelected);
 
-            selectedInventory.SetItem(currentSelected.index, currentTarget, true);
-            pressedInventory.SetItem(pressedIndex, currentSelected, true);
-            pressedInventory.ExpandNum(pressedIndex);
+            pressedInventory.SwitchItem(pressedIndex, currentSelected);
 
             if (pressedInventory is InventoryItemsHandler)
             {
+                pressedInventory.ExpandNum(pressedIndex);
+
                 selector.Enable();
                 selector.SetSelect(pressedInventory.UIPos(pressedIndex), pressedInventory is EquipItemsHandler);
                 selectedInventory = pressedInventory;
+
                 return handler.selectMode;
                 // OnRelease() will be fired by the pointed panel immediately.
             }
