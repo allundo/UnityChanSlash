@@ -363,8 +363,8 @@ public class ItemIconHandler : IItemIconHandler
 
             if (selected.itemInfo.numOfItem == 0) return CleanUp();
 
-            // In the case of item equipment.
-            if (selectedEquipment != null)
+            // In the case of item equipment from inventory items.
+            if (selectedEquipment != null && selectedInventory is InventoryItemsHandler)
             {
                 if (equipItems.isEnable)
                 {
@@ -373,14 +373,10 @@ public class ItemIconHandler : IItemIconHandler
                         : selectedEquipment.category == EquipmentCategory.Amulet ? 1
                         : 2;
 
-                    ItemIcon replaced = equipItems.GetItem(index);
-                    if (selected != replaced)
-                    {
-                        EquipMessage(selected);
-                        equipItems.SetItem(index, selected, true);
-                        selectedInventory.SetItem(pressedIndex, replaced, true);
-                        return CleanUp();
-                    }
+                    EquipMessage(selected);
+                    selectedInventory.SetItem(pressedIndex, equipItems.GetItem(index), true);
+                    equipItems.SetItem(index, selected, true);
+                    return CleanUp();
                 }
                 else
                 {
