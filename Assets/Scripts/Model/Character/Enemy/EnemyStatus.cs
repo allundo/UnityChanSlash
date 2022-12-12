@@ -29,9 +29,11 @@ public class Shooter : Attacker, IAttacker
 
     public static IAttacker New(float attack, IStatus status)
     {
-        var enemyStatus = status as IEnemyStatus;
-        return enemyStatus != null ? new Shooter(attack, enemyStatus) : new Attacker(attack, status.dir, status.Name);
+        if (status is IEnemyStatus) return new Shooter(attack, status as IEnemyStatus);
+        if (status is PlayerStatus) return status;
+        return new Attacker(attack, status.dir, status.Name);
     }
+
     private Shooter(float attack, IEnemyStatus status) : base(attack, status.dir, status.Name)
     {
         type = status.type;
