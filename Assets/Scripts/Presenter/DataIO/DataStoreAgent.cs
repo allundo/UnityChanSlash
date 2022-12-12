@@ -362,7 +362,9 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         deadRecords.Add(newRecord);
 
-        deadRecords = deadRecords.OrderByDescending(record => record.moneyAmount).Where((r, index) => index < 10).ToList();
+        deadRecords = deadRecords
+            .OrderByDescending(record => record.moneyAmount)
+            .ThenBy(record => record.floor).Where((r, index) => index < 10).ToList();
 
         var rank = deadRecords.IndexOf(newRecord) + 1;
 
