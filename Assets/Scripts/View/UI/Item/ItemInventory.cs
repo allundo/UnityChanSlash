@@ -57,8 +57,9 @@ public class ItemInventory : MonoBehaviour
         Observable.Merge(inventoryItems.OnRelease, equipItems.OnRelease)
             .Subscribe(index => iconHandler.OnRelease()).AddTo(this);
 
-        equipItems.SetBackInventory
-            .Subscribe(pair => inventoryItems.SetItem(pair.index, pair.itemIcon, true))
+        Observable.Merge(inventoryItems.SetBack, equipItems.SetBack)
+            .Where(pair => pair.targetPlace != null)
+            .Subscribe(pair => (pair.targetPlace.isEquip ? equipItems as IItemIndexHandler : inventoryItems).SetItem(pair.targetPlace.index, pair.itemToSet, true))
             .AddTo(this);
 
         selector.OnLongPress.Subscribe(_ => iconHandler.OnLongPress()).AddTo(this);

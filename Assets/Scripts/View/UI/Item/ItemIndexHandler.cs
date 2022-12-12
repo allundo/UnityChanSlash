@@ -17,6 +17,7 @@ public interface IItemIndexHandler
     bool hasKeyBlade();
     bool hasItem(ItemIcon itemIcon);
     ulong SumUpPrices();
+    IObservable<(ItemIcon targetPlace, ItemIcon itemToSet)> SetBack { get; }
 }
 
 public abstract class ItemIndexHandler : IItemIndexHandler
@@ -43,6 +44,9 @@ public abstract class ItemIndexHandler : IItemIndexHandler
     public IObservable<int> OnRelease => Observable.Merge(panels.Select(panel => panel.OnRelease));
 
     protected int currentSelected;
+
+    public IObservable<(ItemIcon targetPlace, ItemIcon itemToSet)> SetBack => setBackSubject;
+    protected ISubject<(ItemIcon, ItemIcon)> setBackSubject = new Subject<(ItemIcon, ItemIcon)>();
 
     public ItemIndexHandler(ItemInventory inventory, RectTransform uiRT, ItemPanel prefabItemPanel, int width, int height)
     {
@@ -117,7 +121,7 @@ public abstract class ItemIndexHandler : IItemIndexHandler
 
     public virtual void SwitchItem(int destIndex, ItemIcon srcItemIcon)
     {
-        SetItemWithEmptyCheck(srcItemIcon.index, GetItem(destIndex), true);
+        setBackSubject.OnNext((srcItemIcon, GetItem(destIndex)));
         SetItemWithEmptyCheck(destIndex, srcItemIcon, true);
     }
 

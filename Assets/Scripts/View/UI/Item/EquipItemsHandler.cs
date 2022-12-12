@@ -10,6 +10,7 @@ public interface IEquipmentStyle
     AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI);
     InputRegion LoadInputRegion(Transform fightCircle);
     FightStyleHandler LoadFightStyle(Transform player);
+    IEquipmentStyle DetectEquipmentStyle();
     RuntimeAnimatorController animatorController { get; }
 }
 
@@ -26,9 +27,6 @@ public class EquipItemsHandler : ItemIndexHandler
 
     private IReactiveProperty<IEquipmentStyle> currentEquipments = new ReactiveProperty<IEquipmentStyle>();
     public IObservable<IEquipmentStyle> CurrentEquipments => currentEquipments;
-
-    public IObservable<(int index, ItemIcon itemIcon)> SetBackInventory => setBackSubject;
-    protected ISubject<(int, ItemIcon)> setBackSubject = new Subject<(int, ItemIcon)>();
 
     protected KnuckleKnuckle knuckleKnuckle = null;
     protected SwordKnuckle swordKnuckle = null;
@@ -59,7 +57,12 @@ public class EquipItemsHandler : ItemIndexHandler
 
     private bool tweenMove = false;
 
-    public override void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false) => Equip(index, itemIcon, tweenMove);
+    public override void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false)
+    {
+        this.tweenMove = tweenMove;
+        SetEquip(index, itemIcon);
+        currentEquipments.Value = currentEquipments.Value.DetectEquipmentStyle();
+    }
     public override void SwitchItem(int index, ItemIcon itemIcon) => Equip(index, itemIcon, true);
     private void Equip(int index, ItemIcon itemIcon, bool tweenMove = false)
     {
@@ -139,6 +142,28 @@ public class EquipItemsHandler : ItemIndexHandler
             animatorController = Resources.Load<RuntimeAnimatorController>($"AnimatorController/UnityChan_{name}");
         }
 
+        public IEquipmentStyle DetectEquipmentStyle()
+        {
+            var resourceLoader = ResourceLoader.Instance;
+
+            var categoryR = resourceLoader.GetEquipmentOrDefault(GetR()).category;
+            var categoryL = resourceLoader.GetEquipmentOrDefault(GetL()).category;
+
+            if (categoryR == EquipmentCategory.Sword)
+            {
+                if (categoryL == EquipmentCategory.Knuckle) return equipments.swordKnuckle;
+                if (categoryL == EquipmentCategory.Shield) return equipments.swordShield;
+            }
+
+            if (categoryR == EquipmentCategory.Knuckle)
+            {
+                if (categoryL == EquipmentCategory.Knuckle) return equipments.knuckleKnuckle;
+                if (categoryL == EquipmentCategory.Shield) return equipments.knuckleShield;
+            }
+
+            throw new Exception($"invalid equipment style: {categoryR} {categoryL}");
+        }
+
         public IEquipmentStyle Equip(EquipmentCategory category, ItemIcon itemIcon)
         {
             switch (category)
@@ -161,6 +186,8 @@ public class EquipItemsHandler : ItemIndexHandler
 
         public IEquipmentStyle Equip(int index, ItemIcon itemIcon)
         {
+            if (itemIcon.isEquip) return Exchange(index, itemIcon);
+
             switch (index)
             {
                 case 2: return Equip(itemIcon, EquipKnuckleR, EquipSwordR, EquipShieldR);
@@ -177,6 +204,8 @@ public class EquipItemsHandler : ItemIndexHandler
             return equipFuncs[(int)category](itemIcon);
         }
 
+        protected virtual IEquipmentStyle Exchange(int index, ItemIcon itemIcon) => Switch(index, itemIcon);
+
         protected abstract IEquipmentStyle EquipKnuckleR(ItemIcon itemIcon);
         protected virtual IEquipmentStyle EquipKnuckleOpenHand(ItemIcon itemIcon) => EquipKnuckleR(itemIcon);
         protected abstract IEquipmentStyle EquipSwordR(ItemIcon itemIcon);
@@ -188,7 +217,7 @@ public class EquipItemsHandler : ItemIndexHandler
 
         private IEquipmentStyle Switch(int index, ItemIcon itemIcon)
         {
-            SetBack(index, itemIcon);
+            equipments.setBackSubject.OnNext((itemIcon, Get(index)));
             return Set(index, itemIcon);
         }
 
@@ -196,7 +225,7 @@ public class EquipItemsHandler : ItemIndexHandler
         protected IEquipmentStyle SwitchL(ItemIcon itemIcon) => Switch(0, itemIcon);
         protected IEquipmentStyle SwitchBody(ItemIcon itemIcon) => Switch(1, itemIcon);
 
-        private IEquipmentStyle Set(int index, ItemIcon itemIcon)
+        protected IEquipmentStyle Set(int index, ItemIcon itemIcon)
         {
             equipments.SetEquip(index, itemIcon);
             return this;
@@ -210,19 +239,6 @@ public class EquipItemsHandler : ItemIndexHandler
         protected ItemIcon GetR() => Get(2);
         protected ItemIcon GetL() => Get(0);
         protected ItemIcon GetBody() => Get(1);
-
-        /// <summary>
-        /// Set equipment back from equipment items to inventory items.
-        /// </summary>
-        /// <param name="fromIndex">index of equipment items</param>
-        /// <param name="dest">ItemIcon target to switch position</param>
-        private void SetBack(int fromIndex, ItemIcon dest)
-        {
-            if (dest != null)
-            {
-                equipments.setBackSubject.OnNext((dest.index, Get(fromIndex)));
-            }
-        }
     }
 
     protected class KnuckleKnuckle : EquipmentStyle
@@ -254,6 +270,7 @@ public class EquipItemsHandler : ItemIndexHandler
         protected override IEquipmentStyle EquipSwordL(ItemIcon itemIcon)
         {
             SetL(GetR() ?? GetL());
+            if (GetR() == GetL()) SetR(null);
             SwitchR(itemIcon);
             return equipments.swordKnuckle;
         }
@@ -268,6 +285,7 @@ public class EquipItemsHandler : ItemIndexHandler
     {
         public SwordKnuckle(EquipItemsHandler equipments) : base(equipments, "SwordKnuckle") { }
 
+        protected override IEquipmentStyle Exchange(int index, ItemIcon itemIcon) => Set(itemIcon.index, itemIcon);
         protected override IEquipmentStyle EquipKnuckleOpenHand(ItemIcon itemIcon) => SwitchL(itemIcon);
 
         protected override IEquipmentStyle EquipKnuckleR(ItemIcon itemIcon)
@@ -303,6 +321,8 @@ public class EquipItemsHandler : ItemIndexHandler
     protected class KnuckleShield : EquipmentStyle
     {
         public KnuckleShield(EquipItemsHandler equipments) : base(equipments, "KnuckleShield") { }
+
+        protected override IEquipmentStyle Exchange(int index, ItemIcon itemIcon) => Set(itemIcon.index, itemIcon);
         protected override IEquipmentStyle EquipKnuckleR(ItemIcon itemIcon)
         {
             return SwitchR(itemIcon);
@@ -336,6 +356,8 @@ public class EquipItemsHandler : ItemIndexHandler
     protected class SwordShield : EquipmentStyle
     {
         public SwordShield(EquipItemsHandler equipments) : base(equipments, "SwordShield") { }
+
+        protected override IEquipmentStyle Exchange(int index, ItemIcon itemIcon) => Set(itemIcon.index, itemIcon);
         protected override IEquipmentStyle EquipKnuckleR(ItemIcon itemIcon)
         {
             SwitchR(itemIcon);

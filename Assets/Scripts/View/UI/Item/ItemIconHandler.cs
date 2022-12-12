@@ -298,7 +298,7 @@ public class ItemIconHandler : IItemIconHandler
 
         protected void EquipMessage(ItemIcon equipment)
         {
-            if (!equipItems.hasItem(equipment))
+            if (!equipment.isEquip)
             {
                 ActiveMessageController.Instance.InputMessageData(new ActiveMessageData(equipment.itemInfo.name + " を装備した！"));
             }
@@ -400,14 +400,28 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler OnPressEquipment(int index)
         {
             // Don't set target to equip panel if dragging item isn't equipment.
-            return IsValidEquipment(index) ? base.OnPressEquipment(index) : this;
+            if (IsValidEquipment(index))
+            {
+                pressedInventory = equipItems;
+                SetTarget(index);
+            }
+            return this;
         }
 
         protected override IItemIconHandler OnPressInventory(int index)
         {
+            // Don't set target to inventory panel when setting back equipment to inventory and the target isn't empty.
+            if (selectedInventory is InventoryItemsHandler || pressedInventory.GetItem(index) == null)
+            {
+                SetTarget(index);
+            }
+            return this;
+        }
+
+        private void SetTarget(int index)
+        {
             selector.SetTarget(pressedInventory.UIPos(index));
             pressedIndex = index;
-            return this;
         }
 
         public override IItemIconHandler OnRelease()
@@ -426,7 +440,10 @@ public class ItemIconHandler : IItemIconHandler
                 currentTarget = null;
             }
 
-            if (pressedInventory is EquipItemsHandler) EquipMessage(currentSelected);
+            if (pressedInventory is EquipItemsHandler)
+            {
+                EquipMessage(currentSelected);
+            }
 
             pressedInventory.SwitchItem(pressedIndex, currentSelected);
 
@@ -435,7 +452,7 @@ public class ItemIconHandler : IItemIconHandler
                 pressedInventory.ExpandNum(pressedIndex);
 
                 selector.Enable();
-                selector.SetSelect(pressedInventory.UIPos(pressedIndex), pressedInventory is EquipItemsHandler);
+                selector.SetSelect(pressedInventory.UIPos(pressedIndex), false);
                 selectedInventory = pressedInventory;
 
                 return handler.selectMode;
