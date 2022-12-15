@@ -19,6 +19,7 @@ MonoBehaviour:
     prefab: {fileID: 0}
     isOnGround: 1
     shield: 10
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -29,4 +30,4 @@ MonoBehaviour:
     lightDamageMultiplier: 1
     darkDamageMultiplier: 1
     armorMultiplier: 1
-    baseExp: 100
+    baseExp: 50

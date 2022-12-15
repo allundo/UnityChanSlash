@@ -15,8 +15,9 @@ MonoBehaviour:
   setParams:
   - name: "\u30D0\u30E9\u30F3\u30B9"
     lifeMaxGainRatio: 1.0185
-    attackGain: 0.2
-    shieldGain: 0.2
+    attackGain: 2
+    shieldGain: 2
+    magicGain: 0.2
     armorReduction: 0.02
     fireReduction: 0.01
     iceReduction: 0.01

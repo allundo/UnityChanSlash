@@ -80,8 +80,8 @@ public class LevelGain
 {
     [SerializeField] public string name = "バランス";
     [SerializeField] public float lifeMaxGainRatio = 1.0185f;
-    [SerializeField] public float attackGain = 0.2f;
-    [SerializeField] public float shieldGain = 0.2f;
+    [SerializeField] public float attackGain = 2f;
+    [SerializeField] public float shieldGain = 2f;
     [SerializeField] public float magicGain = 0.2f;
     [SerializeField] public float armorReduction = 0.02f;
     [SerializeField] public float fireReduction = 0.02f;
