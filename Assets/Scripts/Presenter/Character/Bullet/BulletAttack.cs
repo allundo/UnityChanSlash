@@ -18,7 +18,9 @@ public class BulletAttack : Attack
 
         if (null == targetMob) return null;
 
-        targetMob.Damage(Shooter.New(status.attack, (status as BulletStatus).shotBy), data);
+        var bulletStatus = status as BulletStatus;
+
+        targetMob.Damage(Shooter.New(bulletStatus.Attack, bulletStatus.shotBy), data);
         reactor.Damage(status.LifeMax.Value, null, AttackType.None, AttackAttr.None);
         return targetMob;
     }

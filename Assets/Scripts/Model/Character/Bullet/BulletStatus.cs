@@ -10,11 +10,11 @@ public class BulletStatus : Status, IBulletStatus
 {
     public IStatus shotBy { get; protected set; }
     public void SetAttack(float attack) => this.attack = attack;
+    public float Attack => attack * shotBy.MagicMultiplier;
 
     public virtual BulletStatus SetShooter(IStatus shooter)
     {
         shotBy = shooter;
-        attack = shooter.attack;
         return this;
     }
 

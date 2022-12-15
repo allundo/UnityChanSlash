@@ -4,8 +4,25 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+public interface IGetExp
+{
+    void AddExp(float expObtain);
+}
+
+public class PlayerShooter : Shooter, IGetExp
+{
+    private PlayerStatus status;
+
+    public PlayerShooter(float attack, PlayerStatus status) : base(attack, status)
+    {
+        this.status = status;
+    }
+
+    public void AddExp(float expObtain) => status.AddExp(expObtain);
+}
+
 [RequireComponent(typeof(CapsuleCollider))]
-public class PlayerStatus : MobStatus
+public class PlayerStatus : MobStatus, IGetExp
 {
     private static readonly float EXP_GAIN_RATIO = 1.2f;
     public float exp { get; protected set; }

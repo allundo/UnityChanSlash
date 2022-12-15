@@ -21,20 +21,13 @@ public interface IEnemyStatus : IMobStatus
     void CancelTamed();
 }
 
-public class Shooter : Attacker, IAttacker
+public class EnemyShooter : Shooter
 {
     private EnemyType type;
     public override string CauseOfDeath(AttackType attackType = AttackType.None)
         => ResourceLoader.Instance.GetDeadCause(this.type, attackType);
 
-    public static IAttacker New(float attack, IStatus status)
-    {
-        if (status is IEnemyStatus) return new Shooter(attack, status as IEnemyStatus);
-        if (status is PlayerStatus) return status;
-        return new Attacker(attack, status.dir, status.Name);
-    }
-
-    private Shooter(float attack, IEnemyStatus status) : base(attack, status.dir, status.Name)
+    public EnemyShooter(float attack, IEnemyStatus status) : base(attack, status)
     {
         type = status.type;
     }
