@@ -558,7 +558,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     private bool BrakeIfRunning()
     {
-        bool isRunning = commander.currentCommand is PlayerRun && commander.NextCommand != brake;
+        bool isRunning = commander.currentCommand is PlayerRun && !(commander.NextCommand is PlayerBrake);
 
         if (isRunning) Interrupt(brake, false, true);
         return isRunning;
