@@ -41,6 +41,8 @@ public class MobParam : Param
 
     [SerializeField] public float shield = 0.0f;
 
+    [SerializeField] public float magic = 1.0f;
+
     [SerializeField] public float faceDamageMultiplier = 1.0f;
 
     [SerializeField] public float sideDamageMultiplier = 1.5f;
@@ -80,6 +82,7 @@ public class LevelGain
     [SerializeField] public float lifeMaxGainRatio = 1.0185f;
     [SerializeField] public float attackGain = 0.2f;
     [SerializeField] public float shieldGain = 0.2f;
+    [SerializeField] public float magicGain = 0.2f;
     [SerializeField] public float armorReduction = 0.02f;
     [SerializeField] public float fireReduction = 0.02f;
     [SerializeField] public float iceReduction = 0.02f;

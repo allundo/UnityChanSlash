@@ -48,17 +48,28 @@ public class MobStatus : Status, IMobStatus
     public float icingFrames { get; protected set; }
 
     protected virtual float ArmorMultiplier => mobParam.armorMultiplier - levelGain.armorReduction * level;
+    public override float MagicMultiplier => mobParam.magic + levelGain.magicGain * level;
 
     public virtual Vector3 corePos => transform.position;
 
     public virtual float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None)
     {
-        var attrDM = attrDamageMultiplier[attr];
+        var attrDM = CalcAttrDM(attr);
 
         // Direction doesn't affect attack power when absorbing attribute of the attack.
         var dirDM = attrDM > 0f ? dirDamageMultiplier[GetDamageType(attackDir)] : 1f;
 
         return attack * ArmorMultiplier * dirDM * attrDM;
+    }
+    /// <summary>
+    /// Reduce damage by default attribute damage multiplier and magic power.
+    /// </summary>
+    /// <param name="attr">damage attribute</param>
+    /// <returns>damage multiplier based on the attribute</returns>
+    protected virtual float CalcAttrDM(AttackAttr attr)
+    {
+        return attrDamageMultiplier[attr] / (0.5f * (1f + MagicMultiplier));
+
     }
 
     protected DamageType GetDamageType(IDirection attackerDir)

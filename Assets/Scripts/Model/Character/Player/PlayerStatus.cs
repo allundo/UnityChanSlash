@@ -131,9 +131,9 @@ public class PlayerStatus : MobStatus
     /// </summary>
     /// <param name="attr">damage attribute</param>
     /// <returns>damage multiplier based on the attribute</returns>
-    private float CalcAttrDM(AttackAttr attr)
+    protected override float CalcAttrDM(AttackAttr attr)
     {
-        var attrDM = attrDamageMultiplier[attr];
+        var attrDM = base.CalcAttrDM(attr);
 
         for (int index = 0; index < equips.Length; index++)
         {

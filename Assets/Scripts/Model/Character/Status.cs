@@ -43,6 +43,8 @@ public interface IStatus : IAttacker
 
     void LifeChange(float diff, AttackAttr attr = AttackAttr.None);
 
+    float MagicMultiplier { get; }
+
     void ResetStatus();
 
     void Activate();
@@ -63,6 +65,8 @@ public class Status : SpawnObject<Status>, IStatus
     public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
 
     public float attack { get; protected set; }
+
+    public virtual float MagicMultiplier => 1f;
 
     public bool isOnGround { get; protected set; }
 
