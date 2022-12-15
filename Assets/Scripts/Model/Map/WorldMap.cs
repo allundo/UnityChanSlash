@@ -75,7 +75,6 @@ public class WorldMap
     {
         if (tileOpenPosList == null) return;
         tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
-        isLoadedDataValid = false;
     }
 
     public List<Pos> ExportTileOpenData()
@@ -92,11 +91,13 @@ public class WorldMap
             });
         }
 
-        // Store tile open positions data on exporting it.
-        // This exporting process must be called at moving floor.
-        tileOpenPosList = data;
-
         return data;
+    }
+
+    public void StoreTileOpenData()
+    {
+        isLoadedDataValid = false;
+        tileOpenPosList = ExportTileOpenData();
     }
 
     public void ImportMapData(DataStoreAgent.MapData import)

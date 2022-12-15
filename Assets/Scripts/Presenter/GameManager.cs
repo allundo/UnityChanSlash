@@ -247,6 +247,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         // Deny enemies to access WorldMap
         spawnHandler.DisableAllEnemiesInput();
 
+        worldMap.StoreTileOpenData();
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 
