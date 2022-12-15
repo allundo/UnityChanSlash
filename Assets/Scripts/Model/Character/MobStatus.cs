@@ -35,7 +35,7 @@ public class MobStatus : Status, IMobStatus
     public int level { get; protected set; }
     protected LevelGain levelGain;
 
-    protected float GainedLifeMax => param.defaultLifeMax * Mathf.Pow(levelGain.lifeMaxGainRatio, level);
+    protected float GainedLifeMax => param.defaultLifeMax * (1f + 0.25f * level) * Mathf.Pow(levelGain.lifeMaxGainRatio, level);
     public virtual float Shield => mobParam.shield + levelGain.shieldGain * level;
 
     public bool isHidden { get; protected set; }
