@@ -93,7 +93,10 @@ public class PlayerStatus : MobStatus
         {
             exp -= expToNextLevel;
             expToNextLevel *= EXP_GAIN_RATIO;
+
+            var prevLifeMax = lifeMax.Value;
             InitParam(param, new MobStatusStoreData(life.Value, level + 1));
+            life.Value += lifeMax.Value - prevLifeMax;
             ActiveMessageController.Instance.InputMessageData(ActiveMessageData.LevelUp(level));
         }
     }
