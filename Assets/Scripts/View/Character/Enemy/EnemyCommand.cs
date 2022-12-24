@@ -186,12 +186,11 @@ public class EnemyDie : EnemyCommand
         if (attacker != null)
         {
             attacker.AddExp(enemyReact.ExpObtain);
+            GameInfo.Instance.defeatCount++;
         }
 
         anim.die.Bool = true;
         react.OnDie();
-
-        GameInfo.Instance.defeatCount++;
 
         return ExecOnCompleted(() => mobReact.OnDisappear()); // Don't validate input.
     }
