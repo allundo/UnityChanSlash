@@ -200,16 +200,20 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class PlayerData : MobData
     {
-        public PlayerData(Pos pos, PlayerStatus status, ExitState state) : this(pos, status.dir, status.Life.Value, status.level, status.exp, status.isHidden, status.UpdateIcingFrames(), state)
+        public PlayerData(Pos pos, PlayerStatus status, ExitState state)
+        : this(pos, status.dir, status.Life.Value, status.level, status.exp, status.isHidden, status.UpdateIcingFrames(), state, status.counter, status.selector.type)
         { }
 
         /// <summary>
         /// For testing
         /// </summary>
-        public PlayerData(Pos pos, IDirection dir, float life, int level, float exp, bool isHidden, float icingFrames, ExitState state) : base(pos, dir, life, level, isHidden, icingFrames)
+        public PlayerData(Pos pos, IDirection dir, float life, int level, float exp, bool isHidden, float icingFrames, ExitState state, PlayerCounter counter, LevelGainType type)
+        : base(pos, dir, life, level, isHidden, icingFrames)
         {
             this.state = (int)state;
             this.exp = exp;
+            this.counter = counter;
+            this.type = (int)type;
         }
 
         [SerializeField] private int state;
@@ -219,8 +223,17 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             get { return Util.ConvertTo<ExitState>(state); }
             set { state = (int)value; }
         }
-        public float exp = 0f;
 
+        public float exp = 0f;
+        public PlayerCounter counter;
+
+        [SerializeField] private int type;
+
+        public LevelGainType levelGainType
+        {
+            get { return Util.ConvertTo<LevelGainType>(type); }
+            set { type = (int)value; }
+        }
     }
 
     [System.Serializable]

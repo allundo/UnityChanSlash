@@ -133,6 +133,22 @@ public class PlayerReactor : MobReactor
         restUI.OnLifeChange(life, status.LifeMax.Value);
         playerAnim.lifeRatio.Float = LifeRatio(life);
     }
+    public override float Damage(IAttacker attacker, Attack.AttackData attackData)
+    {
+        var damage = base.Damage(attacker, attackData);
+
+        if (attacker is Shooter)
+        {
+            playerStatus.counter.IncMagicDamage();
+        }
+
+        if (attacker is EnemyStatus)
+        {
+            playerStatus.counter.IncDamage();
+        }
+
+        return damage;
+    }
 
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
@@ -156,7 +172,17 @@ public class PlayerReactor : MobReactor
             float shieldEffectiveness = guardState.SetShield();
             shield = (playerStatus.Shield + playerStatus.ShieldR * playerFightStyle.ShieldRatioR + playerStatus.ShieldL * playerFightStyle.ShieldRatioL) * shieldEffectiveness;
 
-            if (shieldEffectiveness < 1f) minDamage = 1f;
+            playerStatus.counter.IncShield();
+
+            if (shieldEffectiveness >= 1f)
+            {
+                // Cancel damage count when shield is completely on
+                playerStatus.counter.DecDamage();
+            }
+            else
+            {
+                minDamage = 1f;
+            }
         }
 
         return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, minDamage);

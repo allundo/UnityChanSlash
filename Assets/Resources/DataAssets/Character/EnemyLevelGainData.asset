@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c4de7376a37416c8a8768e337bc85f, type: 3}
+  m_Name: EnemyLevelGainData
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u6210\u9577\u306A\u3057"
+    lifeMaxGainRatio: 1
+    attackGain: 0
+    shieldGain: 0
+    magicGain: 0
+    armorReduction: 0
+    fireReduction: 0
+    iceReduction: 0
+    thunderReduction: 0
+    lightReduction: 0
+    darkReduction: 0
+  - name: "\u30B9\u30E9\u30A4\u30E0"
+    lifeMaxGainRatio: 1.0185
+    attackGain: 1.5
+    shieldGain: 0
+    magicGain: 0.2
+    armorReduction: 0.01
+    fireReduction: 0.01
+    iceReduction: 0.01
+    thunderReduction: 0.01
+    lightReduction: 0.01
+    darkReduction: 0.01
+  - name: "\u30A2\u30CB\u30DE\u30EB"
+    lifeMaxGainRatio: 1.02
+    attackGain: 1.8
+    shieldGain: 0
+    magicGain: 0.2
+    armorReduction: 0.01
+    fireReduction: 0.01
+    iceReduction: 0.01
+    thunderReduction: 0.01
+    lightReduction: 0.01
+    darkReduction: 0.01
+  - name: "\u30B4\u30FC\u30B9\u30C8\u3000"
+    lifeMaxGainRatio: 1.01
+    attackGain: 2
+    shieldGain: 0
+    magicGain: 0.2
+    armorReduction: 0.01
+    fireReduction: 0.025
+    iceReduction: 0.025
+    thunderReduction: 0.025
+    lightReduction: 0.025
+    darkReduction: 0.025

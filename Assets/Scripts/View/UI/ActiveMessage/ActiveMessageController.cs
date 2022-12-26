@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using UniRx;
 
 public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageController>
@@ -24,5 +25,12 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
     {
         sdIcon.Activate(messageData);
         messageBox.Activate(messageData);
+    }
+
+    public void InputMessageWithDelay(ActiveMessageData messageData, float delay = 1f)
+    {
+        Observable.Timer(TimeSpan.FromSeconds(delay))
+            .Subscribe(_ => InputMessageData(messageData))
+            .AddTo(this);
     }
 }

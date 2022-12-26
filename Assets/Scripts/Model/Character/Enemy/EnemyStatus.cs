@@ -87,7 +87,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     private IEnemyStatus InitParam(EnemyParam param, EnemyStoreData data)
     {
         this.enemyParam = param;
-        levelGain = ResourceLoader.Instance.levelGainData.Param((int)param.gainType);
+        levelGain = ResourceLoader.Instance.enemyLevelGainData.Param((int)param.gainType);
 
         data = data ?? new EnemyStoreData(param.defaultLifeMax, 0, false);
 

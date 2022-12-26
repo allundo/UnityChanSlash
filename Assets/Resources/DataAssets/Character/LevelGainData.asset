@@ -24,3 +24,58 @@ MonoBehaviour:
     thunderReduction: 0.01
     lightReduction: 0.01
     darkReduction: 0.01
+  - name: "\u6226\u58EB"
+    lifeMaxGainRatio: 1.0185
+    attackGain: 2.5
+    shieldGain: 2
+    magicGain: 0.1
+    armorReduction: 0.02
+    fireReduction: 0.005
+    iceReduction: 0.005
+    thunderReduction: 0.005
+    lightReduction: 0.005
+    darkReduction: 0.005
+  - name: "\u76FE\u8853\u58EB"
+    lifeMaxGainRatio: 1.02
+    attackGain: 2
+    shieldGain: 2.5
+    magicGain: 0.2
+    armorReduction: 0.01
+    fireReduction: 0.01
+    iceReduction: 0.01
+    thunderReduction: 0.01
+    lightReduction: 0.01
+    darkReduction: 0.01
+  - name: "\u91CD\u9A0E\u58EB"
+    lifeMaxGainRatio: 1.05
+    attackGain: 1.8
+    shieldGain: 2.25
+    magicGain: 0.18
+    armorReduction: 0.05
+    fireReduction: 0.025
+    iceReduction: 0.025
+    thunderReduction: 0.025
+    lightReduction: 0.025
+    darkReduction: 0.025
+  - name: "\u9B54\u8853\u5E2B"
+    lifeMaxGainRatio: 1.005
+    attackGain: 1.5
+    shieldGain: 1.5
+    magicGain: 0.5
+    armorReduction: 0.005
+    fireReduction: 0.025
+    iceReduction: 0.025
+    thunderReduction: 0.025
+    lightReduction: 0.025
+    darkReduction: 0.025
+  - name: "\u72C2\u6226\u58EB"
+    lifeMaxGainRatio: 1.02
+    attackGain: 3
+    shieldGain: 1.5
+    magicGain: 0.05
+    armorReduction: 0.0025
+    fireReduction: 0.0025
+    iceReduction: 0.0025
+    thunderReduction: 0.0025
+    lightReduction: 0.0025
+    darkReduction: 0.0025

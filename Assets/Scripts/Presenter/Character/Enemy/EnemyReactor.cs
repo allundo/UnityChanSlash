@@ -76,6 +76,16 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     {
         var damage = base.Damage(attacker, attackData);
 
+        if (attacker is PlayerShooter)
+        {
+            (attacker as PlayerShooter).IncMagic();
+        }
+
+        if (attacker is PlayerStatus)
+        {
+            (attacker as PlayerStatus).counter.IncAttack();
+        }
+
         // Taming process
         if (attackData.attr == AttackAttr.Coin)
         {

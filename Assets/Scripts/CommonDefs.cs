@@ -603,9 +603,14 @@ public enum LevelGainType
     Attacker,       // Attack main
     Shielder,       // Shield main
     Guardian,       // Armor and HP main
-    Magician,       // Magic(not implemented) main
+    Magician,       // Magic main
+    Berserker,      // Attack only
+}
+
+public enum EnemyLevelGainType
+{
+    None = 0,
     Slime,
     Animal,
     Ghost,
 }
-

@@ -314,6 +314,11 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         gameInfo.clearTimeSec = tm.elapsedTimeSec;
         gameInfo.SetMapComp();
 
+        var counter = player.GetComponent<PlayerStatus>().counter;
+
+        counter.TotalCounts();
+        gameInfo.defeatCount = counter.DefeatSum;
+
         var result = new ResultBonus(gameInfo);
 
         dataStoreAgent.SaveClearRecords("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);

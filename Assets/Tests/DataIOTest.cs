@@ -61,11 +61,31 @@ public class DataIOTest
         var stairsBottom = floor1Map.StairsBottom;
         var stairsTop = floor1Map.stairsTop;
 
+        var counter = new PlayerCounter();
+
+        counter.IncDefeat();
+        counter.IncAttack();
+        counter.IncAttack();
+        counter.IncShield();
+        counter.IncMagic();
+        counter.IncDamage();
+        counter.IncMagicDamage();
+
+        counter.TotalCounts();
+
+        counter.IncDefeat();
+        counter.IncAttack();
+        counter.IncAttack();
+        counter.IncShield();
+        counter.IncMagic();
+        counter.IncDamage();
+        counter.IncMagicDamage();
+
         var saveData = new DataStoreAgent.SaveData()
         {
             currentFloor = 1,
             elapsedTimeSec = 1000,
-            playerData = new DataStoreAgent.PlayerData(new Pos(1, 1), Direction.north, 12f, 3, 100f, false, 60f, ExitState.PitFall),
+            playerData = new DataStoreAgent.PlayerData(new Pos(1, 1), Direction.north, 12f, 3, 100f, false, 60f, ExitState.PitFall, counter, LevelGainType.Attacker),
             inventoryItems = new DataStoreAgent.ItemInfo[] { new DataStoreAgent.ItemInfo(ItemType.FireRing, 12), null, null, new DataStoreAgent.ItemInfo(ItemType.Potion, 9), null, null, null },
             mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(floor1Map), null, null, null, null },
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
@@ -102,6 +122,22 @@ public class DataIOTest
         Assert.AreEqual(stairsTop, map.stairsTop);
         Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
         Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);
+
+        Assert.AreEqual(1, loadData.playerData.counter.Defeat);
+        Assert.AreEqual(2, loadData.playerData.counter.Attack);
+        Assert.AreEqual(1, loadData.playerData.counter.Shield);
+        Assert.AreEqual(1, loadData.playerData.counter.Magic);
+        Assert.AreEqual(1, loadData.playerData.counter.Damage);
+        Assert.AreEqual(1, loadData.playerData.counter.MagicDamage);
+
+        Assert.AreEqual(1, loadData.playerData.counter.DefeatSum);
+        Assert.AreEqual(2, loadData.playerData.counter.AttackSum);
+        Assert.AreEqual(1, loadData.playerData.counter.ShieldSum);
+        Assert.AreEqual(1, loadData.playerData.counter.MagicSum);
+        Assert.AreEqual(1, loadData.playerData.counter.DamageSum);
+        Assert.AreEqual(1, loadData.playerData.counter.MagicDamageSum);
+
+        Assert.AreEqual(LevelGainType.Attacker, loadData.playerData.levelGainType);
 
         for (int y = 0; y < 49; y++)
         {

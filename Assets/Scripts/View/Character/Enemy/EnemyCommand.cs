@@ -186,7 +186,6 @@ public class EnemyDie : EnemyCommand
         if (attacker != null)
         {
             attacker.AddExp(enemyReact.ExpObtain);
-            GameInfo.Instance.defeatCount++;
         }
 
         anim.die.Bool = true;

@@ -19,6 +19,7 @@ public class PlayerShooter : Shooter, IGetExp
     }
 
     public void AddExp(float expObtain) => status.AddExp(expObtain);
+    public void IncMagic() => status.counter.IncMagic();
 }
 
 [RequireComponent(typeof(CapsuleCollider))]
@@ -62,16 +63,19 @@ public class PlayerStatus : MobStatus, IGetExp
     /// </summary>
     private ItemInfo[] equipInfo = new ItemInfo[3];
 
-    private LevelGainType gainType;
+    public PlayerCounter counter { get; private set; }
+    public ClassSelector selector { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
         col = GetComponent<CapsuleCollider>();
 
-        level = 2;
-        gainType = LevelGainType.Balance;
-        levelGain = ResourceLoader.Instance.levelGainData.Param((int)gainType);
+        level = 0;
+        levelGain = ResourceLoader.Instance.enemyLevelGainData.Param(0);
+        counter = new PlayerCounter();
+        selector = new ClassSelector();
+
         // ResetStatus() is called inside InitParam() method.
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
     }
@@ -88,10 +92,12 @@ public class PlayerStatus : MobStatus, IGetExp
         SetPosition(map.WorldPos(initPos.Key), initPos.Value);
     }
 
-    public void SetStatusData(float life, int level, float exp, bool isHidden)
+    public void SetStatusData(float life, int level, float exp, bool isHidden, PlayerCounter counter, LevelGainType type)
     {
         this.isHidden = isHidden;
         this.exp = exp;
+        this.counter = counter;
+        levelGain = selector.SetSelector(type);
         InitParam(param, new MobStatusStoreData(life, level));
     }
 
@@ -104,6 +110,7 @@ public class PlayerStatus : MobStatus, IGetExp
 
     public void AddExp(float expObtain)
     {
+        counter.IncDefeat();
         exp += expObtain;
 
         if (exp >= expToNextLevel)
@@ -112,8 +119,13 @@ public class PlayerStatus : MobStatus, IGetExp
             expToNextLevel *= EXP_GAIN_RATIO;
 
             var prevLifeMax = lifeMax.Value;
+
+            levelGain = selector.SelectType(counter);
+            counter.TotalCounts();
             InitParam(param, new MobStatusStoreData(life.Value, level + 1));
-            life.Value += lifeMax.Value - prevLifeMax;
+
+            life.Value += Mathf.Max(lifeMax.Value - prevLifeMax, 0f);
+
             ActiveMessageController.Instance.InputMessageData(ActiveMessageData.LevelUp(level));
         }
     }

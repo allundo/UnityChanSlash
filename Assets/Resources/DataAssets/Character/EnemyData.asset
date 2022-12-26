@@ -19,6 +19,7 @@ MonoBehaviour:
     prefab: {fileID: 0}
     isOnGround: 0
     shield: 0
+    magic: 1
     faceDamageMultiplier: 0
     sideDamageMultiplier: 0
     backDamageMultiplier: 0
@@ -41,6 +42,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -55,7 +57,7 @@ MonoBehaviour:
     type: 1
     enemyCore: {x: 0, y: 0.3, z: 0}
     tamingProbability: 0.1
-    gainType: 0
+    gainType: 1
   - name: "\u8D64\u30B9\u30E9\u30A4\u30E0"
     defaultLifeMax: 60
     attack: 10
@@ -63,6 +65,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -77,7 +80,7 @@ MonoBehaviour:
     type: 2
     enemyCore: {x: 0, y: 0.3, z: 0}
     tamingProbability: 0.1
-    gainType: 0
+    gainType: 1
   - name: "\u30B4\u30D6\u30EA\u30F3"
     defaultLifeMax: 80
     attack: 15
@@ -85,6 +88,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 15
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
     backDamageMultiplier: 3
@@ -107,6 +111,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -121,7 +126,7 @@ MonoBehaviour:
     type: 4
     enemyCore: {x: 0, y: 0.5, z: 0}
     tamingProbability: 0.5
-    gainType: 0
+    gainType: 2
   - name: "\u7D2B\u30B3\u30A6\u30E2\u30EA"
     defaultLifeMax: 50
     attack: 8
@@ -129,6 +134,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 0
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -143,7 +149,7 @@ MonoBehaviour:
     type: 5
     enemyCore: {x: 0, y: 1.5, z: 0}
     tamingProbability: 0.1
-    gainType: 0
+    gainType: 2
   - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
     defaultLifeMax: 60
     attack: 10
@@ -151,6 +157,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
     backDamageMultiplier: 4
@@ -165,7 +172,7 @@ MonoBehaviour:
     type: 6
     enemyCore: {x: 0, y: 0.75, z: 0}
     tamingProbability: 1
-    gainType: 0
+    gainType: 3
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u5175"
     defaultLifeMax: 100
     attack: 15
@@ -173,6 +180,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 15
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
     backDamageMultiplier: 3
@@ -195,6 +203,7 @@ MonoBehaviour:
       type: 3}
     isOnGround: 1
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
@@ -216,6 +225,7 @@ MonoBehaviour:
     prefab: {fileID: 173471009557050624, guid: e54bb68aa4b0d4d509caf67f4a7777a6, type: 3}
     isOnGround: 1
     shield: 0
+    magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
     backDamageMultiplier: 2
