@@ -44,11 +44,11 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         sqrForwardRadius = forwardRadius * forwardRadius;
 
         ResetCenterPos();
-        circle.SetAlpha(0.0f);
     }
 
     protected void Start()
     {
+        circle.SetAlpha(0.0f);
         gameObject.SetActive(false);
 
         EnemyStatus
