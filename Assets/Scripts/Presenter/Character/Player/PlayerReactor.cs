@@ -172,7 +172,7 @@ public class PlayerReactor : MobReactor
             float shieldEffectiveness = guardState.SetShield();
             shield = (playerStatus.Shield + playerStatus.ShieldR * playerFightStyle.ShieldRatioR + playerStatus.ShieldL * playerFightStyle.ShieldRatioL) * shieldEffectiveness;
 
-            playerStatus.counter.IncShield();
+            playerStatus.TryIncShield();
 
             if (shieldEffectiveness >= 1f)
             {

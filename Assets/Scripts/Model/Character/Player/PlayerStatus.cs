@@ -171,4 +171,12 @@ public class PlayerStatus : MobStatus, IGetExp
 
         return attrDM;
     }
+
+    public void TryIncShield()
+    {
+        if (equips[0].Value.category == EquipmentCategory.Shield)
+        {
+            counter.IncShield();
+        }
+    }
 }
