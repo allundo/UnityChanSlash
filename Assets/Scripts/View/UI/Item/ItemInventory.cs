@@ -38,6 +38,8 @@ public class ItemInventory : MonoBehaviour
 
     public bool IsPutItem => iconHandler.IsPutItem;
 
+    public bool UseEquip(int index) => iconHandler.UseEquip(index);
+
     void Awake()
     {
         iconGenerator = GetComponent<ItemIconGenerator>();

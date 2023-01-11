@@ -6,6 +6,7 @@ public interface IFadeUI
     void FadeActivate(float duration);
     void FadeInactivate(float duration);
     void Disable();
+    void KillTweens();
 }
 
 public abstract class FadeUI : MonoBehaviour, IFadeUI
@@ -77,5 +78,10 @@ public abstract class FadeUI : MonoBehaviour, IFadeUI
         BeforeFadeOut();
         prevFade?.Kill(); // Make sure to kill the same frame OnComplete callback as playing next tween.
         prevFade = fade.Out(duration, 0f, null, Disable).Play();
+    }
+
+    public virtual void KillTweens()
+    {
+        fade?.KillTweens();
     }
 }

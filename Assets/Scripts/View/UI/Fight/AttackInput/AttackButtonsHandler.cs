@@ -89,4 +89,10 @@ public abstract class AttackButtonsHandler : MonoBehaviour
     protected abstract bool[,] GetCancelableTable();
 
     public abstract AttackButton GetAttack(Vector2 uiPos);
+
+    public void Destroy()
+    {
+        attackButtons.ForEach(btn => btn.KillTweens());
+        Destroy(gameObject);
+    }
 }

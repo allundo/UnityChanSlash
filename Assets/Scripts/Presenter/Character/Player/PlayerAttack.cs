@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public interface IPlayerAttack : IMobAttack
 {
@@ -32,10 +34,27 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
     protected PlayerStatus playerStatus;
     protected Sequence attackSequence;
 
+    protected Func<bool> useEquip;
+
     protected override void Awake()
     {
         base.Awake();
+
         playerStatus = status as PlayerStatus;
+
+        var itemInventory = GetComponentInParent<PlayerInput>().GetItemInventory;
+        if (attackRatioR >= 1.0f)
+        {
+            useEquip = () => itemInventory.UseEquip(2);
+        }
+        else if (attackRatioL >= 1.0f)
+        {
+            useEquip = () => itemInventory.UseEquip(0);
+        }
+        else
+        {
+            useEquip = () => true;
+        }
     }
 
     public override void OnDie()
@@ -56,6 +75,13 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
         criticalFX.Play();
         criticalSnd.SetPitch(Random.Range(minPitch, maxPitch));
         criticalSnd.PlayEx();
+    }
+
+    protected override IReactor OnHitAttack(Collider collider)
+    {
+        var target = base.OnHitAttack(collider);
+        if (target != null && !useEquip()) CompleteAttack();
+        return target;
     }
 
     public override Sequence AttackSequence(float attackDuration)

@@ -25,7 +25,7 @@ public class AttackInputController : MonoBehaviour
 
     public AttackButtonsHandler SetAttackButtonsHandler(IEquipmentStyle equipments)
     {
-        if (attackButtonsHandler != null) Destroy(attackButtonsHandler.gameObject);
+        attackButtonsHandler?.Destroy();
 
         attackButtonsHandler = equipments.LoadAttackButtonsHandler(transform);
         attackButtonsHandler.SetTarget(enemyTarget);

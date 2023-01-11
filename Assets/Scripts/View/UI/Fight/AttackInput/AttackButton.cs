@@ -103,7 +103,7 @@ public class AttackButton : FadeUI
         expand.Play();
 
         FadeInactivate(duration);
-        StartCoolTime(CoolTime);
+        coolTimer = StartCoolTime(CoolTime);
 
         attackSubject.OnNext(this);
     }
@@ -153,5 +153,15 @@ public class AttackButton : FadeUI
     {
         countTime = coolTime;
         return DOTween.To(() => countTime, time => countTime = time, 0f, coolTime).OnComplete(EnableButton).Play();
+    }
+
+    public override void KillTweens()
+    {
+        fade.KillTweens();
+        region.KillTweens();
+        expand?.Kill();
+        shrink?.Kill();
+        move?.Kill();
+        coolTimer?.Kill();
     }
 }

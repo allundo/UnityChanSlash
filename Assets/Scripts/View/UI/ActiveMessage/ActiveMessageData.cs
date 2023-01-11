@@ -53,6 +53,11 @@ public struct ActiveMessageData
         return new ActiveMessageData($"レベル {level + 1} に上がった！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
     }
 
+    public static ActiveMessageData BreakItem(string name)
+    {
+        return new ActiveMessageData($"{name} は壊れてしまった！", SDFaceID.SAD2, SDEmotionID.CONFUSE);
+    }
+
     public static ActiveMessageData ClassChange(string name)
     {
         return new ActiveMessageData($"{name} のクラスに変化した！", SDFaceID.SURPRISE, SDEmotionID.SURPRISE);

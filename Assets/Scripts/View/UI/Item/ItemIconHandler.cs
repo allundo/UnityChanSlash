@@ -158,6 +158,17 @@ public class ItemIconHandler : IItemIconHandler
         return currentMode;
     }
 
+    public bool UseEquip(int index)
+    {
+        bool isEquipValid = equipItems.UseEquip(index);
+        if (!isEquipValid)
+        {
+            CleanUp();
+            equipItems.SetItem(index, null);
+        }
+        return isEquipValid;
+    }
+
     protected class NormalMode : IItemIconHandler
     {
         protected ItemIconHandler handler;

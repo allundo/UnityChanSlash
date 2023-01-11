@@ -76,6 +76,28 @@ public class EquipItemsHandler : ItemIndexHandler
         currentEquipments.Value = currentEquipments.Value.Equip(category, itemIcon);
     }
 
+    public bool UseEquip(int index)
+    {
+        var equipIcon = equips[index].Value;
+
+        if (equipIcon == null) return true;
+
+        var info = equipIcon.itemInfo;
+
+        if (info.type == ItemType.KeyBlade) return true;
+
+        info.Subtraction(1);
+
+        if (info.numOfItem > 0)
+        {
+            UpdateItemNum(equipIcon);
+            return true;
+        }
+
+        ActiveMessageController.Instance.InputMessageData(ActiveMessageData.BreakItem(info.name));
+        return false;
+    }
+
     protected override void StoreItem(int index, ItemIcon itemIcon)
     {
         itemIcon?.SetInventoryType(true);
