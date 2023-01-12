@@ -55,4 +55,14 @@ public class MapFrame : MiniMapBase, IPointerDownHandler, IPointerUpHandler
             .Join(rectTransform.DOSizeDelta(CurrentSize, duration).SetEase(Ease.OutQuart))
             .AppendCallback(() => SetRaycast(true));
     }
+
+    public void HideAndShow(float duration = 0.5f)
+    {
+        image.raycastTarget = false;
+        DOTween.Sequence()
+            .Append(HideTween(duration * 0.5f))
+            .Append(ShowTween(duration * 0.5f))
+            .AppendCallback(() => image.raycastTarget = true)
+            .Play();
+    }
 }

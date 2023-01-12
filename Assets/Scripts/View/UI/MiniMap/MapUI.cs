@@ -8,6 +8,7 @@ using System.Linq;
 public class MapUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] protected MiniMap miniMap = default;
+    [SerializeField] protected StatusUI statusUI = default;
     [SerializeField] protected MapFrame frame = default;
     [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] private float landscapeSize = 420f;
@@ -32,6 +33,20 @@ public class MapUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     {
         ResetOrientation(DeviceOrientation.Portrait);
         frame.Press.Subscribe(_ => ExpandMap()).AddTo(this);
+
+        miniMap.Switch.Subscribe(_ =>
+        {
+            frame.HideAndShow();
+            statusUI.ShowStatus();
+        })
+        .AddTo(this);
+
+        statusUI.Switch.Subscribe(_ =>
+        {
+            frame.HideAndShow();
+            miniMap.ShowMap();
+        })
+        .AddTo(this);
     }
 
     public void ResetOrientation(DeviceOrientation orientation)
@@ -62,6 +77,7 @@ public class MapUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         TimeManager.Instance.Pause(true);
         itemInventory.SetActive(false);
         miniMap.SetEnable(false);
+        miniMap.HideButton();
 
         activateTween =
             DOTween.Sequence()
@@ -87,8 +103,12 @@ public class MapUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         DOTween.Sequence()
             .Join(frame.ShrinkTween(0.5f))
             .Join(FadeOut(0.5f))
-            .AppendCallback(() => TimeManager.Instance.Resume(true))
-            .AppendCallback(() => miniMap.SetEnable(true))
+            .AppendCallback(() =>
+            {
+                TimeManager.Instance.Resume(true);
+                miniMap.SetEnable(true);
+                miniMap.ShowButton();
+            })
             .SetUpdate(true)
             .Play();
     }

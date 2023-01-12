@@ -15,11 +15,11 @@ public class PlayerReactor : MobReactor
     [SerializeField] protected HandREquipment handR = default;
     [SerializeField] protected HandLEquipment handL = default;
     [SerializeField] protected NeckEquipment neck = default;
+    [SerializeField] protected StatusUI statusUI = default;
 
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
     protected PlayerStatus playerStatus;
-    protected PlayerFightStyle playerFightStyle;
     protected ParticleSystem iceCrashVFX;
 
     public string CauseOfDeath() => lastAttacker.CauseOfDeath(lastAttackType);
@@ -32,7 +32,6 @@ public class PlayerReactor : MobReactor
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
         playerStatus = status as PlayerStatus;
-        playerFightStyle = fightStyle as PlayerFightStyle;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
@@ -84,10 +83,18 @@ public class PlayerReactor : MobReactor
         itemInventory.FightStyleChange
              .Subscribe(equipments =>
              {
-                 playerFightStyle.SetFightStyle(equipments);
+                 (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
                  playerInput.SetFightInput(equipments);
              })
              .AddTo(this);
+
+        playerStatus.ExpChange
+            .Subscribe(exp => statusUI.UpdateExp(exp))
+            .AddTo(this);
+
+        playerStatus.StatusChange
+            .Subscribe(status => statusUI.UpdateValues(status))
+            .AddTo(this);
     }
 
     protected void OnLifeMaxChange(float lifeMax)
@@ -170,7 +177,7 @@ public class PlayerReactor : MobReactor
         if (guardState.IsShieldOn(dir))
         {
             float shieldEffectiveness = guardState.SetShield();
-            shield = (playerStatus.Shield + playerStatus.ShieldR * playerFightStyle.ShieldRatioR + playerStatus.ShieldL * playerFightStyle.ShieldRatioL) * shieldEffectiveness;
+            shield = playerStatus.ShieldSum * shieldEffectiveness;
 
             playerStatus.TryIncShield();
 

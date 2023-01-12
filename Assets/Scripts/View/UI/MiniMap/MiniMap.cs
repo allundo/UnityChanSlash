@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using DG.Tweening;
+using UniRx;
+using System;
 
 public class MiniMap : MiniMapBase
 {
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
     [SerializeField] private PlayerSymbol playerSymbol = default;
+    [SerializeField] private Button statusBtn = default;
 
     private static readonly int MINIMAP_SIZE = 15;
     private static readonly int EXPAND_MAP_SIZE = 41;
@@ -26,11 +30,18 @@ public class MiniMap : MiniMapBase
 
     private Dictionary<EnemyReactor, UISymbol> enemies = new Dictionary<EnemyReactor, UISymbol>();
 
+    public IObservable<Unit> Switch => statusBtn.OnClickAsObservable();
+
     protected override void Awake()
     {
         base.Awake();
 
         map = GameManager.Instance.worldMap;
+    }
+
+    void Start()
+    {
+        Switch.Subscribe(_ => HideMap()).AddTo(this);
     }
 
     public override void InitUISize(float landscapeSize, float portraitSize, float expandSize)
@@ -164,4 +175,26 @@ public class MiniMap : MiniMapBase
         playerSymbol.SetSize(uiTileUnit);
         currentMiniMapSize = miniMapSize;
     }
+
+    private void HideMap(float duration = 0.25f)
+    {
+        statusBtn.enabled = false;
+        HideButton();
+
+        HideTween(duration).OnComplete(() => SetEnable(false)).Play();
+    }
+
+    public void ShowMap(float duration = 0.25f, float delay = 0.25f)
+    {
+        SetEnable(true);
+        ShowButton();
+
+        ShowTween(duration)
+            .SetDelay(delay)
+            .OnComplete(() => statusBtn.enabled = true)
+            .Play();
+    }
+
+    public void ShowButton() => statusBtn.gameObject.SetActive(true);
+    public void HideButton() => statusBtn.gameObject.SetActive(false);
 }

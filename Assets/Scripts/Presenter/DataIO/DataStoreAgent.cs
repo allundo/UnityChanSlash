@@ -201,7 +201,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     public class PlayerData : MobData
     {
         public PlayerData(Pos pos, PlayerStatus status, ExitState state)
-        : this(pos, status.dir, status.Life.Value, status.level, status.exp, status.isHidden, status.UpdateIcingFrames(), state, status.counter, status.selector.type)
+        : this(pos, status.dir, status.Life.Value, status.level, status.Exp, status.isHidden, status.UpdateIcingFrames(), state, status.counter, status.selector.type)
         { }
 
         /// <summary>

@@ -26,7 +26,10 @@ public class PlayerShooter : Shooter, IGetExp
 public class PlayerStatus : MobStatus, IGetExp
 {
     private static readonly float EXP_GAIN_RATIO = 1.2f;
-    public float exp { get; protected set; }
+    // public float exp { get; protected set; }
+    private IReactiveProperty<float> exp = new ReactiveProperty<float>(0f);
+    public IObservable<float> ExpChange => exp;
+    public float Exp => exp.Value;
     private float expToNextLevel;
     protected CapsuleCollider col;
 
@@ -36,6 +39,16 @@ public class PlayerStatus : MobStatus, IGetExp
     public IObservable<EquipmentSource> EquipRObservable => EquipObservable(2);
     public IObservable<EquipmentSource> EquipLObservable => EquipObservable(0);
     public IObservable<EquipmentSource> EquipBodyObservable => EquipObservable(1);
+
+    private ISubject<Unit> initSubject = new BehaviorSubject<Unit>(Unit.Default);
+    public IObservable<DispStatus> StatusChange =>
+        Observable.Merge(
+            EquipRObservable.Select(_ => Unit.Default),
+            EquipLObservable.Select(_ => Unit.Default),
+            EquipBodyObservable.Select(_ => Unit.Default),
+            initSubject
+        )
+        .Select(_ => GetDispStatus());
 
     /// <summary>
     /// [0: Left hand weapon], 
@@ -65,11 +78,14 @@ public class PlayerStatus : MobStatus, IGetExp
 
     public PlayerCounter counter { get; private set; }
     public ClassSelector selector { get; private set; }
+    private PlayerFightStyle fightStyle;
+    public float ShieldSum => Shield + ShieldR * fightStyle.ShieldRatioR + ShieldL * fightStyle.ShieldRatioL;
 
     protected override void Awake()
     {
         base.Awake();
         col = GetComponent<CapsuleCollider>();
+        fightStyle = GetComponent<PlayerFightStyle>();
 
         level = 0;
         levelGain = ResourceLoader.Instance.enemyLevelGainData.Param(0);
@@ -95,7 +111,7 @@ public class PlayerStatus : MobStatus, IGetExp
     public void SetStatusData(float life, int level, float exp, bool isHidden, PlayerCounter counter, LevelGainType type)
     {
         this.isHidden = isHidden;
-        this.exp = exp;
+        this.exp.Value = exp;
         this.counter = counter;
         levelGain = selector.SetSelector(type);
         InitParam(param, new MobStatusStoreData(life, level));
@@ -105,17 +121,18 @@ public class PlayerStatus : MobStatus, IGetExp
     {
         base.InitParam(param, data);
         expToNextLevel = mobParam.baseExp * Mathf.Pow(EXP_GAIN_RATIO, level);
+        initSubject.OnNext(Unit.Default);
         return this;
     }
 
     public void AddExp(float expObtain)
     {
         counter.IncDefeat();
-        exp += expObtain;
+        exp.Value += expObtain;
 
-        if (exp >= expToNextLevel)
+        if (exp.Value >= expToNextLevel)
         {
-            exp -= expToNextLevel;
+            exp.Value -= expToNextLevel;
             expToNextLevel *= EXP_GAIN_RATIO;
 
             var prevLifeMax = lifeMax.Value;
@@ -178,5 +195,25 @@ public class PlayerStatus : MobStatus, IGetExp
         {
             counter.IncShield();
         }
+    }
+
+    private DispStatus GetDispStatus()
+    {
+        return new DispStatus()
+        {
+            level = this.level + 1,
+            exp = this.exp.Value,
+            expToNextLevel = this.expToNextLevel,
+            attack = Mathf.RoundToInt(this.attack),
+            equipR = Mathf.RoundToInt(this.AttackR * 100f),
+            equipL = Mathf.RoundToInt(this.AttackL * 100f),
+            armor = Mathf.RoundToInt((1f - this.ArmorMultiplier) * 100f),
+            shield = Mathf.RoundToInt(this.ShieldSum),
+            magic = Mathf.RoundToInt((this.MagicMultiplier - 1f) * 100f),
+            resistFire = Mathf.RoundToInt((1f - CalcAttrDM(AttackAttr.Fire)) * 100f),
+            resistIce = Mathf.RoundToInt((1f - CalcAttrDM(AttackAttr.Ice)) * 100f),
+            resistDark = Mathf.RoundToInt((1f - CalcAttrDM(AttackAttr.Dark)) * 100f),
+            resistLight = Mathf.RoundToInt((1f - CalcAttrDM(AttackAttr.Light)) * 100f),
+        };
     }
 }

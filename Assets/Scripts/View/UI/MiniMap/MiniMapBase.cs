@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class MiniMapBase : MonoBehaviour
 {
@@ -64,5 +65,15 @@ public class MiniMapBase : MonoBehaviour
                 SetLandscapePos();
                 break;
         }
+    }
+
+    protected Tween HideTween(float duration = 0.25f)
+    {
+        return rectTransform.DOAnchorPosX(540f, duration).SetRelative(true).SetEase(Ease.OutCubic);
+    }
+
+    protected Tween ShowTween(float duration = 0.25f)
+    {
+        return rectTransform.DOAnchorPosX(-540f, duration).SetRelative(true).SetEase(Ease.OutCubic);
     }
 }
