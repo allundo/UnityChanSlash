@@ -6884,7 +6884,7 @@ PrefabInstance:
     - target: {fileID: 8234509767623409023, guid: 7e773a125091745f89ba2b5133395e38,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8234509767623409023, guid: 7e773a125091745f89ba2b5133395e38,
         type: 3}
@@ -7518,6 +7518,7 @@ MonoBehaviour:
     type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 2
+  m_CursorLockBehavior: 0
 --- !u!114 &613658814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17882,8 +17883,8 @@ RectTransform:
   - {fileID: 874884606}
   - {fileID: 535103282}
   - {fileID: 8337679455544452697}
-  - {fileID: 4143909644624622703}
   - {fileID: 284002328}
+  - {fileID: 4143909644624622703}
   - {fileID: 7538483662229452208}
   - {fileID: 1931765455232171163}
   - {fileID: 1723596713}
@@ -28098,7 +28099,7 @@ RectTransform:
   - {fileID: 6909229592954410188}
   - {fileID: 6784663617881831482}
   m_Father: {fileID: 1658967357}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
