@@ -5,7 +5,7 @@ using DG.Tweening;
 using UniRx;
 using System;
 
-public class MiniMap : MiniMapBase
+public class MiniMap : MapAndStatusBase
 {
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
     [SerializeField] private PlayerSymbol playerSymbol = default;

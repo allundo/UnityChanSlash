@@ -5,11 +5,11 @@ using UnityEngine.UI;
 using UniRx;
 using System.Linq;
 
-public class MapUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
+public class MapAndStatusUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] protected MiniMap miniMap = default;
     [SerializeField] protected StatusUI statusUI = default;
-    [SerializeField] protected MapFrame frame = default;
+    [SerializeField] protected MapAndStatusFrame frame = default;
     [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] private float landscapeSize = 420f;
     [SerializeField] private float portraitSize = 480f;

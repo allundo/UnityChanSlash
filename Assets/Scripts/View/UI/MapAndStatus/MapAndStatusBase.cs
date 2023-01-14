@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class MiniMapBase : MonoBehaviour
+public class MapAndStatusBase : MonoBehaviour
 {
     protected RectTransform rectTransform;
 
