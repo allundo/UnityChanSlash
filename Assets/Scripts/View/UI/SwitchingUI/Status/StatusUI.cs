@@ -1,13 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UniRx;
-using System;
-using DG.Tweening;
 
-public class StatusUI : SwitchingUIBase
+public class StatusUI : SwitchingContentBase
 {
-    [SerializeField] private Button mapBtn = default;
     [SerializeField] private TextMeshProUGUI level = default;
     [SerializeField] private Image exp = default;
     [SerializeField] private TextMeshProUGUI attack = default;
@@ -23,17 +19,10 @@ public class StatusUI : SwitchingUIBase
 
     private float expToNextLevel = 10000f;
 
-    public IObservable<Unit> Switch => mapBtn.OnClickAsObservable();
-
     protected override void Awake()
     {
         base.Awake();
         isShown = false;
-    }
-
-    void Start()
-    {
-        Switch.Subscribe(_ => HideStatus()).AddTo(this);
     }
 
     public void UpdateValues(DispStatus status)
@@ -63,17 +52,6 @@ public class StatusUI : SwitchingUIBase
         this.shield.text = Mathf.RoundToInt(shield).ToString();
     }
 
-    private void HideStatus(float duration = 0.25f)
-    {
-        mapBtn.enabled = false;
-        mapBtn.gameObject.SetActive(false);
-        SwitchUI(duration, () => gameObject.SetActive(false));
-    }
-
-    public void ShowStatus(float duration = 0.25f, float delay = 0.25f)
-    {
-        gameObject.SetActive(true);
-        mapBtn.gameObject.SetActive(true);
-        DOVirtual.DelayedCall(delay, () => SwitchUI(duration, () => mapBtn.enabled = true)).Play();
-    }
+    protected override void EnableUI() => gameObject.SetActive(true);
+    protected override void DisableUI() => gameObject.SetActive(false);
 }

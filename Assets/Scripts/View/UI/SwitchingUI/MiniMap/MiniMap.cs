@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using DG.Tweening;
-using UniRx;
-using System;
 
-public class MiniMap : SwitchingUIBase
+public class MiniMap : SwitchingContentBase
 {
     [SerializeField] private UISymbolGenerator enemyPointGenerator = default;
     [SerializeField] private PlayerSymbol playerSymbol = default;
-    [SerializeField] private Button statusBtn = default;
 
     private static readonly int MINIMAP_SIZE = 15;
     private static readonly int EXPAND_MAP_SIZE = 41;
@@ -30,19 +26,12 @@ public class MiniMap : SwitchingUIBase
 
     private Dictionary<EnemyReactor, UISymbol> enemies = new Dictionary<EnemyReactor, UISymbol>();
 
-    public IObservable<Unit> Switch => statusBtn.OnClickAsObservable();
-
     protected override void Awake()
     {
         base.Awake();
 
         map = GameManager.Instance.worldMap;
         isShown = true;
-    }
-
-    void Start()
-    {
-        Switch.Subscribe(_ => HideMap()).AddTo(this);
     }
 
     public override void InitUISize(float landscapeSize, float portraitSize, float expandSize)
@@ -177,22 +166,6 @@ public class MiniMap : SwitchingUIBase
         currentMiniMapSize = miniMapSize;
     }
 
-    private void HideMap(float duration = 0.25f)
-    {
-        statusBtn.enabled = false;
-        HideButton();
-
-        SwitchUI(duration, () => SetEnable(false));
-    }
-
-    public void ShowMap(float duration = 0.25f, float delay = 0.25f)
-    {
-        SetEnable(true);
-        ShowButton();
-
-        DOVirtual.DelayedCall(delay, () => SwitchUI(duration, () => statusBtn.enabled = true)).Play();
-    }
-
-    public void ShowButton() => statusBtn.gameObject.SetActive(true);
-    public void HideButton() => statusBtn.gameObject.SetActive(false);
+    protected override void EnableUI() => SetEnable(true);
+    protected override void DisableUI() => SetEnable(false);
 }

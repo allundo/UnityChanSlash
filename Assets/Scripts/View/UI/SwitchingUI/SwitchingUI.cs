@@ -37,14 +37,14 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         miniMap.Switch.Subscribe(_ =>
         {
             frame.HideAndShow();
-            statusUI.ShowStatus();
+            statusUI.ShowUI();
         })
         .AddTo(this);
 
         statusUI.Switch.Subscribe(_ =>
         {
             frame.HideAndShow();
-            miniMap.ShowMap();
+            miniMap.ShowUI();
         })
         .AddTo(this);
     }

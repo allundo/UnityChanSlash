@@ -22241,7 +22241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f8d2fd5e0d54ad6b336466105f846a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapBtn: {fileID: 1327575447}
+  switchBtn: {fileID: 1327575447}
   level: {fileID: 2104901555}
   exp: {fileID: 2039285244}
   attack: {fileID: 1373619580}
@@ -34841,9 +34841,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63d319ebacb9047119446c43e16ec15a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  switchBtn: {fileID: 1252626665}
   enemyPointGenerator: {fileID: 4907802069983716306}
   playerSymbol: {fileID: 726251882}
-  statusBtn: {fileID: 1252626665}
 --- !u!114 &8337679455103305514
 MonoBehaviour:
   m_ObjectHideFlags: 0
