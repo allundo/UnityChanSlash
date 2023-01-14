@@ -79,7 +79,7 @@ public class PlayerStatus : MobStatus, IGetExp
     public PlayerCounter counter { get; private set; }
     public ClassSelector selector { get; private set; }
     private PlayerFightStyle fightStyle;
-    public float ShieldSum => Shield + ShieldR * fightStyle.ShieldRatioR + ShieldL * fightStyle.ShieldRatioL;
+    public float ShieldSum => Shield * (1f + ShieldR * fightStyle.ShieldRatioR + ShieldL * fightStyle.ShieldRatioL);
 
     protected override void Awake()
     {

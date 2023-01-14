@@ -58,6 +58,11 @@ public class StatusUI : MonoBehaviour
         this.exp.fillAmount = exp / expToNextLevel;
     }
 
+    public void UpdateShield(float shield)
+    {
+        this.shield.text = Mathf.RoundToInt(shield).ToString();
+    }
+
     private void HideStatus(float duration = 0.25f)
     {
         mapBtn.enabled = false;

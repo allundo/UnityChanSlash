@@ -85,6 +85,7 @@ public class PlayerReactor : MobReactor
              {
                  (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
                  playerInput.SetFightInput(equipments);
+                 statusUI.UpdateShield(playerStatus.ShieldSum);
              })
              .AddTo(this);
 
