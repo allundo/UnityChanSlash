@@ -7,12 +7,31 @@ using System;
 public abstract class SwitchingContentBase : SwitchingUIBase
 {
     [SerializeField] protected Button switchBtn = default;
+    protected RectTransform btnRT;
+    protected Vector2 currentBtnPos;
 
     public IObservable<Unit> Switch => switchBtn.OnClickAsObservable();
+
+    protected override void Awake()
+    {
+        base.Awake();
+        btnRT = switchBtn.GetComponent<RectTransform>();
+    }
 
     void Start()
     {
         Switch.Subscribe(_ => HideUI()).AddTo(this);
+    }
+    protected override void SetPortraitPos()
+    {
+        base.SetPortraitPos();
+        btnRT.anchoredPosition = currentBtnPos = new Vector2(-80f, 80f);
+    }
+
+    protected override void SetLandscapePos()
+    {
+        base.SetLandscapePos();
+        btnRT.anchoredPosition = currentBtnPos = new Vector2(100f, -200f);
     }
 
     private void HideUI(float duration = 0.25f)

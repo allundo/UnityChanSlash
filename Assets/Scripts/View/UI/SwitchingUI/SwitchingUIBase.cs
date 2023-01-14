@@ -15,7 +15,7 @@ public class SwitchingUIBase : MonoBehaviour
     protected bool isShown = true;
 
     protected Vector2 PortraitPos => new Vector2(-(portraitSize + 40f), portraitSize + 360f) * 0.5f;
-    protected Vector2 LandscapePos => new Vector2(-(landscapeSize + 240f + Screen.width * ThirdPersonCamera.Margin), -(landscapeSize + 40f)) * 0.5f;
+    protected Vector2 LandscapePos => new Vector2(-(landscapeSize + 280f + Screen.width * ThirdPersonCamera.Margin), -(landscapeSize + 40f)) * 0.5f;
 
     protected virtual void Awake()
     {
@@ -36,14 +36,14 @@ public class SwitchingUIBase : MonoBehaviour
         currentSize = size;
         rectTransform.sizeDelta = new Vector2(size, size);
     }
-    protected void SetPortraitPos()
+    protected virtual void SetPortraitPos()
     {
         rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 0.5f);
         SetPos(PortraitPos);
         anchoredCenter = new Vector2(-Screen.width * 0.5f, 0f);
     }
 
-    protected void SetLandscapePos()
+    protected virtual void SetLandscapePos()
     {
         rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1f, 1f);
         SetPos(LandscapePos);
