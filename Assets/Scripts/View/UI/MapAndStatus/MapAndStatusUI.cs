@@ -52,6 +52,7 @@ public class MapAndStatusUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     public void ResetOrientation(DeviceOrientation orientation)
     {
         miniMap.ResetOrientation(orientation);
+        statusUI.ResetOrientation(orientation);
         frame.ResetOrientation(orientation);
     }
 

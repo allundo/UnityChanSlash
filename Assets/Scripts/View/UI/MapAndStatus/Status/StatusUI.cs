@@ -5,7 +5,7 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class StatusUI : MonoBehaviour
+public class StatusUI : MapAndStatusBase
 {
     [SerializeField] private Button mapBtn = default;
     [SerializeField] private TextMeshProUGUI level = default;
@@ -22,13 +22,13 @@ public class StatusUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resistLight = default;
 
     private float expToNextLevel = 10000f;
-    private RectTransform rectTransform;
 
     public IObservable<Unit> Switch => mapBtn.OnClickAsObservable();
 
-    void Awake()
+    protected override void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
+        base.Awake();
+        isShown = false;
     }
 
     void Start()
@@ -67,27 +67,13 @@ public class StatusUI : MonoBehaviour
     {
         mapBtn.enabled = false;
         mapBtn.gameObject.SetActive(false);
-        HideTween(duration).OnComplete(() => gameObject.SetActive(false)).Play();
+        SwitchUI(duration, () => gameObject.SetActive(false));
     }
 
     public void ShowStatus(float duration = 0.25f, float delay = 0.25f)
     {
         gameObject.SetActive(true);
         mapBtn.gameObject.SetActive(true);
-
-        ShowTween(duration)
-            .SetDelay(delay)
-            .OnComplete(() => mapBtn.enabled = true)
-            .Play();
-    }
-
-    protected Tween HideTween(float duration = 0.25f)
-    {
-        return rectTransform.DOAnchorPosX(540f, duration).SetRelative(true).SetEase(Ease.OutCubic);
-    }
-
-    protected Tween ShowTween(float duration = 0.25f)
-    {
-        return rectTransform.DOAnchorPosX(-540f, duration).SetRelative(true).SetEase(Ease.OutCubic);
+        DOVirtual.DelayedCall(delay, () => SwitchUI(duration, () => mapBtn.enabled = true)).Play();
     }
 }

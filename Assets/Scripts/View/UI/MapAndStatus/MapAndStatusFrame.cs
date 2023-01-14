@@ -59,10 +59,11 @@ public class MapAndStatusFrame : MapAndStatusBase, IPointerDownHandler, IPointer
     public void HideAndShow(float duration = 0.5f)
     {
         image.raycastTarget = false;
-        DOTween.Sequence()
-            .Append(HideTween(duration * 0.5f))
-            .Append(ShowTween(duration * 0.5f))
-            .AppendCallback(() => image.raycastTarget = true)
-            .Play();
+
+        SwitchUI(duration * 0.5f,
+            () => SwitchUI(duration * 0.5f,
+                () => image.raycastTarget = true
+            )
+        );
     }
 }

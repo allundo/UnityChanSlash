@@ -37,6 +37,7 @@ public class MiniMap : MapAndStatusBase
         base.Awake();
 
         map = GameManager.Instance.worldMap;
+        isShown = true;
     }
 
     void Start()
@@ -181,7 +182,7 @@ public class MiniMap : MapAndStatusBase
         statusBtn.enabled = false;
         HideButton();
 
-        HideTween(duration).OnComplete(() => SetEnable(false)).Play();
+        SwitchUI(duration, () => SetEnable(false));
     }
 
     public void ShowMap(float duration = 0.25f, float delay = 0.25f)
@@ -189,10 +190,7 @@ public class MiniMap : MapAndStatusBase
         SetEnable(true);
         ShowButton();
 
-        ShowTween(duration)
-            .SetDelay(delay)
-            .OnComplete(() => statusBtn.enabled = true)
-            .Play();
+        DOVirtual.DelayedCall(delay, () => SwitchUI(duration, () => statusBtn.enabled = true)).Play();
     }
 
     public void ShowButton() => statusBtn.gameObject.SetActive(true);
