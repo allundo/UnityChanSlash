@@ -82,12 +82,4 @@ public class SwitchingUIBase : MonoBehaviour
             .SetEase(Ease.OutCubic)
             .Play();
     }
-
-    protected Tween ShowTween(float duration = 0.25f, TweenCallback onComplete = null)
-    {
-        currentPos = new Vector2(-currentPos.x, currentPos.y);
-        return rectTransform.DOAnchorPos(currentPos, duration)
-            .SetEase(Ease.OutCubic)
-            .Play();
-    }
 }
