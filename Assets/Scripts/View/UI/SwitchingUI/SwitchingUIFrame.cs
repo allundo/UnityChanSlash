@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using UniRx;
 
-public class MapAndStatusFrame : MapAndStatusBase, IPointerDownHandler, IPointerUpHandler
+public class SwitchingUIFrame : SwitchingUIBase, IPointerDownHandler, IPointerUpHandler
 {
     protected Image image;
 

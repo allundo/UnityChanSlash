@@ -5,7 +5,7 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class StatusUI : MapAndStatusBase
+public class StatusUI : SwitchingUIBase
 {
     [SerializeField] private Button mapBtn = default;
     [SerializeField] private TextMeshProUGUI level = default;

@@ -10466,7 +10466,7 @@ GameObject:
   - component: {fileID: 874884607}
   - component: {fileID: 874884609}
   m_Layer: 5
-  m_Name: MapAndStatusUI
+  m_Name: SwitchingUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31927,7 +31927,7 @@ MonoBehaviour:
   rtUI: {fileID: 1574935736902618774}
   rtLifeGauge: {fileID: 8337679455544452697}
   fightCircle: {fileID: 4719329011268037073}
-  mapAndStatusUI: {fileID: 874884609}
+  switchingUI: {fileID: 874884609}
   itemInventory: {fileID: 284002330}
   restButton: {fileID: 314247949}
   resumeButton: {fileID: 1057805256}
