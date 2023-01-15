@@ -127,7 +127,7 @@ public class MiniMap : SwitchingContentBase
         }
     }
 
-    public void SetEnable(bool isEnabled)
+    public override void SetEnable(bool isEnabled)
     {
         image.enabled = isEnabled;
         playerSymbol.SetEnable(isEnabled);
@@ -165,7 +165,4 @@ public class MiniMap : SwitchingContentBase
         playerSymbol.SetSize(uiTileUnit);
         currentMiniMapSize = miniMapSize;
     }
-
-    protected override void EnableUI() => SetEnable(true);
-    protected override void DisableUI() => SetEnable(false);
 }

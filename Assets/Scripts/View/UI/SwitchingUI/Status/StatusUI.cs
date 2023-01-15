@@ -52,6 +52,5 @@ public class StatusUI : SwitchingContentBase
         this.shield.text = Mathf.RoundToInt(shield).ToString();
     }
 
-    protected override void EnableUI() => gameObject.SetActive(true);
-    protected override void DisableUI() => gameObject.SetActive(false);
+    public override void SetEnable(bool isEnabled) => gameObject.SetActive(isEnabled);
 }

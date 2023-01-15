@@ -38,18 +38,17 @@ public abstract class SwitchingContentBase : SwitchingUIBase
     {
         switchBtn.enabled = false;
         HideButton();
-        SwitchUI(duration, DisableUI);
+        SwitchUI(duration, () => SetEnable(false));
     }
 
     public void ShowUI(float duration = 0.25f, float delay = 0.25f)
     {
-        EnableUI();
+        SetEnable(true);
         ShowButton();
         DOVirtual.DelayedCall(delay, () => SwitchUI(duration, () => switchBtn.enabled = true)).Play();
     }
 
-    protected abstract void EnableUI();
-    protected abstract void DisableUI();
+    public abstract void SetEnable(bool isEnabled);
 
     public void ShowButton() => switchBtn.gameObject.SetActive(true);
     public void HideButton() => switchBtn.gameObject.SetActive(false);
