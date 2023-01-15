@@ -4,18 +4,11 @@ using TMPro;
 
 public class StatusUI : SwitchingContentBase
 {
-    [SerializeField] private TextMeshProUGUI level = default;
-    [SerializeField] private Image exp = default;
-    [SerializeField] private TextMeshProUGUI attack = default;
-    [SerializeField] private TextMeshProUGUI equipR = default;
-    [SerializeField] private TextMeshProUGUI equipL = default;
-    [SerializeField] private TextMeshProUGUI armor = default;
-    [SerializeField] private TextMeshProUGUI shield = default;
-    [SerializeField] private TextMeshProUGUI magic = default;
-    [SerializeField] private TextMeshProUGUI resistFire = default;
-    [SerializeField] private TextMeshProUGUI resistIce = default;
-    [SerializeField] private TextMeshProUGUI resistDark = default;
-    [SerializeField] private TextMeshProUGUI resistLight = default;
+    [SerializeField] private StatusContent level = default;
+    [SerializeField] private StatusContent attack = default;
+    [SerializeField] private StatusContent defense = default;
+    [SerializeField] private StatusContent magic = default;
+    [SerializeField] private StatusContent resist = default;
 
     private float expToNextLevel = 10000f;
 
@@ -27,29 +20,25 @@ public class StatusUI : SwitchingContentBase
 
     public void UpdateValues(DispStatus status)
     {
-        level.text = status.level.ToString();
+        level.SetValue(status.level);
         expToNextLevel = status.expToNextLevel;
-        exp.fillAmount = status.exp / expToNextLevel;
-        attack.text = status.attack.ToString();
-        equipR.text = status.equipR.ToString();
-        equipL.text = status.equipL.ToString();
-        armor.text = status.armor.ToString();
-        shield.text = status.shield.ToString();
-        magic.text = status.magic.ToString();
-        resistFire.text = status.resistFire.ToString();
-        resistIce.text = status.resistIce.ToString();
-        resistDark.text = status.resistDark.ToString();
-        resistLight.text = status.resistLight.ToString();
+        level.SetSubValues(status.exp / expToNextLevel);
+        attack.SetValue(status.attack);
+        attack.SetSubValues(status.equipR, status.equipL);
+        defense.SetValue(status.armor);
+        defense.SetSubValues(status.shield);
+        magic.SetValue(status.magic);
+        resist.SetSubValues(status.resistFire, status.resistIce, status.resistDark, status.resistLight);
     }
 
     public void UpdateExp(float exp)
     {
-        this.exp.fillAmount = exp / expToNextLevel;
+        level.SetSubValues(exp / expToNextLevel);
     }
 
     public void UpdateShield(float shield)
     {
-        this.shield.text = Mathf.RoundToInt(shield).ToString();
+        defense.SetSubValues(shield);
     }
 
     public override void SetEnable(bool isEnabled) => gameObject.SetActive(isEnabled);
