@@ -12,12 +12,33 @@ public class StatusUI : SwitchingContentBase
 
     private float expToNextLevel = 10000f;
 
+    private float landscapeRatio;
+    private IStatusContent[] contents;
+
     protected override void Awake()
     {
         base.Awake();
         isShown = false;
+        landscapeRatio = landscapeSize / portraitSize;
+        contents = new IStatusContent[] { level, attack, defense, magic, resist };
     }
+    public override void ResetOrientation(DeviceOrientation orientation)
+    {
+        switch (orientation)
+        {
+            case DeviceOrientation.Portrait:
+                SetSize(portraitSize);
+                SetPortraitPos();
+                contents.ForEach(content => content.SetSize(1f));
+                break;
 
+            case DeviceOrientation.LandscapeRight:
+                SetSize(landscapeSize);
+                SetLandscapePos();
+                contents.ForEach(content => content.SetSize(landscapeRatio));
+                break;
+        }
+    }
     public void UpdateValues(DispStatus status)
     {
         level.SetValue(status.level);
