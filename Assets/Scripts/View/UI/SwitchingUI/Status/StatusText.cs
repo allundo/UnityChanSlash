@@ -4,7 +4,7 @@ using TMPro;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class StatusText : StatusContent
 {
-    private TextMeshProUGUI valueTMP = default;
+    protected TextMeshProUGUI valueTMP;
 
     private float defaultValueFontSize;
 
@@ -23,9 +23,20 @@ public class StatusText : StatusContent
     public override void SetValue(float value)
         => SetValue(Mathf.RoundToInt(value));
 
-    public override void SetSize(float ratio)
+    public void SetValue(string value)
     {
-        base.SetSize(ratio);
+        this.valueTMP.text = value;
+    }
+
+    protected override void SetSizeAndPos(float ratio, Vector2 contentPos)
+    {
+        base.SetSizeAndPos(ratio, contentPos);
         valueTMP.fontSize = defaultValueFontSize * ratio;
+    }
+
+    protected override void SetAlpha(float alpha)
+    {
+        base.SetAlpha(alpha);
+        valueTMP.alpha = alpha;
     }
 }

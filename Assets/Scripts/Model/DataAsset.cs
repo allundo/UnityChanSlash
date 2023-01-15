@@ -78,7 +78,7 @@ public class EnemyParam : MobParam
 [System.Serializable]
 public class LevelGain
 {
-    [SerializeField] public string name = "バランス";
+    [SerializeField] public string name = "バランス型";
     [SerializeField] public float lifeMaxGainRatio = 1.0185f;
     [SerializeField] public float attackGain = 2f;
     [SerializeField] public float shieldGain = 2f;

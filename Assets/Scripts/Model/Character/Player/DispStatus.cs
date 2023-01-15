@@ -3,6 +3,7 @@ public struct DispStatus
     public int level;
     public float exp;
     public float expToNextLevel;
+    public string levelGainTypeName;
     public float attack;
     public float equipR;
     public float equipL;

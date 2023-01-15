@@ -16,16 +16,19 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private float expandSize = 960f;
 
     protected Image image;
-
     protected Tween activateTween = null;
+
+    protected ISwitchingContent currentUIContent;
 
     protected override void Awake()
     {
         miniMap.InitUISize(landscapeSize, portraitSize, expandSize);
         frame.InitUISize(landscapeSize, portraitSize, expandSize);
+        currentUIContent = miniMap;
 
         fade = new FadeTween(gameObject, 0.4f, true);
         image = GetComponent<Image>();
+
         Inactivate();
     }
 
@@ -38,6 +41,7 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         {
             frame.HideAndShow();
             statusUI.ShowUI();
+            currentUIContent = statusUI;
         })
         .AddTo(this);
 
@@ -45,6 +49,7 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         {
             frame.HideAndShow();
             miniMap.ShowUI();
+            currentUIContent = miniMap;
         })
         .AddTo(this);
     }
@@ -77,8 +82,8 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         image.raycastTarget = true;
         TimeManager.Instance.Pause(true);
         itemInventory.SetActive(false);
-        miniMap.SetEnable(false);
-        miniMap.HideButton();
+        currentUIContent.SetEnable(false);
+        currentUIContent.HideButton();
 
         activateTween =
             DOTween.Sequence()
@@ -86,8 +91,8 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
             .Join(FadeIn(0.75f))
             .AppendCallback(() =>
             {
-                miniMap.ExpandMap();
-                miniMap.SetEnable(true);
+                currentUIContent.ExpandUI();
+                currentUIContent.SetEnable(true);
                 activateTween = null;
             })
             .SetUpdate(true)
@@ -97,8 +102,8 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     private void ShrinkMap()
     {
         image.raycastTarget = false;
-        miniMap.SetEnable(false);
-        miniMap.ShrinkMap();
+        currentUIContent.SetEnable(false);
+        currentUIContent.ShrinkUI();
         itemInventory.SetActive(true);
 
         DOTween.Sequence()
@@ -107,8 +112,8 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
             .AppendCallback(() =>
             {
                 TimeManager.Instance.Resume(true);
-                miniMap.SetEnable(true);
-                miniMap.ShowButton();
+                currentUIContent.SetEnable(true);
+                currentUIContent.ShowButton();
             })
             .SetUpdate(true)
             .Play();

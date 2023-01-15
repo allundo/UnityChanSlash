@@ -27,11 +27,17 @@ public class StatusGauge : StatusContent
         expBar.fillAmount = fillRatio;
     }
 
-    public override void SetSize(float ratio)
+    protected override void SetSizeAndPos(float ratio, Vector2 contentPos)
     {
-        base.SetSize(ratio);
+        base.SetSizeAndPos(ratio, contentPos);
 
         expGaugeRT.anchoredPosition = defaultGaugePos * ratio;
         expGaugeRT.sizeDelta = defaultGaugeSize * ratio;
+    }
+    protected override void SetAlpha(float alpha)
+    {
+        base.SetAlpha(alpha);
+        expBar.color = new Color(expBar.color.r, expBar.color.b, expBar.color.g, alpha);
+        expGauge.color = new Color(expGauge.color.r, expGauge.color.b, expGauge.color.g, alpha);
     }
 }

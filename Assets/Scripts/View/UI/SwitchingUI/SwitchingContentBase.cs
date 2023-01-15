@@ -4,7 +4,16 @@ using DG.Tweening;
 using UniRx;
 using System;
 
-public abstract class SwitchingContentBase : SwitchingUIBase
+public interface ISwitchingContent
+{
+    void ShowButton();
+    void HideButton();
+    void SetEnable(bool isEnabled);
+    void ExpandUI();
+    void ShrinkUI();
+}
+
+public abstract class SwitchingContentBase : SwitchingUIBase, ISwitchingContent
 {
     [SerializeField] protected Button switchBtn = default;
     protected RectTransform btnRT;
@@ -49,6 +58,8 @@ public abstract class SwitchingContentBase : SwitchingUIBase
     }
 
     public abstract void SetEnable(bool isEnabled);
+    public abstract void ExpandUI();
+    public abstract void ShrinkUI();
 
     public void ShowButton() => switchBtn.gameObject.SetActive(true);
     public void HideButton() => switchBtn.gameObject.SetActive(false);

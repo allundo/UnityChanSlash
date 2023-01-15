@@ -88,9 +88,9 @@ public class PlayerStatus : MobStatus, IGetExp
         fightStyle = GetComponent<PlayerFightStyle>();
 
         level = 0;
-        levelGain = ResourceLoader.Instance.enemyLevelGainData.Param(0);
         counter = new PlayerCounter();
         selector = new ClassSelector();
+        levelGain = selector.SetSelector(LevelGainType.Balance);
 
         // ResetStatus() is called inside InitParam() method.
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
@@ -204,6 +204,7 @@ public class PlayerStatus : MobStatus, IGetExp
             level = this.level + 1,
             exp = this.exp.Value,
             expToNextLevel = this.expToNextLevel,
+            levelGainTypeName = levelGain.name,
             attack = this.attack,
             equipR = AttackR * 100f,
             equipL = AttackL * 100f,

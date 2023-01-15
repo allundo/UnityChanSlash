@@ -1,14 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class StatusUI : SwitchingContentBase
 {
+    [SerializeField] private TextMeshProUGUI unityChan = default;
     [SerializeField] private StatusContent level = default;
     [SerializeField] private StatusContent attack = default;
     [SerializeField] private StatusContent defense = default;
     [SerializeField] private StatusContent magic = default;
     [SerializeField] private StatusContent resist = default;
+    [SerializeField] private StatusTextHidden levelGainType = default;
 
     private float expToNextLevel = 10000f;
 
@@ -18,9 +19,10 @@ public class StatusUI : SwitchingContentBase
     protected override void Awake()
     {
         base.Awake();
+        unityChan.enabled = false;
         isShown = false;
         landscapeRatio = landscapeSize / portraitSize;
-        contents = new IStatusContent[] { level, attack, defense, magic, resist };
+        contents = new IStatusContent[] { level, attack, defense, magic, resist, levelGainType };
     }
     public override void ResetOrientation(DeviceOrientation orientation)
     {
@@ -43,7 +45,8 @@ public class StatusUI : SwitchingContentBase
     {
         level.SetValue(status.level);
         expToNextLevel = status.expToNextLevel;
-        level.SetSubValues(status.exp / expToNextLevel);
+        level.SetSubValues(status.exp / expToNextLevel, expToNextLevel);
+        levelGainType.SetValue(status.levelGainTypeName);
         attack.SetValue(status.attack);
         attack.SetSubValues(status.equipR, status.equipL);
         defense.SetValue(status.armor);
@@ -63,4 +66,25 @@ public class StatusUI : SwitchingContentBase
     }
 
     public override void SetEnable(bool isEnabled) => gameObject.SetActive(isEnabled);
+
+    public override void ExpandUI()
+    {
+        unityChan.enabled = true;
+        ResetUISize(expandSize);
+        rectTransform.anchoredPosition = anchoredCenter;
+        contents.ForEach(content => content.Expand());
+    }
+
+    public override void ShrinkUI()
+    {
+        unityChan.enabled = false;
+        ResetUISize(currentSize);
+        rectTransform.anchoredPosition = currentPos;
+        contents.ForEach(content => content.Shrink());
+    }
+
+    protected void ResetUISize(float size)
+    {
+        rectTransform.sizeDelta = new Vector2(size, size);
+    }
 }

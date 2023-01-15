@@ -134,7 +134,7 @@ public class MiniMap : SwitchingContentBase
         enemies.ForEach(kv => kv.Value?.SetEnable(isEnabled));
     }
 
-    public void ExpandMap()
+    public override void ExpandUI()
     {
         int miniMapSize = Mathf.Min(EXPAND_MAP_SIZE, map.Width);
         ResetUISize(expandSize, miniMapSize, 1f);
@@ -146,7 +146,7 @@ public class MiniMap : SwitchingContentBase
         MoveEnemySymbols();
     }
 
-    public void ShrinkMap()
+    public override void ShrinkUI()
     {
         ResetUISize(currentSize, MINIMAP_SIZE, 0.4f);
         rectTransform.anchoredPosition = currentPos;
@@ -156,7 +156,7 @@ public class MiniMap : SwitchingContentBase
         MoveEnemySymbols();
     }
 
-    public void ResetUISize(float size, int miniMapSize, float alpha)
+    protected void ResetUISize(float size, int miniMapSize, float alpha)
     {
         image.texture = renderTexture = new RenderTexture((int)size, (int)size, 0);
         image.color = new Color(1, 1, 1, alpha);
