@@ -49,6 +49,8 @@ public class DataIOTest
         Assert.AreEqual(3, records[0].floor);
         Assert.AreEqual("testにやられた", records[0].causeOfDeath);
         Assert.AreEqual("1,3,10000,testにやられた", string.Join(",", records[0].GetValues(1).Select(obj => obj.ToString())));
+
+        dataStoreAgent.DeleteFile(dataStoreAgent.DEAD_RECORD_FILE_NAME);
     }
 
 
@@ -146,5 +148,7 @@ public class DataIOTest
                 Assert.False(map.discovered[x, y]);
             }
         }
+
+        dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
     }
 }

@@ -455,7 +455,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
         catch (Exception e)
         {
-            Debug.LogError("ファイルのロードに失敗: " + e.Message);
+            Debug.LogError($"ファイルのロードに失敗: {e.Message} ...新しくファイルを作成します");
             deadRecords = new List<DeadRecord>();
         }
 
@@ -472,7 +472,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
         catch (Exception e)
         {
-            Debug.LogError("ファイルのロードに失敗: " + e.Message);
+            Debug.LogError($"ファイルのロードに失敗: {e.Message} ...新しくファイルを作成します");
             clearRecords = new List<ClearRecord>();
         }
 
