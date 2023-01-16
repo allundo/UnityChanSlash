@@ -49,6 +49,7 @@ public class MiniMap : SwitchingContentBase
         base.ResetOrientation(orientation);
 
         ResetUISize(currentSize, currentMiniMapSize, image.color.a);
+        DrawMap();
     }
 
     public void SwitchWorldMap(WorldMap map)
@@ -93,13 +94,16 @@ public class MiniMap : SwitchingContentBase
 
     protected void UpdateMiniMap(Vector3 playerPos, int miniMapSize)
     {
-        Graphics.Blit(map.GetMiniMap(miniMapSize), renderTexture);
+        DrawMap(miniMapSize);
 
         center = map.MiniMapCenterWorldPos(miniMapSize);
         playerSymbol.SetPos(UIOffsetDiscrete(playerPos));
         MoveEnemySymbols();
         isUpdated = true;
     }
+
+    protected void DrawMap() => DrawMap(currentMiniMapSize);
+    protected void DrawMap(int miniMapSize) => Graphics.Blit(map.GetMiniMap(miniMapSize), renderTexture);
 
     public PlayerSymbol Turn(IDirection dir) => playerSymbol.SetDir(dir);
 
@@ -141,7 +145,7 @@ public class MiniMap : SwitchingContentBase
         rectTransform.anchoredPosition = anchoredCenter;
 
         image.color = Color.white;
-        UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos, miniMapSize);
+        DrawMap(miniMapSize);
 
         MoveEnemySymbols();
     }

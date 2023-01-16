@@ -29,6 +29,7 @@ public class UISymbol : SpawnObject<UISymbol>
 
     public virtual UISymbol SetSize(Vector2 size)
     {
+        rectTransform.anchoredPosition *= size.x / rectTransform.sizeDelta.x;
         rectTransform.sizeDelta = size;
         return this;
     }
