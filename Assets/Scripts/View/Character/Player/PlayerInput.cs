@@ -27,7 +27,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     [SerializeField] protected ItemHandler itemHandler = default;
     [SerializeField] protected InspectHandler inspectHandler = default;
     [SerializeField] protected BoxHandler boxHandler = default;
-    [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] protected HandleIcon handleIcon = default;
 
     // Moving UIs: Normal type input
@@ -51,6 +50,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     protected IPlayerMapUtil playerMap;
     protected PlayerCommandTarget playerTarget;
+    protected ItemInventory itemInventory;
+
     protected bool IsAttack => currentCommand is PlayerAttackCommand;
     protected bool IsItemUse => currentCommand is PlayerItem || IsFiring && !(currentCommand as PlayerFire).isCancelable;
     protected bool IsFiring => currentCommand is PlayerFire;
@@ -74,8 +75,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     /// </summary>
     protected bool isInputVisible = false;
 
-    public ItemInventory GetItemInventory => itemInventory;
-
     // Reserved ICommand input applied by other classes.
     // FIXME: need to implement game events handling system.
     public ICommand EnqueueTurnL() => ForceEnqueue(new PlayerTurnL(playerTarget, 18f, 0.99f, 0.99f));
@@ -98,6 +97,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         base.Awake();
         playerMap = map as IPlayerMapUtil;
+        itemInventory = ItemInventory.Instance;
     }
 
     protected override void SetCommander()
@@ -582,7 +582,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             input.ClearAll(true, false, 9);
             input.Interrupt(shieldOn);
             if (playerInput.isGuardOn) (input.commander as PlayerCommander).SetGuard(true);
-            playerInput.GetItemInventory.UseEquip(0);
+            playerInput.itemInventory.UseEquip(0);
             return 1f;
         }
 

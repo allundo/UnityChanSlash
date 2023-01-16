@@ -66,7 +66,7 @@ public class PlayerReactor : MobReactor
             .Subscribe(source => neck.Equip(source))
             .AddTo(this);
 
-        var itemInventory = playerInput.GetItemInventory;
+        var itemInventory = ItemInventory.Instance;
 
         itemInventory.EquipR
             .Subscribe(itemInfo => playerStatus.EquipR(itemInfo))

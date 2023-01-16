@@ -10,7 +10,6 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     [SerializeField] protected MiniMap miniMap = default;
     [SerializeField] protected StatusUI statusUI = default;
     [SerializeField] protected SwitchingUIFrame frame = default;
-    [SerializeField] protected ItemInventory itemInventory = default;
     [SerializeField] private float landscapeSize = 420f;
     [SerializeField] private float portraitSize = 480f;
     [SerializeField] private float expandSize = 960f;
@@ -81,7 +80,7 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     {
         image.raycastTarget = true;
         TimeManager.Instance.Pause(true);
-        itemInventory.SetActive(false);
+        ItemInventory.Instance.SetActive(false);
         currentUIContent.SetEnable(false);
         currentUIContent.HideButton();
 
@@ -104,7 +103,7 @@ public class SwitchingUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
         image.raycastTarget = false;
         currentUIContent.SetEnable(false);
         currentUIContent.ShrinkUI();
-        itemInventory.SetActive(true);
+        ItemInventory.Instance.SetActive(true);
 
         DOTween.Sequence()
             .Join(frame.ShrinkTween(0.5f))

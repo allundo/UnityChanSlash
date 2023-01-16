@@ -42,7 +42,8 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
 
         playerStatus = status as PlayerStatus;
 
-        var itemInventory = GetComponentInParent<PlayerInput>().GetItemInventory;
+        var itemInventory = ItemInventory.Instance;
+
         if (attackRatioR >= 1.0f)
         {
             useEquip = () => itemInventory.UseEquip(2);

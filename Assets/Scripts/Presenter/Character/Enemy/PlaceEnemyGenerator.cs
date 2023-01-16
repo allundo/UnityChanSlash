@@ -157,7 +157,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
         restore.ForEach(data => Respawn(data));
         // Reserve spawning witch if player has KeyBlade.
-        isWitchReserved = PlayerInfo.Instance.IsPlayerHavingKeyBlade && restore.Where(data => data.enemyType == EnemyType.Witch).Count() == 0;
+        isWitchReserved = ItemInventory.Instance.hasKeyBlade() && restore.Where(data => data.enemyType == EnemyType.Witch).Count() == 0;
         restore.Clear();
     }
 

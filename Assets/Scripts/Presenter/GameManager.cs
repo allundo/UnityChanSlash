@@ -331,7 +331,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     public ulong SumUpItemValue()
     {
-        ulong moneyAmount = input.GetItemInventory.SumUpPrices();
+        ulong moneyAmount = ItemInventory.Instance.SumUpPrices();
         GameInfo.Instance.moneyAmount = moneyAmount;
         return moneyAmount;
     }

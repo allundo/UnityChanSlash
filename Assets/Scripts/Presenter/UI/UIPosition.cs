@@ -7,7 +7,6 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private RectTransform rtLifeGauge = default;
     [SerializeField] private FightCircle fightCircle = default;
     [SerializeField] private SwitchingUI switchingUI = default;
-    [SerializeField] private ItemInventory itemInventory = default;
     [SerializeField] private RestButton restButton = default;
     [SerializeField] private ResumeButton resumeButton = default;
     [SerializeField] private float portraitFromBottom = 720f;
@@ -39,7 +38,7 @@ public class UIPosition : MonoBehaviour
         switchingUI.ResetOrientation(orientation);
         restButton.ResetOrientation(orientation);
         resumeButton.ResetOrientation(orientation);
-        itemInventory.ResetOrientation(orientation);
+        ItemInventory.Instance.ResetOrientation(orientation);
         fightCircle.ResetCenterPos();
     }
 }

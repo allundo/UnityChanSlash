@@ -408,14 +408,13 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         var gameInfo = GameInfo.Instance;
         var gameManager = GameManager.Instance;
-        var playerInfo = PlayerInfo.Instance;
 
         saveData = new SaveData()
         {
             currentFloor = gameInfo.currentFloor,
             elapsedTimeSec = TimeManager.Instance.elapsedTimeSec + 1,
-            playerData = playerInfo.ExportRespawnData(),
-            inventoryItems = playerInfo.ExportInventoryItems(),
+            playerData = PlayerInfo.Instance.ExportRespawnData(),
+            inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
@@ -539,12 +538,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         {
             if (saveData == null) throw new Exception("データがロードされていません");
 
-            var playerInfo = PlayerInfo.Instance;
-
             TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
             SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
-            playerInfo.ImportRespawnData(saveData.playerData);
-            playerInfo.ImportInventoryItems(saveData.inventoryItems);
+            PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
+            ItemInventory.Instance.ImportInventoryItems(saveData.inventoryItems);
             GameManager.Instance.ImportRespawnData(saveData);
         }
         catch (Exception e)

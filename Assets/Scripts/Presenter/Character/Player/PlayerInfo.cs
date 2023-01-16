@@ -25,7 +25,6 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public Pos PlayerPos => map.onTilePos;
     public Vector3 PlayerVec3Pos => map.CurrentVec3Pos;
     public IDirection PlayerDir => map.dir;
-    public bool IsPlayerHavingKeyBlade => input.GetItemInventory.hasKeyBlade();
 
     public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !map.isInPit && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
@@ -58,22 +57,10 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         return new DataStoreAgent.PlayerData(PlayerPos, status, exitState);
     }
 
-    public DataStoreAgent.ItemInfo[] ExportInventoryItems()
-    {
-        return input.GetItemInventory.ExportInventoryItems();
-    }
-
     public void ImportRespawnData(DataStoreAgent.PlayerData data)
     {
         status.SetPosition(data.kvPosDir);
         input.SetInputVisible();
-    }
-
-    public void ImportInventoryItems(DataStoreAgent.ItemInfo[] items)
-    {
-        input.GetItemInventory.ImportInventoryItems(items);
-
-        // TODO: Restore equipments from item data.
     }
 
     public void RestorePlayerStatus(DataStoreAgent.PlayerData data)

@@ -17,6 +17,8 @@ public class UnityChanMotionTest
     private FightStyleHandler prefabSwordKnuckle;
     private RuntimeAnimatorController swordKnuckleController;
     private HandREquipment handR;
+    private ItemInventoryTest itemInventory;
+    private ResourceLoader resourceLoader;
 
     protected class EquipTest : IEquipmentStyle
     {
@@ -41,6 +43,9 @@ public class UnityChanMotionTest
         knuckleKnuckleController = Object.Instantiate(Resources.Load<RuntimeAnimatorController>("AnimatorController/UnityChan_KnuckleKnuckle"));
         prefabSwordKnuckle = Resources.Load<FightStyleHandler>("Prefabs/Character/Player/SwordKnuckleStyleHandler");
         swordKnuckleController = Object.Instantiate(Resources.Load<RuntimeAnimatorController>("AnimatorController/UnityChan_SwordKnuckle"));
+
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        itemInventory = Object.Instantiate(Resources.Load<ItemInventoryTest>("Prefabs/UI/Item/ItemInventoryTest"));
     }
 
     [OneTimeTearDown]
@@ -49,6 +54,8 @@ public class UnityChanMotionTest
         Object.Destroy(mainCamera.gameObject);
         Object.Destroy(knuckleKnuckleController);
         Object.Destroy(swordKnuckleController);
+        Object.Destroy(itemInventory.gameObject);
+        Object.Destroy(resourceLoader.gameObject);
     }
 
     [SetUp]

@@ -27,7 +27,7 @@ public abstract class PlayerCommand : MobCommand
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
         itemGenerator = target.itemGenerator;
-        itemInventory = playerInput.GetItemInventory;
+        itemInventory = ItemInventory.Instance;
         messageController = target.messageController;
     }
 

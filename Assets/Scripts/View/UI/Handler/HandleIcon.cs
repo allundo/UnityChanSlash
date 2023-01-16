@@ -44,6 +44,8 @@ public class HandleIcon : FadeEnable
             .Subscribe(_ => Disable())
             .AddTo(this);
 
+        var itemInventory = ItemInventory.Instance;
+
         itemInventory.OnPutItem
             .Subscribe(itemIcon => SetItemIconActive(itemIcon))
             .AddTo(this);

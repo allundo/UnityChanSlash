@@ -5,7 +5,7 @@ using System;
 using TMPro;
 
 [RequireComponent(typeof(ItemIconGenerator))]
-public class ItemInventory : MonoBehaviour
+public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
 {
     [SerializeField] private ItemSelector selector = default;
     [SerializeField] private ItemPanel prefabItemPanel = default;
@@ -40,8 +40,10 @@ public class ItemInventory : MonoBehaviour
 
     public bool UseEquip(int index) => iconHandler.UseEquip(index);
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         iconGenerator = GetComponent<ItemIconGenerator>();
 
         inventoryItems = new InventoryItemsHandler(this, prefabItemPanel, WIDTH, HEIGHT);

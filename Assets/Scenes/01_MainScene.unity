@@ -10952,7 +10952,6 @@ MonoBehaviour:
   miniMap: {fileID: 8337679454959986929}
   statusUI: {fileID: 1859247367}
   frame: {fileID: 28477387}
-  itemInventory: {fileID: 284002330}
   landscapeSize: 420
   portraitSize: 480
   expandSize: 960
@@ -33039,7 +33038,6 @@ MonoBehaviour:
   rtLifeGauge: {fileID: 8337679455544452697}
   fightCircle: {fileID: 4719329011268037073}
   switchingUI: {fileID: 874884609}
-  itemInventory: {fileID: 284002330}
   restButton: {fileID: 314247949}
   resumeButton: {fileID: 1057805256}
   portraitFromBottom: 720

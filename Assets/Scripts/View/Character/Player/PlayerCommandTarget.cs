@@ -27,8 +27,6 @@ public class PlayerCommandTarget : CommandTarget
     /// </summary>
     [SerializeField] public ItemGenerator itemGenerator = default;
 
-    public ItemInventory itemInventory => (input as PlayerInput).GetItemInventory;
-
     /// <summary>
     /// Hide plate handler to update HidePlate positions at players Move and Turn Command execution.
     /// </summary>

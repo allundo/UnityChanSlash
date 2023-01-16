@@ -60,7 +60,7 @@ public class WitchGenerateEvent : PlayerDetectEvent
 
     protected override bool IsEventValid()
     {
-        var playerHasKeyBlade = target.itemInventory.hasKeyBlade();
+        var playerHasKeyBlade = ItemInventory.Instance.hasKeyBlade();
         var keyBladeIsOnEventTile = target.map.OnTile.HasItem(ItemType.KeyBlade);
         var jumpLeapedEventTileWithKeyBlade = target.map.BackwardTile.HasItem(ItemType.KeyBlade);
 
