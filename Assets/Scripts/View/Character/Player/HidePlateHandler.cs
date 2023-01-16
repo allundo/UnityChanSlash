@@ -111,7 +111,7 @@ public class HidePlateHandler : MonoBehaviour
     /// <summary>
     /// Turn the HidePlates with player's turning. <br />
     /// </summary>
-    public void Turn()
+    public void Turn(bool redrawOnLandscape = false)
     {
         plateFront.SetRotation(mapUtil.dir);
         miniMap.Turn(mapUtil.dir);
@@ -120,6 +120,7 @@ public class HidePlateHandler : MonoBehaviour
         {
             plateFront.SetLandscapeOffset(mapUtil.dir);
             plateFront.Move(prevPos);
+            if (redrawOnLandscape) Draw();
             return;
         }
 
@@ -182,7 +183,7 @@ public class HidePlateHandler : MonoBehaviour
     public void OnStartFloor()
     {
         miniMap.OnStartFloor();
-        Turn();
+        Turn(true);
     }
 
     protected abstract class PlateUpdater
