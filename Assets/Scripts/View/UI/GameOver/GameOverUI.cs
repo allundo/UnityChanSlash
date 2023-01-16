@@ -25,6 +25,8 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
+        record.gameObject.SetActive(false);
+        message.gameObject.SetActive(false);
         Inactivate();
     }
 
@@ -46,6 +48,7 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     {
         gameObject.SetActive(true);
 
+        record.gameObject.SetActive(true);
         record.SetValues(rank, deadRecord);
         record.ResetPosition(new Vector2(0, -320f));
         record.SetRankEnable(false);
@@ -57,7 +60,11 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
             .Append(record.RankEffect(rank))
             .Append(record.RankPunchEffect(rank));
 
-        if (rank > 0) seq.Append(message.RankInTween());
+        if (rank > 0)
+        {
+            message.gameObject.SetActive(true);
+            seq.Append(message.RankInTween());
+        }
 
         seqEx.Append(seq).Play();
     }
