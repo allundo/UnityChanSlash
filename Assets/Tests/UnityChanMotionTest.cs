@@ -19,6 +19,9 @@ public class UnityChanMotionTest
     private HandREquipment handR;
     private ItemInventoryTest itemInventory;
     private ResourceLoader resourceLoader;
+    private Light directionalLight;
+    private GameObject ground;
+    private GameObject screen;
 
     protected class EquipTest : IEquipmentStyle
     {
@@ -46,6 +49,10 @@ public class UnityChanMotionTest
 
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
         itemInventory = Object.Instantiate(Resources.Load<ItemInventoryTest>("Prefabs/UI/Item/ItemInventoryTest"));
+
+        directionalLight = Object.Instantiate(Resources.Load<Light>("Prefabs/DirectionalLight"));
+        ground = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Ground"));
+        screen = Object.Instantiate(Resources.Load<GameObject>("Prefabs/BackScreen"));
     }
 
     [OneTimeTearDown]
@@ -56,6 +63,9 @@ public class UnityChanMotionTest
         Object.Destroy(swordKnuckleController);
         Object.Destroy(itemInventory.gameObject);
         Object.Destroy(resourceLoader.gameObject);
+        Object.Destroy(directionalLight.gameObject);
+        Object.Destroy(ground);
+        Object.Destroy(screen);
     }
 
     [SetUp]
