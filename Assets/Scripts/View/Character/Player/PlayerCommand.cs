@@ -595,7 +595,11 @@ public class PlayerPutItem : PlayerAction
         if (!playerAnim.handOn.Bool) return false;
 
         // Cancel if guarding
-        if (playerAnim.guard.Bool) return HandOff(false);
+        if (playerAnim.guard.Bool)
+        {
+            ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("モノ置いてるスキがない！", SDFaceID.ANGRY2, SDEmotionID.IRRITATE));
+            return HandOff(false);
+        }
 
         // Cancel if forward tile is Box and the Box isn't Open or Controllable.
         Box boxTile = mobMap.ForwardTile as Box;
