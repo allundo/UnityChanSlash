@@ -15,7 +15,7 @@ public class SwitchingUIBase : MonoBehaviour
     protected bool isShown = true;
 
     protected Vector2 PortraitPos => new Vector2(-(portraitSize + 40f), portraitSize + 360f) * 0.5f;
-    protected Vector2 LandscapePos => new Vector2(-(landscapeSize + 280f + Screen.width * ThirdPersonCamera.Margin), -(landscapeSize + 40f)) * 0.5f;
+    protected Vector2 LandscapePos => new Vector2(-(landscapeSize + 280f + Mathf.Max(120f, Screen.width * ThirdPersonCamera.Margin)), -(landscapeSize + 40f)) * 0.5f;
 
     protected virtual void Awake()
     {
