@@ -18,6 +18,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     // Player info
     private HidePlateHandler hidePlateHandler;
     private PlayerInput input;
+    private PlayerAnimator anim;
     private PlayerMapUtil map;
 
     private bool isInitialOrientation = true;
@@ -36,6 +37,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         base.Awake();
 
         input = player.GetComponent<PlayerInput>();
+        anim = player.GetComponent<PlayerAnimator>();
         map = player.GetComponent<PlayerMapUtil>();
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
@@ -213,6 +215,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         input.ClearAll();
         input.SetInputVisible(false);
+        anim.Pause();
         mainCamera.StopScreen(cover.transform.GetSiblingIndex());
 
         Observable
@@ -234,6 +237,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         cover.FadeIn(1f, 0f, false).Play();
         input.ValidateInput();
         input.SetInputVisible(true);
+        anim.Resume();
     }
 
     private IEnumerator MoveFloor(bool isDownStairs)
