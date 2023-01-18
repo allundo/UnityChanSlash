@@ -85,13 +85,13 @@ public class PlayerAnimator : ShieldAnimator
 
     public override void Pause()
     {
-        anim.speed = 0f;
+        anim.enabled = false;
         springManager.Pause();
     }
 
     public override void Resume()
     {
-        anim.speed = 1f;
+        anim.enabled = true;
         springManager.Resume();
     }
 
