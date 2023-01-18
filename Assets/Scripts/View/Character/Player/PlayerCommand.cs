@@ -155,6 +155,8 @@ public class PlayerStartRunning : PlayerRun
 
         playingTween = tweenMove.Linear(mobMap.CurrentVec3Pos + dest, timeScale);
 
+        playerInput.SetSubUIEnable(false);
+
         playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
         completeTween = DOTween.Sequence()
             .Append(ToSpeed(TILE_UNIT / duration, 0.25f))
@@ -197,6 +199,7 @@ public class PlayerRun : PlayerDash
         }
         else
         {
+            playerInput.SetSubUIEnable(true);
             input.Interrupt(brakeAndBackStep, false);
             return Observable.Empty<Unit>();
         }
@@ -231,6 +234,7 @@ public class PlayerBrakeStop : PlayerBrake
 
     public override IObservable<Unit> Execute()
     {
+        playerInput.SetSubUIEnable(true);
 
         if (mobMap.IsForwardMovable)
         {

@@ -5,7 +5,8 @@ using System;
 
 public interface IPlayerInput : IInput
 {
-    void SetInputVisible(bool isVisible = true, bool withInventory = true);
+    void SetInputVisible(bool isVisible = true, bool withSubUI = true);
+    void SetSubUIEnable(bool isEnable = true);
     void SetCancel();
 }
 
@@ -225,13 +226,15 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         isInputVisible = isVisible;
 
-        if (withSubUIs)
-        {
-            restButton.gameObject.SetActive(isVisible);
-            itemInventory.SetEnable(isVisible);
-        }
+        if (withSubUIs) SetSubUIEnable(isVisible);
 
         if (!isVisible) InactivateUIs();
+    }
+
+    public void SetSubUIEnable(bool isEnable = true)
+    {
+        restButton.gameObject.SetActive(isEnable);
+        itemInventory.SetEnable(isEnable);
     }
 
     public void SetCancel() => (commander as PlayerCommander).SetCancel();
