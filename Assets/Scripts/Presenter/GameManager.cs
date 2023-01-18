@@ -19,6 +19,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     private HidePlateHandler hidePlateHandler;
     private PlayerInput input;
     private PlayerAnimator anim;
+    private Collider playerCollider;
     private PlayerMapUtil map;
 
     private bool isInitialOrientation = true;
@@ -39,6 +40,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         input = player.GetComponent<PlayerInput>();
         anim = player.GetComponent<PlayerAnimator>();
         map = player.GetComponent<PlayerMapUtil>();
+        playerCollider = player.GetComponent<Collider>();
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
         worldMap = GameInfo.Instance.Map(0);
@@ -55,7 +57,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         InitPlayerPos();
 
-        player.SetActive(false);
+        playerCollider.enabled = false;
 
         StartCoroutine(startProcessCoroutine);
     }
@@ -72,7 +74,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.PlaceEnemyGenerators();
         yield return new WaitForEndOfFrame();
 
-        player.SetActive(true);
+        playerCollider.enabled = true;
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
         cover.FadeIn(1.5f, 0.6f, false).Play();
@@ -94,7 +96,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         yield return new WaitForEndOfFrame();
 
-        player.SetActive(true);
+        playerCollider.enabled = true;
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
         cover.FadeIn(1f, 0.3f, false).Play();
@@ -109,7 +111,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var dataStoreAgent = DataStoreAgent.Instance;
 
-        player.SetActive(false);
+        playerCollider.enabled = false;
         dataStoreAgent.RespawnByGameData(worldMap);
 
         try
@@ -136,7 +138,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.PlaceEnemyGenerators();
         DataStoreAgent.Instance.RestorePlayerStatus();
         mainCamera.SwitchFloor(worldMap.floor);
-        player.SetActive(true);
+        playerCollider.enabled = true;
 
         yield return null;
 
@@ -234,7 +236,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.OnStartFloor();
         mainCamera.ResetCrossFade();
 
-        player.SetActive(true);
+        playerCollider.enabled = true;
         cover.FadeIn(1f, 0f, false).Play();
         input.ValidateInput();
         input.SetInputVisible(true);
@@ -259,7 +261,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         // Wait for screenshot is applied to forefront Image
         yield return new WaitForEndOfFrame();
 
-        player.SetActive(false);
+        playerCollider.enabled = false;
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
         mainCamera.SwitchFloor(worldMap.floor);
