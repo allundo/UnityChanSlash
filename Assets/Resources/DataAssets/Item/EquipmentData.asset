@@ -115,7 +115,7 @@ MonoBehaviour:
     attribute: 0
     handRPosition: {x: 0, y: 0, z: 0}
     handRRotate: {x: 0, y: 0, z: 0}
-    handLPosition: {x: 0.0003594728, y: 0.0001157179, z: -0.003698}
+    handLPosition: {x: -0.017, y: 0.01, z: -0.057}
     handLRotate: {x: -2.878, y: -164.501, z: -88.91}
     category: 2
     prefabEquipment: {fileID: 6554978802244137270, guid: 7fe53ed2a31924a18ab03b0118292367,
