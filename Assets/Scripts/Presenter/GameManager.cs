@@ -234,6 +234,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.OnStartFloor();
         mainCamera.ResetCrossFade();
 
+        player.SetActive(true);
         cover.FadeIn(1f, 0f, false).Play();
         input.ValidateInput();
         input.SetInputVisible(true);
@@ -258,6 +259,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         // Wait for screenshot is applied to forefront Image
         yield return new WaitForEndOfFrame();
 
+        player.SetActive(false);
         map.SetPosition(worldMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(worldMap);
         mainCamera.SwitchFloor(worldMap.floor);
