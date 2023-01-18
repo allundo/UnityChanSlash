@@ -145,9 +145,7 @@ public class MiniMap : SwitchingContentBase
         rectTransform.anchoredPosition = anchoredCenter;
 
         image.color = Color.white;
-        DrawMap(miniMapSize);
-
-        MoveEnemySymbols();
+        UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos, miniMapSize);
     }
 
     public override void ShrinkUI()
@@ -156,8 +154,6 @@ public class MiniMap : SwitchingContentBase
         rectTransform.anchoredPosition = currentPos;
 
         UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos);
-
-        MoveEnemySymbols();
     }
 
     protected void ResetUISize(float size, int miniMapSize, float alpha)
@@ -167,6 +163,7 @@ public class MiniMap : SwitchingContentBase
         rectTransform.sizeDelta = new Vector2(size, size);
         uiTileUnit = rectTransform.sizeDelta / (float)miniMapSize;
         playerSymbol.SetSize(uiTileUnit);
+        enemies.ForEach(kv => kv.Value.SetSize(uiTileUnit));
         currentMiniMapSize = miniMapSize;
     }
 }
