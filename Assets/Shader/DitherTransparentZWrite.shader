@@ -16,6 +16,39 @@
             ZWrite ON
             ColorMask 0
             Lighting OFF
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
+            #include "./CGIncludes/DitherTransparentFunctions.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+            };
+
+            struct v2f
+            {
+                float4 screenPos : TEXCOORD1;
+            };
+
+            half4 _Color;
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+	            o.screenPos = ComputeScreenPos(UnityObjectToClipPos(v.vertex));
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                DitherClipping(i.screenPos, _Color.a);
+                return fixed4(0,0,0,0);
+            }
+            ENDCG
         }
 
         CGPROGRAM
