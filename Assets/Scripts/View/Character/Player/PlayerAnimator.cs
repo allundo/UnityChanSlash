@@ -2,14 +2,11 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System;
-using static UniRx.Triggers.ObservableStateMachineTrigger;
 
 [RequireComponent(typeof(SpringManager))]
 public class PlayerAnimator : ShieldAnimator
 {
-    protected ObservableStateMachineTrigger trigger;
-    protected IObservable<OnStateInfo> StateEnter => trigger.OnStateEnterAsObservable();
-    protected IObservable<OnStateInfo> StateExit => trigger.OnStateExitAsObservable();
+    protected StateMachineTrigger trigger;
 
     public TriggerJump jump { get; protected set; }
     public TriggerJump pitJump { get; protected set; }
@@ -70,7 +67,7 @@ public class PlayerAnimator : ShieldAnimator
     protected void Start()
     {
         // StateMachineTrigger may have been prepared on Start()
-        trigger = anim.GetBehaviour<ObservableStateMachineTrigger>();
+        trigger = anim.GetBehaviour<StateMachineTrigger>();
 
         rest = new BoolRest(this);
         handOn = new BoolHandOn(this);
@@ -110,14 +107,11 @@ public class PlayerAnimator : ShieldAnimator
             this.bodyCollider = bodyCollider;
 
             // Disable the updating collider when exiting trigger entered state
-            playerAnim.StateExit
-                .Where(x => x.StateInfo.fullPathHash == Animator.StringToHash(fullPathStateName))
-                .Subscribe(_ =>
-                {
-                    updateCollider?.Dispose();
-                    bodyCollider.ResetCollider();
-                })
-                .AddTo(playerAnim);
+            playerAnim.trigger.AddStateExit(Animator.StringToHash(fullPathStateName), _ =>
+            {
+                updateCollider?.Dispose();
+                bodyCollider.ResetCollider();
+            });
         }
 
         protected abstract void Update(float value);
@@ -154,10 +148,8 @@ public class PlayerAnimator : ShieldAnimator
             int waitHash = Animator.StringToHash("Base Layer.Stand.Wait");
             int exhaustionHash = Animator.StringToHash("Base Layer.Stand.Exhaustion");
 
-            playerAnim.StateEnter
-                .Where(x => x.StateInfo.fullPathHash == waitHash || x.StateInfo.fullPathHash == exhaustionHash)
-                .Subscribe(_ => Bool = true)
-                .AddTo(playerAnim);
+            playerAnim.trigger.AddStateEnter(waitHash, _ => Bool = true);
+            playerAnim.trigger.AddStateEnter(exhaustionHash, _ => Bool = true);
         }
     }
 
@@ -168,10 +160,7 @@ public class PlayerAnimator : ShieldAnimator
             int handOnHash = Animator.StringToHash("Base Layer.Handle.HandOn");
 
             // Avoid hand on flag remaining after transition to another state.
-            playerAnim.StateExit
-                .Where(x => x.StateInfo.fullPathHash == handOnHash)
-                .Subscribe(_ => Bool = false)
-                .AddTo(playerAnim);
+            playerAnim.trigger.AddStateExit(handOnHash, _ => Bool = false);
         }
     }
 
