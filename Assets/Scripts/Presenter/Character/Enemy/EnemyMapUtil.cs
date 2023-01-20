@@ -39,7 +39,13 @@ public class EnemyMapUtil : MobMapUtil
     /// <returns>destPos</returns>
     public Pos SetOnEnemy(Pos destPos)
     {
-        map.GetTile(destPos).OnEnemy = status as IEnemyStatus;
+        ITile tile = map.GetTile(destPos);
+
+        if (mobStatus.isOnGround || tile.OnEnemy == null)
+        {
+            tile.OnEnemy = status as IEnemyStatus;
+        }
+
         onTileEnemyPos = destPos;
         return destPos;
     }
