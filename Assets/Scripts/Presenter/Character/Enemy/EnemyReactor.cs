@@ -19,6 +19,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     protected IEnemyInput enemyInput;
     protected IEnemyStatus enemyStatus;
     private IDisposable inactiveNextFrame;
+    private bool isDestroying = false;
 
     public bool IsTamed => enemyStatus.isTamed;
     public float ExpObtain => enemyStatus.ExpObtain;
@@ -29,6 +30,8 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         enemyEffect = effect as IEnemyEffect;
         enemyInput = input as IEnemyInput;
         enemyStatus = status as IEnemyStatus;
+
+        isDestroying = false;
     }
 
     protected override void Start()
@@ -47,6 +50,8 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     /// </summary>
     protected override void OnDead()
     {
+        if (isDestroying) return;
+
         // Force TriggerExit from enemy detecting collider
         bodyCollider.enabled = true;
         transform.position = OUT_OF_SCREEN;
@@ -64,6 +69,8 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     public virtual void OnOutOfView()
     {
+        if (isDestroying) return;
+
         effect.Disappear(() =>
         {
             input.ClearAll();
@@ -118,6 +125,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         map.ResetTile();
 
         Destroy(gameObject);
+        isDestroying = true;
     }
 
     public void OnSummoned()
