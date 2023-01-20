@@ -10,7 +10,7 @@ public class EnemyMapUtil : MobMapUtil
 
     public override void OnActive()
     {
-        SetObjectOn();
+        base.OnActive();
         SetOnEnemy(onTilePos);
     }
     public override void ResetTile()
@@ -23,7 +23,7 @@ public class EnemyMapUtil : MobMapUtil
     /// Set enemy status info to the Tile currently on
     /// </summary>
     /// <returns>Current map Pos</returns>
-    public Pos SetOnEnemy() => SetOnEnemy(tf.position);
+    public Pos SetOnEnemy() => SetOnEnemy(transform.position);
 
     /// <summary>
     /// Set enemy status info to the Tile specified by Vector3 position

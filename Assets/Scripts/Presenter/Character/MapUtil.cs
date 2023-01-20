@@ -22,12 +22,15 @@ public class MapUtil : MonoBehaviour, IMapUtil
 
     protected virtual void Awake()
     {
-        this.map = GameManager.Instance.worldMap;
         this.tf = transform;
         status = GetComponent<Status>();
     }
 
-    public virtual void OnActive() => SetObjectOn();
+    public virtual void OnActive()
+    {
+        this.map = GameManager.Instance.worldMap;
+        SetObjectOn();
+    }
 
     public Vector3 WorldPos(Pos pos) => map.WorldPos(pos);
 
@@ -101,7 +104,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     /// Set current on tile and IsObjectOn flag to the Tile currently on
     /// </summary>
     /// <returns>Current map Pos</returns>
-    public Pos SetObjectOn() => SetObjectOn(tf.position);
+    public Pos SetObjectOn() => SetObjectOn(transform.position);
 
     /// <summary>
     /// Set current on tile and IsObjectOn flag to the Tile specified by Vector3 position
