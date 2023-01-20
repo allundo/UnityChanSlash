@@ -69,8 +69,6 @@ public class GhostThroughEnd : EnemyForward
         if (mobMap.IsForwardMovable) mobReact.Appear();
 
         playingTween = LinearMove(GetDest);
-        SetSpeed();
-        completeTween = tweenMove.FinallyCall(ResetSpeed).Play();
 
         return true;
     }
