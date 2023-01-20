@@ -781,4 +781,68 @@ public class UnityEngineSpecTest
         }
     }
 
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Coroutine restarts after Update() anyway. <br />
+    /// Update() stops at the end of frame that Destroy() is called.
+    /// </summary>
+    public IEnumerator _016_DestroyAndCoroutineTimingTest()
+    {
+        var destroyTest = new GameObject("DestroyTest").AddComponent<DestroyTestObject>();
+        var counter = new TestCounter();
+        destroyTest.SetCounter(counter);
+
+        Assert.AreEqual(0, counter.Count);
+        yield return new WaitForEndOfFrame();
+
+        // V----- End of frame 0 -----V
+        Assert.AreEqual(0, counter.Count);
+        yield return new WaitForEndOfFrame();
+
+        // V----- End of frame 1 -----V
+        Assert.AreEqual(1, counter.Count);
+        destroyTest.Destroy();
+        yield return new WaitForSeconds(2f);
+
+        // DestroyTestObject.Update() in frame 2 was not applied.
+        Assert.AreEqual(1, counter.Count);
+        yield return null;
+
+        // V----- After Update() in frame -1 -----V
+        var destroyTest2 = new GameObject("DestroyTest").AddComponent<DestroyTestObject>();
+        var counter2 = new TestCounter();
+        destroyTest2.SetCounter(counter2);
+
+        Assert.AreEqual(0, counter2.Count);
+        yield return null;
+
+        // V----- After Update() in frame 0 -----V
+        Assert.AreEqual(1, counter2.Count);
+        yield return null;
+
+        // V----- After Update() in frame 1 -----V
+        Assert.AreEqual(2, counter2.Count);
+        destroyTest2.Destroy();
+        yield return new WaitForSeconds(2f);
+
+        // DestroyTestObject.Update() on frame 2 was not applied.
+        Assert.AreEqual(2, counter2.Count);
+    }
+
+    public class DestroyTestObject : MonoBehaviour
+    {
+        private TestCounter counter;
+        public void SetCounter(TestCounter counter) => this.counter = counter;
+
+        void Update() { counter.Inc(); }
+        public void Destroy() => Destroy(gameObject);
+    }
+
+    public class TestCounter
+    {
+        private int count = 0;
+        public int Count => count;
+        public void Inc() => count++;
+    }
 }
