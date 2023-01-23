@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimator))]
 public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 {
-    private PlayerMapUtil map;
+    private PlayerMapUtil mapUtil;
     private PlayerInput input;
     private PlayerStatus status;
     private PlayerEffect effect;
@@ -15,20 +15,20 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     protected override void Awake()
     {
         base.Awake();
-        map = GetComponent<PlayerMapUtil>();
+        mapUtil = GetComponent<PlayerMapUtil>();
         input = GetComponent<PlayerInput>();
         status = GetComponent<PlayerStatus>();
         effect = GetComponent<PlayerEffect>();
         anim = GetComponent<PlayerAnimator>();
     }
 
-    public Pos PlayerPos => map.onTilePos;
-    public Vector3 PlayerVec3Pos => map.CurrentVec3Pos;
-    public IDirection PlayerDir => map.dir;
+    public Pos PlayerPos => mapUtil.onTilePos;
+    public Vector3 PlayerVec3Pos => mapUtil.CurrentVec3Pos;
+    public IDirection PlayerDir => mapUtil.dir;
 
-    public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !map.isInPit && PlayerPos == pos;
+    public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && PlayerPos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
-    public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !map.isInPit && map.onTilePos == pos;
+    public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && mapUtil.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
 
     public DataStoreAgent.PlayerData ExportRespawnData()
@@ -39,7 +39,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
         if (cmd is PlayerJump && cmd.RemainingTimeScale > 0.25f) exitState = ExitState.Jump;
 
-        if (map.isInPit)
+        if (mapUtil.isInPit)
         {
             // Player has already fell into pit if Idling(cmd is null), Turn LR in the pit or failed to escape from the pit by Jump.
             exitState = (cmd == null || cmd is PlayerTurnL || cmd is PlayerTurnR || cmd is PlayerPitJump || cmd is PlayerWakeUp) ? ExitState.InPit : ExitState.PitFall;
@@ -57,9 +57,9 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         return new DataStoreAgent.PlayerData(PlayerPos, status, exitState);
     }
 
-    public void ImportRespawnData(DataStoreAgent.PlayerData data)
+    public void ImportRespawnData(DataStoreAgent.PlayerData data, WorldMap map)
     {
-        status.SetPosition(data.kvPosDir);
+        mapUtil.SetStartPos(map, data.kvPosDir);
         input.SetInputVisible();
     }
 

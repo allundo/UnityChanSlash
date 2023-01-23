@@ -102,9 +102,8 @@ public class PlayerStatus : MobStatus, IGetExp
         activeSubject.OnNext(Unit.Default);
     }
 
-    public void SetPosition(KeyValuePair<Pos, IDirection> initPos)
+    public void SetPosition(WorldMap map, KeyValuePair<Pos, IDirection> initPos)
     {
-        var map = GameManager.Instance.worldMap;
         SetPosition(map.WorldPos(initPos.Key), initPos.Value);
     }
 

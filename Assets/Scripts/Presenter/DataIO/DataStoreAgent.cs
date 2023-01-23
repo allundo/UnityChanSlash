@@ -540,7 +540,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
             TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
             SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
-            PlayerInfo.Instance.ImportRespawnData(saveData.playerData);
+            PlayerInfo.Instance.ImportRespawnData(saveData.playerData, map);
             ItemInventory.Instance.ImportInventoryItems(saveData.inventoryItems);
             GameManager.Instance.ImportRespawnData(saveData);
         }

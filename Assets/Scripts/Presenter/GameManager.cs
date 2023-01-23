@@ -186,7 +186,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         // Need to set player position before initialize HidePlateHandler.
         // MiniMap controlled by HidePlateHandler refers to player position and direction.
-        map.SetPosition(worldMap);
+        map.SetFloorStartPos(worldMap);
         hidePlateHandler.Init();
 
         // Initialize the point light position.
@@ -257,20 +257,26 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         worldMap.StoreTileOpenData();
         Pos stairsPos = (isDownStairs ? worldMap.stairsTop : worldMap.StairsBottom).Key;
 
-        worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 
         // Wait for screenshot is applied to forefront Image
         yield return new WaitForEndOfFrame();
 
+        var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
+
         playerCollider.enabled = false;
-        map.SetPosition(worldMap, isDownStairs);
-        hidePlateHandler.SwitchWorldMap(worldMap);
-        mainCamera.SwitchFloor(worldMap.floor);
+        map.SetFloorStartPos(nextFloorMap, isDownStairs);
+        hidePlateHandler.SwitchWorldMap(nextFloorMap);
+        mainCamera.SwitchFloor(nextFloorMap.floor);
         yield return new WaitForEndOfFrame();
 
-        spawnHandler.MoveFloorCharacters(worldMap, stairsPos);
-        eventManager.SwitchWorldMap(worldMap);
+        // Update WorldMap just before respawn enemies.
+        worldMap = nextFloorMap;
+
+        // Stored floor enemies are respawn in this method.
+        spawnHandler.MoveFloorCharacters(nextFloorMap, stairsPos);
+
+        eventManager.SwitchWorldMap(nextFloorMap);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -280,28 +286,28 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.DestroyObjects();
         yield return new WaitForEndOfFrame();
 
-        mapRenderer.LoadFloorMaterials(worldMap);
+        mapRenderer.LoadFloorMaterials(nextFloorMap);
         yield return new WaitForEndOfFrame();
 
         mapRenderer.InitMeshes();
         yield return new WaitForEndOfFrame();
 
-        var terrainMeshes = mapRenderer.SetUpTerrainMeshes(worldMap);
+        var terrainMeshes = mapRenderer.SetUpTerrainMeshes(nextFloorMap);
         yield return new WaitForSeconds(0.5f);
 
         mapRenderer.GenerateTerrain(terrainMeshes);
         yield return new WaitForEndOfFrame();
 
-        mapRenderer.SwitchTerrainMaterials(worldMap);
+        mapRenderer.SwitchTerrainMaterials(nextFloorMap);
         yield return new WaitForEndOfFrame();
 
         mapRenderer.SetActiveTerrains(true);
         yield return new WaitForEndOfFrame();
 
-        mapRenderer.ApplyTileOpen(worldMap);
+        mapRenderer.ApplyTileOpen(nextFloorMap);
         yield return new WaitForEndOfFrame();
 
-        spawnHandler.MoveFloorItems(worldMap, map.dir);
+        spawnHandler.MoveFloorItems(nextFloorMap, map.dir);
         yield return new WaitForEndOfFrame();
 
         spawnHandler.PlaceEnemyGenerators();

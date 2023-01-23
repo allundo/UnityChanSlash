@@ -148,6 +148,11 @@ public class PlaceEnemyGenerator : EnemyGenerator
         return store;
     }
 
+    /// <summary>
+    /// [!Caution!] GameManager.worldMap must be updated before respawn enemies. <br />
+    /// since respawn enemies set GameManager.worldMap to their own property to refer to.
+    /// </summary>
+    /// <param name="respawnMap"></param>
     private void RespawnEnemies(WorldMap respawnMap)
     {
         // Switch current world map.

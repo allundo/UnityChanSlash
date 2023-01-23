@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public interface IPlayerMapUtil : IMobMapUtil
 {
@@ -17,10 +18,13 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
     public override bool IsJumpable => IsForwardLeapable && IsMovable(GetJump, dir);
     public bool IsPitJumpable => IsMovable(dir.GetForward(onTilePos), dir);
 
-    public void SetPosition(WorldMap map, bool isDownStairs = true)
+    public void SetFloorStartPos(WorldMap map, bool isDownStairs = true)
+        => SetStartPos(map, isDownStairs ? map.StairsBottom : map.stairsTop);
+
+    public void SetStartPos(WorldMap map, KeyValuePair<Pos, IDirection> initPos)
     {
         this.map = map;
-        (status as PlayerStatus).SetPosition(isDownStairs ? map.StairsBottom : map.stairsTop);
+        (status as PlayerStatus).SetPosition(map, initPos);
         SetObjectOn();
     }
 
