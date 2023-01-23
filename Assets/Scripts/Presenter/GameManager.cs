@@ -255,6 +255,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.DisableAllEnemiesInput();
 
         worldMap.StoreTileOpenData();
+        Pos stairsPos = (isDownStairs ? worldMap.stairsTop : worldMap.StairsBottom).Key;
+
         worldMap = GameInfo.Instance.NextFloorMap(isDownStairs);
         yield return new WaitForEndOfFrame();
 
@@ -267,7 +269,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mainCamera.SwitchFloor(worldMap.floor);
         yield return new WaitForEndOfFrame();
 
-        spawnHandler.MoveFloorCharacters(worldMap, map.onTilePos);
+        spawnHandler.MoveFloorCharacters(worldMap, stairsPos);
         eventManager.SwitchWorldMap(worldMap);
 
         yield return new WaitForSeconds(0.5f);

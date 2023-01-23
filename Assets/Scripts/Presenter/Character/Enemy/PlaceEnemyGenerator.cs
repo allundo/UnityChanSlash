@@ -120,9 +120,9 @@ public class PlaceEnemyGenerator : EnemyGenerator
         return regions;
     }
 
-    public void SwitchWorldMap(WorldMap map, Pos playerPos)
+    public void SwitchWorldMap(WorldMap map, Pos startPos)
     {
-        respawnData[this.map.floor - 1] = GetRespawnData(playerPos);
+        respawnData[this.map.floor - 1] = GetRespawnData(startPos);
 
         DestroyAllEnemies();
         DestroyAllEnemyGenerators();

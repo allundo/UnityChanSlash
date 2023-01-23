@@ -40,12 +40,12 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
 
-    public void MoveFloorCharacters(WorldMap map, Pos playerPos)
+    public void MoveFloorCharacters(WorldMap map, Pos startPos)
     {
         EnemyCommand.ClearResetTweens();
 
         // Enemies and bullets must be destroyed during the same frame.
-        placeEnemyGenerator.SwitchWorldMap(map, playerPos);
+        placeEnemyGenerator.SwitchWorldMap(map, startPos);
 
         debugEnemyGenerators.ForEach(gen =>
         {
