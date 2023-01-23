@@ -50,7 +50,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
         debugEnemyGenerators.ForEach(gen =>
         {
             gen.DestroyAll();
-            gen.gameObject.SetActive(false);
+            gen.Inactivate();
         });
 
         // Some bullets refer to a character status, so don't call Update() after the enemies had been destroyed.
