@@ -9,7 +9,7 @@ public interface IMobStatus : IStatus
     bool isHidden { get; }
     void SetHidden(bool isHidden = true);
     float icingFrames { get; }
-    float SetIcingFrames(float icingFrames);
+    float SetIcingFrames(float framesToMelt);
     float UpdateIcingFrames();
 
     Vector3 corePos { get; }

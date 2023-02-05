@@ -31,16 +31,16 @@ public interface IIcedCommand : ICommand { }
 public class IcedCommand : MobCommand, IIcedCommand
 {
     public override int priority => 20;
-    private float icingFrames;
+    private float framesToMelt;
 
     public IcedCommand(ICommandTarget target, float duration) : base(target, duration, 0.98f)
     {
-        icingFrames = duration;
+        framesToMelt = duration;
     }
 
     protected override bool Action()
     {
-        mobReact.Iced(icingFrames);
+        mobReact.Iced(framesToMelt);
         SetOnCompleted(() => mobReact.Melt());
         return true;
     }

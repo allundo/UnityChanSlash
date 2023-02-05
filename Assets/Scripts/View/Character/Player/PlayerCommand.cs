@@ -862,16 +862,16 @@ public class PlayerInspect : PlayerAction
 
 public class PlayerIcedCommand : PlayerCommand, IIcedCommand
 {
-    private float icingFrames;
+    private float framesToMelt;
     public override int priority => 20;
     public PlayerIcedCommand(PlayerCommandTarget target, float duration) : base(target, duration, 0.98f)
     {
-        icingFrames = duration;
+        framesToMelt = duration;
     }
 
     protected override bool Action()
     {
-        mobReact.Iced(icingFrames);
+        mobReact.Iced(framesToMelt);
         SetUIInvisible();
         SetOnCompleted(() => mobReact.Melt());
         return true;
