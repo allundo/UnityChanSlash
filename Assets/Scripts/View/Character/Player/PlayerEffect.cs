@@ -21,4 +21,11 @@ public class PlayerEffect : MobEffect
     {
         matColEffect.Activate(0f);
     }
+
+    public void OnIced(Vector3 pos, bool isPaused)
+    {
+        if (isPaused) anim.Pause();
+        resourceFX.PlayVFX(VFXType.Iced, pos);
+        matColEffect.Flash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
+    }
 }

@@ -20,6 +20,7 @@ public class PlayerReactor : MobReactor
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
     protected PlayerStatus playerStatus;
+    protected PlayerEffect playerEffect;
     protected ParticleSystem iceCrashVFX;
 
     public string CauseOfDeath() => lastAttacker.CauseOfDeath(lastAttackType);
@@ -32,6 +33,7 @@ public class PlayerReactor : MobReactor
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
         playerStatus = status as PlayerStatus;
+        playerEffect = effect as PlayerEffect;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
@@ -216,8 +218,14 @@ public class PlayerReactor : MobReactor
     public override void OnDie()
     {
         map.ResetTile();
-        effect.OnDie();
+        playerEffect.OnDie();
         playerInput.SetInputVisible(false);
         bodyCollider.enabled = false;
+    }
+
+    public void Iced(float framesToMelt, bool isPaused)
+    {
+        playerStatus.SetIcingFrames(framesToMelt);
+        playerEffect.OnIced(playerStatus.corePos, isPaused);
     }
 }

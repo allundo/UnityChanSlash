@@ -389,7 +389,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
             completeTween = meltTimer.Play();
         }
 
-        mobReact.Iced(framesToMelt);
+        (react as PlayerReactor).Iced(framesToMelt, false);
         playingTween = jumpSeq.SetUpdate(false).Play();
 
         return ObservableComplete();
