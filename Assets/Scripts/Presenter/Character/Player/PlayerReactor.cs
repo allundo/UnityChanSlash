@@ -7,6 +7,7 @@ using static ShieldInput;
 [RequireComponent(typeof(PlayerEffect))]
 [RequireComponent(typeof(PlayerAnimFX))]
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(PlayerMapUtil))]
 [RequireComponent(typeof(PlayerFightStyle))]
 public class PlayerReactor : MobReactor
 {
@@ -21,6 +22,7 @@ public class PlayerReactor : MobReactor
     protected PlayerInput playerInput;
     protected PlayerStatus playerStatus;
     protected PlayerEffect playerEffect;
+    protected PlayerMapUtil playerMap;
     protected ParticleSystem iceCrashVFX;
 
     public string CauseOfDeath() => lastAttacker.CauseOfDeath(lastAttackType);
@@ -34,6 +36,7 @@ public class PlayerReactor : MobReactor
         playerInput = input as PlayerInput;
         playerStatus = status as PlayerStatus;
         playerEffect = effect as PlayerEffect;
+        playerMap = map as PlayerMapUtil;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
     }
 
@@ -212,12 +215,12 @@ public class PlayerReactor : MobReactor
     public override void OnWakeUp()
     {
         bodyCollider.enabled = true;
-        playerInput.SetInputVisible(true, !(map as PlayerMapUtil).isInPit);
+        playerInput.SetInputVisible(true, !playerMap.isInPit);
     }
 
     public override void OnDie()
     {
-        map.ResetTile();
+        playerMap.ResetTile();
         playerEffect.OnDie();
         playerInput.SetInputVisible(false);
         bodyCollider.enabled = false;
