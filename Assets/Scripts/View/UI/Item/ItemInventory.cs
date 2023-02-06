@@ -39,6 +39,7 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     public bool IsPutItem => iconHandler.IsPutItem;
 
     public bool UseEquip(int index) => iconHandler.UseEquip(index);
+    public void UseShield() => iconHandler.UseShield();
 
     protected override void Awake()
     {

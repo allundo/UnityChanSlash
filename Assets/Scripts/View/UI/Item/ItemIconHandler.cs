@@ -169,6 +169,16 @@ public class ItemIconHandler : IItemIconHandler
         return isEquipValid;
     }
 
+    public void UseShield()
+    {
+        var shield = equipItems.UseShield();
+        if (shield != null)
+        {
+            CleanUp();
+            equipItems.SetItem(shield.index, null);
+        }
+    }
+
     protected class NormalMode : IItemIconHandler
     {
         protected ItemIconHandler handler;

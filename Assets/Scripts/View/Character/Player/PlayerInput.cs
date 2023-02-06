@@ -585,7 +585,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             input.ClearAll(true, false, 9);
             input.Interrupt(shieldOn);
             if (playerInput.isGuardOn) (input.commander as PlayerCommander).SetGuard(true);
-            playerInput.itemInventory.UseEquip(0);
+            playerInput.itemInventory.UseShield();
             return 1f;
         }
 

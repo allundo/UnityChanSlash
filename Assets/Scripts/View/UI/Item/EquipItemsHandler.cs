@@ -7,6 +7,7 @@ public interface IEquipmentStyle
 {
     IEquipmentStyle Equip(EquipmentCategory category, ItemIcon itemIcon);
     IEquipmentStyle Equip(int index, ItemIcon itemIcon);
+    ItemIcon TryShieldUse();
     AttackButtonsHandler LoadAttackButtonsHandler(Transform attackInputUI);
     InputRegion LoadInputRegion(Transform fightCircle);
     FightStyleHandler LoadFightStyle(Transform player);
@@ -76,10 +77,10 @@ public class EquipItemsHandler : ItemIndexHandler
         currentEquipments.Value = currentEquipments.Value.Equip(category, itemIcon);
     }
 
-    public bool UseEquip(int index)
-    {
-        var equipIcon = equips[index].Value;
+    public bool UseEquip(int index) => UseEquip(equips[index].Value);
 
+    public bool UseEquip(ItemIcon equipIcon)
+    {
         if (equipIcon == null) return true;
 
         var info = equipIcon.itemInfo;
@@ -96,6 +97,12 @@ public class EquipItemsHandler : ItemIndexHandler
 
         ActiveMessageController.Instance.InputMessageData(ActiveMessageData.BreakItem(info.name));
         return false;
+    }
+
+    public ItemIcon UseShield()
+    {
+        var equipIcon = currentEquipments.Value.TryShieldUse();
+        return UseEquip(equipIcon) ? null : equipIcon;
     }
 
     protected override void StoreItem(int index, ItemIcon itemIcon)
@@ -220,6 +227,8 @@ public class EquipItemsHandler : ItemIndexHandler
             throw new ArgumentException("Invalid index: " + index);
         }
 
+        public virtual ItemIcon TryShieldUse() => GetL();
+
         protected IEquipmentStyle Equip(ItemIcon itemIcon, params Func<ItemIcon, IEquipmentStyle>[] equipFuncs)
         {
             var category = ResourceLoader.Instance.GetEquipmentOrDefault(itemIcon).category;
@@ -301,6 +310,14 @@ public class EquipItemsHandler : ItemIndexHandler
             SwitchL(itemIcon);
             return equipments.knuckleShield;
         }
+
+        public override ItemIcon TryShieldUse()
+        {
+            // Use knuckle equipment by 1/4 probability
+            return Util.Judge(4)
+               ? (Util.Judge(2) ? (GetR() ?? GetL()) : (GetL() ?? GetR()))
+               : null;
+        }
     }
 
     protected class SwordKnuckle : EquipmentStyle
@@ -337,6 +354,21 @@ public class EquipItemsHandler : ItemIndexHandler
         {
             SwitchL(itemIcon);
             return equipments.swordShield;
+        }
+
+        public override ItemIcon TryShieldUse()
+        {
+            var knuckle = GetL();
+            if (knuckle == null || Util.Judge(2))
+            {
+                // Use sword equipment by 1/2 probability
+                return Util.Judge(2) ? GetR() : null;
+            }
+            else
+            {
+                // Use knuckle equipment by 1/4 probability
+                return Util.Judge(4) ? knuckle : null;
+            }
         }
     }
 

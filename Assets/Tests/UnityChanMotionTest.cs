@@ -35,6 +35,7 @@ public class UnityChanMotionTest
         public InputRegion LoadInputRegion(Transform fightCircle) => null;
         public FightStyleHandler LoadFightStyle(Transform player) => UnityEngine.Object.Instantiate(handler, player);
         public RuntimeAnimatorController animatorController => null;
+        public ItemIcon TryShieldUse() => null;
     }
 
     [OneTimeSetUp]
