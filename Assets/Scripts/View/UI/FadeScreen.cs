@@ -1,49 +1,85 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UniRx;
+using System;
+using System.Linq;
 
 public class FadeScreen : MonoBehaviour
 {
     [SerializeField] protected Image fadeImage = null;
 
-    protected FadeTween fade = null;
+    private Tween fadeIn = null;
+    private Tween fadeOut = null;
 
     public virtual Vector2 sizeDelta
     {
-        get
-        {
-            return fadeImage.rectTransform.sizeDelta;
-        }
-        set
-        {
-            fadeImage.rectTransform.sizeDelta = value;
-        }
+        get { return fadeImage.rectTransform.sizeDelta; }
+        set { fadeImage.rectTransform.sizeDelta = value; }
     }
 
-    public Color color
+    public virtual Color color
     {
-        get { return fade.color; }
-        set { fade.color = value; }
+        get { return fadeImage.color; }
+        set { fadeImage.color = value; }
     }
 
-    public virtual void SetAlpha(float alpha) => fade.SetAlpha(alpha);
+    public virtual void SetAlpha(float alpha)
+    {
+        color = new Color(color.r, color.g, color.b, alpha);
+    }
 
     protected virtual void Awake()
     {
         fadeImage = fadeImage ?? GetComponent<Image>();
-        fade = new FadeTween(fadeImage, 1f, true);
         SetAlpha(0f);
     }
 
-    public virtual Tween FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true)
+    public virtual void FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
     {
+        fadeOut?.Kill();
+
         // Fade out black image to display screen
-        return fade.Out(duration, delay, null, null, isContinuous).SetEase(Ease.InQuad);
+        fadeIn = FadeFunc(false, duration, delay, isContinuous, ease);
     }
 
-    public virtual Tween FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true)
+    public virtual void FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
     {
+        fadeIn?.Kill();
+
         // Fade in black image to hide screen
-        return fade.In(duration, delay, null, null, isContinuous).SetEase(Ease.OutQuad);
+        fadeOut = FadeFunc(true, duration, delay, isContinuous, ease);
+    }
+
+    private Tween FadeFunc(bool isIn, float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
+    {
+        if (isContinuous)
+        {
+            duration *= isIn ? (1f - color.a) : color.a;
+        }
+        else
+        {
+            SetAlpha(isIn ? 0f : 1f);
+        }
+
+        return DOTween
+            .ToAlpha(() => color, value => color = value, isIn ? 1f : 0f, duration)
+            .SetUpdate(true)
+            .SetEase(ease)
+            .SetDelay(delay).Play();
+    }
+
+    public IObservable<Unit> FadeInObservable(float duration = 1f, float delay = 0f, Ease ease = Ease.OutQuad, params IObservable<Unit>[] asyncObservables)
+        => FadeObservable(false, duration, delay, ease, asyncObservables);
+
+    public IObservable<Unit> FadeOutObservable(float duration = 1f, float delay = 0f, Ease ease = Ease.OutQuad, params IObservable<Unit>[] asyncObservables)
+        => FadeObservable(true, duration, delay, ease, asyncObservables);
+
+    protected virtual IObservable<Unit> FadeObservable(bool isIn, float duration = 1f, float delay = 0f, Ease ease = Ease.OutQuad, params IObservable<Unit>[] asyncObservables)
+    {
+        var observableList = asyncObservables.ToList();
+        observableList.Add(FadeFunc(isIn, duration, delay, true, ease).OnCompleteAsObservable<Unit>(Unit.Default));
+
+        return Observable.Merge(observableList);
     }
 }

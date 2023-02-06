@@ -77,7 +77,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         playerCollider.enabled = true;
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
-        cover.FadeIn(1.5f, 0.6f, false).Play();
+        cover.FadeIn(1.5f, 0.6f, false);
 
         eventManager.EventInit(worldMap);
         eventManager.InvokeGameEvent(0);
@@ -99,7 +99,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         playerCollider.enabled = true;
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
-        cover.FadeIn(1f, 0.3f, false).Play();
+        cover.FadeIn(1f, 0.3f, false);
 
         eventManager.EventInit(worldMap);
         eventManager.InvokeGameEvent(1);
@@ -145,15 +145,12 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         // Initialize hide plates after ApplyTileOpen();
         hidePlateHandler.Init();
 
-        DOTween.Sequence()
-            .Append(cover.FadeIn(1f, 0.5f, false))
-            .InsertCallback(1f, () =>
-            {
-                TimeManager.Instance.Resume(false);         // Resume in the middle of fade-in
-                eventManager.RestartCurrentEvent();         // Restart the event if it was in progress at exit
-            })
-            .SetUpdate(true)
-            .Play();
+        cover.FadeIn(1f, 0.5f, false);
+        DOVirtual.DelayedCall(1f, () =>
+        {
+            TimeManager.Instance.Resume(false);         // Resume in the middle of fade-in
+            eventManager.RestartCurrentEvent();         // Restart the event if it was in progress at exit
+        }).Play();
 
         yield return null;
     }
@@ -220,11 +217,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         anim.Pause();
         mainCamera.StopScreen(cover.transform.GetSiblingIndex());
 
-        Observable
-            .Merge(
-                cover.CoverOn().OnCompleteAsObservable().Select(t => Unit.Default),
-                Observable.FromCoroutine(() => MoveFloor(isDownStairs))
-            )
+        cover.CoverOnObservable(1f, Observable.FromCoroutine(() => MoveFloor(isDownStairs)))
             .IgnoreElements()
             .Subscribe(null, StartFloor);
     }
@@ -237,7 +230,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mainCamera.ResetCrossFade();
 
         playerCollider.enabled = true;
-        cover.FadeIn(1f, 0f, false).Play();
+        cover.FadeIn(1f, 0f, false);
         input.ValidateInput();
         input.SetInputVisible(true);
         anim.Resume();
@@ -340,9 +333,10 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         dataStoreAgent.SaveClearRecords("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
 
         cover.color = new Color(1f, 1f, 1f, 0f);
-        cover.FadeOut(3f).SetEase(Ease.InCubic)
-            .OnComplete(exitSubject.OnCompleted)
-            .Play();
+        cover.FadeOutObservable(3f, 0f, Ease.InCubic)
+            .IgnoreElements()
+            .Subscribe(null, exitSubject.OnCompleted)
+            .AddTo(this);
     }
 
     public ulong SumUpItemValue()

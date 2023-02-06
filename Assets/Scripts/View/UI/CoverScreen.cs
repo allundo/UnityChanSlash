@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UniRx;
+using System;
+using System.Linq;
 
 public class CoverScreen : FadeScreen
 {
@@ -23,52 +26,69 @@ public class CoverScreen : FadeScreen
 
     public override void SetAlpha(float alpha)
     {
-        fade.SetAlpha(alpha);
-        fadeMC.SetAlpha(alpha);
+        if (fadeImage != null)
+        {
+            base.SetAlpha(alpha);
+            fadeMC.SetAlpha(0f);
+        }
+        else
+        {
+            fadeMC.SetAlpha(alpha);
+        }
     }
 
     protected override void Awake()
     {
-        if (fadeImage != null) fade = new FadeTween(fadeImage, 1f, true);
-
         coverImage = coverImage ?? GetComponent<Image>();
         fadeMC = new FadeMaterialColor(coverImage, 1f, true);
 
-        SetAlpha(0f);
+        if (fadeImage != null) base.SetAlpha(0f);
+
+        fadeMC.SetAlpha(0f);
     }
 
-    public Tween CoverOff(float duration = 1f, float delay = 0f)
+    public void CoverOff(float duration = 1f, float delay = 0f)
     {
-        return DOTween.Sequence()
-            .AppendCallback(() => fade?.SetAlpha(0f))
-            // Fade out black image to display screen
-            .Append(fadeMC.Out(duration, delay).SetEase(Ease.InQuad))
-            .SetUpdate(true);
+        if (fadeImage != null) base.SetAlpha(0f);
+
+        // Fade out black image to display screen
+        fadeMC.Out(duration, delay).SetEase(Ease.InQuad).SetUpdate(true).Play();
     }
 
-    public Tween CoverOn(float duration = 1f, float delay = 0f)
+    public void CoverOn(float duration = 1f, float delay = 0f)
     {
-        return DOTween.Sequence()
-            .AppendCallback(() => fade?.SetAlpha(0f))
-            // Fade out black image to display screen
-            .Append(fadeMC.In(duration, delay).SetEase(Ease.OutQuad))
-            .SetUpdate(true);
+        if (fadeImage != null) base.SetAlpha(0f);
+
+        // Fade in black image to display screen
+        fadeMC.In(duration, delay).SetEase(Ease.OutQuad).SetUpdate(true).Play();
     }
 
-    public override Tween FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true)
+    public IObservable<Unit> CoverOnObservable(float duration = 1f, params IObservable<Unit>[] asyncObservables)
     {
-        return DOTween.Sequence()
-            .AppendCallback(() => fadeMC.SetAlpha(0f))
-            .Append(base.FadeIn(duration, delay, isContinuous))
-            .SetUpdate(true);
+        if (fadeImage != null) base.SetAlpha(0f);
+
+        var observableList = asyncObservables.ToList();
+        observableList.Add(fadeMC.In(duration).SetEase(Ease.OutQuad).SetUpdate(true).OnCompleteAsObservable<Unit>(Unit.Default));
+
+        return Observable.Merge(observableList);
     }
 
-    public override Tween FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true)
+    public override void FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
     {
-        return DOTween.Sequence()
-            .AppendCallback(() => fadeMC.SetAlpha(0f))
-            .Append(base.FadeOut(duration, delay, isContinuous))
-            .SetUpdate(true);
+        fadeMC.SetAlpha(0f);
+        base.FadeIn(duration, delay, isContinuous, ease);
+    }
+
+    public override void FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
+    {
+        fadeMC.SetAlpha(0f);
+        base.FadeOut(duration, delay, isContinuous, ease);
+    }
+
+    protected override IObservable<Unit> FadeObservable(bool isIn, float duration = 1f, float delay = 0f, Ease ease = Ease.OutQuad, params IObservable<Unit>[] asyncObservables)
+    {
+        fadeMC.SetAlpha(0f);
+        return base.FadeObservable(isIn, duration, delay, ease, asyncObservables);
     }
 
     private void OnDestroy()

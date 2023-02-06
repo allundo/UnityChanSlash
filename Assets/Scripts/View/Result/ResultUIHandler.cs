@@ -23,7 +23,7 @@ public class ResultUIHandler : MonoBehaviour
     private Image resultBGImage;
 
     public IObservable<Unit> ClickToEnd { get; private set; }
-    public IObservable<object> FadeOutScreen { get; private set; }
+    public IObservable<Unit> FadeOutScreen { get; private set; }
 
     public IObservable<object> TransitSignal { get; private set; }
 
@@ -32,7 +32,7 @@ public class ResultUIHandler : MonoBehaviour
         ClickToEnd = titleButton.OnPush.First();
 
         FadeOutScreen = ClickToEnd
-            .ContinueWith(_ => ClickTitleEffect().OnCompleteAsObservable());
+            .ContinueWith(_ => ClickTitleEffect());
 
         TransitSignal = FadeOutScreen
             .ContinueWith(_ => titleButton.TextFinish().OnCompleteAsObservable());
@@ -45,8 +45,10 @@ public class ResultUIHandler : MonoBehaviour
     {
         fade.color = Color.black;
 
+        fade.FadeIn(3f);
+
         return DOTween.Sequence()
-            .Append(fade.FadeIn(3f))
+            .AppendInterval(3f)
             .Append(wagesAnimation.LabelFadeIn())
             .Append(wagesAnimation.ValueFadeIn(result.itemPrice, 2f, 0f))
             .Join(itemPrice.ValueFadeIn(result.itemPrice, 2f))
@@ -72,11 +74,12 @@ public class ResultUIHandler : MonoBehaviour
             .OnCompleteAsObservable(Unit.Default);
     }
 
-    public Tween ClickTitleEffect()
+    public IObservable<Unit> ClickTitleEffect()
     {
-        return DOTween.Sequence()
-            .Join(titleButton.Apply(1f))
-            .Join(fade.FadeOut(3f, 0.5f));
+        return fade.FadeOutObservable(
+            3f, 0.5f, Ease.OutQuad,
+            titleButton.Apply(1f).OnCompleteAsObservable(Unit.Default)
+        );
     }
 
     public Tween SweepResults(float duration)

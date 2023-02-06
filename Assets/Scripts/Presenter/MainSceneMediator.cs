@@ -36,8 +36,5 @@ public class MainSceneMediator : SceneMediator
     }
 
     private IObservable<Unit> LoadSceneWithCoverOn(int sceneBuildIndex, float duration = 2f)
-        => Observable.Merge(
-            sceneLoader.LoadSceneAsync(sceneBuildIndex),
-            cover.CoverOn(duration).OnCompleteAsObservable().Select(t => Unit.Default)
-        );
+        => cover.CoverOnObservable(duration, sceneLoader.LoadSceneAsync(sceneBuildIndex));
 }

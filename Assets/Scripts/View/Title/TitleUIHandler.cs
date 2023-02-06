@@ -48,9 +48,10 @@ public class TitleUIHandler : MonoBehaviour
 
     public IObservable<Tween> Logo()
     {
+        fade.FadeIn(1f);
+
         return
             DOTween.Sequence()
-                .Join(fade.FadeIn(1f))
                 .Join(unityChanIcon.LogoTween())
                 .Join(logo.LogoTween())
                 .OnCompleteAsObservable();
@@ -60,7 +61,7 @@ public class TitleUIHandler : MonoBehaviour
     {
         logo.Inactivate();
         ToTitle();
-        fade.FadeIn(1f, 1f).Play();
+        fade.FadeIn(1f, 1f);
     }
 
     public void ToTitle()
@@ -94,7 +95,7 @@ public class TitleUIHandler : MonoBehaviour
 
         Sequence fadeOutTween = DOTween.Sequence()
             .AppendCallback(cameraWork.StartTrail)
-            .Join(fade.FadeOut(1.25f))
+            .AppendCallback(() => fade.FadeOut(1.25f))
             .Join(txtUnity.CameraOutTween())
             .Join(txtSlash.CameraOutTween())
             .Join(selectButtons.CameraOutTween());
@@ -112,11 +113,9 @@ public class TitleUIHandler : MonoBehaviour
     {
         return DOTween.Sequence()
             .Append(button.PressedTween())
-            .Append(fade.FadeOut(1f));
+            .AppendCallback(() => fade.FadeOut(1f));
     }
 
     public IObservable<Unit> FadeOutObservable(float duration = 1f)
-    {
-        return fade.FadeOut(duration).OnCompleteAsObservable(Unit.Default);
-    }
+        => fade.FadeOutObservable(duration);
 }

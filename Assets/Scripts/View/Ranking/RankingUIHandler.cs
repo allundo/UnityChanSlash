@@ -17,7 +17,7 @@ public class RankingUIHandler : MonoBehaviour
 
     private Button[] buttons;
     private void SetInteractableBtns(bool isInteractable) => buttons.ForEach(btn => { btn.interactable = isInteractable; });
-    public IObservable<object> TransitSignal;
+    public IObservable<Unit> TransitSignal;
 
     private RecordsUI leftUI;
     private RecordsUI centerUI;
@@ -32,7 +32,7 @@ public class RankingUIHandler : MonoBehaviour
     void Awake()
     {
         TransitSignal = toTitleBtn.OnClickAsObservable().First() // ContinueWith() cannot handle duplicated click events
-                .ContinueWith(_ => fade.FadeOut(2f).OnCompleteAsObservable());
+                .ContinueWith(_ => fade.FadeOutObservable(2f));
 
         buttons = new Button[] { toTitleBtn, rightBtn, leftBtn };
         SetInteractableBtns(false);
@@ -63,7 +63,9 @@ public class RankingUIHandler : MonoBehaviour
     public void ViewInfo()
     {
         fade.color = Color.black;
-        fade.FadeIn(2f).OnComplete(() => SetInteractableBtns(true)).Play();
+        fade.FadeInObservable(2f)
+            .Subscribe(_ => SetInteractableBtns(true))
+            .AddTo(this);
 
         deadRankUI.LoadRecords(DataStoreAgent.Instance.LoadDeadRecords());
         clearRankUI.LoadRecords(DataStoreAgent.Instance.LoadClearRecords());
