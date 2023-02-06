@@ -37,22 +37,20 @@ public class FadeScreen : MonoBehaviour
 
     public virtual void FadeIn(float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
     {
-        fadeOut?.Kill();
-
         // Fade out black image to display screen
         fadeIn = FadeFunc(false, duration, delay, isContinuous, ease);
     }
 
     public virtual void FadeOut(float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
     {
-        fadeIn?.Kill();
-
         // Fade in black image to hide screen
         fadeOut = FadeFunc(true, duration, delay, isContinuous, ease);
     }
 
     private Tween FadeFunc(bool isIn, float duration = 1f, float delay = 0f, bool isContinuous = true, Ease ease = Ease.OutQuad)
     {
+        (isIn ? fadeIn : fadeOut)?.Kill();
+
         if (isContinuous)
         {
             duration *= isIn ? (1f - color.a) : color.a;
