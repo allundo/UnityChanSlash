@@ -91,6 +91,19 @@ public class TweenMove
             .Play();
     }
 
+    /// <summary>
+    /// DOTween brake on current Tile
+    /// </summary>
+    /// <returns>Playing tween for handling</returns>
+    public Tween BrakeHalf(float timeScale = 1f, TweenCallback onComplete = null)
+    {
+        return DOTween.Sequence()
+            // Set distances of (Linear : OutQuart) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
+            .Append(Move(map.DestVec3Pos, timeScale, Ease.OutQuad))
+            .AppendCallback(onComplete)
+            .Play();
+    }
+
     public Tween BrakeAndBack(float timeScale = 1f, TweenCallback onComplete = null)
     {
         var moveVec = map.dir.LookAt * TILE_UNIT * 0.2f;

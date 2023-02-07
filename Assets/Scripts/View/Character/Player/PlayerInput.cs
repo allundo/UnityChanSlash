@@ -109,12 +109,14 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     protected ICommand wakeUp;
     protected ICommand brake;
+    protected ICommand brakeHalf;
 
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 120f);
         brake = new PlayerBrakeStop(playerTarget, 48f);
+        brakeHalf = new PlayerBrakeStopHalf(playerTarget, 48f);
     }
 
     protected override void SetInputs()
@@ -563,7 +565,12 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         bool isRunning = commander.currentCommand is PlayerRun && !(commander.NextCommand is PlayerBrake);
 
-        if (isRunning) Interrupt(brake, false, true);
+        if (isRunning)
+        {
+            float remaining = commander.currentCommand.RemainingTimeScale;
+            bool isHalf = remaining > 0.333333f && remaining < 0.75f;
+            Interrupt(isHalf ? new PlayerBrakeStopHalf(playerTarget, 108f * remaining) : brake, isHalf, true);
+        }
         return isRunning;
     }
 

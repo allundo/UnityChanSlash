@@ -175,9 +175,11 @@ public class PlayerStartRunning : PlayerRun
 
 public class PlayerRun : PlayerDash
 {
+    protected ICommand brakeHalf;
     protected ICommand brakeAndBackStep;
     public PlayerRun(PlayerCommandTarget target, float duration) : base(target, duration)
     {
+        brakeHalf = new PlayerBrakeStopHalf(target, duration * 2f);
         brakeAndBackStep = new PlayerBrakeAndBackStep(target, duration * 2f);
     }
 
@@ -185,13 +187,20 @@ public class PlayerRun : PlayerDash
     {
         if (mobMap.IsForwardMovable)
         {
-            playingTween = tweenMove.Linear(mobMap.GetForward, 1f);
+            var destPos = mobMap.GetForward;
+
+            map.MoveObjectOn(destPos);
+            playingTween = DOTween.Sequence()
+                .Join(tweenMove.Move(destPos, 1f))
+                .Join(tweenMove.DelayedCall(0.666667f, () => { if (!mobMap.IsForwardMovable) target.input.Interrupt(brakeHalf, true, true); }))
+                .Play();
 
             playerAnim.speed.Float = TILE_UNIT / duration;
-            completeTween = tweenMove
-                .FinallyCall(() => playerAnim.speed.Float = 0)
-                .OnComplete(hidePlateHandler.Move)
-                .Play();
+            completeTween = tweenMove.FinallyCall(() =>
+            {
+                playerAnim.speed.Float = 0;
+                hidePlateHandler.Move();
+            }).Play();
 
             target.input.Interrupt(this, false);
 
@@ -249,6 +258,22 @@ public class PlayerBrakeStop : PlayerBrake
             input.Interrupt(brakeAndBackStep, false);
             return Observable.Empty<Unit>();
         }
+    }
+}
+
+public class PlayerBrakeStopHalf : PlayerBrake
+{
+    public PlayerBrakeStopHalf(PlayerCommandTarget target, float duration) : base(target, duration)
+    { }
+
+    public override IObservable<Unit> Execute()
+    {
+        playerInput.SetSubUIEnable(true);
+        playingTween = tweenMove.BrakeHalf(0.5f);
+        validateTween = ValidateTween().Play();
+        completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f);
+
+        return ObservableComplete();
     }
 }
 
