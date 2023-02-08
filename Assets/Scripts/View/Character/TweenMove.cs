@@ -84,7 +84,7 @@ public class TweenMove
 
         map.MoveObjectOn(destPos);
         return DOTween.Sequence()
-            // Set distances of (Linear : OutQuart) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
+            // Set distances of (Linear : OutQuad) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
             .Append(MoveRelative(toDestVec3 * 0.666667f, timeScale * 0.5f))
             .Append(MoveRelative(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad))
             .AppendCallback(onComplete)
@@ -98,7 +98,7 @@ public class TweenMove
     public Tween BrakeHalf(float timeScale = 1f, TweenCallback onComplete = null)
     {
         return DOTween.Sequence()
-            // Set distances of (Linear : OutQuart) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
+            // Set distances of (Linear : OutQuad) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
             .Append(Move(map.DestVec3Pos, timeScale, Ease.OutQuad))
             .AppendCallback(onComplete)
             .Play();

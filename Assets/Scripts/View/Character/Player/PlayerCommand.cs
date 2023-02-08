@@ -127,6 +127,9 @@ public class PlayerLeft : PlayerMove
 
 public class PlayerDash : PlayerCommand
 {
+    protected static readonly float RUN_DURATION = 24f;
+    protected static readonly float RUN_SPEED = TILE_UNIT / RUN_DURATION;
+
     public override int priority => 10;
     public PlayerDash(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f)
     { }
@@ -143,9 +146,9 @@ public class PlayerDash : PlayerCommand
 public class PlayerStartRunning : PlayerRun
 {
     protected Command run;
-    public PlayerStartRunning(PlayerCommandTarget target, float duration) : base(target, duration)
+    public PlayerStartRunning(PlayerCommandTarget target) : base(target)
     {
-        run = new PlayerRun(target, duration);
+        run = new PlayerRun(target);
     }
 
     public override IObservable<Unit> Execute()
@@ -157,9 +160,9 @@ public class PlayerStartRunning : PlayerRun
 
         playerInput.SetSubUIEnable(false);
 
-        playerAnim.speed.Float = TILE_UNIT / duration * 0.5f;
+        playerAnim.speed.Float = RUN_SPEED * 0.5f;
         completeTween = DOTween.Sequence()
-            .Append(ToSpeed(TILE_UNIT / duration, 0.25f))
+            .Append(ToSpeed(RUN_SPEED, 0.25f))
             .InsertCallback(duration * timeScale, () =>
             {
                 playerAnim.speed.Float = 0f;
@@ -177,10 +180,10 @@ public class PlayerRun : PlayerDash
 {
     protected ICommand brakeHalf;
     protected ICommand brakeAndBackStep;
-    public PlayerRun(PlayerCommandTarget target, float duration) : base(target, duration)
+    public PlayerRun(PlayerCommandTarget target) : base(target, RUN_DURATION)
     {
-        brakeHalf = new PlayerBrakeStopHalf(target, duration * 2f);
-        brakeAndBackStep = new PlayerBrakeAndBackStep(target, duration * 2f);
+        brakeHalf = new PlayerBrakeStopHalf(target, RUN_DURATION * 2f);
+        brakeAndBackStep = new PlayerBrakeAndBackStep(target);
     }
 
     public override IObservable<Unit> Execute()
@@ -195,7 +198,7 @@ public class PlayerRun : PlayerDash
                 .Join(tweenMove.DelayedCall(0.666667f, () => { if (!mobMap.IsForwardMovable) target.input.Interrupt(brakeHalf, true, true); }))
                 .Play();
 
-            playerAnim.speed.Float = TILE_UNIT / duration;
+            playerAnim.speed.Float = RUN_SPEED;
             completeTween = tweenMove.FinallyCall(() =>
             {
                 playerAnim.speed.Float = 0;
@@ -219,13 +222,13 @@ public class PlayerBrake : PlayerDash
 {
     public PlayerBrake(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
-    protected Tween DampenSpeed(TweenCallback startCallback = null, float timeScale = 1f, float delayRate = 0f)
+    protected Tween DampenSpeed(TweenCallback startCallback = null, float timeScale = 1f, float delayTimeScale = 0f)
     {
-        playerAnim.speed.Float = TILE_UNIT / duration * 2f;
+        playerAnim.speed.Float = RUN_SPEED;
 
         var seq = DOTween.Sequence();
 
-        if (delayRate > 0f) seq.AppendInterval(duration * delayRate);
+        if (delayTimeScale > 0f) seq.AppendInterval(duration * delayTimeScale);
 
         if (startCallback != null) seq.AppendCallback(startCallback);
 
@@ -236,9 +239,9 @@ public class PlayerBrake : PlayerDash
 public class PlayerBrakeStop : PlayerBrake
 {
     protected ICommand brakeAndBackStep;
-    public PlayerBrakeStop(PlayerCommandTarget target, float duration) : base(target, duration)
+    public PlayerBrakeStop(PlayerCommandTarget target) : base(target, RUN_DURATION * 2f)
     {
-        brakeAndBackStep = new PlayerBrakeAndBackStep(target, duration);
+        brakeAndBackStep = new PlayerBrakeAndBackStep(target);
     }
 
     public override IObservable<Unit> Execute()
@@ -279,11 +282,8 @@ public class PlayerBrakeStopHalf : PlayerBrake
 
 public class PlayerBrakeAndBackStep : PlayerBrake
 {
-    protected float startSpeedRate;
-    public PlayerBrakeAndBackStep(PlayerCommandTarget target, float duration, float startSpeedRate = 2f) : base(target, duration)
-    {
-        this.startSpeedRate = startSpeedRate;
-    }
+    public PlayerBrakeAndBackStep(PlayerCommandTarget target) : base(target, RUN_DURATION * 2f)
+    { }
 
     public override IObservable<Unit> Execute()
     {

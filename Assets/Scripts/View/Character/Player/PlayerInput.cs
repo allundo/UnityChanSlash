@@ -115,7 +115,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 120f);
-        brake = new PlayerBrakeStop(playerTarget, 48f);
+        brake = new PlayerBrakeStop(playerTarget);
         brakeHalf = new PlayerBrakeStopHalf(playerTarget, 48f);
     }
 
@@ -488,8 +488,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
         ICommand right = new PlayerRight(playerTarget, 43f);
         ICommand left = new PlayerLeft(playerTarget, 43f);
         ICommand backward = new PlayerBack(playerTarget, 43f);
-        ICommand run = new PlayerRun(playerTarget, 24f);
-        ICommand startRunning = new PlayerStartRunning(playerTarget, 24f);
+        ICommand run = new PlayerRun(playerTarget);
+        ICommand startRunning = new PlayerStartRunning(playerTarget);
 
         ICommand turnR = new PlayerTurnR(playerTarget, 18f);
         ICommand turnL = new PlayerTurnL(playerTarget, 18f);
