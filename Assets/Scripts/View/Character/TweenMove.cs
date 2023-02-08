@@ -78,29 +78,29 @@ public class TweenMove
     /// DOTween brake with updating IsObjectOn flag to destination Tile
     /// </summary>
     /// <returns>Playing tween for handling</returns>
-    public Tween Brake(Pos destPos, float timeScale = 1f, TweenCallback onComplete = null)
+    public Tween BrakeMove(Pos destPos, float brakeRatio = 0.333333f, float coolTimeScale = 0.5f)
     {
-        var toDestVec3 = map.WorldPos(destPos) - map.CurrentVec3Pos;
-
         map.MoveObjectOn(destPos);
-        return DOTween.Sequence()
-            // Set distances of (Linear : OutQuad) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
-            .Append(MoveRelative(toDestVec3 * 0.666667f, timeScale * 0.5f))
-            .Append(MoveRelative(toDestVec3 * 0.333333f, timeScale * 0.5f, Ease.OutQuad))
-            .AppendCallback(onComplete)
-            .Play();
+        return Brake(map.WorldPos(destPos), 1f, brakeRatio, coolTimeScale);
     }
 
     /// <summary>
     /// DOTween brake on current Tile
     /// </summary>
     /// <returns>Playing tween for handling</returns>
-    public Tween BrakeHalf(float timeScale = 1f, TweenCallback onComplete = null)
+    public Tween Brake(Vector3 destPos, float remainingRatio = 1f, float brakeRatio = 0.333333f, float coolTimeScale = 0.5f)
     {
+        Vector3 remainingVec3 = destPos - map.CurrentVec3Pos;
+
+        float runScale = remainingRatio - brakeRatio;
+        float timeScale = remainingRatio + brakeRatio + coolTimeScale;
+
+        float remainingRunRatio = runScale / remainingRatio;
+
         return DOTween.Sequence()
-            // Set distances of (Linear : OutQuad) = (2 : 1) with (1 : 1) durations for smooth velocity connecting
-            .Append(Move(map.DestVec3Pos, timeScale, Ease.OutQuad))
-            .AppendCallback(onComplete)
+            .Append(MoveRelative(remainingVec3 * remainingRunRatio, runScale / timeScale))
+            .Append(Move(destPos, brakeRatio * 2f / timeScale, Ease.OutQuad))
+            .AppendInterval(coolTimeScale / timeScale)
             .Play();
     }
 

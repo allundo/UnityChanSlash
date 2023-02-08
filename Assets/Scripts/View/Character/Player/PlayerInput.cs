@@ -568,8 +568,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
         if (isRunning)
         {
             float remaining = commander.currentCommand.RemainingTimeScale;
-            bool isHalf = remaining > 0.333333f && remaining < 0.75f;
-            Interrupt(isHalf ? new PlayerBrakeStopHalf(playerTarget, 108f * remaining) : brake, isHalf, true);
+            bool isHalf = remaining > 0.333333f;
+            Interrupt(isHalf ? new PlayerBrakeStopHalf(playerTarget, remaining) : brake, isHalf, true);
         }
         return isRunning;
     }

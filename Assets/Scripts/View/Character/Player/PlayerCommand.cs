@@ -128,7 +128,10 @@ public class PlayerLeft : PlayerMove
 public class PlayerDash : PlayerCommand
 {
     protected static readonly float RUN_DURATION = 24f;
-    protected static readonly float RUN_SPEED = TILE_UNIT / RUN_DURATION;
+    protected static readonly float RUN_SPEED = TILE_UNIT / (RUN_DURATION * FRAME_UNIT);
+    protected static readonly float BRAKE_RATIO = 0.333333f;
+    protected static readonly float RUN_RATIO = 1f - BRAKE_RATIO;
+    protected static float RunRatio(float remainingRatio = 1f) => remainingRatio - BRAKE_RATIO;
 
     public override int priority => 10;
     public PlayerDash(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f)
@@ -182,7 +185,7 @@ public class PlayerRun : PlayerDash
     protected ICommand brakeAndBackStep;
     public PlayerRun(PlayerCommandTarget target) : base(target, RUN_DURATION)
     {
-        brakeHalf = new PlayerBrakeStopHalf(target, RUN_DURATION * 2f);
+        brakeHalf = new PlayerBrakeStopHalf(target);
         brakeAndBackStep = new PlayerBrakeAndBackStep(target);
     }
 
@@ -195,7 +198,7 @@ public class PlayerRun : PlayerDash
             map.MoveObjectOn(destPos);
             playingTween = DOTween.Sequence()
                 .Join(tweenMove.Move(destPos, 1f))
-                .Join(tweenMove.DelayedCall(0.666667f, () => { if (!mobMap.IsForwardMovable) target.input.Interrupt(brakeHalf, true, true); }))
+                .Join(tweenMove.DelayedCall(RUN_RATIO, () => { if (!mobMap.IsForwardMovable) target.input.Interrupt(brakeHalf, true, true); }))
                 .Play();
 
             playerAnim.speed.Float = RUN_SPEED;
@@ -220,10 +223,16 @@ public class PlayerRun : PlayerDash
 
 public class PlayerBrake : PlayerDash
 {
-    public PlayerBrake(PlayerCommandTarget target, float duration) : base(target, duration) { }
+    protected static readonly float COOL_TIME_SCALE = 0.5f;
+    protected static float WholeTimeScale(float remainingTimeScale = 1f) => remainingTimeScale + BRAKE_RATIO + COOL_TIME_SCALE;
 
-    protected Tween DampenSpeed(TweenCallback startCallback = null, float timeScale = 1f, float delayTimeScale = 0f)
+    public PlayerBrake(PlayerCommandTarget target, float duration) : base(target, duration)
+    { }
+
+    protected Tween DampenSpeed(TweenCallback startCallback = null, float timeScale = 1f, float remainingRatio = 1f)
     {
+        float delayTimeScale = Mathf.Max(0, RunRatio(remainingRatio) / WholeTimeScale(remainingRatio) - 0.1f);
+
         playerAnim.speed.Float = RUN_SPEED;
 
         var seq = DOTween.Sequence();
@@ -239,7 +248,7 @@ public class PlayerBrake : PlayerDash
 public class PlayerBrakeStop : PlayerBrake
 {
     protected ICommand brakeAndBackStep;
-    public PlayerBrakeStop(PlayerCommandTarget target) : base(target, RUN_DURATION * 2f)
+    public PlayerBrakeStop(PlayerCommandTarget target) : base(target, RUN_DURATION * WholeTimeScale(1f))
     {
         brakeAndBackStep = new PlayerBrakeAndBackStep(target);
     }
@@ -250,9 +259,9 @@ public class PlayerBrakeStop : PlayerBrake
 
         if (mobMap.IsForwardMovable)
         {
-            playingTween = tweenMove.Brake(mobMap.GetForward, 0.75f);
+            playingTween = tweenMove.BrakeMove(mobMap.GetForward, BRAKE_RATIO);
             validateTween = ValidateTween().Play();
-            completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, 0.3f);
+            completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f);
 
             return ObservableComplete();
         }
@@ -266,15 +275,20 @@ public class PlayerBrakeStop : PlayerBrake
 
 public class PlayerBrakeStopHalf : PlayerBrake
 {
-    public PlayerBrakeStopHalf(PlayerCommandTarget target, float duration) : base(target, duration)
-    { }
+    private float remainingRatio;
+
+    public PlayerBrakeStopHalf(PlayerCommandTarget target) : this(target, BRAKE_RATIO) { }
+    public PlayerBrakeStopHalf(PlayerCommandTarget target, float remainingRatio) : base(target, RUN_DURATION * WholeTimeScale(remainingRatio))
+    {
+        this.remainingRatio = remainingRatio;
+    }
 
     public override IObservable<Unit> Execute()
     {
         playerInput.SetSubUIEnable(true);
-        playingTween = tweenMove.BrakeHalf(0.5f);
+        playingTween = tweenMove.Brake(map.DestVec3Pos, remainingRatio, BRAKE_RATIO, COOL_TIME_SCALE);
         validateTween = ValidateTween().Play();
-        completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f);
+        completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, remainingRatio);
 
         return ObservableComplete();
     }
