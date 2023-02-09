@@ -10,6 +10,7 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private RestButton restButton = default;
     [SerializeField] private ResumeButton resumeButton = default;
     [SerializeField] private ActiveMessageController activeMessageUI = default;
+    [SerializeField] private RankInMessage rankInMessage = default;
     [SerializeField] private float portraitFromBottom = 720f;
     [SerializeField] private float landscapeFromLeft = 480f;
     [SerializeField] private float lifeGaugeFromBottom = 60f;
@@ -40,6 +41,7 @@ public class UIPosition : MonoBehaviour
         restButton.ResetOrientation(orientation);
         resumeButton.ResetOrientation(orientation);
         activeMessageUI.ResetOrientation(orientation);
+        rankInMessage.ResetOrientation(orientation);
         ItemInventory.Instance.ResetOrientation(orientation);
         fightCircle.ResetCenterPos();
     }

@@ -6646,6 +6646,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 292638573}
   m_CullTransparentMesh: 0
+--- !u!114 &293875951 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 840327230457827709, guid: 25c86473574794550828fb85c20fdab4,
+    type: 3}
+  m_PrefabInstance: {fileID: 840327230518460557}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 934ce874b632843569e1292a3fb47bed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &298491923 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5411086374825413571, guid: ac866355074454fd99cd2dc1c7ac5357,
@@ -33053,6 +33065,7 @@ MonoBehaviour:
   restButton: {fileID: 314247949}
   resumeButton: {fileID: 1057805256}
   activeMessageUI: {fileID: 608784082}
+  rankInMessage: {fileID: 293875951}
   portraitFromBottom: 720
   landscapeFromLeft: 480
   lifeGaugeFromBottom: 60
