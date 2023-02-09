@@ -85,13 +85,15 @@ public class AttackInputController : MonoBehaviour
         effortPoint.Show(screenPos);
         targetPointer.Show(pressPos);
 
-        pointerVec = pressPos - screenPos;
-        targetPointer.SetVerticesPos(pointerVec);
+        var visualPointerVec = pointerVec = pressPos - screenPos;
 
         isChargingUp.Value = !InCircle(screenPos);
 
         if (isChargingUp.Value)
         {
+            // Lock on pointer
+            if (enemyTarget.isPointerOn) visualPointerVec = enemyTarget.ScreenPos - pressPos;
+
             pivotPoint.EnableChargingUp();
             effortPoint.EnableChargingUp();
             targetPointer.EnableChargingUp();
@@ -102,6 +104,8 @@ public class AttackInputController : MonoBehaviour
             effortPoint.DisableChargingUp();
             targetPointer.DisableChargingUp();
         }
+
+        targetPointer.SetVerticesPos(visualPointerVec);
     }
 
     public void ButtonCancel(bool isFadeOnly = false)
