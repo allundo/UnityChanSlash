@@ -14,6 +14,7 @@ public class Target : FadeUI, ITargetUI
     [SerializeField] float bullEyeRadius = 25f;
     [SerializeField] float activeBullEyeRadius = 60f;
     [SerializeField] TargetName targetName = default;
+    [SerializeField] private AudioSource lockOnSnd = default;
 
     private IEnemyStatus status;
     private RectTransform rectTransform;
@@ -24,8 +25,7 @@ public class Target : FadeUI, ITargetUI
     public bool isPointerOn { get; private set; }
     private bool IsPointerOn(Vector2 pointerPos)
     {
-        isPointerOn = (ScreenPos - pointerPos).sqrMagnitude < (isPointerOn ? sqrActiveBullEyeRadius : sqrBullEyeRadius);
-        return isPointerOn;
+        return (ScreenPos - pointerPos).sqrMagnitude < (isPointerOn ? sqrActiveBullEyeRadius : sqrBullEyeRadius);
     }
 
     private float sqrBullEyeRadius;
@@ -98,10 +98,13 @@ public class Target : FadeUI, ITargetUI
 
         if (IsPointerOn(pointerPos))
         {
+            if (!isPointerOn) lockOnSnd.PlayEx();
+            isPointerOn = true;
             SetPointerOn();
         }
         else
         {
+            isPointerOn = false;
             SetPointerOff();
         }
     }
