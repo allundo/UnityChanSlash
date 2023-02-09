@@ -24,6 +24,8 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
 
     private SDEmotionFX currentEmotion = null;
 
+    private Vector2 moveOffset;
+
     void Awake()
     {
         image = GetComponent<Image>();
@@ -33,6 +35,22 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
         fade.SetAlpha(0f);
 
         gameObject.SetActive(false);
+    }
+
+    public void ResetOrientation(DeviceOrientation orientation)
+    {
+        switch (orientation)
+        {
+            case DeviceOrientation.Portrait:
+                moveOffset = new Vector2(-uiTween.defaultSize.x, 0f);
+                break;
+
+            case DeviceOrientation.LandscapeRight:
+                moveOffset = new Vector2(540f - Screen.width * 0.5f - uiTween.defaultSize.x, 0f);
+                break;
+        }
+
+        uiTween.SetPos(new Vector2((Screen.width + uiTween.defaultSize.x) * 0.5f, 0f), true);
     }
 
     public void Activate(ActiveMessageData messageData)
@@ -52,7 +70,7 @@ public class SDIcon : MonoBehaviour, IPointerEnterHandler
 
         activateTween = DOTween.Sequence()
             .Join(fade.In(0.25f).SetEase(Ease.OutCubic))
-            .Join(uiTween.MoveOffset(new Vector2(-120f, 0f), 0.25f).SetEase(Ease.OutCubic))
+            .Join(uiTween.MoveOffset(moveOffset, 0.25f).SetEase(Ease.OutCubic))
             .SetUpdate(true)
             .Play();
 
