@@ -24,6 +24,14 @@ public class ItemInfo : ICloneable
 
     public bool Merge(ItemInfo itemInfo)
     {
+        if (itemInfo.numOfItem + numOfItem - 99 > 0)
+        {
+            // Item overflows by merging
+            itemInfo.Subtraction(99 - numOfItem);
+            numOfItem = 99;
+            return false;
+        }
+
         numOfItem += itemInfo.Subtraction();
         return true;
     }
