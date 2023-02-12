@@ -56,36 +56,7 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
-        bool isForwardMovable = mobMap.IsMovable(forward);
-
-        if (isForwardMovable)
-        {
-            // Turn 50%
-            if (Util.Judge(2))
-            {
-                if (Util.Judge(2))
-                {
-                    return (currentCommand == turnR) ? moveForward : turnL;
-                }
-                else
-                {
-                    return (currentCommand == turnL) ? moveForward : turnR;
-                }
-            }
-
-            // Move forward if not turned and forward movable
-            return moveForward;
-        }
-        else
-        {
-            // Turn if forward unmovable and left or right movable
-            if (mobMap.IsMovable(left)) return turnL;
-            if (mobMap.IsMovable(right)) return turnR;
-            if (mobMap.IsMovable(backward)) return RandomChoice(turnL, turnR);
-        }
-
-        // Idle if unmovable
-        return null;
+        return MoveForwardOrTurn(mobMap.IsMovable(forward), mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
     }
 
     // Doesn't fall by ice

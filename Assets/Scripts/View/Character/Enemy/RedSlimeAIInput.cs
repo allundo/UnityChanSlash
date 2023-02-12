@@ -66,34 +66,6 @@ public class RedSlimeAIInput : EnemyAIInput
         if (IsOnPlayer(left2)) return turnL;
         if (IsOnPlayer(right2)) return turnR;
 
-        if (isForwardMovable)
-        {
-            // Turn 50% if left or right movable
-            if (Util.Judge(2))
-            {
-                if (Util.Judge(2))
-                {
-                    if (currentCommand == turnR) return moveForward;
-                    if (isLeftMovable) return turnL;
-                    if (isRightMovable) return turnR;
-                }
-                else
-                {
-                    if (currentCommand == turnL) return moveForward;
-                    if (isRightMovable) return turnR;
-                    if (isLeftMovable) return turnL;
-                }
-            }
-
-            // Move forward if not turned and forward movable
-            return moveForward;
-        }
-        else
-        {
-            if (isLeftMovable && !isRightMovable) return turnL;
-            if (isRightMovable && !isLeftMovable) return turnR;
-
-            return RandomChoice(turnL, turnR);
-        }
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable);
     }
 }

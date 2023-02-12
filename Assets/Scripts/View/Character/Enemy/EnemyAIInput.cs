@@ -65,9 +65,11 @@ public class EnemyAIInput : MobInput, IEnemyInput
         // Move forward if player found in front
         if (IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
-        bool isLeftMovable = mobMap.IsMovable(left);
-        bool isRightMovable = mobMap.IsMovable(right);
+        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
+    }
 
+    protected virtual ICommand MoveForwardOrTurn(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
+    {
         if (isForwardMovable)
         {
             // Turn 50% if left or right movable
@@ -92,18 +94,12 @@ public class EnemyAIInput : MobInput, IEnemyInput
         }
         else
         {
-            // Turn if forward unmovable and left or right movable
+            // Turn if forward unmovable and left or right or backward  movable
+            if ((isLeftMovable && isRightMovable) || isBackwardMovable) return RandomChoice(turnL, turnR);
             if (isLeftMovable) return turnL;
             if (isRightMovable) return turnR;
 
-            // Turn if backward movable
-            if (mobMap.IsMovable(backward))
-            {
-                return RandomChoice(turnL, turnR);
-            }
+            return null;
         }
-
-        // Idle if unmovable
-        return null;
     }
 }

@@ -97,46 +97,8 @@ public class RabbitAIInput : EnemyAIInput
         // Move forward if player found in front
         if (mobMap.IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
-        if (isForwardMovable)
-        {
-            // Inhibit continuous moving forward by wondering
-            if (currentCommand == moveForward && Util.Judge(2)) return wondering;
-
-            // Turn 50% if left or right movable
-            if (Util.Judge(2))
-            {
-                if (Util.Judge(2))
-                {
-                    if (currentCommand == turnR) return moveForward;
-                    if (isLeftMovable) return turnL;
-                    if (isRightMovable) return turnR;
-                }
-                else
-                {
-                    if (currentCommand == turnL) return moveForward;
-                    if (isRightMovable) return turnR;
-                    if (isLeftMovable) return turnL;
-                }
-            }
-
-            // Move forward if not turned and forward movable
-            return moveForward;
-        }
-        else
-        {
-            // Turn if forward unmovable and left or right movable
-            if (isLeftMovable) return turnL;
-            if (isRightMovable) return turnR;
-
-            // Turn if backward movable
-            if (mobMap.IsMovable(backward))
-            {
-                return RandomChoice(turnL, turnR);
-            }
-        }
-
         // Wonder if unmovable
-        return wondering;
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable) ?? wondering;
     }
 
     public override ICommand InputIced(float duration)
