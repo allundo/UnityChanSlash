@@ -1,6 +1,7 @@
 using System;
 using UniRx;
-
+using System.Collections.Generic;
+using DG.Tweening;
 
 public class MobCommand : Command
 {
@@ -11,6 +12,8 @@ public class MobCommand : Command
         mobReact = react as IMobReactor;
         mobMap = map as IMobMapUtil;
     }
+
+    public MobCommand(IInput input, Tween playing, Tween complete, List<Action> onCompleted = null) : base(input, playing, complete, onCompleted) { }
 }
 
 public class DieCommand : MobCommand

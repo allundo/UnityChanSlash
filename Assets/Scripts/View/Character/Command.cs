@@ -79,7 +79,7 @@ public class Command : ICommand
         this.invalidDuration = this.duration * 0.95f;
     }
 
-    private static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
+    protected static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
     public float RemainingDuration => playingTween == null ? 0f : playingTween.Duration() - playingTween.fullPosition;
     public float RemainingTimeScale => RemainingDuration / duration;
     public virtual float RemainingFramesToComplete => completeTween == null ? 0f : (1f - completeTween.ElapsedPercentage()) * duration / FRAME_UNIT;

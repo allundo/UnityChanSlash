@@ -29,11 +29,10 @@ public abstract class MobInput : InputHandler, IMobInput
 
     public virtual ICommand InputIced(float duration)
     {
-        // Delete Command queue only
-        ClearAll(true);
-
         // Retrieve remaining process of current command
         ICommand continuation = commander.PostponeCurrent();
+
+        ClearAll();
 
         ICommand iced = GetIcedCommand(duration);
 
