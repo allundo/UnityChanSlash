@@ -11,6 +11,9 @@ public interface IEnemyStatus : IMobStatus
 
     IObservable<EnemyStatus.ActivateOption> ActiveWithOption { get; }
 
+    IObservable<bool> IsTarget { get; }
+    void SetTarget(bool isTarget);
+
     /// <summary>
     /// Try taming to the enemy.
     /// </summary>
@@ -55,6 +58,13 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     protected ISubject<ActivateOption> activeWithOptionSubject = new BehaviorSubject<ActivateOption>(new ActivateOption());
     public IObservable<ActivateOption> ActiveWithOption => activeWithOptionSubject;
     public override string Name => $"{param.name} Lv{level + 1}";
+
+    public IObservable<bool> IsTarget => isTarget;
+    private IReactiveProperty<bool> isTarget = new ReactiveProperty<bool>(false);
+    public void SetTarget(bool isTarget)
+    {
+        this.isTarget.Value = isTarget;
+    }
 
     public bool isTamed { get; protected set; } = false;
     public bool TryTame(float tamingPower = 1f)

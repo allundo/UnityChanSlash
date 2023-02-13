@@ -16,6 +16,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     private static readonly Vector3 OUT_OF_SCREEN = new Vector3(1024.0f, 0.0f, 1024.0f);
 
     protected IEnemyEffect enemyEffect;
+    protected HologramFade hologramFade;
     protected IEnemyInput enemyInput;
     protected IEnemyStatus enemyStatus;
     private IDisposable inactiveNextFrame;
@@ -31,6 +32,8 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         enemyInput = input as IEnemyInput;
         enemyStatus = status as IEnemyStatus;
 
+        hologramFade = new HologramFade(transform);
+
         isDestroying = false;
     }
 
@@ -42,6 +45,8 @@ public class EnemyReactor : MobReactor, IEnemyReactor
             .AddTo(this);
 
         enemyStatus.ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
+
+        enemyStatus.IsTarget.Subscribe(isTarget => hologramFade.SetActive(isTarget)).AddTo(this);
     }
 
     /// <summary>

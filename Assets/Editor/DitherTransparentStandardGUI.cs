@@ -337,7 +337,7 @@ namespace UnityEditor
             material.DisableKeyword("_ALPHATEST_ON");
             material.DisableKeyword("_ALPHABLEND_ON");
             material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+            material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
         }
 
         static SmoothnessMapChannel GetSmoothnessMapChannel(Material material)
