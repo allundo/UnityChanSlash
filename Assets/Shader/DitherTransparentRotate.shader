@@ -9,7 +9,7 @@
 
     SubShader
     {
-        Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout"}
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         LOD 100
 
         Pass
