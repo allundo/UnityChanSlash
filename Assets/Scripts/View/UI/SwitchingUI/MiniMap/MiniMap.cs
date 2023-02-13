@@ -166,4 +166,9 @@ public class MiniMap : SwitchingContentBase
         enemies.ForEach(kv => kv.Value.SetSize(uiTileUnit));
         currentMiniMapSize = miniMapSize;
     }
+
+    void OnDestroy()
+    {
+        renderTexture?.Release();
+    }
 }

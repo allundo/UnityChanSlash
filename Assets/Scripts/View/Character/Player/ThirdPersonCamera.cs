@@ -63,6 +63,11 @@ public class ThirdPersonCamera : MonoBehaviour
         pointLight.transform.position = lookAt.position + pointLightOffset;
     }
 
+    void OnDestroy()
+    {
+        renderTexture?.Release();
+    }
+
     public void ResetRenderSettings(DeviceOrientation orientation)
     {
         Rect viewPortRect = new Rect(0f, 0f, 1f, 1f);

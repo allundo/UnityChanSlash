@@ -67,6 +67,10 @@ public class CameraWork : MonoBehaviour
         crossFade.texture = renderTexture;
         standByCamera.targetTexture = renderTexture;
     }
+    void OnDestroy()
+    {
+        renderTexture?.Release();
+    }
 
     void Update()
     {
