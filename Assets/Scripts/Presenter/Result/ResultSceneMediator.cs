@@ -56,7 +56,7 @@ public class ResultSceneMediator : SceneMediator
         unityChanReactor.ScreenOut
             .Subscribe(_ =>
             {
-                resultUIHandler.CenterResults(3f).Play();
+                resultUIHandler.CenterResults(GameInfo.Instance.clearRank, GameInfo.Instance.clearRecord, 3f).Play();
                 if (bagControl.bagSize == BagSize.Gigantic)
                 {
                     resultUIHandler.ClickToEnd
@@ -75,7 +75,10 @@ public class ResultSceneMediator : SceneMediator
         Debug.Log("DEBUG MODE");
 
         GameInfo gameInfo = GameInfo.Instance;
-        gameInfo.clearTimeSec = 0;
+        gameInfo.clearTimeSec = 3000;
+        gameInfo.defeatCount = 20;
+        gameInfo.clearRank = 1;
+        gameInfo.clearRecord = new DataStoreAgent.ClearRecord("テスト", 171717, gameInfo.clearTimeSec, gameInfo.defeatCount);
 
         Result();
     }

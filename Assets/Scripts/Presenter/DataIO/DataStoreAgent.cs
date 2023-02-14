@@ -385,15 +385,22 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return rank;
     }
 
-    public void SaveClearRecords(string title, ulong wagesAmount, int clearTimeSec, int defeatCount)
+    public int SaveClearRecords(DataStoreAgent.ClearRecord newRecord)
     {
+        // Delete save data
+        DisableSave();
+        DeleteFile(SAVE_DATA_FILE_NAME);
+
         clearRecords = LoadClearRecords();
 
-        clearRecords.Add(new ClearRecord(title, wagesAmount, clearTimeSec, defeatCount));
+        clearRecords.Add(newRecord);
 
         clearRecords = clearRecords.OrderByDescending(record => record.wagesAmount).Where((r, index) => index < 10).ToList();
 
+        var rank = clearRecords.IndexOf(newRecord) + 1;
+
         SaveEncryptedRecords(clearRecords, CLEAR_RECORD_FILE_NAME);
+        return rank;
     }
 
     protected void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray

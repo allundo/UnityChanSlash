@@ -34,6 +34,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public int level = 1;
     public int strength = 10;
     public int magic = 10;
+    public int clearRank = 0;
+    public DataStoreAgent.ClearRecord clearRecord = null;
 
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
@@ -200,6 +202,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         level = 1;
         strength = 10;
         magic = 10;
+        clearRank = 0;
+        clearRecord = null;
     }
 
     public DataStoreAgent.MapData[] ExportMapData()

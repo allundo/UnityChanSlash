@@ -30,4 +30,7 @@ public class ClearRecord : RankRecord
         int hour = min / 60;
         return $"{hour,3:D}:{min % 60:00}:{sec % 60:00}";
     }
+
+    public void SetValues(int rank, DataStoreAgent.ClearRecord clearRecord)
+        => base.SetValues(rank, clearRecord.title, clearRecord.wagesAmount, clearRecord.clearTimeSec, clearRecord.defeatCount);
 }

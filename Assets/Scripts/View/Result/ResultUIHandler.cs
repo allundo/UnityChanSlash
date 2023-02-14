@@ -20,6 +20,9 @@ public class ResultUIHandler : MonoBehaviour
     [SerializeField] private ResultAnimation strength = default;
     [SerializeField] private ResultAnimation magic = default;
 
+    [SerializeField] private ClearRecord record = default;
+    [SerializeField] private RankInMessage message = default;
+
     private Image resultBGImage;
 
     public IObservable<Unit> ClickToEnd { get; private set; }
@@ -39,6 +42,9 @@ public class ResultUIHandler : MonoBehaviour
 
         resultBGImage = resultsTf.GetComponent<Image>();
         resultBGImage.enabled = false;
+
+        record.gameObject.SetActive(false);
+        message.gameObject.SetActive(false);
     }
 
     public IObservable<Unit> ViewResult(ResultBonus result)
@@ -89,7 +95,7 @@ public class ResultUIHandler : MonoBehaviour
             .SetRelative(true);
     }
 
-    public Tween CenterResults(float duration)
+    public Tween CenterResults(int clearRank, DataStoreAgent.ClearRecord clearRecord, float duration = 3f)
     {
         return DOTween.Sequence()
             .Join(resultsTf.DOAnchorPosX(0f, duration))
@@ -100,6 +106,31 @@ public class ResultUIHandler : MonoBehaviour
             .Join(level.Centering(0f, duration))
             .Join(strength.Centering(0f, duration))
             .Join(magic.Centering(0f, duration))
-            .AppendCallback(() => titleButton.Show().Play());
+            .Append(titleButton.Show())
+            .AppendCallback(() => PlayRankIn(clearRank, clearRecord));
+    }
+
+    public Tween PlayRankIn(int rank, DataStoreAgent.ClearRecord clearRecord)
+    {
+        record.gameObject.SetActive(true);
+        record.ResetPosition(new Vector2(0f, -580f));
+        record.SetValues(rank, clearRecord);
+        record.SetRankEnable(false);
+
+        // SequenceEx cannot handle a lot of callbacks so mediate it by original Sequence.
+        // Maybe the implementation with deep nested callback cause stack overflow.
+        var seq = DOTween.Sequence()
+            .Append(record.SlideInTween())
+            .Append(record.RankEffect(rank))
+            .Append(record.RankPunchEffect(rank));
+
+        if (rank > 0)
+        {
+            message.gameObject.SetActive(true);
+            message.ResetOrientation(DeviceOrientation.Portrait);
+            seq.Append(message.RankInTween());
+        }
+
+        return seq.Play();
     }
 }

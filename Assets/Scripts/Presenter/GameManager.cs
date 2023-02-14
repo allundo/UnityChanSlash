@@ -330,7 +330,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var result = new ResultBonus(gameInfo);
 
-        dataStoreAgent.SaveClearRecords("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        gameInfo.clearRecord = new DataStoreAgent.ClearRecord("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        gameInfo.clearRank = dataStoreAgent.SaveClearRecords(gameInfo.clearRecord);
 
         cover.color = new Color(1f, 1f, 1f, 0f);
         cover.FadeOutObservable(3f, 0f, Ease.InCubic)
