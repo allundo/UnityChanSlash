@@ -33061,6 +33061,7 @@ MonoBehaviour:
   rtUI: {fileID: 1574935736902618774}
   rtLifeGauge: {fileID: 8337679455544452697}
   fightCircle: {fileID: 4719329011268037073}
+  rtHandleIcon: {fileID: 233540039}
   switchingUI: {fileID: 874884609}
   restButton: {fileID: 314247949}
   resumeButton: {fileID: 1057805256}

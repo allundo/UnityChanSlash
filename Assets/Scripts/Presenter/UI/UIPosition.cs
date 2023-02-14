@@ -6,6 +6,7 @@ public class UIPosition : MonoBehaviour
     [SerializeField] private RectTransform rtUI = default;
     [SerializeField] private RectTransform rtLifeGauge = default;
     [SerializeField] private FightCircle fightCircle = default;
+    [SerializeField] private RectTransform rtHandleIcon = default;
     [SerializeField] private SwitchingUI switchingUI = default;
     [SerializeField] private RestButton restButton = default;
     [SerializeField] private ResumeButton resumeButton = default;
@@ -44,5 +45,6 @@ public class UIPosition : MonoBehaviour
         rankInMessage.ResetOrientation(orientation);
         ItemInventory.Instance.ResetOrientation(orientation);
         fightCircle.ResetOrientation(orientation, rtUI.anchoredPosition.x);
+        rtHandleIcon.anchoredPosition = new Vector2(-rtUI.anchoredPosition.x, rtHandleIcon.anchoredPosition.y);
     }
 }
