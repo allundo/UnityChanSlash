@@ -56,4 +56,10 @@ public class Util
 
     public static T ConvertTo<T>(int index) where T : Enum
         => (T)Enum.ToObject(typeof(T), index);
+
+    public static int GetEnemyLevel(uint range = 5)
+    {
+        int min = -(int)(range / 2);
+        return Mathf.Max(0, GameInfo.Instance.currentFloor + UnityEngine.Random.Range(min, min + (int)range));
+    }
 }
