@@ -50,8 +50,14 @@ public class Target : FadeUI, ITargetUI
 
     void Update()
     {
-        if (status != null)
+        if (status != null && isActive)
         {
+            if (!status.IsAlive)
+            {
+                status.SetTarget(false);
+                FadeInactivate();
+                return;
+            }
             rectTransform.position = MainCamera.WorldToScreenPoint(status.corePos) + offset;
         }
     }
