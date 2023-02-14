@@ -66,6 +66,6 @@ public class RedSlimeAIInput : EnemyAIInput
         if (IsOnPlayer(left2)) return turnL;
         if (IsOnPlayer(right2)) return turnR;
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable);
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable || IsOnPlayer(backward));
     }
 }
