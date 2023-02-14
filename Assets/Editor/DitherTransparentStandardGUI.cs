@@ -19,6 +19,7 @@ namespace UnityEditor
         {
             DitherTransparent,
             DitherTransparentAdditive,
+            DitherTransparentAdditiveHologram,
         }
 
         public enum SmoothnessMapChannel
@@ -33,6 +34,7 @@ namespace UnityEditor
 
             public static GUIContent albedoText = EditorGUIUtility.TrTextContent("Albedo", "Albedo (RGB) and Transparency (A)");
             public static GUIContent additiveColorText = EditorGUIUtility.TrTextContent("Additive Color", "Additive color for flash material");
+            public static GUIContent hologramColorText = EditorGUIUtility.TrTextContent("Hologram Color", "Hologram color for enemy target on landscape mode");
             public static GUIContent specularMapText = EditorGUIUtility.TrTextContent("Specular", "Specular (RGB) and Smoothness (A)");
             public static GUIContent metallicMapText = EditorGUIUtility.TrTextContent("Metallic", "Metallic (R) and Smoothness (A)");
             public static GUIContent smoothnessText = EditorGUIUtility.TrTextContent("Smoothness", "Smoothness value");
@@ -60,6 +62,7 @@ namespace UnityEditor
         MaterialProperty albedoMap = null;
         MaterialProperty albedoColor = null;
         MaterialProperty additiveColor = null;
+        MaterialProperty hologramColor = null;
         MaterialProperty alphaCutoff = null;
         MaterialProperty specularMap = null;
         MaterialProperty specularColor = null;
@@ -98,6 +101,7 @@ namespace UnityEditor
             albedoMap = FindProperty("_MainTex", props);
             albedoColor = FindProperty("_Color", props);
             additiveColor = FindProperty("_AdditiveColor", props);
+            hologramColor = FindProperty("_HologramColor", props);
             alphaCutoff = FindProperty("_Cutoff", props);
             specularMap = FindProperty("_SpecGlossMap", props, false);
             specularColor = FindProperty("_SpecColor", props, false);
@@ -274,6 +278,12 @@ namespace UnityEditor
             if (((BlendMode)material.GetFloat("_Mode") == BlendMode.DitherTransparentAdditive))
             {
                 m_MaterialEditor.ShaderProperty(additiveColor, Styles.additiveColorText.text);
+            }
+
+            if (((BlendMode)material.GetFloat("_Mode") == BlendMode.DitherTransparentAdditiveHologram))
+            {
+                m_MaterialEditor.ShaderProperty(additiveColor, Styles.additiveColorText.text);
+                m_MaterialEditor.ShaderProperty(hologramColor, Styles.hologramColorText.text);
             }
         }
 

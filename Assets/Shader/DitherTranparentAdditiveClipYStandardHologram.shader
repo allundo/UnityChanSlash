@@ -2,15 +2,20 @@
 // ## Dither transparent is available with "Cutoff" Rendering Mode set on material editor
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Custom/Standard/DitherTransparentZWrite"
+Shader "Custom/Standard/DitherTransparentAdditiveClipYHologram"
 {
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
         _MainTex("Albedo", 2D) = "white" {}
 
-        [HideInInspector] _AdditiveColor("Additive Color", Color) = (0,0,0,1)
-        [HideInInspector] _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
+        // This parameter can be editted only via Material.color in scripts
+        [MainColor] _AdditiveColor("Additive Color", Color) = (0,0,0,1)
+
+        _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
+
+        // Handled by script only
+        _ClipY("Clipping Y Plane", Range(0, 2.5)) = 0
 
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 
@@ -44,7 +49,6 @@ Shader "Custom/Standard/DitherTransparentZWrite"
 
         [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
 
-
         // Blending state
         [HideInInspector] _Mode ("__mode", Float) = 0.0
         [HideInInspector] _SrcBlend ("__src", Float) = 1.0
@@ -58,50 +62,6 @@ Shader "Custom/Standard/DitherTransparentZWrite"
 
     SubShader
     {
-        Pass
-        {
-            Name "ZWrite"
-            Tags { "LightMode" = "ZBufferOnly" }
-
-            ZWrite On
-            ColorMask 0
-            Lighting OFF
-
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-
-            #include "UnityCG.cginc"
-            #include "./CGIncludes/DitherTransparentFunctions.cginc"
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-            };
-
-            struct v2f
-            {
-                float4 screenPos : TEXCOORD1;
-            };
-
-            half4 _Color;
-
-            v2f vert(appdata v)
-            {
-                v2f o;
-	            o.screenPos = ComputeScreenPos(UnityObjectToClipPos(v.vertex));
-                return o;
-            }
-
-            fixed4 frag (v2f i) : SV_Target
-            {
-                DitherClipping(i.screenPos, _Color.a);
-                return fixed4(0,0,0,0);
-            }
-
-            ENDCG
-        }
-
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 300
 
@@ -111,10 +71,9 @@ Shader "Custom/Standard/DitherTransparentZWrite"
         {
             Name "FORWARD"
             Tags { "LightMode" = "ForwardBase" }
-        
+
             Blend [_SrcBlend] [_DstBlend]
             ZWrite [_ZWrite]
-            ZTest LEqual
 
             CGPROGRAM
             #pragma target 3.0
@@ -124,6 +83,8 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
+            #define _CLIP_Y
             #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local_fragment _DETAIL_MULX2
@@ -164,6 +125,8 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
+    
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
             #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
@@ -186,8 +149,8 @@ Shader "Custom/Standard/DitherTransparentZWrite"
         Pass {
             Name "ShadowCaster"
             Tags { "LightMode" = "ShadowCaster" }
-            ZWrite On
-            ZTest LEqual
+
+            ZWrite On ZTest LEqual
 
             CGPROGRAM
             #pragma target 3.0
@@ -217,8 +180,6 @@ Shader "Custom/Standard/DitherTransparentZWrite"
         {
             Name "DEFERRED"
             Tags { "LightMode" = "Deferred" }
-            ZWrite Off
-            ZTest LEqual
 
             CGPROGRAM
             #pragma target 3.0
@@ -230,6 +191,8 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
+            #define _CLIP_Y
             #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
@@ -273,18 +236,16 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #include "UnityStandardMeta.cginc"
             ENDCG
         }
-    }
 
-    SubShader
-    {
-        Pass
+         Pass
         {
-            Name "FORWARD"
-            Tags { "LightMode" = "ZBufferOnly" }
+            Name "Hologram"
+            Tags { "RenderType"="Transparent" "Queue" = "Transparent+5" }
 
-            ZWrite On
-            ColorMask 0
-            Lighting OFF
+            Blend One One
+            ZWrite Off
+            ZTest Always
+            LOD 150
 
             CGPROGRAM
             #pragma vertex vert
@@ -296,31 +257,44 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             struct appdata
             {
                 float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+                float3 normal : NORMAL;
             };
 
             struct v2f
             {
-                float4 screenPos : TEXCOORD1;
+                float4 vertex : SV_POSITION;
+                float3 viewDir : TEXCOORD0;
+                float3 normal : TEXCOORD1;
+                float4 screenPos : TEXCOORD2;
             };
 
-            half4 _Color;
+            fixed4 _HologramColor;
+            float4 _AdditiveColor;
 
             v2f vert(appdata v)
             {
                 v2f o;
-	            o.screenPos = ComputeScreenPos(UnityObjectToClipPos(v.vertex));
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.vertex.x -= 0.625 * o.vertex.w;  // 0.625 is magic number ... need to verify accurate value
+                o.screenPos = ComputeScreenPos(o.vertex);
+                o.normal = UnityObjectToWorldNormal(v.normal);
+                o.viewDir = normalize(UnityWorldSpaceViewDir(mul(unity_ObjectToWorld, v.vertex).xyz));
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                DitherClipping(i.screenPos, _Color.a);
-                return fixed4(0,0,0,0);
-            }
+                DitherClipping(i.screenPos, (1 - saturate(dot(i.viewDir, i.normal))) * 1.5 * _HologramColor.a * _AdditiveColor.a);
 
+                return _HologramColor;
+            }
             ENDCG
         }
+    }
 
+    SubShader
+    {
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 150
 
@@ -333,7 +307,6 @@ Shader "Custom/Standard/DitherTransparentZWrite"
 
             Blend [_SrcBlend] [_DstBlend]
             ZWrite [_ZWrite]
-            ZTest LEqual
 
             CGPROGRAM
             #pragma target 2.0
@@ -341,6 +314,8 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
+            #define _CLIP_Y
             #pragma shader_feature_fragment _EMISSION
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
@@ -377,6 +352,8 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #pragma shader_feature_local _NORMALMAP
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #define _DITHER_ALPHA
+            #define _ADDITIVE_COLOR
+            #define _CLIP_Y
             #pragma shader_feature_local _METALLICGLOSSMAP
             #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
             #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
@@ -399,8 +376,7 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             Name "ShadowCaster"
             Tags { "LightMode" = "ShadowCaster" }
 
-            ZWrite On
-            ZTest LEqual
+            ZWrite On ZTest LEqual
 
             CGPROGRAM
             #pragma target 2.0
@@ -427,9 +403,6 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             Name "META"
             Tags { "LightMode"="Meta" }
 
-            ZWrite On
-            ZTest LEqual
-
             Cull Off
 
             CGPROGRAM
@@ -443,6 +416,61 @@ Shader "Custom/Standard/DitherTransparentZWrite"
             #pragma shader_feature EDITOR_VISUALIZATION
 
             #include "UnityStandardMeta.cginc"
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "Hologram"
+            Tags { "RenderType"="Transparent" "Queue" = "Transparent+5" }
+
+            Blend One One
+            ZWrite Off
+            ZTest Always
+            LOD 150
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
+            #include "./CGIncludes/DitherTransparentFunctions.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+                float3 normal : NORMAL;
+            };
+
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                float3 viewDir : TEXCOORD0;
+                float3 normal : TEXCOORD1;
+                float4 screenPos : TEXCOORD2;
+            };
+
+            fixed4 _HologramColor;
+            float4 _AdditiveColor;
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.vertex.x -= 0.625 * o.vertex.w;  // 0.625 is magic number ... need to verify accurate value
+                o.screenPos = ComputeScreenPos(o.vertex);
+                o.normal = UnityObjectToWorldNormal(v.normal);
+                o.viewDir = normalize(UnityWorldSpaceViewDir(mul(unity_ObjectToWorld, v.vertex).xyz));
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                DitherClipping(i.screenPos, (1 - saturate(dot(i.viewDir, i.normal))) * 1.5 * _HologramColor.a * _AdditiveColor.a);
+
+                return _HologramColor;
+            }
             ENDCG
         }
     }

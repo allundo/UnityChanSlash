@@ -8,7 +8,7 @@ public class HologramFade : MaterialEffect
         InitEffects();
     }
 
-    protected override string propName => "_BaseColor";
+    protected override string propName => "_HologramColor";
     protected override void InitProperty(Material mat, int propID) => mat.SetColor(propID, new Color(0f, 1f, 0.4f, 0f));
 
     protected Tween fadeIn;

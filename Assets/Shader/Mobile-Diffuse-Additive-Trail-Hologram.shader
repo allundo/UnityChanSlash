@@ -5,39 +5,54 @@
 // - no Main Color
 // - fully supports only 1 directional light. Other lights can affect it, but it will be per-vertex/SH.
 
-Shader "Custom/Mobile/Diffuse-Additive-Holgram"
+Shader "Custom/Mobile/Diffuse-Additive-Trail-Hologram"
 {
     Properties
     {
         _MainTex ("Base (RGB)", 2D) = "white" {}
         [MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 1)
+        _NoiseTex ("Noise", 2D) = "white" {}
+        _TrailDir ("Trail Dir", Vector) = (0, 0, 0, 0)
         _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
     }
 
     SubShader
     {
-        Name "Main"
-        Tags { "RenderType"="Opaque" "Queue" = "Geometry" }
+        Tags { "RenderType"="Opaque" }
         LOD 150
 
         CGPROGRAM
-        #pragma surface surf Lambert noforwardadd
+        #pragma surface surf Lambert noforwardadd vertex:vert
         #include "./CGIncludes/DitherTransparentFunctions.cginc"
 
         sampler2D _MainTex;
-        float4 _AdditiveColor;
+        sampler2D _NoiseTex;
 
-        struct Input
-        {
+        float4 _AdditiveColor;
+        fixed4 _TrailDir;
+
+        struct Input {
             float2 uv_MainTex;
             float4 screenPos;
         };
+
+        void vert(inout appdata_full v, out Input o)
+        {
+            UNITY_INITIALIZE_OUTPUT(Input, o);
+
+            half3 trailObjDir = mul(unity_WorldToObject, _TrailDir);
+            float weight = clamp(dot(v.normal, trailObjDir), 0, 1);
+            float noise = 1 + tex2Dlod(_NoiseTex, v.texcoord).r * 0.5;
+            fixed3 trail = trailObjDir * weight * noise;
+            v.vertex.xyz += trail;
+        }
 
         void surf (Input IN, inout SurfaceOutput o)
         {
             DitherClipping(IN.screenPos, _AdditiveColor.a, 1);
             o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb + _AdditiveColor.rgb;
         }
+
         ENDCG
 
         Pass

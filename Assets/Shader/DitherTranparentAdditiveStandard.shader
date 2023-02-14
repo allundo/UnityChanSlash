@@ -11,6 +11,7 @@ Shader "Custom/Standard/DitherTransparentAdditive"
 
         // This parameter can be editted only via Material.color in scripts
         [MainColor] _AdditiveColor("Additive Color", Color) = (0,0,0,1)
+        [HideInInspector] _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
 
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 

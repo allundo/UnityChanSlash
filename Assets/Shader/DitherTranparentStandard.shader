@@ -10,6 +10,7 @@ Shader "Custom/Standard/DitherTransparent"
         _MainTex("Albedo", 2D) = "white" {}
 
         [HideInInspector] _AdditiveColor("Additive Color", Color) = (0,0,0,1)
+        [HideInInspector] _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
 
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 
