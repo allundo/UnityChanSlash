@@ -96,11 +96,12 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         return inputRegion;
     }
 
-    public void ResetOrientation(DeviceOrientation orientation)
+    public void ResetOrientation(DeviceOrientation orientation, float offsetX)
     {
         isHologramOn = orientation == DeviceOrientation.LandscapeRight;
         EnemyStatus.Value?.SetTarget(isHologramOn);
         ResetCenterPos();
+        enemyTarget.SetTargetPosOffsetX(offsetX);
     }
 
     private void ResetCenterPos()

@@ -20,6 +20,12 @@ public class Target : FadeUI, ITargetUI
     private RectTransform rectTransform;
     public Vector2 ScreenPos => rectTransform.position;
 
+    public void SetTargetPosOffsetX(float offsetX)
+    {
+        offset = new Vector3(offsetX, 0f, 0f);
+    }
+    private Vector3 offset = Vector3.zero;
+
     protected virtual Camera MainCamera => Camera.main;
 
     public bool isPointerOn { get; private set; }
@@ -46,7 +52,7 @@ public class Target : FadeUI, ITargetUI
     {
         if (status != null)
         {
-            rectTransform.position = MainCamera.WorldToScreenPoint(status.corePos);
+            rectTransform.position = MainCamera.WorldToScreenPoint(status.corePos) + offset;
         }
     }
 

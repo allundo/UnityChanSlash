@@ -43,6 +43,6 @@ public class UIPosition : MonoBehaviour
         activeMessageUI.ResetOrientation(orientation);
         rankInMessage.ResetOrientation(orientation);
         ItemInventory.Instance.ResetOrientation(orientation);
-        fightCircle.ResetOrientation(orientation);
+        fightCircle.ResetOrientation(orientation, rtUI.anchoredPosition.x);
     }
 }
