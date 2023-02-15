@@ -70,12 +70,12 @@ public struct ActiveMessageData
 
     public static ActiveMessageData TameSucceeded(IEnemyStatus status)
     {
-        return new ActiveMessageData(status.Name + " を懐柔した！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+        return new ActiveMessageData(status.name + " を懐柔した！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
     }
 
     public static ActiveMessageData AlreadyTamed(IEnemyStatus status)
     {
-        return new ActiveMessageData(status.Name + " はすでに懐柔されている…！", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION);
+        return new ActiveMessageData(status.name + " はすでに懐柔されている…！", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION);
     }
 
     public static ActiveMessageData InspectTile(ITile tile)
