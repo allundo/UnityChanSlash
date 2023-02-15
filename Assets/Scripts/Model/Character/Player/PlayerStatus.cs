@@ -113,7 +113,7 @@ public class PlayerStatus : MobStatus, IGetExp
         this.exp.Value = exp;
         this.counter = counter;
         levelGain = selector.SetSelector(type);
-        InitParam(param, new MobStatusStoreData(life, level));
+        InitParam(param, new MobStatusStoreData(level, life));
     }
 
     public override IStatus InitParam(Param param, StatusStoreData data = null)
@@ -138,7 +138,7 @@ public class PlayerStatus : MobStatus, IGetExp
 
             levelGain = selector.SelectType(counter);
             counter.TotalCounts();
-            InitParam(param, new MobStatusStoreData(life.Value, level + 1));
+            InitParam(param, new MobStatusStoreData(level + 1, life.Value));
 
             life.Value += Mathf.Max(lifeMax.Value - prevLifeMax, 0f);
 

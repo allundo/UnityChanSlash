@@ -161,7 +161,6 @@ public class Status : SpawnObject<Status>, IStatus
     public virtual IStatus InitParam(Param param, StatusStoreData data = null)
     {
         this.param = param;
-        data = data ?? new StatusStoreData(param.defaultLifeMax);
 
         attack = param.attack;
         ResetStatus();

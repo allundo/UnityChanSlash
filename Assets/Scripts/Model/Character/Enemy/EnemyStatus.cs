@@ -99,7 +99,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
         this.enemyParam = param;
         levelGain = ResourceLoader.Instance.enemyLevelGainData.Param((int)param.gainType);
 
-        data = data ?? new EnemyStoreData(param.defaultLifeMax, Util.GetEnemyLevel(), false);
+        data = data ?? new EnemyStoreData(Util.GetEnemyLevel());
 
         base.InitParam(param, data);
         isTamed = data.isTamed;

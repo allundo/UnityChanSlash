@@ -103,7 +103,7 @@ public class MobStatus : Status, IMobStatus
     private IMobStatus InitParam(MobParam mobParam, MobStatusStoreData data)
     {
         this.param = this.mobParam = mobParam;
-        data = data ?? new MobStatusStoreData(param.defaultLifeMax, 0);
+        data = data ?? new MobStatusStoreData();
 
         this.level = data.level;
 
@@ -128,7 +128,7 @@ public class MobStatus : Status, IMobStatus
 
         ResetStatus();
         attack = mobParam.attack + levelGain.attackGain * level;
-        life.Value = data.life;
+        if (data.life != 0) life.Value = data.life;
 
         return this;
     }

@@ -194,7 +194,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 
         public bool isTamed = false;
-        public EnemyStoreData StoreData() => new EnemyStoreData(life, level, isTamed);
+        public EnemyStoreData StoreData() => new EnemyStoreData(level, life, isTamed);
     }
 
     [System.Serializable]
