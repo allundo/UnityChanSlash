@@ -16,6 +16,6 @@ public class Magic : MonoBehaviour
         types.ForEach(type => launcher[type] = new Launcher(status, type));
     }
 
-    public Sequence MagicSequence(BulletType type, float duration) => launcher[type].AttackSequence(duration);
+    public Tween MagicSequence(BulletType type, float duration) => launcher[type].AttackSequence(duration);
     public void Fire(BulletType type) => launcher[type].Fire();
 }

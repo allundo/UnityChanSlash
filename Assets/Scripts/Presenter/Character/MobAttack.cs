@@ -82,7 +82,6 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
     public override Sequence AttackSequence(float attackDuration)
     {
         return DOTween.Sequence()
-            .AppendInterval(attackDuration)
             .InsertCallback(startSec, OnHitStart)
             .InsertCallback(finishSec, OnHitFinished)
             .SetUpdate(false);
