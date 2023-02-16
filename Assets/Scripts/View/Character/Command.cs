@@ -1,4 +1,5 @@
 using DG.Tweening;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UniRx;
@@ -80,7 +81,8 @@ public class Command : ICommand
     }
 
     protected static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
-    public float RemainingDuration => playingTween == null ? 0f : playingTween.Duration() - playingTween.fullPosition;
+    public float RemainingDuration => Mathf.Max(CalcRemaining(playingTween), CalcRemaining(completeTween));
+    protected float CalcRemaining(Tween tween) => tween == null ? 0f : tween.Duration() - tween.fullPosition;
     public float RemainingTimeScale => RemainingDuration / duration;
     public virtual float RemainingFramesToComplete => completeTween == null ? 0f : (1f - completeTween.ElapsedPercentage()) * duration / FRAME_UNIT;
 
