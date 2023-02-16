@@ -41,6 +41,7 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
 
     protected ISubject<IReactor> hitSubject = new Subject<IReactor>();
     public IObservable<IReactor> Hit => hitSubject;
+    public IDisposable attackFinish = null;
 
     protected BoxCollider boxCollider;
     protected Vector3 defaultSize;
@@ -76,7 +77,13 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
     {
         // Make sure to keep hit detection at least 1 frame.
         // Especially for speed up mode such as player resting.
-        Observable.NextFrame().Subscribe(_ => attackCollider.enabled = false).AddTo(this);
+        attackFinish = Observable.NextFrame().Subscribe(_ => attackCollider.enabled = false).AddTo(this);
+    }
+
+    protected void HitFinish()
+    {
+        attackFinish?.Dispose();
+        attackCollider.enabled = false;
     }
 
     public override Sequence AttackSequence(float attackDuration)
@@ -84,6 +91,7 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
         return DOTween.Sequence()
             .InsertCallback(startSec, OnHitStart)
             .InsertCallback(finishSec, OnHitFinished)
+            .InsertCallback(attackDuration, HitFinish) // Make sure to disable attack collider.
             .SetUpdate(false);
     }
 
