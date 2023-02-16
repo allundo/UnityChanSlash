@@ -845,4 +845,33 @@ public class UnityEngineSpecTest
         public int Count => count;
         public void Inc() => count++;
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _017_TweenFullPositionMeansElapsedSecondFromPlay()
+    {
+        float sec1, sec2, sec3, sec4;
+        sec1 = sec2 = sec3 = sec4 = 0.0f;
+
+        var sut = DOVirtual.DelayedCall(5f, () => { }).Play();
+        var seq = DOTween.Sequence()
+            .AppendInterval(1f)
+            .AppendCallback(() => sec1 = sut.fullPosition)
+            .AppendInterval(1f)
+            .AppendCallback(() => sec2 = sut.fullPosition)
+            .AppendInterval(1f)
+            .AppendCallback(() => sec3 = sut.fullPosition)
+            .AppendInterval(1f)
+            .AppendCallback(() => sec4 = sut.fullPosition)
+            .Play();
+
+        yield return new WaitForSeconds(5f);
+
+        Assert.AreEqual(1f, sec1, Constants.FRAME_SEC_UNIT);
+        Assert.AreEqual(2f, sec2, Constants.FRAME_SEC_UNIT);
+        Assert.AreEqual(3f, sec3, Constants.FRAME_SEC_UNIT);
+        Assert.AreEqual(4f, sec4, Constants.FRAME_SEC_UNIT);
+
+        yield return null;
+    }
 }
