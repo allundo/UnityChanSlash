@@ -424,7 +424,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
         else
         {
             // Reserve ice crushing on completed or ice melting in the middle of the IcedFall.
-            jumpSeq.AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash));
+            jumpSeq.AppendCallback(() => mobReact.Damage(5f, null, AttackType.Smash));
             completeTween = meltTimer.Play();
         }
 
