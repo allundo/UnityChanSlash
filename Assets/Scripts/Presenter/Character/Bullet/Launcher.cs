@@ -20,6 +20,7 @@ public class Launcher : ILauncher
         => DOTween.Sequence()
             .AppendInterval(attackDuration * 0.3f)
             .AppendCallback(Fire)
+            .AppendInterval(attackDuration * 0.7f)
             .SetUpdate(false);
 
     public virtual void Fire() => bulletGenerator.Fire(status);

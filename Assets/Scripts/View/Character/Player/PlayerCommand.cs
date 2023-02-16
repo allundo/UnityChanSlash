@@ -786,9 +786,8 @@ public class PlayerFire : PlayerAction
         isCancelable = false;
         playerAnim.fire.Fire();
 
-        completeTween = target.magic
-            .MagicSequence(type, duration) // MagicSequence has completed on time scale 0.3 of the command duration.
-            .OnComplete(ValidateAction)
+        completeTween = target.magic.MagicSequence(type, duration)
+            .InsertCallback(duration * 0.3f, ValidateAction)
             .Play();
 
         return true;
