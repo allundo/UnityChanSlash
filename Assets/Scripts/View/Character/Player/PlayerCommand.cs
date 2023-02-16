@@ -494,7 +494,7 @@ public class PlayerWakeUp : PlayerCommand
         float groundDuration = duration * wakeUpTiming;
         float wakeUpDuration = duration - groundDuration;
 
-        completeTween = DOTween.Sequence()
+        playingTween = DOTween.Sequence()
             .AppendInterval(groundDuration)
             .AppendCallback(() => playerAnim.fall.Bool = false)
             .AppendInterval(wakeUpDuration * 0.5f)
