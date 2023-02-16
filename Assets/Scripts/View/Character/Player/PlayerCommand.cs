@@ -491,9 +491,15 @@ public class PlayerWakeUp : PlayerCommand
 
     protected override bool Action()
     {
+        float groundDuration = duration * wakeUpTiming;
+        float wakeUpDuration = duration - groundDuration;
+
         completeTween = DOTween.Sequence()
-            .InsertCallback(duration * wakeUpTiming, () => playerAnim.fall.Bool = false)
-            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, mobReact.OnWakeUp)
+            .AppendInterval(groundDuration)
+            .AppendCallback(() => playerAnim.fall.Bool = false)
+            .AppendInterval(wakeUpDuration * 0.5f)
+            .AppendCallback(mobReact.OnWakeUp)
+            .AppendInterval(wakeUpDuration * 0.5f)
             .SetUpdate(false)
             .Play();
 
