@@ -29,19 +29,19 @@ public abstract class MobInput : InputHandler, IMobInput
 
     public virtual ICommand InputIced(float duration)
     {
+        DisableInput();
+
+        if (IsIdling) return ForceEnqueue(GetIcedCommand(duration, 0.98f));
+
         // Retrieve remaining process of current command
         ICommand continuation = commander.PostponeCurrent();
 
         ClearAll();
 
-        ICommand iced = GetIcedCommand(duration);
+        ICommand iced = ForceEnqueue(GetIcedCommand(duration, 1f));
 
-        ForceEnqueue(iced);
-
-        // Enqueue remaining process command after icing
-        if (continuation != null) ForceEnqueue(continuation);
-
-        DisableInput();
+        // Enqueue remaining process of interrupted command after icing
+        ForceEnqueue(continuation);
 
         return iced;
     }
@@ -59,8 +59,8 @@ public abstract class MobInput : InputHandler, IMobInput
         commander.Cancel();
     }
 
-    protected virtual ICommand GetIcedCommand(float duration)
-        => new IcedCommand(target, duration);
+    protected virtual ICommand GetIcedCommand(float duration, float validateTiming)
+        => new IcedCommand(target, duration, validateTiming);
 
     public float GetIcingFrames() => IsIced ? currentCommand.RemainingFramesToComplete : 0.0f;
 }

@@ -268,8 +268,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
         return pitFall;
     }
 
-    protected override ICommand GetIcedCommand(float duration)
-        => new PlayerIcedCommand(playerTarget, duration);
+    protected override ICommand GetIcedCommand(float duration, float validateTiming)
+        => new PlayerIcedCommand(playerTarget, duration, validateTiming);
 
     public override void OnIceCrash()
     {

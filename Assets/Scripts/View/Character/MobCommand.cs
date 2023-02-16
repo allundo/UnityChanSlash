@@ -36,7 +36,7 @@ public class IcedCommand : MobCommand, IIcedCommand
     public override int priority => 20;
     private float framesToMelt;
 
-    public IcedCommand(ICommandTarget target, float duration) : base(target, duration, 0.98f)
+    public IcedCommand(ICommandTarget target, float duration, float validateTiming) : base(target, duration, validateTiming)
     {
         framesToMelt = duration;
     }

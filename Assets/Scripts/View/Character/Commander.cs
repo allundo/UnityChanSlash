@@ -116,7 +116,7 @@ public class Commander
     {
         ICommand continuation = currentCommand?.GetContinuation();
         execDisposable?.Dispose();
-        DispatchCommand(); // No command is dispatched if iced or command queue is empty.
+        currentCommand = null;
         return continuation;
     }
 

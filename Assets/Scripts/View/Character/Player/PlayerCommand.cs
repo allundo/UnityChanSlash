@@ -902,7 +902,7 @@ public class PlayerIcedCommand : PlayerCommand, IIcedCommand
 {
     private float framesToMelt;
     public override int priority => 20;
-    public PlayerIcedCommand(PlayerCommandTarget target, float duration) : base(target, duration, 0.98f)
+    public PlayerIcedCommand(PlayerCommandTarget target, float duration, float validateTiming) : base(target, duration, validateTiming)
     {
         framesToMelt = duration;
     }
