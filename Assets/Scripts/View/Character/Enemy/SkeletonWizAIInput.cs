@@ -51,24 +51,11 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        if (IsPlayerFound(forward)) return RandomChoice(ice, fire);
+        if (IsPlayerFound(forward)) return RandomChoice(ice, ice);
 
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
         return MoveForwardOrTurn(mobMap.IsMovable(forward), mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
-    }
-
-    // Doesn't fall by ice
-    public override ICommand InputIced(float duration)
-    {
-        // Delete Command queue only
-        ClearAll(true);
-        ICommand continuation = commander.PostponeCurrent();
-        ICommand iced = new IcedCommand(target, duration);
-        InputCommand(iced);
-        if (continuation != null) ForceEnqueue(continuation);
-
-        return iced;
     }
 }
