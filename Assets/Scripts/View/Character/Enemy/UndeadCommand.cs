@@ -49,6 +49,38 @@ public class Resurrection : UndeadCommand
 
         return ObservableComplete();
     }
+
+    public override ICommand GetContinuation()
+    {
+        CancelValidate();
+        return new ResurrectionContinue(target, startMoving, RemainingDuration);
+    }
+}
+
+public class ResurrectionContinue : Command
+{
+    private ICommand startMoving;
+    public ResurrectionContinue(ICommandTarget target, ICommand startMoving, float duration) : base(target.input, null, null, duration)
+    {
+        this.target = target;
+        this.map = target.map;
+        this.startMoving = startMoving;
+    }
+
+    protected override bool Action()
+    {
+        if (map.DestVec.magnitude > 0f)
+        {
+            input.Interrupt(startMoving, false);
+        }
+        return true;
+    }
+
+    public override ICommand GetContinuation()
+    {
+        CancelValidate();
+        return new ResurrectionContinue(target, startMoving, RemainingDuration);
+    }
 }
 
 public class StartMoving : UndeadCommand
