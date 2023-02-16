@@ -70,31 +70,31 @@ public class Command : ICommand
         map = target.map;
     }
 
-    public Command(IInput input, Tween playing, Tween complete, List<Action> onCompleted = null)
+    public Command(IInput input, Tween playing, Tween complete, float duration, List<Action> onCompleted = null)
     {
         this.input = input;
         this.playingTween = playing;
         this.completeTween = complete;
         this.onCompleted = onCompleted ?? new List<Action>();
-        this.duration = RemainingDuration;
+        this.duration = duration;
         this.invalidDuration = this.duration * 0.95f;
     }
 
     protected static Tween Pause(Tween src) => src == null || !src.IsActive() ? null : src.Pause();
-    public float RemainingDuration => Mathf.Max(CalcRemaining(playingTween), CalcRemaining(completeTween));
-    protected float CalcRemaining(Tween tween) => tween == null ? 0f : tween.Duration() - tween.fullPosition;
+    public float RemainingDuration => commandTimer == null ? 0f : commandTimer.Duration() - commandTimer.fullPosition;
     public float RemainingTimeScale => RemainingDuration / duration;
     public virtual float RemainingFramesToComplete => completeTween == null ? 0f : (1f - completeTween.ElapsedPercentage()) * duration / FRAME_UNIT;
 
     public Tween playingTween { get; protected set; } = null;
     protected Tween completeTween = null;
     protected Tween validateTween = null;
+    protected Tween commandTimer = null;
     protected List<Action> onCompleted = new List<Action>();
 
     public virtual ICommand GetContinuation()
     {
         CancelValidate();
-        return new Command(input, Pause(playingTween), Pause(completeTween), onCompleted);
+        return new Command(input, Pause(playingTween), Pause(completeTween), RemainingDuration, onCompleted);
     }
 
     public virtual void Cancel()
@@ -152,9 +152,8 @@ public class Command : ICommand
     /// <param name="value">will be notified by OnNext()</param>
     protected IObservable<T> DOTweenCompleted<T>(float dueTimeSec, T value, bool ignoreTimeScale = false)
     {
-        return DOTweenTimer(dueTimeSec, DoOnCompleted, ignoreTimeScale)
-            .OnCompleteAsObservable(value)
-            .IgnoreElements();
+        commandTimer = DOTweenTimer(dueTimeSec, DoOnCompleted, ignoreTimeScale);
+        return commandTimer.OnCompleteAsObservable(value).IgnoreElements();
     }
 
     protected Tween DOTweenTimer(float dueTimeSec, TweenCallback callback, bool ignoreTimeScale = false)

@@ -23,8 +23,6 @@ public abstract class EnemyCommand : MobCommand
         enemyAnim = target.anim as IEnemyAnimator;
         enemyMap = target.map as EnemyMapUtil;
     }
-
-    public EnemyCommand(IInput input, Tween playing, Tween complete, List<Action> onCompleted = null) : base(input, playing, complete, onCompleted) { }
 }
 
 public class EnemyIdle : EnemyCommand
@@ -38,13 +36,6 @@ public abstract class EnemyMove : EnemyCommand
     protected Tween speedTween;
     protected Tween resetTween;
     public EnemyMove(ICommandTarget target, float duration) : base(target, duration, 0.95f) { }
-    public EnemyMove(ICommandTarget target, Tween playing, Tween speedTween, Tween resetTween, List<Action> onCompleted = null) : base(target.input, playing, null, onCompleted)
-    {
-        enemyAnim = target.anim as IEnemyAnimator;
-
-        this.speedTween = speedTween;
-        this.resetTween = resetTween;
-    }
 
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
@@ -54,11 +45,7 @@ public abstract class EnemyMove : EnemyCommand
         speedTween?.Kill();
         resetTween?.Complete();
         enemyAnim.speed.Float = 0f;
-
-        playingTween?.Kill();
-        validateTween?.Kill();
-        input.ValidateInput();
-        onCompleted.Clear();
+        base.Cancel();
     }
 
     protected virtual void SetSpeed()
@@ -105,8 +92,6 @@ public abstract class EnemyMove : EnemyCommand
 public class EnemyForward : EnemyMove
 {
     public EnemyForward(ICommandTarget target, float duration) : base(target, duration) { }
-    public EnemyForward(ICommandTarget target, Tween playing, Tween speedTween, Tween resetTween, List<Action> onCompleted = null)
-        : base(target, playing, speedTween, resetTween, onCompleted) { }
 
     protected override bool IsMovable => mobMap.IsForwardMovable;
     protected override Pos GetDest => mobMap.GetForward;
@@ -115,14 +100,33 @@ public class EnemyForward : EnemyMove
     public override ICommand GetContinuation()
     {
         CancelValidate();
-        return new EnemyMoveContinue(target, Pause(playingTween), Pause(speedTween), resetTween, onCompleted);
+        try
+        {
+            return new EnemyMoveContinue(target, Pause(playingTween), Pause(speedTween), resetTween, RemainingDuration, onCompleted);
+        }
+        catch (NullReferenceException ex)
+        {
+            Debug.Log($"target: {target}, playingTween: {playingTween}, speed: {speedTween}, reset: {resetTween}, onCompleted: {onCompleted}");
+            Debug.Log(ex.Message);
+            return null;
+        }
     }
 }
 
-public class EnemyMoveContinue : EnemyForward
+public class EnemyMoveContinue : Command
 {
-    public EnemyMoveContinue(ICommandTarget target, Tween playing, Tween speedTween, Tween resetTween, List<Action> onCompleted = null)
-        : base(target, playing, speedTween, resetTween, onCompleted) { }
+    protected IEnemyAnimator enemyAnim;
+    protected Tween speedTween;
+    protected Tween resetTween;
+
+    public EnemyMoveContinue(ICommandTarget target, Tween playing, Tween speedTween, Tween resetTween, float duration, List<Action> onCompleted = null)
+        : base(target.input, playing, null, duration, onCompleted)
+    {
+        this.target = target;
+        this.enemyAnim = target.anim as IEnemyAnimator;
+        this.speedTween = speedTween;
+        this.resetTween = resetTween;
+    }
 
     protected override bool Action()
     {
@@ -130,6 +134,20 @@ public class EnemyMoveContinue : EnemyForward
         speedTween?.Play();
         playingTween?.Play();
         return true;
+    }
+
+    public override ICommand GetContinuation()
+    {
+        CancelValidate();
+        return new EnemyMoveContinue(target, Pause(playingTween), Pause(speedTween), resetTween, RemainingDuration, onCompleted);
+    }
+
+    public override void Cancel()
+    {
+        speedTween?.Kill();
+        resetTween?.Complete();
+        enemyAnim.speed.Float = 0f;
+        base.Cancel();
     }
 }
 

@@ -921,3 +921,14 @@ public class PlayerIcedCommand : PlayerCommand, IIcedCommand
         return true;
     }
 }
+
+public class PlayerGuardCommand : GuardCommand
+{
+    public PlayerGuardCommand(ICommandTarget target, float duration) : base(target, duration, 0f) { }
+
+    public override ICommand GetContinuation()
+    {
+        Cancel();
+        return this;
+    }
+}

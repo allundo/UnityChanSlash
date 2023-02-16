@@ -18,7 +18,7 @@ public class PlayerCommander : ShieldCommander
     public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
         anim = target.anim as PlayerAnimator;
-        guard = new GuardCommand(target, 6000f, 0f);
+        guard = new PlayerGuardCommand(target, 6000f);
     }
 
     public override void EnqueueCommand(ICommand cmd)
