@@ -66,7 +66,7 @@ public class Tile
     public bool HasItem(ItemType type) => items.Contains(item => item.itemInfo.type == type);
 
     public virtual IEnemyStatus GetEnemyStatus()
-        => OnEnemy ?? (OnCharacterDest is IEnemyStatus ? OnCharacterDest as IEnemyStatus : null) ?? AboveEnemy;
+        => OnEnemy ?? OnCharacterDest as IEnemyStatus ?? AboveEnemy;
 }
 
 public abstract class HandleTile : Tile
