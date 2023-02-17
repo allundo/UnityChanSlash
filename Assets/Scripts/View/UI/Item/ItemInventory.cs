@@ -118,17 +118,16 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     {
         inventoryItems.SetEnablePanels(isEnable);
         equipItems.SetEnablePanels(isEnable);
-        enabled = selector.enabled = isEnable;
-        if (!isEnable) Cancel();
+        selector.SetEnable(isEnable);
+        enabled = isEnable;
+        if (!isEnable) iconHandler.CleanUp();
     }
 
     public void SetEquipEnable(bool isEnable)
     {
         equipItems.SetEnablePanels(isEnable);
-        if (!isEnable && selector.isEquip) Cancel();
+        if (!isEnable && selector.isEquip) iconHandler.CleanUp();
     }
-
-    public void Cancel() => iconHandler.CleanUp();
 
     public bool hasKeyBlade()
     {
