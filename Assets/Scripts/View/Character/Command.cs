@@ -189,6 +189,10 @@ public class Command : ICommand
         return seq;
     }
 
+    /// <summary>
+    /// Reserve actions on the command completion. Do not call it outside Command.Execute(), such as constructor.
+    /// </summary>
+    /// <param name="action"></param>
     protected void SetOnCompleted(Action action)
     {
         this.onCompleted.Add(action);
