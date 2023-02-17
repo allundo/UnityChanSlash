@@ -904,20 +904,23 @@ public class PlayerInspect : PlayerAction
     }
 }
 
-public class PlayerIcedCommand : PlayerCommand, IIcedCommand
+public class PlayerIcedCommand : IcedCommand
 {
-    public float framesToMelt { get; protected set; }
-    public override int priority => 20;
+    protected PlayerInput playerInput;
     public PlayerIcedCommand(PlayerCommandTarget target, float duration, float validateTiming) : base(target, duration, validateTiming)
     {
-        framesToMelt = duration;
+        playerInput = input as PlayerInput;
     }
 
     protected override bool Action()
     {
         mobReact.Iced(framesToMelt);
-        SetUIInvisible();
+
+        playerInput.SetInputVisible(false);
+        SetOnCompleted(() => playerInput.SetInputVisible(true));
+
         SetOnCompleted(() => mobReact.Melt());
+
         return true;
     }
 }

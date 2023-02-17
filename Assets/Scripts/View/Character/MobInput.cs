@@ -56,7 +56,7 @@ public abstract class MobInput : InputHandler, IMobInput
         }
 #endif
 
-        commander.Cancel();
+        if (currentCommand is IcedCommand) commander.Cancel();
     }
 
     protected virtual ICommand GetIcedCommand(float duration, float validateTiming)
