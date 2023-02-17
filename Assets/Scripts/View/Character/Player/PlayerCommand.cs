@@ -842,7 +842,6 @@ public class PlayerDie : PlayerCommand
     {
         playingTween = tweenMove.TurnToDir(1f).Play();
 
-        itemInventory.Cancel();
         react.OnDie();
         playerAnim.die.Bool = true;
 
