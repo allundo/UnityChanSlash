@@ -382,8 +382,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
 {
     public override int priority => 20;
     protected Tween meltTimer;
-    protected float framesToMelt;
-    public override float RemainingFramesToComplete => framesToMelt;
+    public float framesToMelt { get; protected set; }
 
     public PlayerIcedFall(PlayerCommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
@@ -466,7 +465,7 @@ public class PlayerPitFall : PlayerCommand
 public class PlayerIcedPitFall : PlayerPitFall, IIcedCommand
 {
     private float meltTime;
-    public override float RemainingFramesToComplete => meltTime / FRAME_UNIT;
+    public float framesToMelt => meltTime / FRAME_UNIT;
 
     public PlayerIcedPitFall(PlayerCommandTarget target, float damage, float duration, float meltTime) : base(target, damage, duration)
     {
@@ -907,7 +906,7 @@ public class PlayerInspect : PlayerAction
 
 public class PlayerIcedCommand : PlayerCommand, IIcedCommand
 {
-    private float framesToMelt;
+    public float framesToMelt { get; protected set; }
     public override int priority => 20;
     public PlayerIcedCommand(PlayerCommandTarget target, float duration, float validateTiming) : base(target, duration, validateTiming)
     {

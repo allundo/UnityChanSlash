@@ -151,8 +151,7 @@ public class FlyingAttackLeave : FlyingAttack
 public class FlyingIcedFall : FlyingCommand, IIcedCommand
 {
     protected float meltTime;
-    protected float framesToMelt;
-    public override float RemainingFramesToComplete => framesToMelt;
+    public float framesToMelt { get; protected set; }
 
     public FlyingIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {

@@ -62,5 +62,5 @@ public abstract class MobInput : InputHandler, IMobInput
     protected virtual ICommand GetIcedCommand(float duration, float validateTiming)
         => new IcedCommand(target, duration, validateTiming);
 
-    public float GetIcingFrames() => IsIced ? currentCommand.RemainingFramesToComplete : 0.0f;
+    public float GetIcingFrames() => IsIced ? (currentCommand as IIcedCommand).framesToMelt : 0.0f;
 }

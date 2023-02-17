@@ -27,12 +27,15 @@ public class DieCommand : MobCommand
     }
 }
 
-public interface IIcedCommand : ICommand { }
+public interface IIcedCommand : ICommand
+{
+    float framesToMelt { get; }
+}
 
 public class IcedCommand : MobCommand, IIcedCommand
 {
     public override int priority => 20;
-    private float framesToMelt;
+    public float framesToMelt { get; protected set; }
 
     public IcedCommand(ICommandTarget target, float duration, float validateTiming) : base(target, duration, validateTiming)
     {

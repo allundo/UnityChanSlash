@@ -155,8 +155,7 @@ public class RabbitWondering : RabbitCommand
 public class RabbitIcedFall : RabbitCommand, IIcedCommand
 {
     protected float meltTime;
-    protected float framesToMelt;
-    public override float RemainingFramesToComplete => framesToMelt;
+    public float framesToMelt { get; protected set; }
 
     public RabbitIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
