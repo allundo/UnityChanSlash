@@ -118,9 +118,13 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     {
         inventoryItems.SetEnablePanels(isEnable);
         equipItems.SetEnablePanels(isEnable);
-        selector.SetEnable(isEnable);
         enabled = isEnable;
-        if (!isEnable) iconHandler.CleanUp();
+
+        if (!isEnable)
+        {
+            selector.Disable();
+            iconHandler.CleanUp();
+        }
     }
 
     public void SetEquipEnable(bool isEnable)

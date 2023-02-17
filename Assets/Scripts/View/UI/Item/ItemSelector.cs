@@ -53,10 +53,13 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         SetRaycast(false);
     }
 
-    public void Disable() => SetEnable(false);
-    public void Enable() => SetEnable(true);
+    public void Disable()
+    {
+        isLongPressing.Value = isDragOn = false;
+        SetEnable(false);
+    }
 
-    public void SetEnable(bool isEnable)
+    protected void SetEnable(bool isEnable)
     {
         image.enabled = enabled = isEnable;
     }
@@ -89,6 +92,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     }
     public ItemSelector SetSelect(Vector2 pos, bool isEquip)
     {
+        SetEnable(true);
         this.isEquip = isEquip;
         image.sprite = select;
         ui.Resize(1.4f, 0.2f).Play();

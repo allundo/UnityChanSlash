@@ -250,7 +250,6 @@ public class ItemIconHandler : IItemIconHandler
 
             if (currentTarget != currentSelected)
             {
-                selector.Enable();
                 selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
                 pressedIndex = index;
@@ -472,7 +471,6 @@ public class ItemIconHandler : IItemIconHandler
             {
                 pressedInventory.ExpandNum(pressedIndex);
 
-                selector.Enable();
                 selector.SetSelect(pressedInventory.UIPos(pressedIndex), false);
                 selectedInventory = pressedInventory;
 
