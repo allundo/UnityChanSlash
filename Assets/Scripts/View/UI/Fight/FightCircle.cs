@@ -225,7 +225,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
         else
         {
-            Inactivate();
+            Inactivate(status != null && !status.IsAlive);
         }
     }
 }
