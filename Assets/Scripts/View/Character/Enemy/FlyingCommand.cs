@@ -169,7 +169,7 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.JumpRelative(map.DestVec + new Vector3(0f, -1.25f, 0f), 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash))
+            .AppendCallback(() => mobReact.Damage(5f, map.dir, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 

@@ -173,7 +173,7 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.Jump(mobMap.DestVec3Pos + map.GetBackwardVector(0.2f), 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => mobReact.Damage(0.5f, null, AttackType.Smash))
+            .AppendCallback(() => mobReact.Damage(5f, map.dir, AttackType.Smash))
             .SetUpdate(false)
             .Play();
 
