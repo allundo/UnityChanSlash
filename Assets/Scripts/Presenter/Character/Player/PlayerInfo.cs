@@ -22,11 +22,11 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         anim = GetComponent<PlayerAnimator>();
     }
 
-    public Pos PlayerPos => mapUtil.onTilePos;
-    public Vector3 PlayerVec3Pos => mapUtil.CurrentVec3Pos;
-    public IDirection PlayerDir => mapUtil.dir;
+    public Pos Pos => mapUtil.onTilePos;
+    public Vector3 Vec3Pos => mapUtil.CurrentVec3Pos;
+    public IDirection Dir => mapUtil.dir;
 
-    public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && PlayerPos == pos;
+    public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && Pos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
     public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && mapUtil.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
@@ -54,7 +54,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         if (cmd is PlayerIcedFall) exitState = ExitState.IcedFall;
         if (cmd is PlayerIcedPitFall) exitState = ExitState.IcedPitFall;
 
-        return new DataStoreAgent.PlayerData(PlayerPos, status, exitState);
+        return new DataStoreAgent.PlayerData(Pos, status, exitState);
     }
 
     public void ImportRespawnData(DataStoreAgent.PlayerData data, WorldMap map)

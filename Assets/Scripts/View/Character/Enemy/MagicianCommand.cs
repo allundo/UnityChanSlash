@@ -22,7 +22,7 @@ public class MagicianTeleport : MagicianCommand
 
     protected override bool Action()
     {
-        Pos destPos = enemyMap.SearchSpaceNearBy(PlayerInfo.Instance.PlayerPos, range);
+        Pos destPos = enemyMap.SearchSpaceNearBy(PlayerInfo.Instance.Pos, range);
 
         if (destPos.IsNull) return false;
 

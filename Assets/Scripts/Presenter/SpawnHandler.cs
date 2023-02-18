@@ -59,7 +59,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
         lightGenerator.DestroyAll();
     }
 
-    public Item PlaceItem(ItemType type, int numOfItem, Pos pos) => itemGenerator.PlaceItem(type, numOfItem, pos, PlayerInfo.Instance.PlayerDir);
+    public Item PlaceItem(ItemType type, int numOfItem, Pos pos) => itemGenerator.PlaceItem(type, numOfItem, pos, PlayerInfo.Instance.Dir);
 
     public void MoveFloorItems(WorldMap map, IDirection playerDir)
     {

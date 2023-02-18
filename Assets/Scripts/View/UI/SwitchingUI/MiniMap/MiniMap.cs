@@ -145,7 +145,7 @@ public class MiniMap : SwitchingContentBase
         rectTransform.anchoredPosition = anchoredCenter;
 
         image.color = Color.white;
-        UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos, miniMapSize);
+        UpdateMiniMap(PlayerInfo.Instance.Vec3Pos, miniMapSize);
     }
 
     public override void ShrinkUI()
@@ -153,7 +153,7 @@ public class MiniMap : SwitchingContentBase
         ResetUISize(currentSize, MINIMAP_SIZE, 0.4f);
         rectTransform.anchoredPosition = currentPos;
 
-        UpdateMiniMap(PlayerInfo.Instance.PlayerVec3Pos);
+        UpdateMiniMap(PlayerInfo.Instance.Vec3Pos);
     }
 
     protected void ResetUISize(float size, int miniMapSize, float alpha)
