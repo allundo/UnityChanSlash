@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 [RequireComponent(typeof(Image))]
-public abstract class Gauge : MonoBehaviour
+public class Gauge : MonoBehaviour
 {
     protected Image gauge = default;
     public Color color

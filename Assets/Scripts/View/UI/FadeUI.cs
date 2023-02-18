@@ -9,7 +9,7 @@ public interface IFadeUI
     void KillTweens();
 }
 
-public abstract class FadeUI : MonoBehaviour, IFadeUI
+public class FadeUI : MonoBehaviour, IFadeUI
 {
     [SerializeField] protected float maxAlpha = 1f;
     protected FadeTween fade;
