@@ -30,7 +30,7 @@ public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
             }
             return;
         }
-        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
+        if (!enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
     }
 
     public void OnResurrection()

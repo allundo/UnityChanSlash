@@ -1,29 +1,78 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using UniRx;
+using System;
 
-public class PanelLifeGauge : FadeUI
+public class PanelLifeGauge : FadeUI, ISpawnObject<PanelLifeGauge>
 {
-    [SerializeField] private PanelGauge greenGauge = default;
-    [SerializeField] private PanelGauge redGauge = default;
+    [SerializeField] private Image gauge = default;
+    [SerializeField] private PanelGauge greenBar = default;
+    [SerializeField] private PanelGauge redBar = default;
+    [SerializeField] private float offsetY = 1.7f;
 
     private Tween visualTimer = null;
     private Canvas canvas;
     private float angleX;
+    private IEnemyStatus status;
+    private IDisposable detectDir = null;
+    private IDisposable lifeChange = null;
 
-    void Start()
+    public IObservable<IEnemyStatus> DetectDisable => disableSubject;
+    private ISubject<IEnemyStatus> disableSubject = new Subject<IEnemyStatus>();
+
+    protected override void Awake()
     {
-        canvas = transform.parent.GetComponent<Canvas>();
-        canvas.worldCamera = Camera.main;
+        FadeInit(new FadeTween(gauge, maxAlpha));
+
+        canvas = GetComponent<Canvas>();
         visualTimer = DOVirtual.DelayedCall(3f, () => FadeInactivate()).AsReusable(gameObject);
+    }
 
-        canvas.transform.rotation = canvas.worldCamera.transform.rotation * Quaternion.Euler(0, 180, 0);
-        angleX = canvas.transform.localEulerAngles.x;
+    public PanelLifeGauge OnSpawn(Vector3 pos, IDirection dir, float duration = 0.2f)
+    {
+        gameObject.SetActive(true);
 
-        PlayerInfo.Instance.DirObservable
+        SetPos(pos);
+
+        canvas.worldCamera = Camera.main;
+        transform.rotation = canvas.worldCamera.transform.rotation * Quaternion.Euler(0, 180, 0);
+        angleX = transform.localEulerAngles.x;
+
+        var info = PlayerInfo.Instance;
+        SetDir(info.Dir);
+
+        detectDir = info.DirObservable
             .Where(_ => isActive)
             .Subscribe(dir => SetDir(dir))
             .AddTo(gameObject);
+
+        return this;
+    }
+
+    public PanelLifeGauge SetStatus(IEnemyStatus status)
+    {
+        this.status = status;
+        float lifeMax = status.LifeMax.Value;
+
+        lifeChange = status.Life
+            .Subscribe(life => UpdateGauge(life / lifeMax))
+            .AddTo(gameObject);
+
+        return this;
+    }
+
+    public void Activate() => FadeActivate();
+    public void Inactivate() => Disable();
+
+    void Update()
+    {
+        if (status != null) SetPos(status.corePos);
+    }
+
+    private void SetPos(Vector3 corePos)
+    {
+        transform.position = new Vector3(corePos.x, corePos.y + offsetY, corePos.z);
     }
 
     private void SetDir(IDirection playerDir)
@@ -31,13 +80,11 @@ public class PanelLifeGauge : FadeUI
         canvas.transform.rotation = Quaternion.Euler(angleX, playerDir.Backward.Angle.y, 0f);
     }
 
-    public void UpdateLife(float life, float lifeMax) => UpdateGauge(life / lifeMax);
-
-    public void UpdateGauge(float lifeRatio)
+    private void UpdateGauge(float lifeRatio)
     {
-        SetDir(PlayerInfo.Instance.Dir);
-        greenGauge.UpdateGauge(lifeRatio);
-        redGauge.UpdateGauge(lifeRatio);
+        FadeActivate();
+        greenBar.UpdateGauge(lifeRatio);
+        redBar.UpdateGauge(lifeRatio);
     }
 
     protected override void OnFadeEnable(float fadeDuration)
@@ -45,21 +92,27 @@ public class PanelLifeGauge : FadeUI
         visualTimer?.Rewind();
         visualTimer?.Restart();
 
-        greenGauge.FadeActivate(fadeDuration);
-        redGauge.FadeActivate(fadeDuration);
+        greenBar.FadeActivate(fadeDuration);
+        redBar.FadeActivate(fadeDuration);
     }
 
     protected override void BeforeFadeOut()
     {
-        greenGauge.FadeInactivate();
-        redGauge.FadeInactivate();
+        greenBar.FadeInactivate();
+        redBar.FadeInactivate();
     }
 
     protected override void OnDisable()
     {
+        detectDir?.Dispose();
+        lifeChange?.Dispose();
+
         visualTimer?.Rewind();
 
-        greenGauge.Disable();
-        redGauge.Disable();
+        greenBar.Disable();
+        redBar.Disable();
+
+        gameObject.SetActive(false);
+        disableSubject.OnNext(status);
     }
 }

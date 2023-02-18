@@ -7,9 +7,11 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     [SerializeField] private ItemGenerator itemGenerator = default;
     [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
     [SerializeField] private WitchLightGenerator lightGenerator = default;
+    [SerializeField] private LifeGaugeGenerator lifeGaugeGenerator = default;
     [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
 
     public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
+    public LifeGaugeGenerator GetLifeGaugeGenerator() => lifeGaugeGenerator;
 
     public void PlaceEnemyGenerators() => placeEnemyGenerator.Place();
 
@@ -43,6 +45,9 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     public void MoveFloorCharacters(WorldMap map, Pos startPos)
     {
         EnemyCommand.ClearResetTweens();
+
+        // Do not destroyLifeGauges since they are reusable for all over floors.
+        // lifeGaugeGenerator.DestroyAll();
 
         // Enemies and bullets must be destroyed during the same frame.
         placeEnemyGenerator.SwitchWorldMap(map, startPos);

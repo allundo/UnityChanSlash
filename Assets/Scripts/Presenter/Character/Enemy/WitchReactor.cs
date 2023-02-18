@@ -25,7 +25,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
             witchInput.InputSleep();
             return;
         }
-        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
+        if (!enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
     }
 
     public void OnResurrection()

@@ -25,12 +25,16 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     public bool IsTamed => enemyStatus.isTamed;
     public float ExpObtain => enemyStatus.ExpObtain;
 
+    protected LifeGaugeGenerator gaugeGenerator;
+
     protected override void Awake()
     {
         base.Awake();
         enemyEffect = effect as IEnemyEffect;
         enemyInput = input as IEnemyInput;
         enemyStatus = status as IEnemyStatus;
+
+        gaugeGenerator = SpawnHandler.Instance.GetLifeGaugeGenerator();
 
         hologramFade = new HologramFade(transform);
 
@@ -52,7 +56,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         enemyStatus.IsTarget.Subscribe(isTarget =>
         {
             hologramFade.SetActive(isTarget);
-            if (isTarget) enemyEffect.HideGauge();
+            if (isTarget) gaugeGenerator.Hide(enemyStatus);
         })
         .AddTo(this);
     }
@@ -64,7 +68,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
             input.InputDie();
             return;
         }
-        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
+        if (!enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
     }
 
     /// <summary>

@@ -114,7 +114,6 @@ GameObject:
   - component: {fileID: 5034305963682830822}
   - component: {fileID: 6599559612507161103}
   - component: {fileID: 2866767760770139493}
-  - component: {fileID: 2477792574675813718}
   m_Layer: 5
   m_Name: LifeGauge
   m_TagString: Untagged
@@ -182,21 +181,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2477792574675813718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5479071657160530463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 415150eeb449f427d809cb69ed5e7d6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxAlpha: 1
-  greenGauge: {fileID: 7517431134875569175}
-  redGauge: {fileID: 2726272869235009242}
 --- !u!1 &5849716653721578721
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +283,7 @@ GameObject:
   - component: {fileID: 2878294395428676838}
   - component: {fileID: 5440390251322148149}
   - component: {fileID: 6674989732558846061}
+  - component: {fileID: 1860680249227223891}
   m_Layer: 9
   m_Name: PanelLifeGauge
   m_TagString: Untagged
@@ -388,3 +373,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1860680249227223891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6259408774871456009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 415150eeb449f427d809cb69ed5e7d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxAlpha: 1
+  gauge: {fileID: 2866767760770139493}
+  greenBar: {fileID: 7517431134875569175}
+  redBar: {fileID: 2726272869235009242}
+  offsetY: 1.7
