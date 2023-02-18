@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UniRx;
+using System;
 
 public interface IPlayerMapUtil : IMobMapUtil
 {
@@ -10,6 +12,18 @@ public interface IPlayerMapUtil : IMobMapUtil
 [RequireComponent(typeof(PlayerStatus))]
 public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
 {
+    private IReactiveProperty<IDirection> reactiveDir = new ReactiveProperty<IDirection>(null);
+    public IObservable<IDirection> Dir => reactiveDir;
+
+    public override IDirection dir
+    {
+        get { return status.dir; }
+        set
+        {
+            reactiveDir.Value = value;
+            status.SetDir(value);
+        }
+    }
     public bool isInPit { get; protected set; } = false;
     public override bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos), dir) && !isInPit;
     public override bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos), dir.Backward) && !isInPit;

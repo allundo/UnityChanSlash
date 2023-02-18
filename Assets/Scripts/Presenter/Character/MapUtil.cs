@@ -11,7 +11,7 @@ public class MapUtil : MonoBehaviour, IMapUtil
     protected WorldMap map;
     protected Transform tf;
 
-    public IDirection dir { get { return status.dir; } set { status.SetDir(value); } }
+    public virtual IDirection dir { get { return status.dir; } set { status.SetDir(value); } }
 
     /// <summary>
     /// Tile position of destination for moving
