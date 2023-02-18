@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using UniRx;
 
 public class PanelLifeGauge : FadeUI
 {
@@ -18,13 +19,23 @@ public class PanelLifeGauge : FadeUI
 
         canvas.transform.rotation = canvas.worldCamera.transform.rotation * Quaternion.Euler(0, 180, 0);
         angleX = canvas.transform.localEulerAngles.x;
+
+        PlayerInfo.Instance.DirObservable
+            .Where(_ => isActive)
+            .Subscribe(dir => SetDir(dir))
+            .AddTo(gameObject);
+    }
+
+    private void SetDir(IDirection playerDir)
+    {
+        canvas.transform.rotation = Quaternion.Euler(angleX, playerDir.Backward.Angle.y, 0f);
     }
 
     public void UpdateLife(float life, float lifeMax) => UpdateGauge(life / lifeMax);
 
     public void UpdateGauge(float lifeRatio)
     {
-        canvas.transform.rotation = Quaternion.Euler(angleX, PlayerInfo.Instance.Dir.Backward.Angle.y, 0f);
+        SetDir(PlayerInfo.Instance.Dir);
         greenGauge.UpdateGauge(lifeRatio);
         redGauge.UpdateGauge(lifeRatio);
     }
