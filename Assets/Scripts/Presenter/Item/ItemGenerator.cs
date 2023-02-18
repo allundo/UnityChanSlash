@@ -82,9 +82,10 @@ public class ItemGenerator : MobGenerator<Item>
 
     private void StackRespawn(Stack<RespawnData> restore)
     {
+        var dir = PlayerInfo.Instance.Dir;
         while (restore.Count > 0)
         {
-            Respawn(restore.Pop());
+            Respawn(restore.Pop(), dir);
         }
     }
 
@@ -133,11 +134,7 @@ public class ItemGenerator : MobGenerator<Item>
         return null;
     }
 
-    public void Turn(IDirection dir)
-    {
-        transform.ForEach(tf => tf.GetComponent<Item>().SetDir(dir));
-    }
-    private bool Respawn(RespawnData data) => Put(data.info, data.pos);
+    private bool Respawn(RespawnData data, IDirection dir = null) => Put(data.info, data.pos, dir);
 
     private struct RespawnData
     {

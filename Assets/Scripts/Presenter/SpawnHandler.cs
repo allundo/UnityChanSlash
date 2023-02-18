@@ -64,7 +64,6 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     public void MoveFloorItems(WorldMap map, IDirection playerDir)
     {
         itemGenerator.SwitchWorldMap(map);
-        itemGenerator.Turn(playerDir);
     }
 
     public DataStoreAgent.RespawnData[] ExportRespawnData()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 using DG.Tweening;
 
 [RequireComponent(typeof(Renderer))]
@@ -11,6 +12,13 @@ public class Item : SpawnObject<Item>
     protected virtual void Awake()
     {
         meshRenderer = GetComponent<Renderer>();
+    }
+
+    void Start()
+    {
+        PlayerInfo.Instance.DirObservable
+            .Subscribe(dir => SetDir(dir))
+            .AddTo(this);
     }
 
     public override Item OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5F)
@@ -27,10 +35,9 @@ public class Item : SpawnObject<Item>
         return this;
     }
 
-    public Item SetDir(IDirection dir)
+    private void SetDir(IDirection dir)
     {
         transform.DORotate(dir.Angle, 0.04f).SetEase(Ease.InQuad).Play();
-        return this;
     }
 
     public Item SetItemInfo(ItemInfo info)

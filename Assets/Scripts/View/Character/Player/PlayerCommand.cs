@@ -517,7 +517,6 @@ public class PlayerTurnL : PlayerCommand
         mainCamera.TurnLeft();
         playerAnim.turnL.Fire();
         hidePlateHandler.Turn();
-        itemGenerator.Turn(mobMap.dir);
 
         playingTween = tweenMove.TurnToDir().SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;
@@ -535,7 +534,6 @@ public class PlayerTurnR : PlayerCommand
         mainCamera.TurnRight();
         playerAnim.turnR.Fire();
         hidePlateHandler.Turn();
-        itemGenerator.Turn(mobMap.dir);
 
         playingTween = tweenMove.TurnToDir().SetEase(Ease.InCubic).OnComplete(mainCamera.ResetCamera).Play();
         return true;

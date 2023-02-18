@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UniRx;
 
 [RequireComponent(typeof(PlayerMapUtil))]
 [RequireComponent(typeof(PlayerInput))]
@@ -26,7 +27,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public Pos Pos => mapUtil.onTilePos;
     public Vector3 Vec3Pos => mapUtil.CurrentVec3Pos;
     public IDirection Dir => mapUtil.dir;
-    public IObservable<IDirection> DirObservable => mapUtil.Dir;
+    public IObservable<IDirection> DirObservable => mapUtil.Dir.Where(dir => dir != null);
 
     public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && Pos == pos;
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
