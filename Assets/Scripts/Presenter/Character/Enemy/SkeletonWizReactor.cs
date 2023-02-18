@@ -18,7 +18,19 @@ public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) undeadInput.InputSleep();
+        if (life <= 0.0f)
+        {
+            if (undeadStatus.curse > 0f)
+            {
+                undeadInput.InputSleep();
+            }
+            else
+            {
+                input.InputDie();
+            }
+            return;
+        }
+        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
     }
 
     public void OnResurrection()

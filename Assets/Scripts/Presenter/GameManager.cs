@@ -208,6 +208,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         }
 
         isInitialOrientation = false;
+
+        HologramFade.isHologramOn = orientation == DeviceOrientation.LandscapeRight;
     }
 
     public void EnterStair(bool isDownStairs)

@@ -41,12 +41,30 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     {
         status.Life
             .SkipLatestValueOnSubscribe()
-            .Subscribe(life => OnLifeChange(life))
+            .Subscribe(life =>
+            {
+                OnLifeChange(life);
+            })
             .AddTo(this);
 
         enemyStatus.ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
 
-        enemyStatus.IsTarget.Subscribe(isTarget => hologramFade.SetActive(isTarget)).AddTo(this);
+        enemyStatus.IsTarget.Subscribe(isTarget =>
+        {
+            hologramFade.SetActive(isTarget);
+            if (isTarget) enemyEffect.HideGauge();
+        })
+        .AddTo(this);
+    }
+
+    protected override void OnLifeChange(float life)
+    {
+        if (life <= 0.0f)
+        {
+            input.InputDie();
+            return;
+        }
+        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
     }
 
     /// <summary>

@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class HologramFade : MaterialEffect
 {
+    public static bool isHologramOn = false;
+
     public HologramFade(Transform targetTf) : base(targetTf)
     {
         InitEffects();
@@ -16,7 +18,7 @@ public class HologramFade : MaterialEffect
 
     public void SetActive(bool isActive)
     {
-        if (isActive)
+        if (isActive && isHologramOn)
         {
             FadeIn();
         }

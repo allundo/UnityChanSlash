@@ -11,7 +11,7 @@ public interface IEnemyStatus : IMobStatus
 
     IObservable<EnemyStatus.ActivateOption> ActiveWithOption { get; }
 
-    IObservable<bool> IsTarget { get; }
+    IReadOnlyReactiveProperty<bool> IsTarget { get; }
     void SetTarget(bool isTarget);
     string NameLv { get; }
 
@@ -60,7 +60,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public IObservable<ActivateOption> ActiveWithOption => activeWithOptionSubject;
     public override string NameLv => $"{param.name}\nLv{level + 1}";
 
-    public IObservable<bool> IsTarget => isTarget;
+    public IReadOnlyReactiveProperty<bool> IsTarget => isTarget;
     private IReactiveProperty<bool> isTarget = new ReactiveProperty<bool>(false);
     public void SetTarget(bool isTarget)
     {

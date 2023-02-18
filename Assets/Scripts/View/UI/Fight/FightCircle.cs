@@ -32,7 +32,6 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private bool InForward(Vector2 screenPos) => (forwardUIPos - screenPos).sqrMagnitude < sqrForwardRadius;
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
-    private bool isHologramOn = false;
 
     protected virtual void Awake()
     {
@@ -98,8 +97,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void ResetOrientation(DeviceOrientation orientation, float offsetX)
     {
-        isHologramOn = orientation == DeviceOrientation.LandscapeRight;
-        EnemyStatus.Value?.SetTarget(isHologramOn);
+        EnemyStatus.Value?.SetTarget(true);
         ResetCenterPos();
         enemyTarget.SetTargetPosOffsetX(offsetX);
     }
@@ -175,7 +173,7 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void Activate(IEnemyStatus status)
     {
         EnemyStatus.Value?.SetTarget(false);
-        status?.SetTarget(isHologramOn);
+        status?.SetTarget(true);
 
         EnemyStatus.Value = status;
 

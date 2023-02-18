@@ -20,7 +20,12 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) witchInput.InputSleep();
+        if (life <= 0.0f)
+        {
+            witchInput.InputSleep();
+            return;
+        }
+        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
     }
 
     public void OnResurrection()

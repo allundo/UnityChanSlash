@@ -29,7 +29,9 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
             {
                 input.InputDie();
             }
+            return;
         }
+        if (!enemyStatus.IsTarget.Value) enemyEffect.ShowGauge(enemyStatus.LifeRatio);
     }
 
     public void OnResurrection()
