@@ -89,9 +89,11 @@ public class MobStatus : Status, IMobStatus
         return DamageType.Side;
     }
 
-    public override void ResetStatus()
+    public override void ResetStatus(float life = 0f)
     {
-        life.Value = lifeMax.Value = GainedLifeMax;
+        lifeMax.Value = GainedLifeMax;
+        this.life.Value = life == 0f ? lifeMax.Value : life;
+
         isOnGround = mobParam.isOnGround;
         icingFrames = 0f;
         isHidden = false;
@@ -126,9 +128,8 @@ public class MobStatus : Status, IMobStatus
             { AttackAttr.Coin,        1f                                                                        },
         };
 
-        ResetStatus();
+        ResetStatus(data.life);
         attack = mobParam.attack + levelGain.attackGain * level;
-        if (data.life != 0) life.Value = data.life;
 
         return this;
     }

@@ -86,9 +86,9 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public override string CauseOfDeath(AttackType attackType = AttackType.None)
         => ResourceLoader.Instance.GetDeadCause(this.type, attackType);
 
-    public override void ResetStatus()
+    public override void ResetStatus(float life = 0f)
     {
-        base.ResetStatus();
+        base.ResetStatus(life);
         isTamed = false;
     }
 

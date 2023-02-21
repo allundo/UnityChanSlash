@@ -28,9 +28,9 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
         curse = curseMax = 0f;
     }
 
-    public override void ResetStatus()
+    public override void ResetStatus(float life = 0f)
     {
-        base.ResetStatus();
+        base.ResetStatus(life);
         curse = curseMax = lifeMax.Value;
     }
 

@@ -56,7 +56,7 @@ public interface IStatus : IAttacker
 
     float MagicMultiplier { get; }
 
-    void ResetStatus();
+    void ResetStatus(float life = 0f);
 
     void Activate();
     void Inactivate();
@@ -113,9 +113,10 @@ public class Status : SpawnObject<Status>, IStatus
         life.Value = Mathf.Clamp(life.Value + diff, 0f, lifeMax.Value);
     }
 
-    public virtual void ResetStatus()
+    public virtual void ResetStatus(float life = 0f)
     {
-        life.Value = lifeMax.Value = param.defaultLifeMax;
+        lifeMax.Value = param.defaultLifeMax;
+        this.life.Value = life == 0f ? lifeMax.Value : life;
     }
 
     public override void Activate()
