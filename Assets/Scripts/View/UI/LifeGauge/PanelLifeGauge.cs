@@ -56,6 +56,7 @@ public class PanelLifeGauge : FadeUI, ISpawnObject<PanelLifeGauge>
         float lifeMax = status.LifeMax.Value;
 
         lifeChange = status.Life
+            .SkipLatestValueOnSubscribe()
             .Subscribe(life => UpdateGauge(life / lifeMax))
             .AddTo(gameObject);
 
