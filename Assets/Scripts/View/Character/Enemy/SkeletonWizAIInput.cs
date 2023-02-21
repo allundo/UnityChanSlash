@@ -51,7 +51,7 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        if (IsPlayerFound(forward)) return RandomChoice(ice, ice);
+        if (IsPlayerFound(forward)) return RandomChoice(ice, fire);
 
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
