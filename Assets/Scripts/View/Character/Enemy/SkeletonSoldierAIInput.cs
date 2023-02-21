@@ -45,7 +45,7 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         if (shieldAnim.fighting.Bool)
         {
             if (currentCommand is EnemyIdle) return attack;
-            return RandomChoice(attack, guard, idle);
+            return RandomChoice(attack, guard, guard, idle);
         }
 
         Pos forward2 = mobMap.dir.GetForward(forward);
