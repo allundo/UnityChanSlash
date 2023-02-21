@@ -161,13 +161,9 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         return new Dictionary<Pos, IDirection>()
         {
-            { new Pos(14, 12), Direction.north },
             { new Pos(16, 12), Direction.north },
-            { new Pos(16, 14), Direction.north },
             { new Pos(16, 16), Direction.north },
-            { new Pos(14, 16), Direction.north },
             { new Pos(12, 16), Direction.north },
-            { new Pos(12, 14), Direction.north },
             { new Pos(12, 12), Direction.north },
             { new Pos( 3, 21), Direction.north },
             { new Pos(11, 27), Direction.north },
@@ -177,6 +173,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(19,  1), Direction.west  },
             { new Pos(27,  1), Direction.south },
             { new Pos(27,  7), Direction.north },
+            { new Pos(12, 14), Direction.north },
+            { new Pos(14, 12), Direction.north },
+            { new Pos(16, 14), Direction.north },
+            { new Pos(14, 16), Direction.north },
             { new Pos(14, 14), Direction.north }, // KeyBlade
             { new Pos( 1,  1), Direction.south }, // up stairs
         };
