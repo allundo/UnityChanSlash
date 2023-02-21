@@ -30,10 +30,10 @@ public class PotionAction : ItemAction
     }
 }
 
-public class KeyBladeAction : ItemAction
+public class KeyItemAction : ItemAction
 {
     protected ItemType type;
-    public KeyBladeAction(ItemAttr attr, ItemType type) : base(attr)
+    public KeyItemAction(ItemAttr attr, ItemType type) : base(attr)
     {
         this.type = type;
     }

@@ -530,9 +530,15 @@ public class MapManager
                 // Skip pillar or gate
                 if (x % 2 == 0 && y % 2 == 0) continue;
 
+                if (matrix[x, y] == Terrain.LockedDoor)
+                {
+                    dirMap[x, y] = GetValidDir(x, y, IsPath);
+                    continue;
+                }
+
                 if (matrix[x, y] == Terrain.MessageWall || matrix[x, y] == Terrain.ExitDoor || matrix[x, y] == Terrain.Box)
                 {
-                    dirMap[x, y] = GetValidDir(x, y);
+                    dirMap[x, y] = GetValidDir(x, y, IsEnterable);
                     continue;
                 }
 
@@ -548,7 +554,7 @@ public class MapManager
             {
                 if (matrix[x, y] == Terrain.MessagePillar || matrix[x, y] == Terrain.Box)
                 {
-                    dirMap[x, y] = GetValidDir(x, y);
+                    dirMap[x, y] = GetValidDir(x, y, IsEnterable);
                     continue;
                 }
 
@@ -589,21 +595,24 @@ public class MapManager
 
         return dir;
     }
-    public Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.ExitDoor);
+    public Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.LockedDoor) | GetDir(x, y, Terrain.ExitDoor);
     private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall) | GetDir(x, y, Terrain.MessageWall);
     public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar);
 
-    public Dir GetValidDir(int x, int y)
+    public Dir GetValidDir(int x, int y) => GetValidDir(x, y, IsEnterable);
+
+    private Dir GetValidDir(int x, int y, Func<Terrain, bool> validChecker)
     {
-        if (y > 0 && IsEnterable(matrix[x, y - 1])) return Dir.N;
-        if (x > 0 && IsEnterable(matrix[x - 1, y])) return Dir.W;
-        if (y < height - 2 && IsEnterable(matrix[x, y + 1])) return Dir.S;
-        if (x < width - 2 && IsEnterable(matrix[x + 1, y])) return Dir.E;
+        if (y > 0 && validChecker(matrix[x, y - 1])) return Dir.N;
+        if (x > 0 && validChecker(matrix[x - 1, y])) return Dir.W;
+        if (y < height - 2 && validChecker(matrix[x, y + 1])) return Dir.S;
+        if (x < width - 2 && validChecker(matrix[x + 1, y])) return Dir.E;
 
         return Dir.NONE;
     }
 
     private bool IsEnterable(Terrain terrain) => terrain == Terrain.Ground || terrain == Terrain.Path;
+    private bool IsPath(Terrain terrain) => terrain == Terrain.Path;
 
     public class MazeCreator
     {

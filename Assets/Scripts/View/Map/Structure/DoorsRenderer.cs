@@ -4,12 +4,14 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
 {
     private DoorControl prefabDoorV;
     private DoorHControl prefabDoorH;
+    private LockedDoorControl prefabLockedDoorN;
     private ExitDoorControl prefabExitDoorN;
 
     public DoorsRenderer(Transform parent) : base(parent)
     {
         prefabDoorV = Resources.Load<DoorControl>("Prefabs/Map/DoorV");
         prefabDoorH = Resources.Load<DoorHControl>("Prefabs/Map/DoorH");
+        prefabLockedDoorN = Resources.Load<LockedDoorControl>("Prefabs/Map/LockedDoorN");
         prefabExitDoorN = Resources.Load<ExitDoorControl>("Prefabs/Map/ExitDoorN");
     }
 
@@ -19,6 +21,11 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
     private void SetDoor<T>(Pos pos, T doorPrefab) where T : DoorControl
     {
         InitDoorData(pos, PlacePrefab(pos, doorPrefab));
+    }
+
+    public void SetLockedDoor(Pos pos, IDirection dir)
+    {
+        InitDoorData(pos, PlacePrefab(pos, prefabLockedDoorN, dir.Rotate).SetDir(dir), ItemType.TreasureKey);
     }
 
     public void SetExitDoor(Pos pos, IDirection dir)

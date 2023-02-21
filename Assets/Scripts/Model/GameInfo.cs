@@ -95,7 +95,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 0, 2, 1, 1, 1, 4, 1,12, 1, 1, 1, 1,11, 2,
             6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-           10, 0, 4, 1, 1,11, 2, 1,12, 1, 1, 1, 1, 1, 2,
+           13, 0, 4, 1, 1,11, 2, 1,12, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             5, 1,12, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -135,7 +135,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 2, 7, 2,
             2,11, 1, 1, 1, 1, 1,11, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4, 1, 1, 1, 1,11, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 4, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,10, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 4, 1, 1, 1, 1,11, 2,
             2, 4, 2, 2, 2, 2, 2, 2, 2, 0, 2, 1, 7, 1, 7, 1, 7, 1, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
             2,11, 1, 1, 1,11, 4, 0, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 4, 1, 1, 1, 1,11, 2,
@@ -169,14 +169,14 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(11, 27), Direction.north },
             { new Pos( 7, 13), Direction.south },
             { new Pos(13,  7), Direction.west  },
-            { new Pos(13,  1), Direction.east  },
             { new Pos(19,  1), Direction.west  },
             { new Pos(27,  1), Direction.south },
             { new Pos(27,  7), Direction.north },
-            { new Pos(12, 14), Direction.north },
-            { new Pos(14, 12), Direction.north },
-            { new Pos(16, 14), Direction.north },
-            { new Pos(14, 16), Direction.north },
+            { new Pos(13,  1), Direction.east  }, // TreasureKey
+            { new Pos(12, 14), Direction.north }, // Coin
+            { new Pos(14, 12), Direction.north }, // Coin
+            { new Pos(16, 14), Direction.north }, // Coin
+            { new Pos(14, 16), Direction.north }, // Coin
             { new Pos(14, 14), Direction.north }, // KeyBlade
             { new Pos( 1,  1), Direction.south }, // up stairs
         };

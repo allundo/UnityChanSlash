@@ -38,9 +38,10 @@ public enum Terrain
     Box,
     DownStairs,
     UpStairs,
-    ExitDoor,
+    LockedDoor,
     RoomCenter = 11,
     Pit = 12,
+    ExitDoor = 13,
 }
 
 [System.Serializable]
@@ -472,6 +473,7 @@ public enum ItemType
     FireRing,
     IceRing,
     DarkRing,
+    TreasureKey,
 }
 
 public enum ItemAttr

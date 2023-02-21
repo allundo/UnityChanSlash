@@ -206,6 +206,7 @@ public class WorldMap
                         break;
 
                     case Terrain.Door:
+                    case Terrain.LockedDoor:
                         tileInfo[i, j] = new Door();
                         pixels[i + Width * j] = Color.red;
                         break;

@@ -32,7 +32,7 @@ public class ItemInfoLoader
             { ItemType.Jamadhar,        new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.LongSword,       new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Katana,          new ItemAction(ItemAttr.Equipment)                              },
-            { ItemType.KeyBlade,        new KeyBladeAction(ItemAttr.Consumption, ItemType.KeyBlade)     },
+            { ItemType.KeyBlade,        new KeyItemAction(ItemAttr.Consumption, ItemType.KeyBlade)      },
             { ItemType.Buckler,         new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.CrossShield,     new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.LargeShield,     new ItemAction(ItemAttr.Equipment)                              },
@@ -45,6 +45,7 @@ public class ItemInfoLoader
             { ItemType.FireRing,        new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)         },
             { ItemType.IceRing,         new MagicRingAction(ItemAttr.Ring, BulletType.IceBullet)        },
             { ItemType.DarkRing,        new MagicRingAction(ItemAttr.Ring, BulletType.PlayerDarkHound)  },
+            { ItemType.TreasureKey,     new KeyItemAction(ItemAttr.Consumption, ItemType.TreasureKey)   },
         };
     }
 

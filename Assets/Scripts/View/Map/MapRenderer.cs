@@ -162,6 +162,10 @@ public class MapRenderer : MonoBehaviour
                         if (dirMap[i, j] == Dir.EW) doorsRenderer.SetDoorH(pos);
                         break;
 
+                    case Terrain.LockedDoor:
+                        doorsRenderer.SetLockedDoor(pos, Direction.Convert(dirMap[i, j]));
+                        break;
+
                     case Terrain.ExitDoor:
                         doorsRenderer.SetExitDoor(pos, Direction.Convert(dirMap[i, j]));
                         break;
