@@ -20,6 +20,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     protected IEnemyInput enemyInput;
     protected IEnemyStatus enemyStatus;
     private IDisposable inactiveNextFrame;
+    private IDisposable lifeChange;
     private bool isDestroying = false;
 
     public bool IsTamed => enemyStatus.isTamed;
@@ -43,14 +44,6 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     protected override void Start()
     {
-        status.Life
-            .SkipLatestValueOnSubscribe()
-            .Subscribe(life =>
-            {
-                OnLifeChange(life);
-            })
-            .AddTo(this);
-
         enemyStatus.ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
 
         enemyStatus.IsTarget.Subscribe(isTarget =>
@@ -89,6 +82,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     private void Inactivate()
     {
+        lifeChange.Dispose();
         input.ClearAll();
         bodyCollider.enabled = false;
         status.Inactivate();
@@ -167,6 +161,13 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     protected void OnActive(EnemyStatus.ActivateOption option)
     {
+        lifeChange?.Dispose();
+
+        lifeChange = status.Life
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(life => OnLifeChange(life))
+            .AddTo(this);
+
         enemyEffect.OnActive(option.fadeInDuration);
         map.OnActive();
         enemyInput.OnActive(option);
