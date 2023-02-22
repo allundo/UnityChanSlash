@@ -244,7 +244,11 @@ public class ItemIconHandler : IItemIconHandler
 
             var currentTarget = pressedInventory.GetItem(index);
 
-            if (currentTarget == null) return this;
+            if (currentTarget == null)
+            {
+                pressedInventory = null;
+                return this;
+            }
 
             handler.StartLongPressing();
 
@@ -337,27 +341,26 @@ public class ItemIconHandler : IItemIconHandler
 
             var currentTarget = pressedInventory.GetItem(index);
 
-            if (currentTarget == null) return this;
-
-            if (currentTarget != currentSelected)
+            if (currentTarget == null || currentTarget == currentSelected)
             {
-                handler.StartLongPressing();
-
-                selector.SetRaycast(false);
-                selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
-
-                currentSelected.Resize(1f, 0.2f).Play();
-                currentSelected = null;
-                cancelSelect?.Dispose();
-
-                handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
-                pressedIndex = index;
-                pressedInventory.ExpandNum(index);
-
-                return handler.normalMode;
+                pressedInventory = currentSelected.isEquip ? equipItems : inventoryItems;
+                return this;
             }
 
-            return this;
+            handler.StartLongPressing();
+
+            selector.SetRaycast(false);
+            selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
+
+            currentSelected.Resize(1f, 0.2f).Play();
+            currentSelected = null;
+            cancelSelect?.Dispose();
+
+            handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
+            pressedIndex = index;
+            pressedInventory.ExpandNum(index);
+
+            return handler.normalMode;
         }
 
         public override IItemIconHandler OnRelease()
