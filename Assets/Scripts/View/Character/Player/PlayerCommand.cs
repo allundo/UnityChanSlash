@@ -885,6 +885,23 @@ public class PlayerMessage : PlayerAction
     }
 }
 
+public class PlayerInfoMessage : PlayerAction
+{
+    protected MessageData[] data;
+
+    public PlayerInfoMessage(PlayerCommandTarget target, MessageData[] data) : base(target, 5f, 0.999f)
+    {
+        this.data = data;
+    }
+
+    protected override bool Action()
+    {
+        if (data == null) return false;
+        messageController.InputMessageData(data);
+        return true;
+    }
+}
+
 public class PlayerInspect : PlayerAction
 {
     protected ActiveMessageData data;

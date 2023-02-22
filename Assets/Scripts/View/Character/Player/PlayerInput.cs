@@ -455,7 +455,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         itemHandler.ObserveInspect
-            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInfoMessage(playerTarget, data)))
             .AddTo(this);
 
         inspectHandler.ObserveInspect
@@ -471,11 +471,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         itemInventory.OnInspectItem
-            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInfoMessage(playerTarget, data)))
             .AddTo(this);
 
         inspectUI.OnInspectMessage
-            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerMessage(playerTarget, data)))
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInfoMessage(playerTarget, data)))
             .AddTo(this);
     }
 
