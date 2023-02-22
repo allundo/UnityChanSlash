@@ -284,7 +284,11 @@ public class ItemIconHandler : IItemIconHandler
             return handler.selectMode;
         }
 
-        public virtual IItemIconHandler OnSubmit() => null;
+        public virtual IItemIconHandler OnSubmit()
+        {
+            Debug.LogError("Item is submitted on NormalMode.");
+            return this;
+        }
 
         public IItemIconHandler OnLongPress()
         {
@@ -315,10 +319,8 @@ public class ItemIconHandler : IItemIconHandler
 
         public virtual IItemIconHandler OnDrag(Vector2 screenPos)
         {
-            handler.StopPressing();
-            selectedInventory.DeleteNum(pressedIndex);
-            currentSelected.transform.SetAsLastSibling();
-            return handler.dragMode.OnDrag(screenPos);
+            Debug.LogError("Item is dragged on NormalMode.");
+            return this;
         }
 
         protected void EquipMessage(ItemIcon equipment)
@@ -406,6 +408,14 @@ public class ItemIconHandler : IItemIconHandler
             // Item use interaction.
             handler.PlaySize(currentSelected.Resize(0.5f, 0.1f).SetLoops(2, LoopType.Yoyo));
             return this;
+        }
+
+        public override IItemIconHandler OnDrag(Vector2 screenPos)
+        {
+            handler.StopPressing();
+            selectedInventory.DeleteNum(pressedIndex);
+            currentSelected.transform.SetAsLastSibling();
+            return handler.dragMode.OnDrag(screenPos);
         }
     }
 
