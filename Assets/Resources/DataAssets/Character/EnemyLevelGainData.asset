@@ -28,7 +28,7 @@ MonoBehaviour:
     lifeMaxGainRatio: 1.0185
     attackGain: 1.5
     shieldGain: 0
-    magicGain: 0.2
+    magicGain: 0.4
     armorReduction: 0.01
     fireReduction: 0.01
     iceReduction: 0.01
@@ -39,7 +39,7 @@ MonoBehaviour:
     lifeMaxGainRatio: 1.02
     attackGain: 1.8
     shieldGain: 0
-    magicGain: 0.2
+    magicGain: 0.5
     armorReduction: 0.01
     fireReduction: 0.01
     iceReduction: 0.01
@@ -50,10 +50,32 @@ MonoBehaviour:
     lifeMaxGainRatio: 1.01
     attackGain: 2
     shieldGain: 0
-    magicGain: 0.2
+    magicGain: 0.8
     armorReduction: 0.01
     fireReduction: 0.025
     iceReduction: 0.025
     thunderReduction: 0.025
     lightReduction: 0.025
     darkReduction: 0.025
+  - name: "\u6226\u58EB"
+    lifeMaxGainRatio: 1.02
+    attackGain: 2
+    shieldGain: 0
+    magicGain: 0.2
+    armorReduction: 0.02
+    fireReduction: 0.01
+    iceReduction: 0.01
+    thunderReduction: 0.01
+    lightReduction: 0.01
+    darkReduction: 0.01
+  - name: "\u9B54\u8853\u5E2B"
+    lifeMaxGainRatio: 1.01
+    attackGain: 2
+    shieldGain: 0
+    magicGain: 1
+    armorReduction: 0.01
+    fireReduction: 0.05
+    iceReduction: 0.05
+    thunderReduction: 0.05
+    lightReduction: 0.05
+    darkReduction: 0.05

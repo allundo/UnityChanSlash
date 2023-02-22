@@ -68,8 +68,8 @@ public class MobStatus : Status, IMobStatus
     /// <returns>damage multiplier based on the attribute</returns>
     protected virtual float CalcAttrDM(AttackAttr attr)
     {
+        if (attr == AttackAttr.None) return 1f;
         return attrDamageMultiplier[attr] / (0.5f * (1f + MagicMultiplier));
-
     }
 
     protected DamageType GetDamageType(IDirection attackerDir)

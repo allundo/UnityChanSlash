@@ -615,4 +615,6 @@ public enum EnemyLevelGainType
     Slime,
     Animal,
     Ghost,
+    Fighter,
+    Magician,
 }
