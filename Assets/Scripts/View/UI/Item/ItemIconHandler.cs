@@ -254,6 +254,7 @@ public class ItemIconHandler : IItemIconHandler
 
             if (currentTarget != currentSelected)
             {
+                selector.SetRaycast(false);
                 selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
                 pressedIndex = index;
@@ -366,6 +367,7 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler OnRelease()
         {
             handler.StopPressing();
+            selector.SetRaycast(true);
             return this;
         }
 
@@ -474,6 +476,7 @@ public class ItemIconHandler : IItemIconHandler
             {
                 pressedInventory.ExpandNum(pressedIndex);
 
+                selector.SetRaycast(false);
                 selector.SetSelect(pressedInventory.UIPos(pressedIndex), false);
                 selectedInventory = pressedInventory;
 
