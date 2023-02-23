@@ -32987,10 +32987,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1931400859}
     - target: {fileID: 2098669949, guid: b6767695d090e403590b881951615ed1, type: 3}
-      propertyPath: itemInventory
-      value: 
-      objectReference: {fileID: 284002330}
-    - target: {fileID: 2098669949, guid: b6767695d090e403590b881951615ed1, type: 3}
       propertyPath: inspectHandler
       value: 
       objectReference: {fileID: 292638575}
