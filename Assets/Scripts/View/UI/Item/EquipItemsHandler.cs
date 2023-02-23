@@ -95,7 +95,7 @@ public class EquipItemsHandler : ItemIndexHandler
             return true;
         }
 
-        ActiveMessageController.Instance.InputMessageData(ActiveMessageData.BreakItem(info.name));
+        ActiveMessageController.Instance.BreakItem(info.name);
         return false;
     }
 

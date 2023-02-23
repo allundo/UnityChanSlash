@@ -573,7 +573,7 @@ public class PlayerGetItem : PlayerAction
 
         if (playerAnim.handOn.Bool && itemInventory.PickUp(item.itemInfo))
         {
-            ActiveMessageController.Instance.InputMessageData(ActiveMessageData.GetItem(item.itemInfo));
+            ActiveMessageController.Instance.GetItem(item.itemInfo);
             playerAnim.getItem.Fire();
         }
         else
@@ -613,7 +613,7 @@ public class PlayerHandleBox : PlayerAction
         }
 
         playerAnim.getItem.Fire();
-        ActiveMessageController.Instance.InputMessageData(ActiveMessageData.GetItem(item.itemInfo));
+        ActiveMessageController.Instance.GetItem(item.itemInfo);
         return true;
     }
 }
@@ -902,18 +902,18 @@ public class PlayerInfoMessage : PlayerAction
     }
 }
 
-public class PlayerInspect : PlayerAction
+public class PlayerInspectTile : PlayerAction
 {
-    protected ActiveMessageData data;
+    protected ITile tile;
 
-    public PlayerInspect(PlayerCommandTarget target, ActiveMessageData data) : base(target, 2f, 0.999f)
+    public PlayerInspectTile(PlayerCommandTarget target, ITile tile) : base(target, 2f, 0.999f)
     {
-        this.data = data;
+        this.tile = tile;
     }
 
     protected override bool Action()
     {
-        ActiveMessageController.Instance.InputMessageData(data);
+        ActiveMessageController.Instance.InspectTile(tile);
         return true;
     }
 }

@@ -142,7 +142,7 @@ public class PlayerStatus : MobStatus, IGetExp
 
             life.Value += Mathf.Max(lifeMax.Value - prevLifeMax, 0f);
 
-            ActiveMessageController.Instance.InputMessageData(ActiveMessageData.LevelUp(level));
+            ActiveMessageController.Instance.LevelUp(level);
         }
     }
 

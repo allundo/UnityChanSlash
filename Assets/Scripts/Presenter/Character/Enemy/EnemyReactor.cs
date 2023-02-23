@@ -119,11 +119,11 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         {
             if (IsTamed)
             {
-                ActiveMessageController.Instance.InputMessageData(ActiveMessageData.AlreadyTamed(enemyStatus));
+                ActiveMessageController.Instance.AlreadyTamed(enemyStatus);
             }
             else if (enemyStatus.TryTame())
             {
-                ActiveMessageController.Instance.InputMessageData(ActiveMessageData.TameSucceeded(enemyStatus));
+                ActiveMessageController.Instance.TameSucceeded(enemyStatus);
             }
         }
         else if (damage > 0.1f)

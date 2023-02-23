@@ -50,7 +50,7 @@ public class ClassSelector
         if (selector != currentSelector)
         {
             currentSelector = selector;
-            ActiveMessageController.Instance.InputMessageWithDelay(ActiveMessageData.ClassChange(levelGain.name));
+            ActiveMessageController.Instance.ClassChange(levelGain.name);
         }
 
         return levelGain;

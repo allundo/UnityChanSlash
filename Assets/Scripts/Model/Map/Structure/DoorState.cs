@@ -11,7 +11,7 @@ public class DoorState : HandleState
         if (key != lockType.Value) return false;
 
         lockType.Value = ItemType.Null;
-        ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("扉の鍵が開いた！", SDFaceID.SMILE, SDEmotionID.WAIWAI));
+        ActiveMessageController.Instance.KeyLockOpen();
         return true;
     }
 

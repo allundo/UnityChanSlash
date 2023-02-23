@@ -327,7 +327,7 @@ public class ItemIconHandler : IItemIconHandler
         {
             if (!equipment.isEquip)
             {
-                ActiveMessageController.Instance.InputMessageData(new ActiveMessageData(equipment.itemInfo.name + " を装備した！"));
+                ActiveMessageController.Instance.Equip(equipment.itemInfo.name);
             }
         }
     }

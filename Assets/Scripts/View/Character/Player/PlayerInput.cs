@@ -459,7 +459,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         inspectHandler.ObserveInspect
-            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInspect(playerTarget, data)))
+            .Subscribe(tile => InputTrigger(IsMessage ? null : new PlayerInspectTile(playerTarget, tile)))
             .AddTo(this);
 
         itemInventory.OnPutApply

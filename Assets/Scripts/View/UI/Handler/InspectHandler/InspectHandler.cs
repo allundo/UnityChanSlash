@@ -5,7 +5,7 @@ public class InspectHandler : BaseHandler
 {
     protected ITile tile;
     public IObservable<Unit> ObserveGo => ObserveUp;
-    public IObservable<ActiveMessageData> ObserveInspect => ObserveRL.Select(_ => ActiveMessageData.InspectTile(tile));
+    public IObservable<ITile> ObserveInspect => ObserveRL.Select(_ => tile);
 
     public void Activate(ITile tile)
     {

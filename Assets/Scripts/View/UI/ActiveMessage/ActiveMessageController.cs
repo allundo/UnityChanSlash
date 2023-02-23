@@ -6,6 +6,7 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
 {
     [SerializeField] protected ActiveMessageBox messageBox = default;
     [SerializeField] protected SDIcon sdIcon = default;
+    [SerializeField] protected ActiveSound activeSound = default;
 
     protected RectTransform rectTransform;
 
@@ -43,11 +44,14 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
         messageBox.Inactivate();
     }
 
-    public void InputMessageData(string message) => InputMessageData(new ActiveMessageData(message));
-    public void InputMessageData(ActiveMessageData messageData)
+    public void InputMessageData(string message, SDFaceID face = SDFaceID.DEFAULT, SDEmotionID emotion = SDEmotionID.NONE, ActiveSoundType type = ActiveSoundType.None)
+        => InputMessageData(new ActiveMessageData(message, face, emotion), type);
+
+    public void InputMessageData(ActiveMessageData messageData, ActiveSoundType type = ActiveSoundType.None)
     {
         sdIcon.Activate(messageData);
         messageBox.Activate(messageData);
+        activeSound.Play(type);
     }
 
     public void InputMessageWithDelay(ActiveMessageData messageData, float delay = 1f)
@@ -56,4 +60,39 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
             .Subscribe(_ => InputMessageData(messageData))
             .AddTo(this);
     }
+
+    public void LevelUp(int level) => InputMessageData($"レベル {level + 1} に上がった！", SDFaceID.SMILE, SDEmotionID.WAIWAI, ActiveSoundType.LevelUp);
+
+    public void Equip(string name) => InputMessageData(new ActiveMessageData($"{name} を装備した！"), ActiveSoundType.WeaponEquip);
+
+    public void BreakItem(string name) => InputMessageData($"{name} は壊れてしまった！", SDFaceID.SAD2, SDEmotionID.CONFUSE, ActiveSoundType.WeaponBreak);
+
+    public void ClassChange(string name) => InputMessageWithDelay(new ActiveMessageData($"{name} のクラスに変化した！", SDFaceID.SURPRISE, SDEmotionID.SURPRISE));
+
+    public void GetItem(ItemInfo item) => InputMessageData(item.name + " を手に入れた！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+
+    public void TameSucceeded(IEnemyStatus status) => InputMessageData(status.name + " を懐柔した！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+
+    public void AlreadyTamed(IEnemyStatus status) => InputMessageData(status.name + " はすでに懐柔されている…！", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION);
+
+    public void InspectTile(ITile tile)
+    {
+        if (tile is Pit)
+        {
+            if ((tile as Pit).IsOpen)
+            {
+                InputMessageData("落とし穴がある。", SDFaceID.DISATTRACT, SDEmotionID.BLUE);
+            }
+            else
+            {
+                InputMessageData("落とし穴はっけん！", SDFaceID.ANGRY2, SDEmotionID.SURPRISE);
+            }
+        }
+        else
+        {
+            InputMessageData("なにもない");
+        }
+    }
+
+    public void KeyLockOpen() => InputMessageData("扉の鍵が開いた！", SDFaceID.SMILE, SDEmotionID.WAIWAI, ActiveSoundType.KeyLockOpen);
 }
