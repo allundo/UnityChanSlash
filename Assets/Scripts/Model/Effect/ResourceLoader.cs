@@ -95,6 +95,11 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.TeleportDest,         Resources.Load<AudioSource>("Prefabs/Sound/SND_TELEPORT_DEST")      },
             { SNDType.ResurrectionSkull,    Resources.Load<AudioSource>("Prefabs/Sound/SND_RESURRECTION_SKULL") },
             { SNDType.PitDrop,              Resources.Load<AudioSource>("Prefabs/Sound/SND_PIT_DROP")           },
+            { SNDType.DoorOpen,             Resources.Load<AudioSource>("Prefabs/Sound/SND_DOOR_OPEN")          },
+            { SNDType.DoorClose,            Resources.Load<AudioSource>("Prefabs/Sound/SND_DOOR_CLOSE")         },
+            { SNDType.BoxOpen,              Resources.Load<AudioSource>("Prefabs/Sound/SND_BOX_OPEN")           },
+            { SNDType.BoxClose,             Resources.Load<AudioSource>("Prefabs/Sound/SND_BOX_CLOSE")          },
+            { SNDType.FloorMove,            Resources.Load<AudioSource>("Prefabs/Sound/SND_FLOOR_MOVE")         },
         };
 
         enemyLevelGainData = Resources.Load<LevelGainData>("DataAssets/Character/EnemyLevelGainData");

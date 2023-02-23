@@ -78,8 +78,16 @@ public class DoorControl : HandleStructure
                 .SetEase(Ease.InOutQuad);
 
         return DOTween.Sequence()
+                .AppendCallback(() => GameManager.Instance.PlaySnd(isOpen ? SNDType.DoorOpen : SNDType.DoorClose, transform.position))
                 .Append(moveL)
                 .Join(moveR)
-                .OnComplete(() => handleState.TransitToNextState());
+                .AppendCallback(() => handleState.TransitToNextState());
+    }
+
+    protected override void ForceOpen()
+    {
+        doorL.position += VecL;
+        doorR.position += VecR;
+        handleState.TransitToNextState();
     }
 }

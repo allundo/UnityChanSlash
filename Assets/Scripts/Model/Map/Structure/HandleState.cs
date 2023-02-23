@@ -11,6 +11,7 @@ public interface IHandleState
     bool IsLocked { get; }
 
     void TransitToNextState();
+    void Open();
 }
 
 public abstract class HandleState : IHandleState
@@ -21,6 +22,7 @@ public abstract class HandleState : IHandleState
         CLOSE,
         OPENING,
         CLOSING,
+        FORCE_OPEN,
     }
 
     public HandleState(ItemType type = ItemType.Null)
@@ -39,6 +41,10 @@ public abstract class HandleState : IHandleState
     public abstract bool IsLocked { get; }
 
     public void TransitToNextState() => state.Value = GetNextState();
+    public void Open()
+    {
+        state.Value = StateEnum.FORCE_OPEN;
+    }
 
     private StateEnum GetNextState()
     {
@@ -54,6 +60,7 @@ public abstract class HandleState : IHandleState
                 return StateEnum.CLOSE;
 
             case StateEnum.OPENING:
+            case StateEnum.FORCE_OPEN:
                 return StateEnum.OPEN;
 
             default:

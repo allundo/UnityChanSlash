@@ -252,6 +252,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         worldMap.StoreTileOpenData();
         Pos stairsPos = (isDownStairs ? worldMap.stairsTop : worldMap.StairsBottom).Key;
 
+        PlaySnd(SNDType.FloorMove, worldMap.WorldPos(stairsPos));
+
         yield return new WaitForEndOfFrame();
 
         // Wait for screenshot is applied to forefront Image

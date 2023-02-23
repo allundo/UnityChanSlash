@@ -50,6 +50,11 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
             case HandleState.StateEnum.CLOSING:
                 movingControl = CloseTween.Play();
                 break;
+
+            case HandleState.StateEnum.FORCE_OPEN:
+                KillTween();
+                ForceOpen();
+                break;
         }
     }
 
@@ -57,4 +62,5 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
     private Tween CloseTween => GetDoorHandle(false);
 
     protected abstract Tween GetDoorHandle(bool isOpen);
+    protected abstract void ForceOpen();
 }

@@ -558,6 +558,11 @@ public enum SNDType
     TeleportDest,
     ResurrectionSkull,
     PitDrop,
+    DoorOpen,
+    DoorClose,
+    BoxOpen,
+    BoxClose,
+    FloorMove,
 }
 
 public enum ObjectLayerEnum

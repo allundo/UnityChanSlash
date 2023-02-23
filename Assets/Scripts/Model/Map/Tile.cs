@@ -71,7 +71,7 @@ public class Tile
 
 public abstract class HandleTile : Tile
 {
-    public void Open() => Handle();
+    public virtual void Open() => Handle();
     public abstract void Handle();
 }
 
@@ -114,6 +114,7 @@ public class Door : HandleTile, IHandleTile
     public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
 
     public DoorState state { protected get; set; }
+    public override void Open() => state.Open();
     public override void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
     public bool IsLocked => state.IsLocked;
@@ -142,6 +143,7 @@ public class Box : HandleTile, IHandleTile
     public override IStatus OnCharacterDest { get { return null; } set { } }
 
     public BoxState state { protected get; set; }
+    public override void Open() => state.Open();
     public override void Handle() => state.TransitToNextState();
     public bool IsOpen => state.IsOpen;
     public bool IsLocked => state.IsLocked;
