@@ -73,7 +73,7 @@ public class Status : SpawnObject<Status>, IStatus
 
     public virtual string NameLv => param.name;
 
-    public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
+    public virtual string CauseOfDeath(AttackType type = AttackType.None) => param.name + "にやられた";
 
     public float attack { get; protected set; }
 
