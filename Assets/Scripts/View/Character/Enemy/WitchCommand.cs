@@ -30,7 +30,7 @@ public class WitchTargetAttack : WitchCommand
         if (!witchReact.Appear()) return false;
 
         witchAnim.targetAttack.Fire();
-        playingTween = targetAttack.AttackSequence(duration).Play();
+        completeTween = targetAttack.AttackSequence(duration).Play();
 
         return true;
     }
