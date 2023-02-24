@@ -19,6 +19,7 @@ public class TitleUIHandler : MonoBehaviour
     [SerializeField] public Button[] debugResult = default;
 
     private Transform tfUnityChan;
+    private AudioSource dropStart;
 
     public IObservable<object> TransitSignal;
     public IObservable<object> ResultsButtonSignal;
@@ -26,6 +27,7 @@ public class TitleUIHandler : MonoBehaviour
     void Awake()
     {
         tfUnityChan = unityChanAnim.GetComponent<Transform>();
+        dropStart = ResourceLoader.Instance.LoadSnd(SNDType.DropStart);
 
         TransitSignal =
             selectButtons.startButton
@@ -103,6 +105,7 @@ public class TitleUIHandler : MonoBehaviour
         return
             DOTween.Sequence()
                 .Append(startTween)
+                .AppendCallback(() => dropStart.PlayEx())
                 .AppendInterval(0.4f)
                 .Append(unityChanDropTween)
                 .Join(fadeOutTween.SetDelay(0.75f))

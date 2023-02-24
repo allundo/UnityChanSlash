@@ -16,6 +16,7 @@ public class PlayerEffect : MobEffect
         base.OnDamage(damageRatio, type, attr);
         (anim as PlayerAnimator).rest.Bool = false;
     }
+    public void PlayDamageSnd(AttackType type = AttackType.Smash) => PlayDamage(type);
 
     public override void OnActive()
     {

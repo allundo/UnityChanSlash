@@ -100,6 +100,9 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.BoxOpen,              Resources.Load<AudioSource>("Prefabs/Sound/SND_BOX_OPEN")           },
             { SNDType.BoxClose,             Resources.Load<AudioSource>("Prefabs/Sound/SND_BOX_CLOSE")          },
             { SNDType.FloorMove,            Resources.Load<AudioSource>("Prefabs/Sound/SND_FLOOR_MOVE")         },
+            { SNDType.Decision,             Resources.Load<AudioSource>("Prefabs/Sound/SND_UI_DECISION")        },
+            { SNDType.Select,               Resources.Load<AudioSource>("Prefabs/Sound/SND_UI_SELECT")          },
+            { SNDType.DropStart,            Resources.Load<AudioSource>("Prefabs/Sound/SND_TITLE_DROP_START")   },
         };
 
         enemyLevelGainData = Resources.Load<LevelGainData>("DataAssets/Character/EnemyLevelGainData");

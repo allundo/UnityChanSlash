@@ -7,6 +7,7 @@ public class RestartUI : FadeEnable
 {
     [SerializeField] private FadeEnable descriptionTxt = default;
     [SerializeField] private RestartWindowUI selectUI = default;
+    [SerializeField] private AudioSource openSnd = default;
 
     public IObservable<Tween> Restart => selectUI.restartButton.OnPressedCompleteAsObservable();
     public IObservable<Tween> Title => selectUI.titleButton.OnPressedCompleteAsObservable();
@@ -42,6 +43,7 @@ public class RestartUI : FadeEnable
     public IObservable<Unit> Play()
     {
         gameObject.SetActive(true);
+        openSnd.PlayEx();
         return sequence.OnCompleteAsObservable(Unit.Default);
     }
 

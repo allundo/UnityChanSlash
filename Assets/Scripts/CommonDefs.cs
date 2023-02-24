@@ -563,6 +563,9 @@ public enum SNDType
     BoxOpen,
     BoxClose,
     FloorMove,
+    Decision,
+    Select,
+    DropStart,
 }
 
 public enum ObjectLayerEnum
