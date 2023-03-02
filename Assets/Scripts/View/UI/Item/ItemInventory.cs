@@ -94,9 +94,14 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     {
         for (int index = 0; index < MAX_ITEMS; index++)
         {
-            if (SetItem(index, itemInfo)) return true;
+            if (SetItem(index, itemInfo))
+            {
+                ActiveMessageController.Instance.GetItem(itemInfo);
+                return true;
+            }
         }
 
+        ActiveMessageController.Instance.InputMessageData("持ち物がいっぱい！", SDFaceID.SURPRISE, SDEmotionID.SURPRISE);
         return false;
     }
 

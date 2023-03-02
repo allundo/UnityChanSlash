@@ -569,19 +569,23 @@ public class PlayerGetItem : PlayerAction
     protected override bool Action()
     {
         ITile tile = mobMap.ForwardTile;
-        Item item = tile.PickItem();
 
-        if (playerAnim.handOn.Bool && itemInventory.PickUp(item.itemInfo))
+        if (tile.IsItemOn && playerAnim.handOn.Bool)
         {
-            ActiveMessageController.Instance.GetItem(item.itemInfo);
-            playerAnim.getItem.Fire();
+            Item item = tile.PickItem();
+
+            if (itemInventory.PickUp(item.itemInfo))
+            {
+                playerAnim.getItem.Fire();
+                return true;
+            }
+            else
+            {
+                tile.PutItem(item);
+            }
         }
-        else
-        {
-            tile.PutItem(item);
-            return false;
-        }
-        return true;
+
+        return false;
     }
 }
 
