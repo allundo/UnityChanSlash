@@ -903,6 +903,23 @@ public class PlayerInfoMessage : PlayerAction
     }
 }
 
+public class PlayerInspectWall : PlayerAction
+{
+    protected MessageData[] data;
+
+    public PlayerInspectWall(PlayerCommandTarget target, MessageData[] data) : base(target, 5f, 0.999f)
+    {
+        this.data = data;
+    }
+
+    protected override bool Action()
+    {
+        if (data == null || !(map.ForwardTile is MessageWall)) return false;
+        messageController.InputMessageData(data);
+        return true;
+    }
+}
+
 public class PlayerInspectTile : PlayerAction
 {
     protected ITile tile;

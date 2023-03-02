@@ -475,7 +475,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         inspectUI.OnInspectMessage
-            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInfoMessage(playerTarget, data)))
+            .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInspectWall(playerTarget, data)))
             .AddTo(this);
     }
 
