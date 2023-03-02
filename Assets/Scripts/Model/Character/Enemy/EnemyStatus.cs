@@ -13,7 +13,7 @@ public interface IEnemyStatus : IMobStatus
 
     IReadOnlyReactiveProperty<bool> IsTarget { get; }
     void SetTarget(bool isTarget);
-    string NameLv { get; }
+    string TargetName { get; }
 
     /// <summary>
     /// Try taming to the enemy.
@@ -58,7 +58,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
 
     protected ISubject<ActivateOption> activeWithOptionSubject = new BehaviorSubject<ActivateOption>(new ActivateOption());
     public IObservable<ActivateOption> ActiveWithOption => activeWithOptionSubject;
-    public override string NameLv => $"{param.name}\nLv{level + 1}";
+    public string TargetName => $"{Name}\nLv{level + 1}";
 
     public IReadOnlyReactiveProperty<bool> IsTarget => isTarget;
     private IReactiveProperty<bool> isTarget = new ReactiveProperty<bool>(false);

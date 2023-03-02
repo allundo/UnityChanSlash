@@ -6,7 +6,7 @@ public interface IAttacker
 {
     float attack { get; }
     IDirection dir { get; }
-    string name { get; }
+    string Name { get; }
     string CauseOfDeath(AttackType type = AttackType.None);
 }
 
@@ -14,8 +14,10 @@ public class Attacker : IAttacker
 {
     public float attack { get; protected set; }
     public IDirection dir { get; protected set; }
-    public string name { get; protected set; }
-    public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + "にやられた";
+    public string Name => name;
+    protected string name;
+    public virtual string CauseOfDeath(AttackType type = AttackType.None) => Name + "にやられた";
+
 
     public Attacker(float attack, IDirection dir, string name)
     {
@@ -34,7 +36,7 @@ public class Shooter : Attacker
         return new Shooter(attack, status);
     }
 
-    protected Shooter(float attack, IStatus status) : base(attack, status.dir, status.name) { }
+    protected Shooter(float attack, IStatus status) : base(attack, status.dir, status.Name) { }
 }
 
 public interface IStatus : IAttacker
@@ -71,9 +73,9 @@ public class Status : SpawnObject<Status>, IStatus
 {
     protected Param param;
 
-    public virtual string NameLv => param.name;
+    public virtual string Name => param.name;
 
-    public virtual string CauseOfDeath(AttackType type = AttackType.None) => param.name + "にやられた";
+    public virtual string CauseOfDeath(AttackType type = AttackType.None) => Name + "にやられた";
 
     public float attack { get; protected set; }
 

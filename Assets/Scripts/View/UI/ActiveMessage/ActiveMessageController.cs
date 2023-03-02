@@ -71,9 +71,9 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
 
     public void GetItem(ItemInfo item) => InputMessageData(item.name + " を手に入れた！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
 
-    public void TameSucceeded(IEnemyStatus status) => InputMessageData(status.name + " を懐柔した！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+    public void TameSucceeded(IEnemyStatus status) => InputMessageData(status.Name + " を懐柔した！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
 
-    public void AlreadyTamed(IEnemyStatus status) => InputMessageData(status.name + " はすでに懐柔されている…！", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION);
+    public void AlreadyTamed(IEnemyStatus status) => InputMessageData(status.Name + " はすでに懐柔されている…！", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION);
 
     public void InspectTile(ITile tile)
     {

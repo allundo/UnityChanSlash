@@ -73,7 +73,7 @@ public class Target : FadeUI, ITargetUI
     {
         corner.FadeActivate();
         center.FadeActivate();
-        targetName.Activate(status.NameLv);
+        targetName.Activate(status.TargetName);
     }
 
     protected override void BeforeFadeOut()
