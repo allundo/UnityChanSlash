@@ -453,7 +453,7 @@ public class PlayerPitFall : PlayerCommand
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0.001f).SetEase(Ease.OutQuad))
-            .AppendCallback(() => mobReact.Damage(new Attacker(damage, map.dir, "落とし穴"), new Attack.AttackData(1f /* 'parameterless struct constructors' is not available in C# 9.0. */)))
+            .AppendCallback(() => mobReact.Damage(new TrapAttacker(damage, map.dir, "落とし穴"), new Attack.AttackData(1f /* 'parameterless struct constructors' is not available in C# 9.0. */)))
             .AppendCallback(hidePlateHandler.Move)
             .SetUpdate(false)
             .Play();
