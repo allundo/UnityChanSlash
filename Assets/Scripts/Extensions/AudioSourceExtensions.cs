@@ -2,7 +2,7 @@ using UnityEngine;
 
 static public class AudioSourceExtensions
 {
-    static public void PlayEx(this AudioSource source, ulong delay = 0)
+    static public void PlayEx(this AudioSource source, float delay = 0)
     {
         if (source == null)
         {
@@ -12,7 +12,7 @@ static public class AudioSourceExtensions
             return;
         }
 
-        source.Play(delay);
+        source.PlayDelayed(delay);
     }
     static public void StopEx(this AudioSource source)
     {

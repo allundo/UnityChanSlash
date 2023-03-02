@@ -65,7 +65,11 @@ public class RankRecordTest
                 .Append(deadRecord.RankEffect(rank))
                 .Append(deadRecord.RankPunchEffect(rank));
 
-            if (rank > 0) seq.Append(rankInMessage.RankInTween());
+            if (rank > 0)
+            {
+                rankInMessage.ResetOrientation(DeviceOrientation.Portrait);
+                seq.Append(rankInMessage.RankInTween());
+            }
 
             seq.Play();
 

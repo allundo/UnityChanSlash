@@ -5,6 +5,8 @@ public class RankInMessage : MonoBehaviour
     [SerializeField] private GameObject rankInText = default;
     [SerializeField] private ParticleSystem textEffect = default;
     [SerializeField] private ParticleSystem shootEffect = default;
+    [SerializeField] private AudioSource rankInSnd = default;
+
     private UITween uiTween;
     private FadeTween bgFade;
     private RectTransform rectTransform;
@@ -30,10 +32,14 @@ public class RankInMessage : MonoBehaviour
     public Tween RankInTween()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => uiTween.ResetPos())
-            .AppendCallback(() => textEffect.StopAndClear())
-            .AppendCallback(() => textEffect.PlayEx())
-            .AppendCallback(() => shootEffect.PlayEx())
+            .AppendCallback(() =>
+            {
+                uiTween.ResetPos();
+                textEffect.StopAndClear();
+                textEffect.PlayEx();
+                shootEffect.PlayEx();
+                rankInSnd.PlayEx(0.25f);
+            })
             .Append(uiTween.MoveX(moveX, 1.5f).SetEase(Ease.OutExpo))
             .Join(bgFade.In(1.5f, 0, null, null, false))
             .AppendInterval(0.25f)

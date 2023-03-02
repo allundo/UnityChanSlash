@@ -7,13 +7,17 @@ public abstract class RankRecord : BaseRecord
 {
     [SerializeField] private TextMeshProUGUI noData = default;
     [SerializeField] private Image rankImage = default;
-    private TextMeshProUGUI rank = default;
+
+    private TextMeshProUGUI rank;
+    private AudioSource punchSnd;
+
     private TextTween textTween;
     private FadeTween fade;
 
     protected override void Awake()
     {
         rank = rankImage.GetComponentInChildren<TextMeshProUGUI>();
+        punchSnd = rankImage.GetComponentInChildren<AudioSource>();
         textTween = new TextTween(rank);
         fade = new FadeTween(rank);
         base.Awake();
@@ -51,7 +55,12 @@ public abstract class RankRecord : BaseRecord
     public Tween RankPunchEffect(int rank)
     {
         var rankRatio = rank > 0 ? 11 - rank : 0;
+
+        punchSnd.SetPitch(1.5f - rankRatio * 0.05f);
+        punchSnd.volume = 0.25f + 0.025f * rankRatio;
+
         return DOTween.Sequence()
+            .AppendCallback(() => punchSnd.PlayEx())
             .Append(textTween.PunchY(2.5f + rankRatio * 0.5f, 0.25f + rankRatio * 0.05f, 20 + rankRatio))
             .Append(textTween.Resize(1f, 0.25f));
     }
