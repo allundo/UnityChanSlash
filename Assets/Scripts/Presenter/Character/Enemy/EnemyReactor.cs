@@ -143,7 +143,6 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         inactiveNextFrame?.Dispose();
 
         bodyCollider.enabled = false;
-        map.ResetTile();
 
         Destroy(gameObject);
         isDestroying = true;
