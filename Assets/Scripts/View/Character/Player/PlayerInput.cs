@@ -94,6 +94,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
         => (commander as PlayerCommander).CommandComplete
             .First(completedCommand => completedCommand == cmd);
 
+    public bool HasNextCommand => commander.NextCommand != null;
+
     protected override void Awake()
     {
         base.Awake();
@@ -108,13 +110,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
     }
 
     protected ICommand wakeUp;
-    protected ICommand brake;
 
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 150f);
-        brake = new PlayerBrakeStop(playerTarget);
     }
 
     protected override void SetInputs()
@@ -165,7 +165,9 @@ public class PlayerInput : ShieldInput, IPlayerInput
         bool isTriggerValid = this.isTriggerValid;
         this.isTriggerValid = false; // Disable Trigger input UI
 
-        if (!BrakeIfRunning() && (!isTriggerValid || !isCommandValid || cmd == null)) return null;
+        bool isCommandEmpty = cmd == null;
+
+        if (!BrakeIfRunning(!isCommandEmpty) && (!isTriggerValid || !isCommandValid || isCommandEmpty)) return null;
 
         isCommandValid = false;
 
@@ -178,7 +180,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
     /// </summary>
     public void InputTrigger(ICommand cmd)
     {
-        if (!BrakeIfRunning() && (!isTriggerValid || cmd == null)) return;
+        bool isCommandEmpty = cmd == null;
+        if (!BrakeIfRunning(!isCommandEmpty) && (!isTriggerValid || isCommandEmpty)) return;
 
         isCommandValid = !isCommandValid;
         isTriggerValid = !isTriggerValid;
@@ -548,7 +551,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         guardUI.IsPressed
             .Subscribe(isPressed =>
             {
-                BrakeIfRunning();
+                BrakeIfRunning(false); // Guard must be overwritten by next command
                 (commander as PlayerCommander).SetGuard(isPressed);
             })
             .AddTo(this);
@@ -559,15 +562,24 @@ public class PlayerInput : ShieldInput, IPlayerInput
         if (!BrakeIfRunning()) commander.ClearAll(true);
     }
 
-    private bool BrakeIfRunning()
+    private bool BrakeIfRunning(bool isCommandInput = false)
     {
+        if (commander.currentCommand is PlayerBrake && isCommandInput)
+        {
+            // Overwrite next command during braking.
+            commander.ClearAll(true, true);
+            return true;
+        }
+
         bool isRunning = commander.currentCommand is PlayerRun && !(commander.NextCommand is PlayerBrake);
 
         if (isRunning)
         {
             float remaining = commander.currentCommand.RemainingTimeScale;
             bool isHalf = remaining > 0.333333f;
-            Interrupt(isHalf ? new PlayerBrakeStopHalf(playerTarget, remaining) : brake, isHalf, true);
+            ICommand brake = isHalf ? new PlayerBrakeStopHalf(playerTarget, remaining, isCommandInput) : new PlayerBrakeStop(playerTarget, isCommandInput);
+
+            Interrupt(brake, isHalf, true);
         }
         return isRunning;
     }

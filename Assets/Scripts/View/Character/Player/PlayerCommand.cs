@@ -248,9 +248,10 @@ public class PlayerBrake : PlayerDash
 public class PlayerBrakeStop : PlayerBrake
 {
     protected ICommand brakeAndBackStep;
-    public PlayerBrakeStop(PlayerCommandTarget target) : base(target, RUN_DURATION * WholeTimeScale(1f))
+    public PlayerBrakeStop(PlayerCommandTarget target, bool isCommandInput = false) : base(target, RUN_DURATION * WholeTimeScale(1f))
     {
         brakeAndBackStep = new PlayerBrakeAndBackStep(target);
+        validateTween = isCommandInput ? null : ValidateTween();
     }
 
     public override IObservable<Unit> Execute()
@@ -259,8 +260,9 @@ public class PlayerBrakeStop : PlayerBrake
 
         if (mobMap.IsForwardMovable)
         {
+            validateTween?.Play();
+
             playingTween = tweenMove.BrakeMove(mobMap.GetForward, BRAKE_RATIO);
-            validateTween = ValidateTween().Play();
             completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f);
 
             return ObservableComplete();
@@ -278,16 +280,18 @@ public class PlayerBrakeStopHalf : PlayerBrake
     private float remainingRatio;
 
     public PlayerBrakeStopHalf(PlayerCommandTarget target) : this(target, BRAKE_RATIO) { }
-    public PlayerBrakeStopHalf(PlayerCommandTarget target, float remainingRatio) : base(target, RUN_DURATION * WholeTimeScale(remainingRatio))
+    public PlayerBrakeStopHalf(PlayerCommandTarget target, float remainingRatio, bool isCommandInput = false) : base(target, RUN_DURATION * WholeTimeScale(remainingRatio))
     {
         this.remainingRatio = remainingRatio;
+        validateTween = isCommandInput ? null : ValidateTween();
     }
 
     public override IObservable<Unit> Execute()
     {
+        validateTween?.Play();
+
         playerInput.SetSubUIEnable(true);
         playingTween = tweenMove.Brake(map.DestVec3Pos, remainingRatio, BRAKE_RATIO, COOL_TIME_SCALE);
-        validateTween = ValidateTween().Play();
         completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, remainingRatio);
 
         return ObservableComplete();

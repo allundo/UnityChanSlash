@@ -1,7 +1,5 @@
 using System;
 using UniRx;
-using System.Collections.Generic;
-using DG.Tweening;
 
 public class MobCommand : Command
 {
