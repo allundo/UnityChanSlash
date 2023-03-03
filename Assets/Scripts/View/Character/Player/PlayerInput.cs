@@ -109,14 +109,12 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     protected ICommand wakeUp;
     protected ICommand brake;
-    protected ICommand brakeHalf;
 
     protected override void SetCommands()
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 150f);
         brake = new PlayerBrakeStop(playerTarget);
-        brakeHalf = new PlayerBrakeStopHalf(playerTarget, 48f);
     }
 
     protected override void SetInputs()
