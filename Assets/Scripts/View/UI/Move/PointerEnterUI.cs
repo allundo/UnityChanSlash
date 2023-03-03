@@ -18,7 +18,7 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
         // To be observed every frame when IsPressed is true
         EnterObservable =
             moveButton.IsPressed
-                .Where(x => x).SelectMany(_ => moveButton.UpdateAsObservable())
+                .Where(x => x).SelectMany(_ => moveButton.FixedUpdateAsObservable()) // Update can be skipped and then cannot observe button off
                 .TakeUntil(moveButton.IsPressed.Where(x => !x))
                 .RepeatUntilDestroy(moveButton);
     }

@@ -23,7 +23,7 @@ public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
         EnterObservable =
             Observable.Merge(forwardButton.IsPressed, forwardButton.IsDash)
                 .Where(_ => forwardButton.IsPressed.Value && !forwardButton.IsDash.Value)
-                .SelectMany(_ => moveButton.UpdateAsObservable())
+                .SelectMany(_ => moveButton.FixedUpdateAsObservable()) // Update can be skipped and then cannot observe button off
                 .TakeUntil(forwardButton.IsPressed.Where(x => !x))
                 .RepeatUntilDestroy(forwardButton);
     }
