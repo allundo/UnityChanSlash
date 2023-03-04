@@ -19,6 +19,7 @@ public class UITest
     private EnemyStatus prefabEnemyStatus;
 
     private GameOverUI prefabGameOverUI;
+    private ActiveMessageController activeMessageUI;
 
     private GameObject testCanvas;
     private Camera mainCamera;
@@ -36,6 +37,8 @@ public class UITest
         eventSystem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/EventSystem"));
 
         testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+        activeMessageUI = Object.Instantiate(Resources.Load<ActiveMessageController>("Prefabs/UI/Message/ActiveMessageUI"), testCanvas.transform);
+        activeMessageUI.ResetOrientation(DeviceOrientation.Portrait);
 
         prefabItemInventory = Resources.Load<ItemInventoryTest>("Prefabs/UI/Item/ItemInventoryTest");
         itemIconGenerator = Object.Instantiate(Resources.Load<ItemIconGenerator>("Prefabs/UI/Item/ItemIconGenerator"));
@@ -61,6 +64,7 @@ public class UITest
         Object.Destroy(gameInfo.gameObject);
         Object.Destroy(dataStoreAgent.gameObject);
         Object.Destroy(itemIconGenerator.gameObject);
+        Object.Destroy(activeMessageUI.gameObject);
         Object.Destroy(testCanvas.gameObject);
         Object.Destroy(mainCamera.gameObject);
         Object.Destroy(eventSystem);
@@ -363,6 +367,12 @@ public class UITest
     {
         var gameOverUI = Object.Instantiate(prefabGameOverUI, testCanvas.transform);
 
+        // GetComponentInChildren cannot retrieve a component from attached prefab children.
+        // var message = gameOverUI.transform.GetComponentInChildren<RankInMessage>();
+        var message = gameOverUI.transform.GetChild(3).GetComponent<RankInMessage>();
+        message.ResetOrientation(DeviceOrientation.Portrait);
+
+        // Wait for gameOverUI.Start()
         yield return null;
 
         gameOverUI.Play(rank, new DataStoreAgent.DeadRecord((ulong)(10000 * rank), "テスト死因" + rank, rank));

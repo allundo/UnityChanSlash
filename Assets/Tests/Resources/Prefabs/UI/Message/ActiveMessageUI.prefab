@@ -634,7 +634,7 @@ MonoBehaviour:
   isPersistent: 0
   messageBox: {fileID: 8324177738002052494}
   sdIcon: {fileID: 8324177738784910062}
-  activeSound: {fileID: 0}
+  activeSound: {fileID: 7926047556567806783}
 --- !u!1 &8324177737758880223
 GameObject:
   m_ObjectHideFlags: 0
