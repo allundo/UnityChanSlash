@@ -107,7 +107,11 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
             default:
                 input.SetInputVisible();
                 return;
-
         }
     }
+
+    // ## FOR DEBUG (begin)
+    public void DebugSetLevel(int level)
+        => status.InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(1), new MobStatusStoreData(level));
+    // ## FOR DEBUG (end)
 }

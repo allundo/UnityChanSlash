@@ -177,6 +177,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         if (floor == 2) spawnHandler.ActivateDebugEnemyGenerators();
 
         spawnHandler.PlaceEnemyGenerators();
+
+        PlayerInfo.Instance.DebugSetLevel((floor - 1) * 2);
     }
 
     private void InitPlayerPos()

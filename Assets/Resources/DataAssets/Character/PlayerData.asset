@@ -31,3 +31,21 @@ MonoBehaviour:
     darkDamageMultiplier: 1
     armorMultiplier: 1
     baseExp: 50
+  - name: "\u30D7\u30EC\u30A4\u30E4\u30FC(\u30C7\u30D0\u30C3\u30B0\u7528)"
+    defaultLifeMax: 100
+    attack: 10
+    prefab: {fileID: 0}
+    isOnGround: 1
+    shield: 10
+    magic: 1
+    faceDamageMultiplier: 1
+    sideDamageMultiplier: 1.5
+    backDamageMultiplier: 2
+    restDamageMultiplier: 6
+    fireDamageMultiplier: 1
+    iceDamageMultiplier: 1
+    thunderDamageMultiplier: 1
+    lightDamageMultiplier: 1
+    darkDamageMultiplier: 1
+    armorMultiplier: 1
+    baseExp: 50
