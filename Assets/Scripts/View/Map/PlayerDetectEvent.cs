@@ -48,23 +48,72 @@ public abstract class PlayerDetectEvent : GameEvent
         invoker.Inactivate();
     }
 }
-
-public class WitchGenerateEvent : PlayerDetectEvent
+public class PlayerHasItemEvent : PlayerDetectEvent
 {
-    private LightManager lightManager;
-
-    public WitchGenerateEvent(PlayerCommandTarget target, LightManager lightManager, Pos pos) : base(target, pos, true)
+    protected ItemType itemTypeToCheck;
+    public PlayerHasItemEvent(PlayerCommandTarget target, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true) : base(target, pos, isOneShot)
     {
-        this.lightManager = lightManager;
+        this.itemTypeToCheck = itemTypeToCheck;
     }
 
     protected override bool IsEventValid()
     {
-        var playerHasKeyBlade = ItemInventory.Instance.hasKeyBlade();
-        var keyBladeIsOnEventTile = target.map.OnTile.HasItem(ItemType.KeyBlade);
-        var jumpLeapedEventTileWithKeyBlade = target.map.BackwardTile.HasItem(ItemType.KeyBlade);
+        var playerHasItem = ItemInventory.Instance.hasItemType(itemTypeToCheck);
+        var itemIsOnEventTile = target.map.OnTile.HasItem(itemTypeToCheck);
+        var jumpLeapedEventTileWithItem = target.map.BackwardTile.HasItem(itemTypeToCheck);
 
-        return playerHasKeyBlade || keyBladeIsOnEventTile || jumpLeapedEventTileWithKeyBlade;
+        return playerHasItem || itemIsOnEventTile || jumpLeapedEventTileWithItem;
+    }
+
+    protected override IObservable<Unit> EventFunc()
+    {
+        return Observable.Empty<Unit>();
+    }
+}
+
+public class SkeletonsGenerateEvent : PlayerHasItemEvent
+{
+    private DoorOpener prefabDoorOpener;
+    public SkeletonsGenerateEvent(PlayerCommandTarget target, Pos pos) : base(target, pos, ItemType.TreasureKey)
+    {
+        prefabDoorOpener = Resources.Load<DoorOpener>("Prefabs/Map/DoorOpener");
+    }
+
+    protected override IObservable<Unit> EventFunc()
+    {
+        var spawn = SpawnHandler.Instance;
+        var option = new EnemyStatus.ActivateOption();
+
+        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(21, 1), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(21, 17), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonWizard, new Pos(24, 9), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(24, 11), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonWizard, new Pos(24, 13), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(24, 15), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonWizard, new Pos(24, 17), Direction.west, option);
+
+        ActiveMessageController.Instance.InputMessageData("スケルトンがいっぱい！", SDFaceID.SURPRISE, SDEmotionID.EXSURPRISE);
+
+        var map = GameManager.Instance.worldMap;
+        var opener = Util.Instantiate(prefabDoorOpener, map.WorldPos(pos), Quaternion.identity);
+
+        return opener.Shoot(map.WorldPos(new Pos(21, 17)))
+            .ContinueWith(_ =>
+            {
+                target.hidePlateHandler.Redraw();
+                UnityEngine.Object.Destroy(opener.gameObject, 0.1f);
+                return Observable.NextFrame();
+            });
+    }
+}
+
+public class WitchGenerateEvent : PlayerHasItemEvent
+{
+    private LightManager lightManager;
+
+    public WitchGenerateEvent(PlayerCommandTarget target, LightManager lightManager, Pos pos) : base(target, pos, ItemType.KeyBlade)
+    {
+        this.lightManager = lightManager;
     }
 
     protected override IObservable<Unit> EventFunc()
