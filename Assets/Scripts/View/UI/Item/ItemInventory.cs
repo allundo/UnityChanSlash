@@ -138,9 +138,11 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
         if (!isEnable && selector.isEquip) iconHandler.CleanUp();
     }
 
-    public bool hasKeyBlade()
+    public bool hasKeyBlade() => hasItemType(ItemType.KeyBlade);
+
+    public bool hasItemType(ItemType type)
     {
-        return inventoryItems.hasKeyBlade() || equipItems.hasKeyBlade();
+        return inventoryItems.hasItemType(type) || equipItems.hasItemType(type);
     }
 
     public ulong SumUpPrices()
