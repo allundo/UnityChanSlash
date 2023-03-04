@@ -84,7 +84,9 @@ public class MobReactor : Reactor, IMobReactor
         {
             if (damage > 0 && mobStatus.icingFrames == 0f)
             {
-                var icingFrames = damage * 10f;
+                // Max icing duration is 400 frame.
+                var icingFrames = Mathf.Min(400f, damage * 10f);
+
                 input.InputIced(icingFrames);
                 effect.OnDamage(Mathf.Min(0.01f, LifeRatio(damage)), type, attr);
             }
