@@ -58,6 +58,8 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
             gen.Inactivate();
         });
 
+        lifeGaugeGenerator.DestroyAll();
+
         // Some bullets refer to a character status, so don't call Update() after the enemies had been destroyed.
         bulletGeneratorLoader.DestroyAll();
 

@@ -22,4 +22,10 @@ public class LifeGaugeGenerator : MobGenerator<PanelLifeGauge>
 
         return gauge;
     }
+
+    public override void DestroyAll()
+    {
+        gauges.Clear();
+        base.DestroyAll();
+    }
 }
