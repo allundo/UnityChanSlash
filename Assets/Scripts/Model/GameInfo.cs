@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UniRx;
@@ -159,26 +160,35 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     private Dictionary<Pos, IDirection> FinalMapDeadEnds()
     {
-        return new Dictionary<Pos, IDirection>()
+        var randomPos = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(16, 12), Direction.north },
-            { new Pos(16, 16), Direction.north },
-            { new Pos(12, 16), Direction.north },
-            { new Pos(12, 12), Direction.north },
-            { new Pos( 3, 21), Direction.north },
-            { new Pos(11, 27), Direction.north },
-            { new Pos( 7, 13), Direction.south },
-            { new Pos(13,  7), Direction.west  },
             { new Pos(19,  1), Direction.west  },
             { new Pos(27,  1), Direction.south },
             { new Pos(27,  7), Direction.north },
-            { new Pos(13,  1), Direction.east  }, // TreasureKey
-            { new Pos(12, 14), Direction.north }, // Coin
-            { new Pos(14, 12), Direction.north }, // Coin
-            { new Pos(16, 14), Direction.north }, // Coin
-            { new Pos(14, 16), Direction.north }, // Coin
-            { new Pos(14, 14), Direction.north }, // KeyBlade
-            { new Pos( 1,  1), Direction.south }, // up stairs
+            { new Pos(13,  1), Direction.east  },
+        }
+        .OrderBy(pos => Guid.NewGuid()).ToArray();
+
+        return new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(16, 12),  Direction.north     },
+            { new Pos(16, 16),  Direction.north     },
+            { new Pos(12, 16),  Direction.north     },
+            { new Pos(12, 12),  Direction.north     },
+            { new Pos( 3, 21),  Direction.north     },
+            { new Pos(11, 27),  Direction.north     },
+            { new Pos( 7, 13),  Direction.south     },
+            { new Pos(13,  7),  Direction.west      },
+            { randomPos[0].Key, randomPos[0].Value  },
+            { randomPos[1].Key, randomPos[1].Value  },
+            { randomPos[2].Key, randomPos[2].Value  },
+            { randomPos[3].Key, randomPos[3].Value  }, // TreasureKey
+            { new Pos(12, 14),  Direction.north     }, // Coin
+            { new Pos(14, 12),  Direction.north     }, // Coin
+            { new Pos(16, 14),  Direction.north     }, // Coin
+            { new Pos(14, 16),  Direction.north     }, // Coin
+            { new Pos(14, 14),  Direction.north     }, // KeyBlade
+            { new Pos( 1,  1),  Direction.south     }, // up stairs
         };
     }
 
