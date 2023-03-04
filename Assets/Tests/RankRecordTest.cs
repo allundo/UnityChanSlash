@@ -50,6 +50,7 @@ public class RankRecordTest
         var rankInMessage = Object.Instantiate(prefabRankInMessage, testCanvas.transform);
         var offset = new Vector2(0f, -Screen.height * 0.5f);
 
+        rankInMessage.ResetOrientation(DeviceOrientation.Portrait);
         yield return null;
 
         for (int rank = 0; rank < 11; rank++)
@@ -67,7 +68,6 @@ public class RankRecordTest
 
             if (rank > 0)
             {
-                rankInMessage.ResetOrientation(DeviceOrientation.Portrait);
                 seq.Append(rankInMessage.RankInTween());
             }
 

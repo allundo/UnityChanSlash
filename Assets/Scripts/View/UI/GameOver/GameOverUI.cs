@@ -25,13 +25,14 @@ public class GameOverUI : FadeEnable, IPointerDownHandler, IPointerUpHandler
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
-        record.gameObject.SetActive(false);
-        message.gameObject.SetActive(false);
         Inactivate();
     }
 
     protected virtual void Start()
     {
+        record.gameObject.SetActive(false);
+        message.gameObject.SetActive(false);
+
         uiTween = new UITween(gameOverBG.gameObject, true);
 
         seqEx = new SequenceEx()
