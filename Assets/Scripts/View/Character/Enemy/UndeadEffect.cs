@@ -1,4 +1,4 @@
-public interface IUndeadEffect : IBodyEffect
+public interface IUndeadEffect : IEnemyEffect
 {
     void OnResurrection();
 }

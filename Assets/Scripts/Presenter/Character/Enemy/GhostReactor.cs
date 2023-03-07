@@ -18,6 +18,11 @@ public class GhostReactor : EnemyReactor, IGhostReactor
         base.Awake();
         ghostEffect = effect as GhostEffect;
     }
+    protected override void OnActive(EnemyStatus.ActivateOption option)
+    {
+        base.OnActive(option);
+        if (option.isHidden) Hide();
+    }
 
     public override void Hide()
     {
@@ -27,6 +32,7 @@ public class GhostReactor : EnemyReactor, IGhostReactor
         mobStatus.SetHidden(true);
         effect.OnHide();
     }
+
     public void OnAttackStart()
     {
         Hide();

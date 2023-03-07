@@ -15,7 +15,7 @@ public class BulletInput : InputHandler
         ValidateInput();
         Interrupt(fire);
     }
-    public override ICommand InputDie()
+    public override ICommand InterruptDie()
     {
         ClearAll();
         Interrupt(die);

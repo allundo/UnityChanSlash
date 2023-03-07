@@ -26,7 +26,7 @@ public class BulletReactor : Reactor, IBulletReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) input.InputDie();
+        if (life <= 0.0f) input.InterruptDie();
     }
 
     protected override void OnActive()

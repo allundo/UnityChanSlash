@@ -21,6 +21,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     protected IEnemyStatus enemyStatus;
     private IDisposable inactiveNextFrame;
     private IDisposable lifeChange;
+    private IDisposable targetEnemy;
     private bool isDestroying = false;
 
     public bool IsTamed => enemyStatus.isTamed;
@@ -46,22 +47,19 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     {
         enemyStatus.ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
 
-        enemyStatus.IsTarget.Subscribe(isTarget =>
-        {
-            hologramFade.SetActive(isTarget);
-            if (isTarget) gaugeGenerator.Hide(enemyStatus);
-        })
-        .AddTo(this);
+
     }
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f)
-        {
-            input.InputDie();
-            return;
-        }
-        if (!enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
+        if (CheckAlive(life) && !enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
+    }
+
+    protected virtual bool CheckAlive(float life)
+    {
+        if (life > 0f) return true;
+        input.InterruptDie();
+        return false;
     }
 
     /// <summary>
@@ -82,7 +80,8 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     private void Inactivate()
     {
-        lifeChange.Dispose();
+        lifeChange?.Dispose();
+        targetEnemy?.Dispose();
         input.ClearAll();
         bodyCollider.enabled = false;
         status.Inactivate();
@@ -158,21 +157,31 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         enemyEffect.OnTeleportEnd();
     }
 
-    protected void OnActive(EnemyStatus.ActivateOption option)
+    protected void Subscribe()
     {
         lifeChange?.Dispose();
-
         lifeChange = status.Life
             .SkipLatestValueOnSubscribe()
             .Subscribe(life => OnLifeChange(life))
             .AddTo(this);
 
+        targetEnemy?.Dispose();
+        targetEnemy = enemyStatus.IsTarget.Subscribe(isTarget =>
+        {
+            hologramFade.SetActive(isTarget);
+            if (isTarget) gaugeGenerator.Hide(enemyStatus);
+        })
+        .AddTo(this);
+    }
+
+    protected virtual void OnActive(EnemyStatus.ActivateOption option)
+    {
+        Subscribe();
+
         enemyEffect.OnActive(option.fadeInDuration);
         map.OnActive();
         enemyInput.OnActive(option);
         bodyCollider.enabled = true;
-
-        if (option.isHidden) Hide();
     }
 
     protected override void OnActive() => OnActive(new EnemyStatus.ActivateOption());

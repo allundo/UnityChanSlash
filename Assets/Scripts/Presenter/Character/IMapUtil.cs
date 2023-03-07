@@ -7,6 +7,7 @@ public interface IMapUtil
     Transform transform { get; }
 
     void OnActive();
+
     Vector3 WorldPos(Pos pos);
 
     void TurnLeft();

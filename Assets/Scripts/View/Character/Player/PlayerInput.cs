@@ -242,10 +242,10 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     public void SetCancel() => (commander as PlayerCommander).SetCancel();
 
-    public override ICommand InputDie()
+    public override ICommand InterruptDie()
     {
         SetInputVisible(false);
-        return base.InputDie();
+        return base.InterruptDie();
     }
 
     public override ICommand InputIced(float duration)

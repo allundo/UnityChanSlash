@@ -6,10 +6,7 @@ public interface IMobInput : IInput
     void OnIceCrash();
 }
 
-public interface IUndeadInput : IMobInput
-{
-    void InputSleep();
-}
+
 
 /// <summary>
 /// Inputs ICommand to ICommand queue in Commander. <br />

@@ -1,7 +1,12 @@
 using UnityEngine;
 
+public interface IEnemyMapUtil : IMobMapUtil
+{
+    void OnActive(bool isSleeping);
+}
+
 [RequireComponent(typeof(EnemyStatus))]
-public class EnemyMapUtil : MobMapUtil
+public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
 {
     /// <summary>
     /// Tile position of enemy body Collider for fighting
@@ -13,6 +18,19 @@ public class EnemyMapUtil : MobMapUtil
         base.OnActive();
         SetOnEnemy(onTilePos);
     }
+
+    public void OnActive(bool isSleeping)
+    {
+        if (isSleeping)
+        {
+            map = GameManager.Instance.worldMap;
+            onTilePos = map.MapPos(transform.position);
+            return;
+        }
+
+        OnActive();
+    }
+
     public override void ResetTile()
     {
         RemoveObjectOn();

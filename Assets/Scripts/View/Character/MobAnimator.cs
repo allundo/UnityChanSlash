@@ -10,6 +10,7 @@ public class MobAnimator : MonoBehaviour
 
     public virtual void Pause() => anim.speed = 0f;
     public virtual void Resume() => anim.speed = 1f;
+    public virtual void SetSpeed(float speed) => anim.speed = speed;
 
     public void SetController(RuntimeAnimatorController animatorController)
         => anim.runtimeAnimatorController = animatorController;

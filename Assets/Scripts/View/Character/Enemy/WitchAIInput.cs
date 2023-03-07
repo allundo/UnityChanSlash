@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(MagicAndDouble))]
 public class WitchAIInput : GhostAIInput, IUndeadInput
 {
-    protected ICommand sleep;
     protected ICommand backAttack;
     protected ICommand targetAttack;
     protected ICommand backStep;
@@ -13,6 +12,8 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     protected ICommand magic;
     protected ICommand summon;
     protected ICommand teleport;
+
+    protected UndeadInput undeadInput;
 
     protected override void SetCommands()
     {
@@ -34,12 +35,14 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         summon = new WitchSummonMonster(target, 108f);
         teleport = new MagicianTeleport(target, 84f);
 
-        sleep = new UndeadSleep(target, 300f, new Resurrection(target, 64f));
+        undeadInput = new UndeadInput(target, cmd => Interrupt(cmd, true, true));
     }
-    public void InputSleep()
+
+    public void InterruptSleep() => undeadInput.InterruptSleep();
+    public override void OnActive(EnemyStatus.ActivateOption option)
     {
-        ClearAll();
-        Interrupt(sleep);
+        base.OnActive(option);
+        undeadInput.OnActive(option);
     }
 
     protected override ICommand GetCommand()

@@ -29,10 +29,18 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
 
     protected override IEnemyStatus InitParam(EnemyParam param, EnemyStoreData data)
     {
-        data = data ?? new EnemyStoreData(Util.GetEnemyLevel());
-
         base.InitParam(param, data);
-        curse = data.curse == 0f ? lifeMax.Value : data.curse;
+
+        if (data != null)
+        {
+            curse = data.curse;
+            life.Value = data.life;
+        }
+        else
+        {
+            curse = lifeMax.Value;
+        }
+
         return this;
     }
 }

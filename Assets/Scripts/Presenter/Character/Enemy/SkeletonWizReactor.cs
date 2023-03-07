@@ -7,6 +7,7 @@ public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
     protected IUndeadInput undeadInput;
     protected IUndeadStatus undeadStatus;
     protected SkeletonWizEffect skeletonWizEffect;
+    protected UndeadReactor undeadReact;
 
     protected override void Awake()
     {
@@ -14,37 +15,20 @@ public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
         undeadStatus = status as IUndeadStatus;
         undeadInput = input as IUndeadInput;
         skeletonWizEffect = effect as SkeletonWizEffect;
+        undeadReact = new UndeadReactor(status, input, effect, map, bodyCollider);
     }
 
-    protected override void OnLifeChange(float life)
+    protected override bool CheckAlive(float life) => undeadReact.CheckAlive(life);
+
+    protected override void OnActive(EnemyStatus.ActivateOption option)
     {
-        if (life <= 0.0f)
-        {
-            if (undeadStatus.curse > 0f)
-            {
-                undeadInput.InputSleep();
-            }
-            else
-            {
-                input.InputDie();
-            }
-            return;
-        }
-        if (!enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
+        Subscribe();
+        undeadReact.OnActive(option);
+        if (option.isHidden) Hide();
     }
 
-    public void OnResurrection()
-    {
-        status.ResetStatus();
-        skeletonWizEffect.OnResurrection();
-        bodyCollider.enabled = true;
-    }
-    public void OnSleep()
-    {
-        effect.OnDie();
-        map.ResetTile();
-        bodyCollider.enabled = false;
-    }
+    public void OnResurrection() => undeadReact.OnResurrection();
+    public void OnSleep() => undeadReact.OnSleep();
 
     public void OnTeleport(float duration)
     {

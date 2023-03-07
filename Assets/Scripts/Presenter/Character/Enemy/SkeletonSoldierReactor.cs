@@ -6,44 +6,21 @@ using UnityEngine;
 [RequireComponent(typeof(ShieldAnimFX))]
 public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
 {
-    protected IUndeadStatus undeadStatus;
-    protected IUndeadInput undeadInput;
-    protected IUndeadEffect undeadEffect;
+    protected UndeadReactor undeadReact;
 
     protected override void Awake()
     {
         base.Awake();
-        undeadStatus = status as IUndeadStatus;
-        undeadInput = input as IUndeadInput;
-        undeadEffect = effect as IUndeadEffect;
+        undeadReact = new UndeadReactor(status, input, effect, map, bodyCollider);
     }
-    protected override void OnLifeChange(float life)
+    protected override bool CheckAlive(float life) => undeadReact.CheckAlive(life);
+
+    protected override void OnActive(EnemyStatus.ActivateOption option)
     {
-        if (life <= 0.0f)
-        {
-            if (undeadStatus.curse > 0f)
-            {
-                undeadInput.InputSleep();
-            }
-            else
-            {
-                input.InputDie();
-            }
-            return;
-        }
-        if (!enemyStatus.IsTarget.Value) gaugeGenerator.Show(enemyStatus);
+        Subscribe();
+        undeadReact.OnActive(option);
     }
 
-    public void OnResurrection()
-    {
-        status.ResetStatus();
-        undeadEffect.OnResurrection();
-        bodyCollider.enabled = true;
-    }
-    public void OnSleep()
-    {
-        effect.OnDie();
-        map.ResetTile();
-        bodyCollider.enabled = false;
-    }
+    public void OnResurrection() => undeadReact.OnResurrection();
+    public void OnSleep() => undeadReact.OnSleep();
 }

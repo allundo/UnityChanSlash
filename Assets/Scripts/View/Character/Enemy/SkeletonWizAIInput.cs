@@ -4,9 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(SkeletonWizReactor))]
 public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
 {
-    protected ICommand sleep;
     protected ICommand ice;
     protected ICommand teleport;
+
+    protected UndeadInput undeadInput;
 
     protected override void SetCommands()
     {
@@ -21,12 +22,14 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         ice = new EnemyFire(target, 72f, BulletType.IceBullet);
         teleport = new MagicianTeleport(target, 84f, 3);
 
-        sleep = new UndeadSleep(target, 300f, new Resurrection(target, 64f));
+        undeadInput = new UndeadInput(target, cmd => Interrupt(cmd, true, true));
     }
-    public void InputSleep()
+
+    public void InterruptSleep() => undeadInput.InterruptSleep();
+    public override void OnActive(EnemyStatus.ActivateOption option)
     {
-        ClearAll();
-        Interrupt(sleep);
+        base.OnActive(option);
+        undeadInput.OnActive(option);
     }
 
     protected override ICommand GetCommand()

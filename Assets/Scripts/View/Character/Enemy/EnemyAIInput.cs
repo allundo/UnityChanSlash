@@ -5,6 +5,11 @@ public interface IEnemyInput : IMobInput
     void OnActive(EnemyStatus.ActivateOption option);
 }
 
+public interface IUndeadInput : IEnemyInput
+{
+    void InterruptSleep();
+}
+
 public class EnemyAIInput : MobInput, IEnemyInput
 {
     protected ICommand turnL;

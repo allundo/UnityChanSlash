@@ -46,6 +46,7 @@ public class EnemyStatus : MobStatus, IEnemyStatus
         public float summoningDuration;
         public float icingFrames;
         public bool isHidden;
+        public bool isSleeping;
         public ActivateOption(float fadeInDuration = 0.5f, float icingFrames = 0f, bool isHidden = false, bool isSummoned = false, float summoningDuration = 120f)
         {
             this.fadeInDuration = fadeInDuration;
@@ -53,6 +54,17 @@ public class EnemyStatus : MobStatus, IEnemyStatus
             this.isHidden = isHidden;
             this.isSummoned = isSummoned;
             this.summoningDuration = summoningDuration;
+            this.isSleeping = false;
+        }
+
+        public ActivateOption(DataStoreAgent.EnemyData data)
+        {
+            this.fadeInDuration = 0.25f;
+            this.icingFrames = data.icingFrames;
+            this.isHidden = data.isHidden;
+            this.isSummoned = false;
+            this.summoningDuration = 0f;
+            this.isSleeping = data.life == 0f;
         }
     }
 

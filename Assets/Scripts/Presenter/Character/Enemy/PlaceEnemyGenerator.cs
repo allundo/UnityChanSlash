@@ -137,14 +137,35 @@ public class PlaceEnemyGenerator : EnemyGenerator
         {
             if (tile.OnEnemy != null)
             {
-                if (tile.AboveEnemy != null) store.Add(new DataStoreAgent.EnemyData(pos, tile.AboveEnemy));
+                if (tile.AboveEnemy != null)
+                {
+                    store.Add(new DataStoreAgent.EnemyData(pos, tile.AboveEnemy));
+                    tile.AboveEnemy.gameObject.GetComponent<Reactor>().Destroy();
+                }
 
                 if (pos != playerPos) store.Add(new DataStoreAgent.EnemyData(pos, tile.OnEnemy));
+                tile.OnEnemy.gameObject.GetComponent<Reactor>().Destroy();
                 tile.OnEnemy = null;
             }
 
             tile.OnCharacterDest = tile.AboveEnemy = null;
         });
+
+        enemyPool.ForEach(
+            kv => kv.Value.transform?.ForEach(t =>
+            {
+                if (t.gameObject.activeSelf)
+                {
+                    var undead = t.GetComponent<EnemyStatus>() as IUndeadStatus;
+                    if (undead != null && undead.Life.Value == 0f)
+                    {
+                        var map = undead.gameObject.GetComponent<MapUtil>();
+                        store.Add(new DataStoreAgent.EnemyData(map.onTilePos, undead));
+                    }
+                }
+            })
+        );
+
         return store;
     }
 
@@ -217,7 +238,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, 0f, false, true, waitFrames), new EnemyStoreData(4));
 
     private IEnemyStatus Respawn(DataStoreAgent.EnemyData data)
-        => ManualSpawn(data.enemyType, data.pos, data.dir, new EnemyStatus.ActivateOption(0.5f, data.icingFrames, data.isHidden), data.StoreData());
+        => ManualSpawn(data.enemyType, data.pos, data.dir, new EnemyStatus.ActivateOption(data), data.StoreData());
 
     private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData)
         => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, statusData);

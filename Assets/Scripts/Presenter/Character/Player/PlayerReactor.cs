@@ -1,6 +1,5 @@
 using UnityEngine;
 using UniRx;
-using System;
 using static ShieldInput;
 
 [RequireComponent(typeof(PlayerInput))]
@@ -161,7 +160,7 @@ public class PlayerReactor : MobReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) input.InputDie();
+        if (life <= 0.0f) input.InterruptDie();
 
         lifeGauge.UpdateLife(life, status.LifeMax.Value);
 

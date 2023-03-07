@@ -64,7 +64,7 @@ public class MobReactor : Reactor, IMobReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) input.InputDie();
+        if (life <= 0.0f) input.InterruptDie();
     }
 
     public override float Damage(IAttacker attacker, Attack.AttackData attackData)

@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class WitchEffect : GhostEffect
+public class WitchEffect : GhostEffect, IUndeadEffect
 {
     [SerializeField] private AudioSource summonSnd = default;
     [SerializeField] private ParticleSystem summonVFX = default;

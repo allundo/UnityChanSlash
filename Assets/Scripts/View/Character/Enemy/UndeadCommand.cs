@@ -137,3 +137,21 @@ public class UndeadSleep : UndeadCommand
         return ObservableComplete(); // Don't validate input
     }
 }
+
+public class UndeadQuickSleep : UndeadCommand
+{
+    ICommand resurrection;
+    public UndeadQuickSleep(ICommandTarget target) : base(target, 15f)
+    {
+        resurrection = new Resurrection(target, 64f);
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        undeadAnim.die.Bool = undeadAnim.sleep.Bool = true;
+        target.anim.SetSpeed(100f);
+        input.Interrupt(resurrection, false);
+
+        return ExecOnCompleted(target.anim.Resume); // Don't validate input
+    }
+}

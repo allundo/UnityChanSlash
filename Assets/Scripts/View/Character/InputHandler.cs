@@ -7,7 +7,7 @@ public interface IInput
     ICommand InputCommand(ICommand cmd);
     ICommand ForceEnqueue(ICommand cmd);
     ICommand Interrupt(ICommand cmd, bool isCancel = true, bool isQueueClear = false);
-    ICommand InputDie();
+    ICommand InterruptDie();
     ICommand currentCommand { get; }
     void ValidateInput(bool isTriggerOnly = false);
     void DisableInput(bool isTriggerOnly = false);
@@ -113,12 +113,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
 
     public ICommand currentCommand => commander.currentCommand;
 
-    public virtual ICommand InputDie()
-    {
-        ClearAll();
-        Interrupt(die);
-        return die;
-    }
+    public virtual ICommand InterruptDie() => Interrupt(die, true, true);
 
     public virtual void ValidateInput(bool isTriggerOnly = false)
     {

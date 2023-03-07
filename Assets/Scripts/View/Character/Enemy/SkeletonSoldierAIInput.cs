@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(SkeletonSoldierReactor))]
 public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
 {
-    protected ICommand sleep;
+    protected UndeadInput undeadInput;
 
     protected override void SetCommands()
     {
@@ -17,7 +17,7 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         guard = new GuardCommand(target, 36f, 0.95f);
         attack = new EnemyAttack(target, 86f);
 
-        sleep = new UndeadSleep(target, 300f, new Resurrection(target, 64f));
+        undeadInput = new UndeadInput(target, cmd => Interrupt(cmd, true, true));
     }
 
     protected override void SetInputs()
@@ -26,10 +26,11 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         shieldAnim = target.anim as SkeletonSoldierAnimator;
     }
 
-    public void InputSleep()
+    public void InterruptSleep() => undeadInput.InterruptSleep();
+    public override void OnActive(EnemyStatus.ActivateOption option)
     {
-        ClearAll();
-        Interrupt(sleep);
+        base.OnActive(option);
+        undeadInput.OnActive(option);
     }
 
     protected override ICommand GetCommand()
