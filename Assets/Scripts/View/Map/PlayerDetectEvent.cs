@@ -72,7 +72,7 @@ public class PlayerMessageFloor3 : PlayerDetectFloor
     public PlayerMessageFloor3(PlayerCommandTarget target) : base(target, new MessageData[]
     {
         new MessageData("そろそろ地下 3 階ってもんかしら？\n…なんかめっちゃ暑いんですけど。", FaceID.DEFAULT),
-        new MessageData("体力が奪われてく感じがする…。\n休み休み行きましょーかね。", FaceID.DESPISE),
+        new MessageData("体力が奪われてく感じがする…。\nこまめに休息とらないとしんどいね、こりゃ。", FaceID.DESPISE),
     })
     { }
 }
@@ -81,7 +81,7 @@ public class PlayerMessageFloor4 : PlayerDetectFloor
     public PlayerMessageFloor4(PlayerCommandTarget target) : base(target, new MessageData[]
     {
         new MessageData("いよいよ地下 4 階！\n・・・って、寒ゥ！！！", FaceID.SURPRISE),
-        new MessageData("サウナでも流行ってんのかー！\n一体どうなってんの？！", FaceID.ANGRY),
+        new MessageData("フィンランド式サウナか！\n一体どうなってんの？！", FaceID.ANGRY),
         new MessageData("ここで寝たらアウトだね…。\n急いで突破しよ！", FaceID.ANGRY2),
     })
     { }
