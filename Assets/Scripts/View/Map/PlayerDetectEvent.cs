@@ -9,20 +9,20 @@ public abstract class PlayerDetectEvent : GameEvent
     protected ISubject<Unit> eventEndSubject = new Subject<Unit>();
     protected EventInvoker invoker;
     protected IDisposable disposable;
-    protected Pos pos;
     public bool isOneShot { get; protected set; }
 
     protected abstract bool IsEventValid();
 
-    public PlayerDetectEvent(PlayerCommandTarget target, Pos pos, bool isOneShot = true) : base(target)
+    public PlayerDetectEvent(PlayerCommandTarget target, bool isOneShot = true) : base(target)
     {
-        this.pos = pos;
         this.isOneShot = isOneShot;
     }
 
+    protected abstract Vector3 EventTilePosition(WorldMap map);
+
     public void Activate(EventInvoker invoker, WorldMap map)
     {
-        this.invoker = invoker.OnSpawn(map.WorldPos(pos));
+        this.invoker = invoker.OnSpawn(EventTilePosition(map));
 
         disposable = invoker.DetectPlayer
             .Where(_ => IsEventValid())
@@ -48,13 +48,68 @@ public abstract class PlayerDetectEvent : GameEvent
         invoker.Inactivate();
     }
 }
-public class PlayerHasItemEvent : PlayerDetectEvent
+
+public class PlayerDetectFloor : PlayerDetectEvent
 {
+    protected MessageData[] eventMessages;
+
+    public PlayerDetectFloor(PlayerCommandTarget target, MessageData[] eventMessages) : base(target)
+    {
+        this.eventMessages = eventMessages;
+    }
+
+    protected override bool IsEventValid() => true;
+    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(map.StairsBottom.Key);
+
+    protected override IObservable<Unit> EventFunc()
+        => input
+            .ObserveComplete(input.EnqueueMessage(eventMessages))
+            .Select(_ => Unit.Default);
+}
+
+public class PlayerMessageFloor3 : PlayerDetectFloor
+{
+    public PlayerMessageFloor3(PlayerCommandTarget target) : base(target, new MessageData[]
+    {
+        new MessageData("そろそろ地下 3 階ってもんかしら？\n…なんかめっちゃ暑いんですけど。", FaceID.DEFAULT),
+        new MessageData("体力が奪われてく感じがする…。\n休み休み行きましょーかね。", FaceID.DESPISE),
+    })
+    { }
+}
+public class PlayerMessageFloor4 : PlayerDetectFloor
+{
+    public PlayerMessageFloor4(PlayerCommandTarget target) : base(target, new MessageData[]
+    {
+        new MessageData("いよいよ地下 4 階！\n・・・って、寒ゥ！！！", FaceID.SURPRISE),
+        new MessageData("サウナでも流行ってんのかー！\n一体どうなってんの？！", FaceID.ANGRY),
+        new MessageData("ここで寝たらアウトだね…。\n急いで突破しよ！", FaceID.ANGRY2),
+    })
+    { }
+}
+
+public class PlayerMessageFloor5 : PlayerDetectFloor
+{
+    public PlayerMessageFloor5(PlayerCommandTarget target) : base(target, new MessageData[]
+    {
+        new MessageData("地下 5 階とーちゃーく！\nうぇ〜寒かったぁ…。", FaceID.SMILE),
+        new MessageData("…なんだかモノモノシイ雰囲気。\nこれが最後って感じかな？", FaceID.EYECLOSE),
+        new MessageData("とっとと鍵奪って脱出してやりますかね！", FaceID.ANGRY2),
+    })
+    { }
+}
+
+public abstract class PlayerHasItemEvent : PlayerDetectEvent
+{
+    protected Pos pos;
     protected ItemType itemTypeToCheck;
-    public PlayerHasItemEvent(PlayerCommandTarget target, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true) : base(target, pos, isOneShot)
+
+    public PlayerHasItemEvent(PlayerCommandTarget target, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true) : base(target, isOneShot)
     {
         this.itemTypeToCheck = itemTypeToCheck;
+        this.pos = pos;
     }
+
+    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(pos);
 
     protected override bool IsEventValid()
     {
@@ -63,11 +118,6 @@ public class PlayerHasItemEvent : PlayerDetectEvent
         var jumpLeapedEventTileWithItem = target.map.BackwardTile.HasItem(itemTypeToCheck);
 
         return playerHasItem || itemIsOnEventTile || jumpLeapedEventTileWithItem;
-    }
-
-    protected override IObservable<Unit> EventFunc()
-    {
-        return Observable.Empty<Unit>();
     }
 }
 

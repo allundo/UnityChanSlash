@@ -24,6 +24,9 @@ public class EventManager : MobGenerator<EventInvoker>
         {
             new DropStartEvent(playerTarget),
             new RestartEvent(playerTarget),
+            new PlayerMessageFloor3(playerTarget),
+            new PlayerMessageFloor4(playerTarget),
+            new PlayerMessageFloor5(playerTarget),
             new WitchGenerateEvent(playerTarget, lightManager, new Pos(11, 11)),
             new SkeletonsGenerateEvent(playerTarget, new Pos(21, 7)),
         };
@@ -33,8 +36,11 @@ public class EventManager : MobGenerator<EventInvoker>
     {
         // Initialize GameEvents invoked by detecting player
         playerDetectEvents = new List<PlayerDetectEvent>[GameInfo.Instance.LastFloor].Select(_ => new List<PlayerDetectEvent>()).ToArray();
-        SetPlayerDetectEvent(5, 2);
-        SetPlayerDetectEvent(5, 3);
+        SetPlayerDetectEvent(3, 2);
+        SetPlayerDetectEvent(4, 3);
+        SetPlayerDetectEvent(5, 4);
+        SetPlayerDetectEvent(5, 5);
+        SetPlayerDetectEvent(5, 6);
 
         SwitchWorldMap(map);
     }
