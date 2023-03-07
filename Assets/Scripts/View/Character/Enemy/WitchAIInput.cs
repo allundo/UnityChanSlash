@@ -65,7 +65,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         if (IsOnPlayer(right2)) return turnR;
 
         Pos forward2 = mobMap.dir.GetForward(forward);
-        bool isForwardMovable = mobMap.IsMovable(forward);
+        bool isForwardMovable = mobMap.IsLeapable(forward);
 
         // Move forward if player found in front
         if (IsOnPlayer(forward2))

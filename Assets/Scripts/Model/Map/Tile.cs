@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 public interface ITile
 {
@@ -136,11 +135,6 @@ public class Box : HandleTile, IHandleTile
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => true;
     public virtual bool IsViewOpen => true;
-    public override bool IsCharacterOn => false;
-
-    public override bool IsEnemyOn => AboveEnemy != null;
-    public override IEnemyStatus OnEnemy { get { return null; } set { } }
-    public override IStatus OnCharacterDest { get { return null; } set { } }
 
     public BoxState state { protected get; set; }
     public override void Open() => state.Open();
@@ -170,11 +164,6 @@ public class Pit : Tile, IOpenable
     public bool IsEnterable(IDirection dir = null) => dir != null;
     public bool IsLeapable => true;
     public virtual bool IsViewOpen => true;
-    public override bool IsCharacterOn => false;
-
-    public override bool IsEnemyOn => AboveEnemy != null;
-    public override IEnemyStatus OnEnemy { get { return null; } set { } }
-    public override IStatus OnCharacterDest { get { return null; } set { } }
 
     public PitState state { protected get; set; }
     public void Open() => state.Drop(false);
