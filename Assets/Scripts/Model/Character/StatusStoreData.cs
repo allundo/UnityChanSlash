@@ -22,9 +22,11 @@ public class MobStatusStoreData : StatusStoreData
 public class EnemyStoreData : MobStatusStoreData
 {
     public bool isTamed { get; private set; }
+    public float curse { get; private set; }
 
-    public EnemyStoreData(int level = 0, float life = 0, bool isTamed = false) : base(level, life)
+    public EnemyStoreData(int level = 0, float life = 0, bool isTamed = false, float curse = 0) : base(level, life)
     {
         this.isTamed = isTamed;
+        this.curse = curse;
     }
 }

@@ -97,7 +97,7 @@ public class MobReactor : Reactor, IMobReactor
             Melt(true);
         }
 
-        mobStatus.LifeChange(-damage);
+        mobStatus.LifeChange(-damage, attr);
 
         effect.OnDamage(LifeRatio(damage), type, attr);
 

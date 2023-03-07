@@ -184,6 +184,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         {
             type = (int)status.type;
             isTamed = status.isTamed;
+            if (status is IUndeadStatus) curse = (status as IUndeadStatus).curse;
         }
 
         [SerializeField] private int type = 0;
@@ -194,7 +195,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 
         public bool isTamed = false;
-        public EnemyStoreData StoreData() => new EnemyStoreData(level, life, isTamed);
+        public float curse = 0f;
+        public EnemyStoreData StoreData() => new EnemyStoreData(level, life, isTamed, curse);
     }
 
     [System.Serializable]

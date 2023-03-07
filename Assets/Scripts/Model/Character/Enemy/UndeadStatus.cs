@@ -8,8 +8,7 @@ public interface IUndeadStatus : IEnemyStatus
 
 public class UndeadStatus : EnemyStatus, IUndeadStatus
 {
-    public float curse { get; protected set; }
-    protected float curseMax;
+    public float curse { get; protected set; } = 0f;
 
     protected static Dictionary<AttackAttr, float> curseMultiplier
         = new Dictionary<AttackAttr, float>()
@@ -22,21 +21,18 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
             { AttackAttr.Dark,       -2f },
         };
 
-    protected override void Awake()
-    {
-        base.Awake();
-        curse = curseMax = 0f;
-    }
-
-    public override void ResetStatus(float life = 0f)
-    {
-        base.ResetStatus(life);
-        curse = curseMax = lifeMax.Value;
-    }
-
     public override void LifeChange(float diff, AttackAttr attr = AttackAttr.None)
     {
-        curse = Mathf.Clamp(curse + diff * curseMultiplier[attr], 0f, curseMax);
+        curse = Mathf.Clamp(curse + diff * curseMultiplier[attr], 0f, lifeMax.Value);
         life.Value = Mathf.Clamp(life.Value + diff, 0f, lifeMax.Value);
+    }
+
+    protected override IEnemyStatus InitParam(EnemyParam param, EnemyStoreData data)
+    {
+        data = data ?? new EnemyStoreData(Util.GetEnemyLevel());
+
+        base.InitParam(param, data);
+        curse = data.curse == 0f ? lifeMax.Value : data.curse;
+        return this;
     }
 }

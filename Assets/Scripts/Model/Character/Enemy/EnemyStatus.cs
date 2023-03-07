@@ -95,12 +95,12 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     public override IStatus InitParam(Param param, StatusStoreData data = null)
         => InitParam(param as EnemyParam, data as EnemyStoreData);
 
-    private IEnemyStatus InitParam(EnemyParam param, EnemyStoreData data)
+    protected virtual IEnemyStatus InitParam(EnemyParam param, EnemyStoreData data)
     {
+        data = data ?? new EnemyStoreData(Util.GetEnemyLevel());
+
         this.enemyParam = param;
         levelGain = ResourceLoader.Instance.enemyLevelGainData.Param((int)param.gainType);
-
-        data = data ?? new EnemyStoreData(Util.GetEnemyLevel());
 
         base.InitParam(param, data);
         isTamed = data.isTamed;
