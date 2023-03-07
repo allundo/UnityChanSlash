@@ -20,6 +20,8 @@ public class UnityEngineSpecTest
     private TestMonoBehaviourTree prefabTestMonoBehaviourTree;
     private TestUniRxTree prefabTestUniRxTree;
     private GameObject prefabLock;
+    private Canvas prefabCanvas;
+    private TestDrag prefabDrag;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -34,6 +36,8 @@ public class UnityEngineSpecTest
         prefabTestMonoBehaviourTree = Resources.Load<TestMonoBehaviourTree>("Prefabs/TestMonoBehaviourTree");
         prefabTestUniRxTree = Resources.Load<TestUniRxTree>("Prefabs/TestUniRxTree");
         prefabLock = Resources.Load<GameObject>("Prefabs/TestLock");
+        prefabCanvas = Resources.Load<Canvas>("Prefabs/UI/Canvas");
+        prefabDrag = Resources.Load<TestDrag>("Prefabs/UI/TestDrag");
     }
 
     [OneTimeTearDown]
@@ -873,5 +877,22 @@ public class UnityEngineSpecTest
         Assert.AreEqual(4f, sec4, Constants.FRAME_SEC_UNIT);
 
         yield return null;
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _018_OnDragDoesntWorkAfterDestroy()
+    {
+        var eventSystem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/EventSystem"));
+        var canvas = Object.Instantiate(prefabCanvas);
+        var drag = Object.Instantiate(prefabDrag, canvas.transform);
+
+        yield return new WaitForSeconds(5f);
+
+        Object.Destroy(drag);
+
+        yield return new WaitForSeconds(5f);
+        Object.Destroy(canvas);
+        Object.Destroy(eventSystem);
     }
 }
