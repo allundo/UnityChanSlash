@@ -13,7 +13,7 @@ public class RestLifeGauge : MonoBehaviour
     {
         float lifeRatio = life / lifeMax;
 
-        lifeText.text = PlayerLifeGauge.GetDisplayHP(life, lifeMax);
+        lifeText.text = PlayerLifeGauge.GetDisplayHP(life) + PlayerLifeGauge.GetDisplayLifeMax(lifeMax);
         greenGauge.SetGauge(lifeRatio);
     }
 

@@ -8,6 +8,7 @@ public class PlayerLifeGauge : MonoBehaviour
     [SerializeField] private Gauge greenGauge = default;
     [SerializeField] private Gauge redGauge = default;
     [SerializeField] private TextMeshProUGUI lifeText = default;
+    [SerializeField] private TextMeshProUGUI lifeMaxText = default;
     [SerializeField] private SkewedImage healImage = default;
     [SerializeField] private UIParticle healVfx = default;
 
@@ -81,15 +82,19 @@ public class PlayerLifeGauge : MonoBehaviour
         shakeTween = DamageShake(damageRatio);
     }
 
-    public static string GetDisplayHP(float life, float lifeMax)
+    public static int GetDisplayHP(float life)
     {
-        int hp = life < 1.0f ? (life > 0.0f ? 1 : 0) : (int)life;
-        return hp + " / " + (int)lifeMax;
+        return life < 1.0f ? (life > 0.0f ? 1 : 0) : (int)life;
+    }
+    public static string GetDisplayLifeMax(float lifeMax)
+    {
+        return $" / {(int)lifeMax}";
     }
 
     public void UpdateLifeText(float life, float lifeMax)
     {
-        lifeText.text = GetDisplayHP(life, lifeMax);
+        lifeText.text = GetDisplayHP(life).ToString();
+        lifeMaxText.text = GetDisplayLifeMax(lifeMax);
     }
 
     private Tween DamageShake(float damageRatio)
