@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniRx;
+using System;
 using static ShieldInput;
 
 [RequireComponent(typeof(PlayerInput))]
@@ -25,6 +26,8 @@ public class PlayerReactor : MobReactor
     protected PlayerMapUtil playerMap;
     protected ParticleSystem iceCrashVFX;
 
+    protected FloorIllness floorIllness;
+
     public string CauseOfDeath() => lastAttacker.CauseOfDeath(lastAttackType);
 
     protected GuardState guardState => playerInput.guardState;
@@ -38,6 +41,8 @@ public class PlayerReactor : MobReactor
         playerEffect = effect as PlayerEffect;
         playerMap = map as PlayerMapUtil;
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
+
+        floorIllness = new FloorIllness(lifeGauge, restUI);
     }
 
     protected override void Start()
@@ -53,6 +58,7 @@ public class PlayerReactor : MobReactor
             .AddTo(this);
 
         restUI.Heal.Subscribe(point => HealRatio(point, false)).AddTo(this);
+        restUI.Poison.Subscribe(point => PoisonRatio(point)).AddTo(this);
 
         // Initialize life text and gauge
         restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
@@ -103,6 +109,11 @@ public class PlayerReactor : MobReactor
             .AddTo(this);
     }
 
+    public void SwitchFloor(int floor)
+    {
+        floorIllness.SwitchFloor(floor);
+    }
+
     protected void OnLifeMaxChange(float lifeMax)
     {
         lifeGauge.UpdateLife(status.Life.Value, lifeMax);
@@ -134,6 +145,17 @@ public class PlayerReactor : MobReactor
         }
 
         status.LifeChange(heal);
+        return true;
+    }
+
+    public bool PoisonRatio(float poisonRatio = 0f)
+    {
+        float maxDamage = status.Life.Value - 1f;
+
+        if (!status.IsAlive || maxDamage <= 0f) return false;
+
+        status.LifeChange(-Mathf.Min(poisonRatio * status.LifeMax.Value, maxDamage));
+
         return true;
     }
 

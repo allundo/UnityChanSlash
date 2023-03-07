@@ -373,6 +373,9 @@ public class WorldMap
     private KeyValuePair<Pos, IDirection> stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(), null);
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
+    public Pos StairsEnterPos(bool isDownStairs) => (isDownStairs ? stairsTop : stairsBottom).Key;
+    public Pos StairsExitPos(bool isDownStairs) => StairsEnterPos(!isDownStairs);
+
     public DataStoreAgent.PosList[] ExportRandomMessagePos()
     {
         var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();

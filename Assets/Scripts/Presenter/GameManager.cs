@@ -20,7 +20,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     private PlayerInput input;
     private PlayerAnimator anim;
     private Collider playerCollider;
-    private PlayerMapUtil map;
+    private PlayerMapUtil playerMap;
+    private PlayerReactor playerReact;
 
     private bool isInitialOrientation = true;
 
@@ -39,7 +40,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         input = player.GetComponent<PlayerInput>();
         anim = player.GetComponent<PlayerAnimator>();
-        map = player.GetComponent<PlayerMapUtil>();
+        playerMap = player.GetComponent<PlayerMapUtil>();
+        playerReact = player.GetComponent<PlayerReactor>();
         playerCollider = player.GetComponent<Collider>();
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
@@ -137,7 +139,10 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.ApplyTileOpen(worldMap);
         spawnHandler.PlaceEnemyGenerators();
         DataStoreAgent.Instance.RestorePlayerStatus();
+
         mainCamera.SwitchFloor(worldMap.floor);
+        playerReact.SwitchFloor(worldMap.floor);
+
         playerCollider.enabled = true;
 
         yield return null;
@@ -185,12 +190,13 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         // Need to set player position before initialize HidePlateHandler.
         // MiniMap controlled by HidePlateHandler refers to player position and direction.
-        map.SetFloorStartPos(worldMap);
+        playerMap.SetFloorStartPos(worldMap);
         hidePlateHandler.Init();
 
         // Initialize the point light position.
         // The point light refers to player position but need to be fixed at Camera looking position before DropStart().
         mainCamera.SwitchFloor(worldMap.floor);
+        playerReact.SwitchFloor(worldMap.floor);
     }
 
     void Start()
@@ -252,9 +258,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.DisableAllEnemiesInput();
 
         worldMap.StoreTileOpenData();
-        Pos stairsPos = (isDownStairs ? worldMap.stairsTop : worldMap.StairsBottom).Key;
 
-        PlaySnd(SNDType.FloorMove, worldMap.WorldPos(stairsPos));
+        PlaySnd(SNDType.FloorMove, worldMap.WorldPos(worldMap.StairsEnterPos(isDownStairs)));
 
         yield return new WaitForEndOfFrame();
 
@@ -264,8 +269,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
 
         playerCollider.enabled = false;
-        map.SetFloorStartPos(nextFloorMap, isDownStairs);
+        playerMap.SetFloorStartPos(nextFloorMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(nextFloorMap);
+        playerReact.SwitchFloor(nextFloorMap.floor);
         mainCamera.SwitchFloor(nextFloorMap.floor);
         yield return new WaitForEndOfFrame();
 
@@ -273,7 +279,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         worldMap = nextFloorMap;
 
         // Stored floor enemies are respawn in this method.
-        spawnHandler.MoveFloorCharacters(nextFloorMap, stairsPos);
+        spawnHandler.MoveFloorCharacters(nextFloorMap, isDownStairs);
 
         eventManager.SwitchWorldMap(nextFloorMap);
 
@@ -306,7 +312,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.ApplyTileOpen(nextFloorMap);
         yield return new WaitForEndOfFrame();
 
-        spawnHandler.MoveFloorItems(nextFloorMap, map.dir);
+        spawnHandler.MoveFloorItems(nextFloorMap);
         yield return new WaitForEndOfFrame();
 
         spawnHandler.PlaceEnemyGenerators();

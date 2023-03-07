@@ -120,9 +120,9 @@ public class PlaceEnemyGenerator : EnemyGenerator
         return regions;
     }
 
-    public void SwitchWorldMap(WorldMap map, Pos startPos)
+    public void SwitchWorldMap(WorldMap map, bool isDownStairs)
     {
-        respawnData[this.map.floor - 1] = GetRespawnData(startPos);
+        respawnData[this.map.floor - 1] = GetRespawnData(this.map.StairsEnterPos(isDownStairs));
 
         DestroyAllEnemies();
         DestroyAllEnemyGenerators();

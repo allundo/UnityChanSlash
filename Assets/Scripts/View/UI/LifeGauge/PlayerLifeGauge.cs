@@ -102,4 +102,6 @@ public class PlayerLifeGauge : MonoBehaviour
         if (damageRatio <= 0.0f) return null;
         return rectTransform.DOShakeAnchorPos(2 * damageRatio, 100 * damageRatio, (int)(300 * damageRatio)).Play();
     }
+
+    public void SetHPColor(Color color) => lifeText.color = color;
 }

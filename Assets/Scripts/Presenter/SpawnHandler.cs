@@ -42,7 +42,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
 
-    public void MoveFloorCharacters(WorldMap map, Pos startPos)
+    public void MoveFloorCharacters(WorldMap map, bool isDownStairs)
     {
         EnemyCommand.ClearResetTweens();
 
@@ -50,7 +50,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
         // lifeGaugeGenerator.DestroyAll();
 
         // Enemies and bullets must be destroyed during the same frame.
-        placeEnemyGenerator.SwitchWorldMap(map, startPos);
+        placeEnemyGenerator.SwitchWorldMap(map, isDownStairs);
 
         debugEnemyGenerators.ForEach(gen =>
         {
@@ -68,7 +68,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public Item PlaceItem(ItemType type, int numOfItem, Pos pos) => itemGenerator.PlaceItem(type, numOfItem, pos, PlayerInfo.Instance.Dir);
 
-    public void MoveFloorItems(WorldMap map, IDirection playerDir)
+    public void MoveFloorItems(WorldMap map)
     {
         itemGenerator.SwitchWorldMap(map);
     }

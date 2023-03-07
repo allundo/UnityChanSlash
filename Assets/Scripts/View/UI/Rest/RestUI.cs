@@ -9,6 +9,7 @@ using System;
 public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private RestButton restButton = default;
+    [SerializeField] private Image invalidIcon = default;
     [SerializeField] private ResumeButton resumeButton = default;
     [SerializeField] private RestLifeGauge restLifeGauge = default;
     [SerializeField] private TextMeshProUGUI txtRest = default;
@@ -17,6 +18,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Image image;
     private FadeTween fade;
     private Tween healTween;
+    private Tween poisonTween;
     private Tween damageTween;
     private Tween cancelValidTween;
 
@@ -25,7 +27,14 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private ISubject<float> healSubject = new Subject<float>();
     public IObservable<float> Heal => healSubject;
 
+    private float poisonPoint = 0.005f;
+
+    private ISubject<float> poisonSubject = new Subject<float>();
+    public IObservable<float> Poison => poisonSubject;
+
     public bool isActive { get; protected set; } = false;
+    private bool isPoison = false;
+    private bool isCold = false;
 
     public void OnPointerDown(PointerEventData eventData) { }
 
@@ -36,10 +45,12 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         image = GetComponent<Image>();
         fade = new FadeTween(image);
 
+        invalidIcon.gameObject.SetActive(false);
+
         healTween = DOTween.Sequence()
             .AppendCallback(() => healPoint += 0.0005f)
             .AppendCallback(() => healSubject.OnNext(healPoint))
-            .AppendInterval(0.1f) // 6frames
+            .AppendInterval(0.1f) // heal per 6frames
             .SetLoops(-1, LoopType.Restart)
             .SetUpdate(true)
             .AsReusable(gameObject);
@@ -64,6 +75,12 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void Activate()
     {
+        if (isCold)
+        {
+            ActiveMessageController.Instance.InputMessageData("寝るな…！寝たら死ぬぞ…！", SDFaceID.SURPRISE, SDEmotionID.BLUE);
+            return;
+        }
+
         cover.FadeOutObservable(0.01f)
             .IgnoreElements()
             .Subscribe(null, ShowUIs)
@@ -75,6 +92,12 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         healTween.Restart();
 
         isActive = true;
+
+        if (isPoison)
+        {
+            poisonPoint = 0.005f;
+            poisonTween.Pause();
+        }
     }
 
     protected void ShowUIs()
@@ -98,6 +121,11 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         HideUIs();
 
         isActive = false;
+
+        if (isPoison)
+        {
+            poisonTween.Restart();
+        }
     }
 
     protected void HideUIs()
@@ -117,5 +145,39 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         Inactivate();
         damageTween.Restart();
+    }
+
+    public void SetPoison()
+    {
+        poisonPoint = 0.005f;
+
+        poisonTween = DOTween.Sequence()
+            .AppendCallback(() => poisonPoint += 0.0005f)
+            .AppendCallback(() => poisonSubject.OnNext(poisonPoint))
+            .AppendInterval(2f) // poison damage per 120frames
+            .SetLoops(-1, LoopType.Restart)
+            .SetUpdate(false)
+            .AsReusable(gameObject)
+            .Play();
+
+        isPoison = true;
+    }
+
+    public void RemovePoison()
+    {
+        poisonTween?.Kill();
+        isPoison = false;
+    }
+
+    public void SetCold()
+    {
+        isCold = true;
+        invalidIcon.gameObject.SetActive(true);
+    }
+
+    public void RemoveCold()
+    {
+        isCold = false;
+        invalidIcon.gameObject.SetActive(false);
     }
 }
