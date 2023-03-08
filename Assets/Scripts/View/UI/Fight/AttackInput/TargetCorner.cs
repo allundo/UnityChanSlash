@@ -19,6 +19,7 @@ public class TargetCorner : FadeUI, ITargetUI
     {
         if (expansionLoop != null && expansionLoop.IsActive()) return;
 
+        activate?.Complete();
         uiTween.ResetSize();
         fade.SetAlpha(1f);
 
@@ -32,14 +33,15 @@ public class TargetCorner : FadeUI, ITargetUI
 
     protected override void OnFadeEnable(float fadeDuration)
     {
-        activate?.Kill();
+        activate?.Complete();
+        expansionLoop?.Kill();
         uiTween.ResetSize(2f);
         activate = uiTween.Resize(1f, fadeDuration).Play();
     }
     protected override void OnCompleteFadeIn() => ExpansionLoop();
 
     protected override void BeforeFadeOut() => expansionLoop?.Kill();
-    protected override void OnDisable() => activate?.Kill();
+    protected override void OnDisable() => activate?.Complete();
 
     public void SetPointerOn()
     {
