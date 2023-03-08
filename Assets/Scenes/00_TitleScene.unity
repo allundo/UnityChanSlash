@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 107865102}
   - component: {fileID: 107865101}
   m_Layer: 5
-  m_Name: TXT_OPTION
+  m_Name: TXT_SETTINGS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,7 +303,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OPTION
+  m_text: SETTINGS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: a13c67d5e75d04d93b4e2ced3e91c5cd, type: 2}
@@ -10140,7 +10140,7 @@ GameObject:
   - component: {fileID: 1822275783}
   - component: {fileID: 1822275787}
   m_Layer: 5
-  m_Name: OptionButton
+  m_Name: SettingsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
