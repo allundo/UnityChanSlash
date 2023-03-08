@@ -11,18 +11,18 @@ public abstract class SceneMediator : MonoBehaviour
 
     protected virtual void Awake()
     {
-        LoadSingleton(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
-        LoadSingleton(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
-        LoadSingleton(Resources.Load<DataStoreAgent>("Prefabs/System/DataStoreAgent"));
+        LoadSingleton<ResourceLoader>("Prefabs/System/ResourceLoader");
+        LoadSingleton<GameInfo>("Prefabs/System/GameInfo");
+        LoadSingleton<DataStoreAgent>("Prefabs/System/DataStoreAgent");
 
         sceneLoader = new SceneLoader();
     }
 
-    protected void LoadSingleton<T>(T prefab) where T : MonoBehaviour
+    protected void LoadSingleton<T>(string prefabFilePath) where T : MonoBehaviour
     {
         if (FindObjectOfType(typeof(T)) == null)
         {
-            Instantiate(prefab, Vector3.zero, Quaternion.identity); ;
+            Instantiate(Resources.Load<T>(prefabFilePath)); ;
         }
     }
 
