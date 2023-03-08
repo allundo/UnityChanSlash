@@ -20,7 +20,6 @@ public class WorldMap
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
     private List<Pos> tileOpenPosList = null;
-    private bool isLoadedDataValid = false;
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
@@ -77,13 +76,20 @@ public class WorldMap
         tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
     }
 
-    public List<Pos> ExportTileOpenData()
+    public void StoreTileOpenData()
     {
-        if (isLoadedDataValid) return tileOpenPosList;
+        tileOpenPosList = RetrieveTileOpenData();
+    }
 
+    public List<Pos> ExportTileOpenData() => tileOpenPosList ?? RetrieveTileOpenData();
+
+    private List<Pos> RetrieveTileOpenData()
+    {
         var data = new List<Pos>();
 
-        if (randomMessagePos.Count() > 0/* FIXME: use random message count as initialized flag for now */)
+        // FIXME: use random message count as initialized flag for now.
+        bool isTilesReady = randomMessagePos.Count() > 0;
+        if (isTilesReady)
         {
             ForEachTiles((tile, pos) =>
             {
@@ -94,16 +100,9 @@ public class WorldMap
         return data;
     }
 
-    public void StoreTileOpenData()
-    {
-        isLoadedDataValid = false;
-        tileOpenPosList = ExportTileOpenData();
-    }
-
     public void ImportMapData(DataStoreAgent.MapData import)
     {
         tileOpenPosList = import.tileOpenData.ToList();
-        isLoadedDataValid = true;
 
         fixedMessagePos = import.fixedMessagePos.ToList();
         for (int i = 0; i < import.randomMessagePos.Length; i++)
