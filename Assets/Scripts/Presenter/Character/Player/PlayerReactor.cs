@@ -108,6 +108,13 @@ public class PlayerReactor : MobReactor
             .AddTo(this);
     }
 
+    protected override void OnActive()
+    {
+        effect.OnActive();
+        map.OnActive();
+        input.OnActive();
+    }
+
     public void SwitchFloor(int floor)
     {
         floorIllness.SwitchFloor(floor);
