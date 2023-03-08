@@ -96,7 +96,6 @@ public class Status : SpawnObject<Status>, IStatus
 
     protected virtual void OnActive()
     {
-        ResetStatus();
         activeSubject.OnNext(Unit.Default);
     }
 

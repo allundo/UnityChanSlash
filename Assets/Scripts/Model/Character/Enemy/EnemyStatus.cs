@@ -144,9 +144,6 @@ public class EnemyStatus : MobStatus, IEnemyStatus
     protected override void OnActive() => OnActive(new ActivateOption());
     protected virtual void OnActive(ActivateOption option)
     {
-        // Don't reset status on activation
-        // Set status by InitParam()
-
         activeWithOptionSubject.OnNext(option);
     }
 }

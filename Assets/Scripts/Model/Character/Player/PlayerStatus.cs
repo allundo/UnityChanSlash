@@ -96,12 +96,6 @@ public class PlayerStatus : MobStatus, IGetExp
         InitParam(Resources.Load<PlayerData>("DataAssets/Character/PlayerData").Param(0));
     }
 
-    protected override void OnActive()
-    {
-        // Don't call ResetStatus() on active
-        activeSubject.OnNext(Unit.Default);
-    }
-
     public void SetPosition(WorldMap map, KeyValuePair<Pos, IDirection> initPos)
     {
         SetPosition(map.WorldPos(initPos.Key), initPos.Value);
