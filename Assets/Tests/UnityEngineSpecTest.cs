@@ -895,4 +895,21 @@ public class UnityEngineSpecTest
         Object.Destroy(canvas);
         Object.Destroy(eventSystem);
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    public IEnumerator _019_ColliderDoesntDetectsWhenDisabledOnAwake()
+    {
+        var cube = Object.Instantiate(Resources.Load<DetectSphere>("Prefabs/CubeDetector"));
+        var sphere = Object.Instantiate(Resources.Load<TestSphere>("Prefabs/TestSphere"));
+
+        yield return null;
+
+        Assert.False(sphere.isDetected);
+
+        yield return null;
+
+        Object.Destroy(cube.gameObject);
+        Object.Destroy(sphere.gameObject);
+    }
 }
