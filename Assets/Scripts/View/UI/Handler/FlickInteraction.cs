@@ -237,6 +237,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         protected FlickInteraction flick;
         protected FadeTween fade;
         protected UITween ui;
+        protected Tween effectTween;
         public Sprite sprite { get; protected set; }
         public string text { get; protected set; }
         protected float limit;
@@ -274,7 +275,11 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
             flickSubject.OnNext(Unit.Default);
         }
 
-        public void SetSprite() => fade.sprite = sprite;
+        public void SetSprite()
+        {
+            effectTween?.Kill();
+            fade.sprite = sprite;
+        }
 
         /// <summary>
         /// Change sprite, move by drag directional factor and set alpha according to drag directional ratio.
@@ -311,7 +316,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
                 return false;
             }
 
-            DOTween.Sequence()
+            effectTween = DOTween.Sequence()
                 .Append(ui.MoveOffset(Destination, duration))
                 .Join(fade.In(duration))
                 .Append(ui.Resize(1.5f, duration))
