@@ -330,6 +330,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         bool isFaceToItem = !playerMap.isInPit && !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
         if (isFaceToItem)
         {
+            handleIcon.isLocked = false;
             itemHandler.Activate(forwardTile.TopItem);
             forwardUI.Resize(0.5f, 1f);
         }
@@ -341,6 +342,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         bool isFaceToSpecialTile = !playerMap.isInPit && IsIdling && !fightCircle.isActive && forwardTile is Pit;
         if (isFaceToSpecialTile)
         {
+            handleIcon.isLocked = false;
             inspectHandler.Activate(forwardTile);
             forwardUI.Resize(0.5f, 1f);
         }
