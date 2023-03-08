@@ -10,6 +10,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     public readonly string CLEAR_RECORD_FILE_NAME = "clear_r.dat";
     public readonly string INFO_RECORD_FILE_NAME = "info_r.dat";
     public readonly string SAVE_DATA_FILE_NAME = "save_data.dat";
+    public readonly string SETTING_DATA_FILE_NAME = "setting_data.dat";
 
     private class RecordSet
     {
@@ -77,7 +78,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     }
 
     [System.Serializable]
-    public class SaveData : DataArray
+    public class SaveData
     {
         public int currentFloor = 0;
         public int elapsedTimeSec = 0;
@@ -87,7 +88,6 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public EventData[] eventData = null;
         public MapData[] mapData = null;
         public RespawnData[] respawnData = null;
-        public override object[] GetValues() => new object[] { };
     }
 
     [System.Serializable]
@@ -330,10 +330,21 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public override object[] GetValues() => new object[] { };
     }
 
+    [System.Serializable]
+    public class SettingData
+    {
+        public float fightCircleAlpha = 1f;
+        public float attackButtonAlpha = 1f;
+        public float buttonRegionAlpha = 1f;
+        public float moveButtonAlpha = 1f;
+        public float handleButtonAlpha = 1f;
+    }
+
     protected List<DeadRecord> deadRecords = null;
     protected List<ClearRecord> clearRecords = null;
     protected InfoRecord infoRecord = null;
     protected SaveData saveData = null;
+    protected SettingData settingData = null;
 
     protected MyAesGcm aesGcm;
     protected NonceStore nonceStore;
@@ -434,6 +445,12 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return true;
     }
 
+    public void SaveSettings(SettingData data)
+    {
+        settingData = data;
+        SaveEncryptedRecord(settingData, SETTING_DATA_FILE_NAME);
+    }
+
     protected void SaveEncryptedRecord<T>(T record, string fileName)
     {
         var encrypt = aesGcm.Encrypt(JsonUtility.ToJson(record));
@@ -489,11 +506,9 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     }
     public InfoRecord LoadInfoRecord()
     {
-        if (infoRecord != null) return infoRecord;
-
         try
         {
-            infoRecord = JsonUtility.FromJson<InfoRecord>(LoadJsonData(INFO_RECORD_FILE_NAME));
+            infoRecord = infoRecord ?? JsonUtility.FromJson<InfoRecord>(LoadJsonData(INFO_RECORD_FILE_NAME));
         }
         catch (Exception e)
         {
@@ -565,6 +580,21 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     public void RestorePlayerStatus()
     {
         PlayerInfo.Instance.RestorePlayerStatus(saveData.playerData);
+    }
+
+    public SettingData LoadSettingData()
+    {
+        try
+        {
+            settingData = settingData ?? JsonUtility.FromJson<SettingData>(LoadJsonData(SETTING_DATA_FILE_NAME));
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("設定ファイルのロードに失敗: " + e.Message);
+            SaveSettings(new SettingData());
+        }
+
+        return settingData;
     }
 
     protected string LoadJsonData(string fileName)

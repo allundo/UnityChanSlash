@@ -53,7 +53,6 @@ public class DataIOTest
         dataStoreAgent.DeleteFile(dataStoreAgent.DEAD_RECORD_FILE_NAME);
     }
 
-
     [Test]
     public void _002_SaveGameDataAndLoadTest()
     {
@@ -150,5 +149,32 @@ public class DataIOTest
         }
 
         dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
+    }
+
+    [Test]
+    public void _003_SaveSettingDataAndLoadTest()
+    {
+        dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
+
+        var settingData = new DataStoreAgent.SettingData()
+        {
+            fightCircleAlpha = 0.1f,
+            attackButtonAlpha = 0.2f,
+            buttonRegionAlpha = 0.3f,
+            moveButtonAlpha = 0.4f,
+            handleButtonAlpha = 0.5f,
+        };
+
+        dataStoreAgent.SaveEncryptedRecordTest(settingData, dataStoreAgent.SETTING_DATA_FILE_NAME);
+
+        var loadData = dataStoreAgent.LoadSettingData();
+
+        Assert.AreEqual(0.1f, loadData.fightCircleAlpha);
+        Assert.AreEqual(0.2f, loadData.attackButtonAlpha);
+        Assert.AreEqual(0.3f, loadData.buttonRegionAlpha);
+        Assert.AreEqual(0.4f, loadData.moveButtonAlpha);
+        Assert.AreEqual(0.5f, loadData.handleButtonAlpha);
+
+        dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
     }
 }
