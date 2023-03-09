@@ -15,13 +15,13 @@ public class ClearRecord : RankRecord
         textFormats.Add(title => title.ToString());
 
         textObjects.Add(wagesAmount);
-        textFormats.Add(wages => $"・お給金: ￥{wages:#,0}");
+        textFormats.Add(wages => $"お給金: ￥{wages:#,0}");
 
         textObjects.Add(clearTime);
-        textFormats.Add(sec => "・踏破時間: " + ValueFormat((int)sec));
+        textFormats.Add(sec => "踏破時間: " + ValueFormat((int)sec));
 
         textObjects.Add(defeat);
-        textFormats.Add(count => "・敵撃破数: " + count);
+        textFormats.Add(count => "敵撃破数: " + count);
     }
 
     private string ValueFormat(int sec)

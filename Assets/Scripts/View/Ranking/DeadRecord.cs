@@ -14,10 +14,10 @@ public class DeadRecord : RankRecord
         textFormats.Add(floor => "地下" + floor + "階");
 
         textObjects.Add(moneyAmount);
-        textFormats.Add(money => $"・アイテム資産: ￥{money:#,0}");
+        textFormats.Add(money => $"アイテム資産: ￥{money:#,0}");
 
         textObjects.Add(causeOfDeath);
-        textFormats.Add(cause => "・死因:" + cause);
+        textFormats.Add(cause => cause.ToString());
     }
 
     public void SetValues(int rank, DataStoreAgent.DeadRecord deadRecord)
