@@ -626,3 +626,13 @@ public enum EnemyLevelGainType
     Fighter,
     Magician,
 }
+
+public enum UIType
+{
+    None = 0,
+    EnemyGauge,
+    AttackButton,
+    AttackRegion,
+    MoveButton,
+    HandleButton,
+}

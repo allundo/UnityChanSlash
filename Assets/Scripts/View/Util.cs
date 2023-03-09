@@ -57,6 +57,8 @@ public class Util
     public static T ConvertTo<T>(int index) where T : Enum
         => (T)Enum.ToObject(typeof(T), index);
 
+    public static int Count<T>() where T : Enum => Enum.GetNames(typeof(T)).Length;
+
     public static int GetEnemyLevel(uint range = 5)
     {
         int min = -(int)(range / 2);

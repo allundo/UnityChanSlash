@@ -333,11 +333,36 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class SettingData
     {
-        public float fightCircleAlpha = 1f;
-        public float attackButtonAlpha = 1f;
-        public float buttonRegionAlpha = 1f;
-        public float moveButtonAlpha = 1f;
-        public float handleButtonAlpha = 1f;
+        public SettingData()
+        {
+            alpha = new float[Util.Count<UIType>()].Select(_ => 1f).ToArray();
+        }
+
+        public SettingData(params float[] alpha)
+        {
+            this.alpha = alpha;
+            this.alpha[0] = 1f;
+        }
+
+        [SerializeField] private float[] alpha;
+
+        private static string[] labels = new string[]
+        {
+            "Default UI",
+            "敵体力ゲージ",
+            "攻撃種別アイコン",
+            "攻撃種別領域",
+            "移動・ガードボタン",
+            "操作ボタン",
+        };
+
+        public float this[UIType type]
+        {
+            get { return alpha[(int)type]; }
+            set { if (type != UIType.None) alpha[(int)type] = value; }
+        }
+
+        public static string Label(UIType type) => labels[(int)type];
     }
 
     protected List<DeadRecord> deadRecords = null;

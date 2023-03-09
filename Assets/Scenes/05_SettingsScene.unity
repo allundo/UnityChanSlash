@@ -706,7 +706,7 @@ PrefabInstance:
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
@@ -781,7 +781,7 @@ PrefabInstance:
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -490
+      value: -210
       objectReference: {fileID: 0}
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
@@ -3137,7 +3137,7 @@ PrefabInstance:
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
@@ -3212,7 +3212,7 @@ PrefabInstance:
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -350
+      value: -490
       objectReference: {fileID: 0}
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
@@ -3330,9 +3330,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1019310108}
+  - {fileID: 274931162}
   - {fileID: 1108981803}
   - {fileID: 1276391556}
-  - {fileID: 274931162}
   - {fileID: 809225301}
   - {fileID: 1190411376}
   m_Father: {fileID: 2115870179}
@@ -4498,12 +4498,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fade: {fileID: 900187881}
-  bgSetter: {fileID: 2122401859}
-  attackButtonSetter: {fileID: 1108981806}
-  buttonRegionSetter: {fileID: 1276391557}
-  enemyGaugeSetter: {fileID: 274931163}
-  moveButtonSetter: {fileID: 809225302}
-  handleButtonSetter: {fileID: 1190411377}
+  alphaSetters:
+  - {fileID: 2122401859}
+  - {fileID: 274931163}
+  - {fileID: 1108981806}
+  - {fileID: 1276391557}
+  - {fileID: 809225302}
+  - {fileID: 1190411377}
   toTitleBtn: {fileID: 521957893}
 --- !u!1 &2122401857
 GameObject:
@@ -4934,7 +4935,7 @@ PrefabInstance:
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
@@ -5009,7 +5010,7 @@ PrefabInstance:
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -210
+      value: -350
       objectReference: {fileID: 0}
     - target: {fileID: 4048946879187648009, guid: a06ebfdf6ce0d4cdcb76f7f9546e2272,
         type: 3}

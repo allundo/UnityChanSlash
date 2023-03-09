@@ -156,24 +156,18 @@ public class DataIOTest
     {
         dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
 
-        var settingData = new DataStoreAgent.SettingData()
-        {
-            fightCircleAlpha = 0.1f,
-            attackButtonAlpha = 0.2f,
-            buttonRegionAlpha = 0.3f,
-            moveButtonAlpha = 0.4f,
-            handleButtonAlpha = 0.5f,
-        };
+        var settingData = new DataStoreAgent.SettingData(0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
 
         dataStoreAgent.SaveEncryptedRecordTest(settingData, dataStoreAgent.SETTING_DATA_FILE_NAME);
 
         var loadData = dataStoreAgent.LoadSettingData();
 
-        Assert.AreEqual(0.1f, loadData.fightCircleAlpha);
-        Assert.AreEqual(0.2f, loadData.attackButtonAlpha);
-        Assert.AreEqual(0.3f, loadData.buttonRegionAlpha);
-        Assert.AreEqual(0.4f, loadData.moveButtonAlpha);
-        Assert.AreEqual(0.5f, loadData.handleButtonAlpha);
+        Assert.AreEqual(1f, loadData[UIType.None]);
+        Assert.AreEqual(0.1f, loadData[UIType.EnemyGauge]);
+        Assert.AreEqual(0.2f, loadData[UIType.AttackButton]);
+        Assert.AreEqual(0.3f, loadData[UIType.AttackRegion]);
+        Assert.AreEqual(0.4f, loadData[UIType.MoveButton]);
+        Assert.AreEqual(0.5f, loadData[UIType.HandleButton]);
 
         dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
     }
