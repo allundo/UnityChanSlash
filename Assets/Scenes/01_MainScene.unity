@@ -7446,6 +7446,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 150, y: 150}
   fightingOffset: {x: 0, y: 0}
+  uiType: 5
 --- !u!114 &374195353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8137,6 +8138,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: -32, y: 0}
+  uiType: 4
 --- !u!1 &513605029
 GameObject:
   m_ObjectHideFlags: 0
@@ -13484,6 +13486,7 @@ MonoBehaviour:
   rightLimit: 0
   leftLimit: 0
   maxAlpha: 1
+  uiType: 5
 --- !u!114 &1170145109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14986,6 +14989,7 @@ MonoBehaviour:
   rightLimit: 80
   leftLimit: 0
   maxAlpha: 1
+  uiType: 5
 --- !u!114 &1361193909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21109,6 +21113,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 32, y: 0}
+  uiType: 4
 --- !u!224 &1506115882
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22427,6 +22432,7 @@ MonoBehaviour:
   rightLimit: 80
   leftLimit: 0
   maxAlpha: 0.8
+  uiType: 5
 --- !u!114 &1694465820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23499,6 +23505,7 @@ MonoBehaviour:
   rightLimit: 0
   leftLimit: 80
   maxAlpha: 0.8
+  uiType: 5
 --- !u!114 &1862954647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24992,6 +24999,7 @@ MonoBehaviour:
   rightLimit: 0
   leftLimit: 0
   maxAlpha: 1
+  uiType: 5
 --- !u!114 &1980683140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31112,6 +31120,7 @@ MonoBehaviour:
   rightLimit: 0
   leftLimit: 80
   maxAlpha: 1
+  uiType: 5
 --- !u!114 &2111762171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31649,6 +31658,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
+  uiType: 4
 --- !u!1 &7928616715383657
 GameObject:
   m_ObjectHideFlags: 0
@@ -31747,6 +31757,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1574935736902618774}
     m_Modifications:
+    - target: {fileID: 5379277188051756822, guid: 31c48c9368a3a4dc58b1278ea56ea902,
+        type: 3}
+      propertyPath: uiType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5379277188842850592, guid: 31c48c9368a3a4dc58b1278ea56ea902,
         type: 3}
       propertyPath: m_Name
@@ -32023,6 +32038,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
+  uiType: 4
 --- !u!1 &480741749894978722
 GameObject:
   m_ObjectHideFlags: 0
@@ -32441,6 +32457,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
+  uiType: 4
 --- !u!114 &1001582510908394526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32843,6 +32860,7 @@ MonoBehaviour:
   rightLimit: 80
   leftLimit: 80
   maxAlpha: 1
+  uiType: 5
 --- !u!114 &2346006232178893650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33924,6 +33942,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 64}
+  uiType: 4
 --- !u!222 &4647984070977934203
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -34047,6 +34066,7 @@ MonoBehaviour:
   rightLimit: 80
   leftLimit: 0
   maxAlpha: 1
+  uiType: 5
 --- !u!1 &5161768609922195078
 GameObject:
   m_ObjectHideFlags: 0
@@ -34696,6 +34716,7 @@ MonoBehaviour:
   rightLimit: 0
   leftLimit: 80
   maxAlpha: 1
+  uiType: 5
 --- !u!222 &6319635469752444724
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -34988,6 +35009,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1574935736902618774}
     m_Modifications:
+    - target: {fileID: 61242168461810484, guid: 723caa0e0671f482aa1faa89649e4e0f,
+        type: 3}
+      propertyPath: uiType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032258986174721739, guid: 723caa0e0671f482aa1faa89649e4e0f,
+        type: 3}
+      propertyPath: uiType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2232297670149298018, guid: 723caa0e0671f482aa1faa89649e4e0f,
         type: 3}
       propertyPath: forwardUIRT
@@ -35127,6 +35158,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943010126977940347, guid: 723caa0e0671f482aa1faa89649e4e0f,
+        type: 3}
+      propertyPath: uiType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7729704547895182892, guid: 723caa0e0671f482aa1faa89649e4e0f,
+        type: 3}
+      propertyPath: uiType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 723caa0e0671f482aa1faa89649e4e0f, type: 3}
@@ -35707,6 +35748,7 @@ MonoBehaviour:
   maxAlpha: 0.4
   defaultSize: {x: 100, y: 100}
   fightingOffset: {x: 0, y: 0}
+  uiType: 4
 --- !u!224 &7263179161045669112
 RectTransform:
   m_ObjectHideFlags: 0

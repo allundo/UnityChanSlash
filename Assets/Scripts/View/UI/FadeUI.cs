@@ -12,18 +12,27 @@ public interface IFadeUI
 public class FadeUI : MonoBehaviour, IFadeUI
 {
     [SerializeField] protected float maxAlpha = 1f;
+    [SerializeField] protected UIType uiType = UIType.None;
+
+    protected float uiAlpha = 1f;
+
     protected FadeTween fade;
     protected bool isActive = false;
     protected Tween prevFade = null;
 
     protected virtual void Awake()
     {
-        FadeInit(new FadeTween(gameObject, maxAlpha));
+        var settingData = DataStoreAgent.Instance.LoadSettingData();
+        uiAlpha = settingData[uiType];
+
+        FadeInit();
     }
 
-    protected virtual void FadeInit(FadeTween fade)
+    protected virtual FadeTween FadeComponent() => new FadeTween(gameObject, uiAlpha * maxAlpha);
+
+    protected virtual void FadeInit()
     {
-        this.fade = fade;
+        fade = FadeComponent();
         fade.SetAlpha(0f);
         fade.Disable();
         isActive = false;

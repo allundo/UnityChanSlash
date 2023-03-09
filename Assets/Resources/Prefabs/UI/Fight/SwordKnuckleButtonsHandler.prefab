@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAlpha: 1
+  uiType: 2
   frames: 71
   motionFrameRate: 30
   cancelStart: 0.75
@@ -336,6 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAlpha: 1
+  uiType: 2
   frames: 51
   motionFrameRate: 30
   cancelStart: 0.75
@@ -476,6 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAlpha: 1
+  uiType: 2
   frames: 66
   motionFrameRate: 30
   cancelStart: 1
@@ -616,6 +619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAlpha: 1
+  uiType: 2
   frames: 131
   motionFrameRate: 30
   cancelStart: 1

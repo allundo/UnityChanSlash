@@ -18,8 +18,8 @@ public class PointerDown : MoveButton
         alphaTween?.Kill();
 
         alphaTween = DOTween.Sequence()
-            .Append(fade.ToAlpha(1f, 0.05f))
-            .Append(fade.ToAlpha(0.4f, 0.4f))
+            .Append(fade.ToAlpha(uiAlpha, 0.05f))
+            .Append(fade.ToAlpha(maxAlpha * uiAlpha, 0.4f))
             .Play();
     }
 }

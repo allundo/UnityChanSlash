@@ -65,7 +65,7 @@ public class ForwardButton : MoveButton
         shrink?.Kill();
         ui.ResetSize(1.5f);
         alphaTween?.Kill();
-        alphaTween = fade.ToAlpha(1.0f, 0.1f).Play();
+        alphaTween = fade.ToAlpha(uiAlpha, 0.1f).Play();
 
         walkTimer.Restart();
     }
@@ -85,7 +85,7 @@ public class ForwardButton : MoveButton
         }
 
         shrink = ui.Resize(1f, 0.2f).Play();
-        alphaTween = fade.ToAlpha(maxAlpha, 0.3f).Play();
+        alphaTween = fade.ToAlpha(uiAlpha * maxAlpha, 0.3f).Play();
     }
 
     protected override void OnFadeIn()

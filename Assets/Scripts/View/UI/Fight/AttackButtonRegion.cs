@@ -1,7 +1,4 @@
 ﻿public class AttackButtonRegion : FadeUI
 {
-    protected override void Awake()
-    {
-        FadeInit(new FadeMaterialColor(gameObject, maxAlpha));
-    }
+    protected override FadeTween FadeComponent() => new FadeMaterialColor(gameObject, uiAlpha * maxAlpha);
 }

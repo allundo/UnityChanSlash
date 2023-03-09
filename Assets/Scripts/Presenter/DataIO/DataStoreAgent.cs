@@ -622,6 +622,21 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return settingData;
     }
 
+    public float GetSettingData(UIType type)
+    {
+        try
+        {
+            return LoadSettingData()[type];
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("設定ファイルが不正です: " + e.Message);
+            DeleteFile(SETTING_DATA_FILE_NAME);
+            settingData = new SettingData();
+            return settingData[type];
+        }
+    }
+
     protected string LoadJsonData(string fileName)
     {
         RecordSet set = JsonUtility.FromJson<RecordSet>(LoadText(fileName));

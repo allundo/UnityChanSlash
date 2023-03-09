@@ -135,6 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAlpha: 1
+  uiType: 2
   frames: 81
   motionFrameRate: 30
   cancelStart: 1
@@ -274,6 +276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAlpha: 1
+  uiType: 2
   frames: 34
   motionFrameRate: 30
   cancelStart: 0.6
@@ -413,6 +417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3b0f1a52bad48d7af8d5ae3f1c6001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAlpha: 1
+  uiType: 2
   frames: 61
   motionFrameRate: 30
   cancelStart: 0.8

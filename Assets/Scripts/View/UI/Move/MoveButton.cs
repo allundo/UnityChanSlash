@@ -7,6 +7,7 @@ public class MoveButton : FadeEnable
     [SerializeField] protected float maxAlpha = DEFAULT_ALPHA;
     [SerializeField] protected Vector2 defaultSize = new Vector2(100f, 100f);
     [SerializeField] protected Vector2 fightingOffset = default;
+    [SerializeField] protected UIType uiType = UIType.None;
 
     private static readonly float DEFAULT_ALPHA = 0.4f;
 
@@ -22,17 +23,20 @@ public class MoveButton : FadeEnable
 
     protected bool isFighting = false;
 
+    protected float uiAlpha = 1f;
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, maxAlpha, true);
+        uiAlpha = DataStoreAgent.Instance.GetSettingData(uiType);
+
+        fade = new FadeTween(gameObject, maxAlpha * uiAlpha, true);
         ui = new UITween(gameObject);
 
         // BUG: Initialize on awake in case sizeDelta is set to zero at scene transition
         ui.SetSize(defaultSize, true);
 
         ui.ResetSize();
-        fade.SetAlpha(maxAlpha);
+        fade.SetAlpha(1f);
 
         Inactivate();
     }
@@ -54,7 +58,7 @@ public class MoveButton : FadeEnable
         shrink?.Kill();
         ui.ResetSize(1.5f);
         alphaTween?.Kill();
-        alphaTween = fade.ToAlpha(1.0f, 0.1f).Play();
+        alphaTween = fade.ToAlpha(uiAlpha, 0.1f).Play();
     }
 
     public virtual void ReleaseButton()
@@ -63,7 +67,7 @@ public class MoveButton : FadeEnable
 
         isPressed.Value = false;
         shrink = ui.Resize(1f, 0.2f).Play();
-        alphaTween = fade.ToAlpha(maxAlpha, 0.3f).Play();
+        alphaTween = fade.ToAlpha(uiAlpha * maxAlpha, 0.3f).Play();
     }
 
     public override void Activate()

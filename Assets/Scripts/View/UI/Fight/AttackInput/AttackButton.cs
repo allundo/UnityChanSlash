@@ -59,7 +59,7 @@ public class AttackButton : FadeUI
         duration = (float)frames / motionFrameRate / CRITICAL_SPEED;
 
         ui = new UITween(gameObject);
-        FadeInit(new FadeTween(gameObject, maxAlpha));
+        FadeInit();
     }
 
     protected virtual void Start()

@@ -21,9 +21,11 @@ public class PanelLifeGauge : FadeUI, ISpawnObject<PanelLifeGauge>
     public IObservable<IEnemyStatus> DetectDisable => disableSubject;
     private ISubject<IEnemyStatus> disableSubject = new Subject<IEnemyStatus>();
 
+    protected override FadeTween FadeComponent() => new FadeTween(gauge, uiAlpha * maxAlpha);
+
     protected override void Awake()
     {
-        FadeInit(new FadeTween(gauge, maxAlpha));
+        base.Awake();
 
         canvas = GetComponent<Canvas>();
         visualTimer = DOVirtual.DelayedCall(3f, () => FadeInactivate()).AsReusable(gameObject);

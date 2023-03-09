@@ -22,11 +22,11 @@ public class TitleSceneMediator : SceneMediator
             .AddTo(this);
 
         titleUIHandler.SettingsButtonSignal
-            .Subscribe(_ => ForceTransitScene(5, 0))
+            .Subscribe(_ => TransitOptionalScene(5))
             .AddTo(this);
 
         titleUIHandler.ResultsButtonSignal
-            .Subscribe(_ => ForceTransitScene(4, 0))
+            .Subscribe(_ => TransitOptionalScene(4))
             .AddTo(this);
 
         // ## FOR DEBUG (begin)
@@ -142,6 +142,12 @@ public class TitleSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, titleUIHandler.SkipLogo)
             .AddTo(this);
+    }
+
+    private void TransitOptionalScene(int sceneBuildIndex)
+    {
+        DisableOtherControls();
+        ForceTransitScene(sceneBuildIndex, 0);
     }
 
     // ## FOR DEBUG (begin)

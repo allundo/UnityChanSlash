@@ -9,9 +9,11 @@ public class TargetCenter : FadeUI, ITargetUI
     private RectTransform rectTransform;
     private Vector2 defaultSize;
 
+    protected override FadeTween FadeComponent() => new FadeMaterialColor(gameObject, uiAlpha * maxAlpha);
+
     protected override void Awake()
     {
-        FadeInit(new FadeMaterialColor(gameObject, maxAlpha));
+        base.Awake();
         blinkLoop = fade.ToAlpha(0.25f, 0.5f).SetEase(Ease.InQuad).SetLoops(-1, LoopType.Yoyo).AsReusable(gameObject);
         rectTransform = GetComponent<RectTransform>();
         defaultSize = rectTransform.sizeDelta;

@@ -16,17 +16,22 @@ public class AlphaRawImage : MonoBehaviour
 
     [SerializeField] protected float maxAlpha = 1.0f;
 
+    [SerializeField] protected UIType uiType = UIType.None;
+
+    protected float uiAlpha = 1f;
+
     protected RawImage gauge = default;
 
     void Awake()
     {
+        uiAlpha = DataStoreAgent.Instance.GetSettingData(uiType);
         gauge = GetComponent<RawImage>();
     }
 
     public void SetAlpha(float alpha)
     {
         Color c = gauge.color;
-        gauge.color = new Color(c.r, c.g, c.b, alpha * maxAlpha);
+        gauge.color = new Color(c.r, c.g, c.b, alpha * uiAlpha * maxAlpha);
     }
 
     public void SetGauge(float valueRatio)

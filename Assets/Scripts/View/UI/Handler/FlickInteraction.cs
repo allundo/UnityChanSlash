@@ -24,6 +24,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     [SerializeField] protected float leftLimit = 0.0f;
 
     [SerializeField] protected float maxAlpha = 1.0f;
+    [SerializeField] protected UIType uiType = UIType.None;
 
     protected FlickDirection up = null;
     protected FlickDirection down = null;
@@ -68,10 +69,14 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
     private Vector2 pressPos = Vector2.zero;
     private Vector2 DragVector(Vector2 screenPos) => screenPos - pressPos;
 
+    protected float uiAlpha = 1f;
+
     protected override void Awake()
     {
+        uiAlpha = DataStoreAgent.Instance.GetSettingData(uiType);
+
         image = GetComponent<Image>();
-        fade = new FadeTween(image, maxAlpha, true);
+        fade = new FadeTween(image, uiAlpha * maxAlpha, true);
         ui = new UITween(gameObject);
 
         SetFlicks();
