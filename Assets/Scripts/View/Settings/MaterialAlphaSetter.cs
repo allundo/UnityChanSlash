@@ -8,4 +8,11 @@ public class MaterialAlphaSetter : ImageAlphaSetter
         get { return image.material.color; }
         set { image.material.color = value; }
     }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        material = new Material(image.material);
+        image.material = material;
+    }
 }
