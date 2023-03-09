@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/04_RankingScene.unity
     guid: 73ce45a115fc3422b8666ced3d0a2977
+  - enabled: 1
+    path: Assets/Scenes/05_SettingsScene.unity
+    guid: 4b2465b40be3f4ecd925969d423f6b9c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9759d652dea1c4e858a2f1a8e336de42,
       type: 2}

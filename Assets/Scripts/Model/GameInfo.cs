@@ -45,6 +45,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
 #if UNITY_EDITOR
     public bool isScenePlayedByEditor = true;
+    public void SetDebugAction(int startActionID)
+    {
+        if (isScenePlayedByEditor) this.startActionID = startActionID;
+    }
 #endif
 
     public WorldMap Map(int floor)

@@ -17,7 +17,7 @@ public class RankingUIHandler : MonoBehaviour
 
     private Button[] buttons;
     private void SetInteractableBtns(bool isInteractable) => buttons.ForEach(btn => { btn.interactable = isInteractable; });
-    public IObservable<Unit> TransitSignal;
+    public IObservable<Unit> TransitSignal { get; private set; }
 
     private RecordsUI leftUI;
     private RecordsUI centerUI;

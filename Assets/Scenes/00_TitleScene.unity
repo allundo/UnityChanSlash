@@ -3003,7 +3003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startButton: {fileID: 729827171}
-  optionButton: {fileID: 1822275787}
+  settingsButton: {fileID: 1822275787}
   resultsButton: {fileID: 302795055}
   unityChanIcon: {fileID: 1833971749}
 --- !u!1 &911527634

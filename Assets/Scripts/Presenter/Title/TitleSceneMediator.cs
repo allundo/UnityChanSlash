@@ -21,6 +21,10 @@ public class TitleSceneMediator : SceneMediator
             .Subscribe(_ => SceneTransition(0, () => GameInfo.Instance.InitData()))
             .AddTo(this);
 
+        titleUIHandler.SettingsButtonSignal
+            .Subscribe(_ => ForceTransitScene(5, 0))
+            .AddTo(this);
+
         titleUIHandler.ResultsButtonSignal
             .Subscribe(_ => ForceTransitScene(4, 0))
             .AddTo(this);

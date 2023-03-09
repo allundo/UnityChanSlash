@@ -5,7 +5,7 @@ using System.Linq;
 public class SelectButtons : MonoBehaviour
 {
     [SerializeField] public TwoPushButton startButton = default;
-    [SerializeField] public TwoPushButton optionButton = default;
+    [SerializeField] public TwoPushButton settingsButton = default;
     [SerializeField] public TwoPushButton resultsButton = default;
     [SerializeField] private UnityChanIcon unityChanIcon = default;
 
@@ -22,7 +22,7 @@ public class SelectButtons : MonoBehaviour
 
     void Start()
     {
-        handler = new ButtonsHandler(unityChanIcon, startButton, optionButton, resultsButton);
+        handler = new ButtonsHandler(unityChanIcon, startButton, settingsButton, resultsButton);
     }
 
     public Tween TitleTween()

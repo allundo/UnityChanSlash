@@ -22,7 +22,8 @@ public class TitleUIHandler : MonoBehaviour
     private AudioSource dropStart;
 
     public IObservable<object> TransitSignal;
-    public IObservable<object> ResultsButtonSignal;
+    public IObservable<Unit> SettingsButtonSignal;
+    public IObservable<Unit> ResultsButtonSignal;
 
     void Awake()
     {
@@ -34,10 +35,17 @@ public class TitleUIHandler : MonoBehaviour
                 .OnClickAsObservable()
                 .ContinueWith(_ => StartSequence().OnCompleteAsObservable());
 
+        SettingsButtonSignal =
+            selectButtons.settingsButton
+                .OnClickAsObservable()
+                .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable())
+                .ContinueWith(_ => fade.FadeOutObservable(1f));
+
         ResultsButtonSignal =
             selectButtons.resultsButton
                 .OnClickAsObservable()
-                .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable());
+                .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable())
+                .ContinueWith(_ => fade.FadeOutObservable(1f));
 
 
         fade.SetAlpha(1f);
