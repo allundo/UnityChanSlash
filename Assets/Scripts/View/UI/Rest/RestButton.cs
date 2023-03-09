@@ -3,9 +3,12 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
 {
+    private Image buttonImage;
+    private TextMeshProUGUI textRest;
     private RaycastHandler raycastHandler;
     private RectTransform rectTransform;
 
@@ -15,6 +18,8 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
     protected override void Awake()
     {
         base.Awake();
+        buttonImage = GetComponent<Image>();
+        textRest = GetComponentInChildren<TextMeshProUGUI>();
         raycastHandler = new RaycastHandler(gameObject);
         rectTransform = GetComponent<RectTransform>();
     }
@@ -55,5 +60,14 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
         }
 
         raycastHandler.RaycastPointerUp(eventData);
+    }
+
+    public void SetEnable(bool isEnable)
+    {
+        enabled = isEnable;
+        var iColor = buttonImage.color;
+        var tColor = textRest.color;
+        buttonImage.color = new Color(iColor.r, iColor.g, iColor.b, isEnable ? 1f : 0.5f);
+        textRest.color = new Color(tColor.r, tColor.g, tColor.b, isEnable ? 1f : 0.5f);
     }
 }

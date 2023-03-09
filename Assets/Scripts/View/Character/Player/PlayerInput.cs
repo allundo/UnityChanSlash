@@ -45,7 +45,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     [SerializeField] protected PointerEnterExitUI guardUI = default;
     [SerializeField] protected InspectUI inspectUI = default;
 
-    [SerializeField] protected Button restButton = default;
+    [SerializeField] protected RestButton restButton = default;
 
     [SerializeField] protected GameObject uiMask = default;
 
@@ -236,7 +236,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     public void SetSubUIEnable(bool isEnable = true)
     {
-        restButton.gameObject.SetActive(isEnable);
+        restButton.SetEnable(isEnable);
         itemInventory.SetEnable(isEnable);
     }
 
