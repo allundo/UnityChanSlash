@@ -231,6 +231,25 @@ public class WorldMap
         }
     }
 
+    public Dir SetTerrain(int x, int y, Terrain terrain)
+    {
+        Dir dir = map.CreateDir(x, y, terrain);
+
+        map.matrix[x, y] = terrain;
+        map.dirMap[x, y] = dir;
+
+        var pixels = texMap.GetPixels();
+
+        ITile temp = tileInfo[x, y];
+        (tileInfo[x, y], pixels[x + Width * y]) = ConvertTerrain(terrain);
+        tileInfo[x, y].items = temp.items;
+
+        texMap.SetPixels(pixels);
+        texMap.Apply();
+
+        return dir;
+    }
+
     public WorldMap(int floor = 1, int w = 49, int h = 49) : this(new MapManager(floor, w, h))
     { }
 

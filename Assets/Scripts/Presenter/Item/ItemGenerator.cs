@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class ItemGenerator : MobGenerator<Item>
 {
+    [SerializeField] private MapRenderer mapRenderer = default;
+
     private ItemData itemData;
     private ItemTypesData itemTypesData;
 
@@ -97,6 +99,9 @@ public class ItemGenerator : MobGenerator<Item>
         {
             var last = map.deadEndPos.Last();
             PutNew(singleItemTypes[i], last.Key, last.Value.Backward);
+
+            mapRenderer.PlaceBox(last.Key);
+
             map.deadEndPos.Remove(last.Key);
         }
 

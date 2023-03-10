@@ -241,6 +241,7 @@ public class MapManager
 
         return this;
     }
+
     protected void SetExitDoor(Pos pos, IDirection doorDir)
     {
         Pos leftPos = doorDir.GetLeft(pos);
@@ -528,22 +529,9 @@ public class MapManager
             for (int x = 0; x < width; x++)
             {
                 // Skip pillar or gate
-                if (x % 2 == 0 && y % 2 == 0) continue;
+                if (IsGridPoint(x, y)) continue;
 
-                if (matrix[x, y] == Terrain.LockedDoor)
-                {
-                    dirMap[x, y] = GetValidDir(x, y, IsPath);
-                    continue;
-                }
-
-                if (matrix[x, y] == Terrain.MessageWall || matrix[x, y] == Terrain.ExitDoor || matrix[x, y] == Terrain.Box)
-                {
-                    dirMap[x, y] = GetValidDir(x, y, IsEnterable);
-                    continue;
-                }
-
-                dirMap[x, y] = GetWallDir(x, y);
-
+                dirMap[x, y] = GetNonGridPointDir(x, y);
             }
         }
 
@@ -552,31 +540,59 @@ public class MapManager
         {
             for (int x = 0; x < width; x += 2)
             {
-                if (matrix[x, y] == Terrain.MessagePillar || matrix[x, y] == Terrain.Box)
-                {
-                    dirMap[x, y] = GetValidDir(x, y, IsEnterable);
-                    continue;
-                }
-
-                Dir doorDir = GetDoorDir(x, y);
-
-                // Leave it as is if strait wall or room ground
-                if (doorDir == Dir.NONE)
-                {
-                    Dir wallDir = GetWallDir(x, y);
-                    if (wallDir == Dir.NS || wallDir == Dir.EW || wallDir == Dir.NONE)
-                    {
-                        dirMap[x, y] = wallDir;
-                        continue;
-                    }
-                }
-
-                // Set gate as wall next to door
-                // Set pillar as corner wall
-                matrix[x, y] = Terrain.Pillar;
-                dirMap[x, y] = doorDir;
+                dirMap[x, y] = GetGridPointDir(x, y);
             }
         }
+    }
+
+    public Dir CreateDir(int x, int y, Terrain terrain)
+        => IsGridPoint(x, y) ? GetGridPointDir(x, y, terrain) : GetNonGridPointDir(x, y, terrain);
+
+    private bool IsGridPoint(int x, int y) => x % 2 == 0 && y % 2 == 0;
+
+    private Dir GetNonGridPointDir(int x, int y) => GetNonGridPointDir(x, y, matrix[x, y]);
+
+    private Dir GetNonGridPointDir(int x, int y, Terrain terrain)
+    {
+        if (terrain == Terrain.LockedDoor)
+        {
+            return GetValidDir(x, y, IsPath);
+        }
+
+        if (terrain == Terrain.MessageWall || terrain == Terrain.ExitDoor || terrain == Terrain.Box)
+        {
+            return GetValidDir(x, y, IsEnterable);
+        }
+
+        return GetWallDir(x, y);
+    }
+
+    private Dir GetGridPointDir(int x, int y) => GetGridPointDir(x, y, matrix[x, y]);
+
+    private Dir GetGridPointDir(int x, int y, Terrain terrain)
+    {
+        if (terrain == Terrain.MessagePillar || terrain == Terrain.Box)
+        {
+            return GetValidDir(x, y, IsEnterable);
+        }
+
+        Dir doorDir = GetDoorDir(x, y);
+
+        // Leave it as is if strait wall or room ground
+        if (doorDir == Dir.NONE)
+        {
+            Dir wallDir = GetWallDir(x, y);
+            if (wallDir == Dir.NS || wallDir == Dir.EW || wallDir == Dir.NONE)
+            {
+                return wallDir;
+            }
+        }
+
+        // Set gate as wall next to door
+        // Set pillar as corner wall
+        matrix[x, y] = Terrain.Pillar;
+
+        return doorDir;
     }
 
     private Dir GetDir(int x, int y, Terrain type)

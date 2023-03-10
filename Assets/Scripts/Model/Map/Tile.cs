@@ -16,6 +16,7 @@ public interface ITile
     ItemInfo TopItem { get; }
     bool HasItem(ItemType type);
     IEnemyStatus GetEnemyStatus();
+    Stack<Item> items { get; set; }
 }
 
 public interface IOpenable : ITile
@@ -32,7 +33,7 @@ public interface IHandleTile : IOpenable
 
 public class Tile
 {
-    protected Stack<Item> items = new Stack<Item>();
+    public Stack<Item> items { get; set; } = new Stack<Item>();
     public virtual bool IsItemOn => items.Count > 0;
 
     public virtual IEnemyStatus OnEnemy { get; set; } = null;

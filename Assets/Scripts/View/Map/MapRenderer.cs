@@ -214,6 +214,12 @@ public class MapRenderer : MonoBehaviour
         return terrainMeshes;
     }
 
+    public void PlaceBox(Pos pos)
+    {
+        IDirection dir = Direction.Convert(map.SetTerrain(pos.x, pos.y, Terrain.Box));
+        boxesRenderer.SetBox(pos, dir);
+    }
+
     public void ApplyTileOpen(WorldMap map)
     {
         map.ApplyTileOpen();
