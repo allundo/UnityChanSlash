@@ -178,69 +178,57 @@ public class WorldMap
         tileInfo = new ITile[Width, Height];
 
         texMap = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+
         var pixels = texMap.GetPixels();
-
-        discovered = new bool[Width, Height];
-
         var matrix = CloneMatrix();
 
         for (int i = 0; i < Width; i++)
         {
             for (int j = 0; j < Height; j++)
             {
-                discovered[i, j] = false;
-
-                switch (matrix[i, j])
-                {
-                    case Terrain.Wall:
-                    case Terrain.Pillar:
-                        tileInfo[i, j] = new Wall();
-                        pixels[i + Width * j] = Color.gray;
-                        break;
-
-                    case Terrain.MessageWall:
-                    case Terrain.MessagePillar:
-                        tileInfo[i, j] = new MessageWall();
-                        pixels[i + Width * j] = Color.magenta;
-                        break;
-
-                    case Terrain.Door:
-                    case Terrain.LockedDoor:
-                        tileInfo[i, j] = new Door();
-                        pixels[i + Width * j] = Color.red;
-                        break;
-
-                    case Terrain.ExitDoor:
-                        tileInfo[i, j] = new ExitDoor();
-                        pixels[i + Width * j] = Color.green;
-                        break;
-
-                    case Terrain.DownStairs:
-                    case Terrain.UpStairs:
-                        tileInfo[i, j] = new Stairs();
-                        pixels[i + Width * j] = Color.green;
-                        break;
-
-                    case Terrain.Box:
-                        tileInfo[i, j] = new Box();
-                        pixels[i + Width * j] = Color.blue;
-                        break;
-
-                    case Terrain.Pit:
-                        tileInfo[i, j] = new Pit();
-                        pixels[i + Width * j] = Color.black;
-                        break;
-
-                    default:
-                        tileInfo[i, j] = new Ground();
-                        pixels[i + Width * j] = Color.black;
-                        break;
-                }
+                (tileInfo[i, j], pixels[i + Width * j]) = ConvertTerrain(matrix[i, j]);
             }
         }
 
+        // The elements are initialized by false automatically
+        discovered = new bool[Width, Height];
+
         texMap.SetPixels(pixels);
         texMap.Apply();
+    }
+
+    private (ITile, Color) ConvertTerrain(Terrain terrain)
+    {
+        switch (terrain)
+        {
+            case Terrain.Wall:
+            case Terrain.Pillar:
+                return (new Wall(), Color.gray);
+
+            case Terrain.MessageWall:
+            case Terrain.MessagePillar:
+                return (new MessageWall(), Color.magenta);
+
+            case Terrain.Door:
+            case Terrain.LockedDoor:
+                return (new Door(), Color.red);
+
+            case Terrain.ExitDoor:
+                return (new ExitDoor(), Color.green);
+
+            case Terrain.DownStairs:
+            case Terrain.UpStairs:
+                return (new Stairs(), Color.green);
+
+            case Terrain.Box:
+                return (new Box(), Color.blue);
+
+            case Terrain.Pit:
+                return (new Pit(), Color.black);
+
+            default:
+                return (new Ground(), Color.black);
+        }
     }
 
     public WorldMap(int floor = 1, int w = 49, int h = 49) : this(new MapManager(floor, w, h))
