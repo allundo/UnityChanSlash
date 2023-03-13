@@ -38,6 +38,7 @@ public class PlayerCounter
     [SerializeField] private int damageSum = 0;
     [SerializeField] private int magicDamageSum = 0;
     [SerializeField] private int potionSum = 0;
+    [SerializeField] private int stepSum = 0;
 
     public int DefeatSum => defeatSum.Sum();
     public int DefeatType(EnemyType type) => defeatSum[(int)type - 1];
@@ -60,6 +61,7 @@ public class PlayerCounter
     public int MagicDamageSum => magicDamageSum;
     public int CoinSum => magicSum[(int)AttackAttr.Coin - 1];
     public int PotionSum => potionSum;
+    public int StepSum => stepSum;
 
     public void IncDefeat(EnemyType type = EnemyType.None)
     {
@@ -77,6 +79,7 @@ public class PlayerCounter
     public void DecDamage() => --damage;
     public void IncMagicDamage() => ++magicDamage;
     public void IncPotion() => ++potionSum;
+    public void IncStep() => ++stepSum;
 
     public void TotalCounts()
     {

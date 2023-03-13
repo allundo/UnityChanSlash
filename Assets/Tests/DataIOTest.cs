@@ -82,6 +82,9 @@ public class DataIOTest
         counter.IncPotion();
         counter.IncPotion();
 
+        counter.IncStep();
+        counter.IncStep();
+
         counter.TotalCounts();
 
         counter.IncDefeat(EnemyType.SkeletonSoldier);
@@ -95,6 +98,8 @@ public class DataIOTest
         counter.IncMagic(AttackAttr.Coin);
         counter.IncMagic(AttackAttr.Coin);
         counter.IncPotion();
+
+        counter.IncStep();
 
         var saveData = new DataStoreAgent.SaveData()
         {
@@ -154,6 +159,7 @@ public class DataIOTest
         Assert.AreEqual(1, loadData.playerData.counter.MagicDamageSum);
         Assert.AreEqual(2, loadData.playerData.counter.CoinSum);
         Assert.AreEqual(3, loadData.playerData.counter.PotionSum);
+        Assert.AreEqual(3, loadData.playerData.counter.StepSum);
 
         Assert.AreEqual(LevelGainType.Attacker, loadData.playerData.levelGainType);
 

@@ -12,6 +12,13 @@ public interface IPlayerMapUtil : IMobMapUtil
 [RequireComponent(typeof(PlayerStatus))]
 public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
 {
+    protected PlayerStatus playerStatus;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        playerStatus = status as PlayerStatus;
+    }
     private IReactiveProperty<IDirection> reactiveDir = new ReactiveProperty<IDirection>(null);
     public IObservable<IDirection> Dir => reactiveDir;
 
@@ -38,7 +45,7 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
     public void SetStartPos(WorldMap map, KeyValuePair<Pos, IDirection> initPos)
     {
         this.map = map;
-        (status as PlayerStatus).SetPosition(map, initPos);
+        playerStatus.SetPosition(map, initPos);
         SetObjectOn();
     }
 
@@ -46,5 +53,11 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
     {
         isInPit = map.GetTile(destPos) is Pit;
         return base.SetObjectOn(destPos);
+    }
+
+    public override Pos MoveObjectOn(Pos destPos)
+    {
+        playerStatus.counter.IncStep();
+        return base.MoveObjectOn(destPos);
     }
 }
