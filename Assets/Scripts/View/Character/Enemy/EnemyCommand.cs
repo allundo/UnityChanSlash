@@ -235,7 +235,7 @@ public class EnemyDie : EnemyCommand
         var attacker = enemyReact.lastAttacker as IGetExp;
         if (attacker != null)
         {
-            attacker.AddExp(enemyReact.ExpObtain);
+            attacker.AddExp(enemyReact.ExpObtain, enemyReact.Type);
         }
 
         anim.die.Bool = true;

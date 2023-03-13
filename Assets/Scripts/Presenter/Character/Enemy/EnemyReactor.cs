@@ -8,6 +8,7 @@ public interface IEnemyReactor : IMobReactor
     void OnTeleportEnd();
     bool IsTamed { get; }
     float ExpObtain { get; }
+    EnemyType Type { get; }
 }
 
 [RequireComponent(typeof(EnemyEffect))]
@@ -26,6 +27,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
 
     public bool IsTamed => enemyStatus.isTamed;
     public float ExpObtain => enemyStatus.ExpObtain;
+    public EnemyType Type => enemyStatus.type;
 
     protected LifeGaugeGenerator gaugeGenerator;
 

@@ -64,7 +64,10 @@ public class DataIOTest
 
         var counter = new PlayerCounter();
 
-        counter.IncDefeat();
+        counter.IncDefeat(EnemyType.RedSlime);
+        counter.IncDefeat(EnemyType.SkeletonSoldier);
+        counter.IncDefeat(EnemyType.None);
+        counter.IncDefeat(EnemyType.RedSlime);
         counter.IncAttack();
         counter.IncAttack();
         counter.IncShield();
@@ -74,7 +77,7 @@ public class DataIOTest
 
         counter.TotalCounts();
 
-        counter.IncDefeat();
+        counter.IncDefeat(EnemyType.SkeletonSoldier);
         counter.IncAttack();
         counter.IncAttack();
         counter.IncShield();
@@ -131,7 +134,8 @@ public class DataIOTest
         Assert.AreEqual(1, loadData.playerData.counter.Damage);
         Assert.AreEqual(1, loadData.playerData.counter.MagicDamage);
 
-        Assert.AreEqual(1, loadData.playerData.counter.DefeatSum);
+        Assert.AreEqual(3, loadData.playerData.counter.DefeatSum);
+        Assert.AreEqual(2, loadData.playerData.counter.DefeatType(EnemyType.RedSlime));
         Assert.AreEqual(2, loadData.playerData.counter.AttackSum);
         Assert.AreEqual(1, loadData.playerData.counter.ShieldSum);
         Assert.AreEqual(1, loadData.playerData.counter.MagicSum);

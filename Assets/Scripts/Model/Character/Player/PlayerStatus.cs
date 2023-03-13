@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public interface IGetExp
 {
-    void AddExp(float expObtain);
+    void AddExp(float expObtain, EnemyType type = EnemyType.None);
 }
 
 public class PlayerShooter : Shooter, IGetExp
@@ -18,7 +18,7 @@ public class PlayerShooter : Shooter, IGetExp
         this.status = status;
     }
 
-    public void AddExp(float expObtain) => status.AddExp(expObtain);
+    public void AddExp(float expObtain, EnemyType type = EnemyType.None) => status.AddExp(expObtain, type);
     public void IncMagic() => status.counter.IncMagic();
 }
 
@@ -118,9 +118,9 @@ public class PlayerStatus : MobStatus, IGetExp
         return this;
     }
 
-    public void AddExp(float expObtain)
+    public void AddExp(float expObtain, EnemyType type = EnemyType.None)
     {
-        counter.IncDefeat();
+        counter.IncDefeat(type);
         exp.Value += expObtain;
 
         if (exp.Value >= expToNextLevel)
