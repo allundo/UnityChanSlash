@@ -116,14 +116,20 @@ public class EnemyReactor : MobReactor, IEnemyReactor
             {
                 ActiveMessageController.Instance.TameSucceeded(enemyStatus);
             }
-            (attacker as PlayerShooter)?.IncCoin();
         }
-        else
+        else if (damage > 0.1f)
         {
-            if (damage > 0.1f) enemyStatus.CancelTamed();
+            enemyStatus.CancelTamed();
+        }
 
-            (attacker as PlayerShooter)?.IncMagic();
-            if (attacker is PlayerStatus) (attacker as PlayerStatus)?.counter.IncAttack();
+        if (attacker is PlayerShooter)
+        {
+            (attacker as PlayerShooter).IncMagic(attackData.attr);
+        }
+
+        if (attacker is PlayerStatus)
+        {
+            (attacker as PlayerStatus).counter.IncAttack();
         }
 
         return damage;

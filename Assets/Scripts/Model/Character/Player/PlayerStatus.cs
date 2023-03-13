@@ -19,8 +19,7 @@ public class PlayerShooter : Shooter, IGetExp
     }
 
     public void AddExp(float expObtain, EnemyType type = EnemyType.None) => status.AddExp(expObtain, type);
-    public void IncMagic() => status.counter.IncMagic();
-    public void IncCoin() => status.counter.IncCoin();
+    public void IncMagic(AttackAttr attr = AttackAttr.None) => status.counter.IncMagic(attr);
 }
 
 [RequireComponent(typeof(CapsuleCollider))]

@@ -71,12 +71,14 @@ public class DataIOTest
         counter.IncAttack();
         counter.IncAttack();
         counter.IncShield();
-        counter.IncMagic();
+        counter.IncMagic(AttackAttr.Fire);
+        counter.IncMagic(AttackAttr.Ice);
+        counter.IncMagic(AttackAttr.Ice);
         counter.IncDamage();
         counter.IncMagicDamage();
 
-        counter.IncCoin();
-        counter.IncCoin();
+        counter.IncMagic(AttackAttr.Coin);
+        counter.IncMagic(AttackAttr.Coin);
         counter.IncPotion();
         counter.IncPotion();
 
@@ -86,12 +88,12 @@ public class DataIOTest
         counter.IncAttack();
         counter.IncAttack();
         counter.IncShield();
-        counter.IncMagic();
+        counter.IncMagic(AttackAttr.Dark);
         counter.IncDamage();
         counter.IncMagicDamage();
 
-        counter.IncCoin();
-        counter.IncCoin();
+        counter.IncMagic(AttackAttr.Coin);
+        counter.IncMagic(AttackAttr.Coin);
         counter.IncPotion();
 
         var saveData = new DataStoreAgent.SaveData()
@@ -147,10 +149,10 @@ public class DataIOTest
         Assert.AreEqual(2, loadData.playerData.counter.DefeatType(EnemyType.RedSlime));
         Assert.AreEqual(2, loadData.playerData.counter.AttackSum);
         Assert.AreEqual(1, loadData.playerData.counter.ShieldSum);
-        Assert.AreEqual(1, loadData.playerData.counter.MagicSum);
+        Assert.AreEqual(3, loadData.playerData.counter.MagicSum);
         Assert.AreEqual(1, loadData.playerData.counter.DamageSum);
         Assert.AreEqual(1, loadData.playerData.counter.MagicDamageSum);
-        Assert.AreEqual(4, loadData.playerData.counter.CoinSum);
+        Assert.AreEqual(2, loadData.playerData.counter.CoinSum);
         Assert.AreEqual(3, loadData.playerData.counter.PotionSum);
 
         Assert.AreEqual(LevelGainType.Attacker, loadData.playerData.levelGainType);
