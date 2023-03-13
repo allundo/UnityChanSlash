@@ -5,8 +5,6 @@ public class ExitDoorControl : LockedDoorControl
     private Material materialExit;
     private Color defaultExitColor;
 
-    private Vector3 vecL;
-
     protected override void Awake()
     {
         base.Awake();
