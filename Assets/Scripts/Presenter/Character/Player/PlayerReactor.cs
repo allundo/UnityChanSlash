@@ -259,4 +259,6 @@ public class PlayerReactor : MobReactor
         playerStatus.SetIcingFrames(framesToMelt);
         playerEffect.OnIced(playerStatus.corePos, isPaused);
     }
+
+    public void IncPotion() => playerStatus.counter.IncPotion();
 }

@@ -25,6 +25,8 @@ public class PlayerCounter
     [SerializeField] private int magicSum = 0;
     [SerializeField] private int damageSum = 0;
     [SerializeField] private int magicDamageSum = 0;
+    [SerializeField] private int coinSum = 0;
+    [SerializeField] private int potionSum = 0;
 
     public int DefeatSum => defeatSum.Sum();
     public int DefeatType(EnemyType type) => defeatSum[(int)type - 1];
@@ -33,6 +35,8 @@ public class PlayerCounter
     public int MagicSum => magicSum;
     public int DamageSum => damageSum;
     public int MagicDamageSum => magicDamageSum;
+    public int CoinSum => coinSum;
+    public int PotionSum => potionSum;
 
     public void IncDefeat(EnemyType type = EnemyType.None)
     {
@@ -45,6 +49,8 @@ public class PlayerCounter
     public void IncDamage() => ++damage;
     public void DecDamage() => --damage;
     public void IncMagicDamage() => ++magicDamage;
+    public void IncCoin() => ++coinSum;
+    public void IncPotion() => ++potionSum;
 
     public void TotalCounts()
     {

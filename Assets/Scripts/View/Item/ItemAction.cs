@@ -18,8 +18,10 @@ public class PotionAction : ItemAction
     public PotionAction(ItemAttr attr) : base(attr) { }
     public override int Action(PlayerCommandTarget target)
     {
-        if ((target.react as IMobReactor).HealRatio(1f))
+        var react = target.react as PlayerReactor;
+        if (react.HealRatio(1f))
         {
+            react.IncPotion();
             return 1;
         }
         else
