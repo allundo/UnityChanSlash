@@ -127,11 +127,6 @@ public class EnemyReactor : MobReactor, IEnemyReactor
             (attacker as PlayerShooter).IncMagic(attackData.attr);
         }
 
-        if (attacker is PlayerStatus)
-        {
-            (attacker as PlayerStatus).counter.IncAttack();
-        }
-
         return damage;
     }
 

@@ -38,8 +38,8 @@ public class ClassSelector
         var selector =
             currentSelector.SelectType
             (
-                counter.Attack * 1f,
-                counter.Shield * 1.5f,
+                counter.AttackPoint * 1f,
+                counter.ShieldPoint * 1.5f,
                 counter.Damage * 1f,
                 counter.Magic * 2f,
                 counter.MagicDamage * 2f

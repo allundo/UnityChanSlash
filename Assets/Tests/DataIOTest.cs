@@ -68,8 +68,10 @@ public class DataIOTest
         counter.IncDefeat(EnemyType.SkeletonSoldier);
         counter.IncDefeat(EnemyType.None);
         counter.IncDefeat(EnemyType.RedSlime);
-        counter.IncAttack();
-        counter.IncAttack();
+        counter.IncAttack(EquipmentCategory.Knuckle);
+        counter.IncAttack(EquipmentCategory.Knuckle);
+        counter.IncAttack(EquipmentCategory.Sword, true);
+        counter.IncAttack(EquipmentCategory.Shield, true);
         counter.IncShield();
         counter.IncMagic(AttackAttr.Fire);
         counter.IncMagic(AttackAttr.Ice);
@@ -88,8 +90,9 @@ public class DataIOTest
         counter.TotalCounts();
 
         counter.IncDefeat(EnemyType.SkeletonSoldier);
-        counter.IncAttack();
-        counter.IncAttack();
+        counter.IncAttack(EquipmentCategory.Sword);
+        counter.IncAttack(EquipmentCategory.Shield);
+        counter.IncAttack(EquipmentCategory.Sword, true);
         counter.IncShield();
         counter.IncMagic(AttackAttr.Dark);
         counter.IncDamage();
@@ -144,16 +147,16 @@ public class DataIOTest
         Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);
 
         Assert.AreEqual(1, loadData.playerData.counter.Defeat);
-        Assert.AreEqual(2, loadData.playerData.counter.Attack);
-        Assert.AreEqual(1, loadData.playerData.counter.Shield);
+        Assert.AreEqual(3, loadData.playerData.counter.AttackPoint);
+        Assert.AreEqual(2, loadData.playerData.counter.ShieldPoint);
         Assert.AreEqual(1, loadData.playerData.counter.Magic);
         Assert.AreEqual(1, loadData.playerData.counter.Damage);
         Assert.AreEqual(1, loadData.playerData.counter.MagicDamage);
 
         Assert.AreEqual(3, loadData.playerData.counter.DefeatSum);
         Assert.AreEqual(2, loadData.playerData.counter.DefeatType(EnemyType.RedSlime));
-        Assert.AreEqual(2, loadData.playerData.counter.AttackSum);
-        Assert.AreEqual(1, loadData.playerData.counter.ShieldSum);
+        Assert.AreEqual(4, loadData.playerData.counter.AttackPointSum);
+        Assert.AreEqual(3, loadData.playerData.counter.ShieldPointSum);
         Assert.AreEqual(3, loadData.playerData.counter.MagicSum);
         Assert.AreEqual(1, loadData.playerData.counter.DamageSum);
         Assert.AreEqual(1, loadData.playerData.counter.MagicDamageSum);

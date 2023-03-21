@@ -24427,7 +24427,7 @@ Transform:
   - {fileID: 6509734373272750549}
   - {fileID: 4926151504630117845}
   m_Father: {fileID: 2647494185702927388}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &7147092458117384912
 ParticleSystem:
@@ -29368,6 +29368,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LAttackHitDetector
+      objectReference: {fileID: 0}
+    - target: {fileID: 3867872897582574268, guid: 110d6946a03354a9082add541aaf6051,
+        type: 3}
+      propertyPath: category
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3867872897582574268, guid: 110d6946a03354a9082add541aaf6051,
         type: 3}

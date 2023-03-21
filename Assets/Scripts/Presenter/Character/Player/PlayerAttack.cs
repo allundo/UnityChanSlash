@@ -23,6 +23,7 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
     [SerializeField] protected float maxPitch = 1f;
     [SerializeField] protected float attackRatioR = 0f;
     [SerializeField] protected float attackRatioL = 0f;
+    [SerializeField] protected EquipmentCategory category = EquipmentCategory.Knuckle;
 
     public static readonly float ATTACK_SPEED = Constants.PLAYER_ATTACK_SPEED;
     public static readonly float CRITICAL_SPEED = Constants.PLAYER_CRITICAL_SPEED;
@@ -81,7 +82,11 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
     protected override IReactor OnHitAttack(Collider collider)
     {
         var target = base.OnHitAttack(collider);
-        if (target != null && !useEquip()) CompleteAttack();
+        if (target != null)
+        {
+            playerStatus.counter.IncAttack(category, attackMultiplier > defaultAttack);
+            if (!useEquip()) CompleteAttack();
+        }
         return target;
     }
 

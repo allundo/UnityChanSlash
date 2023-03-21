@@ -6,15 +6,16 @@ using UnityEngine;
 public class PlayerCounter
 {
     [SerializeField] private int[] defeat = new int[Util.Count<EnemyType>() - 1];
-    [SerializeField] private int attack = 0;
+    [SerializeField] private int[] attack = new int[Util.Count<EquipmentCategory>() - 1];
+    [SerializeField] private int[] critical = new int[Util.Count<EquipmentCategory>() - 1];
     [SerializeField] private int shield = 0;
     [SerializeField] private int[] magic = new int[Util.Count<AttackAttr>() - 1];
     [SerializeField] private int damage = 0;
     [SerializeField] private int magicDamage = 0;
 
     public int Defeat => defeat.Sum();
-    public int Attack => attack;
-    public int Shield => shield;
+    public int AttackPoint => attack[0] + attack[1] + (critical[0] + critical[1]) * 2;
+    public int ShieldPoint => shield + attack[2] + critical[2] * 2;
     public int Magic
     {
         get
@@ -32,7 +33,8 @@ public class PlayerCounter
     public int MagicDamage => magicDamage;
 
     [SerializeField] private int[] defeatSum = new int[Util.Count<EnemyType>() - 1];
-    [SerializeField] private int attackSum = 0;
+    [SerializeField] private int[] attackSum = new int[Util.Count<EquipmentCategory>() - 1];
+    [SerializeField] private int[] criticalSum = new int[Util.Count<EquipmentCategory>() - 1];
     [SerializeField] private int shieldSum = 0;
     [SerializeField] private int[] magicSum = new int[Util.Count<AttackAttr>() - 1];
     [SerializeField] private int damageSum = 0;
@@ -42,8 +44,8 @@ public class PlayerCounter
 
     public int DefeatSum => defeatSum.Sum();
     public int DefeatType(EnemyType type) => defeatSum[(int)type - 1];
-    public int AttackSum => attackSum;
-    public int ShieldSum => shieldSum;
+    public int AttackPointSum => attackSum[0] + attackSum[1] + (criticalSum[0] + criticalSum[1]) * 2;
+    public int ShieldPointSum => shieldSum + attackSum[2] + criticalSum[2] * 2;
     public int MagicSum
     {
         get
@@ -68,7 +70,7 @@ public class PlayerCounter
         if (type != EnemyType.None) ++defeat[(int)type - 1];
     }
 
-    public void IncAttack() => ++attack;
+    public void IncAttack(EquipmentCategory category, bool isCritical = false) => ++(isCritical ? critical : attack)[(int)category];
     public void IncShield() => ++shield;
     public void IncMagic(AttackAttr attr = AttackAttr.None)
     {
@@ -89,7 +91,13 @@ public class PlayerCounter
             defeat[i] = 0;
         }
 
-        attackSum += attack;
+        for (int i = 0; i < attack.Length; i++)
+        {
+            attackSum[i] += attack[i];
+            criticalSum[i] += critical[i];
+            attack[i] = critical[i] = 0;
+        }
+
         shieldSum += shield;
 
         for (int i = 0; i < magic.Length; i++)
@@ -101,6 +109,6 @@ public class PlayerCounter
         damageSum += damage;
         magicDamageSum += magicDamage;
 
-        attack = shield = damage = magicDamage = 0;
+        shield = damage = magicDamage = 0;
     }
 }
