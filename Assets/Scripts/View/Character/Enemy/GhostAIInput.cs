@@ -39,7 +39,7 @@ public class GhostAIInput : EnemyAIInput
         if (IsOnPlayer(right2)) return turnR;
 
         Pos forward2 = mobMap.dir.GetForward(forward);
-        bool isForwardMovable = mobMap.IsLeapable(forward);
+        bool isForwardMovable = mobMap.IsMovable(forward) || mobMap.IsLeapable(forward);
 
         // Move forward if player found in front
         if (IsOnPlayer(forward2))
