@@ -24,7 +24,11 @@ public struct ResultBonus
     public ulong magic => (ulong)gameInfo.magic;
     public int magicBonus { get; private set; }
 
+    public string title { get; private set; }
+    public int bonusPay { get; private set; }
+
     public ulong wagesAmount { get; private set; }
+
 
     public ResultBonus(GameInfo gameInfo)
     {
@@ -38,6 +42,10 @@ public struct ResultBonus
         strengthBonus = gameInfo.strength * 1000;
         magicBonus = gameInfo.magic * 1000;
 
-        wagesAmount = itemPrice + (ulong)(mapCompBonus + clearTimeBonus + defeatBonus + levelBonus + strengthBonus + magicBonus);
+        title = gameInfo.title;
+
+        var tempAmount = itemPrice + (ulong)(mapCompBonus + clearTimeBonus + defeatBonus + levelBonus + strengthBonus + magicBonus);
+        bonusPay = (int)(tempAmount * gameInfo.titleBonusRatio);
+        wagesAmount = tempAmount + (ulong)bonusPay;
     }
 }

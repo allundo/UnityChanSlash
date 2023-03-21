@@ -190,6 +190,11 @@ public class PlayerStatus : MobStatus, IGetExp
         }
     }
 
+    public (int attack, int magic) GetAttackMagic()
+    {
+        var disp = GetDispStatus();
+        return ((int)disp.attack, (int)disp.magic);
+    }
     private DispStatus GetDispStatus()
     {
         return new DispStatus()

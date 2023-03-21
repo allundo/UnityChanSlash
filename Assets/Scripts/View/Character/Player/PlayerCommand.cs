@@ -851,7 +851,7 @@ public class PlayerDie : PlayerCommand
         react.OnDie();
         playerAnim.die.Bool = true;
 
-        var newRecord = new DataStoreAgent.DeadRecord(GameManager.Instance.SumUpItemValue(), (react as PlayerReactor).CauseOfDeath(), GameInfo.Instance.currentFloor);
+        var newRecord = new DataStoreAgent.DeadRecord(itemInventory.SumUpPrices(), (react as PlayerReactor).CauseOfDeath(), GameInfo.Instance.currentFloor);
         var rank = DataStoreAgent.Instance.SaveDeadRecords(newRecord);
 
         playerTarget.gameOverUI.Play(rank, newRecord);

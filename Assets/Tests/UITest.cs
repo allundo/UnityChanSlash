@@ -21,6 +21,8 @@ public class UITest
     private GameOverUI prefabGameOverUI;
     private ActiveMessageController activeMessageUI;
 
+    private TitleDisplay prefabTitleDisplay;
+
     private GameObject testCanvas;
     private Camera mainCamera;
     private GameObject eventSystem;
@@ -47,6 +49,7 @@ public class UITest
         prefabAttackInput = Resources.Load<AttackInputControllerTest>("Prefabs/UI/Fight/AttackInputUITest");
         prefabForwardUI = Resources.Load<ForwardUI>("Prefabs/UI/Move/Forward");
         prefabEnemyStatus = Resources.Load<EnemyStatus>("Prefabs/TestEnemyStatus");
+        prefabTitleDisplay = Resources.Load<TitleDisplay>("Prefabs/Result/UI/TitleDisplay");
 
         prefabGameOverUI = Resources.Load<GameOverUI>("Prefabs/UI/GameOver/GameOverUI");
 
@@ -91,12 +94,16 @@ public class UITest
     }
 
     private void InitAnchoredPosition(GameObject uiObject, Vector2 anchoredPosition)
+        => InitAnchoredPosition(uiObject, anchoredPosition, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+
+    private void InitAnchoredPosition(GameObject uiObject, Vector2 anchoredPosition, Vector2 anchorMin, Vector2 anchorMax)
     {
         RectTransform rectTf = uiObject.GetComponent<RectTransform>();
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         rectTf.SetParent(rectTfCanvas);
 
-        rectTf.anchorMin = rectTf.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTf.anchorMin = anchorMin;
+        rectTf.anchorMax = anchorMax;
         rectTf.anchoredPosition = anchoredPosition;
     }
 
@@ -380,5 +387,20 @@ public class UITest
         yield return new WaitForSeconds(7f);
         DOTween.KillAll();
         Object.Destroy(gameOverUI.gameObject);
+    }
+
+    [UnityTest]
+    public IEnumerator _006_DisplayTitleInResultTest()
+    {
+        var titleDisplay = Object.Instantiate(prefabTitleDisplay);
+        InitAnchoredPosition(titleDisplay.gameObject, Vector2.zero, new Vector2(0f, 0.5f), new Vector2(1f, 0.5f));
+        yield return null;
+
+        titleDisplay.DisplayTween("テスト", null, 6f).Play();
+        yield return new WaitForSeconds(7f);
+
+        Object.Destroy(titleDisplay.gameObject);
+
+        yield return new WaitForSeconds(3f);
     }
 }

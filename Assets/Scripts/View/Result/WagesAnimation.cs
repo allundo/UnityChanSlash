@@ -9,6 +9,9 @@ public class WagesAnimation : ResultAnimation
     [SerializeField] private TextMeshProUGUI wagesTxt = default;
     [SerializeField] private Color addEffectColor = default;
 
+    protected Tween valueTween;
+    protected Tween prevTween;
+
     private Vector2 valueTxtPos;
 
     private ScrollTextGenerator effectGenerator;
@@ -26,7 +29,7 @@ public class WagesAnimation : ResultAnimation
 
         valueTween?.Complete(true);
 
-        effectGenerator.Spawn(valueTxtPos, 0.3f, "+" + addValue, addEffectColor)
+        Tween moneyEffect = effectGenerator.Spawn(valueTxtPos, 0.3f, "+" + addValue, addEffectColor)
             .ScrollY(150f, 0.6f, Ease.OutCubic)
             .Play();
 
@@ -37,11 +40,13 @@ public class WagesAnimation : ResultAnimation
                 valueUI.ResetSize(1f + strength);
                 prevValue = value;
                 value += (ulong)addValue;
+                moneyEffect?.Play();
             })
             .Join(valueUI.PunchY(strength * 100f, duration, 30))
             .Join(valueUI.Resize(1f, duration * 0.25f))
             .Join(valueFade.In(duration * 0.25f, 0, null, null, false))
-            .Join(DOVirtual.Int(0, addValue, duration, count => UpdateDisplay(count)));
+            .Join(DOVirtual.Int(0, addValue, duration, count => UpdateDisplay(count)))
+            .Play();
 
         return valueTween;
     }

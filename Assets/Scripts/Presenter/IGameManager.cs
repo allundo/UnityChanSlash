@@ -13,7 +13,6 @@ public interface IGameManager
     void DebugStart();
     void LoadDataStart();
 
-    ulong SumUpItemValue();
     DataStoreAgent.EventData[] ExportEventData();
     int GetCurrentEvent();
     void ImportRespawnData(DataStoreAgent.SaveData import);

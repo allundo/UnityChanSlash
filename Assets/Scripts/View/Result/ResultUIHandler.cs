@@ -20,6 +20,7 @@ public class ResultUIHandler : MonoBehaviour
     [SerializeField] private ResultAnimation strength = default;
     [SerializeField] private ResultAnimation magic = default;
 
+    [SerializeField] private TitleDisplay titleDisplay = default;
     [SerializeField] private ClearRecord record = default;
     [SerializeField] private RankInMessage message = default;
 
@@ -58,24 +59,25 @@ public class ResultUIHandler : MonoBehaviour
             .Append(wagesAnimation.LabelFadeIn())
             .Append(wagesAnimation.ValueFadeIn(result.itemPrice, 2f, 0f))
             .Join(itemPrice.ValueFadeIn(result.itemPrice, 2f))
-            .AppendCallback(() => wagesAnimation.AddValue(result.mapCompBonus)?.Play())
+            .AppendCallback(() => wagesAnimation.AddValue(result.mapCompBonus))
             .Join(mapComp.LabelFadeIn())
             .Join(mapComp.ValueFadeIn(result.mapComp))
-            .AppendCallback(() => wagesAnimation.AddValue(result.clearTimeBonus)?.Play())
+            .AppendCallback(() => wagesAnimation.AddValue(result.clearTimeBonus))
             .Join(clearTime.LabelFadeIn())
             .Join(clearTime.ValueFadeIn(result.clearTimeSec))
-            .AppendCallback(() => wagesAnimation.AddValue(result.defeatBonus)?.Play())
+            .AppendCallback(() => wagesAnimation.AddValue(result.defeatBonus))
             .Join(defeat.LabelFadeIn())
             .Join(defeat.ValueFadeIn(result.defeatCount))
-            .AppendCallback(() => wagesAnimation.AddValue(result.levelBonus)?.Play())
+            .AppendCallback(() => wagesAnimation.AddValue(result.levelBonus))
             .Join(level.LabelFadeIn())
             .Join(level.ValueFadeIn(result.level))
-            .AppendCallback(() => wagesAnimation.AddValue(result.strengthBonus)?.Play())
+            .AppendCallback(() => wagesAnimation.AddValue(result.strengthBonus))
             .Join(strength.LabelFadeIn())
             .Join(strength.ValueFadeIn(result.strength))
-            .AppendCallback(() => wagesAnimation.AddValue(result.magicBonus)?.Play())
+            .AppendCallback(() => wagesAnimation.AddValue(result.magicBonus))
             .Join(magic.LabelFadeIn())
             .Join(magic.ValueFadeIn(result.magic))
+            .Append(titleDisplay.DisplayTween(result.title, () => wagesAnimation.AddValue(result.bonusPay)))
             .AppendInterval(2f)
             .OnCompleteAsObservable(Unit.Default);
     }

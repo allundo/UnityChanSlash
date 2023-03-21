@@ -74,11 +74,22 @@ public class ResultSceneMediator : SceneMediator
     {
         Debug.Log("DEBUG MODE");
 
+        var counter = new PlayerCounter();
+        for (int i = 0; i < 20; i++)
+        {
+            counter.IncDefeat(EnemyType.Slime);
+            counter.IncAttack(EquipmentCategory.Knuckle);
+        }
+
         GameInfo gameInfo = GameInfo.Instance;
-        gameInfo.clearTimeSec = 3000;
-        gameInfo.defeatCount = 20;
+
+        gameInfo.TotalClearCounts(counter, 3000, 171717);
         gameInfo.clearRank = 1;
-        gameInfo.clearRecord = new DataStoreAgent.ClearRecord("テスト", 171717, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        gameInfo.level = 10;
+
+        var resultBonus = new ResultBonus(GameInfo.Instance);
+
+        gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, resultBonus.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
 
         Result();
     }

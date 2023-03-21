@@ -331,18 +331,19 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var gameInfo = GameInfo.Instance;
 
-        SumUpItemValue();
-        gameInfo.clearTimeSec = tm.elapsedTimeSec;
-        gameInfo.SetMapComp();
+        var status = player.GetComponent<PlayerStatus>();
 
-        var counter = player.GetComponent<PlayerStatus>().counter;
+        gameInfo.TotalClearCounts(
+            status.counter,
+            tm.elapsedTimeSec,
+            ItemInventory.Instance.SumUpPrices()
+        );
 
-        counter.TotalCounts();
-        gameInfo.defeatCount = counter.DefeatSum;
+        (gameInfo.strength, gameInfo.magic) = status.GetAttackMagic();
 
         var result = new ResultBonus(gameInfo);
 
-        gameInfo.clearRecord = new DataStoreAgent.ClearRecord("なし", result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
         gameInfo.clearRank = dataStoreAgent.SaveClearRecords(gameInfo.clearRecord);
 
         cover.color = new Color(1f, 1f, 1f, 0f);
@@ -350,13 +351,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
             .IgnoreElements()
             .Subscribe(null, exitSubject.OnCompleted)
             .AddTo(this);
-    }
-
-    public ulong SumUpItemValue()
-    {
-        ulong moneyAmount = ItemInventory.Instance.SumUpPrices();
-        GameInfo.Instance.moneyAmount = moneyAmount;
-        return moneyAmount;
     }
 
     public DataStoreAgent.EventData[] ExportEventData() => eventManager.ExportEventData();

@@ -94,12 +94,28 @@ public class FadeTween
     public void Activate() => SetActive(true);
     public void Inactivate() => SetActive(false);
 
+    /// <summary>
+    /// Create fade-in Tween.
+    /// </summary>
+    /// <param name="isContinuous">
+    /// !Caution! Tweens decide start value when they are created. <br />
+    /// So you cannot use fade-in and fade-out at the same time in Sequence with this option true.
+    /// </param>
+    /// <returns>Fade-in Tween</returns>
     public virtual Tween In(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
         fadeIn = FadeFunc(true, duration, delay, onPlay, onComplete, isContinuous);
         return fadeIn;
     }
 
+    /// <summary>
+    /// Create fade-out Tween.
+    /// </summary>
+    /// <param name="isContinuous">
+    /// !Caution! Tweens decide start value when they are created. <br />
+    /// So you cannot use fade-in and fade-out at the same time in Sequence with this option true.
+    /// </param>
+    /// <returns>Fade-out Tween</returns>
     public virtual Tween Out(float duration = 1f, float delay = 0f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
     {
         fadeOut = FadeFunc(false, duration, delay, onPlay, onComplete, isContinuous);

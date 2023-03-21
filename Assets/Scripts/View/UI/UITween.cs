@@ -78,6 +78,12 @@ public class UITween
     public Tween PunchY(float strength, float duration = 1f, int vibrato = 10, float elasticity = 1)
         => rectTransform.DOPunchAnchorPos(new Vector2(0f, strength), duration, vibrato, elasticity);
 
+    public Tween Shake(float strength, float duration = 1f, int vibrato = 10, float randomness = 90f)
+        => rectTransform.DOShakeAnchorPos(duration, strength, vibrato, randomness);
+
+    public Tween Shake(Vector2 strength, float duration = 1f, int vibrato = 10, float randomness = 90f)
+        => rectTransform.DOShakeAnchorPos(duration, strength, vibrato, randomness);
+
     /// <summary>
     /// Set position and move immediately.
     /// </summary>

@@ -16,7 +16,6 @@ public class ResultAnimation : MonoBehaviour
 
     protected ulong value = 0;
     protected ulong prevValue = 0;
-    protected Tween valueTween;
 
     protected virtual void Awake()
     {

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -110,5 +111,147 @@ public class PlayerCounter
         magicDamageSum += magicDamage;
 
         shield = damage = magicDamage = 0;
+    }
+
+    public ClearData TotalClearCounts(float mapComp, float treasureComp, float clearTimeSec)
+    {
+        var titleData = new TitleSelector(this, mapComp, treasureComp, clearTimeSec).titleData;
+        return new ClearData()
+        {
+            title = titleData.title,
+            bonusRate = titleData.bonusRate,
+            defeatCount = DefeatSum,
+        };
+    }
+
+    public struct ClearData
+    {
+        public string title;
+        public float bonusRate;
+        public int defeatCount;
+    }
+
+    protected class TitleSelector
+    {
+        private struct Title
+        {
+            public const string FastRunner = "俊足";
+            public const string SlowPoke = "鈍足";
+            public const string PhantomThief = "怪盗";
+            public const string Zenigata = "銭形";
+            public const string Magician = "魔導士";
+            public const string Fighter = "戦士";
+            public const string Mapper = "測量士";
+            public const string FireMagician = "炎術士";
+            public const string IceMagician = "氷術士";
+            public const string DarkMagician = "闇術士";
+            public const string Grappler = "格闘家";
+            public const string SwordFighter = "剣闘士";
+            public const string Shielder = "盾使い";
+            public const string Kuroobi = "黒帯";
+            public const string SwordMaster = "剣聖";
+            public const string ShieldMaster = "盾師";
+            public const string MinimumStep = "低歩数";
+        }
+
+        private PlayerCounter counter;
+        private Dictionary<string, float> titlePoint = new Dictionary<string, float>();
+        private Dictionary<string, float> titleBonus = new Dictionary<string, float>()
+        {
+            { Title.Zenigata,       0.5f    },
+            { Title.MinimumStep,    0.25f   },
+            { Title.FastRunner,     0.2f    },
+            { Title.Kuroobi,        0.15f   },
+            { Title.SwordMaster,    0.15f   },
+            { Title.ShieldMaster,   0.15f   },
+            { Title.PhantomThief,   0.1f    },
+            { Title.Mapper,         0.08f   },
+            { Title.DarkMagician,   0.075f  },
+            { Title.FireMagician,   0.05f   },
+            { Title.IceMagician,    0.05f   },
+            { Title.Grappler,       0.025f  },
+            { Title.SwordFighter,   0.025f  },
+            { Title.Shielder,       0.025f  },
+            { Title.Magician,       0.02f   },
+            { Title.Fighter,        0.015f  },
+            { Title.SlowPoke,       0.0f    },
+        };
+
+        public (string title, float bonusRate) titleData { get; private set; }
+
+        public TitleSelector(PlayerCounter counter, float mapComp, float treasureComp, float clearTimeSec)
+        {
+            counter.TotalCounts();
+            this.counter = counter;
+            float attackSum = (float)(counter.attackSum.Sum() + counter.criticalSum.Sum());
+            float magic = (float)counter.MagicSum;
+
+            float fighter = attackSum > 0 ? attackSum / (magic + attackSum) : 0;
+            float magician = magic > 0 ? 1f - fighter : 0;
+
+            int attackLen = counter.attackSum.Length;
+            float[] attackRate = new float[attackLen];
+            float[] criticalRate = new float[attackLen];
+            float[] categoryRate = new float[attackLen];
+            for (int i = 0; i < attackLen; i++)
+            {
+                float attack = (float)counter.attackSum[i];
+                float critical = (float)counter.criticalSum[i];
+
+                attackRate[i] = attack + critical;
+                criticalRate[i] = critical > 0 ? 1f - attackRate[i] : 0;
+                categoryRate[i] = (attack + critical) / attackSum;
+            }
+
+            float shieldSum = (float)counter.shieldSum;
+            float damageSum = (float)counter.damageSum;
+
+            float shieldRate = shieldSum > 0 ? shieldSum / (damageSum + shieldSum) : 0f;
+            float damageRate = damageSum > 0 ? 1f - shieldRate : 0f;
+
+            int knuckle = (int)EquipmentCategory.Knuckle;
+            int sword = (int)EquipmentCategory.Sword;
+
+            titlePoint[Title.MinimumStep] = MinimumStep(counter.stepSum);
+            titlePoint[Title.Zenigata] = Zenigata(counter.CoinSum);
+            titlePoint[Title.FastRunner] = FastRunner(clearTimeSec);
+
+            titlePoint[Title.Kuroobi] = Fighter(counter.attackSum[knuckle], attackSum, fighter, criticalRate[knuckle]);
+            titlePoint[Title.SwordMaster] = Fighter(counter.attackSum[sword], attackSum, fighter, criticalRate[sword]);
+            titlePoint[Title.ShieldMaster] = Fighter(counter.attackSum[(int)EquipmentCategory.Shield], attackSum, fighter, shieldRate);
+
+            titlePoint[Title.PhantomThief] = PhantomThief(treasureComp);
+
+            titlePoint[Title.Mapper] = mapComp;
+
+            titlePoint[Title.DarkMagician] = Magician(counter.magicSum[(int)AttackAttr.Dark], magic, magician);
+            titlePoint[Title.FireMagician] = Magician(counter.magicSum[(int)AttackAttr.Fire], magic, magician);
+            titlePoint[Title.IceMagician] = Magician(counter.magicSum[(int)AttackAttr.Ice], magic, magician);
+
+            titlePoint[Title.Grappler] = Fighter(counter.attackSum[knuckle], attackSum, fighter, attackRate[knuckle]);
+            titlePoint[Title.SwordFighter] = Fighter(counter.attackSum[sword], attackSum, fighter, attackRate[sword]);
+            titlePoint[Title.Shielder] = Fighter(counter.attackSum[(int)EquipmentCategory.Shield], attackSum, fighter, damageRate);
+
+            titlePoint[Title.Magician] = magician;
+            titlePoint[Title.Fighter] = fighter;
+
+            titlePoint[Title.SlowPoke] = SlowPoke(clearTimeSec);
+
+            var title = titlePoint.OrderByDescending(kv => kv.Value).ToArray()[0].Key;
+            var bonus = titleBonus[title];
+
+            titleData = (title, bonus);
+        }
+
+        private float FastRunner(float clearTimeSec) => Mathf.Clamp01(2f - clearTimeSec / 3600f);
+        private float SlowPoke(float clearTimeSec) => Mathf.Clamp01(clearTimeSec / 10800f);
+        private float MinimumStep(float step) => Mathf.Clamp01(1f - step / 1000f);
+        private float PhantomThief(float treasureComp) => treasureComp;
+        private float Zenigata(int coin) => Mathf.Min(1f, (float)coin / 100f);
+        private float Magician(int attr, float magicSum, float magician)
+            => magicSum > 0 ? Mathf.Min(1f, magician * attr / magicSum * 3f) : 0f;
+
+        private float Fighter(int category, float attackSum, float fighter, float specificRate)
+            => attackSum > 0 ? Mathf.Min(1f, fighter * specificRate * category / attackSum * 6f) : 0f;
     }
 }

@@ -12,7 +12,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     private WorldMap[] maps;
     private int[] mapSize;
 
-    public void SetMapComp()
+    private float CalcMapComp()
     {
         float totalMapArea = 0;
         float totalMapDiscovered = 0;
@@ -23,20 +23,55 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             totalMapDiscovered += (maps[i] != null) ? maps[i].SumUpDiscovered() : 0;
         }
 
-        mapComp = totalMapDiscovered / totalMapArea;
+        return totalMapArea > 0 ? totalMapDiscovered / totalMapArea : 0f;
+    }
+
+    private float CalcTreasureComp()
+    {
+        int sum = 0;
+        int open = 0;
+        for (int i = 0; i < LastFloor; i++)
+        {
+            if (maps[i] == null) break;
+            maps[i].ForEachTiles(tile =>
+            {
+                if (tile is Box)
+                {
+                    if ((tile as Box).IsOpen) open++;
+                    sum++;
+                }
+            });
+        }
+        return sum > 0 ? (float)open / (float)sum : 0f;
     }
 
     public int currentFloor = 1;
 
     public ulong moneyAmount = 0;
     public float mapComp = 0f;
+    public float treasureComp = 0f;
     public int clearTimeSec = 0;
     public int defeatCount = 0;
     public int level = 1;
     public int strength = 10;
     public int magic = 10;
     public int clearRank = 0;
+    public string title = "なし";
+    public float titleBonusRatio = 1f;
     public DataStoreAgent.ClearRecord clearRecord = null;
+
+    public void TotalClearCounts(PlayerCounter counter, int clearTimeSec, ulong moneyAmount)
+    {
+        this.clearTimeSec = clearTimeSec;
+        this.moneyAmount = moneyAmount;
+        this.mapComp = CalcMapComp();
+        this.treasureComp = CalcTreasureComp();
+
+        var clearData = counter.TotalClearCounts(mapComp, treasureComp, clearTimeSec);
+        title = clearData.title;
+        titleBonusRatio = clearData.bonusRate;
+        defeatCount = clearData.defeatCount;
+    }
 
     public int startActionID = 0;
     public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
