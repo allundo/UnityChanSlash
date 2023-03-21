@@ -554,14 +554,17 @@ public class MapManager
 
     private Dir GetNonGridPointDir(int x, int y, Terrain terrain)
     {
-        if (terrain == Terrain.LockedDoor)
+        switch (terrain)
         {
-            return GetValidDir(x, y, IsPath);
-        }
+            case Terrain.LockedDoor:
+                return GetValidDir(x, y, IsPath);
 
-        if (terrain == Terrain.MessageWall || terrain == Terrain.ExitDoor || terrain == Terrain.Box)
-        {
-            return GetValidDir(x, y, IsEnterable);
+            case Terrain.MessageWall:
+            case Terrain.ExitDoor:
+                return GetValidDir(x, y, IsEnterable);
+
+            case Terrain.Box:
+                return GetValidDir(x, y, terrain => IsEnterable(terrain) || terrain == Terrain.Door);
         }
 
         return GetWallDir(x, y);
