@@ -137,13 +137,14 @@ public class PlaceEnemyGenerator : EnemyGenerator
         {
             if (tile.OnEnemy != null)
             {
-                if (tile.AboveEnemy != null)
+                if (tile.AboveEnemy != tile.OnEnemy && tile.AboveEnemy != null)
                 {
                     store.Add(new DataStoreAgent.EnemyData(pos, tile.AboveEnemy));
                     tile.AboveEnemy.gameObject.GetComponent<Reactor>().Destroy();
                 }
 
                 if (pos != playerPos) store.Add(new DataStoreAgent.EnemyData(pos, tile.OnEnemy));
+
                 tile.OnEnemy.gameObject.GetComponent<Reactor>().Destroy();
                 tile.OnEnemy = null;
             }
