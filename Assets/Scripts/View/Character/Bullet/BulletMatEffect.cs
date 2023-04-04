@@ -30,9 +30,9 @@ public class BulletMatEffect : MatColorEffect
         if (blinkColor != default)
         {
             Sequence blink = DOTween.Sequence();
-            materials.ForEach(mat => blink.Join(mat.DOColor(blinkColor, 0.2f).SetLoops(-1, LoopType.Yoyo)));
+            materials.ForEach(mat => blink.Join(mat.DOColor(blinkColor, 0.1f)));
 
-            blinkTween = blink.AsReusable(meshTf.gameObject);
+            blinkTween = blink.SetLoops(-1, LoopType.Yoyo).AsReusable(meshTf.gameObject);
         }
     }
 
