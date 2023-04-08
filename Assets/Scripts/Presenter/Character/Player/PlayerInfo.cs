@@ -34,7 +34,8 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && mapUtil.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
 
-    public DataStoreAgent.PlayerData ExportRespawnData()
+    public DataStoreAgent.PlayerData ExportRespawnData() => ExportRespawnData(Pos);
+    public DataStoreAgent.PlayerData ExportRespawnData(Pos playerPos)
     {
         var cmd = input.currentCommand;
 
@@ -57,7 +58,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         if (cmd is PlayerIcedFall) exitState = ExitState.IcedFall;
         if (cmd is PlayerIcedPitFall) exitState = ExitState.IcedPitFall;
 
-        return new DataStoreAgent.PlayerData(Pos, status, exitState);
+        return new DataStoreAgent.PlayerData(playerPos, status, exitState);
     }
 
     public void ImportRespawnData(DataStoreAgent.PlayerData data, WorldMap map)

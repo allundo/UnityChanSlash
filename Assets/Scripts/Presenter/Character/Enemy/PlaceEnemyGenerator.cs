@@ -120,10 +120,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
         return regions;
     }
 
-    public void SwitchWorldMap(WorldMap map, bool isDownStairs)
+    public void SwitchWorldMap(WorldMap map)
     {
-        respawnData[this.map.floor - 1] = GetRespawnData(this.map.StairsEnterPos(isDownStairs));
-
         DestroyAllEnemies();
         DestroyAllEnemyGenerators();
 
@@ -244,9 +242,9 @@ public class PlaceEnemyGenerator : EnemyGenerator
     private IEnemyStatus Spawn(EnemyType type, Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData)
         => Spawn(enemyPool[type].transform, enemyData.Param((int)type), map.WorldPos(pos), dir, option, statusData);
 
-    public List<DataStoreAgent.EnemyData>[] ExportRespawnData()
+    public List<DataStoreAgent.EnemyData>[] ExportRespawnData(Pos playerPos)
     {
-        respawnData[this.map.floor - 1] = GetRespawnData(new Pos());
+        respawnData[this.map.floor - 1] = GetRespawnData(playerPos);
         return respawnData;
     }
 

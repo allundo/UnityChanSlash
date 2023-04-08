@@ -258,7 +258,15 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         [SerializeField] private PosDirPair posDir;
 
-        public KeyValuePair<Pos, IDirection> kvPosDir => posDir.Convert();
+        public KeyValuePair<Pos, IDirection> kvPosDir
+        {
+            get { return posDir.Convert(); }
+            set
+            {
+                pos = value.Key;
+                dir = value.Value;
+            }
+        }
 
         public Pos pos
         {
@@ -444,6 +452,42 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     protected void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
         => SaveEncryptedRecord(new RecordList<T>(records), fileName);
 
+    public void SaveOnMovingFloor(bool isDownStair)
+    {
+        var gameInfo = GameInfo.Instance;
+        var gameManager = GameManager.Instance;
+        var map = gameManager.worldMap;
+
+        var stairsEnterPos = map.StairsEnterPos(isDownStair);
+        int nextFloor = gameInfo.currentFloor + (isDownStair ? 1 : -1);
+
+#if UNITY_EDITOR
+        // Never save if played game from MainScene directly.
+        if (GameInfo.Instance.isScenePlayedByEditor)
+        {
+            SpawnHandler.Instance.SaveEnemyRespawnData(stairsEnterPos);
+            map.StoreTileOpenData();
+            return;
+        }
+#endif
+        var data = PlayerInfo.Instance.ExportRespawnData();
+        if (!isDownStair) data.kvPosDir = gameInfo.Map(nextFloor).stairsTop;
+
+        saveData = new SaveData()
+        {
+            currentFloor = nextFloor,
+            elapsedTimeSec = TimeManager.Instance.elapsedTimeSec + 1,
+            playerData = data,
+            inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
+            mapData = gameInfo.ExportMapData(),
+            currentEvent = gameManager.GetCurrentEvent(),
+            eventData = gameManager.ExportEventData(),
+            respawnData = SpawnHandler.Instance.ExportRespawnData(stairsEnterPos)
+        };
+
+        SaveEncryptedRecord(saveData, SAVE_DATA_FILE_NAME);
+    }
+
     public bool SaveCurrentGameData()
     {
 #if UNITY_EDITOR
@@ -453,17 +497,18 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         var gameInfo = GameInfo.Instance;
         var gameManager = GameManager.Instance;
+        var playerInfo = PlayerInfo.Instance;
 
         saveData = new SaveData()
         {
             currentFloor = gameInfo.currentFloor,
             elapsedTimeSec = TimeManager.Instance.elapsedTimeSec + 1,
-            playerData = PlayerInfo.Instance.ExportRespawnData(),
+            playerData = playerInfo.ExportRespawnData(),
             inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
-            respawnData = SpawnHandler.Instance.ExportRespawnData()
+            respawnData = SpawnHandler.Instance.ExportRespawnData(playerInfo.Pos)
         };
 
         SaveEncryptedRecord(saveData, SAVE_DATA_FILE_NAME);

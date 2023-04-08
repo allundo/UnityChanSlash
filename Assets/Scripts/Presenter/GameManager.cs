@@ -250,15 +250,16 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         var dataStoreAgent = DataStoreAgent.Instance;
         dataStoreAgent.DisableSave();
-        dataStoreAgent.SaveCurrentGameData();
+
+        // Save enemy respawn data
+        // Store tile open data
+        dataStoreAgent.SaveOnMovingFloor(isDownStairs);
 
         hidePlateHandler.OnMoveFloor();
 
         // Deny enemies to access WorldMap
         spawnHandler.DisableAllEnemiesInput();
         EnemyCommand.ClearResetTweens();
-
-        worldMap.StoreTileOpenData();
 
         PlaySnd(SNDType.FloorMove, worldMap.WorldPos(worldMap.StairsEnterPos(isDownStairs)));
 
@@ -280,7 +281,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         worldMap = nextFloorMap;
 
         // Stored floor enemies are respawn in this method.
-        spawnHandler.MoveFloorCharacters(nextFloorMap, isDownStairs);
+        spawnHandler.MoveFloorCharacters(nextFloorMap);
 
         eventManager.SwitchWorldMap(nextFloorMap);
 

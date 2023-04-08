@@ -282,12 +282,16 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         {
             var mapData = import.mapData[i];
 
-            if (mapData == null) continue;
-
-            var mapSize = mapData.mapSize;
-
-            maps[i] = new WorldMap(new MapManager(i + 1, mapData));
-            maps[i].ImportMapData(mapData);
+            if (mapData != null)
+            {
+                maps[i] = new WorldMap(new MapManager(i + 1, mapData));
+                maps[i].ImportMapData(mapData);
+            }
+            else if (i + 1 == currentFloor)
+            {
+                var map = Map(currentFloor);
+                import.playerData.kvPosDir = map.StairsBottom;
+            }
         }
     }
 }

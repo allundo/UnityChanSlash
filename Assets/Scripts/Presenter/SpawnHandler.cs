@@ -42,14 +42,14 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
 
-    public void MoveFloorCharacters(WorldMap map, bool isDownStairs)
+    public void MoveFloorCharacters(WorldMap map)
     {
 
         // Delete cached all enemy status.
         lifeGaugeGenerator.DestroyAll();
 
         // Enemies and bullets must be destroyed during the same frame.
-        placeEnemyGenerator.SwitchWorldMap(map, isDownStairs);
+        placeEnemyGenerator.SwitchWorldMap(map);
 
         debugEnemyGenerators.ForEach(gen =>
         {
@@ -70,12 +70,12 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
         itemGenerator.SwitchWorldMap(map);
     }
 
-    public DataStoreAgent.RespawnData[] ExportRespawnData()
+    public DataStoreAgent.RespawnData[] ExportRespawnData(Pos playerPos)
     {
         int lastFloor = GameInfo.Instance.LastFloor;
 
         var export = new DataStoreAgent.RespawnData[lastFloor];
-        var enemyData = placeEnemyGenerator.ExportRespawnData();
+        var enemyData = placeEnemyGenerator.ExportRespawnData(playerPos);
         var itemData = itemGenerator.ExportRespawnData();
 
         for (int i = 0; i < lastFloor; i++)
@@ -83,6 +83,11 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
             export[i] = new DataStoreAgent.RespawnData(enemyData[i], itemData[i]);
         }
         return export;
+    }
+
+    public void SaveEnemyRespawnData(Pos playerPos)
+    {
+        placeEnemyGenerator.ExportRespawnData(playerPos);
     }
 
     public void ImportRespawnData(DataStoreAgent.RespawnData[] import, WorldMap map)
