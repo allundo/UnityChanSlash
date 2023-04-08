@@ -44,8 +44,9 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void MoveFloorCharacters(WorldMap map, bool isDownStairs)
     {
-        // Do not destroyLifeGauges since they are reusable for all over floors.
-        // lifeGaugeGenerator.DestroyAll();
+
+        // Delete cached all enemy status.
+        lifeGaugeGenerator.DestroyAll();
 
         // Enemies and bullets must be destroyed during the same frame.
         placeEnemyGenerator.SwitchWorldMap(map, isDownStairs);
