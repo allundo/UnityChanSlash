@@ -120,14 +120,6 @@ public class PlaceEnemyGenerator : EnemyGenerator
         return regions;
     }
 
-    public void SwitchWorldMap(WorldMap map)
-    {
-        DestroyAllEnemies();
-        DestroyAllEnemyGenerators();
-
-        RespawnEnemies(map);
-    }
-
     private List<DataStoreAgent.EnemyData> GetRespawnData(Pos playerPos)
     {
         var store = new List<DataStoreAgent.EnemyData>();
@@ -138,16 +130,10 @@ public class PlaceEnemyGenerator : EnemyGenerator
                 if (tile.AboveEnemy != tile.OnEnemy && tile.AboveEnemy != null)
                 {
                     store.Add(new DataStoreAgent.EnemyData(pos, tile.AboveEnemy));
-                    tile.AboveEnemy.gameObject.GetComponent<Reactor>().Destroy();
                 }
 
                 if (pos != playerPos) store.Add(new DataStoreAgent.EnemyData(pos, tile.OnEnemy));
-
-                tile.OnEnemy.gameObject.GetComponent<Reactor>().Destroy();
-                tile.OnEnemy = null;
             }
-
-            tile.OnCharacterDest = tile.AboveEnemy = null;
         });
 
         enemyPool.ForEach(
@@ -170,15 +156,18 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     /// <summary>
     /// [!Caution!] GameManager.worldMap must be updated before respawn enemies. <br />
-    /// since respawn enemies set GameManager.worldMap to their own property to refer to.
+    /// since EnemyMapUtil refers to GameManager.worldMap on respawn.
     /// </summary>
-    /// <param name="respawnMap"></param>
-    private void RespawnEnemies(WorldMap respawnMap)
+    public void SwitchWorldMap(WorldMap map)
     {
         // Switch current world map.
-        SetWorldMap(respawnMap);
+        SetWorldMap(map);
+        RespawnEnemies();
+    }
 
-        var restore = respawnData[respawnMap.floor - 1];
+    private void RespawnEnemies()
+    {
+        var restore = respawnData[map.floor - 1];
 
         restore.ForEach(data => Respawn(data));
         // Reserve spawning witch if player has KeyBlade.
@@ -251,6 +240,6 @@ public class PlaceEnemyGenerator : EnemyGenerator
     public void ImportRespawnData(List<DataStoreAgent.EnemyData>[] import, WorldMap currentMap)
     {
         respawnData = import;
-        RespawnEnemies(currentMap);
+        SwitchWorldMap(currentMap);
     }
 }

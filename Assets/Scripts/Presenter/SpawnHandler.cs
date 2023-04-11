@@ -32,6 +32,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     public IEnemyStatus PlaceWitch(Pos pos, IDirection dir, float waitFrames = 120f)
         => placeEnemyGenerator.SpawnWitch(pos, dir, waitFrames);
 
+    public void MoveFloorEnemies(WorldMap map) => placeEnemyGenerator.SwitchWorldMap(map);
     public void RespawnWitch() => placeEnemyGenerator.RespawnWitch();
 
     public void DisableAllEnemiesInput()
@@ -42,14 +43,14 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();
 
-    public void MoveFloorCharacters(WorldMap map)
+    public void DestroyCharacters()
     {
-
         // Delete cached all enemy status.
         lifeGaugeGenerator.DestroyAll();
 
         // Enemies and bullets must be destroyed during the same frame.
-        placeEnemyGenerator.SwitchWorldMap(map);
+        placeEnemyGenerator.DestroyAllEnemies();
+        placeEnemyGenerator.DestroyAllEnemyGenerators();
 
         debugEnemyGenerators.ForEach(gen =>
         {

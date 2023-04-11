@@ -70,6 +70,11 @@ public class WorldMap
         }
     }
 
+    public void ClearCharacterOnTileInfo()
+    {
+        ForEachTiles(tile => tile.OnCharacterDest = tile.OnEnemy = tile.AboveEnemy = null);
+    }
+
     public void ApplyTileOpen()
     {
         if (tileOpenPosList == null) return;

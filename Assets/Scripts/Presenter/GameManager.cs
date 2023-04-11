@@ -257,7 +257,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         hidePlateHandler.OnMoveFloor();
 
-        // Deny enemies to access WorldMap
+        // Forbid enemies to access WorldMap
         spawnHandler.DisableAllEnemiesInput();
         EnemyCommand.ClearResetTweens();
 
@@ -277,15 +277,15 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mainCamera.SwitchFloor(nextFloorMap.floor);
         yield return new WaitForEndOfFrame();
 
-        // Update WorldMap just before respawn enemies.
-        worldMap = nextFloorMap;
+        // Clear character on tile info just before delete all enemies.
+        worldMap.ClearCharacterOnTileInfo();
 
         // Stored floor enemies are respawn in this method.
-        spawnHandler.MoveFloorCharacters(nextFloorMap);
+        spawnHandler.DestroyCharacters();
+        yield return new WaitForSeconds(0.5f);
 
         eventManager.SwitchWorldMap(nextFloorMap);
-
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForEndOfFrame();
 
         mapRenderer.SetActiveTerrains(false);
         yield return new WaitForEndOfFrame();
@@ -293,7 +293,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.DestroyObjects();
         yield return new WaitForEndOfFrame();
 
-        mapRenderer.LoadFloorMaterials(nextFloorMap);
+        mapRenderer.LoadFloorMaterials(nextFloorMap); // Switch world map for MapRenderer
         yield return new WaitForEndOfFrame();
 
         mapRenderer.InitMeshes();
@@ -314,7 +314,12 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.ApplyTileOpen(nextFloorMap);
         yield return new WaitForEndOfFrame();
 
-        spawnHandler.MoveFloorItems(nextFloorMap);
+        spawnHandler.MoveFloorItems(nextFloorMap); // Switch world map for ItemGenerator
+        yield return new WaitForEndOfFrame();
+
+        // Update WorldMap just before respawn enemies. EnemyMapUtil refers to this "worldMap" on spawn.
+        worldMap = nextFloorMap;
+        spawnHandler.MoveFloorEnemies(nextFloorMap); // Switch world map for PlaceEnemyGenerator
         yield return new WaitForEndOfFrame();
 
         spawnHandler.PlaceEnemyGenerators();
