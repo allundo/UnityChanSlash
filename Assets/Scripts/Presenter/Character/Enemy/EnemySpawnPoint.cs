@@ -36,9 +36,9 @@ public class EnemySpawnPoint : MonoBehaviour
         }
     }
 
-    public void Destroy()
+    public void Disable()
     {
+        detectPlayer.enabled = false;
         enemyAutoGenerator.Inactivate();
-        Destroy(gameObject);
     }
 }

@@ -35,10 +35,17 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     public void MoveFloorEnemies(WorldMap map) => placeEnemyGenerator.SwitchWorldMap(map);
     public void RespawnWitch() => placeEnemyGenerator.RespawnWitch();
 
-    public void DisableAllEnemiesInput()
+    public void DisableAllEnemyGenerators()
     {
-        debugEnemyGenerators.ForEach(gen => gen.DisableInputAll());
-        placeEnemyGenerator.DisableAllEnemiesInput();
+        debugEnemyGenerators.ForEach(gen => gen.Inactivate());
+        placeEnemyGenerator.DisableAllEnemyGenerators();
+    }
+
+    public void DisableEnemyBehaviorsAll()
+    {
+        debugEnemyGenerators.ForEach(gen => gen.DisableEnemyCommandsAll());
+        placeEnemyGenerator.DisableEnemyCommandsAll();
+        EnemyCommand.ClearResetTweens();
     }
 
     public void EraseAllEnemies() => placeEnemyGenerator.EraseAllEnemies();

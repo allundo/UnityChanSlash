@@ -26,9 +26,9 @@ public class EnemyGenerator : Generator<Status>
     protected virtual IStatus GetPooledObj(Transform pool)
         => pool.FirstOrDefault(t => !t.gameObject.activeSelf)?.GetComponent<Status>();
 
-    public void DisableInputAll()
+    public virtual void DisableEnemyCommandsAll()
     {
-        pool.ForEach(t => t.GetComponent<InputHandler>().DisableInput());
+        pool.ForEach(t => t.GetComponent<InputHandler>().ClearAll());
     }
 
     public override void DestroyAll()

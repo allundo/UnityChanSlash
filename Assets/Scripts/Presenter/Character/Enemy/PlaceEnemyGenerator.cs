@@ -186,10 +186,10 @@ public class PlaceEnemyGenerator : EnemyGenerator
         SpawnWitch(map.SearchSpaceNearBy(info.Pos, 3), info.Dir.Backward, 300f);
         isWitchReserved = false;
     }
-    public void DisableAllEnemiesInput()
+    public override void DisableEnemyCommandsAll()
     {
         enemyPool.ForEach(
-            kv => kv.Value.transform?.ForEach(t => t.GetComponent<InputHandler>().DisableInput())
+            kv => kv.Value.transform?.ForEach(t => t.GetComponent<InputHandler>().ClearAll())
         );
     }
 
@@ -209,8 +209,13 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     public void DestroyAllEnemyGenerators()
     {
-        generatorPool.ForEach(generator => generator.Destroy());
+        generatorPool.ForEach(generator => Destroy(generator.gameObject));
         generatorPool.Clear();
+    }
+
+    public void DisableAllEnemyGenerators()
+    {
+        generatorPool.ForEach(generator => generator.Disable());
     }
 
     public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData = null)

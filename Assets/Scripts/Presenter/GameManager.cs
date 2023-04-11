@@ -257,13 +257,15 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         hidePlateHandler.OnMoveFloor();
 
-        // Forbid enemies to access WorldMap
-        spawnHandler.DisableAllEnemiesInput();
-        EnemyCommand.ClearResetTweens();
+        // Stop enemy generating
+        spawnHandler.DisableAllEnemyGenerators();
 
         PlaySnd(SNDType.FloorMove, worldMap.WorldPos(worldMap.StairsEnter(isDownStairs).Key));
 
         yield return new WaitForEndOfFrame();
+
+        // Stop all enemy behaviors
+        spawnHandler.DisableEnemyBehaviorsAll();
 
         // Wait for screenshot is applied to forefront Image
         yield return new WaitForEndOfFrame();
