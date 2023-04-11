@@ -384,8 +384,8 @@ public class WorldMap
     private KeyValuePair<Pos, IDirection> stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(), null);
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
-    public Pos StairsEnterPos(bool isDownStairs) => (isDownStairs ? stairsTop : stairsBottom).Key;
-    public Pos StairsExitPos(bool isDownStairs) => StairsEnterPos(!isDownStairs);
+    public KeyValuePair<Pos, IDirection> StairsEnter(bool isDownStairs) => isDownStairs ? stairsTop : stairsBottom;
+    public KeyValuePair<Pos, IDirection> StairsExit(bool isDownStairs) => StairsEnter(!isDownStairs);
 
     public DataStoreAgent.PosList[] ExportRandomMessagePos()
     {

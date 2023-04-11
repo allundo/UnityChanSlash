@@ -86,7 +86,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     }
 #endif
 
-    public WorldMap Map(int floor)
+    public WorldMap Map(int floor, bool createNew = true)
     {
         if (floor == 0)
         {
@@ -105,7 +105,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         if (floor > 0 && floor <= LastFloor)
         {
             int size = mapSize[floor - 1];
-            return maps[floor - 1] = (maps[floor - 1] ?? new WorldMap(floor, size, size));
+
+            if (createNew) maps[floor - 1] = (maps[floor - 1] ?? new WorldMap(floor, size, size));
+
+            return maps[floor - 1];
         }
 
         return null;

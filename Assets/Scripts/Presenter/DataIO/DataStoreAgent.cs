@@ -458,7 +458,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         var gameManager = GameManager.Instance;
         var map = gameManager.worldMap;
 
-        var stairsEnterPos = map.StairsEnterPos(isDownStair);
+        var stairsEnterPos = map.StairsEnter(isDownStair).Key;
         int nextFloor = gameInfo.currentFloor + (isDownStair ? 1 : -1);
 
 #if UNITY_EDITOR
@@ -471,7 +471,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
 #endif
         var data = PlayerInfo.Instance.ExportRespawnData();
-        if (!isDownStair) data.kvPosDir = gameInfo.Map(nextFloor).stairsTop;
+        var nextMap = gameInfo.Map(nextFloor, false);
+        if (nextMap != null) data.kvPosDir = nextMap.StairsExit(isDownStair);
 
         saveData = new SaveData()
         {

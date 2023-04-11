@@ -261,13 +261,14 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.DisableAllEnemiesInput();
         EnemyCommand.ClearResetTweens();
 
-        PlaySnd(SNDType.FloorMove, worldMap.WorldPos(worldMap.StairsEnterPos(isDownStairs)));
+        PlaySnd(SNDType.FloorMove, worldMap.WorldPos(worldMap.StairsEnter(isDownStairs).Key));
 
         yield return new WaitForEndOfFrame();
 
         // Wait for screenshot is applied to forefront Image
         yield return new WaitForEndOfFrame();
 
+        // GameInfo.currentFloor is set to next floor
         var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
 
         playerCollider.enabled = false;
