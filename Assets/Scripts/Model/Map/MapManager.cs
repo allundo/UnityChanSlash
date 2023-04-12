@@ -95,6 +95,9 @@ public class MapManager
 
         SetDownStairs(floor);
         SetUpStairsOrStartDoor(floor);
+
+        deadEndPos = deadEndPos.Shuffle();
+
         SetPitAndMessageBoards(floor);
     }
 
@@ -161,6 +164,7 @@ public class MapManager
             this.deadEndPos = new MatrixHandler(matrix, width).SearchDeadEnds();
             SetDownStairs(floor);
             SetUpStairsOrStartDoor(floor);
+            this.deadEndPos = this.deadEndPos.Shuffle();
         }
     }
 

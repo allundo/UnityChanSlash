@@ -67,4 +67,9 @@ static public class CollectionsExtensions
         }
         return false;
     }
+
+    static public Dictionary<K, V> Shuffle<K, V>(this Dictionary<K, V> dictionary)
+    {
+        return dictionary.OrderBy(elem => Guid.NewGuid()).ToDictionary(x => x.Key, x => x.Value);
+    }
 }
