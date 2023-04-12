@@ -214,7 +214,6 @@ public class PlayerRun : PlayerDash
         }
         else
         {
-            playerInput.SetSubUIEnable(true);
             input.Interrupt(brakeAndBackStep, false);
             return Observable.Empty<Unit>();
         }
@@ -305,6 +304,8 @@ public class PlayerBrakeAndBackStep : PlayerBrake
 
     public override IObservable<Unit> Execute()
     {
+        playerInput.SetSubUIEnable(true);
+
         playingTween = tweenMove.BrakeAndBack();
         validateTween = ValidateTween().Play();
         completeTween = DampenSpeed(playerAnim.brakeAndBackStep.Fire);
@@ -320,6 +321,9 @@ public class PlayerJump : PlayerCommand
     protected override bool Action()
     {
         playerAnim.jump.Fire();
+
+        // Enable sub UIs when run and jumping without braking.
+        playerInput.SetSubUIEnable(true);
 
         playingTween = tweenMove
             .JumpLeap(
