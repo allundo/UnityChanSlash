@@ -621,4 +621,15 @@ public class PlayerInput : ShieldInput, IPlayerInput
                 .AddTo(playerInput.gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    void OnGUI()
+    {
+        Rect rect = new Rect(440, 40, 200, 30);
+        if (GUI.Button(rect, "Teleport"))
+        {
+            Interrupt(new PlayerDebugTeleport(playerTarget));
+        }
+    }
+#endif
 }

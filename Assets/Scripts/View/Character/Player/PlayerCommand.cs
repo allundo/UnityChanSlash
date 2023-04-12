@@ -979,3 +979,29 @@ public class PlayerGuardCommand : GuardCommand
         return this;
     }
 }
+
+#if UNITY_EDITOR
+
+public class PlayerDebugTeleport : PlayerAction
+{
+    public PlayerDebugTeleport(PlayerCommandTarget target) : base(target, 10f)
+    { }
+
+    protected override bool Action()
+    {
+        var worldMap = GameManager.Instance.worldMap;
+        var dest = worldMap.stairsTop.Key;
+
+        if (map.onTilePos == dest) dest = worldMap.StairsBottom.Key;
+
+        mobReact.OnFall();
+        playingTween = tweenMove.Linear(dest, 1, () =>
+        {
+            hidePlateHandler.Turn();
+            mobReact.OnWakeUp();
+        });
+        return true;
+    }
+
+#endif
+}
