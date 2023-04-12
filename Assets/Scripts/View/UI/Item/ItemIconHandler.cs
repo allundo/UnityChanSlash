@@ -482,7 +482,6 @@ public class ItemIconHandler : IItemIconHandler
             {
                 pressedInventory.ExpandNum(pressedIndex);
 
-                selector.SetRaycast(false);
                 selector.SetSelect(pressedInventory.UIPos(pressedIndex), false);
                 selectedInventory = pressedInventory;
 

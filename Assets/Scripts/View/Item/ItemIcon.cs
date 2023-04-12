@@ -1,5 +1,4 @@
 using UnityEngine;
-using UniRx;
 using System;
 using DG.Tweening;
 
@@ -71,6 +70,12 @@ public class ItemIcon : UISymbol
         moveTween?.Complete(true);
         moveTween = Move(destPos, duration).SetDelay(delay).Play();
         return moveTween;
+    }
+
+    public override UISymbol SetPos(Vector2 pos)
+    {
+        moveTween?.Kill();
+        return base.SetPos(pos);
     }
 
     public Tween Move(Vector2 destPos, float duration = 0.5f)
