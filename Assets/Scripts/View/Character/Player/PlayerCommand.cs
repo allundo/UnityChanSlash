@@ -608,22 +608,30 @@ public class PlayerHandleBox : PlayerAction
         // Cancel the command if forward tile isn't Box or Box isn't controllable or player isn't handling the Box.
         if (boxTile == null || !boxTile.IsControllable || !playerAnim.handOn.Bool) return false;
 
-        bool isOpen = boxTile.IsOpen;
-
-        boxTile.Handle();
-
         // Finish this handling command if player is closing the Box.
-        if (isOpen) return true;
+        if (boxTile.IsOpen)
+        {
+            boxTile.Handle();
+            return true;
+        }
 
         Item item = boxTile.PickItem();
 
-        // Cancel picking up an item if player failed to get item from the Box.
-        if (item == null || !itemInventory.PickUp(item.itemInfo))
+        // Finish this handling command if player is opening an empty Box.
+        if (item == null)
+        {
+            boxTile.Handle();
+            return true;
+        }
+
+        // Cancel this handling command if player cannot pick up the item.
+        if (!itemInventory.PickUp(item.itemInfo))
         {
             boxTile.PutItem(item);
             return false;
         }
 
+        boxTile.Handle();
         playerAnim.getItem.Fire();
         ActiveMessageController.Instance.GetItem(item.itemInfo);
         return true;
