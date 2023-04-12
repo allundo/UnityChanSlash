@@ -62,10 +62,8 @@ public class EventManager : MobGenerator<EventInvoker>
     public void SwitchWorldMap(WorldMap map)
     {
         if (currentFloor > 0) playerDetectEvents[currentFloor - 1].ForEach(evt => evt.Inactivate());
-        playerDetectEvents[map.floor - 1].ForEach(evt =>
-        {
-            evt.Activate(Spawn(), map);
-        });
+
+        playerDetectEvents[map.floor - 1].ForEach(evt => evt.Activate(Spawn(), map));
 
         currentFloor = map.floor;
     }

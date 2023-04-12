@@ -26,13 +26,13 @@ public abstract class PlayerDetectEvent : GameEvent
 
         disposable = invoker.DetectPlayer
             .Where(_ => IsEventValid())
-            .SelectMany(_ => Invoke())      // ContinueWith observes OnCompleted() AFTER OnNext() is sent.
+            .SelectMany(_ => Invoke())
             .Subscribe(_ =>
             {
                 if (isOneShot)
                 {
                     eventEndSubject.OnCompleted();
-                    invoker.Inactivate();
+                    Inactivate();
                 }
                 else
                 {
