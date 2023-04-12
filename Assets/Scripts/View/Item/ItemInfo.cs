@@ -19,7 +19,7 @@ public class ItemInfo : ICloneable
         }
     }
 
-    public IReactiveProperty<int> onNumOfItemChange;
+    private IReactiveProperty<int> onNumOfItemChange;
     public IReadOnlyReactiveProperty<int> OnNumOfItemChange => onNumOfItemChange;
 
     public bool Merge(ItemInfo itemInfo)

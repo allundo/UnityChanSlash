@@ -89,11 +89,7 @@ public class EquipItemsHandler : ItemIndexHandler
 
         info.Subtraction(1);
 
-        if (info.numOfItem > 0)
-        {
-            UpdateItemNum(equipIcon);
-            return true;
-        }
+        if (info.numOfItem > 0) return true;
 
         ActiveMessageController.Instance.BreakItem(info.name);
         return false;

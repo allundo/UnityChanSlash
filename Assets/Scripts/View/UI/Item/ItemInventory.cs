@@ -108,7 +108,7 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     public bool Remove(ItemIcon itemIcon)
     {
         IItemIndexHandler handler = itemIcon.isEquip ? equipItems : inventoryItems;
-        return handler.RemoveItem(itemIcon);
+        return handler.RemoveItem(itemIcon.index);
     }
 
     private bool SetItem(int index, ItemInfo itemInfo)

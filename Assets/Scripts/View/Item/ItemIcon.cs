@@ -14,7 +14,7 @@ public class ItemIcon : UISymbol
     public int index { get; private set; }
     public bool isEquip { get; private set; }
 
-    public IObservable<Unit> OnItemEmpty => itemInfo.OnNumOfItemChange.Where(num => num == 0).Select(_ => Unit.Default);
+    public IObservable<int> OnNumOfItemItemChange => itemInfo.OnNumOfItemChange;
 
     public bool TryMerge(ItemInfo itemInfo)
     {

@@ -13,7 +13,7 @@ public interface IItemIndexHandler
     bool UpdateItemNum(ItemIcon itemIcon);
     void SetItem(int index, ItemIcon itemIcon, bool tweenMove = false);
     void SwitchItem(int index, ItemIcon itemIcon);
-    bool RemoveItem(ItemIcon itemIcon);
+    bool RemoveItem(int index);
     bool hasItem(ItemIcon itemIcon);
     bool hasItemType(ItemType type);
     ulong SumUpPrices();
@@ -26,7 +26,7 @@ public abstract class ItemIndexHandler : IItemIndexHandler
     public int HEIGHT { get; protected set; }
     public int MAX_ITEMS { get; protected set; }
 
-    protected IDisposable[] itemEmptyCheck;
+    protected IDisposable[] itemNumCheck;
     protected ItemPanel[] panels;
 
     protected Transform uiTf;
@@ -72,7 +72,7 @@ public abstract class ItemIndexHandler : IItemIndexHandler
             )
             .ToArray();
 
-        itemEmptyCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
+        itemNumCheck = Enumerable.Repeat<IDisposable>(null, MAX_ITEMS).ToArray();
 
         currentSelected = MAX_ITEMS;
     }
@@ -135,36 +135,42 @@ public abstract class ItemIndexHandler : IItemIndexHandler
     {
         StoreItem(index, itemIcon);
 
-        itemEmptyCheck[index]?.Dispose();
+        itemNumCheck[index]?.Dispose();
 
         if (itemIcon != null)
         {
             if (tweenMove) itemIcon.MoveExclusive(UIPos(index));
 
             itemIcon.SetIndex(index);
-            UpdateItemNum(itemIcon);
 
-            itemEmptyCheck[index] = itemIcon.OnItemEmpty
-                .Subscribe(_ => RemoveItem(itemIcon))
+            itemNumCheck[index] = itemIcon.OnNumOfItemItemChange
+                .Subscribe(numOfItem => SetItemNum(index, numOfItem))
                 .AddTo(itemIcon);
         }
         else
         {
             panels[index].SetItemNum(0);
-            itemEmptyCheck[index] = null;
+            itemNumCheck[index] = null;
         }
     }
 
-    public bool RemoveItem(ItemIcon itemIcon)
+    protected void SetItemNum(int index, int numOfItem)
     {
+        panels[index].SetItemNum(numOfItem);
+        if (numOfItem == 0) RemoveItem(index);
+    }
+
+    public bool RemoveItem(int index)
+    {
+        var itemIcon = GetItem(index);
         if (itemIcon == null) return false;
 
-        itemEmptyCheck[itemIcon.index]?.Dispose();
-        itemEmptyCheck[itemIcon.index] = null;
+        itemNumCheck[index]?.Dispose();
+        itemNumCheck[index] = null;
 
         itemIcon.Inactivate();
-        SetItem(itemIcon.index, null);
-        panels[itemIcon.index].SetItemNum(0);
+        SetItem(index, null);
+        panels[index].SetItemNum(0);
 
         return true;
     }

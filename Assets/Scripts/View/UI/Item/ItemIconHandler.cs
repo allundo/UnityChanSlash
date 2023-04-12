@@ -254,6 +254,7 @@ public class ItemIconHandler : IItemIconHandler
 
             if (currentTarget != currentSelected)
             {
+                cancelSelect?.Dispose();
                 selector.SetRaycast(false);
                 selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
@@ -275,10 +276,11 @@ public class ItemIconHandler : IItemIconHandler
             handler.SelectEquipment();
             selectedInventory = pressedInventory;
 
-            cancelSelect?.Dispose();
-
-            // Disable selector when selected item is empty.
-            cancelSelect = currentSelected.OnItemEmpty.Subscribe(_ => selector.Disable()).AddTo(selector);
+            // Clean up to normal mode when selected item gets to be empty.
+            cancelSelect = currentSelected.OnNumOfItemItemChange
+                .Where(num => num == 0)
+                .Subscribe(_ => handler.CleanUp())
+                .AddTo(selector);
 
             selector.SetRaycast(true);
             return handler.selectMode;
@@ -382,13 +384,7 @@ public class ItemIconHandler : IItemIconHandler
             bool isEquip = selected.itemInfo.attr == ItemAttr.Equipment;
 
             // In the case of item use. Also KeyBlade is usable.
-            if (!isEquip)
-            {
-                onUseItem.OnNext(selected.itemInfo);
-                selectedInventory.UpdateItemNum(selected);
-            }
-
-            if (selected.itemInfo.numOfItem == 0) return CleanUp();
+            if (!isEquip) onUseItem.OnNext(selected.itemInfo);
 
             // In the case of item equipment from inventory items.
             if (selectedEquipment != null && selectedInventory is InventoryItemsHandler)
