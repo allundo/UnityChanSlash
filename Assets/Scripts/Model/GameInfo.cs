@@ -237,11 +237,11 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public void ClearMaps()
     {
         maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR + 1).ToArray();
-        mapSize = Enumerable.Repeat(49, MAX_FLOOR + 1).ToArray();
+        mapSize = Enumerable.Repeat(41, MAX_FLOOR + 1).ToArray();
         currentFloor = 1;
 
         mapSize[0] = 19;
-        mapSize[1] = 35;
+        mapSize[1] = 31;
         mapSize[LastFloor - 1] = 29;
 
         maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds()));
