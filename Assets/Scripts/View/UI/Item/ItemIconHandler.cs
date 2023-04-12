@@ -497,6 +497,7 @@ public class ItemIconHandler : IItemIconHandler
         public override IItemIconHandler CleanUp()
         {
             onPutItem.OnNext(null);
+            selectedInventory.UpdateItemNum(currentSelected);
             currentSelected.MoveExclusive(selectedInventory.UIPos(currentSelected.index), 0.5f, 0.1f);
             return BaseCleanUp();
         }
