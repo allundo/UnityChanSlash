@@ -108,11 +108,10 @@ public class ResultUIHandler : MonoBehaviour
             .Join(level.Centering(0f, duration))
             .Join(strength.Centering(0f, duration))
             .Join(magic.Centering(0f, duration))
-            .Append(titleButton.Show())
-            .AppendCallback(() => PlayRankIn(clearRank, clearRecord));
+            .AppendCallback(() => PlayRankIn(clearRank, clearRecord, titleButton.Show()));
     }
 
-    public Tween PlayRankIn(int rank, DataStoreAgent.ClearRecord clearRecord)
+    public Tween PlayRankIn(int rank, DataStoreAgent.ClearRecord clearRecord, Tween showTitleButton)
     {
         record.gameObject.SetActive(true);
         record.ResetPosition(new Vector2(0f, -580f));
@@ -132,6 +131,8 @@ public class ResultUIHandler : MonoBehaviour
             message.ResetOrientation(DeviceOrientation.Portrait);
             seq.Append(message.RankInTween());
         }
+
+        seq.Append(showTitleButton);
 
         return seq.Play();
     }
