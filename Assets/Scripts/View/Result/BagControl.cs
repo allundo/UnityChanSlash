@@ -16,6 +16,9 @@ public class BagControl
 
     private Rigidbody sphereBody;
 
+    private AudioSource caughtSnd = null;
+    private AudioSource shakeSnd = null;
+
     public BagControl(ulong wagesAmount, GroundCoinGenerator generator)
     {
         if (wagesAmount > 10000000)
@@ -39,6 +42,9 @@ public class BagControl
 
         bagSource = ResourceLoader.Instance.YenBagSource(bagSize);
         bag = Util.Instantiate(bagSource.prefabYenBag);
+
+        caughtSnd = Util.Instantiate(bagSource.prefabCaughtSnd);
+        shakeSnd = Util.Instantiate(bagSource.prefabShakeSnd);
 
         sphereBody = bag.GetComponent<Rigidbody>();
         sphereBody.useGravity = false;
@@ -67,6 +73,8 @@ public class BagControl
 
     private void CaughtBy(Transform parent)
     {
+        caughtSnd?.PlayEx();
+
         sphereBody.useGravity = false;
         sphereBody.velocity = Vector3.zero;
 
@@ -77,14 +85,21 @@ public class BagControl
 
     public void UpHoldResetPosition()
     {
-        bagMoveTween?.Kill();
-        bagRotateTween?.Kill();
-        bagTf.DOLocalMove(bagSource.rightHandOffsets[1], 0.5f).Play();
-        bagTf.DOLocalRotate(bagSource.catchAngles[1], 0.5f).Play();
+        shakeSnd?.PlayEx();
+
+        if (bagSize == BagSize.Big)
+        {
+            bagMoveTween?.Kill();
+            bagRotateTween?.Kill();
+            bagTf.DOLocalMove(bagSource.rightHandOffsets[1], 0.5f).Play();
+            bagTf.DOLocalRotate(bagSource.catchAngles[1], 0.5f).Play();
+        }
     }
 
     public void CarryingResetPosition()
     {
+        shakeSnd?.PlayEx();
+
         bagTf.DOLocalMove(bagSource.rightHandOffsets[2], 0.5f).Play();
         bagTf.DOLocalRotate(bagSource.catchAngles[2], 0.5f).Play();
     }

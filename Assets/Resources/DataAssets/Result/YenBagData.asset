@@ -27,6 +27,9 @@ MonoBehaviour:
     dropDelay: 0.65
     prefabYenBag: {fileID: 7311533902124115277, guid: c6b58027e66504b569d912388fc94a8f,
       type: 3}
+    prefabCaughtSnd: {fileID: 1069970021194800848, guid: ff1bb8602a7604746b92fddccaa44cfb,
+      type: 3}
+    prefabShakeSnd: {fileID: 0}
   - name: "\u4E2D\u888B"
     coinScale: 0.25
     startPosition: {x: 0, y: 5, z: 0.4}
@@ -40,6 +43,10 @@ MonoBehaviour:
     - {x: -5.606, y: -58.089, z: -27.344}
     dropDelay: 1
     prefabYenBag: {fileID: 616785935331266334, guid: 92898bc3d24ed41bfb7057bc37b99d95,
+      type: 3}
+    prefabCaughtSnd: {fileID: 6662307642341175567, guid: 3f2ea07c21957455689ae1851efc94c1,
+      type: 3}
+    prefabShakeSnd: {fileID: 5029976774047383004, guid: 5fb621ecd00e041eba2a4dbb0e744af2,
       type: 3}
   - name: "\u5927\u888B"
     coinScale: 0.5
@@ -55,6 +62,10 @@ MonoBehaviour:
     dropDelay: 1
     prefabYenBag: {fileID: 5303064818832279925, guid: 9d720bed7abbc4d889f83f10e498a8bb,
       type: 3}
+    prefabCaughtSnd: {fileID: 4609498043833959826, guid: eeb2389a391df4f81b73d51040837e1d,
+      type: 3}
+    prefabShakeSnd: {fileID: 6114631182666571851, guid: 16a8cb307e02f473590d790ad2b41dae,
+      type: 3}
   - name: "\u5DE8\u888B"
     coinScale: 1
     startPosition: {x: 0, y: 5, z: -0.25}
@@ -69,3 +80,5 @@ MonoBehaviour:
     dropDelay: 0.65
     prefabYenBag: {fileID: 8504761741954600432, guid: e41b5396754f84b8485d972ca5ada2ea,
       type: 3}
+    prefabCaughtSnd: {fileID: 0}
+    prefabShakeSnd: {fileID: 0}

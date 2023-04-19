@@ -7,6 +7,7 @@ using DG.Tweening;
 public class ToTitleButton : FadeEnable
 {
     [SerializeField] private ToTitleEffect txtToTitle = default;
+    [SerializeField] private AudioSource pressSnd = default;
 
     public IObservable<Unit> OnPush => button.OnClickAsObservable();
 
@@ -33,6 +34,7 @@ public class ToTitleButton : FadeEnable
     public Tween Apply(float duration = 0.1f)
     {
         return DOTween.Sequence()
+            .AppendCallback(() => pressSnd.PlayEx())
             .AppendCallback(() => button.enabled = false)
             .Join(FadeOut(duration))
             .Join(ui.Resize(1.5f, duration))

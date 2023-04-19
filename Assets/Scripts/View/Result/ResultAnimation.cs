@@ -62,7 +62,7 @@ public class ResultAnimation : MonoBehaviour
         return labelUI.MoveX(vecX, duration);
     }
 
-    protected void UpdateDisplay(int count)
+    protected virtual void UpdateDisplay(int count)
     {
         valueTxt.text = ValueFormat(prevValue + (ulong)count);
     }

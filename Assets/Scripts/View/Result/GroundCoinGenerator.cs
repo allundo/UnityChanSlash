@@ -5,6 +5,8 @@ public class GroundCoinGenerator : MonoBehaviour
 {
     [SerializeField] private Rigidbody prefabGroundCoin = default;
     [SerializeField] private GameObject ground = default;
+    [SerializeField] private AudioSource dropSnd01 = default;
+    [SerializeField] private AudioSource dropSnd02 = default;
 
     public GameObject Ground => ground;
 
@@ -16,6 +18,11 @@ public class GroundCoinGenerator : MonoBehaviour
         instance.velocity = inherit.velocity;
         instance.angularVelocity = inherit.angularVelocity;
         instance.gameObject.SetActive(true);
+
+        var snd = (Util.Judge(2) ? dropSnd01 : dropSnd02);
+        snd.SetPitch(Random.Range(0.95f, 1.05f));
+        snd.PlayEx();
+
         return instance;
     }
 

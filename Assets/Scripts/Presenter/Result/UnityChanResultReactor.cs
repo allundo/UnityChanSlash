@@ -7,6 +7,7 @@ public class UnityChanResultReactor : MonoBehaviour
     [SerializeField] private SphereCollider headCollider = default;
     [SerializeField] private SphereCollider footCollider = default;
     [SerializeField] private SphereCollider handCollider = default;
+    [SerializeField] private AudioSource pressSnd = default;
 
     private CapsuleCollider col;
     private ResultFaceAnimator anim;
@@ -78,5 +79,7 @@ public class UnityChanResultReactor : MonoBehaviour
         anim.drop.Fire();
 
         springManager.Pause();
+
+        pressSnd.PlayEx();
     }
 }

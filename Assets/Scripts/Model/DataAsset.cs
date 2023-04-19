@@ -246,6 +246,8 @@ public class YenBagSource
     [SerializeField] public Vector3[] catchAngles = default;
     [SerializeField] public float dropDelay = 0.65f;
     [SerializeField] public YenBag prefabYenBag = default;
+    [SerializeField] public AudioSource prefabCaughtSnd = default;
+    [SerializeField] public AudioSource prefabShakeSnd = default;
 }
 
 [System.Serializable]

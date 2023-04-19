@@ -135,6 +135,7 @@ MonoBehaviour:
     type: 3}
   cloth: {fileID: 13}
   box: {fileID: 7550552779065667520}
+  caughtSnd: {fileID: 0}
 --- !u!1 &7550552779065667522
 GameObject:
   m_ObjectHideFlags: 0

@@ -248,6 +248,7 @@ MonoBehaviour:
     type: 3}
   cloth: {fileID: 4584311364081140872}
   box: {fileID: 6293302582095637317}
+  caughtSnd: {fileID: 0}
 --- !u!1001 &554721156732647018
 PrefabInstance:
   m_ObjectHideFlags: 0

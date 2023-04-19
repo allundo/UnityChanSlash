@@ -83,7 +83,7 @@ public class ResultSceneMediator : SceneMediator
 
         GameInfo gameInfo = GameInfo.Instance;
 
-        gameInfo.TotalClearCounts(counter, 3000, 171717);
+        gameInfo.TotalClearCounts(counter, 100, 171717);
         gameInfo.clearRank = 1;
         gameInfo.level = 10;
 

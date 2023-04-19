@@ -5,9 +5,11 @@ using TMPro;
 
 public class TitleDisplay : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI titleTxt;
-    [SerializeField] private TextMeshProUGUI labelTxt;
-    [SerializeField] private Image strokeImage;
+    [SerializeField] private TextMeshProUGUI titleTxt = default;
+    [SerializeField] private TextMeshProUGUI labelTxt = default;
+    [SerializeField] private Image strokeImage = default;
+    [SerializeField] private AudioSource titleShowSnd = default;
+    [SerializeField] private AudioSource titleStrokeSnd = default;
 
     private Image bgImage;
     private RectTransform bgRT;
@@ -66,6 +68,7 @@ public class TitleDisplay : MonoBehaviour
             .Join(titleFade.In(duration * 0.3f, 0, null, null, false).SetEase(Ease.InCubic))
             .Join(titleUI.Resize(1.05f, duration * 0.3f).SetEase(Ease.InCubic))
             .AppendCallback(wagesTweenPlayer)
+            .AppendCallback(() => titleShowSnd.PlayEx())
             .Append(titleUI.PunchY(20f, duration * 0.1f, 20))
             .Append(titleUI.Resize(1f, duration * 0.1f))
             .AppendInterval(duration * 0.2f)
@@ -139,6 +142,6 @@ public class TitleDisplay : MonoBehaviour
 
     private Tween StrokeFill(float duration)
     {
-        return DOVirtual.Float(0f, 1f, duration, value => strokeImage.fillAmount = value);
+        return DOVirtual.Float(0f, 1f, duration, value => strokeImage.fillAmount = value).OnPlay(() => titleStrokeSnd.PlayEx());
     }
 }

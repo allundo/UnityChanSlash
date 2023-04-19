@@ -8,6 +8,8 @@ public class WagesAnimation : ResultAnimation
 
     [SerializeField] private TextMeshProUGUI wagesTxt = default;
     [SerializeField] private Color addEffectColor = default;
+    [SerializeField] private AudioSource countUpSnd = default;
+    [SerializeField] private AudioSource getWageSnd = default;
 
     protected Tween valueTween;
     protected Tween prevTween;
@@ -41,6 +43,7 @@ public class WagesAnimation : ResultAnimation
                 prevValue = value;
                 value += (ulong)addValue;
                 moneyEffect?.Play();
+                getWageSnd.PlayEx();
             })
             .Join(valueUI.PunchY(strength * 100f, duration, 30))
             .Join(valueUI.Resize(1f, duration * 0.25f))
@@ -49,5 +52,11 @@ public class WagesAnimation : ResultAnimation
             .Play();
 
         return valueTween;
+    }
+
+    protected override void UpdateDisplay(int count)
+    {
+        valueTxt.text = ValueFormat(prevValue + (ulong)count);
+        countUpSnd.PlayEx();
     }
 }
