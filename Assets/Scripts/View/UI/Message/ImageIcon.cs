@@ -6,7 +6,7 @@ public class ImageIcon : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI tmpCaption = default;
 
-    private readonly Vector2 spaceCaption = new Vector2(0f, 20f);
+    private readonly Vector2 spaceCaption = new Vector2(0f, 40f);
 
     private Vector2 defaultPos;
 
