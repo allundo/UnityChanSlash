@@ -846,7 +846,10 @@ public class PlayerItem : PlayerAction
 
     protected override bool Action()
     {
-        playingTween = itemInfo.EffectSequence(playerTarget)?.Play();
+        Tween effect = itemInfo.EffectSequence(playerTarget);
+        if (effect == null) return false;
+
+        playingTween = effect.Play();
         return true;
     }
 }

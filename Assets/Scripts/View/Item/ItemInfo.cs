@@ -108,6 +108,7 @@ public class ItemInfo : ICloneable
 
     protected bool ItemUse(PlayerCommandTarget target)
     {
+        if (numOfItem <= 0) return false;
         int useCount = itemAction.Action(target);
         numOfItem -= useCount;
         return useCount > 0;

@@ -383,6 +383,9 @@ public class ItemIconHandler : IItemIconHandler
             // In the case of item use. Also KeyBlade is usable.
             if (!isEquip) onUseItem.OnNext(selected.itemInfo);
 
+            // Back to normal mode if the item is used up to empty.
+            if (currentSelected == null) return handler.normalMode;
+
             // In the case of item equipment from inventory items.
             var selectedEquipment = handler.GetEquipmentSource(currentSelected);
             if (selectedEquipment != null && selectedInventory is InventoryItemsHandler)
