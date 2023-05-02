@@ -51,7 +51,7 @@ public class ItemPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         rtNumOfItem.localPosition = transform.localPosition;
     }
 
-    public void ExpandNum(Transform inventoryTf)
+    public void ExpandNum()
     {
         tmpNumOfItem.fontSize = fontSize * 1.5f;
         rtNumOfItem.sizeDelta = expand;

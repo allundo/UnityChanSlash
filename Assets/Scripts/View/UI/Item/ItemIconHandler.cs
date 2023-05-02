@@ -63,11 +63,11 @@ public class ItemIconHandler : IItemIconHandler
 
     protected IItemIndexHandler pressedInventory;
     protected IItemIndexHandler selectedInventory;
-    protected EquipmentSource selectedEquipment;
     protected ResourceLoader resourceLoader;
-    protected void SelectEquipment()
+
+    protected EquipmentSource GetEquipmentSource(ItemIcon item)
     {
-        selectedEquipment = resourceLoader.GetEquipmentSource(currentSelected.itemInfo.type);
+        return resourceLoader.GetEquipmentSource(item.itemInfo.type);
     }
 
     protected InventoryItemsHandler inventoryItems;
@@ -107,7 +107,6 @@ public class ItemIconHandler : IItemIconHandler
         pressedIndex = inventoryItems.MAX_ITEMS;
 
         pressedInventory = selectedInventory = null;
-        selectedEquipment = null;
 
         currentMode = normalMode = new NormalMode(this);
         selectMode = new SelectMode(this);
@@ -204,11 +203,7 @@ public class ItemIconHandler : IItemIconHandler
             get { return handler.selectedInventory; }
             set { handler.selectedInventory = value; }
         }
-        protected EquipmentSource selectedEquipment
-        {
-            get { return handler.selectedEquipment; }
-            set { handler.selectedEquipment = value; }
-        }
+
         protected IDisposable cancelSelect
         {
             get { return handler.cancelSelect; }
@@ -226,19 +221,21 @@ public class ItemIconHandler : IItemIconHandler
             equipItems = handler.equipItems;
         }
 
-        public IItemIconHandler OnPress(int index)
+        public virtual IItemIconHandler OnPress(int index)
         {
+            var prev = pressedInventory;
             pressedInventory = inventoryItems;
-            return OnPressInventory(index);
+            return OnPressInventory(index, prev);
         }
 
         public virtual IItemIconHandler OnPressEquipment(int index)
         {
+            var prev = pressedInventory;
             pressedInventory = equipItems;
-            return OnPressInventory(index);
+            return OnPressInventory(index, prev);
         }
 
-        protected virtual IItemIconHandler OnPressInventory(int index)
+        protected virtual IItemIconHandler OnPressInventory(int index, IItemIndexHandler prevInventory)
         {
             handler.StopPressing();
 
@@ -259,6 +256,7 @@ public class ItemIconHandler : IItemIconHandler
                 selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
                 handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
                 pressedIndex = index;
+                prevInventory?.ShrinkNum();
                 pressedInventory.ExpandNum(index);
             }
 
@@ -273,7 +271,6 @@ public class ItemIconHandler : IItemIconHandler
 
             if (currentSelected == null) return this;
 
-            handler.SelectEquipment();
             selectedInventory = pressedInventory;
 
             // Clean up to normal mode when selected item gets to be empty.
@@ -306,11 +303,10 @@ public class ItemIconHandler : IItemIconHandler
             handler.PlaySize(currentSelected?.Resize(1f, 0.2f));
             currentSelected = null;
             pressedIndex = inventoryItems.MAX_ITEMS;
-            inventoryItems.ExpandNum(inventoryItems.MAX_ITEMS);
-            equipItems.ExpandNum(inventoryItems.MAX_ITEMS);
+            inventoryItems.ShrinkNum();
+            equipItems.ShrinkNum();
 
             pressedInventory = selectedInventory = null;
-            selectedEquipment = null;
 
             selector.SetRaycast(false);
             selector.Disable();
@@ -327,7 +323,7 @@ public class ItemIconHandler : IItemIconHandler
 
         protected void EquipMessage(ItemIcon equipment)
         {
-            if (!equipment.isEquip)
+            if (equipment != null)
             {
                 ActiveMessageController.Instance.Equip(equipment.itemInfo.name);
             }
@@ -340,7 +336,7 @@ public class ItemIconHandler : IItemIconHandler
 
         public SelectMode(ItemIconHandler handler) : base(handler) { }
 
-        protected override IItemIconHandler OnPressInventory(int index)
+        protected override IItemIconHandler OnPressInventory(int index, IItemIndexHandler prevInventory)
         {
             handler.StopPressing();
 
@@ -363,6 +359,7 @@ public class ItemIconHandler : IItemIconHandler
 
             handler.PlaySize(currentTarget.Resize(1.5f, 0.2f));
             pressedIndex = index;
+            prevInventory?.ShrinkNum();
             pressedInventory.ExpandNum(index);
 
             return handler.normalMode;
@@ -387,6 +384,7 @@ public class ItemIconHandler : IItemIconHandler
             if (!isEquip) onUseItem.OnNext(selected.itemInfo);
 
             // In the case of item equipment from inventory items.
+            var selectedEquipment = handler.GetEquipmentSource(currentSelected);
             if (selectedEquipment != null && selectedInventory is InventoryItemsHandler)
             {
                 if (equipItems.isEnable)
@@ -418,31 +416,40 @@ public class ItemIconHandler : IItemIconHandler
     protected class DragMode : NormalMode
     {
         public ISubject<ItemIcon> onPutItem { get; protected set; } = new Subject<ItemIcon>();
-        private bool IsValidEquipment(int index)
-        {
-            if (selectedEquipment == null) return false;
 
-            if (index == 1) return selectedEquipment.category == EquipmentCategory.Amulet; // Equip body
-            return selectedEquipment.category != EquipmentCategory.Amulet;                 // Equip R or L
+        private bool IsValidEquipment(int equipIndex, ItemIcon equipItem)
+        {
+            if (equipItem == null) return true;
+
+            var equipment = handler.GetEquipmentSource(equipItem);
+
+            if (equipment == null) return false;
+
+            if (equipIndex == 1) return equipment.category == EquipmentCategory.Amulet; // Equip body
+            return equipment.category != EquipmentCategory.Amulet;                      // Equip R or L
         }
 
         public DragMode(ItemIconHandler handler) : base(handler) { }
 
-        public override IItemIconHandler OnPressEquipment(int index)
+        public override IItemIconHandler OnPress(int index)
         {
-            // Don't set target to equip panel if dragging item isn't equipment.
-            if (IsValidEquipment(index))
+            pressedInventory = inventoryItems;
+
+            // Set target anyway when inventory item is selected.
+            // When equip item is selected, check if pressed item is valid equipment.
+            if (selectedInventory is InventoryItemsHandler || IsValidEquipment(currentSelected.index, pressedInventory.GetItem(index)))
             {
-                pressedInventory = equipItems;
                 SetTarget(index);
             }
             return this;
         }
 
-        protected override IItemIconHandler OnPressInventory(int index)
+        public override IItemIconHandler OnPressEquipment(int index)
         {
-            // Don't set target to inventory panel when setting back equipment to inventory and the target isn't empty.
-            if (selectedInventory is InventoryItemsHandler || pressedInventory.GetItem(index) == null)
+            pressedInventory = equipItems;
+
+            // Don't set target to equip panel if dragging item isn't equipment.
+            if (IsValidEquipment(index, currentSelected))
             {
                 SetTarget(index);
             }
@@ -471,11 +478,13 @@ public class ItemIconHandler : IItemIconHandler
                 currentTarget = null;
             }
 
-            if (pressedInventory is EquipItemsHandler)
+            if (currentSelected.isEquip != pressedInventory is EquipItemsHandler)
             {
-                EquipMessage(currentSelected);
+                EquipMessage(currentSelected.isEquip ? currentTarget : currentSelected);
             }
 
+            inventoryItems.ShrinkNum();
+            equipItems.ShrinkNum();
             pressedInventory.SwitchItem(pressedIndex, currentSelected);
 
             if (pressedInventory is InventoryItemsHandler)

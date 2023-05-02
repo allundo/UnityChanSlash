@@ -8,6 +8,7 @@ public interface IItemIndexHandler
 {
     ItemIcon GetItem(int index);
     Vector2 UIPos(int index);
+    void ShrinkNum();
     void ExpandNum(int index);
     void DeleteNum(int index);
     bool UpdateItemNum(ItemIcon itemIcon);
@@ -182,10 +183,15 @@ public abstract class ItemIndexHandler : IItemIndexHandler
         return true;
     }
 
-    public void ExpandNum(int index)
+    public void ShrinkNum()
     {
         if (currentSelected < MAX_ITEMS) panels[currentSelected].ShrinkNum();
-        if (index < MAX_ITEMS) panels[index].ExpandNum(uiTf);
+        currentSelected = MAX_ITEMS;
+    }
+
+    public void ExpandNum(int index)
+    {
+        if (index < MAX_ITEMS) panels[index].ExpandNum();
         currentSelected = index;
     }
 
