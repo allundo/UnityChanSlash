@@ -122,12 +122,6 @@ public class UndeadSleep : UndeadCommand
 
     public override IObservable<Unit> Execute()
     {
-        var attacker = enemyReact.lastAttacker as IGetExp;
-        if (attacker != null)
-        {
-            attacker.AddExp(enemyReact.ExpObtain);
-        }
-
         playingTween = tweenMove.TurnToDir(1f).Play();
 
         undeadAnim.die.Bool = undeadAnim.sleep.Bool = true;

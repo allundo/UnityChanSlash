@@ -22,5 +22,5 @@ public class SkeletonSoldierReactor : ShieldEnemyReactor, IUndeadReactor
     }
 
     public void OnResurrection() => undeadReact.OnResurrection();
-    public void OnSleep() => undeadReact.OnSleep();
+    public void OnSleep() => undeadReact.OnSleep(lastAttacker as IGetExp, ExpObtain);
 }

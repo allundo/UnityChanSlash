@@ -33,7 +33,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
     }
 
     public void OnResurrection() => undeadReact.OnResurrection();
-    public void OnSleep() => undeadReact.OnSleep();
+    public void OnSleep() => undeadReact.OnSleep(lastAttacker as IGetExp, ExpObtain);
 
     public void OnTeleport(float duration)
     {
