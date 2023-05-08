@@ -64,6 +64,16 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         return false;
     }
 
+    public override void OnDie()
+    {
+        var attacker = lastAttacker as IGetExp;
+        if (attacker != null)
+        {
+            attacker.AddExp(ExpObtain, Type);
+        }
+        base.OnDie();
+    }
+
     /// <summary>
     /// Before being dead, enemies must move out of player's detection on Minimap <br />
     /// since EnemySymbol inactivated OnTriggerExit of the detection.

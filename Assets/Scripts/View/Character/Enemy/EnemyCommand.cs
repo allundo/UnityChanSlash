@@ -232,12 +232,6 @@ public class EnemyDie : EnemyCommand
 
     public override IObservable<Unit> Execute()
     {
-        var attacker = enemyReact.lastAttacker as IGetExp;
-        if (attacker != null)
-        {
-            attacker.AddExp(enemyReact.ExpObtain, enemyReact.Type);
-        }
-
         anim.die.Bool = true;
         react.OnDie();
 
