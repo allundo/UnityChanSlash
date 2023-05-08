@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 009_SwitchToStatus
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u30B9\u30C6\u30FC\u30BF\u30B9\u89E3\u8AAC"
+    sentence: "[\u30B9\u30C6\u30FC\u30BF\u30B9]\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3053\u3068\u3067\u3001\u30DE\u30C3\u30D7\u30A6\u30A3\u30F3\u30C9\u30A6\u304C\u30B9\u30C6\u30FC\u30BF\u30B9\u30A6\u30A3\u30F3\u30C9\u30A6\u306B\u5207\u308A\u66FF\u308F\u308A\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u30B9\u30C6\u30FC\u30BF\u30B9\u8868\u793A\u3011"
+    spriteImage: {fileID: 21300000, guid: 21c8abbea67404e5a9c79cc7ff0ef6e7, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u5207\u66FF\u30DC\u30BF\u30F3"
+    ignoreIfRead: 0
+  - name: "\u30B9\u30C6\u30FC\u30BF\u30B9\u89E3\u8AAC02"
+    sentence: "\u30B9\u30C6\u30FC\u30BF\u30B9\u30A6\u30A3\u30F3\u30C9\u30A6\u306B\u306F\u3001\u30B9\u30C6\u30FC\u30BF\u30B9\u304C\u7C21\u6613\u8868\u793A\u3055\u308C\u307E\u3059\u3002\\n[\u30DE\u30C3\u30D7]\u30DC\u30BF\u30F3\u3092\u62BC\u3059\u3053\u3068\u3067\u3001\u518D\u5EA6\u30DE\u30C3\u30D7\u30A6\u30A3\u30F3\u30C9\u30A6\u306B\u5207\u308A\u66FF\u308F\u308A\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u7C21\u6613\u30B9\u30C6\u30FC\u30BF\u30B9\u3011"
+    spriteImage: {fileID: 21300000, guid: 290ea666076c8495190e1e377a4320b3, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u7C21\u6613\u8868\u793A"
+    ignoreIfRead: 0
+  - name: "\u30B9\u30C6\u30FC\u30BF\u30B9\u89E3\u8AAC03"
+    sentence: "\u30B9\u30C6\u30FC\u30BF\u30B9\u30A6\u30A3\u30F3\u30C9\u30A6\u3092\u30BF\u30C3\u30D7\u3059\u308B\u3053\u3068\u3067\u3001\u30B9\u30C6\u30FC\u30BF\u30B9\u304C\u8A73\u7D30\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u8A73\u7D30\u30B9\u30C6\u30FC\u30BF\u30B9\u3011"
+    spriteImage: {fileID: 21300000, guid: 08a5514e4dd3f45e39dac3600a072779, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u8A73\u7D30\u8868\u793A"
+    ignoreIfRead: 0
