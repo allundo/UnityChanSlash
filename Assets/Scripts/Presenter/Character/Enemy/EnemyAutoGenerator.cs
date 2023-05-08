@@ -56,8 +56,16 @@ public class EnemyAutoGenerator : EnemyGenerator
 
     public void OnTriggerEnter(Collider other)
     {
-        // Cancel spawning when enemy or player is detected nearby
-        if (other.GetComponent<MobStatus>() != null) StopSearchCharacter();
+        if (
+            // Cancel spawning when enemy or player is detected nearby.
+            other.GetComponent<MobStatus>() != null
+
+            // Cancel spawning if this point is inside player view.
+            || (other.GetComponent<MiniMapHandler>() != null && GameManager.Instance.worldMap.IsCurrentViewOpen(spawnPoint))
+        )
+        {
+            StopSearchCharacter();
+        }
     }
 
     public void Activate()
