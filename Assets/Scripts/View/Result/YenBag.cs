@@ -65,10 +65,11 @@ public class YenBag : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        var waitFor100mSec = new WaitForSeconds(0.1f);
         for (int i = 0; i < surplusCoins; i++)
         {
             generator.GetNewInstantiate();
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor100mSec;
         }
     }
 
@@ -82,10 +83,11 @@ public class YenBag : MonoBehaviour
         cloth.capsuleColliders = coins;
         yield return null;
 
+        var waitFor100mSec = new WaitForSeconds(0.1f);
         for (int i = 0; i < NUM_OF_INSERT_COINS; i++)
         {
             box.InsertCoin(coins[i].gameObject);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor100mSec;
         }
     }
 

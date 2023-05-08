@@ -35,10 +35,11 @@ public class GroundCoinGenerator : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        var waitFor100mSec = new WaitForSeconds(0.1f);
         for (int i = 0; i < poolCoins; i++)
         {
             GetNewInstantiate().gameObject.SetActive(false);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor100mSec;
         }
     }
 

@@ -48,8 +48,6 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     protected override void Start()
     {
         enemyStatus.ActiveWithOption.Subscribe(option => OnActive(option)).AddTo(this);
-
-
     }
 
     protected override void OnLifeChange(float life)

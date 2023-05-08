@@ -164,12 +164,14 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private IEnumerator DisplayScreenShot(int screenCoverIndex = 8)
     {
+        var waitForEndOfFrame = new WaitForEndOfFrame();
+
         // Wait for rendering before read pixels
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         screenShot.Apply();
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         crossFade.texture = screenShot;
         crossFade.enabled = true;

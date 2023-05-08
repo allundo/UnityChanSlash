@@ -42,6 +42,7 @@ public class Summoner
     {
         var summoned = new List<Pos>();
 
+        var waitForEndOfFrame = new WaitForEndOfFrame();
         for (int i = 0; i < count; i++)
         {
             Pos pos = map.SearchSpaceNearBy(2, summoned);
@@ -50,7 +51,7 @@ public class Summoner
 
             summoned.Add(pos);
             SummonRandom(pos, map.dir);
-            yield return new WaitForEndOfFrame();
+            yield return waitForEndOfFrame;
         }
 
         // Cool time 10 sec

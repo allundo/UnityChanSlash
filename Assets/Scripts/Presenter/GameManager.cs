@@ -262,13 +262,15 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         PlaySnd(SNDType.FloorMove, worldMap.WorldPos(worldMap.StairsEnter(isDownStairs).Key));
 
-        yield return new WaitForEndOfFrame();
+        var waitForEndOfFrame = new WaitForEndOfFrame();
+        var waitForHalfSecond = new WaitForSeconds(0.5f);
+        yield return waitForEndOfFrame;
 
         // Stop all enemy behaviors
         spawnHandler.DisableEnemyBehaviorsAll();
 
         // Wait for screenshot is applied to forefront Image
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         // GameInfo.currentFloor is set to next floor
         var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
@@ -278,56 +280,56 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.SwitchWorldMap(nextFloorMap);
         playerReact.SwitchFloor(nextFloorMap.floor);
         mainCamera.SwitchFloor(nextFloorMap.floor);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         // Clear character on tile info just before delete all enemies.
         worldMap.ClearCharacterOnTileInfo();
 
         // Stored floor enemies are respawn in this method.
         spawnHandler.DestroyCharacters();
-        yield return new WaitForSeconds(0.5f);
+        yield return waitForHalfSecond;
 
         eventManager.SwitchWorldMap(nextFloorMap);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.SetActiveTerrains(false);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.DestroyObjects();
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.LoadFloorMaterials(nextFloorMap); // Switch world map for MapRenderer
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.InitMeshes();
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         var terrainMeshes = mapRenderer.SetUpTerrainMeshes(nextFloorMap);
-        yield return new WaitForSeconds(0.5f);
+        yield return waitForHalfSecond;
 
         mapRenderer.GenerateTerrain(terrainMeshes);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.SwitchTerrainMaterials(nextFloorMap);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.SetActiveTerrains(true);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         mapRenderer.ApplyTileOpen(nextFloorMap);
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         spawnHandler.MoveFloorItems(nextFloorMap); // Switch world map for ItemGenerator
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         // Update WorldMap just before respawn enemies. EnemyMapUtil refers to this "worldMap" on spawn.
         worldMap = nextFloorMap;
         spawnHandler.MoveFloorEnemies(nextFloorMap); // Switch world map for PlaceEnemyGenerator
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
 
         spawnHandler.PlaceEnemyGenerators();
         spawnHandler.RespawnWitch();
-        yield return new WaitForEndOfFrame();
+        yield return waitForEndOfFrame;
     }
 
     public void Exit()

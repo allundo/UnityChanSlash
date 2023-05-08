@@ -37,10 +37,11 @@ public class EnemyAutoGenerator : EnemyGenerator
 
     public IEnumerator SpawnLoop()
     {
+        var waitFor10Sec = new WaitForSeconds(10);
         while (true)
         {
             searchCharacter = StartCoroutine(SearchCharacter());
-            yield return new WaitForSeconds(10);
+            yield return waitFor10Sec;
         }
     }
 
