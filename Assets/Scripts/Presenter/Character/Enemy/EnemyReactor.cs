@@ -67,10 +67,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     public override void OnDie()
     {
         var attacker = lastAttacker as IGetExp;
-        if (attacker != null)
-        {
-            attacker.AddExp(ExpObtain, Type);
-        }
+        attacker?.AddExp(ExpObtain, Type);
         base.OnDie();
     }
 

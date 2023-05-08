@@ -23,9 +23,6 @@ public interface IMobReactor : IReactor
     /// </summary>
     /// <returns>true if appearing is valid</returns>
     bool Appear();
-
-    IAttacker lastAttacker { get; }
-    AttackType lastAttackType { get; }
 }
 
 public interface IUndeadReactor : IMobReactor
@@ -48,8 +45,8 @@ public class MobReactor : Reactor, IMobReactor
     protected MobAnimator anim;
     protected MobFightStyle fightStyle;
 
-    public IAttacker lastAttacker { get; protected set; }
-    public AttackType lastAttackType { get; protected set; }
+    protected IAttacker lastAttacker;
+    protected AttackType lastAttackType;
 
     protected override void Awake()
     {

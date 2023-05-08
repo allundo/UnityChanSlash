@@ -49,10 +49,7 @@ public class UndeadReactor
 
     public void OnSleep(IGetExp attacker, float expObtain)
     {
-        if (attacker != null)
-        {
-            attacker.AddExp(expObtain * 0.5f);
-        }
+        attacker?.AddExp(expObtain * 0.5f);
         effect.OnDie();
         map.ResetTile();
         bodyCollider.enabled = false;
