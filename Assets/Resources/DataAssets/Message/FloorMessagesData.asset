@@ -35,6 +35,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 36b0de580547a454dbf6dadac308c43b, type: 2}
     - {fileID: 11400000, guid: 6dab66b70f9f44258a6c586484d6b98e, type: 2}
     - {fileID: 11400000, guid: 0ad6a08a2490e434db908dd76300c9cc, type: 2}
+    - {fileID: 11400000, guid: 64b624af3f6e14324becf9eb2837421a, type: 2}
   - fixedMessages: []
     randomMessages:
     - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
