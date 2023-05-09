@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Pool HidePlate objects and manage instaces
+/// Pool HidePlate objects and manage instances
 /// </summary>
 public class HidePlatePool : MonoBehaviour
 {
@@ -56,7 +56,7 @@ public class HidePlatePool : MonoBehaviour
     /// Spawn a HidePlate by selected HidePlateGenerator.
     /// </summary>
     /// <param name="plate">Plate shape type to spawn</param>
-    /// <param name="pos">Spawn tile map postion</param>
+    /// <param name="pos">Spawn tile map position</param>
     /// <param name="duration">Fade-in duration at spawning</param>
     /// <returns>One of pooled HidePlate or newly instantiated if not pooled</returns>
     public HidePlate SpawnPlate(Plate plate, Pos pos, float duration = 0.01f)
