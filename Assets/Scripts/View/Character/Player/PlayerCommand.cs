@@ -1008,7 +1008,7 @@ public class PlayerDebugTeleport : PlayerAction
         mobReact.OnFall();
         playingTween = tweenMove.Linear(dest, 1, () =>
         {
-            hidePlateHandler.Turn();
+            hidePlateHandler.Redraw();
             mobReact.OnWakeUp();
         });
         return true;
