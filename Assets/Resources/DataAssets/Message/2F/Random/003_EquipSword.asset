@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 003_EquipSword
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u88C5\u5099\u54C1\u5263\u89E3\u8AAC"
+    sentence: "\u5263\u653B\u6483\u306E\u5A01\u529B\u3092\u4E0A\u3052\u308B\u6B66\u5668\u3067\u3059\u3002\\n\u53F3\u624B\u306E\u307F\u306B\u88C5\u5099\u3067\u304D\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u88C5\u5099\u54C1\u30FB\u5263\u7CFB\u3011"
+    spriteImage: {fileID: 21300000, guid: 81e8d0c5e83e84adcb576aa9c44afd6b, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u9577\u5263"
+    ignoreIfRead: 0
+  - name: "\u88C5\u5099\u54C1\u5263\u89E3\u8AAC02"
+    sentence: "\u53F3\u624B\u304C\u5263\u7CFB\u6B66\u5668\u306E\u5834\u5408\u3001\u5263\u653B\u6483\u306E\u30B9\u30BF\u30A4\u30EB\u3067\u6226\u95D8\u3092\u884C\u3044\u307E\u3059\u3002\\n\u65AC\u308A\u30FB\u6A2A\u8599\u304E\u30FB\u7A81\u304D\u30FB\u515C\u5272\u308A\u306E\\n4
+      \u7A2E\u985E\u306E\u653B\u6483\u3092\u7E70\u308A\u51FA\u305B\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u88C5\u5099\u54C1\u30FB\u5263\u7CFB\u3011"
+    spriteImage: {fileID: 21300000, guid: c68be5e99e40945cda868094a4e33221, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u5263\u653B\u6483"
+    ignoreIfRead: 0
