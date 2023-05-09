@@ -157,12 +157,7 @@ public class ThirdPersonCamera : MonoBehaviour
         crossFade.transform.SetSiblingIndex(1);
     }
 
-    public void StopScreen(int screenCoverIndex = 8)
-    {
-        StartCoroutine(DisplayScreenShot(screenCoverIndex));
-    }
-
-    private IEnumerator DisplayScreenShot(int screenCoverIndex = 8)
+    public IEnumerator DisplayScreenShot(int screenCoverIndex = 8)
     {
         var waitForEndOfFrame = new WaitForEndOfFrame();
 
@@ -178,5 +173,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
         // Set cross fade Image to forefront
         crossFade.transform.SetSiblingIndex(screenCoverIndex - 1);
+        yield return waitForEndOfFrame;
     }
 }

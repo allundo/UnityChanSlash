@@ -225,7 +225,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         input.ClearAll();
         input.SetInputVisible(false);
         anim.Pause();
-        mainCamera.StopScreen(cover.transform.GetSiblingIndex());
 
         cover.CoverOnObservable(1f, Observable.FromCoroutine(() => MoveFloor(isDownStairs)))
             .IgnoreElements()
@@ -248,6 +247,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     private IEnumerator MoveFloor(bool isDownStairs)
     {
+        yield return mainCamera.DisplayScreenShot(cover.transform.GetSiblingIndex());
+
         var dataStoreAgent = DataStoreAgent.Instance;
         dataStoreAgent.DisableSave();
 
@@ -268,9 +269,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         // Stop all enemy behaviors
         spawnHandler.DisableEnemyBehaviorsAll();
-
-        // Wait for screenshot is applied to forefront Image
-        yield return waitForEndOfFrame;
 
         // GameInfo.currentFloor is set to next floor
         var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
