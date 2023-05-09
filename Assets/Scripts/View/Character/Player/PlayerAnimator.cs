@@ -8,6 +8,8 @@ public class PlayerAnimator : ShieldAnimator
 {
     protected StateMachineTrigger trigger;
 
+    private int defaultStateID = Animator.StringToHash("Base Layer.Stand.Idle");
+
     public TriggerJump jump { get; protected set; }
     public TriggerJump pitJump { get; protected set; }
     public TriggerJump landing { get; protected set; }
@@ -78,6 +80,11 @@ public class PlayerAnimator : ShieldAnimator
         landing = new TriggerJump(this, jumpHeight, bodyCollider, "Landing");
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
         fall = new BoolFall(this, fallHeight, bodyCollider);
+    }
+
+    public void ResetToIdle()
+    {
+        anim.Play(defaultStateID);
     }
 
     public override void Pause()

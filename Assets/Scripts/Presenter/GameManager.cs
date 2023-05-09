@@ -278,6 +278,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.SwitchWorldMap(nextFloorMap);
         playerReact.SwitchFloor(nextFloorMap.floor);
         mainCamera.SwitchFloor(nextFloorMap.floor);
+        anim.ResetToIdle();
         yield return waitForEndOfFrame;
 
         // Clear character on tile info just before delete all enemies.
