@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 001_CoinThrow
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u30B3\u30A4\u30F3\u6295\u3052\u89E3\u8AAC"
+    sentence: "\u91D1\u8CA8\u306F\u8CA1\u7523\u4FA1\u5024\u304C\u9AD8\u3044\u30A2\u30A4\u30C6\u30E0\u3067\u3059\u3002\\n\u6295\u3052\u3066\u6575\u306B\u5F53\u3066\u308B\u4E8B\u3067\u3001\u6575\u3092\u61D0\u67D4\u3067\u304D\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u30B3\u30A4\u30F3\u6295\u3052\u3011"
+    spriteImage: {fileID: 21300000, guid: 9fb2815195b7349f3a23fbd0a8f233f7, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u91D1\u8CA8"
+    ignoreIfRead: 0
+  - name: "\u30B3\u30A4\u30F3\u6295\u3052\u89E3\u8AAC02"
+    sentence: "\u4EBA\u578B\u306E\u30E2\u30F3\u30B9\u30BF\u30FC\u306F\u61D0\u67D4\u3057\u3084\u3059\u3044\u50BE\u5411\u306B\u3042\u308A\u307E\u3059\u3002\\n\u6295\u3052\u305F\u91D1\u8CA8\u306F\u6575\u306B\u5F53\u305F\u308B\u3068\u306A\u304F\u306A\u308A\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u30B3\u30A4\u30F3\u6295\u3052\u3011"
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 2100000, guid: 025dc0b9e91dc47b496b777a32970c03, type: 2}
+    caption: "\u91D1\u3067\u89E3\u6C7A"
+    ignoreIfRead: 0

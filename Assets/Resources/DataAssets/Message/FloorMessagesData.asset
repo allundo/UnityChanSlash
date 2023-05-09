@@ -31,7 +31,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 8ed1f7375c12f438894a1bb79e026a38, type: 2}
   - fixedMessages: []
     randomMessages:
-    - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
+    - {fileID: 11400000, guid: 71edca1d768d248d4a214ee56c3103aa, type: 2}
   - fixedMessages: []
     randomMessages:
     - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
