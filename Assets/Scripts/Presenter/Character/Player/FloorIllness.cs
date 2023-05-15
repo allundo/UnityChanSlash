@@ -23,8 +23,20 @@ public class FloorIllness
         illnessSetter[2] = () => { restUI.SetPoison(); lifeGauge.SetHPColor(Color.red); };
         illnessRemover[2] = () => { restUI.RemovePoison(); lifeGauge.SetHPColor(Color.white); };
 
-        illnessSetter[3] = () => restUI.SetCold();
-        illnessRemover[3] = () => restUI.RemoveCold();
+        illnessSetter[3] = () =>
+        {
+            restUI.SetCold();
+            // FIXME: 'Mobile' shaders do not support fog.
+            // RenderSettings.fogColor = new Color(0.9f, 0.9f, 1f);
+            // RenderSettings.fogDensity = 0.05f;
+            // RenderSettings.fog = true;
+        };
+        illnessRemover[3] = () =>
+        {
+            restUI.RemoveCold();
+            // FIXME: 'Mobile' shaders do not support fog.
+            // RenderSettings.fog = false;
+        };
     }
 
     private int prevFloor = 1;
