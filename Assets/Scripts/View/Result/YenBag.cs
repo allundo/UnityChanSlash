@@ -34,6 +34,33 @@ public class YenBag : MonoBehaviour
     {
         caughtSubject.OnNext(catcherTf);
         caughtSubject.OnCompleted();
+        StartCoroutine(CoinsRestrictCoroutine());
+    }
+
+    /// <summary>
+    /// Insert coins again if coins are out of reverse mesh box.
+    /// </summary>
+    private IEnumerator CoinsRestrictCoroutine()
+    {
+        var scale = transform.localScale.x * box.transform.localScale.x;
+        var sqrMaxDistance = scale * scale * 0.5f;
+        yield return new WaitForSeconds(0.1f);
+        yield return RespawnCoins(sqrMaxDistance);
+        yield return RespawnCoins(sqrMaxDistance);
+        yield return RespawnCoins(sqrMaxDistance);
+    }
+
+    private IEnumerator RespawnCoins(float sqrMaxDistance)
+    {
+        for (int i = 0; i < NUM_OF_INSERT_COINS; i++)
+        {
+            var boxPos = box.transform.position;
+            if ((coins[i].transform.position - boxPos).sqrMagnitude > sqrMaxDistance)
+            {
+                coins[i].transform.position = boxPos;
+            }
+            yield return null;
+        }
     }
 
     public void GenerateCoins(float coinScale, GroundCoinGenerator generator)
