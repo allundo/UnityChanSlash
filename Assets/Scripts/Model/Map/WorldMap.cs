@@ -212,7 +212,7 @@ public class WorldMap
 
             case Terrain.MessageWall:
             case Terrain.MessagePillar:
-                return (new MessageWall(), Color.magenta);
+                return (new MessageWall(), Color.gray);
 
             case Terrain.Door:
             case Terrain.LockedDoor:
