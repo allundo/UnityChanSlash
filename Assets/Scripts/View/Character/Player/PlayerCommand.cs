@@ -59,6 +59,9 @@ public abstract class PlayerMove : PlayerCommand
 
     protected void SetSpeed()
     {
+        // Cancel HandOn when moving.
+        playerAnim.handOn.Bool = false;
+
         playerAnim.speed.Float = Speed;
         playerAnim.rSpeed.Float = RSpeed;
     }
