@@ -6,7 +6,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 {
     private GameObject prefabMessageBoardN;
     private FloorMessagesSource floorMessages;
-    private Stack<int> randomIndices = null;
+    private Stack<int> randomIndices;
 
     public MessageBoardsRenderer(Transform parent) : base(parent)
     {
@@ -17,6 +17,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
     {
         this.map = map;
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(map.floor - 1);
+        randomIndices = null;
     }
 
     public void SetMessageBoard(Pos pos, IDirection dir)
