@@ -67,6 +67,8 @@ static public class CollectionsExtensions
         }
         return false;
     }
+    static public IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection)
+        => collection.OrderBy(elem => Guid.NewGuid());
 
     static public Dictionary<K, V> Shuffle<K, V>(this Dictionary<K, V> dictionary)
     {
