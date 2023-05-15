@@ -912,4 +912,63 @@ public class UnityEngineSpecTest
         Object.Destroy(cube.gameObject);
         Object.Destroy(sphere.gameObject);
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Animator params are applied on the same frame as the frame that those params are set. <br />
+    /// </summary>
+    public IEnumerator _020_AnimatorSetBoolAppliesValueImmediately()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var slime = Object.Instantiate(prefabSlime);
+
+        var anim = slime.GetComponent<Animator>();
+
+        anim.SetBool("Die", false);
+        bool param1 = anim.GetBool("Die");
+
+        yield return null;
+
+        anim.SetBool("Die", true);
+        bool param2 = anim.GetBool("Die");
+
+        yield return null;
+
+        bool param3 = anim.GetBool("Die");
+
+        yield return null;
+
+        bool param4 = anim.GetBool("Die");
+
+        yield return null;
+
+        anim.SetBool("Die", false);
+        bool param5 = anim.GetBool("Die");
+
+        yield return null;
+
+        anim.SetBool("Die", true);
+        bool param6 = anim.GetBool("Die");
+
+        yield return null;
+
+        bool param7 = anim.GetBool("Die");
+
+        yield return new WaitForSeconds(1f);
+
+        bool param8 = anim.GetBool("Die");
+
+        Assert.AreEqual(false, param1);
+        Assert.AreEqual(true, param2);
+        Assert.AreEqual(true, param3);
+        Assert.AreEqual(true, param4);
+        Assert.AreEqual(false, param5);
+        Assert.AreEqual(true, param6);
+        Assert.AreEqual(true, param7);
+        Assert.AreEqual(true, param8);
+
+        Object.Destroy(slime);
+        Object.Destroy(mainCamera.gameObject);
+    }
 }
