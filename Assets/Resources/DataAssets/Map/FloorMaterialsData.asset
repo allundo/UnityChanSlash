@@ -36,7 +36,7 @@ MonoBehaviour:
     plateFront: {fileID: 2100000, guid: 08abf525f51e246429481491aa09c9d9, type: 2}
     pointLightColor: {r: 1, g: 0.79607844, b: 0.4117647, a: 1}
   - name: "\u708E"
-    ground: {fileID: 2100000, guid: 196a83e4fac7a644ebc189706f6c2082, type: 2}
+    ground: {fileID: 2100000, guid: 26e9589f1888a4658afc7206d36a6a03, type: 2}
     wall: {fileID: 2100000, guid: 505fbbba9c5a99a4ba162ef4ee7c5736, type: 2}
     gate: {fileID: 2100000, guid: 18eedc47c0a134aa5bf52de87f30574e, type: 2}
     door: {fileID: 2100000, guid: 9a526ccb9696d6545b3991e93bfb18bd, type: 2}

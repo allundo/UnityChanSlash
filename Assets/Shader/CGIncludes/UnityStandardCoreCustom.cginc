@@ -490,7 +490,15 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, mainLight);
 
     half4 c = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect);
-    c.rgb += Emission(i.tex.xy);
+
+    half3 emission = Emission (i.tex.xy);
+
+#ifdef _AUTO_INTENSE_EMISSION
+    emission *= (1 + _SinTime.w * 0.5);
+    emission.r *= 1.5;
+#endif
+
+    c.rbg += emission;
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG(_unity_fogCoord, c.rgb);
@@ -743,9 +751,14 @@ void fragDeferred (
 
     half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect).rgb;
 
-    #ifdef _EMISSION
-        emissiveColor += Emission (i.tex.xy);
-    #endif
+    half3 emission = Emission (i.tex.xy);
+
+#ifdef _AUTO_INTENSE_EMISSION
+    emission *= (1 + _SinTime.w * 0.5);
+    emission.r *= 1.5;
+#endif
+
+    emissiveColor += emission;
 
     #ifndef UNITY_HDR_ON
         emissiveColor.rgb = exp2(-emissiveColor.rgb);
