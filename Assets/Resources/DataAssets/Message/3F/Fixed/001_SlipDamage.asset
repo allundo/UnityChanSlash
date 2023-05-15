@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 001_SlipDamage
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u30B9\u30EA\u30C3\u30D7\u30C0\u30E1\u30FC\u30B8\u89E3\u8AAC"
+    sentence: "\u71B1\u4E2D\u75C7\u5BFE\u7B56\u306B\u306F\u3053\u307E\u3081\u306B\u4F11\u606F\u3092\u5165\u308C\u308B\u3053\u3068\u3002\\n\u4F11\u606F\u3057\u306A\u3044\u3068\u3069\u3093\u3069\u3093
+      HP \u304C\u6E1B\u5C11\u3057\u3066\u3044\u304D\u307E\u3059\u3002"
+    face: -1
+    fontSize: 56
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u707C\u71B1\u5730\u7344\uFF01\u3011"
+    spriteImage: {fileID: 21300000, guid: 850685713cccf43e99f3ae4a2cae8631, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u6B8B\u308AHP\u306B\u6CE8\u610F"
+    ignoreIfRead: 0
+  - name: "\u30B9\u30EA\u30C3\u30D7\u30C0\u30E1\u30FC\u30B8\u53CD\u5FDC01"
+    sentence: "\u306A\u3093\u3064\u30FC\u6691\u3055\u3088\u30FB\u30FB\u30FB\uFF01\\n\u51C4\u307E\u3058\u3044\u52E2\u3044\u3067\u4F53\u529B\u304C\u596A\u308F\u308C\u3066\u304F\u3093\u3060\u3051\u3069\u30FB\u30FB\u30FB\uFF01"
+    face: 1
+    fontSize: 64
+    literalsPerSec: 20
+    alignment: 257
+    title: 
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 1
+  - name: "\u30B9\u30EA\u30C3\u30D7\u30C0\u30E1\u30FC\u30B8\u53CD\u5FDC01"
+    sentence: "\u5E78\u3044\u3053\u306E\u968E\u306B\u306F\u30B4\u30FC\u30B9\u30C8\u306F\u3044\u306A\u3044\u3088\u3046\u3060\u3057\u3002\\n\u307E\u3041\u3001\u4F11\u307F\u4F11\u307F\u884C\u304F\u3057\u304B\u306A\u3044\u306D\u3002"
+    face: 3
+    fontSize: 64
+    literalsPerSec: 20
+    alignment: 257
+    title: 
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 1
