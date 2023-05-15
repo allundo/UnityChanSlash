@@ -61,18 +61,6 @@ public class YenBag : MonoBehaviour
         this.generator = generator;
     }
 
-    private IEnumerator PoolCoinsCoroutine(GroundCoinGenerator generator, int surplusCoins)
-    {
-        yield return new WaitForSeconds(1f);
-
-        var waitFor100mSec = new WaitForSeconds(0.1f);
-        for (int i = 0; i < surplusCoins; i++)
-        {
-            generator.GetNewInstantiate();
-            yield return waitFor100mSec;
-        }
-    }
-
     public void Activate()
     {
         StartCoroutine(ActiveSequence());
