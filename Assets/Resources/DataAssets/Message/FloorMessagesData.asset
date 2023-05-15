@@ -29,7 +29,9 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 2dacbec27d7f047738a8acd3a01f0e55, type: 2}
     - {fileID: 11400000, guid: 13fab1dd4c7a54dc9be3ebb183ea7a6a, type: 2}
     - {fileID: 11400000, guid: 8ed1f7375c12f438894a1bb79e026a38, type: 2}
-  - fixedMessages: []
+    - {fileID: 11400000, guid: 517c6cee98789445990d4beaae20a2c0, type: 2}
+  - fixedMessages:
+    - {fileID: 11400000, guid: 8c5fc9c2b76114b74929818977c3cef6, type: 2}
     randomMessages:
     - {fileID: 11400000, guid: 71edca1d768d248d4a214ee56c3103aa, type: 2}
     - {fileID: 11400000, guid: 36b0de580547a454dbf6dadac308c43b, type: 2}
