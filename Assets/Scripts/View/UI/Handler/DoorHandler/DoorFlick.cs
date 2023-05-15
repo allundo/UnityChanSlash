@@ -2,7 +2,7 @@ using UniRx;
 
 public class DoorFlick : FlickInteraction
 {
-    protected IReactiveProperty<bool> isHandOn = new ReactiveProperty<bool>(false);
+    protected ReactiveProperty<bool> isHandOn = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsHandOn => isHandOn;
 
     protected override void SetFlicks()
@@ -23,7 +23,7 @@ public class DoorFlick : FlickInteraction
     {
         private DoorFlickRight(DoorFlick flick) : base(flick)
         {
-            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f).AddTo(flick);
+            DragRatioRP.Subscribe(ratio => flick.isHandOn.SetValueAndForceNotify(ratio > 0.5f)).AddTo(flick);
         }
 
         public static DoorFlickRight New(DoorFlick flick)
@@ -36,7 +36,7 @@ public class DoorFlick : FlickInteraction
     {
         private DoorFlickLeft(DoorFlick flick) : base(flick)
         {
-            DragRatioRP.Subscribe(ratio => flick.isHandOn.Value = ratio > 0.5f).AddTo(flick);
+            DragRatioRP.Subscribe(ratio => flick.isHandOn.SetValueAndForceNotify(ratio > 0.5f)).AddTo(flick);
         }
 
         public static DoorFlickLeft New(DoorFlick flick)
