@@ -101,7 +101,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
             return;
         }
 
-        if (damageRatio <= 0.1f)
+        if (damageRatio <= 0.2f)
         {
             PlayDamage(type);
             return;
