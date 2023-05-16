@@ -521,6 +521,7 @@ public enum EnemyType
     None = 0,
     Slime,
     RedSlime,
+    BlueSlime,
     Goblin,
     YellowRabbit,
     VioletBat,

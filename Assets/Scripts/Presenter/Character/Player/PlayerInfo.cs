@@ -33,6 +33,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
     public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && mapUtil.onTilePos == pos;
     public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
+    public bool IsPlayerIcing => status.icingFrames > 0f;
 
     public DataStoreAgent.PlayerData ExportRespawnData() => ExportRespawnData(Pos);
     public DataStoreAgent.PlayerData ExportRespawnData(Pos playerPos)

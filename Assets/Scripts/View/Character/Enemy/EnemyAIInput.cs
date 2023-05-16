@@ -23,6 +23,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
     protected bool IsOnPlayer(Pos pos) => !(target.react as IEnemyReactor).IsTamed && MapUtil.IsOnPlayer(pos);
     protected bool IsPlayerFound() => !(target.react as IEnemyReactor).IsTamed && mobMap.IsPlayerFound();
     protected bool IsPlayerFound(Pos pos) => !(target.react as IEnemyReactor).IsTamed && mobMap.IsPlayerFound(pos);
+    protected bool IsViewOpen(Pos pos) => mobMap.GetTile(pos).IsViewOpen;
 
     public virtual void OnActive(EnemyStatus.ActivateOption option)
     {
