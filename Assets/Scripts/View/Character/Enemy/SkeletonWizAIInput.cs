@@ -39,7 +39,7 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos forward = mobMap.GetForward;
 
         // Start attack if player found at forward
-        if (IsOnPlayer(forward)) return RandomChoice(attack, teleport);
+        if (IsOnPlayer(forward)) return RandomChoice(attack, ice, teleport);
 
         // Turn if player found at left, right or backward
         Pos left = mobMap.GetLeft;
@@ -54,11 +54,12 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        if (IsPlayerFound(forward)) return RandomChoice(ice, fire);
+        bool isForwardMovable = mobMap.IsMovable(forward);
+        if (IsPlayerFound()) return isForwardMovable ? RandomChoice(moveForward, fire, ice) : RandomChoice(fire, ice);
 
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
-        return MoveForwardOrTurn(mobMap.IsMovable(forward), mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
+        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
     }
 }
