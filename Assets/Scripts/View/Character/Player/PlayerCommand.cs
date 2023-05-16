@@ -1009,9 +1009,10 @@ public class PlayerDebugTeleport : PlayerAction
         if (map.onTilePos == dest) dest = worldMap.StairsBottom.Key;
 
         mobReact.OnFall();
+
         playingTween = tweenMove.Linear(dest, 1, () =>
         {
-            hidePlateHandler.Redraw();
+            hidePlateHandler.Teleport();
             mobReact.OnWakeUp();
         });
         return true;

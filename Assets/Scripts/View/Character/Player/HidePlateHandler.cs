@@ -166,6 +166,14 @@ public class HidePlateHandler : MonoBehaviour
         Draw();
     }
 
+#if UNITY_EDITOR
+    public void Teleport()
+    {
+        currentUpdater?.ClearRangeImmediately(prevPos);
+        Draw();
+    }
+#endif
+
     public void SwitchWorldMap(WorldMap map)
     {
         this.map = map;
