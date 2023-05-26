@@ -264,13 +264,6 @@ public class MapManager
         SetMessageBoard(pos, dir);
     }
 
-    protected void SetExitDoorMessage(Pos pos, IDirection dir)
-    {
-        // Insert the position as first element
-        fixedMessagePos = new Pos[] { pos }.Concat(fixedMessagePos).ToList(); ;
-        SetMessageBoard(pos, dir);
-    }
-
     protected void SetMessageBoard(Pos pos, IDirection boardDir)
     {
         dirMap[pos.x, pos.y] = boardDir.Enum;
@@ -379,9 +372,6 @@ public class MapManager
 
         return dir;
     }
-
-    public MapManager SetStairs(int floor) => SetDownStairs(floor).SetUpStairsOrStartDoor(floor);
-    public MapManager InitMap(int floor) => SetStairs(floor).SetPitAndMessageBoards(floor);
 
     private MapManager SetPitAndMessageBoards(int floor)
     {
