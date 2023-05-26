@@ -38,10 +38,10 @@ public enum Terrain
     Box,
     DownStairs,
     UpStairs,
-    LockedDoor,
-    RoomCenter = 11,
-    Pit = 12,
-    ExitDoor = 13,
+    LockedDoor = 20,
+    RoomCenter = 21,
+    Pit = 22,
+    ExitDoor = 23,
 }
 
 [System.Serializable]
