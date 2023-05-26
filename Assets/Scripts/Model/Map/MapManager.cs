@@ -389,7 +389,8 @@ public class MapManager
 
                 if ((x + y) % 2 == 0)
                 {
-                    // Forbid placing boards on around walls of dead end position
+                    // To avoid unreadable boards on the walls around stairs or boxes,
+                    // forbid placing boards on the walls around dead end positions.
                     if (!deadEndPos.ContainsKey(pos)) SetBoardCandidate(boardCandidates, x, y);
                 }
                 else
