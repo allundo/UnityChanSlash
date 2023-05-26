@@ -170,4 +170,15 @@ public class MessageUITest
 
         yield return new WaitForSeconds(1f);
     }
+
+    [UnityTest]
+    public IEnumerator _005_BloodMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
+    {
+        var bloodMsgs = resourceLoader.floorMessagesData.Param(floor - 1).bloodMessages;
+        yield return null;
+
+        yield return messageUI.StartCoroutine(ReadMessages(bloodMsgs));
+
+        yield return new WaitForSeconds(1f);
+    }
 }

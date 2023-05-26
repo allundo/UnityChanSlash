@@ -17,6 +17,7 @@ public class WorldMap
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
     public List<Pos> fixedMessagePos { get; private set; }
+    public List<Pos> bloodMessagePos { get; private set; }
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
     private List<Pos> tileOpenPosList = null;
@@ -110,6 +111,7 @@ public class WorldMap
         tileOpenPosList = import.tileOpenData.ToList();
 
         fixedMessagePos = import.fixedMessagePos.ToList();
+        bloodMessagePos = import.bloodMessagePos.ToList();
         for (int i = 0; i < import.randomMessagePos.Length; i++)
         {
             var posList = import.randomMessagePos[i];
@@ -176,6 +178,7 @@ public class WorldMap
         deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
         fixedMessagePos = new List<Pos>(this.map.fixedMessagePos);
+        bloodMessagePos = new List<Pos>(this.map.bloodMessagePos);
 
         Width = map.width;
         Height = map.height;
@@ -212,6 +215,8 @@ public class WorldMap
 
             case Terrain.MessageWall:
             case Terrain.MessagePillar:
+            case Terrain.BloodMessageWall:
+            case Terrain.BloodMessagePillar:
                 return (new MessageWall(), Color.gray);
 
             case Terrain.Door:

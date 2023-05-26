@@ -209,6 +209,7 @@ public class FloorMessagesSource
 {
     [SerializeField] public BoardMessageData[] fixedMessages = default;
     [SerializeField] public BoardMessageData[] randomMessages = default;
+    [SerializeField] public BoardMessageData[] bloodMessages = default;
 }
 
 [System.Serializable]

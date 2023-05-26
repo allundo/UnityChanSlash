@@ -35,6 +35,8 @@ public enum Terrain
     Door,
     MessageWall,
     MessagePillar,
+    BloodMessageWall,
+    BloodMessagePillar,
     Box,
     DownStairs,
     UpStairs,

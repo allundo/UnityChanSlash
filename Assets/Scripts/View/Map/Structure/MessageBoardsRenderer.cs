@@ -4,13 +4,15 @@ using System.Linq;
 
 public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 {
-    private GameObject prefabMessageBoardN;
+    private Dictionary<Terrain, GameObject> prefabMessageN = new Dictionary<Terrain, GameObject>();
     private FloorMessagesSource floorMessages;
     private Stack<int> randomIndices;
 
     public MessageBoardsRenderer(Transform parent) : base(parent)
     {
-        prefabMessageBoardN = Resources.Load<GameObject>("Prefabs/Map/Parts/BoardN");
+        prefabMessageN[Terrain.MessageWall] = prefabMessageN[Terrain.MessagePillar] = Resources.Load<GameObject>("Prefabs/Map/Parts/BoardN");
+        prefabMessageN[Terrain.BloodMessageWall] = Resources.Load<GameObject>("Prefabs/Map/Parts/BloodMessageN");
+        prefabMessageN[Terrain.BloodMessagePillar] = Resources.Load<GameObject>("Prefabs/Map/Parts/BloodMessagePillarN");
     }
 
     public override void SwitchWorldMap(WorldMap map)
@@ -20,9 +22,24 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
         randomIndices = null;
     }
 
-    public void SetMessageBoard(Pos pos, IDirection dir)
+    public void SetMessage(Pos pos, IDirection dir, Terrain type)
     {
-        PlacePrefab(pos, prefabMessageBoardN, dir.Rotate);
+        PlacePrefab(pos, prefabMessageN[type], dir.Rotate);
+        switch (type)
+        {
+            case Terrain.MessageWall:
+            case Terrain.MessagePillar:
+                SetMessageBoard(pos, dir);
+                break;
+            case Terrain.BloodMessageWall:
+            case Terrain.BloodMessagePillar:
+                SetBloodMessage(pos, dir);
+                break;
+        }
+    }
+
+    private void SetMessageBoard(Pos pos, IDirection dir)
+    {
         MessageWall tile = map.GetTile(pos) as MessageWall;
         tile.boardDir = dir;
 
@@ -43,6 +60,21 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
                 }
 
                 tile.data = floorMessages.randomMessages[randomIndex].Convert();
+            }
+        }
+    }
+
+    private void SetBloodMessage(Pos pos, IDirection dir, bool isWall = true)
+    {
+        MessageWall tile = map.GetTile(pos) as MessageWall;
+        tile.boardDir = dir;
+
+        if (tile.Read == null)
+        {
+            int bloodIndex = map.bloodMessagePos.IndexOf(pos);
+            if (bloodIndex != -1)
+            {
+                tile.data = floorMessages.bloodMessages[bloodIndex].Convert();
             }
         }
     }

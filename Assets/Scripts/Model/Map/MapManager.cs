@@ -12,6 +12,7 @@ public class MapManager
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
     public List<Pos> pitTrapPos { get; private set; } = new List<Pos>();
     public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
+    public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
 
     /// <summary>
     /// Represents the start position and direction after going down a floor.
@@ -258,16 +259,22 @@ public class MapManager
         dirMap[rightPos.x, rightPos.y] |= doorDir.Left.Enum;
     }
 
-    protected void SetFixedMessage(Pos pos, IDirection dir)
+    protected void SetFixedMessage(Pos pos, IDirection boardDir)
     {
         fixedMessagePos.Add(pos);
-        SetMessageBoard(pos, dir);
+        SetMessageBoard(pos, boardDir, Terrain.MessageWall);
     }
 
-    protected void SetMessageBoard(Pos pos, IDirection boardDir)
+    protected void SetBloodMessage(Pos pos, IDirection boardDir)
+    {
+        bloodMessagePos.Add(pos);
+        SetMessageBoard(pos, boardDir, Terrain.BloodMessageWall);
+    }
+
+    protected void SetMessageBoard(Pos pos, IDirection boardDir, Terrain type = Terrain.MessageWall)
     {
         dirMap[pos.x, pos.y] = boardDir.Enum;
-        matrix[pos.x, pos.y] = Terrain.MessageWall;
+        matrix[pos.x, pos.y] = type;
     }
 
     protected bool IsAroundWall(Pos pos) => IsAroundWall(pos.x, pos.y);
@@ -410,6 +417,7 @@ public class MapManager
         int numOfPits = Math.Min(floor * floor * 4, width * height / 10);
         int numOfFixedMessages = src.fixedMessages.Length;
         int numOfRandomMessages = src.randomMessages.Length;
+        int numOfBloodMessages = src.bloodMessages.Length;
 
         // Set pit traps
         for (int i = 0; i < numOfPits && pitCandidates.Count > 0; i++)
@@ -436,6 +444,7 @@ public class MapManager
                 {
                     if (!isSet) isSet = TrySetPitAttention(boardCandidates, pos, dest);
 
+                    // Reverse the other boards around the pit.
                     IDirection dir;
                     if (boardCandidates.TryGetValue(dest, out dir)) boardCandidates[dest] = BoardDirection(pos, dest, dir).Backward;
                 });
@@ -443,6 +452,13 @@ public class MapManager
                 // Makes up for decrease of Pit Trap Attentions
                 if (!isSet) numOfRandomMessages++;
             });
+        }
+
+        for (int i = 0; i < numOfBloodMessages && boardCandidates.Count > 0; i++)
+        {
+            Pos pos = boardCandidates.GetRandomKey();
+            SetBloodMessage(pos, boardCandidates[pos]);
+            boardCandidates.Remove(pos);
         }
 
         for (int i = 0; i < numOfFixedMessages && boardCandidates.Count > 0; i++)
@@ -551,10 +567,14 @@ public class MapManager
     {
         switch (terrain)
         {
+            case Terrain.Door:
+                return GetGateDir(x, y);
+
             case Terrain.LockedDoor:
                 return GetValidDir(x, y, IsPath);
 
             case Terrain.MessageWall:
+            case Terrain.BloodMessageWall:
             case Terrain.ExitDoor:
                 return GetValidDir(x, y, IsEnterable);
 
@@ -569,7 +589,7 @@ public class MapManager
 
     private Dir GetGridPointDir(int x, int y, Terrain terrain)
     {
-        if (terrain == Terrain.MessagePillar || terrain == Terrain.Box)
+        if (terrain == Terrain.MessagePillar || terrain == Terrain.BloodMessagePillar || terrain == Terrain.Box)
         {
             return GetValidDir(x, y, IsEnterable);
         }
@@ -610,10 +630,17 @@ public class MapManager
         return dir;
     }
     public Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.LockedDoor) | GetDir(x, y, Terrain.ExitDoor);
-    private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall) | GetDir(x, y, Terrain.MessageWall);
-    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar);
+    private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall) | GetDir(x, y, Terrain.MessageWall) | GetDir(x, y, Terrain.BloodMessageWall);
+    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar) | GetDir(x, y, Terrain.BloodMessagePillar);
 
     public Dir GetValidDir(int x, int y) => GetValidDir(x, y, IsEnterable);
+
+    private Dir GetGateDir(int x, int y)
+    {
+        Dir validDir = GetValidDir(x, y);
+        Dir invDir = Direction.Convert(validDir).Backward.Enum;
+        return Dir.NESW ^ validDir ^ invDir;
+    }
 
     private Dir GetValidDir(int x, int y, Func<Terrain, bool> validChecker)
     {

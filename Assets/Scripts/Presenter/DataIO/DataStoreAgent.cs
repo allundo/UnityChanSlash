@@ -110,6 +110,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             roomCenterPos = map.roomCenterPos.ToArray();
             randomMessagePos = map.ExportRandomMessagePos();
             fixedMessagePos = map.fixedMessagePos.ToArray();
+            bloodMessagePos = map.bloodMessagePos.ToArray();
         }
 
         public int[] mapMatrix = null;
@@ -122,6 +123,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;
         public PosList[] randomMessagePos = null;
+        public Pos[] bloodMessagePos = null;
     }
 
     [System.Serializable]

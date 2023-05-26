@@ -30,6 +30,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 13fab1dd4c7a54dc9be3ebb183ea7a6a, type: 2}
     - {fileID: 11400000, guid: 8ed1f7375c12f438894a1bb79e026a38, type: 2}
     - {fileID: 11400000, guid: 517c6cee98789445990d4beaae20a2c0, type: 2}
+    bloodMessages: []
   - fixedMessages:
     - {fileID: 11400000, guid: 8c5fc9c2b76114b74929818977c3cef6, type: 2}
     randomMessages:
@@ -42,13 +43,19 @@ MonoBehaviour:
     - {fileID: 11400000, guid: acfb341ea3f1a4d1dadd2fb5fcc767a8, type: 2}
     - {fileID: 11400000, guid: 7936a7b73723e4594ad7c1bba9bb9343, type: 2}
     - {fileID: 11400000, guid: c56d285dd9b5b464087850576fa72c1b, type: 2}
+    bloodMessages: []
   - fixedMessages:
     - {fileID: 11400000, guid: 5f785ffc10af642168a59e7ec6b523f5, type: 2}
     randomMessages:
     - {fileID: 11400000, guid: cd50693933b04464691441b8c27d9ee5, type: 2}
+    bloodMessages: []
   - fixedMessages: []
     randomMessages:
     - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-  - fixedMessages: []
+    bloodMessages: []
+  - fixedMessages:
+    - {fileID: 11400000, guid: 3a1e0388d827644eda58603261ba65d7, type: 2}
     randomMessages:
     - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
+    bloodMessages:
+    - {fileID: 11400000, guid: 12a754173306e4392aba542c6d7e7ec3, type: 2}

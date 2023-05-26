@@ -150,8 +150,9 @@ public class MapRenderer : MonoBehaviour
                         break;
 
                     case Terrain.MessagePillar:
-                        // Render a message board
-                        messageBoardsRenderer.SetMessageBoard(pos, Direction.Convert(dirMap[i, j]));
+                    case Terrain.BloodMessagePillar:
+                        // Render a message
+                        messageBoardsRenderer.SetMessage(pos, Direction.Convert(dirMap[i, j]), matrix[i, j]);
 
                         // Render a pillar
                         terrainMeshes.Add(GetMeshInstance(gateMesh[(int)map.GetDoorDir(i, j)], pos));
@@ -172,11 +173,12 @@ public class MapRenderer : MonoBehaviour
 
                     case Terrain.Wall:
                     case Terrain.MessageWall:
-                        // Render a message board
-                        if (matrix[i, j] == Terrain.MessageWall)
+                    case Terrain.BloodMessageWall:
+                        // Render a message
+                        if (matrix[i, j] != Terrain.Wall)
                         {
                             var dir = Direction.Convert(dirMap[i, j]);
-                            messageBoardsRenderer.SetMessageBoard(pos, dir);
+                            messageBoardsRenderer.SetMessage(pos, dir, matrix[i, j]);
 
                             // Change back Dir data for rendering wall
                             dirMap[i, j] = dir.Left.Enum | dir.Right.Enum;
