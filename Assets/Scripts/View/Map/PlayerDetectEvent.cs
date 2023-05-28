@@ -11,7 +11,7 @@ public abstract class PlayerDetectEvent : GameEvent
     protected IDisposable disposable;
     public bool isOneShot { get; protected set; }
 
-    protected abstract bool IsEventValid();
+    protected abstract bool IsEventValid(WorldMap map);
 
     public PlayerDetectEvent(PlayerCommandTarget target, bool isOneShot = true) : base(target)
     {
@@ -25,7 +25,7 @@ public abstract class PlayerDetectEvent : GameEvent
         this.invoker = invoker.OnSpawn(EventTilePosition(map));
 
         disposable = invoker.DetectPlayer
-            .Where(_ => IsEventValid())
+            .Where(_ => IsEventValid(map))
             .SelectMany(_ => Invoke())
             .Subscribe(_ =>
             {
@@ -58,7 +58,7 @@ public class PlayerDetectFloor : PlayerDetectEvent
         this.eventMessages = eventMessages;
     }
 
-    protected override bool IsEventValid() => true;
+    protected override bool IsEventValid(WorldMap map) => true;
     protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(map.StairsBottom.Key);
 
     protected override IObservable<Unit> EventFunc()
@@ -111,7 +111,7 @@ public abstract class PlayerHasItemEvent : PlayerDetectEvent
 
     protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(pos);
 
-    protected override bool IsEventValid()
+    protected override bool IsEventValid(WorldMap map)
     {
         var playerHasItem = ItemInventory.Instance.hasItemType(itemTypeToCheck);
         var itemIsOnEventTile = target.map.OnTile.HasItem(itemTypeToCheck);
@@ -119,6 +119,51 @@ public abstract class PlayerHasItemEvent : PlayerDetectEvent
 
         return playerHasItem || itemIsOnEventTile || jumpLeapedEventTileWithItem;
     }
+}
+
+public abstract class SimpleEnemyGenerateEvent : PlayerDetectEvent
+{
+    protected Pos pos;
+
+    public SimpleEnemyGenerateEvent(PlayerCommandTarget target, Pos pos, bool isOneShot = false) : base(target, isOneShot)
+    {
+        this.pos = pos;
+    }
+
+    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(pos);
+    protected IObservable<Unit> SpawnEnemy(EnemyType type, Pos pos, EnemyStoreData data = null)
+    {
+        SpawnHandler.Instance.PlaceEnemy(type, pos, Direction.north, new EnemyStatus.ActivateOption(), data);
+        return Observable.NextFrame();
+    }
+}
+
+public class SkeletonWizardGenerateEvent : SimpleEnemyGenerateEvent
+{
+    public SkeletonWizardGenerateEvent(PlayerCommandTarget target, Pos pos) : base(target, pos) { }
+
+    protected override bool IsEventValid(WorldMap map)
+    {
+        bool isDoorClose = !(map.GetTile(3, 18) as Door).IsOpen;
+        bool isSkeletonOff = !map.GetTile(3, 17).IsEnemyOn;
+        return isDoorClose && isSkeletonOff;
+    }
+
+    protected override IObservable<Unit> EventFunc() => SpawnEnemy(EnemyType.SkeletonWizard, new Pos(3, 17), new EnemyStoreData(3));
+}
+
+public class RedSlimeGenerateEvent : SimpleEnemyGenerateEvent
+{
+    public RedSlimeGenerateEvent(PlayerCommandTarget target, Pos pos) : base(target, pos) { }
+
+    protected override bool IsEventValid(WorldMap map)
+    {
+        bool isDoorClose = !(map.GetTile(3, 18) as Door).IsOpen;
+        bool isEnemyOff = !map.GetTile(7, 17).IsEnemyOn;
+        return isDoorClose && isEnemyOff;
+    }
+
+    protected override IObservable<Unit> EventFunc() => SpawnEnemy(EnemyType.RedSlime, new Pos(7, 17), new EnemyStoreData(20));
 }
 
 public class SkeletonsGenerateEvent : PlayerHasItemEvent

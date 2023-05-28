@@ -29,6 +29,8 @@ public class EventManager : MobGenerator<EventInvoker>
             new PlayerMessageFloor5(playerTarget),
             new WitchGenerateEvent(playerTarget, lightManager, new Pos(11, 11)),
             new SkeletonsGenerateEvent(playerTarget, new Pos(21, 7)),
+            new SkeletonWizardGenerateEvent(playerTarget, new Pos(1, 11)),
+            new RedSlimeGenerateEvent(playerTarget, new Pos(1, 13)),
         };
     }
 
@@ -41,6 +43,8 @@ public class EventManager : MobGenerator<EventInvoker>
         SetPlayerDetectEvent(5, 4);
         SetPlayerDetectEvent(5, 5);
         SetPlayerDetectEvent(5, 6);
+        SetPlayerDetectEvent(5, 7);
+        SetPlayerDetectEvent(5, 8);
 
         SwitchWorldMap(map);
     }
