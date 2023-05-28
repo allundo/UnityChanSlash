@@ -1,3 +1,4 @@
+using UniRx;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ public class MessageUITest
     private ResourceLoader resourceLoader;
     private TimeManager timeManager;
 
-    private MessageController messageUI;
-    private MessageController prefabMessageUI;
+    private MessageControllerTest messageUI;
+    private MessageControllerTest prefabMessageUI;
 
     private GameObject testCanvas;
     private Camera mainCamera;
@@ -37,7 +38,7 @@ public class MessageUITest
 
         testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
 
-        prefabMessageUI = Resources.Load<MessageController>("Prefabs/UI/Message/MessageUI");
+        prefabMessageUI = Resources.Load<MessageControllerTest>("Prefabs/UI/Message/MessageUITest");
 
     }
 
@@ -77,34 +78,8 @@ public class MessageUITest
     {
         foreach (var msg in msgs)
         {
-            yield return messageUI.StartCoroutine(ReadMessageData(msg));
-            yield return new WaitForSeconds(0.6f);
-        }
-    }
-
-    private IEnumerator ReadMessageData(MessageData[] data, float readSecPerLiteral = 0.1f)
-    {
-        messageUI.InputMessageData(data);
-        yield return null;
-        timeManager.Resume(false);
-        yield return new WaitForSeconds(0.5f);
-
-        foreach (var mes in data)
-        {
-            var duration = mes.sentence.Length / mes.literalsPerSec;
-            var readTime = mes.sentence.Length * readSecPerLiteral;
-            yield return new WaitForSeconds(readTime);
-
-            messageUI.OnPointerUp(null);
-            yield return null;
-
-            // Full sentence is displayed by a tap simulation.
-            if (duration > readTime)
-            {
-                yield return new WaitForSeconds(readTime);
-                // Tap to next message.
-                messageUI.OnPointerUp(null);
-            }
+            yield return messageUI.AutoReadMessageData(msg).ToYieldInstruction();
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -113,7 +88,7 @@ public class MessageUITest
     {
         yield return null;
 
-        yield return messageUI.StartCoroutine(ReadMessageData(new MessageData[]
+        yield return messageUI.AutoReadMessageData(new MessageData[]
         {
             new MessageData("00_デフォルト", FaceID.DEFAULT),
             new MessageData("01_怒り1", FaceID.ANGRY),
@@ -127,7 +102,7 @@ public class MessageUITest
             new MessageData("09_恥ずかし", FaceID.ASHAMED),
             new MessageData("10_びっくり", FaceID.SURPRISE),
             new MessageData("-1_なし", FaceID.NONE),
-        }, 0.25f));
+        }, 0.25f).ToYieldInstruction();
 
         yield return new WaitForSeconds(0.6f);
     }
