@@ -63,7 +63,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
     /// </summary>
     protected virtual void SetCommands()
     {
-        die = new DieCommand(target, 3.6f);
+        die = new DieCommand(target, 60f);
     }
 
     /// <summary>
