@@ -137,7 +137,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
-            6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            23, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             5, 1,22, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -161,7 +161,9 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(1, 1),    Direction.south },
         };
 
-        maps[MAX_FLOOR] = new WorldMap(new MapManager(2, matrix, 15, deadEnds));
+        var fixedMessagePos = new Dictionary<Pos, IDirection>() { { new Pos(0, 2), Direction.east } };
+
+        maps[MAX_FLOOR] = new WorldMap(new MapManager(2, matrix, 15, deadEnds, fixedMessagePos));
     }
 
     private int[] FinalMapMatrix()
@@ -178,9 +180,9 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2, 1, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 2,
             2,21, 1, 1, 1, 1, 1,21, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4, 1, 1, 1, 1,21, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,20, 6, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
-            2, 1, 0, 1, 1, 1, 1, 1, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 4, 1, 1, 1, 1,21, 2,
-            2, 4, 8, 2, 2, 2, 2, 2, 2, 0, 2, 1, 9, 1, 1, 1, 9, 1, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,20, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 4, 1, 1, 1, 1,21, 2,
+            2, 4, 2, 2, 2, 2, 2, 2, 2, 0, 2, 1, 9, 1, 1, 1, 9, 1, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
             2,21, 1, 1, 1,21, 4, 0, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 4, 1, 1, 1, 1,21, 2,
             2, 1, 1, 1, 1, 1, 2, 0, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2,
             2, 1, 1, 1, 1, 1, 2, 0, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 0, 4, 1, 1, 1, 1,21, 2,
@@ -234,6 +236,22 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         };
     }
 
+    private Dictionary<Pos, IDirection> FinalMapFixedMessagePos()
+    {
+        return new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(12, 10), Direction.north},
+            };
+    }
+
+    private Dictionary<Pos, IDirection> FinalMapBloodMessagePos()
+    {
+        return new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(2, 12), Direction.north},
+            };
+    }
+
     public void ClearMaps()
     {
         maps = Enumerable.Repeat<WorldMap>(null, MAX_FLOOR + 1).ToArray();
@@ -244,7 +262,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[1] = 31;
         mapSize[LastFloor - 1] = 29;
 
-        maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds()));
+        maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds(), FinalMapFixedMessagePos(), FinalMapBloodMessagePos()));
     }
 
     public void InitData(bool clearMaps = true)

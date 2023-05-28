@@ -32,11 +32,11 @@ public class MapTest
         int[] matrix =
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 2, 1, 1, 1, 4, 1,12, 1, 1, 1, 1,11, 2,
+            2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
             6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-           10, 0, 4, 1, 1,11, 2, 1,12, 1, 1, 1, 1, 1, 2,
+           20, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            5, 1,12, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            5, 1,22, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -44,7 +44,7 @@ public class MapTest
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 7, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         };
 
@@ -208,6 +208,87 @@ public class MapTest
                 throw new Exception("Generating map failed, count: " + i + ", -> " + e.Message + "\n" + e.StackTrace);
             }
         }
+    }
 
+    [Test]
+    public void _006_MessageBoardPlacingTest()
+    {
+        // setup
+        int[] matrix =
+        {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
+            6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+           20, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
+            2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            5, 1,22, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
+
+        var deadEnds = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(5, 5),    Direction.west  },
+            { new Pos(1, 3),    Direction.north },
+            { new Pos(1, 5),    Direction.north },
+            { new Pos(13, 13),  Direction.north },
+            { new Pos(1, 1),    Direction.south },
+        };
+
+        var fixedMessagePos = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(2, 2),    Direction.west  },
+            { new Pos(0, 8),    Direction.east  },
+            { new Pos(0, 10),   Direction.east  },
+            { new Pos(0, 12),   Direction.east  },
+            { new Pos(2, 14),   Direction.north },
+            { new Pos(9, 0),    Direction.south },
+        };
+
+        var bloodMessagePos = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(14, 12),    Direction.east },
+            { new Pos(14, 11),    Direction.east },
+        };
+
+        var firstDeadEndPos = deadEnds.First();
+        Pos downStairsPos = firstDeadEndPos.Key;
+        IDirection downStairsDir = firstDeadEndPos.Value;
+        Pos inFrontOfDownStairsPos = downStairsDir.GetForward(downStairsPos);
+
+        FloorMessagesSource src1 = ResourceLoader.Instance.floorMessagesData.Param(0);
+        FloorMessagesSource src5 = ResourceLoader.Instance.floorMessagesData.Param(4);
+        int numOfFixedMessage1 = src1.fixedMessages.Length;
+        int numOfBloodMessage1 = src1.bloodMessages.Length;
+        int numOfFixedMessage5 = src5.fixedMessages.Length;
+        int numOfBloodMessage5 = src5.bloodMessages.Length;
+
+        // when
+        MapManager sut1 = new MapManager(1, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos);
+        MapManager sut5 = new MapManager(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos); // Down stairs isn't set to last floor
+
+        // then
+        Assert.AreEqual(numOfFixedMessage1, sut1.fixedMessagePos.Count);
+        Assert.AreEqual(new Pos(2, 2), sut1.fixedMessagePos[0]);
+        Assert.AreEqual(new Pos(0, 8), sut1.fixedMessagePos[1]);
+        Assert.AreEqual(new Pos(0, 10), sut1.fixedMessagePos[2]);
+        Assert.AreEqual(new Pos(0, 12), sut1.fixedMessagePos[3]);
+        Assert.AreEqual(new Pos(2, 14), sut1.fixedMessagePos[4]);
+
+        Assert.AreEqual(numOfBloodMessage1, sut1.bloodMessagePos.Count);
+
+        // then last floor
+        Assert.AreEqual(numOfFixedMessage5, sut5.fixedMessagePos.Count);
+        Assert.AreEqual(new Pos(2, 2), sut5.fixedMessagePos[0]);
+
+        Assert.AreEqual(numOfBloodMessage5, sut5.bloodMessagePos.Count);
+        Assert.AreEqual(new Pos(14, 12), sut5.bloodMessagePos[0]);
     }
 }

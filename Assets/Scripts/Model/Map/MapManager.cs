@@ -128,7 +128,14 @@ public class MapManager
         }
     }
 
-    public MapManager(int floor, int[] matrix, int width, Dictionary<Pos, IDirection> deadEndPos = null)
+    public MapManager(
+        int floor,
+        int[] matrix,
+        int width,
+        Dictionary<Pos, IDirection> deadEndPos = null,
+        Dictionary<Pos, IDirection> fixedMessagePos = null,
+        Dictionary<Pos, IDirection> bloodMessagePos = null
+    )
     {
         this.floor = floor;
         this.width = width;
@@ -137,15 +144,31 @@ public class MapManager
 
         this.matrix = new Terrain[width, height];
 
+        var fixedMessageBuffer = new List<Pos>();
+        var bloodMessageBuffer = new List<Pos>();
+
         for (int j = 0; j < height; j++)
         {
             for (int i = 0; i < width; i++)
             {
                 this.matrix[i, j] = Util.ConvertTo<Terrain>(matrix[i + j * width]);
-                if (this.matrix[i, j] == Terrain.RoomCenter)
+
+                switch (this.matrix[i, j])
                 {
-                    this.roomCenterPos.Add(new Pos(i, j));
-                    this.matrix[i, j] = Terrain.Ground;
+                    case Terrain.RoomCenter:
+                        this.roomCenterPos.Add(new Pos(i, j));
+                        this.matrix[i, j] = Terrain.Ground;
+                        continue;
+
+                    case Terrain.MessageWall:
+                    case Terrain.MessagePillar:
+                        fixedMessageBuffer.Add(new Pos(i, j));
+                        continue;
+
+                    case Terrain.BloodMessageWall:
+                    case Terrain.BloodMessagePillar:
+                        bloodMessageBuffer.Add(new Pos(i, j));
+                        continue;
                 }
             }
         }
@@ -167,6 +190,42 @@ public class MapManager
             SetUpStairsOrStartDoor(floor);
             this.deadEndPos = this.deadEndPos.Shuffle();
         }
+
+        FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
+        int numOfFixedMessage = src.fixedMessages.Length;
+        int numOfBloodMessage = src.bloodMessages.Length;
+
+        fixedMessagePos?.ForEach(kv =>
+        {
+            if (numOfFixedMessage-- > 0) SetFixedMessage(kv.Key, kv.Value);
+        });
+
+        for (int i = 0; i < fixedMessageBuffer.Count && i < numOfFixedMessage; i++)
+        {
+            this.fixedMessagePos.Add(fixedMessageBuffer[i]);
+        }
+
+        bloodMessagePos?.ForEach(kv =>
+        {
+            if (numOfBloodMessage-- > 0) SetBloodMessage(kv.Key, kv.Value);
+        });
+
+        int bloodCount = bloodMessageBuffer.Count;
+        int bloodOverCount = bloodCount - Math.Max(0, numOfBloodMessage);
+        if (bloodOverCount > 0)
+        {
+            var bloodOver = bloodMessageBuffer.GetRange(bloodCount - bloodOverCount, bloodOverCount);
+            bloodMessageBuffer.RemoveRange(bloodCount - bloodOverCount, bloodOverCount);
+
+            // Convert surplus blood messages to random messages.
+            bloodOver.ForEach(pos => this.matrix[pos.x, pos.y] =
+                this.matrix[pos.x, pos.y] == Terrain.BloodMessageWall
+                    ? Terrain.MessageWall
+                    : Terrain.MessagePillar
+            );
+        }
+
+        this.bloodMessagePos.AddRange(bloodMessageBuffer);
     }
 
     public MapManager SetDownStairs(int floor)
@@ -274,7 +333,23 @@ public class MapManager
     protected void SetMessageBoard(Pos pos, IDirection boardDir, Terrain type = Terrain.MessageWall)
     {
         dirMap[pos.x, pos.y] = boardDir.Enum;
-        matrix[pos.x, pos.y] = type;
+        switch (matrix[pos.x, pos.y])
+        {
+            case Terrain.Wall:
+                matrix[pos.x, pos.y] = type;
+                break;
+            case Terrain.Pillar:
+                // Convert terrain type Wall to Pillar.
+                matrix[pos.x, pos.y] = Util.ConvertTo<Terrain>((int)type + 1);
+                break;
+            case Terrain.MessageWall:
+            case Terrain.MessagePillar:
+            case Terrain.BloodMessageWall:
+            case Terrain.BloodMessagePillar:
+                break;
+            default:
+                throw new ArgumentException($"The terrain type:{matrix[pos.x, pos.y]} ({pos.x}, {pos.y}) is not suitable to set message.");
+        }
     }
 
     protected bool IsAroundWall(Pos pos) => IsAroundWall(pos.x, pos.y);
