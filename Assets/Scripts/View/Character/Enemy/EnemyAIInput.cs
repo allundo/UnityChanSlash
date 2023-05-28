@@ -12,6 +12,7 @@ public interface IUndeadInput : IEnemyInput
 
 public class EnemyAIInput : MobInput, IEnemyInput
 {
+    protected ICommand idle;
     protected ICommand turnL;
     protected ICommand turnR;
     protected ICommand moveForward;
@@ -35,6 +36,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
     protected override void SetCommands()
     {
         die = new EnemyDie(target, 72f);
+        idle = new EnemyIdle(target, 60f);
         moveForward = new EnemyForward(target, 72f);
         turnL = new EnemyTurnL(target, 16f);
         turnR = new EnemyTurnR(target, 16f);
@@ -72,7 +74,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
         // Move forward if player found in front
         if (IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
-        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
+        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward)) ?? idle;
     }
 
     protected virtual ICommand MoveForwardOrTurn(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
@@ -110,12 +112,13 @@ public class EnemyAIInput : MobInput, IEnemyInput
         }
     }
 
-    protected ICommand TurnToViewOpen(bool isLeftViewOpen, bool isRightViewOpen, bool isBackwardViewOpen)
+    protected ICommand TurnToViewOpen(bool isForwardViewOpen, bool isLeftViewOpen, bool isRightViewOpen, bool isBackwardViewOpen)
     {
-        if ((isLeftViewOpen && isRightViewOpen) || isBackwardViewOpen) return RandomChoice(turnL, turnR);
+        if (isForwardViewOpen && currentCommand != idle) return idle;
+        if (isLeftViewOpen && isRightViewOpen || isBackwardViewOpen) return RandomChoice(turnL, turnR);
         if (isLeftViewOpen) return turnL;
         if (isRightViewOpen) return turnR;
 
-        return null;
+        return idle;
     }
 }

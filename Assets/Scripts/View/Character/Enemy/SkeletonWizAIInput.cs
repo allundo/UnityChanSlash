@@ -14,6 +14,7 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         attack = new EnemyAttack(target, 64f);
 
         die = new EnemyDie(target, 72f);
+        idle = new EnemyIdle(target, 60f);
         moveForward = new EnemyForward(target, 64f);
         turnL = new EnemyTurnAnimL(target, 16f);
         turnR = new EnemyTurnAnimR(target, 16f);
@@ -61,6 +62,6 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
         return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward))
-            ?? TurnToViewOpen(IsViewOpen(left), IsViewOpen(right), IsViewOpen(backward));
+            ?? TurnToViewOpen(IsViewOpen(forward), IsViewOpen(left), IsViewOpen(right), IsViewOpen(backward));
     }
 }

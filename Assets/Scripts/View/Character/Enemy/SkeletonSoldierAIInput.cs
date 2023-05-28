@@ -77,6 +77,6 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         bool isBackwardMovable = mobMap.IsMovable(backward);
         if (IsOnPlayer(backward2) && isBackwardMovable) return RandomChoice(turnL, turnR);
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable);
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable) ?? idle;
     }
 }

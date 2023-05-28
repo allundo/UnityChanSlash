@@ -71,7 +71,7 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         // Move forward if player found in front
         if (IsPlayerFound(forward) && isForwardMovable) return run;
 
-        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward));
+        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward)) ?? idle;
     }
 
     protected virtual ICommand MoveForwardOrTurn(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)

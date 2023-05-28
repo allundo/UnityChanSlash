@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(RabbitEffect))]
 public class RabbitAIInput : EnemyAIInput
 {
-    protected ICommand idle;
     protected ICommand wondering;
     protected ICommand jumpAttack;
     protected ICommand somersault;
