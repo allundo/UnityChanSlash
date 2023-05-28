@@ -242,7 +242,7 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.8, z: 0}
     tamingProbability: 0.5
     gainType: 5
-  - name: "\u30A6\u30A3\u30C3\u30C1\u3061\u3083\u3093"
+  - name: "\u8FF7\u5BAE\u306E\u756A\u4EBA"
     defaultLifeMax: 60
     attack: 10
     prefab: {fileID: 173471009557050624, guid: e54bb68aa4b0d4d509caf67f4a7777a6, type: 3}

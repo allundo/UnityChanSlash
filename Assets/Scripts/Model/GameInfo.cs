@@ -249,8 +249,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         return new Dictionary<Pos, IDirection>()
         {
-            { new Pos(2, 12), Direction.north},
-            };
+            { new Pos(23, 16), Direction.south },
+       };
     }
 
     public void ClearMaps()
