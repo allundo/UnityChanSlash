@@ -109,4 +109,13 @@ public class EnemyAIInput : MobInput, IEnemyInput
             return null;
         }
     }
+
+    protected ICommand TurnToViewOpen(bool isLeftViewOpen, bool isRightViewOpen, bool isBackwardViewOpen)
+    {
+        if ((isLeftViewOpen && isRightViewOpen) || isBackwardViewOpen) return RandomChoice(turnL, turnR);
+        if (isLeftViewOpen) return turnL;
+        if (isRightViewOpen) return turnR;
+
+        return null;
+    }
 }

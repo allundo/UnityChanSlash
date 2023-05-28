@@ -62,10 +62,15 @@ public class RedSlimeAIInput : EnemyAIInput
         Pos right2 = mobMap.dir.GetRight(right);
 
         // Turn to player if player is found in 2 tile distance
-        if (IsOnPlayer(backward2) && IsViewOpen(backward)) return RandomChoice(turnL, turnR);
-        if (IsOnPlayer(left2) && IsViewOpen(left)) return turnL;
-        if (IsOnPlayer(right2) && IsViewOpen(right)) return turnR;
+        bool isBackwardViewOpen = IsViewOpen(backward);
+        if (IsOnPlayer(backward2) && isBackwardViewOpen) return RandomChoice(turnL, turnR);
+        bool isLeftViewOpen = IsViewOpen(left);
+        if (IsOnPlayer(left2) && isLeftViewOpen) return turnL;
+        bool isRightViewOpen = IsViewOpen(right);
+        if (IsOnPlayer(right2) && isRightViewOpen) return turnR;
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable || IsOnPlayer(backward));
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable || IsOnPlayer(backward))
+            ?? TurnToViewOpen(isLeftViewOpen, isRightViewOpen, isBackwardViewOpen);
     }
+
 }
