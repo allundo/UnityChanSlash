@@ -241,7 +241,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         return new Dictionary<Pos, IDirection>()
         {
             { new Pos(12, 10), Direction.north},
-            };
+            { new Pos(22,  7), Direction.west },
+        };
     }
 
     private Dictionary<Pos, IDirection> FinalMapBloodMessagePos()

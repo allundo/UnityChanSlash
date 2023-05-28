@@ -55,6 +55,7 @@ MonoBehaviour:
     bloodMessages: []
   - fixedMessages:
     - {fileID: 11400000, guid: 3a1e0388d827644eda58603261ba65d7, type: 2}
+    - {fileID: 11400000, guid: c0e34a8aa697147ab8999dc43dfdaaea, type: 2}
     randomMessages:
     - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
     bloodMessages:
