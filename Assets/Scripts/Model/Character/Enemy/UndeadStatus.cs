@@ -31,15 +31,7 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
     {
         base.InitParam(param, data);
 
-        if (data != null)
-        {
-            curse = data.curse;
-            life.Value = data.life;
-        }
-        else
-        {
-            curse = lifeMax.Value;
-        }
+        curse = data == null || data.curse == 0 ? lifeMax.Value : data.curse;
 
         return this;
     }
