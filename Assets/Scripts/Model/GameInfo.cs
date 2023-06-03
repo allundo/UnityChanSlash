@@ -154,11 +154,34 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         var deadEnds = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(5, 5),    Direction.west  },
-            { new Pos(1, 3),    Direction.north },
-            { new Pos(1, 5),    Direction.north },
+            { new Pos( 5, 5),    Direction.west  },
+            { new Pos( 3, 1),    Direction.north },
+            { new Pos( 4, 1),    Direction.north },
+            { new Pos( 5, 1),    Direction.north },
+            { new Pos( 3, 2),    Direction.north },
+            { new Pos( 4, 2),    Direction.north },
+            { new Pos( 5, 2),    Direction.north },
+            { new Pos( 3, 3),    Direction.north },
+            { new Pos( 4, 3),    Direction.north },
+            { new Pos( 9, 1),    Direction.north },
+            { new Pos(10, 1),    Direction.north },
+            { new Pos(11, 1),    Direction.north },
+            { new Pos( 9, 2),    Direction.north },
+            { new Pos(10, 2),    Direction.north },
+            { new Pos(11, 2),    Direction.north },
+            { new Pos( 9, 3),    Direction.north },
+            { new Pos(10, 3),    Direction.north },
+            { new Pos(11, 3),    Direction.north },
+            { new Pos( 9, 4),    Direction.north },
+            { new Pos(10, 4),    Direction.north },
+            { new Pos(11, 4),    Direction.north },
+            { new Pos( 9, 5),    Direction.north },
+            { new Pos(10, 5),    Direction.north },
+            { new Pos(11, 5),    Direction.north },
+            { new Pos( 1, 3),    Direction.north },
+            { new Pos( 1, 5),    Direction.north },
             { new Pos(13, 13),  Direction.north },
-            { new Pos(1, 1),    Direction.south },
+            { new Pos( 1, 1),    Direction.south },
         };
 
         var fixedMessagePos = new Dictionary<Pos, IDirection>() { { new Pos(0, 2), Direction.east } };
