@@ -215,6 +215,7 @@ public class PlayerReactor : MobReactor
             // Cancel damage count when shield is completely on
             if (shieldEffectiveness >= 1f) playerStatus.counter.DecDamage();
 
+            playerEffect.OnShield();
             return mobStatus.CalcAttackWithShield(attack, shieldEffectiveness, attr);
         }
 

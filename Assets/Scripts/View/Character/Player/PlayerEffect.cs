@@ -29,4 +29,6 @@ public class PlayerEffect : MobEffect
         resourceFX.PlayVFX(VFXType.Iced, pos);
         matColEffect.Flash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
     }
+
+    public void OnShield() => (animFX as ShieldAnimFX).OnShield();
 }

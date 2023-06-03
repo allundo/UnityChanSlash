@@ -22,4 +22,10 @@ public class ShieldOnCommand : ShieldCommand
         (anim as ShieldAnimator).shield.Fire();
         return true;
     }
+
+    public override void Cancel()
+    {
+        (anim as ShieldAnimator).shield.Reset();
+        base.Cancel();
+    }
 }

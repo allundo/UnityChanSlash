@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
 using System;
 
@@ -257,6 +256,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
             ICommand iced = InterruptIcedFall(duration);
             return iced;
         }
+
+        if (current is ShieldOnCommand) ClearAll();
 
         return base.InputIced(duration);
     }
