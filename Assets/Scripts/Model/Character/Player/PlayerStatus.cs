@@ -121,6 +121,10 @@ public class PlayerStatus : MobStatus, IGetExp
     public void AddExp(float expObtain, EnemyType type = EnemyType.None)
     {
         counter.IncDefeat(type);
+
+        // Don't get exp on dying.
+        if (!IsAlive) return;
+
         exp.Value += expObtain;
 
         if (exp.Value >= expToNextLevel)
