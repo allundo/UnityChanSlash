@@ -592,6 +592,9 @@ public class PlayerGetItem : PlayerAction
             }
             else
             {
+                // The item was inactivated by PickItem()
+                item.Activate();
+
                 tile.PutItem(item);
             }
         }
@@ -630,6 +633,9 @@ public class PlayerHandleBox : PlayerAction
         // Cancel this handling command if player cannot pick up the item.
         if (!itemInventory.PickUp(item.itemInfo))
         {
+            // The item was inactivated by PickItem()
+            item.Activate();
+
             boxTile.PutItem(item);
             return false;
         }
