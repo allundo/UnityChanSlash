@@ -34758,6 +34758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeImage: {fileID: 9112366752199977610}
   coverImage: {fileID: 864645607073910336}
+  restButton: {fileID: 314247949}
 --- !u!1 &6700523260911184607
 GameObject:
   m_ObjectHideFlags: 0

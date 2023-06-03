@@ -7,7 +7,8 @@ using System.Linq;
 
 public class CoverScreen : FadeScreen
 {
-    [SerializeField] protected Image coverImage = null;
+    [SerializeField] protected Image coverImage = default;
+    [SerializeField] protected RestButton restButton = default;
 
     protected FadeMaterialColor fadeMC = null;
 
@@ -94,5 +95,12 @@ public class CoverScreen : FadeScreen
     private void OnDestroy()
     {
         fadeMC.OnDestroy();
+    }
+
+    public IObservable<Unit> ExitFadeOut(float duration = 3f)
+    {
+        color = new Color(1, 1, 1, 0);
+        restButton.SetVisible(false);
+        return FadeOutObservable(duration, 0, Ease.InCubic).IgnoreElements();
     }
 }
