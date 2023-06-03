@@ -276,7 +276,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         return new Dictionary<Pos, IDirection>()
         {
-            { new Pos(23, 16), Direction.south },
+            { new Pos(23, 8), Direction.south },
        };
     }
 
