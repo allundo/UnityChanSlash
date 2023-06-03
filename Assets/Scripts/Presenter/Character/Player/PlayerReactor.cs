@@ -95,7 +95,7 @@ public class PlayerReactor : MobReactor
              {
                  (fightStyle as PlayerFightStyle).SetFightStyle(equipments);
                  playerInput.SetFightInput(equipments);
-                 statusUI.UpdateShield(playerStatus.ShieldSum);
+                 statusUI.UpdateShield(playerStatus.Shield);
              })
              .AddTo(this);
 
@@ -206,28 +206,19 @@ public class PlayerReactor : MobReactor
     {
         if (restUI.isActive) return Mathf.Max(mobStatus.CalcAttack(attack, null, attr), 0.0f);
 
-        float shield = 0f;
-        float minDamage = 0f;
-
         if (guardState.IsShieldOn(dir))
         {
             float shieldEffectiveness = guardState.SetShield();
-            shield = playerStatus.ShieldSum * shieldEffectiveness;
 
             playerStatus.TryIncShield();
 
-            if (shieldEffectiveness >= 1f)
-            {
-                // Cancel damage count when shield is completely on
-                playerStatus.counter.DecDamage();
-            }
-            else
-            {
-                minDamage = 1f;
-            }
+            // Cancel damage count when shield is completely on
+            if (shieldEffectiveness >= 1f) playerStatus.counter.DecDamage();
+
+            return mobStatus.CalcAttackWithShield(attack, shieldEffectiveness, attr);
         }
 
-        return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, minDamage);
+        return mobStatus.CalcAttack(attack, dir, attr);
     }
 
     public void PitFall(float damage)

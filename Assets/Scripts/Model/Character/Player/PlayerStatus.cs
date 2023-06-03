@@ -79,7 +79,7 @@ public class PlayerStatus : MobStatus, IGetExp
     public PlayerCounter counter { get; private set; }
     public ClassSelector selector { get; private set; }
     private PlayerFightStyle fightStyle;
-    public float ShieldSum => Shield * (1f + ShieldR * fightStyle.ShieldRatioR + ShieldL * fightStyle.ShieldRatioL);
+    public override float Shield => base.Shield * (1f + ShieldR * fightStyle.ShieldRatioR + ShieldL * fightStyle.ShieldRatioL);
 
     protected override void Awake()
     {
@@ -207,7 +207,7 @@ public class PlayerStatus : MobStatus, IGetExp
             equipR = AttackR * 100f,
             equipL = AttackL * 100f,
             armor = (1f - ArmorMultiplier) * 100f,
-            shield = ShieldSum,
+            shield = Shield,
             magic = (MagicMultiplier - 1f) * 100f,
             resistFire = (1f - CalcAttrDM(AttackAttr.Fire)) * 100f,
             resistIce = (1f - CalcAttrDM(AttackAttr.Ice)) * 100f,

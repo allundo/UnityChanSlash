@@ -15,6 +15,7 @@ public interface IMobStatus : IStatus
     Vector3 corePos { get; }
 
     float CalcAttack(float attack, IDirection attackDir, AttackAttr attr = AttackAttr.None);
+    float CalcAttackWithShield(float attack, float shieldEffectiveness, AttackAttr attr = AttackAttr.None);
 }
 
 public class MobStatus : Status, IMobStatus
@@ -87,6 +88,17 @@ public class MobStatus : Status, IMobStatus
         }
 
         return DamageType.Side;
+    }
+
+    public float CalcAttackWithShield(float attack, float shieldEffectiveness, AttackAttr attr = AttackAttr.None)
+    {
+        float resist = Shield * shieldEffectiveness;
+        float damage = CalcAttack(attack, dir.Backward, attr);
+
+        // At least receive 1 damage when guard isn't perfect.
+        float absDamage = Mathf.Max(Mathf.Abs(damage) - resist, shieldEffectiveness >= 1f ? 0f : 1f);
+
+        return damage > 0 ? absDamage : -absDamage;
     }
 
     public override void ResetStatus(float life = 0f)

@@ -19,17 +19,15 @@ public class ShieldEnemyReactor : EnemyReactor
 
     protected override float CalcDamage(float attack, IDirection dir, AttackAttr attr = AttackAttr.None)
     {
-        float shield = 0.0f;
-
         if (guardState.IsShieldOn(dir))
         {
-            var shieldEffectiveness = guardState.SetShield();
-            shield = mobStatus.Shield * shieldEffectiveness;
             shieldEffect.DamageFlash(0.1f);
+            return mobStatus.CalcAttackWithShield(attack, guardState.SetShield(), attr);
         }
 
-        return Mathf.Max(mobStatus.CalcAttack(attack, dir, attr) - shield, 0.0f);
+        return mobStatus.CalcAttack(attack, dir, attr);
     }
+
     public override void Destroy()
     {
         shieldAnim.ClearTriggers();
