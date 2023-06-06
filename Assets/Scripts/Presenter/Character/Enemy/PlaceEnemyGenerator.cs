@@ -13,6 +13,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
     private EnemyType RandomEnemyType => enemyTypes[Random.Range(0, enemyTypes.Length)];
 
     private bool isWitchReserved = false;
+    private int witchLevel;
 
     private WorldMap map;
     private void SetWorldMap(WorldMap map)
@@ -21,6 +22,8 @@ public class PlaceEnemyGenerator : EnemyGenerator
         enemyTypes = enemyTypesData.Param(map.floor - 1).types;
 
         enemyTypes.ForEach(type => CreateEnemyPool(type));
+
+        witchLevel = 5 + 2 * (GameInfo.Instance.LastFloor - map.floor);
     }
 
     private void CreateEnemyPool(EnemyType type)
@@ -228,7 +231,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
     }
 
     public IEnemyStatus SpawnWitch(Pos pos, IDirection dir, float waitFrames = 120f)
-        => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, 0f, false, true, waitFrames), new EnemyStoreData(4));
+        => ManualSpawn(EnemyType.Witch, pos, dir, new EnemyStatus.ActivateOption(2f, 0f, false, true, waitFrames), new EnemyStoreData(witchLevel));
 
     private IEnemyStatus Respawn(DataStoreAgent.EnemyData data)
         => ManualSpawn(data.enemyType, data.pos, data.dir, new EnemyStatus.ActivateOption(data), data.StoreData());
