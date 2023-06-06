@@ -25,8 +25,7 @@ public class PlayerShooter : Shooter, IGetExp
 [RequireComponent(typeof(CapsuleCollider))]
 public class PlayerStatus : MobStatus, IGetExp
 {
-    private static readonly float EXP_GAIN_RATIO = 1.2f;
-    // public float exp { get; protected set; }
+    private static readonly float EXP_GAIN_RATIO = 1.25f;
     private IReactiveProperty<float> exp = new ReactiveProperty<float>(0f);
     public IObservable<float> ExpChange => exp;
     public float Exp => exp.Value;
@@ -199,6 +198,7 @@ public class PlayerStatus : MobStatus, IGetExp
         var disp = GetDispStatus();
         return ((int)disp.attack, (int)disp.magic);
     }
+
     private DispStatus GetDispStatus()
     {
         return new DispStatus()
