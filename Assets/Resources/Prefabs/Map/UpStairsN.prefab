@@ -4836,7 +4836,6 @@ GameObject:
   - component: {fileID: 2970738456269347427}
   - component: {fileID: 2970738456269347424}
   - component: {fileID: 2970738456269347425}
-  - component: {fileID: 2970738456269347430}
   - component: {fileID: 5672300880596749038}
   - component: {fileID: 1195523143432343171}
   m_Layer: 10
@@ -5886,20 +5885,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2970738456269347428}
   m_Mesh: {fileID: 0}
---- !u!64 &2970738456269347430
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2970738456269347428}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &5672300880596749038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5939,7 +5924,6 @@ GameObject:
   - component: {fileID: 2498260104055902805}
   - component: {fileID: 3217011197666931890}
   - component: {fileID: 3883069008029796515}
-  - component: {fileID: 8729543672507329418}
   m_Layer: 10
   m_Name: StairUpDirection
   m_TagString: Untagged
@@ -6079,18 +6063,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4548963652319907651}
-  m_Mesh: {fileID: 0}
---- !u!64 &8729543672507329418
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4548963652319907651}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
