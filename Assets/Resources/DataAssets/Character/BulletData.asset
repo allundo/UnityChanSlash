@@ -51,3 +51,13 @@ MonoBehaviour:
     defaultLifeMax: 4
     attack: 10
     prefab: {fileID: 979957346593184718, guid: 0f53e6b4ffa1e4e0f99a087547a9dc63, type: 3}
+  - name: "\u30E9\u30A4\u30C8\u30EC\u30FC\u30B6\u30FC"
+    defaultLifeMax: 12
+    attack: 20
+    prefab: {fileID: 1903036528992555768, guid: 599055bebf5cd45d1aef60f32112f7f5,
+      type: 3}
+  - name: "\u30B5\u30D6\u30EC\u30FC\u30B6\u30FC"
+    defaultLifeMax: 12
+    attack: 20
+    prefab: {fileID: 1582697011470974842, guid: bfa1c099b65bb48ca866cd4b19bd7558,
+      type: 3}

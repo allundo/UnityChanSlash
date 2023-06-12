@@ -543,6 +543,8 @@ public enum BulletType
     DarkSpirit,
     WitchDouble,
     Coin,
+    LightLaser,
+    SubLaser,
 }
 
 public enum VFXType
@@ -553,6 +555,7 @@ public enum VFXType
     TeleportDest,
     Resurrection,
     PitDrop,
+    HitLaser,
 }
 
 public enum SNDType

@@ -44,7 +44,6 @@ public class BulletReactor : Reactor, IBulletReactor
         if (status.IsAlive) status.LifeChange(-reduction);
     }
 
-
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!status.IsAlive) return 0f;

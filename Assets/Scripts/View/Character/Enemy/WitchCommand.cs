@@ -190,15 +190,19 @@ public class WitchDoubleIce : WitchCommand
     }
 }
 
-public class WitchMagic : WitchCommand
+public class WitchLaser : WitchCommand
 {
-    public WitchMagic(ICommandTarget target, float duration) : base(target, duration) { }
+    public WitchLaser(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
-        // TODO: Implement command action
         witchReact.Appear();
+        witchReact.OnLaserStart();
         witchAnim.magic.Fire();
+
+        ILauncher laser = target.magic.launcher[BulletType.LightLaser];
+        playingTween = laser.AttackSequence(duration).Play();
+
         return true;
     }
 }

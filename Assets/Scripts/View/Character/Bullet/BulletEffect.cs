@@ -30,7 +30,7 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
             .SetLoops(-1, LoopType.Incremental);
     }
 
-    public void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
+    public virtual void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
          => bulletMatEffect.Inactivate(onComplete, duration);
 
     public virtual void OnActive()
@@ -53,5 +53,5 @@ public class BulletEffect : MonoBehaviour, IBodyEffect
         hitVfx?.Play();
     }
 
-    public void OnDestroyByReactor() => bulletMatEffect.KillAllTweens();
+    public virtual void OnDestroyByReactor() => bulletMatEffect.KillAllTweens();
 }

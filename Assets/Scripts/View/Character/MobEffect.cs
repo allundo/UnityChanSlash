@@ -8,6 +8,8 @@ public interface IMobEffect : IBodyEffect
     void OnIced(Vector3 pos);
     void OnIceCrash(Vector3 pos);
 
+    void OnHitLaser(Vector3 pos);
+
     /// <summary>
     /// Play body effect on heal
     /// </summary>
@@ -128,6 +130,11 @@ public class MobEffect : MonoBehaviour, IMobEffect
     {
         PlayCritical(AttackType.Ice);
         resourceFX.PlayVFX(VFXType.IceCrash, pos);
+    }
+
+    public virtual void OnHitLaser(Vector3 pos)
+    {
+        resourceFX.PlayVFX(VFXType.HitLaser, pos);
     }
 
     protected virtual void StopAllAnimation()

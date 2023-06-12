@@ -9,7 +9,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     protected ICommand targetAttack;
     protected ICommand backStep;
     protected ICommand ice;
-    protected ICommand magic;
+    protected ICommand laser;
     protected ICommand summon;
     protected ICommand teleport;
 
@@ -31,7 +31,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
 
         fire = new WitchTripleFire(target, 72f);
         ice = new WitchDoubleIce(target, 72f);
-        magic = new WitchMagic(target, 108f);
+        laser = new WitchLaser(target, 108f);
         summon = new WitchSummonMonster(target, 108f);
         teleport = new MagicianTeleport(target, 84f);
 
@@ -73,11 +73,11 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         // Move forward if player found in front
         if (IsOnPlayer(forward2))
         {
-            return isForwardMovable ? RandomChoice(moveForward, fire, ice, summon) : throughForward;
+            return isForwardMovable ? RandomChoice(moveForward, fire, ice, summon, laser) : throughForward;
         }
 
         Pos forward3 = mobMap.dir.GetForward(forward2);
-        if (IsOnPlayer(forward3) && isForwardMovable) return RandomChoice(moveForward, fire, ice);
+        if (IsOnPlayer(forward3) && isForwardMovable) return RandomChoice(moveForward, fire, ice, laser);
 
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward) && Util.Judge(3)) return RandomChoice(turnL, turnR);

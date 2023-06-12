@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: base01
+  m_Name: Circle21_sheet_intensify
   m_Shader: {fileID: 4800000, guid: 3b5508abdab79409198c33ea3ca28a8b, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: bd237cb87e02849bba27c9e13f174339, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8847927cbb94d4fcf914419d3026bad4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class WitchDoubleEffect : BulletEffect
+﻿public class WitchDoubleEffect : BulletEffect
 {
     protected override void Awake()
     {

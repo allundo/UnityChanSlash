@@ -52,6 +52,11 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
         witchEffect.OnSummonStart();
     }
 
+    public void OnLaserStart()
+    {
+        witchEffect.OnLaserStart();
+    }
+
     public bool IsSummoning => summoner.IsSummoning;
 
     public override void OnOutOfView()

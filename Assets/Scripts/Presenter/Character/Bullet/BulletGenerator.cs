@@ -4,10 +4,11 @@ public class BulletGenerator : Generator<Status>
 {
     protected Param param;
 
-    public BulletStatus Fire(IStatus status)
+    public virtual BulletStatus Fire(IStatus status)
     {
-        var bullet = GetInstance(param.prefab).InitParam(param).OnSpawn(status.Position, status.dir) as BulletStatus;
-        return bullet.SetShooter(status);
+        var bullet = GetInstance(param.prefab).InitParam(param) as BulletStatus;
+        bullet.SetShooter(status).OnSpawn(status.Position, status.dir);
+        return bullet;
     }
 
     public override void DestroyAll()

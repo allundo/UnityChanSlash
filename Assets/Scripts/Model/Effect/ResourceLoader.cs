@@ -87,6 +87,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { VFXType.TeleportDest, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")   },
             { VFXType.Resurrection, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")    },
             { VFXType.PitDrop,      Resources.Load<ParticleSystem>("Prefabs/Effect/FX_PIT_DROP")        },
+            { VFXType.HitLaser,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_HIT_LASER")       },
         };
 
         prefabSNDs = new Dictionary<SNDType, AudioSource>()

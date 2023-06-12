@@ -31,6 +31,11 @@ public class WitchEffect : GhostEffect, IUndeadEffect
         summonVFX.PlayEx();
     }
 
+    public void OnLaserStart()
+    {
+        summonSnd.PlayEx();
+    }
+
     public void TeleportWipe(float duration)
     {
         matClipEffect.TeleportWipe(duration);
