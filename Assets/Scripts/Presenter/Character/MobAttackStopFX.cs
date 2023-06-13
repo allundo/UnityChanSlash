@@ -17,7 +17,7 @@ public class MobAttackStopFX : MobAttackFX
         attackFX.StopEmitting();
     }
 
-    protected override IReactor OnHitAttack(Collider collider)
+    protected override IMobReactor OnHitAttack(Collider collider)
     {
         var target = base.OnHitAttack(collider);
         if (target != null) hitSubject.OnNext(target);

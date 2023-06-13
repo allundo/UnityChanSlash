@@ -66,7 +66,7 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
 
     public virtual void OnDie() { }
 
-    protected override IReactor OnHitAttack(Collider collider)
+    protected override IMobReactor OnHitAttack(Collider collider)
     {
         var target = base.OnHitAttack(collider);
         if (target != null) hitSubject.OnNext(target);

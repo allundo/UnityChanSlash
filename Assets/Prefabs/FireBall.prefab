@@ -4893,7 +4893,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7776984636270831514}
   - component: {fileID: 7713001475001169743}
-  - component: {fileID: 7690376341311500384}
+  - component: {fileID: 5382560503444374734}
   m_Layer: 11
   m_Name: AttackDetector
   m_TagString: Untagged
@@ -4929,7 +4929,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &7690376341311500384
+--- !u!114 &5382560503444374734
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4938,7 +4938,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 914353835210319272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5fa0d9cddefb4e87aceec8b38ec4b35, type: 3}
+  m_Script: {fileID: 11500000, guid: b58e9a66792804072aca8b446a48927e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 10
@@ -38739,11 +38739,11 @@ GameObject:
   - component: {fileID: 2805387921361035656}
   - component: {fileID: 4019047258990873825}
   - component: {fileID: 290249210931567040}
-  - component: {fileID: 4403947982082489751}
   - component: {fileID: 527099848321554971}
   - component: {fileID: 1900991498281850552}
   - component: {fileID: 548237984061548355}
   - component: {fileID: 874775894602705641}
+  - component: {fileID: 4593971619237084235}
   m_Layer: 11
   m_Name: FireBall
   m_TagString: Untagged
@@ -38794,18 +38794,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4403947982082489751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2805387921361035659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5060fecb6dcb947d49db401278051559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &527099848321554971
@@ -38866,7 +38854,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks:
-  - {fileID: 7690376341311500384}
+  - {fileID: 5382560503444374734}
+--- !u!114 &4593971619237084235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2805387921361035659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb33ca095ba3c4167839bc46f7f1128e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2981539196751895809
 GameObject:
   m_ObjectHideFlags: 0

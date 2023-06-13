@@ -9789,7 +9789,7 @@ GameObject:
   m_Component:
   - component: {fileID: 979957346236115938}
   - component: {fileID: 979957346236115939}
-  - component: {fileID: 979957346236115936}
+  - component: {fileID: 6573772947888290626}
   m_Layer: 11
   m_Name: AttackDetector
   m_TagString: Untagged
@@ -9825,7 +9825,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.2
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &979957346236115936
+--- !u!114 &6573772947888290626
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9834,7 +9834,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 979957346236115937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5fa0d9cddefb4e87aceec8b38ec4b35, type: 3}
+  m_Script: {fileID: 11500000, guid: b58e9a66792804072aca8b446a48927e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
@@ -19563,8 +19563,8 @@ GameObject:
   - component: {fileID: 979957346593184716}
   - component: {fileID: 8578504596020701346}
   - component: {fileID: 979957346593184714}
-  - component: {fileID: 979957346593184715}
   - component: {fileID: 3284187562172536079}
+  - component: {fileID: 2047238341937484300}
   m_Layer: 0
   m_Name: CoinThrow
   m_TagString: Untagged
@@ -19662,18 +19662,6 @@ MonoBehaviour:
   dyingFXDuration: 2
   cycleTimeSec: 0.25
   blinkColor: {r: 1, g: 0.975, b: 0, a: 1}
---- !u!114 &979957346593184715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 979957346593184713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5060fecb6dcb947d49db401278051559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3284187562172536079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19687,7 +19675,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks:
-  - {fileID: 979957346236115936}
+  - {fileID: 6573772947888290626}
+--- !u!114 &2047238341937484300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979957346593184713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb33ca095ba3c4167839bc46f7f1128e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &979957346605047838
 GameObject:
   m_ObjectHideFlags: 0

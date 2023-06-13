@@ -1,4 +1,4 @@
-﻿public class WitchDoubleEffect : MagicEffect
+﻿public class WitchDoubleEffect : BulletEffect
 {
     protected override void Awake()
     {
@@ -20,10 +20,7 @@
         bulletMatEffect.Activate(0.01f);
     }
 
-    public override void OnDie()
-    {
-        bulletMatEffect.Inactivate();
-    }
+    protected override void OnDisappear() { }
 
-    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None) { }
+    public override void OnHit() { }
 }

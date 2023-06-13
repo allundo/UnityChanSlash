@@ -38696,6 +38696,7 @@ MonoBehaviour:
   attackType: 13
   attackAttr: 4
   attackMultiplier: 1
+  colliderSizeRatio: 1
 --- !u!1 &1903036528941823554
 GameObject:
   m_ObjectHideFlags: 0
@@ -43681,15 +43682,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f10ebf4f92dc648b58f391f4eef827fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emitVfx: {fileID: 2788481984580477548}
-  fireVfx: {fileID: 1903036527097950275}
-  hitVfx: {fileID: 0}
-  eraseVfx: {fileID: 0}
-  fireSound: {fileID: 0}
-  meshTf: {fileID: 1903036527097950277}
-  dyingFXDuration: 0
-  cycleTimeSec: 0
-  blinkColor: {r: 0, g: 0, b: 0, a: 0}
+  laserVfx: {fileID: 1903036527097950275}
+  wallVfx: {fileID: 2788481984580477548}
+  laserSnd: {fileID: 0}
 --- !u!114 &7482947037716119834
 MonoBehaviour:
   m_ObjectHideFlags: 0

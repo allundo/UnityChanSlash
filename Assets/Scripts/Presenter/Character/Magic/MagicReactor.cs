@@ -1,20 +1,16 @@
 using UnityEngine;
 
-public interface IMagicReactor : IReactor
-{
-    void ReduceHP(float reduction = 1f);
-    float CurrentHP { get; }
-}
-
 [RequireComponent(typeof(MagicStatus))]
 [RequireComponent(typeof(MagicInput))]
 [RequireComponent(typeof(MagicEffect))]
 [RequireComponent(typeof(MapUtil))]
-public class MagicReactor : Reactor, IMagicReactor
+[RequireComponent(typeof(FightStyle))]
+public class MagicReactor : MortalReactor
 {
     protected IMapUtil map;
     protected IInput input;
-    protected IBodyEffect effect;
+    protected IMagicEffect effect;
+    protected IMagicAttack attack;
 
     protected override void Awake()
     {
@@ -22,6 +18,7 @@ public class MagicReactor : Reactor, IMagicReactor
         effect = GetComponent<MagicEffect>();
         input = GetComponent<MagicInput>();
         map = GetComponent<MapUtil>();
+        attack = (GetComponent<FightStyle>().Attack(0) as IMagicAttack);
     }
 
     protected override void OnLifeChange(float life)
@@ -37,26 +34,9 @@ public class MagicReactor : Reactor, IMagicReactor
         input.OnActive();
     }
 
-    public float CurrentHP => status.Life.Value;
-
-    public void ReduceHP(float reduction = 1f)
-    {
-        if (status.IsAlive) status.LifeChange(-reduction);
-    }
-
-    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
-    {
-        if (!status.IsAlive) return 0f;
-
-        status.LifeChange(-attack);
-        effect.OnDamage(attack, type, attr);
-
-        return attack;
-    }
-
     public override void OnDie()
     {
-        effect.OnDie();
+        attack.SetCollider(false);
         effect.Disappear(OnDead);
     }
 
@@ -65,8 +45,7 @@ public class MagicReactor : Reactor, IMagicReactor
         // Stop all tweens before destroying
         input.ClearAll();
         effect.OnDestroyByReactor();
-
-        bodyCollider.enabled = false;
+        attack.SetCollider(false);
 
         Destroy(gameObject);
     }

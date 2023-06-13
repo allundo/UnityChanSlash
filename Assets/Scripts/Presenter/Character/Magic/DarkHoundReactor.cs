@@ -1,9 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MagicStatus))]
 [RequireComponent(typeof(DarkHoundInput))]
-[RequireComponent(typeof(MagicEffect))]
-public class DarkHoundReactor : MagicReactor
+public class DarkHoundReactor : BulletReactor
 {
     protected Transform targetTf = null;
     public float TargetAngle => targetTf == null ? 0f : Vector3.SignedAngle(transform.forward, targetTf.position - transform.position, Vector3.up);
@@ -27,18 +25,9 @@ public class DarkHoundReactor : MagicReactor
         }
     }
 
-    protected override void OnActive()
+    protected override void Hit(float drain)
     {
-        effect.OnActive();
-        // Need to set MapUtil.onTilePos before input moving Command
-        map.OnActive();
-        input.OnActive();
-        bodyCollider.enabled = true;
-    }
-
-    public override float Damage(float drain, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
-    {
-        if (!status.IsAlive) return 0f;
+        if (!status.IsAlive) return;
 
         var lifeMax = status.LifeMax.Value;
 
@@ -50,10 +39,14 @@ public class DarkHoundReactor : MagicReactor
 
         for (float power = 0f; power < spiritsPower; power += status.attack) launcher.Fire();
 
-        effect.OnDamage(lifeMax, type, attr);
-        status.LifeChange(-lifeMax);
+        effect.OnHit();
+        Die();
+    }
 
-        return lifeMax;
+    protected override void OnActive()
+    {
+        base.OnActive();
+        bodyCollider.enabled = true;
     }
 
     public override void OnDie()

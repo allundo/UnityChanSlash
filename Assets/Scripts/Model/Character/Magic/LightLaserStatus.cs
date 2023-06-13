@@ -29,7 +29,6 @@ public class LightLaserStatus : MagicStatus, ILaserStatus
     {
         base.SetShooter(status);
         length = CalcLength();
-        UnityEngine.Debug.Log($"length:{length}");
 
         shooterDeath?.Dispose();
         shooterDeath = shotBy.Life.Where(life => life <= 0.0f)

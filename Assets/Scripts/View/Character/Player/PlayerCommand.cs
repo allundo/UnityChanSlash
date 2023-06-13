@@ -8,6 +8,7 @@ public abstract class PlayerCommand : MobCommand
     protected PlayerCommandTarget playerTarget;
     protected PlayerAnimator playerAnim;
     protected PlayerInput playerInput;
+    protected PlayerReactor playerReact;
     protected ThirdPersonCamera mainCamera;
     protected HidePlateHandler hidePlateHandler;
     protected ItemGenerator itemGenerator;
@@ -24,6 +25,7 @@ public abstract class PlayerCommand : MobCommand
 
         playerAnim = anim as PlayerAnimator;
         playerInput = input as PlayerInput;
+        playerReact = react as PlayerReactor;
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
         itemGenerator = target.itemGenerator;
@@ -438,7 +440,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
             completeTween = meltTimer.Play();
         }
 
-        (react as PlayerReactor).Iced(framesToMelt, false);
+        playerReact.Iced(framesToMelt, false);
         playingTween = jumpSeq.SetUpdate(false).Play();
 
         return ObservableComplete();
@@ -893,7 +895,7 @@ public class PlayerDropFloor : PlayerCommand
         SetUIInvisible(false);
         playerAnim.dropFloor.Fire();
 
-        playingTween = tweenMove.Drop(25.0f, 0f, 0.66f, 1.34f, () => react.Damage(1f, map.dir.Backward, AttackType.Smash)).Play();
+        playingTween = tweenMove.Drop(25.0f, 0f, 0.66f, 1.34f, () => playerReact.Damage(1f, map.dir.Backward, AttackType.Smash)).Play();
         return true;
     }
 }

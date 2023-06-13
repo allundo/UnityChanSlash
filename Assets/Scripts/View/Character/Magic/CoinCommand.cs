@@ -14,12 +14,12 @@ public class CoinCommand : MagicCommand
 }
 public class CoinMove : CoinCommand
 {
-    protected IMagicReactor mortalReact;
+    protected IMortalReactor mortalReact;
     protected CoinBound coinBound;
 
     public CoinMove(ICommandTarget target, float duration) : base(target, duration)
     {
-        mortalReact = react as IMagicReactor;
+        mortalReact = react as IMortalReactor;
         coinBound = new CoinBound(target, duration);
     }
 

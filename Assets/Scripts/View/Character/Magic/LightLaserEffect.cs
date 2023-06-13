@@ -1,26 +1,22 @@
-﻿using DG.Tweening;
+﻿using UnityEngine;
 
-public class LightLaserEffect : MagicEffect
+public class LightLaserEffect : MagicEffectFX
 {
-    private Tween deadTimer;
-    public override void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
+    [SerializeField] protected ParticleSystem laserVfx = default;
+    [SerializeField] protected ParticleSystem wallVfx = default;
+    [SerializeField] protected AudioSource laserSnd = default;
+
+    protected override void OnDisappear()
     {
-        emitVfx.StopEmitting();
-        fireVfx.StopEmitting();
-        fireSound.StopEx();
-        deadTimer = DOVirtual.DelayedCall(duration, onComplete, false).Play();
+        wallVfx.StopEmitting();
+        laserVfx.StopEmitting();
+        laserSnd.StopEx();
     }
 
     public override void OnActive()
     {
-        emitVfx.PlayEx();
-        fireVfx.PlayEx();
-        fireSound.PlayEx();
+        wallVfx.PlayEx();
+        laserVfx.PlayEx();
+        laserSnd.PlayEx();
     }
-
-    public override void OnDie() { }
-
-    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None) { }
-
-    public override void OnDestroyByReactor() => deadTimer?.Kill();
 }

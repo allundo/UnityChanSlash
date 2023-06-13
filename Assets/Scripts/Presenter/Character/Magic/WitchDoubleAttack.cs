@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WitchDoubleAttack : MobAttack
+public class WitchDoubleAttack : MobAttack, IMagicAttack
 {
     protected AttackData data;
 
@@ -10,15 +10,14 @@ public class WitchDoubleAttack : MobAttack
         data = new AttackData(attackMultiplier, attackType, attackAttr);
     }
 
-    protected override IReactor OnHitAttack(Collider collider)
+    protected override void AffectTarget(IMobReactor target)
     {
-        IReactor targetMob = collider.GetComponent<MobReactor>();
+        var magicStatus = status as MagicStatus;
+        target.Damage(Shooter.New(magicStatus.Attack, magicStatus.shotBy), data);
+    }
 
-        if (null == targetMob) return null;
-
-        var bulletStatus = status as MagicStatus;
-
-        targetMob.Damage(Shooter.New(bulletStatus.Attack, bulletStatus.shotBy), data);
-        return targetMob;
+    public void SetCollider(bool isEnabled)
+    {
+        attackCollider.enabled = isEnabled;
     }
 }

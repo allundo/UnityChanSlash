@@ -2,6 +2,9 @@ using UnityEngine;
 
 public interface IMobReactor : IReactor
 {
+    float Damage(IAttacker attacker, Attack.AttackData attackData);
+    float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None);
+
     /// <summary>
     /// Apply healing by rate of life max.
     /// </summary>
@@ -64,14 +67,14 @@ public class MobReactor : Reactor, IMobReactor
         if (life <= 0.0f) input.InterruptDie();
     }
 
-    public override float Damage(IAttacker attacker, Attack.AttackData attackData)
+    public virtual float Damage(IAttacker attacker, Attack.AttackData attackData)
     {
         lastAttacker = attacker;
         lastAttackType = attackData.type;
-        return base.Damage(attacker, attackData);
+        return Damage(attacker.attack * attackData.multiplier, attacker.dir, attackData.type, attackData.attr);
     }
 
-    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public virtual float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         if (!mobStatus.IsAlive || mobStatus.isHidden) return 0f;
 

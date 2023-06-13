@@ -50,15 +50,20 @@ public class Attack : AttackBehaviour
         attackCollider.enabled = true;
     }
 
-    protected virtual IReactor OnHitAttack(Collider collider)
+    protected virtual IMobReactor OnHitAttack(Collider collider)
     {
-        IReactor targetMob = collider.GetComponent<MobReactor>();
+        IMobReactor targetMob = collider.GetComponent<MobReactor>();
 
         if (null == targetMob) return null;
 
-        targetMob.Damage(status, new AttackData(currentAttack, attackType, attackAttr));
+        AffectTarget(targetMob);
 
         return targetMob;
+    }
+
+    protected virtual void AffectTarget(IMobReactor target)
+    {
+        target.Damage(status, new AttackData(currentAttack, attackType, attackAttr));
     }
 
     protected virtual void OnHitFinished()

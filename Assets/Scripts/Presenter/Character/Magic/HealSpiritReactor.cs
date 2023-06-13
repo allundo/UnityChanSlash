@@ -3,11 +3,11 @@ using DG.Tweening;
 
 [RequireComponent(typeof(MagicStatus))]
 [RequireComponent(typeof(HealSpritEffect))]
-public class HealSpiritReactor : Reactor, IMagicReactor
+public class HealSpiritReactor : MortalReactor
 {
     protected MagicStatus bulletStatus;
-    protected IBodyEffect effect;
-    protected bool isTweening = false;
+    protected IMagicEffect effect;
+    protected bool isTrailing = false;
     protected Tween emittingTween = null;
 
     protected override void Awake()
@@ -19,58 +19,44 @@ public class HealSpiritReactor : Reactor, IMagicReactor
 
     protected virtual void Update()
     {
-        if (isTweening) return;
+        if (!isTrailing) return;
         transform.position += (bulletStatus.shotBy.Position - transform.position).normalized * Time.deltaTime * 2.5f;
         ReduceHP(Time.deltaTime);
     }
 
-    protected override void OnLifeChange(float life)
-    {
-        if (life <= 0.0f) OnDie();
-    }
-
     protected virtual void OnTriggerEnter(Collider other)
     {
+        if (!status.IsAlive) return;
+
         MobReactor targetMob = other.GetComponent<MobReactor>();
         if (bulletStatus.shotBy.gameObject != targetMob?.gameObject) return;
 
-        targetMob.Heal(status.attack);
-        Damage(20f, null);
-        bodyCollider.enabled = false;
+        AffectTarget(targetMob);
+
+        effect.OnHit();
+        Die();
     }
 
-    public float CurrentHP => status.Life.Value;
-    public void ReduceHP(float reduction = 1f)
+    protected virtual void AffectTarget(IMobReactor target)
     {
-        if (status.IsAlive) status.LifeChange(-reduction);
-    }
-
-    public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
-    {
-        if (!status.IsAlive) return 0f;
-
-        status.LifeChange(-attack);
-        effect.OnDamage(attack, type, attr);
-
-        return 10f;
+        target.Heal(status.attack);
     }
 
     public override void OnDie()
     {
         bodyCollider.enabled = false;
-        effect.OnDie();
+        isTrailing = false;
         effect.Disappear(OnDead);
-        isTweening = true;
     }
 
     protected override void OnActive()
     {
         effect.OnActive();
         bodyCollider.enabled = true;
-        isTweening = true;
+        isTrailing = false;
         emittingTween = transform.DOMove(UnityEngine.Random.onUnitSphere * 2f, 0.5f)
             .SetRelative(true)
-            .OnComplete(() => isTweening = false)
+            .OnComplete(() => isTrailing = true)
             .Play();
     }
 

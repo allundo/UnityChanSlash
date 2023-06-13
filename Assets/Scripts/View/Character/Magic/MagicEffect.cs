@@ -1,57 +1,30 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class MagicEffect : MonoBehaviour, IBodyEffect
+public interface IMagicEffect : IEffect
 {
-    [SerializeField] protected ParticleSystem emitVfx = default;
-    [SerializeField] protected ParticleSystem fireVfx = default;
-    [SerializeField] protected ParticleSystem hitVfx = default;
-    [SerializeField] protected ParticleSystem eraseVfx = default;
+    void OnHit();
+}
 
-    [SerializeField] protected AudioSource fireSound = default;
-
-    [SerializeField] protected Transform meshTf = null;
-    [SerializeField] protected float dyingFXDuration = 0f;
-    [SerializeField] protected float cycleTimeSec = 0f;
-    [SerializeField] protected Color blinkColor = default;
-
-    protected MatColorEffect bulletMatEffect = null;
-
-    protected virtual void Awake()
+public class MagicEffect : MonoBehaviour, IMagicEffect
+{
+    public virtual void Disappear(TweenCallback onComplete = null, float duration = 0.5F)
     {
-        bulletMatEffect = new BulletMatEffect(meshTf, dyingFXDuration, cycleTimeSec, blinkColor);
+        if (onComplete != null) onComplete();
     }
+    public virtual void OnActive() { }
+    public virtual void OnHit() { }
+    public virtual void OnDestroyByReactor() { }
+}
 
-    protected virtual Tween RollingTween(float duration = 0.25f)
+public abstract class MagicEffectFX : MagicEffect
+{
+    protected Tween deadTimer;
+    public override void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
     {
-        return meshTf.DOLocalRotate(new Vector3(0f, 0f, 90f), duration, RotateMode.FastBeyond360)
-            .SetEase(Ease.Linear)
-            .SetRelative()
-            .SetLoops(-1, LoopType.Incremental);
+        OnDisappear();
+        deadTimer = DOVirtual.DelayedCall(duration, onComplete, false).Play();
     }
-
-    public virtual void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
-         => bulletMatEffect.Inactivate(onComplete, duration);
-
-    public virtual void OnActive()
-    {
-        fireSound.PlayEx();
-        emitVfx.PlayEx();
-        fireVfx.PlayEx();
-        bulletMatEffect.Activate();
-    }
-
-    public virtual void OnDie()
-    {
-        eraseVfx.PlayEx();
-        emitVfx.StopEmitting();
-    }
-
-    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
-    {
-        bulletMatEffect.DamageFlash(damageRatio);
-        hitVfx?.Play();
-    }
-
-    public virtual void OnDestroyByReactor() => bulletMatEffect.KillAllTweens();
+    protected abstract void OnDisappear();
+    public override void OnDestroyByReactor() => deadTimer?.Complete();
 }

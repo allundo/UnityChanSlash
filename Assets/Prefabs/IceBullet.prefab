@@ -38985,7 +38985,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6710468429364292473}
   - component: {fileID: 6710468429364292475}
-  - component: {fileID: 6710468429364292472}
+  - component: {fileID: 7847097677918797928}
   m_Layer: 11
   m_Name: AttackDetector
   m_TagString: Untagged
@@ -39021,7 +39021,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &6710468429364292472
+--- !u!114 &7847097677918797928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39030,7 +39030,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6710468429364292478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5fa0d9cddefb4e87aceec8b38ec4b35, type: 3}
+  m_Script: {fileID: 11500000, guid: b58e9a66792804072aca8b446a48927e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 11
@@ -92421,11 +92421,11 @@ GameObject:
   - component: {fileID: 6710468430858598544}
   - component: {fileID: 6710468430858598638}
   - component: {fileID: 6710468430858598639}
-  - component: {fileID: 6710468430858598636}
   - component: {fileID: 6710468430858598546}
   - component: {fileID: 6710468430858598547}
   - component: {fileID: 1358560897634642497}
   - component: {fileID: 828473255341541324}
+  - component: {fileID: 776744946680856610}
   m_Layer: 0
   m_Name: IceBullet
   m_TagString: Untagged
@@ -92487,18 +92487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 591077e3b633e45bf9cf610ca370e711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6710468430858598636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6710468430858598545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5060fecb6dcb947d49db401278051559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6710468430858598546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92548,7 +92536,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks:
-  - {fileID: 6710468429364292472}
+  - {fileID: 7847097677918797928}
+--- !u!114 &776744946680856610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6710468430858598545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb33ca095ba3c4167839bc46f7f1128e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6710468430955627237
 GameObject:
   m_ObjectHideFlags: 0

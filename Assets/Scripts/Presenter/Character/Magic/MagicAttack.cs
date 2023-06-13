@@ -1,27 +1,26 @@
-using UnityEngine;
-
-public class MagicAttack : Attack
+public interface IMagicAttack : IAttack
 {
-    protected MagicReactor reactor;
+    void SetCollider(bool isEnabled);
+}
+
+public class MagicAttack : Attack, IMagicAttack
+{
     protected AttackData data;
 
     protected override void Awake()
     {
         base.Awake();
         data = new AttackData(attackMultiplier, attackType, attackAttr);
-        reactor = GetComponentInParent<MagicReactor>();
     }
 
-    protected override IReactor OnHitAttack(Collider collider)
+    protected override void AffectTarget(IMobReactor target)
     {
-        IReactor targetMob = collider.GetComponent<MobReactor>();
+        var magicStatus = status as MagicStatus;
+        target.Damage(Shooter.New(magicStatus.Attack, magicStatus.shotBy), data);
+    }
 
-        if (null == targetMob) return null;
-
-        var bulletStatus = status as MagicStatus;
-
-        targetMob.Damage(Shooter.New(bulletStatus.Attack, bulletStatus.shotBy), data);
-        reactor.Damage(status.LifeMax.Value, null, AttackType.None, AttackAttr.None);
-        return targetMob;
+    public void SetCollider(bool isEnabled)
+    {
+        attackCollider.enabled = isEnabled;
     }
 }

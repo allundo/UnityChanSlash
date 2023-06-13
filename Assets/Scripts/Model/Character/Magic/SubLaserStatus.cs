@@ -1,6 +1,3 @@
-using System;
-using UniRx;
-
 public class SubLaserStatus : MagicStatus, ILaserStatus
 {
     public int length { get; private set; } = 0;

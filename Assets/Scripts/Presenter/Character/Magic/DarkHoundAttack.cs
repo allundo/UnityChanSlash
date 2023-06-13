@@ -1,15 +1,9 @@
-using UnityEngine;
 
-public class DarkHoundAttack : MagicAttack
+public class DarkHoundAttack : BulletAttack
 {
-    protected override IReactor OnHitAttack(Collider collider)
+    protected override void AffectTarget(IMobReactor target)
     {
-        IReactor targetMob = collider.GetComponent<MobReactor>();
-
-        if (null == targetMob) return null;
-
-        var damage = targetMob.Damage(status.attack * attackMultiplier, Direction.Convert(transform.forward), attackType, attackAttr);
-        reactor.Damage(damage, null, AttackType.None, AttackAttr.None);
-        return targetMob;
+        var magicStatus = status as MagicStatus;
+        hitSubject.OnNext(target.Damage(Shooter.New(magicStatus.Attack, magicStatus.shotBy, Direction.Convert(transform.forward)), data));
     }
 }

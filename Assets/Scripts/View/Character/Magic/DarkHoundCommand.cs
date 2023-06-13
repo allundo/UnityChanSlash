@@ -25,7 +25,7 @@ public class DarkHoundMove : MagicMove
         completeTween = AttackSequence.Play();
         validateTween = ValidateTween().Play();
 
-        (react as IMagicReactor).ReduceHP();
+        (react as IMortalReactor).ReduceHP();
 
         return ObservableComplete();
     }

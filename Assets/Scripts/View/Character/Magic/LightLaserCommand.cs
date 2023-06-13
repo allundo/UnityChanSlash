@@ -20,7 +20,7 @@ public class SubLaserFire : MagicCommand
 
     protected override bool Action()
     {
-        (attack as SubLaserAttack).SetColliderLength();
+        (attack as LightLaserAttack).SetColliderLength();
         return true;
     }
 }
@@ -32,7 +32,7 @@ public class LightLaserActive : MagicCommand
     protected override bool Action()
     {
         completeTween = attack.AttackSequence(duration).Play();
-        (react as IMagicReactor).ReduceHP();
+        (react as IMortalReactor).ReduceHP();
         return true;
     }
 }
