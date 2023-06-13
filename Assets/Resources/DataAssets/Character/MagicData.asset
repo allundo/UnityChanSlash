@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7d0cd117c4c34c75be3491d004ef534, type: 3}
-  m_Name: BulletData
+  m_Name: MagicData
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u30D5\u30A1\u30A4\u30A2\u30DC\u30FC\u30EB"

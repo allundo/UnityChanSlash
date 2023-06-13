@@ -3,7 +3,7 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class DarkHoundMove : BulletMove
+public class DarkHoundMove : MagicMove
 {
     protected override Tween MoveForward()
     {
@@ -25,13 +25,13 @@ public class DarkHoundMove : BulletMove
         completeTween = AttackSequence.Play();
         validateTween = ValidateTween().Play();
 
-        (react as IBulletReactor).ReduceHP();
+        (react as IMagicReactor).ReduceHP();
 
         return ObservableComplete();
     }
 }
 
-public class DarkHoundDie : BulletDie
+public class DarkHoundDie : MagicDie
 {
     public DarkHoundDie(ICommandTarget target, float duration) : base(target, duration) { }
     protected override Tween MoveForward() => tweenMove.MoveForward(TILE_UNIT * 0.05f).Play();

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class LightLaserAttack : BulletAttack
+public class LightLaserAttack : MagicAttack
 {
     public void SetColliderLength()
     {

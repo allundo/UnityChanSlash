@@ -1,8 +1,8 @@
-public class SpiritStatus : BulletStatus
+public class SpiritStatus : MagicStatus
 {
-    public override BulletStatus SetShooter(IStatus shooter)
+    public override MagicStatus SetShooter(IStatus shooter)
     {
-        shotBy = (shooter as IBulletStatus).shotBy;
+        shotBy = (shooter as IMagicStatus).shotBy;
         attack = shooter.attack;
         return this;
     }

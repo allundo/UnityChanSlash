@@ -155,7 +155,7 @@ MonoBehaviour:
   isPersistent: 0
   placeEnemyGenerator: {fileID: 1196509789}
   itemGenerator: {fileID: 1345430765}
-  bulletGeneratorLoader: {fileID: 795530022}
+  magicGeneratorLoader: {fileID: 795530022}
   lightGenerator: {fileID: 1632812994}
   lifeGaugeGenerator: {fileID: 1732795926}
   debugEnemyGenerators:
@@ -10535,7 +10535,7 @@ GameObject:
   - component: {fileID: 795530023}
   - component: {fileID: 795530022}
   m_Layer: 0
-  m_Name: BulletGeneratorLoader
+  m_Name: MagicGeneratorLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

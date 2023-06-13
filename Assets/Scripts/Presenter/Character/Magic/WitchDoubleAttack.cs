@@ -16,7 +16,7 @@ public class WitchDoubleAttack : MobAttack
 
         if (null == targetMob) return null;
 
-        var bulletStatus = status as BulletStatus;
+        var bulletStatus = status as MagicStatus;
 
         targetMob.Damage(Shooter.New(bulletStatus.Attack, bulletStatus.shotBy), data);
         return targetMob;

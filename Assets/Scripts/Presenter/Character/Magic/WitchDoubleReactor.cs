@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(WitchDoubleStatus))]
 [RequireComponent(typeof(WitchDoubleInput))]
 [RequireComponent(typeof(WitchDoubleEffect))]
-public class WitchDoubleReactor : BulletReactor
+public class WitchDoubleReactor : MagicReactor
 {
     public bool IsBackStep => (status as WitchDoubleStatus).isBackStep;
 

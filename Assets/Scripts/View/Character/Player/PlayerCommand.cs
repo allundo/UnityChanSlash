@@ -803,8 +803,8 @@ public class PlayerCriticalAttack : PlayerAttackCommand
 public class PlayerFire : PlayerAction
 {
     public bool isCancelable { get; protected set; } = false;
-    protected BulletType type;
-    public PlayerFire(PlayerCommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
+    protected MagicType type;
+    public PlayerFire(PlayerCommandTarget target, float duration, MagicType type = MagicType.FireBall) : base(target, duration)
     {
         this.type = type;
     }
@@ -829,7 +829,7 @@ public class PlayerFire : PlayerAction
 
 public class PlayerCoinThrow : PlayerFire
 {
-    public PlayerCoinThrow(PlayerCommandTarget target, float duration) : base(target, duration, BulletType.Coin) { }
+    public PlayerCoinThrow(PlayerCommandTarget target, float duration) : base(target, duration, MagicType.Coin) { }
     protected override void ValidateAction()
     {
         isCancelable = true;

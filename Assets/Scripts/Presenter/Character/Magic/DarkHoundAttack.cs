@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DarkHoundAttack : BulletAttack
+public class DarkHoundAttack : MagicAttack
 {
     protected override IReactor OnHitAttack(Collider collider)
     {

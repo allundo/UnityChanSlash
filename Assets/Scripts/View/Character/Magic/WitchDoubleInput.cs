@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(WitchDoubleAnimator))]
-public class WitchDoubleInput : BulletInput
+public class WitchDoubleInput : MagicInput
 {
     protected ICommand jump;
     protected ICommand backStep;
@@ -14,7 +14,7 @@ public class WitchDoubleInput : BulletInput
         jump = new WitchDoubleJump(target, 32f, attack);
         backStep = new WitchDoubleBackStep(target, 32f, attack);
 
-        die = new BulletDie(target, 28f);
+        die = new MagicDie(target, 28f);
         react = target.react as WitchDoubleReactor;
     }
 

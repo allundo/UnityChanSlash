@@ -4,10 +4,10 @@ using DG.Tweening;
 
 public class Magic : MonoBehaviour
 {
-    [SerializeField] protected BulletType[] types;
-    public BulletType PrimaryType => types[0];
+    [SerializeField] protected MagicType[] types;
+    public MagicType PrimaryType => types[0];
 
-    public Dictionary<BulletType, ILauncher> launcher { get; protected set; } = new Dictionary<BulletType, ILauncher>();
+    public Dictionary<MagicType, ILauncher> launcher { get; protected set; } = new Dictionary<MagicType, ILauncher>();
 
     protected virtual void Start()
     {
@@ -16,6 +16,6 @@ public class Magic : MonoBehaviour
         types.ForEach(type => launcher[type] = new Launcher(status, type));
     }
 
-    public Tween MagicSequence(BulletType type, float duration) => launcher[type].AttackSequence(duration);
-    public void Fire(BulletType type) => launcher[type].Fire();
+    public Tween MagicSequence(MagicType type, float duration) => launcher[type].AttackSequence(duration);
+    public void Fire(MagicType type) => launcher[type].Fire();
 }

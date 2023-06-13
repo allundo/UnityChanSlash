@@ -1,4 +1,4 @@
-public class SubLaserInput : BulletInput
+public class SubLaserInput : MagicInput
 {
     protected override void SetCommands()
     {

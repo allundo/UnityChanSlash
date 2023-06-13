@@ -3,7 +3,7 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class CoinCommand : BulletCommand
+public class CoinCommand : MagicCommand
 {
     protected CoinInput coinInput;
 
@@ -14,12 +14,12 @@ public class CoinCommand : BulletCommand
 }
 public class CoinMove : CoinCommand
 {
-    protected IBulletReactor bulletReact;
+    protected IMagicReactor mortalReact;
     protected CoinBound coinBound;
 
     public CoinMove(ICommandTarget target, float duration) : base(target, duration)
     {
-        bulletReact = react as IBulletReactor;
+        mortalReact = react as IMagicReactor;
         coinBound = new CoinBound(target, duration);
     }
 
@@ -30,7 +30,7 @@ public class CoinMove : CoinCommand
         // Forward movable?
         if (map.ForwardTile.IsViewOpen)
         {
-            if (bulletReact.CurrentHP <= 1f)
+            if (mortalReact.CurrentHP <= 1f)
             {
                 map.MoveObjectOn(map.GetForward);
                 playingTween = tweenMove.JumpHalf(map.DestVec - new Vector3(0, 1f, 0), 0.75f, false).Play();
@@ -39,7 +39,7 @@ public class CoinMove : CoinCommand
                 return ObservableComplete(0.75f);
             }
 
-            bulletReact.ReduceHP();
+            mortalReact.ReduceHP();
 
             playingTween = MoveForward();
             completeTween = AttackSequence.Play();

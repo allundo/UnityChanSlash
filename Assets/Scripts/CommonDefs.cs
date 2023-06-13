@@ -533,7 +533,7 @@ public enum EnemyType
     Witch,
 }
 
-public enum BulletType
+public enum MagicType
 {
     FireBall = 0,
     IceBullet,
@@ -584,7 +584,7 @@ public enum ObjectLayerEnum
     Player = 8,
     Enemy,
     Structure,
-    Bullet,
+    Magic,
 }
 
 public enum BagSize

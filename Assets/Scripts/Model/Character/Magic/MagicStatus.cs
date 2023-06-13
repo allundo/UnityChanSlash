@@ -1,18 +1,18 @@
 using UnityEngine;
 
-public interface IBulletStatus : IStatus
+public interface IMagicStatus : IStatus
 {
     void SetAttack(float attack);
     IStatus shotBy { get; }
 }
 
-public class BulletStatus : Status, IBulletStatus
+public class MagicStatus : Status, IMagicStatus
 {
     public IStatus shotBy { get; protected set; }
     public void SetAttack(float attack) => this.attack = attack;
     public float Attack => attack * shotBy.MagicMultiplier;
 
-    public virtual BulletStatus SetShooter(IStatus shooter)
+    public virtual MagicStatus SetShooter(IStatus shooter)
     {
         shotBy = shooter;
         return this;

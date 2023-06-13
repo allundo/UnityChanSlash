@@ -212,8 +212,8 @@ public class EnemyDoubleAttack : EnemyAttack
 
 public class EnemyFire : EnemyAttack
 {
-    protected BulletType type;
-    public EnemyFire(ICommandTarget target, float duration, BulletType type = BulletType.FireBall) : base(target, duration)
+    protected MagicType type;
+    public EnemyFire(ICommandTarget target, float duration, MagicType type = MagicType.FireBall) : base(target, duration)
     {
         this.type = type;
     }

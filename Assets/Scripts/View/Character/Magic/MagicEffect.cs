@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class BulletEffect : MonoBehaviour, IBodyEffect
+public class MagicEffect : MonoBehaviour, IBodyEffect
 {
     [SerializeField] protected ParticleSystem emitVfx = default;
     [SerializeField] protected ParticleSystem fireVfx = default;

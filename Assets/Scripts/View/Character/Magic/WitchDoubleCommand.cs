@@ -3,7 +3,7 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class WitchDoubleCommand : BulletCommand
+public class WitchDoubleCommand : MagicCommand
 {
     protected WitchDoubleAnimator witchAnim;
     protected WitchDoubleReactor witchReact;

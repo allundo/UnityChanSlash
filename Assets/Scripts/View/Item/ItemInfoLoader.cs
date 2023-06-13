@@ -42,9 +42,9 @@ public class ItemInfoLoader
             { ItemType.SnowNecklace,    new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.CrossNecklace,   new ItemAction(ItemAttr.Equipment)                              },
             { ItemType.Coin,            new CoinAction(ItemAttr.Consumption)                            },
-            { ItemType.FireRing,        new MagicRingAction(ItemAttr.Ring, BulletType.FireBall)         },
-            { ItemType.IceRing,         new MagicRingAction(ItemAttr.Ring, BulletType.IceBullet)        },
-            { ItemType.DarkRing,        new MagicRingAction(ItemAttr.Ring, BulletType.PlayerDarkHound)  },
+            { ItemType.FireRing,        new MagicRingAction(ItemAttr.Ring, MagicType.FireBall)         },
+            { ItemType.IceRing,         new MagicRingAction(ItemAttr.Ring, MagicType.IceBullet)        },
+            { ItemType.DarkRing,        new MagicRingAction(ItemAttr.Ring, MagicType.PlayerDarkHound)  },
             { ItemType.TreasureKey,     new KeyItemAction(ItemAttr.Consumption, ItemType.TreasureKey)   },
         };
     }

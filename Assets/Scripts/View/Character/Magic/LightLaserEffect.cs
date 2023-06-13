@@ -1,6 +1,6 @@
 ﻿using DG.Tweening;
 
-public class LightLaserEffect : BulletEffect
+public class LightLaserEffect : MagicEffect
 {
     private Tween deadTimer;
     public override void Disappear(TweenCallback onComplete = null, float duration = 0.5f)

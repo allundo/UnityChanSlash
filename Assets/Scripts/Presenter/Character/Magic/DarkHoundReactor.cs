@@ -1,9 +1,9 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BulletStatus))]
+[RequireComponent(typeof(MagicStatus))]
 [RequireComponent(typeof(DarkHoundInput))]
-[RequireComponent(typeof(BulletEffect))]
-public class DarkHoundReactor : BulletReactor
+[RequireComponent(typeof(MagicEffect))]
+public class DarkHoundReactor : MagicReactor
 {
     protected Transform targetTf = null;
     public float TargetAngle => targetTf == null ? 0f : Vector3.SignedAngle(transform.forward, targetTf.position - transform.position, Vector3.up);
@@ -13,8 +13,8 @@ public class DarkHoundReactor : BulletReactor
     protected override void Awake()
     {
         base.Awake();
-        healSpiritLauncher = new Launcher(status, BulletType.HealSpirit);
-        darkSpiritLauncher = new Launcher(status, BulletType.DarkSpirit);
+        healSpiritLauncher = new Launcher(status, MagicType.HealSpirit);
+        darkSpiritLauncher = new Launcher(status, MagicType.DarkSpirit);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -46,7 +46,7 @@ public class DarkHoundReactor : BulletReactor
         var spiritsPower = Mathf.Abs(drain) * 0.5f;
 
         // Spirits refers to shooter(DarkHound's) status to calculate attack or heal power.
-        (status as IBulletStatus).SetAttack(Mathf.Max(spiritsPower * 0.2f, 0.05f));
+        (status as IMagicStatus).SetAttack(Mathf.Max(spiritsPower * 0.2f, 0.05f));
 
         for (float power = 0f; power < spiritsPower; power += status.attack) launcher.Fire();
 

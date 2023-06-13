@@ -60,8 +60,8 @@ public class CoinAction : ItemAction
 
 public class MagicRingAction : ItemAction
 {
-    private BulletType bulletType;
-    public MagicRingAction(ItemAttr attr, BulletType bulletType) : base(attr)
+    private MagicType bulletType;
+    public MagicRingAction(ItemAttr attr, MagicType bulletType) : base(attr)
     {
         this.bulletType = bulletType;
     }

@@ -19,8 +19,8 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         turnL = new EnemyTurnAnimL(target, 16f);
         turnR = new EnemyTurnAnimR(target, 16f);
 
-        fire = new EnemyFire(target, 72f, BulletType.DarkHound);
-        ice = new EnemyFire(target, 72f, BulletType.IceBullet);
+        fire = new EnemyFire(target, 72f, MagicType.DarkHound);
+        ice = new EnemyFire(target, 72f, MagicType.IceBullet);
         teleport = new MagicianTeleport(target, 84f, 3);
 
         undeadInput = new UndeadInput(target, cmd => Interrupt(cmd, true, true));

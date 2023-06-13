@@ -7,13 +7,13 @@ public interface ILauncher : IAttack
 
 public class Launcher : ILauncher
 {
-    protected BulletGenerator bulletGenerator;
+    protected MagicGenerator bulletGenerator;
     protected IStatus status;
 
-    public Launcher(IStatus status, BulletType type)
+    public Launcher(IStatus status, MagicType type)
     {
         this.status = status;
-        bulletGenerator = SpawnHandler.Instance.GetBulletGenerator(type);
+        bulletGenerator = SpawnHandler.Instance.GetMagicGenerator(type);
     }
 
     public virtual Sequence AttackSequence(float attackDuration)

@@ -1,11 +1,11 @@
 using UnityEngine;
 using DG.Tweening;
 
-[RequireComponent(typeof(BulletStatus))]
+[RequireComponent(typeof(MagicStatus))]
 [RequireComponent(typeof(HealSpritEffect))]
-public class HealSpiritReactor : Reactor, IBulletReactor
+public class HealSpiritReactor : Reactor, IMagicReactor
 {
-    protected BulletStatus bulletStatus;
+    protected MagicStatus bulletStatus;
     protected IBodyEffect effect;
     protected bool isTweening = false;
     protected Tween emittingTween = null;
@@ -13,7 +13,7 @@ public class HealSpiritReactor : Reactor, IBulletReactor
     protected override void Awake()
     {
         base.Awake();
-        bulletStatus = status as BulletStatus;
+        bulletStatus = status as MagicStatus;
         effect = GetComponent<HealSpritEffect>();
     }
 

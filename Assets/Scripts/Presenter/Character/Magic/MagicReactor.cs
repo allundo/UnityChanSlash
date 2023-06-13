@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public interface IBulletReactor : IReactor
+public interface IMagicReactor : IReactor
 {
     void ReduceHP(float reduction = 1f);
     float CurrentHP { get; }
 }
 
-[RequireComponent(typeof(BulletStatus))]
-[RequireComponent(typeof(BulletInput))]
-[RequireComponent(typeof(BulletEffect))]
+[RequireComponent(typeof(MagicStatus))]
+[RequireComponent(typeof(MagicInput))]
+[RequireComponent(typeof(MagicEffect))]
 [RequireComponent(typeof(MapUtil))]
-public class BulletReactor : Reactor, IBulletReactor
+public class MagicReactor : Reactor, IMagicReactor
 {
     protected IMapUtil map;
     protected IInput input;
@@ -19,8 +19,8 @@ public class BulletReactor : Reactor, IBulletReactor
     protected override void Awake()
     {
         base.Awake();
-        effect = GetComponent<BulletEffect>();
-        input = GetComponent<BulletInput>();
+        effect = GetComponent<MagicEffect>();
+        input = GetComponent<MagicInput>();
         map = GetComponent<MapUtil>();
     }
 

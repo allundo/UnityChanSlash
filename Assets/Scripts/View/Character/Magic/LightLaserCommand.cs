@@ -2,7 +2,7 @@ using System;
 using UniRx;
 using DG.Tweening;
 
-public class LightLaserFire : BulletCommand
+public class LightLaserFire : MagicCommand
 {
     public LightLaserFire(ICommandTarget target, float duration) : base(target, duration) { }
 
@@ -14,7 +14,7 @@ public class LightLaserFire : BulletCommand
     }
 }
 
-public class SubLaserFire : BulletCommand
+public class SubLaserFire : MagicCommand
 {
     public SubLaserFire(ICommandTarget target, float duration) : base(target, duration) { }
 
@@ -25,19 +25,19 @@ public class SubLaserFire : BulletCommand
     }
 }
 
-public class LightLaserActive : BulletCommand
+public class LightLaserActive : MagicCommand
 {
     public LightLaserActive(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
         completeTween = attack.AttackSequence(duration).Play();
-        (react as IBulletReactor).ReduceHP();
+        (react as IMagicReactor).ReduceHP();
         return true;
     }
 }
 
-public class LightLaserDie : BulletCommand
+public class LightLaserDie : MagicCommand
 {
     public LightLaserDie(ICommandTarget target, float duration) : base(target, duration) { }
 

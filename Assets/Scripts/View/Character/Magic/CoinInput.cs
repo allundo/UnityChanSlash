@@ -1,11 +1,11 @@
-public class CoinInput : BulletInput
+public class CoinInput : MagicInput
 {
     protected CoinDrop drop;
     protected override void SetCommands()
     {
         fire = new CoinFire(target, 28f);
         moveForward = new CoinMove(target, 28f);
-        die = new BulletDie(target, 28f);
+        die = new MagicDie(target, 28f);
         drop = new CoinDrop(target, 56f);
     }
 

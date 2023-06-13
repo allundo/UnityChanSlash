@@ -2,10 +2,10 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public abstract class BulletCommand : Command
+public abstract class MagicCommand : Command
 {
     protected IAttack attack;
-    public BulletCommand(ICommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming)
+    public MagicCommand(ICommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming)
     {
         attack = target.Attack(0);
     }
@@ -18,9 +18,9 @@ public abstract class BulletCommand : Command
     }
 }
 
-public class BulletMove : BulletCommand
+public class MagicMove : MagicCommand
 {
-    public BulletMove(ICommandTarget target, float duration) : base(target, duration) { }
+    public MagicMove(ICommandTarget target, float duration) : base(target, duration) { }
 
     protected virtual Tween AttackSequence => attack.AttackSequence(duration);
 
@@ -46,17 +46,17 @@ public class BulletMove : BulletCommand
     }
 }
 
-public class BulletFire : BulletMove
+public class MagicFire : MagicMove
 {
-    public BulletFire(ICommandTarget target, float duration) : base(target, duration) { }
+    public MagicFire(ICommandTarget target, float duration) : base(target, duration) { }
 
     // Enable attack collider after a half duration
     protected override Tween AttackSequence => attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f);
 }
 
-public class BulletDie : BulletCommand
+public class MagicDie : MagicCommand
 {
-    public BulletDie(ICommandTarget target, float duration) : base(target, duration) { }
+    public MagicDie(ICommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

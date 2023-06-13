@@ -1,4 +1,4 @@
-public class LightLaserInput : BulletInput
+public class LightLaserInput : MagicInput
 {
     protected override void SetCommands()
     {

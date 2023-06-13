@@ -1,12 +1,12 @@
 using System;
 using UniRx;
 
-public interface ILaserStatus : IBulletStatus
+public interface ILaserStatus : IMagicStatus
 {
     int length { get; }
 }
 
-public class LightLaserStatus : BulletStatus, ILaserStatus
+public class LightLaserStatus : MagicStatus, ILaserStatus
 {
     private readonly int MAX_LENGTH = 10;
     private readonly float CANCEL_TIMER_SEC = 1.2f;
@@ -25,7 +25,7 @@ public class LightLaserStatus : BulletStatus, ILaserStatus
         map = GameManager.Instance.worldMap;
     }
 
-    public override BulletStatus SetShooter(IStatus status)
+    public override MagicStatus SetShooter(IStatus status)
     {
         base.SetShooter(status);
         length = CalcLength();

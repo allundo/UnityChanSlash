@@ -1,4 +1,4 @@
-﻿public class WitchDoubleEffect : BulletEffect
+﻿public class WitchDoubleEffect : MagicEffect
 {
     protected override void Awake()
     {

@@ -5,12 +5,12 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 {
     [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
     [SerializeField] private ItemGenerator itemGenerator = default;
-    [SerializeField] private BulletGeneratorLoader bulletGeneratorLoader = default;
+    [SerializeField] private MagicGeneratorLoader magicGeneratorLoader = default;
     [SerializeField] private WitchLightGenerator lightGenerator = default;
     [SerializeField] private LifeGaugeGenerator lifeGaugeGenerator = default;
     [SerializeField] private DebugEnemyGenerator[] debugEnemyGenerators = default;
 
-    public BulletGenerator GetBulletGenerator(BulletType type) => bulletGeneratorLoader.bulletGenerators[type];
+    public MagicGenerator GetMagicGenerator(MagicType type) => magicGeneratorLoader.magicGenerators[type];
     public LifeGaugeGenerator GetLifeGaugeGenerator() => lifeGaugeGenerator;
 
     public void PlaceEnemyGenerators() => placeEnemyGenerator.Place();
@@ -66,7 +66,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
         });
 
         // Some bullets refer to a character status, so don't call Update() after the enemies had been destroyed.
-        bulletGeneratorLoader.DestroyAll();
+        magicGeneratorLoader.DestroyAll();
 
         lightGenerator.DestroyAll();
     }
