@@ -27,7 +27,7 @@ public class MatColorEffect : MatTransparentEffect, IMatColorEffect
         PlayExclusive(flash);
     }
 
-    public virtual void DamageFlash(float damageRatio)
+    public virtual void DamageFlash(float damageRatio = 0.2f)
     {
         if (Mathf.Abs(damageRatio) < 0.000001f) return;
 
@@ -40,7 +40,7 @@ public class MatColorEffect : MatTransparentEffect, IMatColorEffect
             Sequence flashSub = DOTween.Sequence()
                 .Append(mat.DOColor(Color.white, isAbsorb ? 0.5f : 0.04f));
 
-            if (damageRatio > 0.1f)
+            if (damageRatio > 0.2f)
             {
                 flashSub.Append(mat.DOColor(Color.black, 0.04f));
                 flashSub.Append(mat.DOColor(Color.red, 0.04f));

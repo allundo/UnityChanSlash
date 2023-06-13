@@ -21,7 +21,7 @@ public class ShieldEnemyReactor : EnemyReactor
     {
         if (guardState.IsShieldOn(dir))
         {
-            shieldEffect.DamageFlash(0.1f);
+            shieldEffect.DamageFlash();
             return mobStatus.CalcAttackWithShield(attack, guardState.SetShield(), attr);
         }
 
