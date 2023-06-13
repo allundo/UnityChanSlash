@@ -3,7 +3,6 @@ using UniRx;
 
 public interface IReactor
 {
-    Vector3 position { get; }
     void OnDie();
     void Destroy();
 }
@@ -13,8 +12,6 @@ public abstract class Reactor : MonoBehaviour, IReactor
 {
     protected IStatus status;
     protected Collider bodyCollider;
-
-    public Vector3 position => transform.position;
 
     protected virtual void Awake()
     {
