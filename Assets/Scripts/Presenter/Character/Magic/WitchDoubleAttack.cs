@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class WitchDoubleAttack : MobAttack, IMagicAttack
 {
     protected AttackData data;

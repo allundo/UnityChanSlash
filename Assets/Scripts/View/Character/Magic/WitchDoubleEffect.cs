@@ -1,9 +1,19 @@
-﻿public class WitchDoubleEffect : BulletEffect
+﻿using UnityEngine;
+using DG.Tweening;
+
+public class WitchDoubleEffect : MagicEffect
 {
-    protected override void Awake()
+    [SerializeField] protected ParticleSystem emitVfx = default;
+    [SerializeField] protected Transform meshTf = null;
+
+    protected MatColorEffect witchMatEffect;
+    protected virtual void Awake()
     {
-        bulletMatEffect = new MatColorEffect(meshTf);
+        witchMatEffect = new MatColorEffect(meshTf);
     }
+
+    public override void Disappear(TweenCallback onComplete = null, float duration = 0.5f)
+        => witchMatEffect.Inactivate(onComplete, duration);
 
     public void OnAttackStart()
     {
@@ -17,10 +27,8 @@
 
     public override void OnActive()
     {
-        bulletMatEffect.Activate(0.01f);
+        witchMatEffect.Activate(0.01f);
     }
 
-    protected override void OnDisappear() { }
-
-    public override void OnHit() { }
+    public override void OnDestroyByReactor() => witchMatEffect.KillAllTweens();
 }
