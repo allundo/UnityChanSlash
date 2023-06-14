@@ -1026,7 +1026,6 @@ GameObject:
   - component: {fileID: 7630895998845448072}
   - component: {fileID: 7630895998845448079}
   - component: {fileID: 7630895998845448078}
-  - component: {fileID: 7630895998845448077}
   m_Layer: 10
   m_Name: DoorL
   m_TagString: Untagged
@@ -1646,20 +1645,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7630895998845448115}
   m_Mesh: {fileID: 0}
---- !u!64 &7630895998845448077
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630895998845448115}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &7630895999622785730
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,7 +1657,6 @@ GameObject:
   - component: {fileID: 7630895999622785759}
   - component: {fileID: 7630895999622785758}
   - component: {fileID: 7630895999622785757}
-  - component: {fileID: 7630895999622785756}
   m_Layer: 10
   m_Name: DoorR
   m_TagString: Untagged
@@ -2291,18 +2275,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7630895999622785730}
-  m_Mesh: {fileID: 0}
---- !u!64 &7630895999622785756
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630895999622785730}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
