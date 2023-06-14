@@ -217,7 +217,7 @@ public class WitchSummonMonster : WitchCommand
 
         witchReact.Appear();
         witchReact.OnSummonStart();
-        witchAnim.magic.Fire();
+        witchAnim.summon.Fire();
         playingTween = tweenMove.DelayedCall(0.8f, witchReact.Summon).Play();
         return true;
     }
