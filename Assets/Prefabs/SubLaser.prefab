@@ -61,7 +61,7 @@ MonoBehaviour:
   attackType: 13
   attackAttr: 4
   attackMultiplier: 1
-  colliderSizeRatio: 0.6
+  colliderSizeRatio: 0.5
 --- !u!1 &5939397111647023072
 GameObject:
   m_ObjectHideFlags: 0

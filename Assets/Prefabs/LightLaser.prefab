@@ -43685,6 +43685,8 @@ MonoBehaviour:
   laserVfx: {fileID: 1903036527097950275}
   wallVfx: {fileID: 2788481984580477548}
   laserSnd: {fileID: 0}
+  tfLaser: {fileID: 1903036528941823555}
+  tfLaserLead: {fileID: 1903036529194630979}
 --- !u!114 &7482947037716119834
 MonoBehaviour:
   m_ObjectHideFlags: 0

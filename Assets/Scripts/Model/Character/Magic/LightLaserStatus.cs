@@ -8,7 +8,7 @@ public interface ILaserStatus : IMagicStatus
 
 public class LightLaserStatus : MagicStatus, ILaserStatus
 {
-    private readonly int MAX_LENGTH = 10;
+    public static readonly int MAX_LENGTH = 9;
     private readonly float CANCEL_TIMER_SEC = 1.2f;
     private WorldMap map;
 
