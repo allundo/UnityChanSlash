@@ -31,7 +31,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
 
         fire = new WitchTripleFire(target, 72f);
         ice = new WitchDoubleIce(target, 72f);
-        laser = new WitchLaser(target, 108f);
+        laser = new WitchLaser(target, 380f);
         summon = new WitchSummonMonster(target, 108f);
         teleport = new MagicianTeleport(target, 84f);
 

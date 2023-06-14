@@ -7,11 +7,12 @@ public class LightLaserAttack : MagicAttack
 
     public void SetColliderLength()
     {
-        float length = (status as ILaserStatus).length * Constants.TILE_UNIT;
+        float TILE_UNIT = Constants.TILE_UNIT;
+        int length = (status as ILaserStatus).length;
 
         var laserCollider = attackCollider as BoxCollider;
 
-        laserCollider.center = new Vector3(0f, 1f, (length + 1.0f) * 0.5f);
-        laserCollider.size = new Vector3(2f, 2f, length * colliderSizeRatio);
+        laserCollider.center = new Vector3(0f, 1f, (length + 1) * TILE_UNIT * 0.5f);
+        laserCollider.size = new Vector3(2f, 2f, length * TILE_UNIT * colliderSizeRatio);
     }
 }
