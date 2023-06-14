@@ -221,7 +221,7 @@ public class EnemyFire : EnemyAttack
     protected override bool Action()
     {
         enemyAnim.fire.Fire();
-        playingTween = target.magic?.MagicSequence(type, duration)?.Play();
+        playingTween = target.magic?.FireSequence(type, duration)?.Play();
         return true;
     }
 }

@@ -1,7 +1,8 @@
 using DG.Tweening;
 
-public interface ILauncher : IAttack
+public interface ILauncher
 {
+    Sequence FireSequence(float fireDuration);
     void Fire();
 }
 
@@ -16,9 +17,9 @@ public class Launcher : ILauncher
         bulletGenerator = SpawnHandler.Instance.GetMagicGenerator(type);
     }
 
-    public virtual Sequence AttackSequence(float attackDuration)
+    public virtual Sequence FireSequence(float fireDuration)
         => DOTween.Sequence()
-            .AppendInterval(attackDuration * 0.3f)
+            .AppendInterval(fireDuration * 0.3f)
             .AppendCallback(Fire)
             .SetUpdate(false);
 

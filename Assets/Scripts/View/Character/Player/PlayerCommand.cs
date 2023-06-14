@@ -821,7 +821,7 @@ public class PlayerFire : PlayerAction
         playerAnim.fire.Fire();
 
         completeTween = target.magic
-            .MagicSequence(type, duration) // MagicSequence has completed on time scale 0.3 of the command duration.
+            .FireSequence(type, duration) // MagicSequence has completed on time scale 0.3 of the command duration.
             .OnComplete(ValidateAction)
             .Play();
 

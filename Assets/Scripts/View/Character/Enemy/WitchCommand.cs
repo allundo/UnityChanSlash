@@ -153,11 +153,11 @@ public class WitchTripleFire : WitchCommand
 
         ILauncher fire = target.magic.launcher[MagicType.FireBall];
         playingTween = DOTween.Sequence()
-            .Join(fire.AttackSequence(fireDuration))
+            .Join(fire.FireSequence(fireDuration))
             .AppendInterval(interval)
-            .Join(fire.AttackSequence(fireDuration))
+            .Join(fire.FireSequence(fireDuration))
             .AppendInterval(interval)
-            .Join(fire.AttackSequence(fireDuration))
+            .Join(fire.FireSequence(fireDuration))
             .SetUpdate(false)
             .Play();
 
@@ -180,9 +180,9 @@ public class WitchDoubleIce : WitchCommand
         ILauncher ice = target.magic.launcher[MagicType.IceBullet];
 
         playingTween = DOTween.Sequence()
-            .Join(ice.AttackSequence(fireDuration))
+            .Join(ice.FireSequence(fireDuration))
             .AppendInterval(interval)
-            .Join(ice.AttackSequence(fireDuration))
+            .Join(ice.FireSequence(fireDuration))
             .SetUpdate(false)
             .Play();
 
@@ -201,7 +201,7 @@ public class WitchLaser : WitchCommand
         witchAnim.magic.Fire();
 
         ILauncher laser = target.magic.launcher[MagicType.LightLaser];
-        playingTween = laser.AttackSequence(duration).Play();
+        playingTween = laser.FireSequence(2f).Play();
 
         return true;
     }
