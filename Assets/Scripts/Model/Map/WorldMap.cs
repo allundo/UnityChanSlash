@@ -20,6 +20,8 @@ public class WorldMap
     public List<Pos> bloodMessagePos { get; private set; }
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
+    public static bool isExitDoorLocked = true;
+    public static Pos exitDoorPos = new Pos();
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
@@ -88,11 +90,22 @@ public class WorldMap
     {
         if (tileOpenPosList != null) tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
         if (tileBrokenPosList != null) tileBrokenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as Door).Break());
+
+        if (floor == 1 && !isExitDoorLocked)
+        {
+            var exitDoor = (tileInfo[exitDoorPos.x, exitDoorPos.y] as ExitDoor);
+            if (!exitDoor.IsOpen) exitDoor.Unlock();
+        }
     }
 
     public void StoreTileStateData()
     {
         (tileOpenPosList, tileBrokenPosList) = RetrieveTileStateData();
+
+        if (floor == 1)
+        {
+            isExitDoorLocked = (tileInfo[exitDoorPos.x, exitDoorPos.y] as ExitDoor).IsLocked;
+        }
     }
 
     public (List<Pos>, List<Pos>) ExportTileStateData()
@@ -196,6 +209,9 @@ public class WorldMap
         this.map = map;
 
         floor = map.floor;
+
+        if (floor == 1) exitDoorPos = map.doorPos;
+
         stairsBottom = map.stairsBottom;
 
         stairsTop = map.stairsTop;

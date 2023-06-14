@@ -44,7 +44,7 @@ public class KeyItemAction : ItemAction
     {
         Pos forward = target.map.GetForward;
         ITile tile = target.map.GetTile(forward);
-        if ((tile is Door && (tile as Door).UnLock(type)))
+        if ((tile is Door && (tile as Door).Unlock(type)))
         {
             GameManager.Instance.worldMap.Unlock(forward);
             return 1;

@@ -57,6 +57,10 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
                 ForceOpen();
                 break;
 
+            case HandleState.StateEnum.FORCE_UNLOCK:
+                ForceUnlock();
+                break;
+
             case HandleState.StateEnum.DESTRUCT:
                 ForceBreak();
                 break;
@@ -68,5 +72,6 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
 
     protected abstract Tween GetDoorHandle(bool isOpen);
     protected abstract void ForceOpen();
+    protected virtual void ForceUnlock() { }
     protected virtual void ForceBreak() { }
 }

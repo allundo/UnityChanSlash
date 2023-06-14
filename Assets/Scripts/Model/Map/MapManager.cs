@@ -14,6 +14,8 @@ public class MapManager
     public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
     public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
 
+    public Pos doorPos { get; private set; }
+
     /// <summary>
     /// Represents the start position and direction after going down a floor.
     /// </summary>
@@ -277,7 +279,6 @@ public class MapManager
         Pos front = dir.GetForward(pos);
         matrix[front.x, front.y] = Terrain.Ground;
 
-        Pos doorPos;
         if (IsAroundWall(doorPos = dir.GetLeft(pos)))
         {
             SetExitDoor(doorPos, dir.Right);

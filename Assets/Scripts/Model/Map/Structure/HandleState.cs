@@ -23,6 +23,7 @@ public abstract class HandleState : IHandleState
         OPENING,
         CLOSING,
         FORCE_OPEN,
+        FORCE_UNLOCK,
         DESTRUCT,
     }
 
@@ -47,6 +48,12 @@ public abstract class HandleState : IHandleState
         state.Value = StateEnum.FORCE_OPEN;
     }
 
+    public void Unlock()
+    {
+        lockType.Value = ItemType.Null;
+        state.Value = StateEnum.FORCE_UNLOCK;
+    }
+
     private StateEnum GetNextState()
     {
         switch (State.Value)
@@ -58,6 +65,7 @@ public abstract class HandleState : IHandleState
                 return StateEnum.CLOSING;
 
             case StateEnum.CLOSING:
+            case StateEnum.FORCE_UNLOCK:
                 return StateEnum.CLOSE;
 
             case StateEnum.OPENING:

@@ -342,5 +342,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
                 import.playerData.kvPosDir = map.StairsBottom;
             }
         }
+
+        WorldMap.isExitDoorLocked = import.isExitDoorLocked;
+        WorldMap.exitDoorPos = import.exitDoorPos;
     }
 }

@@ -87,6 +87,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int currentEvent = -1;
         public EventData[] eventData = null;
         public MapData[] mapData = null;
+        public Pos exitDoorPos;
+        public bool isExitDoorLocked = true;
         public RespawnData[] respawnData = null;
     }
 
@@ -512,6 +514,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             playerData = playerInfo.ExportRespawnData(),
             inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
+            exitDoorPos = WorldMap.exitDoorPos,
+            isExitDoorLocked = WorldMap.isExitDoorLocked,
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
             respawnData = SpawnHandler.Instance.ExportRespawnData(playerInfo.Pos)

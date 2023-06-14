@@ -119,7 +119,7 @@ public class Door : HandleTile, IHandleTile
     public bool IsOpen => state.IsOpen;
     public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
-    public bool UnLock(ItemType type) => state.Unlock(type);
+    public bool Unlock(ItemType type) => state.Unlock(type);
 
     public void Break() => state.Break();
     public bool IsBroken => state.isBroken;
@@ -132,6 +132,7 @@ public class Door : HandleTile, IHandleTile
 public class ExitDoor : Door
 {
     public override bool IsViewOpen => false;
+    public void Unlock() => state.Unlock();
 }
 
 public class Box : HandleTile, IHandleTile

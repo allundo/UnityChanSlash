@@ -38,6 +38,7 @@ public class LockControl : MonoBehaviour
 
     public void ForceBreak()
     {
+        unlockTween?.Complete(true);
         gameObject.SetActive(false);
     }
 }
