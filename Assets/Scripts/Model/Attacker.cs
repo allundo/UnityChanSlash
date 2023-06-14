@@ -12,12 +12,14 @@ public class Attacker : IAttacker
     public IDirection dir { get; protected set; }
     public string Name => name;
     protected string name;
-    public virtual string CauseOfDeath(AttackType type = AttackType.None) => Name + "にやられた";
+    protected string cause;
+    public virtual string CauseOfDeath(AttackType type = AttackType.None) => name + cause;
 
-    public Attacker(float attack, IDirection dir, string name)
+    public Attacker(float attack, IDirection dir, string name, string cause = "にやられた")
     {
         this.attack = attack;
         this.dir = dir;
         this.name = name;
+        this.cause = cause;
     }
 }

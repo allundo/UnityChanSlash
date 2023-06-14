@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HealSpritEffect : MagicEffectFX
+public class SpiritEffect : MagicEffectFX
 {
     [SerializeField] protected ParticleSystem emitVfx = default;
     [SerializeField] protected ParticleSystem eraseVfx = default;

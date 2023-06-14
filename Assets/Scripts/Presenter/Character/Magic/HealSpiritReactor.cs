@@ -2,7 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(MagicStatus))]
-[RequireComponent(typeof(HealSpritEffect))]
+[RequireComponent(typeof(SpiritEffect))]
 public class HealSpiritReactor : MortalReactor
 {
     protected MagicStatus bulletStatus;
@@ -14,7 +14,7 @@ public class HealSpiritReactor : MortalReactor
     {
         base.Awake();
         bulletStatus = status as MagicStatus;
-        effect = GetComponent<HealSpritEffect>();
+        effect = GetComponent<SpiritEffect>();
     }
 
     protected virtual void Update()
@@ -46,17 +46,16 @@ public class HealSpiritReactor : MortalReactor
     {
         bodyCollider.enabled = false;
         isTrailing = false;
-        effect.Disappear(OnDead);
+        effect.Disappear(OnDead, 1f);
     }
 
     protected override void OnActive()
     {
         effect.OnActive();
-        bodyCollider.enabled = true;
-        isTrailing = false;
+        bodyCollider.enabled = isTrailing = false;
         emittingTween = transform.DOMove(UnityEngine.Random.onUnitSphere * 2f, 0.5f)
             .SetRelative(true)
-            .OnComplete(() => isTrailing = true)
+            .OnComplete(() => bodyCollider.enabled = isTrailing = true)
             .Play();
     }
 
