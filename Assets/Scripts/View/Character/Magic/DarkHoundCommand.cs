@@ -8,7 +8,7 @@ public class DarkHoundMove : MagicMove
     protected override Tween MoveForward()
     {
         float targetAngle = (react as DarkHoundReactor).TargetAngle;
-        float rotateAngle = (targetAngle > 0f ? 1 : -1) * Mathf.Min(Mathf.Abs(targetAngle), 20f);
+        float rotateAngle = (targetAngle > 0f ? 1 : -1) * Mathf.Min(Mathf.Abs(targetAngle), 24f);
 
         return DOTween.Sequence()
             .Join(tweenMove.MoveForward(TILE_UNIT * 0.4f))
