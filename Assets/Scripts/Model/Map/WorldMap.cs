@@ -35,6 +35,13 @@ public class WorldMap
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
+    public void Unlock(Pos pos)
+    {
+        if (map.matrix[pos.x, pos.y] == Terrain.LockedDoor)
+        {
+            map.matrix[pos.x, pos.y] = Terrain.Door;
+        }
+    }
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {

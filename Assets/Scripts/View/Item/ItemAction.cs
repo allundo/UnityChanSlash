@@ -42,8 +42,14 @@ public class KeyItemAction : ItemAction
 
     public override int Action(PlayerCommandTarget target)
     {
-        ITile tile = target.map.ForwardTile;
-        return (tile is Door && (tile as Door).UnLock(type)) ? 1 : 0;
+        Pos forward = target.map.GetForward;
+        ITile tile = target.map.GetTile(forward);
+        if ((tile is Door && (tile as Door).UnLock(type)))
+        {
+            GameManager.Instance.worldMap.Unlock(forward);
+            return 1;
+        }
+        return 0;
     }
 }
 
