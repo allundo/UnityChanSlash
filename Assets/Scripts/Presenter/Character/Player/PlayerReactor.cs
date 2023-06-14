@@ -243,7 +243,6 @@ public class PlayerReactor : MobReactor
     {
         playerMap.ResetTile();
         playerEffect.OnDie();
-        playerInput.SetInputVisible(false);
         bodyCollider.enabled = false;
     }
 

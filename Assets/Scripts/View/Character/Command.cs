@@ -99,8 +99,7 @@ public class Command : ICommand
     {
         playingTween?.Kill();
         completeTween?.Complete(true);
-        validateTween?.Kill();
-        input.ValidateInput();
+        validateTween?.Complete(true);
         onCompleted.Clear();
     }
 
