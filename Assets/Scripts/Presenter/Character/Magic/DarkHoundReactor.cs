@@ -46,6 +46,7 @@ public class DarkHoundReactor : BulletReactor
     protected override void OnActive()
     {
         base.OnActive();
+        targetTf = null;
         bodyCollider.enabled = true;
     }
 
