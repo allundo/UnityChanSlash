@@ -13,6 +13,8 @@ public interface IGameManager
     void DebugStart();
     void LoadDataStart();
 
+    void RedrawPlates();
+
     DataStoreAgent.EventData[] ExportEventData();
     int GetCurrentEvent();
     void ImportRespawnData(DataStoreAgent.SaveData import);

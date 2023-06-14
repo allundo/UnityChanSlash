@@ -94,7 +94,6 @@ public class Wall : Tile, ITile
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
     public override ItemInfo TopItem => null;
-
 }
 
 public class MessageWall : Wall
@@ -113,6 +112,7 @@ public class Door : HandleTile, IHandleTile
     public override bool IsCharacterOn => state.IsCharacterOn;
     public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
 
+
     public DoorState state { protected get; set; }
     public override void Open() => state.Open();
     public override void Handle() => state.TransitToNextState();
@@ -120,6 +120,9 @@ public class Door : HandleTile, IHandleTile
     public bool IsLocked => state.IsLocked;
     public bool IsControllable => state.IsControllable;
     public bool UnLock(ItemType type) => state.Unlock(type);
+
+    public void Break() => state.Break();
+    public bool IsBroken => state.isBroken;
 
     public override bool PutItem(Item item) => IsOpen ? base.PutItem(item) : false;
     public override Item PickItem() => IsOpen ? base.PickItem() : null;

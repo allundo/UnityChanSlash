@@ -21,6 +21,7 @@ public class WorldMap
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
     private List<Pos> tileOpenPosList = null;
+    private List<Pos> tileBrokenPosList = null;
 
     private MapManager map;
     public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
@@ -83,22 +84,27 @@ public class WorldMap
         ForEachTiles(tile => tile.OnCharacterDest = tile.OnEnemy = tile.AboveEnemy = null);
     }
 
-    public void ApplyTileOpen()
+    public void ApplyTileState()
     {
-        if (tileOpenPosList == null) return;
-        tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
+        if (tileOpenPosList != null) tileOpenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as IOpenable).Open());
+        if (tileBrokenPosList != null) tileBrokenPosList.ForEach(pos => (tileInfo[pos.x, pos.y] as Door).Break());
     }
 
-    public void StoreTileOpenData()
+    public void StoreTileStateData()
     {
-        tileOpenPosList = RetrieveTileOpenData();
+        (tileOpenPosList, tileBrokenPosList) = RetrieveTileStateData();
     }
 
-    public List<Pos> ExportTileOpenData() => tileOpenPosList ?? RetrieveTileOpenData();
-
-    private List<Pos> RetrieveTileOpenData()
+    public (List<Pos>, List<Pos>) ExportTileStateData()
     {
-        var data = new List<Pos>();
+        return (tileOpenPosList == null || tileBrokenPosList == null)
+            ? RetrieveTileStateData() : (tileOpenPosList, tileBrokenPosList);
+    }
+
+    private (List<Pos>, List<Pos>) RetrieveTileStateData()
+    {
+        var open = new List<Pos>();
+        var broken = new List<Pos>();
 
         // FIXME: use random message count as initialized flag for now.
         bool isTilesReady = randomMessagePos.Count() > 0;
@@ -106,16 +112,27 @@ public class WorldMap
         {
             ForEachTiles((tile, pos) =>
             {
-                if (tile is IOpenable && (tile as IOpenable).IsOpen) data.Add(pos);
+                if (tile is IOpenable)
+                {
+                    if (tile is Door && (tile as Door).IsBroken)
+                    {
+                        broken.Add(pos);
+                    }
+                    else if ((tile as IOpenable).IsOpen)
+                    {
+                        open.Add(pos);
+                    }
+                }
             });
         }
 
-        return data;
+        return (open, broken);
     }
 
     public void ImportMapData(DataStoreAgent.MapData import)
     {
         tileOpenPosList = import.tileOpenData.ToList();
+        tileBrokenPosList = import.tileBrokenData.ToList();
 
         fixedMessagePos = import.fixedMessagePos.ToList();
         bloodMessagePos = import.bloodMessagePos.ToList();

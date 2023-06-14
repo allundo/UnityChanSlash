@@ -224,7 +224,7 @@ public class MapRenderer : MonoBehaviour
 
     public void ApplyTileOpen(WorldMap map)
     {
-        map.ApplyTileOpen();
+        map.ApplyTileState();
 
         doorsRenderer.CompleteTween();
         boxesRenderer.CompleteTween();

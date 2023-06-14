@@ -17,6 +17,8 @@ public class DoorControl : HandleStructure
     protected Color defaultGateColor;
     protected Color defaultDoorColor;
 
+    protected Collider doorCollider;
+
     protected virtual void Awake()
     {
         doorR = this.transform.GetChild(0);
@@ -25,6 +27,8 @@ public class DoorControl : HandleStructure
         gateRenderer = GetComponent<Renderer>();
         doorRRenderer = doorR.GetComponent<Renderer>();
         doorLRenderer = doorL.GetComponent<Renderer>();
+
+        doorCollider = GetComponent<Collider>();
     }
 
     protected override void Start()
@@ -89,5 +93,28 @@ public class DoorControl : HandleStructure
         doorL.position += VecL;
         doorR.position += VecR;
         handleState.TransitToNextState();
+    }
+
+    protected override void ForceBreak()
+    {
+        doorL.gameObject.SetActive(false);
+        doorR.gameObject.SetActive(false);
+        doorCollider.enabled = false;
+        handleState.TransitToNextState();
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        var laser = other.GetComponent<LightLaserAttack>();
+        if (laser != null && !handleState.IsOpen)
+        {
+            ParticleSystem vfx = ResourceLoader.Instance.LoadVFX(VFXType.DoorDestruction, transform);
+            vfx.transform.rotation = laser.dir.Rotate;
+            vfx.PlayEx();
+
+            (handleState as DoorState).Break();
+
+            GameManager.Instance.RedrawPlates();
+        }
     }
 }

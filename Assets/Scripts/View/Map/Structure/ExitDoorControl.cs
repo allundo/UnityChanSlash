@@ -19,12 +19,15 @@ public class ExitDoorControl : LockedDoorControl
         materialExit.SetColor("_Color", new Color(defaultExitColor.r, defaultExitColor.g, defaultExitColor.b, alpha));
     }
 
-    public void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerReactor>() != null)
         {
             GameManager.Instance.Exit();
+            return;
         }
+
+        base.OnTriggerEnter(other);
     }
 
     private void OnDestroy()

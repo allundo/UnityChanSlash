@@ -314,7 +314,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         for (int i = 0; i < LastFloor; i++)
         {
             if (maps[i] == null) continue;
-            if (i + 1 == currentFloor) maps[i].StoreTileOpenData();
+            if (i + 1 == currentFloor) maps[i].StoreTileStateData();
 
             export[i] = new DataStoreAgent.MapData(maps[i]);
         }

@@ -7,6 +7,7 @@ public interface IHandleStructure
     void Handle();
 }
 
+[RequireComponent(typeof(Collider))]
 public abstract class HandleStructure : MonoBehaviour, IHandleStructure
 {
     protected IHandleState handleState;
@@ -55,6 +56,10 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
                 KillTween();
                 ForceOpen();
                 break;
+
+            case HandleState.StateEnum.DESTRUCT:
+                ForceBreak();
+                break;
         }
     }
 
@@ -63,4 +68,5 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
 
     protected abstract Tween GetDoorHandle(bool isOpen);
     protected abstract void ForceOpen();
+    protected virtual void ForceBreak() { }
 }

@@ -81,13 +81,14 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         prefabVFXs = new Dictionary<VFXType, ParticleSystem>()
         {
-            { VFXType.Iced,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICED")            },
-            { VFXType.IceCrash,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")       },
-            { VFXType.Teleport,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT")        },
-            { VFXType.TeleportDest, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")   },
-            { VFXType.Resurrection, Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")    },
-            { VFXType.PitDrop,      Resources.Load<ParticleSystem>("Prefabs/Effect/FX_PIT_DROP")        },
-            { VFXType.HitLaser,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_HIT_LASER")       },
+            { VFXType.Iced,             Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICED")                },
+            { VFXType.IceCrash,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH")           },
+            { VFXType.Teleport,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT")            },
+            { VFXType.TeleportDest,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_TELEPORT_DEST")       },
+            { VFXType.Resurrection,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")        },
+            { VFXType.PitDrop,          Resources.Load<ParticleSystem>("Prefabs/Effect/FX_PIT_DROP")            },
+            { VFXType.HitLaser,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_HIT_LASER")           },
+            { VFXType.DoorDestruction,  Resources.Load<ParticleSystem>("Prefabs/Effect/FX_DOOR_DESTRUCTION")    },
         };
 
         prefabSNDs = new Dictionary<SNDType, AudioSource>()

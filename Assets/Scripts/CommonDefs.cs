@@ -556,6 +556,7 @@ public enum VFXType
     Resurrection,
     PitDrop,
     HitLaser,
+    DoorDestruction,
 }
 
 public enum SNDType

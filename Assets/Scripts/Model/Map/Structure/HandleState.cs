@@ -23,6 +23,7 @@ public abstract class HandleState : IHandleState
         OPENING,
         CLOSING,
         FORCE_OPEN,
+        DESTRUCT,
     }
 
     public HandleState(ItemType type = ItemType.Null)
@@ -61,6 +62,7 @@ public abstract class HandleState : IHandleState
 
             case StateEnum.OPENING:
             case StateEnum.FORCE_OPEN:
+            case StateEnum.DESTRUCT:
                 return StateEnum.OPEN;
 
             default:

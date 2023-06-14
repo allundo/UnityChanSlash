@@ -105,7 +105,9 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             if (!bottom.Key.IsNull) stairsBottom = new PosDirPair(bottom);
             if (!top.Key.IsNull) stairsTop = new PosDirPair(top);
 
-            tileOpenData = map.ExportTileOpenData().ToArray();
+            var (open, broken) = map.ExportTileStateData();
+            tileOpenData = open.ToArray();
+            tileBrokenData = broken.ToArray();
             tileDiscoveredData = map.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
             randomMessagePos = map.ExportRandomMessagePos();
@@ -119,6 +121,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public PosDirPair stairsBottom = null;
         public PosDirPair stairsTop = null;
         public Pos[] tileOpenData = null;
+        public Pos[] tileBrokenData = null;
         public bool[] tileDiscoveredData = null;
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;
@@ -468,7 +471,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         if (GameInfo.Instance.isScenePlayedByEditor)
         {
             SpawnHandler.Instance.SaveEnemyRespawnData(stairsEnterPos);
-            map.StoreTileOpenData();
+            map.StoreTileStateData();
             return;
         }
 #endif

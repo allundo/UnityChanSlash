@@ -220,6 +220,11 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         HologramFade.isHologramOn = orientation == DeviceOrientation.LandscapeRight;
     }
 
+    public void RedrawPlates()
+    {
+        hidePlateHandler.Redraw();
+    }
+
     public void EnterStair(bool isDownStairs)
     {
         input.ClearAll();

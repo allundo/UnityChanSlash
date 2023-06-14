@@ -7,6 +7,7 @@ public class LockControl : MonoBehaviour
     private IMatTransparentEffect matTransparentEffect;
     private int unlock;
     private Vector3 defaultScale;
+    private Tween unlockTween;
 
     protected void Awake()
     {
@@ -27,11 +28,16 @@ public class LockControl : MonoBehaviour
     {
         anim.speed = 1f;
         anim.SetTrigger(unlock);
-        DOTween.Sequence()
+        unlockTween = DOTween.Sequence()
             .AppendInterval(1f)
             .AppendCallback(() => matTransparentEffect.FadeOut())
             .Append(transform.DOScale(new Vector3(defaultScale.x * 1.5f, 0f, defaultScale.z), 0.5f))
             .AppendCallback(() => anim.speed = 0f)
             .Play();
+    }
+
+    public void ForceBreak()
+    {
+        gameObject.SetActive(false);
     }
 }

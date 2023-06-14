@@ -41,4 +41,16 @@ public class LockedDoorControl : DoorControl
             lockControl.Unlock();
         }
     }
+
+    protected override void ForceOpen()
+    {
+        lockControl.ForceBreak();
+        base.ForceOpen();
+    }
+
+    protected override void ForceBreak()
+    {
+        lockControl.ForceBreak();
+        base.ForceBreak();
+    }
 }
