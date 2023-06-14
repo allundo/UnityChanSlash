@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4638532762040982953}
   - component: {fileID: 7394793903594270375}
   - component: {fileID: 8761223803396366255}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: EnemySpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3131941132637476971}
   m_Father: {fileID: 0}
@@ -68,6 +69,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -83,6 +89,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
@@ -95,16 +106,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8671504285426466021, guid: 96c917849d9e84b5baaa0b452042a0fa,
         type: 3}
@@ -125,6 +126,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyAutoGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 8671504285426466023, guid: 96c917849d9e84b5baaa0b452042a0fa,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96c917849d9e84b5baaa0b452042a0fa, type: 3}
