@@ -14,7 +14,9 @@ public class LightLaserAttack : MagicAttack
 
         laserCollider.center = new Vector3(0f, 1f, (length + 1) * TILE_UNIT * 0.5f);
         laserCollider.size = new Vector3(2f, 2f, length * TILE_UNIT * colliderSizeRatio);
+
+        dir = status.dir;
     }
 
-    public IDirection dir => status.dir;
+    public IDirection dir { get; protected set; }
 }

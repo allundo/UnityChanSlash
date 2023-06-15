@@ -108,6 +108,8 @@ public class DoorControl : HandleStructure
         var laser = other.GetComponent<LightLaserAttack>();
         if (laser != null && !handleState.IsOpen)
         {
+            CompleteTween();
+
             ParticleSystem vfx = ResourceLoader.Instance.LoadVFX(VFXType.DoorDestruction, transform);
             vfx.transform.rotation = laser.dir.Rotate;
             vfx.PlayEx();
