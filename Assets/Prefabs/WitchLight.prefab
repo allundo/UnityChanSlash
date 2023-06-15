@@ -24311,7 +24311,7 @@ GameObject:
   - component: {fileID: 9086781224452893914}
   - component: {fileID: 7808161627328232525}
   m_Layer: 0
-  m_Name: Light
+  m_Name: WitchLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
