@@ -112,6 +112,8 @@ public class DoorControl : HandleStructure
             vfx.transform.rotation = laser.dir.Rotate;
             vfx.PlayEx();
 
+            ResourceLoader.Instance.LoadSnd(SNDType.DoorDestruction, transform).PlayEx();
+
             (handleState as DoorState).Break();
 
             GameManager.Instance.RedrawPlates();

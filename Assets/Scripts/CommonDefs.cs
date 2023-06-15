@@ -573,6 +573,7 @@ public enum SNDType
     Decision,
     Select,
     DropStart,
+    DoorDestruction,
 }
 
 public enum ObjectLayerEnum
