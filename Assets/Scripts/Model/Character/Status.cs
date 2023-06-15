@@ -119,7 +119,7 @@ public class Status : SpawnObject<Status>, IStatus
         transform.position = pos;
 
         this.dir = dir ?? Status.defaultDir;
-        transform.LookAt(transform.position + this.dir.LookAt);
+        transform.rotation = this.dir.Rotate;
     }
 
     public virtual IStatus InitParam(Param param, StatusStoreData data = null)
