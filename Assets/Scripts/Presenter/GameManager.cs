@@ -225,8 +225,15 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.Redraw();
     }
 
+    public void AmplifyCamera()
+    {
+        mainCamera.Amplify();
+    }
+
     public void EnterStair(bool isDownStairs)
     {
+        mainCamera.StopAmplify();
+
         input.ClearAll();
         input.SetInputVisible(false);
         anim.Pause();

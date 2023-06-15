@@ -14,6 +14,7 @@ public interface IGameManager
     void LoadDataStart();
 
     void RedrawPlates();
+    void AmplifyCamera();
 
     DataStoreAgent.EventData[] ExportEventData();
     int GetCurrentEvent();

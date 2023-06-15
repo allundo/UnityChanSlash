@@ -118,7 +118,9 @@ public class DoorControl : HandleStructure
 
             (handleState as DoorState).Break();
 
-            GameManager.Instance.RedrawPlates();
+            var gm = GameManager.Instance;
+            gm.RedrawPlates();
+            gm.AmplifyCamera();
         }
     }
 }
