@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class StructuresRenderer<T> : ObjectsRenderer<T>
+public class StructuresRenderer<T> : ObjectsRenderer<T>
     where T : MonoBehaviour
 {
     protected FloorMaterialsSource floorMaterials;

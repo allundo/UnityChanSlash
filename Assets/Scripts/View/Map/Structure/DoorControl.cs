@@ -110,17 +110,12 @@ public class DoorControl : HandleStructure
         {
             CompleteTween();
 
-            ParticleSystem vfx = ResourceLoader.Instance.LoadVFX(VFXType.DoorDestruction, transform);
-            vfx.transform.rotation = laser.dir.Rotate;
-            vfx.PlayEx();
-
-            ResourceLoader.Instance.LoadSnd(SNDType.DoorDestruction, transform).PlayEx();
+            var gm = GameManager.Instance;
+            gm.DestructDoor(transform.position, laser.dir);
 
             (handleState as DoorState).Break();
 
-            var gm = GameManager.Instance;
             gm.RedrawPlates();
-            gm.AmplifyCamera();
         }
     }
 }

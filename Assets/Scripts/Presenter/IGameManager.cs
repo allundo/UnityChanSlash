@@ -14,7 +14,7 @@ public interface IGameManager
     void LoadDataStart();
 
     void RedrawPlates();
-    void AmplifyCamera();
+    void DestructDoor(Vector3 pos, IDirection forceDir);
 
     DataStoreAgent.EventData[] ExportEventData();
     int GetCurrentEvent();

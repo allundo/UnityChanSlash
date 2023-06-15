@@ -88,7 +88,6 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { VFXType.Resurrection,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")        },
             { VFXType.PitDrop,          Resources.Load<ParticleSystem>("Prefabs/Effect/FX_PIT_DROP")            },
             { VFXType.HitLaser,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_HIT_LASER")           },
-            { VFXType.DoorDestruction,  Resources.Load<ParticleSystem>("Prefabs/Effect/FX_DOOR_DESTRUCTION")    },
         };
 
         prefabSNDs = new Dictionary<SNDType, AudioSource>()
@@ -105,7 +104,6 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.Decision,             Resources.Load<AudioSource>("Prefabs/Sound/SND_UI_DECISION")        },
             { SNDType.Select,               Resources.Load<AudioSource>("Prefabs/Sound/SND_UI_SELECT")          },
             { SNDType.DropStart,            Resources.Load<AudioSource>("Prefabs/Sound/SND_TITLE_DROP_START")   },
-            { SNDType.DoorDestruction,      Resources.Load<AudioSource>("Prefabs/Sound/SND_DOOR_DESTRUCTION")    },
         };
 
         enemyLevelGainData = Resources.Load<LevelGainData>("DataAssets/Character/EnemyLevelGainData");

@@ -17,7 +17,7 @@ public class BoxesRenderer : StructuresRenderer<BoxControl>
     public void SetBox(Pos pos, IDirection dir)
     {
         var state = new BoxState();
-        var box = PlacePrefab(pos, prefabBoxN, dir.Rotate).SetState(state) as BoxControl;
+        var box = PlacePrefab(pos, prefabBoxN, dir).SetState(state) as BoxControl;
         (map.GetTile(pos) as Box).state = state;
     }
 

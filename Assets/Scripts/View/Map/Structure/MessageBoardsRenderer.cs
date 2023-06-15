@@ -24,7 +24,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 
     public void SetMessage(Pos pos, IDirection dir, Terrain type)
     {
-        PlacePrefab(pos, prefabMessageN[type], dir.Rotate);
+        PlacePrefab(pos, prefabMessageN[type], dir);
         switch (type)
         {
             case Terrain.MessageWall:

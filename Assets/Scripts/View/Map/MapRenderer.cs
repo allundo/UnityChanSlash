@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
@@ -53,6 +52,7 @@ public class MapRenderer : MonoBehaviour
     private PitTrapsRenderer pitTrapsRenderer;
     private BoxesRenderer boxesRenderer;
     private MessageBoardsRenderer messageBoardsRenderer;
+    private DoorDestructFXRenderer doorDestructFXRenderer;
     private IObjectsRenderer[] renderers;
 
     void Awake()
@@ -64,8 +64,9 @@ public class MapRenderer : MonoBehaviour
         pitTrapsRenderer = new PitTrapsRenderer(transform);
         boxesRenderer = new BoxesRenderer(transform);
         messageBoardsRenderer = new MessageBoardsRenderer(transform);
+        doorDestructFXRenderer = new DoorDestructFXRenderer(transform);
 
-        renderers = new IObjectsRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer };
+        renderers = new IObjectsRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer, doorDestructFXRenderer };
     }
 
     ///  <summary>
@@ -268,4 +269,6 @@ public class MapRenderer : MonoBehaviour
     {
         Destroy(wallParentMesh);
     }
+
+    public void DoorDestructionVFX(Vector3 pos, IDirection dir) => doorDestructFXRenderer.Spawn(pos, dir);
 }

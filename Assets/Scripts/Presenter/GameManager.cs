@@ -225,8 +225,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler.Redraw();
     }
 
-    public void AmplifyCamera()
+    public void DestructDoor(Vector3 pos, IDirection forceDir)
     {
+        mapRenderer.DoorDestructionVFX(pos, forceDir);
         mainCamera.Amplify();
     }
 

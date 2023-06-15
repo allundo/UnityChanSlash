@@ -25,12 +25,12 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
 
     public void SetLockedDoor(Pos pos, IDirection dir)
     {
-        InitDoorData(pos, PlacePrefab(pos, prefabLockedDoorN, dir.Rotate).SetDir(dir), ItemType.TreasureKey);
+        InitDoorData(pos, PlacePrefab(pos, prefabLockedDoorN, dir).SetDir(dir), ItemType.TreasureKey);
     }
 
     public void SetExitDoor(Pos pos, IDirection dir)
     {
-        InitDoorData(pos, PlacePrefab(pos, prefabExitDoorN, dir.Rotate).SetDir(dir), ItemType.KeyBlade);
+        InitDoorData(pos, PlacePrefab(pos, prefabExitDoorN, dir).SetDir(dir), ItemType.KeyBlade);
     }
 
     private void InitDoorData(Pos pos, DoorControl doorInstance, ItemType lockType = ItemType.Null)

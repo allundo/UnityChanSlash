@@ -556,7 +556,6 @@ public enum VFXType
     Resurrection,
     PitDrop,
     HitLaser,
-    DoorDestruction,
 }
 
 public enum SNDType
@@ -573,7 +572,6 @@ public enum SNDType
     Decision,
     Select,
     DropStart,
-    DoorDestruction,
 }
 
 public enum ObjectLayerEnum

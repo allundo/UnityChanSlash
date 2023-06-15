@@ -26,12 +26,9 @@ public abstract class ObjectsRenderer<T> : IObjectsRenderer
         this.map = map;
     }
 
-    protected TControl PlacePrefab<TControl>(Pos pos, TControl prefab) where TControl : T
-        => PlacePrefab(pos, prefab, Quaternion.identity);
-
-    protected TControl PlacePrefab<TControl>(Pos pos, TControl prefab, Quaternion rotation) where TControl : T
+    protected virtual TControl PlacePrefab<TControl>(Pos pos, TControl prefab, IDirection dir = null) where TControl : T
     {
-        var instance = Util.Instantiate(prefab, map.WorldPos(pos), rotation, parentTransform);
+        var instance = Util.Instantiate(prefab, map.WorldPos(pos), dir != null ? dir.Rotate : Quaternion.identity, parentTransform);
         objectsPool.Push(instance);
         return instance;
     }

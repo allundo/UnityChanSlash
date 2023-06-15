@@ -1,13 +1,14 @@
 using UnityEngine;
 
 public abstract class SpawnObject<T> : MonoBehaviour, ISpawnObject<T>
+    where T : UnityEngine.Object
 {
     public abstract T OnSpawn(Vector3 pos, IDirection dir = null, float duration = 0.5f);
     public virtual void Inactivate() { gameObject.SetActive(false); }
     public virtual void Activate() { gameObject.SetActive(true); }
 }
 
-public interface ISpawnObject<T>
+public interface ISpawnObject<T> where T : UnityEngine.Object
 {
     /// <summary>
     /// Initialization process when spawned by Generator<T>
