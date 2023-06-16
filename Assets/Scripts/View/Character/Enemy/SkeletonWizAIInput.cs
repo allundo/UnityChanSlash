@@ -61,7 +61,11 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
-        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward))
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
+
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
             ?? TurnToViewOpen(IsViewOpen(forward), IsViewOpen(left), IsViewOpen(right), IsViewOpen(backward));
     }
 }

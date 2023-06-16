@@ -69,7 +69,8 @@ public class RedSlimeAIInput : EnemyAIInput
         bool isRightViewOpen = IsViewOpen(right);
         if (IsOnPlayer(right2) && isRightViewOpen) return turnR;
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable || IsOnPlayer(backward))
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward) || IsOnPlayer(backward))
             ?? TurnToViewOpen(IsViewOpen(forward), isLeftViewOpen, isRightViewOpen, isBackwardViewOpen);
     }
 

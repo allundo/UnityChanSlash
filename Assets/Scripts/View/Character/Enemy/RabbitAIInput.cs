@@ -97,7 +97,9 @@ public class RabbitAIInput : EnemyAIInput
         if (mobMap.IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
         // Wonder if unmovable
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable) ?? wondering;
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable)
+            ?? wondering;
     }
 
     public override ICommand InputIced(float duration)

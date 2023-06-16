@@ -100,7 +100,7 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         }
         else
         {
-            // Turn if forward unmovable and left or right or backward  movable
+            // Turn if forward unmovable and left or right or backward movable
             if ((isLeftMovable && isRightMovable) || isBackwardMovable) return RandomChoice(turnL, turnR);
             if (isLeftMovable) return turnL;
             if (isRightMovable) return turnR;

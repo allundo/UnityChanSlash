@@ -17,14 +17,15 @@ public abstract class UndeadCommand : EnemyCommand
 public class Resurrection : UndeadCommand
 {
     private ICommand startMoving;
-    public Resurrection(ICommandTarget target, float duration) : base(target, duration)
+    public Resurrection(ICommandTarget target, float duration = 64, ICommand startMoving = null) : base(target, duration)
     {
-        startMoving = new StartMoving(target, 72f);
+        this.startMoving = startMoving ?? new StartMoving(target);
     }
 
+    protected virtual bool IsEnterable => map.OnTile.IsEnterable();
     public override IObservable<Unit> Execute()
     {
-        if (map.OnTile.IsEnterable())
+        if (!map.OnTile.IsCharacterOn)
         {
             undeadAnim.resurrection.Fire();
             undeadAnim.die.Bool = undeadAnim.sleep.Bool = false;
@@ -85,7 +86,7 @@ public class ResurrectionContinue : Command
 
 public class StartMoving : UndeadCommand
 {
-    public StartMoving(ICommandTarget target, float duration) : base(target, duration) { }
+    public StartMoving(ICommandTarget target, float duration = 72f) : base(target, duration) { }
 
     protected override float Speed => TILE_UNIT / duration;
 
@@ -114,10 +115,10 @@ public class StartMoving : UndeadCommand
 
 public class UndeadSleep : UndeadCommand
 {
-    ICommand resurrection;
-    public UndeadSleep(ICommandTarget target, float duration, ICommand resurrection) : base(target, duration)
+    protected ICommand resurrection;
+    public UndeadSleep(ICommandTarget target, float duration = 300f, ICommand resurrection = null) : base(target, duration)
     {
-        this.resurrection = resurrection;
+        this.resurrection = resurrection ?? new Resurrection(target);
     }
 
     public override IObservable<Unit> Execute()
@@ -134,10 +135,10 @@ public class UndeadSleep : UndeadCommand
 
 public class UndeadQuickSleep : UndeadCommand
 {
-    ICommand resurrection;
-    public UndeadQuickSleep(ICommandTarget target) : base(target, 15f)
+    protected ICommand resurrection;
+    public UndeadQuickSleep(ICommandTarget target, float duration = 15f, ICommand resurrection = null) : base(target, duration)
     {
-        resurrection = new Resurrection(target, 64f);
+        this.resurrection = resurrection ?? new Resurrection(target);
     }
 
     public override IObservable<Unit> Execute()

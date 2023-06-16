@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(MagicAndDouble))]
 public class WitchAIInput : GhostAIInput, IUndeadInput
 {
-    protected ICommand backAttack;
+    protected ICommand jumpOverAttack;
     protected ICommand targetAttack;
     protected ICommand backStep;
     protected ICommand ice;
@@ -19,7 +19,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     {
         var doubleAttack = new WitchDoubleAttackLaunch(target, 32f);
         attack = new WitchBackStepAttack(target, 32f, doubleAttack);
-        backAttack = new WitchJumpOverAttack(target, 32f, doubleAttack);
+        jumpOverAttack = new WitchJumpOverAttack(target, 32f, doubleAttack);
 
         die = new EnemyDie(target, 72f);
         targetAttack = new WitchTargetAttack(target, 75f);
@@ -45,14 +45,34 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         undeadInput.OnActive(option);
     }
 
+    protected bool IsClosedDoor(Pos pos)
+    {
+        Door door = mobMap.GetTile(pos) as Door;
+        return door != null && !door.IsOpen;
+    }
+
     protected override ICommand GetCommand()
     {
         var currentCommand = commander.currentCommand;
 
         Pos forward = mobMap.GetForward;
+        Pos backward = mobMap.GetBackward;
+        Pos forward2 = mobMap.dir.GetForward(forward);
+
+        bool isBackwardMovable = mobMap.IsViewable(backward);
+        bool isForward2Movable = mobMap.IsViewable(forward2);
+        bool isLeapable = isForward2Movable && mobMap.IsLeapable(forward);
 
         // Start attack if player found at forward
-        if (IsOnPlayer(forward)) return RandomChoice(attack, backAttack, targetAttack, backStep);
+        if (IsOnPlayer(forward))
+        {
+            ICommand cmd = RandomChoice(attack, jumpOverAttack, targetAttack, backStep, teleport);
+
+            if (cmd == targetAttack || cmd == teleport) return cmd;
+            if ((cmd == attack || cmd == backStep) && !isBackwardMovable && isLeapable) return jumpOverAttack;
+            if (cmd == jumpOverAttack && !isLeapable && isBackwardMovable) return RandomChoice(attack, backStep);
+            return RandomChoice(fire, ice, laser);
+        }
 
         // Turn if player found at left, right or backward
         Pos left = mobMap.GetLeft;
@@ -67,51 +87,50 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        Pos forward2 = mobMap.dir.GetForward(forward);
-        bool isForwardMovable = mobMap.IsMovable(forward) || mobMap.IsLeapable(forward);
+        bool isForwardMovable = mobMap.IsViewable(forward);
+        bool isForwardDoor = IsClosedDoor(forward);
 
         // Move forward if player found in front
         if (IsOnPlayer(forward2))
         {
-            return isForwardMovable ? RandomChoice(moveForward, fire, ice, summon, laser) : throughForward;
+            if (isForwardDoor) return laser;
+            if (!isForwardMovable) return throughForward;
+            return RandomChoice(
+                currentCommand == backStep ? ice : moveForward,
+                currentCommand == moveForward ? fire : backStep,
+                fire,
+                ice,
+                summon,
+                laser
+            );
         }
 
         Pos forward3 = mobMap.dir.GetForward(forward2);
-        if (IsOnPlayer(forward3) && isForwardMovable) return RandomChoice(moveForward, fire, ice, laser);
 
-        Pos backward = mobMap.GetBackward;
+        if (IsOnPlayer(forward3))
+        {
+            if (isForwardDoor) return laser;
+
+            if (isForwardMovable)
+            {
+                if (IsClosedDoor(forward2)) return laser;
+                return RandomChoice(moveForward, fire, ice, laser);
+            }
+        }
+
         if (IsOnPlayer(backward) && Util.Judge(3)) return RandomChoice(turnL, turnR);
 
-        if (isForwardMovable)
-        {
-            // Turn 50%
-            if (Util.Judge(2))
-            {
-                if (Util.Judge(2))
-                {
-                    return (currentCommand == turnR) ? moveForward : turnL;
-                }
-                else
-                {
-                    return (currentCommand == turnL) ? moveForward : turnR;
-                }
-            }
+        bool isLeftMovable = mobMap.IsViewable(left);
+        bool isRightMovable = mobMap.IsViewable(right);
 
-            // Move forward if not turned and forward movable
-            return moveForward;
-        }
-        else
-        {
-            if (mobMap.GetTile(forward2).IsViewOpen) return RandomChoice(throughForward, teleport);
-
-            // Turn if forward unmovable and left or right movable
-            if (mobMap.IsMovable(left)) return turnL;
-            if (mobMap.IsMovable(right)) return turnR;
-            if (mobMap.IsMovable(backward)) return RandomChoice(turnL, turnR);
-        }
-
-        // Idle if unmovable
-        return null;
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
+            ?? ThroughWall(isForward2Movable)
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable)
+            ?? idle;
+    }
+    protected override ICommand ThroughWall(bool isForward2Movable)
+    {
+        return isForward2Movable ? RandomChoice(throughForward, teleport) : null;
     }
 
     public void InputTeleport() => ForceEnqueue(teleport);

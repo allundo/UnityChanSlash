@@ -74,10 +74,15 @@ public class EnemyAIInput : MobInput, IEnemyInput
         // Move forward if player found in front
         if (IsPlayerFound(forward) && isForwardMovable) return moveForward;
 
-        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward)) ?? idle;
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
+
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
+            ?? idle;
     }
 
-    protected virtual ICommand MoveForwardOrTurn(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
+    protected virtual ICommand MoveForwardOrTurn(bool isForwardMovable, bool isLeftMovable, bool isRightMovable)
     {
         if (isForwardMovable)
         {
@@ -101,15 +106,18 @@ public class EnemyAIInput : MobInput, IEnemyInput
             // Move forward if not turned and forward movable
             return moveForward;
         }
-        else
-        {
-            // Turn if forward unmovable and left or right or backward  movable
-            if ((isLeftMovable && isRightMovable) || isBackwardMovable) return RandomChoice(turnL, turnR);
-            if (isLeftMovable) return turnL;
-            if (isRightMovable) return turnR;
 
-            return null;
-        }
+        return null;
+    }
+
+    protected virtual ICommand TurnToMovable(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
+    {
+        // Turn if forward unmovable and left or right or backward  movable
+        if ((isLeftMovable && isRightMovable) || isBackwardMovable) return RandomChoice(turnL, turnR);
+        if (isLeftMovable) return turnL;
+        if (isRightMovable) return turnR;
+
+        return null;
     }
 
     protected ICommand TurnToViewOpen(bool isForwardViewOpen, bool isLeftViewOpen, bool isRightViewOpen, bool isBackwardViewOpen)

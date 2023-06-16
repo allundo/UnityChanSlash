@@ -39,7 +39,7 @@ public class GhostAIInput : EnemyAIInput
         if (IsOnPlayer(right2)) return turnR;
 
         Pos forward2 = mobMap.dir.GetForward(forward);
-        bool isForwardMovable = mobMap.IsMovable(forward) || mobMap.IsLeapable(forward);
+        bool isForwardMovable = mobMap.IsViewable(forward);
 
         // Move forward if player found in front
         if (IsOnPlayer(forward2))
@@ -53,35 +53,17 @@ public class GhostAIInput : EnemyAIInput
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward) && Util.Judge(3)) return RandomChoice(turnL, turnR);
 
-        if (isForwardMovable)
-        {
-            // Turn 50%
-            if (Util.Judge(2))
-            {
-                if (Util.Judge(2))
-                {
-                    return (currentCommand == turnR) ? moveForward : turnL;
-                }
-                else
-                {
-                    return (currentCommand == turnL) ? moveForward : turnR;
-                }
-            }
+        bool isLeftMovable = mobMap.IsViewable(left);
+        bool isRightMovable = mobMap.IsViewable(right);
 
-            // Move forward if not turned and forward movable
-            return moveForward;
-        }
-        else
-        {
-            if (mobMap.GetTile(forward2).IsViewOpen) return throughForward;
+        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
+            ?? ThroughWall(mobMap.IsViewable(forward2))
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsViewable(backward))
+            ?? idle;
+    }
 
-            // Turn if forward unmovable and left or right movable
-            if (mobMap.IsMovable(left)) return turnL;
-            if (mobMap.IsMovable(right)) return turnR;
-            if (mobMap.IsMovable(backward)) return RandomChoice(turnL, turnR);
-        }
-
-        // Idle if unmovable
-        return null;
+    protected virtual ICommand ThroughWall(bool isForward2Movable)
+    {
+        return isForward2Movable ? throughForward : null;
     }
 }
