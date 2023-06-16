@@ -8,6 +8,9 @@ public class LightLaserEffect : MagicEffectFX
 
     [SerializeField] protected Transform tfLaser = default;
     [SerializeField] protected Transform tfLaserLead = default;
+
+    [SerializeField] protected ParticleSystem[] spirals = default;
+
     protected Transform tfWall;
     protected Vector3 laserScale;
     protected Vector3 laserLeadScale;
@@ -24,6 +27,11 @@ public class LightLaserEffect : MagicEffectFX
         tfLaserLead.localPosition = new Vector3(0, 0, -0.5f * (length + 1));
         tfLaser.localScale = new Vector3(laserScale.x, laserScale.y, 0.2f * (length + 1));
         tfLaserLead.localScale = new Vector3(laserLeadScale.x, laserLeadScale.y, 0.2f * (length + 1));
+        spirals.ForEach(spiral =>
+        {
+            var main = spiral.main;
+            main.startSpeed = new ParticleSystem.MinMaxCurve(2f * (length + 1));
+        });
 
         if (length < LightLaserStatus.MAX_LENGTH)
         {

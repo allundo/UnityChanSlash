@@ -43705,6 +43705,9 @@ MonoBehaviour:
   laserSnd: {fileID: 50366056359794035}
   tfLaser: {fileID: 1903036528941823555}
   tfLaserLead: {fileID: 1903036529194630979}
+  spirals:
+  - {fileID: 1903036527114030110}
+  - {fileID: 1903036527484299391}
 --- !u!114 &7482947037716119834
 MonoBehaviour:
   m_ObjectHideFlags: 0
