@@ -10,18 +10,6 @@ public interface IMobMapUtil : IMapUtil
     /// </summary>
     void RemoveObjectOn();
 
-    /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
-    /// </summary>
-    /// <param name="pos">Vector3 Tile position</param>
-    void RemoveObjectOn(Vector3 pos);
-
-    /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
-    /// </summary>
-    /// <param name="pos">Pos unit Tile position</param>
-    void RemoveObjectOn(Pos pos);
-
     bool IsMovable(Pos destPos, IDirection dir = null);
     bool IsLeapable(Pos destPos);
 
@@ -80,23 +68,15 @@ public class MobMapUtil : MapUtil, IMobMapUtil
     }
 
     /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile currently on
-    /// </summary>
-    public void RemoveObjectOn() => RemoveObjectOn(onTilePos);
-
-    /// <summary>
     /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
-    /// <param name="pos">Vector3 Tile position</param>
-    public void RemoveObjectOn(Vector3 pos) => RemoveObjectOn(map.MapPos(pos));
-
-    /// <summary>
-    /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
-    /// </summary>
-    /// <param name="pos">Pos unit Tile position</param>
-    public virtual void RemoveObjectOn(Pos pos)
+    public virtual void RemoveObjectOn()
     {
-        if (mobStatus.isOnGround) map.GetTile(pos).OnCharacterDest = null;
+        if (mobStatus.isOnGround)
+        {
+            ITile tile = map.GetTile(onTilePos);
+            if (tile.OnCharacterDest == status) tile.OnCharacterDest = null;
+        }
     }
 
     /// <summary>

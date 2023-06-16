@@ -69,23 +69,11 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     }
 
     /// <summary>
-    /// Remove enemy status info set on the Tile previously on
-    /// </summary>
-    public void RemoveOnEnemy() { RemoveOnEnemy(onTileEnemyPos); }
-
-    /// <summary>
     /// Remove enemy status info set on the Tile specified by Vector3 position
     /// </summary>
-    /// <param name="pos">Vector3 Tile position</param>
-    public void ResetOnEnemy(Vector3 pos) { RemoveOnEnemy(map.MapPos(pos)); }
-
-    /// <summary>
-    /// Remove enemy status info set on the Tile specified by Vector3 position
-    /// </summary>
-    /// <param name="pos">Pos unit Tile position</param>
-    public void RemoveOnEnemy(Pos pos)
+    public void RemoveOnEnemy()
     {
-        ITile tile = map.GetTile(pos);
+        ITile tile = map.GetTile(onTileEnemyPos);
         if (tile.OnEnemy == status) tile.OnEnemy = null;
     }
 
@@ -130,16 +118,16 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     /// <summary>
     /// Set IsObjectOn flag FALSE to the Tile specified by Vector3 position
     /// </summary>
-    /// <param name="pos">Pos unit Tile position</param>
-    public override void RemoveObjectOn(Pos pos)
+    public override void RemoveObjectOn()
     {
+        ITile tile = map.GetTile(onTilePos);
         if (mobStatus.isOnGround)
         {
-            map.GetTile(pos).OnCharacterDest = null;
+            if (tile.OnCharacterDest == status) tile.OnCharacterDest = null;
         }
         else
         {
-            map.GetTile(pos).AboveEnemy = null;
+            if (tile.AboveEnemy == status) tile.AboveEnemy = null;
         }
     }
 }
