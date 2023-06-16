@@ -35,7 +35,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         summon = new WitchSummonMonster(target, 108f);
         teleport = new MagicianTeleport(target, 84f);
 
-        undeadInput = new UndeadInput(target, cmd => Interrupt(cmd, true, true));
+        undeadInput = new UndeadInput(cmd => Interrupt(cmd, true, true), new WitchSleep(target), new WitchQuickSleep(target));
     }
 
     public void InterruptSleep() => undeadInput.InterruptSleep();

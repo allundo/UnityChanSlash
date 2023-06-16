@@ -1,3 +1,4 @@
+using UnityEngine;
 using UniRx;
 using System;
 using DG.Tweening;
@@ -243,5 +244,46 @@ public class WitchDoubleAttackLaunch : FlyingAttack
         (anim as WitchAnimator).attackStart.Fire();
         input.Interrupt(doubleAttackStart, false);
         return ObservableComplete();
+    }
+}
+
+public class WitchSleep : UndeadSleep
+{
+    public WitchSleep(ICommandTarget target, float duration = 300f, ICommand resurrection = null)
+        : base(target, duration, resurrection ?? new Resurrection(target))
+    { }
+
+    public override IObservable<Unit> Execute()
+    {
+        var pit = map.OnTile as Pit;
+
+        if (pit != null)
+        {
+            completeTween = DOTween.Sequence()
+                .Join(tweenMove.Move(map.DestVec3Pos - Vector3.up * TILE_UNIT, 0.2f, Ease.InCubic))
+                .InsertCallback(0.4f, pit.Drop)
+                .Play();
+        }
+
+        return base.Execute(); // Don't validate input
+    }
+
+}
+public class WitchQuickSleep : UndeadQuickSleep
+{
+    public WitchQuickSleep(ICommandTarget target, float duration = 15f, ICommand resurrection = null)
+        : base(target, duration, resurrection ?? new Resurrection(target))
+    { }
+
+    public override IObservable<Unit> Execute()
+    {
+        var pit = map.OnTile as Pit;
+
+        if (pit != null)
+        {
+            target.transform.position -= Vector3.up * TILE_UNIT;
+        }
+
+        return base.Execute(); // Don't validate input
     }
 }
