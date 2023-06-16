@@ -40,7 +40,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 
         if (cmd is PlayerJump && cmd.RemainingTimeScale > 0.25f) exitState = ExitState.Jump;
 
-        if (mapUtil.isInPit)
+        if (status.isInPit)
         {
             // Player has already fell into pit if Idling(cmd is null), Turn LR in the pit or failed to escape from the pit by Jump.
             exitState = (cmd == null || cmd is PlayerTurnL || cmd is PlayerTurnR || cmd is PlayerPitJump || cmd is PlayerWakeUp) ? ExitState.InPit : ExitState.PitFall;

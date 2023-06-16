@@ -77,8 +77,8 @@ public class MapUtil : MonoBehaviour, IMapUtil
 
     public bool IsOnPlayer(Pos destPos)
     {
-        IStatus status = map.GetTile(destPos).OnCharacterDest;
-        return status is PlayerStatus && status.isActive;
+        PlayerStatus status = map.GetTile(destPos).OnCharacterDest as PlayerStatus;
+        return status != null && status.isActive && !status.isInPit;
     }
 
     public bool IsPlayerFound() => IsPlayerFound(onTilePos);

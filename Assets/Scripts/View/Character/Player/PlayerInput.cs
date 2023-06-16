@@ -288,7 +288,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         ITile forwardTile = map.ForwardTile;
 
-        bool isFaceToEnemy = !playerMap.isInPit && forwardTile.IsEnemyOn;
+        bool isFaceToEnemy = !playerMap.IsInPit && forwardTile.IsEnemyOn;
         if (isFaceToEnemy)
         {
             fightCircle.SetActive(IsFightValid || IsAttack || IsItemUse || IsFiring, forwardTile.GetEnemyStatus());
@@ -301,7 +301,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         isEnemyDetected.Value = fightCircle.isActive;
 
-        bool isFaceToDoor = !playerMap.isInPit && !IsDash && !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
+        bool isFaceToDoor = !playerMap.IsInPit && !IsDash && !fightCircle.isActive && forwardTile is Door && !forwardTile.IsItemOn;
 
         if (isFaceToDoor)
         {
@@ -316,7 +316,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             doorHandler.Inactivate();
         }
 
-        bool isFaceToBox = !playerMap.isInPit && !IsDash && !fightCircle.isActive && forwardTile is Box;
+        bool isFaceToBox = !playerMap.IsInPit && !IsDash && !fightCircle.isActive && forwardTile is Box;
         if (isFaceToBox)
         {
             Box box = forwardTile as Box;
@@ -328,7 +328,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             boxHandler.Inactivate();
         }
 
-        bool isFaceToItem = !playerMap.isInPit && !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
+        bool isFaceToItem = !playerMap.IsInPit && !IsDash && !fightCircle.isActive && !isFaceToBox && forwardTile.IsItemOn;
         if (isFaceToItem)
         {
             handleIcon.isLocked = false;
@@ -340,7 +340,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             itemHandler.Inactivate();
         }
 
-        bool isFaceToSpecialTile = !playerMap.isInPit && IsIdling && !fightCircle.isActive && forwardTile is Pit;
+        bool isFaceToSpecialTile = !playerMap.IsInPit && IsIdling && !fightCircle.isActive && forwardTile is Pit;
         if (isFaceToSpecialTile)
         {
             handleIcon.isLocked = false;
@@ -373,7 +373,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         uiMask.SetActive(isHandleUIOn || IsAttack || attackInputUI.IsPressed);
 
-        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !playerMap.isInPit && !isHandleUIOn);
+        forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !playerMap.IsInPit && !isHandleUIOn);
         backwardUI.SetActive(playerMap.IsBackwardMovable);
         rightUI.SetActive(playerMap.IsRightMovable);
         leftUI.SetActive(playerMap.IsLeftMovable);
@@ -385,7 +385,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
         jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
 
-        guardUI.SetActive(!fightCircle.isActive && !playerMap.isInPit);
+        guardUI.SetActive(!fightCircle.isActive && !playerMap.IsInPit);
     }
 
     /// <summary>
@@ -547,7 +547,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
                     commander.ReplaceNext(jump);
                     return;
                 }
-                InputTrigger(playerMap.isInPit ? pitJump : jump);
+                InputTrigger(playerMap.IsInPit ? pitJump : jump);
             })
             .AddTo(this);
 

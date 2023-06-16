@@ -103,7 +103,7 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     public override Pos SetObjectOn(Pos destPos)
     {
         ITile tile = map.GetTile(destPos);
-        if (mobStatus.isOnGround && !(tile is Pit))
+        if (mobStatus.isOnGround)
         {
             tile.OnCharacterDest ??= status;
         }

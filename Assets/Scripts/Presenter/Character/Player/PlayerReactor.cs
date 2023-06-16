@@ -236,7 +236,7 @@ public class PlayerReactor : MobReactor
     public override void OnWakeUp()
     {
         bodyCollider.enabled = true;
-        playerInput.SetInputVisible(true, !playerMap.isInPit);
+        playerInput.SetInputVisible(true, !playerStatus.isInPit);
     }
 
     public override void OnDie()

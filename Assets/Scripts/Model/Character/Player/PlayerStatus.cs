@@ -34,6 +34,8 @@ public class PlayerStatus : MobStatus, IGetExp
 
     public override Vector3 corePos => transform.position + col.center;
 
+    public bool isInPit = false;
+
     private IObservable<EquipmentSource> EquipObservable(int index) => equips[index].SkipLatestValueOnSubscribe();
     public IObservable<EquipmentSource> EquipRObservable => EquipObservable(2);
     public IObservable<EquipmentSource> EquipLObservable => EquipObservable(0);

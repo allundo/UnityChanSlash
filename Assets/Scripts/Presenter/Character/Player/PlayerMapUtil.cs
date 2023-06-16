@@ -5,7 +5,7 @@ using System;
 
 public interface IPlayerMapUtil : IMobMapUtil
 {
-    bool isInPit { get; }
+    bool IsInPit { get; }
     bool IsPitJumpable { get; }
 }
 
@@ -31,11 +31,11 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
             status.SetDir(value);
         }
     }
-    public bool isInPit { get; protected set; } = false;
-    public override bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos), dir) && !isInPit;
-    public override bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos), dir.Backward) && !isInPit;
-    public override bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos), dir.Left) && !isInPit;
-    public override bool IsRightMovable => IsMovable(dir.GetRight(onTilePos), dir.Right) && !isInPit;
+    public bool IsInPit => playerStatus.isInPit;
+    public override bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos), dir) && !IsInPit;
+    public override bool IsBackwardMovable => IsMovable(dir.GetBackward(onTilePos), dir.Backward) && !IsInPit;
+    public override bool IsLeftMovable => IsMovable(dir.GetLeft(onTilePos), dir.Left) && !IsInPit;
+    public override bool IsRightMovable => IsMovable(dir.GetRight(onTilePos), dir.Right) && !IsInPit;
     public override bool IsJumpable => IsForwardLeapable && IsMovable(GetJump, dir);
     public bool IsPitJumpable => IsMovable(dir.GetForward(onTilePos), dir);
 
@@ -51,7 +51,7 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
 
     public override Pos SetObjectOn(Pos destPos)
     {
-        isInPit = map.GetTile(destPos) is Pit;
+        playerStatus.isInPit = map.GetTile(destPos) is Pit;
         return base.SetObjectOn(destPos);
     }
 
