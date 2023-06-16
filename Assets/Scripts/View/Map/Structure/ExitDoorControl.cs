@@ -30,6 +30,14 @@ public class ExitDoorControl : LockedDoorControl
         base.OnTriggerEnter(other);
     }
 
+    protected override void ForceBreak()
+    {
+        base.ForceBreak();
+
+        // Enable collider again to wait for player exit.
+        doorCollider.enabled = true;
+    }
+
     private void OnDestroy()
     {
         // Destroy cloned material
