@@ -102,13 +102,14 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     /// <returns>destPos</returns>
     public override Pos SetObjectOn(Pos destPos)
     {
+        ITile tile = map.GetTile(destPos);
         if (mobStatus.isOnGround)
         {
-            map.GetTile(destPos).OnCharacterDest = status;
+            tile.OnCharacterDest ??= status;
         }
         else
         {
-            map.GetTile(destPos).AboveEnemy = status as IEnemyStatus;
+            tile.AboveEnemy ??= status as IEnemyStatus;
         }
 
         onTilePos = destPos;

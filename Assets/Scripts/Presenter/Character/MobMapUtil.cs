@@ -63,7 +63,11 @@ public class MobMapUtil : MapUtil, IMobMapUtil
     /// <returns>destPos</returns>
     public override Pos SetObjectOn(Pos destPos)
     {
-        if (mobStatus.isOnGround) map.GetTile(destPos).OnCharacterDest = status;
+        if (mobStatus.isOnGround)
+        {
+            ITile tile = map.GetTile(destPos);
+            tile.OnCharacterDest ??= status;
+        }
         return base.SetObjectOn(destPos);
     }
 
