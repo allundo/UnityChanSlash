@@ -24,8 +24,6 @@ public abstract class RabbitAttack : RabbitCommand
         somersault = target.Attack(1);
     }
 
-    protected bool IsPlayerOnTile(Pos pos) => PlayerInfo.Instance.IsOnPlayerTile(pos);
-
     protected Tween JumpAttack(int distance = 0)
     {
         var seq = DOTween.Sequence().AppendInterval(duration * 0.1f);
@@ -89,12 +87,12 @@ public class RabbitLongJumpAttack : RabbitAttack
     {
         int distance = 3;
 
-        if (IsPlayerOnTile(mobMap.GetJump))
+        if (map.IsOnPlayer(map.GetJump))
         {
             if (!mobMap.IsForwardMovable) return false;
             distance = 2;
         }
-        else if (IsPlayerOnTile(mobMap.GetForward))
+        else if (map.IsOnPlayer(map.GetForward))
         {
             distance = 0;
         }

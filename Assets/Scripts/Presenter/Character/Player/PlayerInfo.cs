@@ -29,10 +29,6 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public IDirection Dir => mapUtil.dir;
     public IObservable<IDirection> DirObservable => mapUtil.Dir.Where(dir => dir != null);
 
-    public bool IsOnPlayer(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && Pos == pos;
-    public bool IsOnPlayer(int x, int y) => IsOnPlayer(new Pos(x, y));
-    public bool IsOnPlayerTile(Pos pos) => gameObject.activeSelf && !mapUtil.isInPit && mapUtil.onTilePos == pos;
-    public bool IsOnPlayerTile(int x, int y) => IsOnPlayerTile(new Pos(x, y));
     public bool IsPlayerIcing => status.icingFrames > 0f;
 
     public DataStoreAgent.PlayerData ExportRespawnData() => ExportRespawnData(Pos);

@@ -59,6 +59,7 @@ public interface IMapUtil
     Pos GetBackward { get; }
     Pos GetJump { get; }
 
+    bool IsOnPlayer(Pos pos);
     bool IsPlayerFound();
     bool IsPlayerFound(Pos pos);
 

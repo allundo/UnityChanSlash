@@ -5,6 +5,8 @@ using System;
 public interface IStatus : IAttacker
 {
     GameObject gameObject { get; }
+    bool isActive { get; }
+
     bool IsAlive { get; }
 
     Vector3 Position { get; }
@@ -65,7 +67,7 @@ public class Status : SpawnObject<Status>, IStatus
     public float LifeRatio => life.Value / lifeMax.Value;
     public bool IsLifeMax => life.Value == lifeMax.Value;
 
-    protected bool isActive = false;
+    public bool isActive { get; protected set; } = false;
 
     protected virtual void Awake()
     {

@@ -53,7 +53,7 @@ public class GhostThrough : EnemyForward
 
         playingTween = LinearMove(GetDest);
 
-        input.Interrupt(MapUtil.IsOnPlayer(mobMap.GetForward) ? attack : throughEnd, false);
+        input.Interrupt(map.IsOnPlayer(map.GetForward) ? attack : throughEnd, false);
 
         return ObservableComplete();
     }
@@ -84,7 +84,7 @@ public class GhostAttackStart : FlyingAttackStart
         => attackEnd ?? new GhostAttackEnd(target, duration);
 
     protected override ICommand PlayNext()
-        => MapUtil.IsOnPlayer(mobMap.GetForward) ? attackKeep : attackEnd;
+        => map.IsOnPlayer(mobMap.GetForward) ? attackKeep : attackEnd;
 
     protected override float attackTimeScale => 0.75f;
     protected override float decentVec => -0.1f;
@@ -113,7 +113,7 @@ public class GhostAttackKeep : FlyingAttack
 {
     protected ICommand attackEnd;
 
-    protected ICommand PlayNext() => MapUtil.IsOnPlayer(mobMap.GetForward) ? this : attackEnd;
+    protected ICommand PlayNext() => map.IsOnPlayer(map.GetForward) ? this : attackEnd;
 
     public GhostAttackKeep(ICommandTarget target, float duration, ICommand attackEnd) : base(target, duration)
     {

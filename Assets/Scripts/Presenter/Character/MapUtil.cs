@@ -75,7 +75,11 @@ public class MapUtil : MonoBehaviour, IMapUtil
     public Pos GetBackward => dir.GetBackward(onTilePos);
     public Pos GetJump => dir.GetForward(dir.GetForward(onTilePos));
 
-    public static bool IsOnPlayer(Pos destPos) => PlayerInfo.Instance.IsOnPlayer(destPos);
+    public bool IsOnPlayer(Pos destPos)
+    {
+        IStatus status = map.GetTile(destPos).OnCharacterDest;
+        return status is PlayerStatus && status.isActive;
+    }
 
     public bool IsPlayerFound() => IsPlayerFound(onTilePos);
     /// <summary>
@@ -95,10 +99,10 @@ public class MapUtil : MonoBehaviour, IMapUtil
                 : IsPlayerFound(forward);
     }
 
-    public bool IsPlayerForward => MapUtil.IsOnPlayer(GetForward);
-    public bool IsPlayerLeft => MapUtil.IsOnPlayer(GetLeft);
-    public bool IsPlayerRight => MapUtil.IsOnPlayer(GetRight);
-    public bool IsPlayerBackward => MapUtil.IsOnPlayer(GetBackward);
+    public bool IsPlayerForward => IsOnPlayer(GetForward);
+    public bool IsPlayerLeft => IsOnPlayer(GetLeft);
+    public bool IsPlayerRight => IsOnPlayer(GetRight);
+    public bool IsPlayerBackward => IsOnPlayer(GetBackward);
 
     /// <summary>
     /// Set current on tile and IsObjectOn flag to the Tile currently on

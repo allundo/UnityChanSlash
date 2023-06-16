@@ -15,8 +15,8 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
     protected ICommand attack;
 
     // Doesn't pay attention to the player if tamed.
-    protected bool IsOnPlayer(Pos pos) => !(target.react as IEnemyReactor).IsTamed && MapUtil.IsOnPlayer(pos);
-    protected bool IsPlayerFound(Pos pos) => !(target.react as IEnemyReactor).IsTamed && mobMap.IsPlayerFound(pos);
+    protected bool IsOnPlayer(Pos pos) => !(target.react as IEnemyReactor).IsTamed && map.IsOnPlayer(pos);
+    protected bool IsPlayerFound(Pos pos) => !(target.react as IEnemyReactor).IsTamed && map.IsPlayerFound(pos);
     protected T RandomChoice<T>(params T[] choices) => choices[Random.Range(0, choices.Length)];
 
     protected override void SetCommands()
