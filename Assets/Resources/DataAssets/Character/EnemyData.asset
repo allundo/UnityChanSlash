@@ -176,7 +176,7 @@ MonoBehaviour:
   - name: "\u7D2B\u30B4\u30FC\u30B9\u30C8"
     defaultLifeMax: 60
     attack: 10
-    prefab: {fileID: 6037122337985102315, guid: a03eb92f0820c44a88b400f98c5cfb97,
+    prefab: {fileID: 8974937305093912321, guid: a03eb92f0820c44a88b400f98c5cfb97,
       type: 3}
     isOnGround: 1
     shield: 0

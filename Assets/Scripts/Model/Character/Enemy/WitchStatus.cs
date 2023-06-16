@@ -1,4 +1,4 @@
-public class WitchStatus : GhostStatus, IUndeadStatus
+public class WitchStatus : EnemyStatus, IUndeadStatus
 {
     public float curse => 1f;
 }

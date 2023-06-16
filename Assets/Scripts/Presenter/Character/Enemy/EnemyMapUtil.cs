@@ -103,11 +103,14 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     public override Pos SetObjectOn(Pos destPos)
     {
         ITile tile = map.GetTile(destPos);
-        if (mobStatus.isOnGround)
+
+        // Try setting to OnCharacterDest first
+        if (mobStatus.isOnGround && tile.OnCharacterDest == null)
         {
-            tile.OnCharacterDest ??= status;
+            tile.OnCharacterDest = status;
         }
-        else
+        // Try setting to AboveEnemy when Ghost enemy is ground and hidden, and OnCharacterDest is already set.
+        else if (mobStatus.isOnGround || !mobStatus.isHidden)
         {
             tile.AboveEnemy ??= status as IEnemyStatus;
         }

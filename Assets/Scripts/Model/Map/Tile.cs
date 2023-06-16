@@ -87,6 +87,10 @@ public class Wall : Tile, ITile
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => false;
     public bool IsViewOpen => false;
+
+    public override IStatus OnCharacterDest { get { return null; } set { } }
+    public override bool IsCharacterOn => false;
+
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
     public override ItemInfo TopItem => null;
@@ -106,7 +110,11 @@ public class Door : HandleTile, IHandleTile
     public bool IsLeapable => false;
     public virtual bool IsViewOpen => state.IsOpen;
     public override bool IsCharacterOn => state.IsCharacterOn;
-    public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
+    public override IStatus OnCharacterDest
+    {
+        get { return IsOpen ? state.onCharacterDest : null; }
+        set { if (IsOpen) state.onCharacterDest = value; }
+    }
 
     public DoorState state { protected get; set; }
     public override void Open() => state.Open();

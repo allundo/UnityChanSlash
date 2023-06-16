@@ -8,7 +8,6 @@ public interface IGhostReactor : IMobReactor
 }
 
 [RequireComponent(typeof(GhostEffect))]
-[RequireComponent(typeof(GhostStatus))]
 public class GhostReactor : EnemyReactor, IGhostReactor
 {
     protected GhostEffect ghostEffect;
@@ -35,7 +34,9 @@ public class GhostReactor : EnemyReactor, IGhostReactor
     public override bool Appear()
     {
         if (!mobStatus.isHidden) return true;
-        if (map.OnTile.OnCharacterDest != null) return false;
+
+        // Destination tile is not enterable(Wall, closed Door etc ..) or occupied by another character.
+        if (map.OnTile.OnCharacterDest != status) return false;
 
         mobStatus.SetHidden(false);
         ghostEffect.OnAppear();
