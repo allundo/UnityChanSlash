@@ -24,7 +24,6 @@ public class SkeletonWizReactor : EnemyReactor, IMagicianReactor, IUndeadReactor
     {
         Subscribe();
         undeadReact.OnActive(option);
-        if (option.isHidden) Hide();
     }
 
     public void OnResurrection() => undeadReact.OnResurrection();
