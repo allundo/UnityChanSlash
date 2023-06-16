@@ -103,7 +103,7 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     public override Pos SetObjectOn(Pos destPos)
     {
         ITile tile = map.GetTile(destPos);
-        if (mobStatus.isOnGround)
+        if (mobStatus.isOnGround && !(tile is Pit))
         {
             tile.OnCharacterDest ??= status;
         }
@@ -122,13 +122,8 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     public override void RemoveObjectOn()
     {
         ITile tile = map.GetTile(onTilePos);
-        if (mobStatus.isOnGround)
-        {
-            if (tile.OnCharacterDest == status) tile.OnCharacterDest = null;
-        }
-        else
-        {
-            if (tile.AboveEnemy == status) tile.AboveEnemy = null;
-        }
+
+        if (tile.OnCharacterDest == status) tile.OnCharacterDest = null;
+        if (tile.AboveEnemy == status) tile.AboveEnemy = null;
     }
 }

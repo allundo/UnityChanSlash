@@ -7,6 +7,8 @@ public class GhostForward : EnemyForward
 {
     public GhostForward(ICommandTarget target, float duration) : base(target, duration) { }
 
+    protected override bool IsMovable => mobMap.ForwardTile.IsViewOpen;
+
     protected override bool Action()
     {
         if (base.Action())
