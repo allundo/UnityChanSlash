@@ -89,7 +89,6 @@ public class Wall : Tile, ITile
     public bool IsViewOpen => false;
     public override bool IsCharacterOn => false;
     public override bool IsEnemyOn => AboveEnemy != null;
-    public override IEnemyStatus OnEnemy { get { return null; } set { } }
     public override IStatus OnCharacterDest { get { return null; } set { } }
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
@@ -110,8 +109,11 @@ public class Door : HandleTile, IHandleTile
     public bool IsLeapable => false;
     public virtual bool IsViewOpen => state.IsOpen;
     public override bool IsCharacterOn => state.IsCharacterOn;
-    public override IStatus OnCharacterDest { get { return state.onCharacterDest; } set { state.onCharacterDest = value; } }
-
+    public override IStatus OnCharacterDest
+    {
+        get { return IsOpen ? state.onCharacterDest : null; }
+        set { if (IsOpen) state.onCharacterDest = value; }
+    }
 
     public DoorState state { protected get; set; }
     public override void Open() => state.Open();
@@ -169,6 +171,8 @@ public class Pit : Tile, IOpenable
     public bool IsEnterable(IDirection dir = null) => dir != null;
     public bool IsLeapable => true;
     public virtual bool IsViewOpen => true;
+
+    public override IStatus OnCharacterDest { get { return null; } set { } }
 
     public PitState state { protected get; set; }
     public void Open() => state.Drop(false);
