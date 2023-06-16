@@ -426,7 +426,7 @@ public enum Dir
 }
 
 /// <summary>
-/// A, B, C, D means existence of quater(1/4) plates <br>
+/// A, B, C, D means existence of quarter(1/4) plates <br>
 /// A = North:West, B = North:East, C = South:West, D = South:East <br>
 /// This is like a 2x2 matrix: <br>
 /// | A B |<br>
