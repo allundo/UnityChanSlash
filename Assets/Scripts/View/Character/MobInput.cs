@@ -6,8 +6,6 @@ public interface IMobInput : IInput
     void OnIceCrash();
 }
 
-
-
 /// <summary>
 /// Inputs ICommand to ICommand queue in Commander. <br />
 /// </summary>

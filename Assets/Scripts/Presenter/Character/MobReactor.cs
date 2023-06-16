@@ -87,8 +87,8 @@ public class MobReactor : Reactor, IMobReactor
                 // Max icing duration is 400 frame.
                 var icingFrames = Mathf.Min(400f, damage * 10f);
 
-                input.InputIced(icingFrames);
-                effect.OnDamage(Mathf.Min(0.01f, LifeRatio(damage)), type, attr);
+                ICommand icedCmd = input.InputIced(icingFrames);
+                if (icedCmd != null) effect.OnDamage(Mathf.Min(0.01f, LifeRatio(damage)), type, attr);
             }
             return 0f;
         }

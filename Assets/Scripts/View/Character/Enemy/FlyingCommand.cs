@@ -168,8 +168,21 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.JumpRelative(map.DestVec + new Vector3(0f, -1.25f, 0f), 1f, 0f).SetEase(Ease.Linear))
-            .AppendCallback(() => mobReact.Damage(5f, map.dir, AttackType.Smash))
+            .Append(tweenMove.JumpRelative(map.DestVec + new Vector3(0f, -1.25f, 0f), 0.5f, 0f).SetEase(Ease.Linear))
+            .AppendCallback(() =>
+            {
+                Pit pit = map.OnTile as Pit;
+                if (pit != null && pit.IsOpen)
+                {
+                    tweenMove.Move(map.CurrentVec3Pos + new Vector3(0f, -TILE_UNIT, 0f), 0.5f)
+                        .OnComplete(() => mobReact.Damage(10f, map.dir, AttackType.Smash))
+                        .Play();
+                }
+                else
+                {
+                    mobReact.Damage(5f, map.dir, AttackType.Smash);
+                }
+            })
             .SetUpdate(false)
             .Play();
 
@@ -210,7 +223,16 @@ public class FlyingDie : FlyingCommand
 
     public override IObservable<Unit> Execute()
     {
-        playingTween = tweenMove.Move(map.DestVec3Pos, 0.5f, Ease.InQuad).Play();
+        Pit pit = map.OnTile as Pit;
+        if (pit != null && pit.IsOpen)
+        {
+            playingTween = tweenMove.Move(map.DestVec3Pos - Vector3.up * TILE_UNIT, 1f, Ease.InQuad).Play();
+        }
+        else
+        {
+            playingTween = tweenMove.Move(map.DestVec3Pos, 0.5f, Ease.InQuad).Play();
+        }
+
         anim.die.Bool = true;
         mobReact.OnDie();
 

@@ -7,7 +7,7 @@ public class FlyingAIInput : EnemyAIInput
     protected override void SetCommands()
     {
         die = new FlyingDie(target, 118f);
-        wakeUp = new FlyingWakeUp(target, 120f);
+        wakeUp = new FlyingWakeUp(target, 100f, 0.4f);
         moveForward = new FlyingForward(target, 45f);
         turnL = new EnemyTurnAnimL(target, 7f);
         turnR = new EnemyTurnAnimR(target, 7f);
@@ -87,8 +87,10 @@ public class FlyingAIInput : EnemyAIInput
 
     public override ICommand InputIced(float duration)
     {
+        if (currentCommand is FlyingIcedFall) return null;
+
         ClearAll();
-        ICommand iced = new FlyingIcedFall(target, duration, 25f);
+        ICommand iced = new FlyingIcedFall(target, duration, 40f);
         Interrupt(iced);
         commander.EnqueueCommand(wakeUp);
         return iced;
