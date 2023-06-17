@@ -52,12 +52,10 @@ public abstract class PlayerCommand : MobCommand
 
 public abstract class PlayerMove : PlayerCommand
 {
-    protected ITile destTile;
     public PlayerMove(PlayerCommandTarget target, float duration) : base(target, duration, 0.95f, 0.5f) { }
 
     protected abstract bool IsMovable { get; }
     protected abstract Pos GetDest { get; }
-    protected abstract ITile DestTile { get; }
 
     protected void SetSpeed()
     {
@@ -95,7 +93,6 @@ public class PlayerForward : PlayerMove
     public PlayerForward(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => mobMap.IsForwardMovable;
-    protected override ITile DestTile => mobMap.ForwardTile;
     protected override Pos GetDest => mobMap.GetForward;
     protected override float Speed => TILE_UNIT / duration;
 }
@@ -105,7 +102,6 @@ public class PlayerBack : PlayerMove
     public PlayerBack(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => mobMap.IsBackwardMovable;
-    protected override ITile DestTile => mobMap.BackwardTile;
     protected override Pos GetDest => mobMap.GetBackward;
     protected override float Speed => -TILE_UNIT / duration;
 }
@@ -115,7 +111,6 @@ public class PlayerRight : PlayerMove
     public PlayerRight(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => mobMap.IsRightMovable;
-    protected override ITile DestTile => mobMap.RightTile;
     protected override Pos GetDest => mobMap.GetRight;
     protected override float RSpeed => TILE_UNIT / duration;
 }
@@ -125,7 +120,6 @@ public class PlayerLeft : PlayerMove
     public PlayerLeft(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool IsMovable => mobMap.IsLeftMovable;
-    protected override ITile DestTile => mobMap.LeftTile;
     protected override Pos GetDest => mobMap.GetLeft;
     protected override float RSpeed => -TILE_UNIT / duration;
 }
