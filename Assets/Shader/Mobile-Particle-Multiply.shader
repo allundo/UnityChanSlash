@@ -12,9 +12,10 @@ Properties {
 }
 
 Category {
-    Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
+    Tags { "Queue"="AlphaTest-50" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
     Blend Zero SrcColor
-    Cull Off Lighting Off ZWrite Off Fog { Color (1,1,1,1) }
+    Cull Off Lighting Off ZWrite Off
+    Fog { Mode Off }
 
     BindChannels {
         Bind "Color", color

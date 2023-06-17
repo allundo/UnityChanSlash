@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TargetCorner
-  m_Shader: {fileID: 4800000, guid: 82a66e13420cc4b90b7b3f1fc287c5b2, type: 3}
+  m_Name: TargetCenterGuide
+  m_Shader: {fileID: 4800000, guid: 2447d291313e14c1b995f54ff5a0498f, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 6ad5cdd795b0a4f0ab490176e0053053, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4855262e8c289495aafdef4cd65f58dc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:

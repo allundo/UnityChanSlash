@@ -20,49 +20,50 @@ Shader "Custom/Mobile/UI/AdditiveMutiply"
         Cull Off
         Lighting Off
         ZWrite Off
+        Fog { Mode Off }
         ZTest [unity_GUIZTestMode]
         Blend SrcAlpha One
 
         Pass
         {
             Name "UI-Additive-Multiply"
-        CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma target 3.0
+            CGPROGRAM
+                #pragma vertex vert
+                #pragma fragment frag
+                #pragma target 3.0
 
-            #include "UnityCG.cginc"
+                #include "UnityCG.cginc"
 
-            struct appdata_t
-            {
-                float4 vertex   : POSITION;
-                float2 texcoord : TEXCOORD0;
-            };
+                struct appdata_t
+                {
+                    float4 vertex   : POSITION;
+                    float2 texcoord : TEXCOORD0;
+                };
 
-            struct v2f
-            {
-                float4 vertex   : SV_POSITION;
-                float2 texcoord  : TEXCOORD0;
-            };
+                struct v2f
+                {
+                    float4 vertex   : SV_POSITION;
+                    float2 texcoord  : TEXCOORD0;
+                };
 
-            sampler2D _MainTex;
-            fixed4 _Color;
+                sampler2D _MainTex;
+                fixed4 _Color;
 
-            v2f vert(appdata_t v)
-            {
-                v2f o;
+                v2f vert(appdata_t v)
+                {
+                    v2f o;
 
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.texcoord = v.texcoord;
+                    o.vertex = UnityObjectToClipPos(v.vertex);
+                    o.texcoord = v.texcoord;
 
-                return o;
-            }
+                    return o;
+                }
 
-            fixed4 frag(v2f IN) : SV_Target
-            {
-                return tex2D(_MainTex, IN.texcoord) * _Color;
-            }
-        ENDCG
+                fixed4 frag(v2f IN) : SV_Target
+                {
+                    return tex2D(_MainTex, IN.texcoord) * _Color;
+                }
+            ENDCG
         }
     }
 }

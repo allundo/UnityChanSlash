@@ -19,7 +19,7 @@ Category {
     Lighting Off
     ZWrite Off
     ZTest [unity_GUIZTestMode]
-    Fog { Color (0,0,0,0) }
+    Fog { Mode Off }
 
     BindChannels {
         Bind "Color", color

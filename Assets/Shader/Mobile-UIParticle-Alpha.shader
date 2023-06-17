@@ -1,5 +1,5 @@
+// ## CUSTOMIZED
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
-// CUSTOMIZED
 
 // Simplified Additive Particle shader. Differences from regular Additive Particle one:
 // - no Tint color
@@ -7,7 +7,7 @@
 // - no AlphaTest
 // - no ColorMask
 
-Shader "Custom/Mobile/Particles/Additive"
+Shader "Custom/Mobile/UI/Particles/Alpha Blended"
 {
     Properties
     {
@@ -16,9 +16,10 @@ Shader "Custom/Mobile/Particles/Additive"
 
     Category
     {
-        Tags { "Queue"="AlphaTest-50" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
-        Blend SrcAlpha One
+        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
+        Blend SrcAlpha OneMinusSrcAlpha
         Cull Off Lighting Off ZWrite Off
+        ZTest [unity_GUIZTestMode]
         Fog { Mode Off }
 
         BindChannels
