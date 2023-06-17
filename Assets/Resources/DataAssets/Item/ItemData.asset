@@ -15,6 +15,7 @@ MonoBehaviour:
   setParams:
   - name: Null
     material: {fileID: 0}
+    uiMaterial: {fileID: 0}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0
@@ -24,6 +25,7 @@ MonoBehaviour:
     numOfItemMax: 1
   - name: "\u30D2\u30FC\u30EB\u30DD\u30FC\u30B7\u30E7\u30F3"
     material: {fileID: 2100000, guid: b4d0df5607eb74b15b1bb09440cce67c, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 6468235fd6bdc4944b3a1fc90a38e988, type: 2}
     vfx: {fileID: 3893910784469507714, guid: 0ee90d52b4a814c02abda4136cea1b8c, type: 3}
     sfx: {fileID: 886390825641632656, guid: 2c9ef0da081474cc1a2bd2c9038fffb4, type: 3}
     duration: 0.2
@@ -33,6 +35,7 @@ MonoBehaviour:
     numOfItemMax: 2
   - name: "\u30E1\u30EA\u30B1\u30F3\u30B5\u30C3\u30AF"
     material: {fileID: 2100000, guid: d46d4646f9eeb4e77b0b6d6d6ebacf80, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 8439a10be8bdc4217b8230dba7c844e3, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -42,6 +45,7 @@ MonoBehaviour:
     numOfItemMax: 25
   - name: "\u30D0\u30B0\u30CA\u30AF"
     material: {fileID: 2100000, guid: 6322970d85e3b41f0b25da2620a4b898, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 81f7e002c75cc4dfa98b21a2bd65b23f, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -51,6 +55,7 @@ MonoBehaviour:
     numOfItemMax: 25
   - name: "\u30B8\u30E3\u30DE\u30C0\u30CF\u30EB"
     material: {fileID: 2100000, guid: 486c2e30f4e084525bd25cfc0ab19f48, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 6741aec916d4b4881a09c2c2d79f1a97, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -60,6 +65,7 @@ MonoBehaviour:
     numOfItemMax: 25
   - name: "\u9577\u5263"
     material: {fileID: 2100000, guid: 140439859ee2b4009adc207cebd3fca8, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 1a7b5038f708145229d4abc6e26e17dd, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -69,6 +75,7 @@ MonoBehaviour:
     numOfItemMax: 25
   - name: "\u30AB\u30BF\u30CA"
     material: {fileID: 2100000, guid: adebb9cdbc23b4018b9543b6f33ce6cc, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 83ed9a211589d4dfaa12c3a905e9af0d, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -78,6 +85,7 @@ MonoBehaviour:
     numOfItemMax: 25
   - name: "\u9375\u306E\u5263"
     material: {fileID: 2100000, guid: c0d5f7ad429974192bdc470d3b87f882, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 99e1df48cbbac4895bab78fbfaeafe74, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -87,6 +95,7 @@ MonoBehaviour:
     numOfItemMax: 1
   - name: "\u30D0\u30C3\u30AF\u30E9\u30FC"
     material: {fileID: 2100000, guid: 18048095a24cc4994b0ab4bbb92dec04, type: 2}
+    uiMaterial: {fileID: 2100000, guid: c20cf9f19ecd74a03aa564932353e0a5, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -96,6 +105,7 @@ MonoBehaviour:
     numOfItemMax: 50
   - name: "\u30AF\u30ED\u30B9\u30B7\u30FC\u30EB\u30C9"
     material: {fileID: 2100000, guid: 9a3eb7ad9c48744358fa02e3aee9bd55, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 6abcec6b8ac4c487f8f9001ce82d0fd1, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -105,6 +115,7 @@ MonoBehaviour:
     numOfItemMax: 50
   - name: "\u5927\u76FE"
     material: {fileID: 2100000, guid: 56950447bcfa24cc9ace3b891ecd0108, type: 2}
+    uiMaterial: {fileID: 2100000, guid: ac528a692b92a46c79e9dff522a6e5fd, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -114,6 +125,7 @@ MonoBehaviour:
     numOfItemMax: 50
   - name: "\u30D0\u30C8\u30EB\u30B7\u30FC\u30EB\u30C9"
     material: {fileID: 2100000, guid: f7064df438f454f5dba9fb48621d3898, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 597a5d25930ae440f9d7efc54add47d4, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -123,6 +135,7 @@ MonoBehaviour:
     numOfItemMax: 50
   - name: "\u685C\u306E\u30CD\u30C3\u30AF\u30EC\u30B9"
     material: {fileID: 2100000, guid: 7bb6b1faa858f4396b122a928af4d471, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 11dff6107dca14fec86aec949a65e50c, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -132,6 +145,7 @@ MonoBehaviour:
     numOfItemMax: 1
   - name: "\u708E\u306E\u30CD\u30C3\u30AF\u30EC\u30B9"
     material: {fileID: 2100000, guid: 9dae446d13be04d16b67af69a7744982, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 2724ef40ed0e64b4b93ca96a8973df8a, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -141,6 +155,7 @@ MonoBehaviour:
     numOfItemMax: 1
   - name: "\u6C37\u306E\u30CD\u30C3\u30AF\u30EC\u30B9"
     material: {fileID: 2100000, guid: a09e58acbb85b418e9f19600306cc431, type: 2}
+    uiMaterial: {fileID: 2100000, guid: b96d8fcf15e614f4abfc1cf6ecb8899d, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -150,6 +165,7 @@ MonoBehaviour:
     numOfItemMax: 1
   - name: "\u8056\u306A\u308B\u5341\u5B57\u67B6"
     material: {fileID: 2100000, guid: c89059925a64741dc980c4b1afcc64d3, type: 2}
+    uiMaterial: {fileID: 2100000, guid: bcc880005aaeb491499b070a749bac1d, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -159,6 +175,7 @@ MonoBehaviour:
     numOfItemMax: 1
   - name: "\u91D1\u8CA8"
     material: {fileID: 2100000, guid: 88e6c5541cfe94946bcf7a3aa17b37b3, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 314f0f372e19e47c2adbe9054d7dd120, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2
@@ -168,6 +185,7 @@ MonoBehaviour:
     numOfItemMax: 4
   - name: "\u708E\u306E\u6307\u8F2A"
     material: {fileID: 2100000, guid: 9804ad87caaa84909b4cc0740ffbec68, type: 2}
+    uiMaterial: {fileID: 2100000, guid: e2a86b12ec0f24ee0a6c49a17bce577d, type: 2}
     vfx: {fileID: 5345454869224519677, guid: 0f60548c57a78426190d8ee4731e2972, type: 3}
     sfx: {fileID: 0}
     duration: 0.4
@@ -177,6 +195,7 @@ MonoBehaviour:
     numOfItemMax: 20
   - name: "\u6C37\u306E\u6307\u8F2A"
     material: {fileID: 2100000, guid: 52d7adce0f9c84bb39e25dc008a8c734, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 7c3b43b7ef987438095745e506214f87, type: 2}
     vfx: {fileID: 8399426352192713591, guid: 7ab49c5ab65064fb48665c0d1eae6086, type: 3}
     sfx: {fileID: 0}
     duration: 0.4
@@ -186,6 +205,7 @@ MonoBehaviour:
     numOfItemMax: 20
   - name: "\u95C7\u306E\u6307\u8F2A"
     material: {fileID: 2100000, guid: 137422c4669a9402480f7846693a5f75, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 6d3079344184b4e9aa1d0bcf5aa4d29a, type: 2}
     vfx: {fileID: 3340609606120145378, guid: 3e214edc0251b4a04a2d73f8093d9044, type: 3}
     sfx: {fileID: 0}
     duration: 0.4
@@ -195,6 +215,7 @@ MonoBehaviour:
     numOfItemMax: 20
   - name: "\u5B9D\u7269\u5EAB\u306E\u9375"
     material: {fileID: 2100000, guid: a8da5fdefcb974ef1b69f583db26da68, type: 2}
+    uiMaterial: {fileID: 2100000, guid: e1677532069b84c8d9ab90f977e6fa6e, type: 2}
     vfx: {fileID: 0}
     sfx: {fileID: 0}
     duration: 0.2

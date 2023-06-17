@@ -100,7 +100,7 @@ public class ItemIcon : UISymbol
 
     public ItemIcon SetMaterial()
     {
-        image.material = itemInfo.material;
+        image.material = itemInfo.uiMaterial;
         return this;
     }
 

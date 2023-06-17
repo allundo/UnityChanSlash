@@ -112,6 +112,7 @@ public class ItemSource
 {
     [SerializeField] public string name = "種別";
     [SerializeField] public Material material = default;
+    [SerializeField] public Material uiMaterial = default;
     [SerializeField] public ParticleSystem vfx = default;
     [SerializeField] public AudioSource sfx = default;
     [SerializeField] public float duration = 0.2f;

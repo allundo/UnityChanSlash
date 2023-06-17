@@ -46,6 +46,7 @@ public class ItemInfo : ICloneable
     public ItemType type { get; protected set; }
 
     public Material material => itemSource.material;
+    public Material uiMaterial => itemSource.uiMaterial;
 
     /// <summary>
     /// Item use command duration

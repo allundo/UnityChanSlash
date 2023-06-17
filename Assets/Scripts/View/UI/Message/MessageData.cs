@@ -77,7 +77,7 @@ public struct MessageData
             itemInfo.description,
             "【" + itemInfo.name + "】 × " + itemInfo.numOfItem,
             null,
-            itemInfo.material,
+            itemInfo.uiMaterial,
             "価格\n" + itemInfo.Price + " 円",
             TextAlignmentOptions.TopLeft,
             52f
