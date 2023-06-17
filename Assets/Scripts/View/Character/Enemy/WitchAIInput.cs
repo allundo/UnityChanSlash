@@ -59,8 +59,8 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         Pos backward = mobMap.GetBackward;
         Pos forward2 = mobMap.dir.GetForward(forward);
 
-        bool isBackwardMovable = mobMap.IsViewable(backward);
-        bool isForward2Movable = mobMap.IsViewable(forward2);
+        bool isBackwardMovable = mobMap.IsMovable(backward);
+        bool isForward2Movable = mobMap.IsMovable(forward2);
         bool isLeapable = isForward2Movable && mobMap.IsLeapable(forward);
 
         // Start attack if player found at forward
@@ -87,7 +87,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        bool isForwardMovable = mobMap.IsViewable(forward);
+        bool isForwardMovable = mobMap.IsMovable(forward);
         bool isForwardDoor = IsClosedDoor(forward);
 
         // Move forward if player found in front
@@ -120,8 +120,8 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
 
         if (IsOnPlayer(backward) && Util.Judge(3)) return RandomChoice(turnL, turnR);
 
-        bool isLeftMovable = mobMap.IsViewable(left);
-        bool isRightMovable = mobMap.IsViewable(right);
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
 
         return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
             ?? ThroughWall(isForward2Movable)

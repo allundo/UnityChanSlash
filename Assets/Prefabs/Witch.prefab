@@ -44931,7 +44931,6 @@ GameObject:
   - component: {fileID: 448080202027934680}
   - component: {fileID: 173471009557050624}
   - component: {fileID: 3925285196016408620}
-  - component: {fileID: 4494748880000112786}
   - component: {fileID: 7840712780051297016}
   - component: {fileID: 1845061941695138143}
   - component: {fileID: 7348866445878775853}
@@ -44940,6 +44939,7 @@ GameObject:
   - component: {fileID: 943698342954164601}
   - component: {fileID: 785701159343097647}
   - component: {fileID: 9110343438535299258}
+  - component: {fileID: 4746669054411503144}
   m_Layer: 9
   m_Name: Witch
   m_TagString: Untagged
@@ -45026,18 +45026,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8ae437baf05d45c59ac3dd531bf7674, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4494748880000112786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3417173071095157763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &7840712780051297016
@@ -45154,6 +45142,18 @@ MonoBehaviour:
   attacks:
   - {fileID: 1892416886341626053}
   - {fileID: 7651901149069753934}
+--- !u!114 &4746669054411503144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3417173071095157763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061ecefaf8e364fcdaef6eac7194e9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3665483582086556155
 GameObject:
   m_ObjectHideFlags: 0

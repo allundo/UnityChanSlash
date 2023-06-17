@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(FlyingAnimator))]
 [RequireComponent(typeof(GhostReactor))]
+[RequireComponent(typeof(GhostMapUtil))]
 public class GhostAIInput : EnemyAIInput
 {
     protected ICommand throughForward;
@@ -39,7 +40,7 @@ public class GhostAIInput : EnemyAIInput
         if (IsOnPlayer(right2)) return turnR;
 
         Pos forward2 = mobMap.dir.GetForward(forward);
-        bool isForwardMovable = mobMap.IsViewable(forward);
+        bool isForwardMovable = mobMap.IsMovable(forward);
 
         // Move forward if player found in front
         if (IsOnPlayer(forward2))
@@ -53,12 +54,12 @@ public class GhostAIInput : EnemyAIInput
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward) && Util.Judge(3)) return RandomChoice(turnL, turnR);
 
-        bool isLeftMovable = mobMap.IsViewable(left);
-        bool isRightMovable = mobMap.IsViewable(right);
+        bool isLeftMovable = mobMap.IsMovable(left);
+        bool isRightMovable = mobMap.IsMovable(right);
 
         return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? ThroughWall(mobMap.IsViewable(forward2))
-            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsViewable(backward))
+            ?? ThroughWall(mobMap.IsMovable(forward2))
+            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
             ?? idle;
     }
 

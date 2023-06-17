@@ -40,7 +40,7 @@ public class MobMapUtil : MapUtil, IMobMapUtil
     }
 
     public virtual void ResetTile() => RemoveObjectOn();
-    public bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
+    public virtual bool IsMovable(Pos destPos, IDirection dir = null) => map.GetTile(destPos).IsEnterable(dir);
     public bool IsLeapable(Pos destPos) => map.GetTile(destPos).IsLeapable;
 
     public virtual bool IsForwardMovable => IsMovable(dir.GetForward(onTilePos));

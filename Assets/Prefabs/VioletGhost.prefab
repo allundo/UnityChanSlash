@@ -10306,7 +10306,6 @@ GameObject:
   - component: {fileID: 6646648689493842637}
   - component: {fileID: 6646648689493842627}
   - component: {fileID: 6646648689493842624}
-  - component: {fileID: 6646648689493842633}
   - component: {fileID: 5172686151483640410}
   - component: {fileID: 5367982663961441733}
   - component: {fileID: 6299658109764173939}
@@ -10314,6 +10313,7 @@ GameObject:
   - component: {fileID: 7096597538805016510}
   - component: {fileID: 3255588825307310385}
   - component: {fileID: 8974937305093912321}
+  - component: {fileID: 3655956448455481690}
   m_Layer: 9
   m_Name: VioletGhost
   m_TagString: Untagged
@@ -10391,18 +10391,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &6646648689493842633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5835761410320476130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 302d5185afed34790882a9d8ca8e4151, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5172686151483640410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10491,6 +10479,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fea9ebe063c914be7bf0a6f5ceb64730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3655956448455481690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5835761410320476130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061ecefaf8e364fcdaef6eac7194e9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6183973933191762915

@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(ShieldEnemyReactor))]
 [RequireComponent(typeof(ShieldEnemyAnimator))]
+[RequireComponent(typeof(EnemyMapUtil))]
 public class GoblinAIInput : ShieldInput, IEnemyInput
 {
     protected ShieldEnemyAnimator shieldAnim;

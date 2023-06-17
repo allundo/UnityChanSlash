@@ -10,6 +10,7 @@ public interface IUndeadInput : IEnemyInput
     void InterruptSleep();
 }
 
+[RequireComponent(typeof(EnemyMapUtil))]
 public class EnemyAIInput : MobInput, IEnemyInput
 {
     protected ICommand idle;
