@@ -19,6 +19,7 @@ public class UndeadStatus : EnemyStatus, IUndeadStatus
             { AttackAttr.Thunder,     0f },
             { AttackAttr.Light,       2f },
             { AttackAttr.Dark,       -2f },
+            { AttackAttr.Coin,        0f },
         };
 
     public override void LifeChange(float diff, AttackAttr attr = AttackAttr.None)
