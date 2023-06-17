@@ -6750,6 +6750,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  isCold: 0
 --- !u!114 &314247950
 MonoBehaviour:
   m_ObjectHideFlags: 0

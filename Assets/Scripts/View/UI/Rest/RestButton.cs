@@ -15,6 +15,8 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
     private ISubject<Unit> clickSubject = new Subject<Unit>();
     public IObservable<Unit> Click => clickSubject;
 
+    public bool isCold = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -64,6 +66,8 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
 
     public void SetEnable(bool isEnable)
     {
+        if (isCold) return;
+
         enabled = isEnable;
         var iColor = buttonImage.color;
         var tColor = textRest.color;

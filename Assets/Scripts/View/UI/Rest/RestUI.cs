@@ -171,13 +171,13 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void SetCold()
     {
-        isCold = true;
+        isCold = restButton.isCold = true;
         invalidIcon.gameObject.SetActive(true);
     }
 
     public void RemoveCold()
     {
-        isCold = false;
+        isCold = restButton.isCold = false;
         invalidIcon.gameObject.SetActive(false);
     }
 }
