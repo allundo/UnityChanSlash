@@ -97,8 +97,6 @@ public class MobReactor : Reactor, IMobReactor
             Melt(true);
         }
 
-        if (type == AttackType.Light) effect.OnHitLaser(mobStatus.corePos);
-
         mobStatus.LifeChange(-damage, attr);
 
         effect.OnDamage(LifeRatio(damage), type, attr);

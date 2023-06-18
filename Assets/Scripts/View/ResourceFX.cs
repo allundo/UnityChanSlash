@@ -12,6 +12,7 @@ public class ResourceFX
         this.parent = parent;
     }
 
+    public void PlayVFX(VFXType type) => PlayVFX(type, parent.position);
     public void PlayVFX(VFXType type, Vector3 pos)
     {
         var vfx = vfxSources.LazyLoad(type, type => ResourceLoader.Instance.LoadVFX(type, parent));
@@ -27,6 +28,7 @@ public class ResourceFX
         if (vfxSources.TryGetValue(type, out vfx)) vfx.StopEmitting();
     }
 
+    public void PlaySnd(SNDType type) => PlaySnd(type, parent.position);
     public void PlaySnd(SNDType type, Vector3 pos)
     {
         var snd = sndSources.LazyLoad(type, type => ResourceLoader.Instance.LoadSnd(type, parent));

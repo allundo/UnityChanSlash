@@ -8,8 +8,6 @@ public interface IMobEffect : IBodyEffect
     void OnIced(Vector3 pos);
     void OnIceCrash(Vector3 pos);
 
-    void OnHitLaser(Vector3 pos);
-
     /// <summary>
     /// Play body effect on heal
     /// </summary>
@@ -93,6 +91,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
     {
         DamageSound(damageRatio, type);
         if (attr != AttackAttr.Ice) matColEffect.DamageFlash(damageRatio);
+        if (attr == AttackAttr.Light) OnHitLaser();
     }
 
     protected void DamageSound(float damageRatio, AttackType type = AttackType.None)
@@ -132,9 +131,20 @@ public class MobEffect : MonoBehaviour, IMobEffect
         resourceFX.PlayVFX(VFXType.IceCrash, pos);
     }
 
-    public virtual void OnHitLaser(Vector3 pos)
+    protected Tween fxTimer;
+    protected void OnHitLaser(float duration = 0.8f)
     {
-        resourceFX.PlayVFX(VFXType.HitLaser, pos);
+        if (fxTimer != null && fxTimer.IsPlaying())
+        {
+            fxTimer.Kill();
+        }
+        else
+        {
+            resourceFX.PlayVFX(VFXType.HitLaser);
+        }
+
+        resourceFX.PlaySnd(SNDType.HitLaser);
+        fxTimer = DOVirtual.DelayedCall(duration, () => resourceFX.StopVFX(VFXType.HitLaser), false).Play();
     }
 
     protected virtual void StopAllAnimation()
