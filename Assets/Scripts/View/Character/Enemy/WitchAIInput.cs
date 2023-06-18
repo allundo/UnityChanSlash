@@ -71,7 +71,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
             if (cmd == targetAttack || cmd == teleport) return cmd;
             if ((cmd == attack || cmd == backStep) && !isBackwardMovable && isLeapable) return jumpOverAttack;
             if (cmd == jumpOverAttack && !isLeapable && isBackwardMovable) return RandomChoice(attack, backStep);
-            return RandomChoice(fire, ice, laser);
+            return RandomChoice(fire, ice, targetAttack, teleport);
         }
 
         // Turn if player found at left, right or backward
