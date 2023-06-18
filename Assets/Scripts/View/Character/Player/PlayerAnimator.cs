@@ -10,9 +10,9 @@ public class PlayerAnimator : ShieldAnimator
 
     private int defaultStateID = Animator.StringToHash("Base Layer.Stand.Idle");
 
-    public TriggerJump jump { get; protected set; }
-    public TriggerJump pitJump { get; protected set; }
-    public TriggerJump landing { get; protected set; }
+    public TriggerEx jump { get; protected set; }
+    public TriggerEx pitJump { get; protected set; }
+    public TriggerEx landing { get; protected set; }
     public TriggerBrakeAndBackStep brakeAndBackStep { get; protected set; }
 
     public TriggerEx handle { get; protected set; }
@@ -54,6 +54,9 @@ public class PlayerAnimator : ShieldAnimator
         dropFloor = new TriggerEx(triggers, anim, "DropFloor", 0);
         brake = new TriggerEx(triggers, anim, "Brake");
         fire = new TriggerEx(triggers, anim, "Fire");
+        jump = new TriggerEx(triggers, anim, "Jump");
+        pitJump = new TriggerEx(triggers, anim, "PitJump");
+        landing = new TriggerEx(triggers, anim, "Landing");
         critical = new AnimatorBool(anim, "Critical");
         chargeUp = new AnimatorBool(anim, "ChargeUp");
         coin = new AnimatorBool(anim, "Coin");
@@ -75,9 +78,6 @@ public class PlayerAnimator : ShieldAnimator
         handOn = new BoolHandOn(this);
 
         bodyCollider = new PlayerBodyCollider(GetComponent<CapsuleCollider>());
-        jump = new TriggerJump(this, jumpHeight, bodyCollider);
-        pitJump = new TriggerJump(this, jumpHeight, bodyCollider, "PitJump");
-        landing = new TriggerJump(this, jumpHeight, bodyCollider, "Landing");
         brakeAndBackStep = new TriggerBrakeAndBackStep(this, brakeOverRun, bodyCollider);
         fall = new BoolFall(this, fallHeight, bodyCollider);
     }
@@ -132,13 +132,6 @@ public class PlayerAnimator : ShieldAnimator
                 .Subscribe(_ => Update(animatorFloat.Float))
                 .AddTo(playerAnim);
         }
-    }
-
-    public class TriggerJump : TriggerUpdate
-    {
-        public TriggerJump(PlayerAnimator playerAnim, AnimatorFloat jumpHeight, PlayerBodyCollider bodyCollider, string triggerName = "Jump")
-            : base(playerAnim, jumpHeight, bodyCollider, triggerName, "Base Layer.Jump." + triggerName) { }
-        protected override void Update(float value) => bodyCollider.JumpCollider(value);
     }
 
     public class TriggerBrakeAndBackStep : TriggerUpdate

@@ -320,6 +320,15 @@ public class PlayerJump : PlayerCommand
 {
     public PlayerJump(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
+    protected virtual Tween ColliderChange()
+    {
+        return DOVirtual.Float(0f, 1f, 0.26f, value => playerReact.JumpCollider(value))
+            .SetEase(Ease.OutCubic)
+            .SetLoops(2, LoopType.Yoyo)
+            .SetDelay(0.18f)
+            .Play();
+    }
+
     protected override bool Action()
     {
         playerAnim.jump.Fire();
@@ -334,19 +343,21 @@ public class PlayerJump : PlayerCommand
                 hidePlateHandler.Move   // Update HidePlate on entering the destination Tile
             );
 
+        completeTween = ColliderChange();
         return true;
     }
 }
-public class PlayerLanding : PlayerCommand
+public class PlayerLanding : PlayerJump
 {
-    public PlayerLanding(PlayerCommandTarget target, float duration, Vector3 moveVec) : base(target, duration)
+    protected override Tween ColliderChange()
     {
-        playingTween = tweenMove.Landing(moveVec);
+        return DOVirtual.Float(1f, 0f, 0.25f, value => playerReact.JumpCollider(value))
+            .SetEase(Ease.InQuad)
+            .Play();
     }
 
-    public PlayerLanding(PlayerCommandTarget target, float duration, float moveForward = 0.5f, float moveY = 0.75f) : base(target, duration)
+    public PlayerLanding(PlayerCommandTarget target, float duration, Vector3 moveVec) : base(target, duration)
     {
-        Vector3 moveVec = map.dir.LookAt * moveForward + Vector3.up * moveY;
         playingTween = tweenMove.Landing(moveVec);
     }
 
@@ -354,12 +365,13 @@ public class PlayerLanding : PlayerCommand
     {
         playerAnim.landing.Fire();
         playingTween.Play();
+        completeTween = ColliderChange();
 
         return true;
     }
 }
 
-public class PlayerPitJump : PlayerCommand
+public class PlayerPitJump : PlayerJump
 {
     public PlayerPitJump(PlayerCommandTarget target, float duration) : base(target, duration) { }
 
@@ -383,6 +395,7 @@ public class PlayerPitJump : PlayerCommand
 
         playerAnim.pitJump.Fire();
         playingTween = tweenMove.JumpRelative(moveVec, 0.8f, jumpPower).SetEase(Ease.OutQuad).Play();
+        completeTween = ColliderChange();
 
         return true;
     }

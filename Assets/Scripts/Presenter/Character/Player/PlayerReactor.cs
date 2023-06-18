@@ -23,6 +23,7 @@ public class PlayerReactor : MobReactor
     protected PlayerStatus playerStatus;
     protected PlayerEffect playerEffect;
     protected PlayerMapUtil playerMap;
+    protected PlayerBodyCollider playerBodyCollider;
     protected ParticleSystem iceCrashVFX;
 
     protected FloorIllness floorIllness;
@@ -39,6 +40,7 @@ public class PlayerReactor : MobReactor
         playerStatus = status as PlayerStatus;
         playerEffect = effect as PlayerEffect;
         playerMap = map as PlayerMapUtil;
+        playerBodyCollider = new PlayerBodyCollider(bodyCollider as CapsuleCollider);
         iceCrashVFX = Resources.Load<ParticleSystem>("Prefabs/Effect/FX_ICE_CRASH");
 
         floorIllness = new FloorIllness(lifeGauge, restUI);
@@ -221,6 +223,9 @@ public class PlayerReactor : MobReactor
 
         return mobStatus.CalcAttack(attack, dir, attr);
     }
+
+    public void JumpCollider(float jumpHeight)
+        => playerBodyCollider.JumpCollider(jumpHeight);
 
     public void PitFall(float damage)
     {
