@@ -1,9 +1,17 @@
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class RecordsUI : MonoBehaviour
 {
     [SerializeField] protected BaseRecord record = default;
+    [SerializeField] private TextMeshProUGUI tmpTitle = default;
+
+    public string title
+    {
+        get { return tmpTitle.text; }
+        set { tmpTitle.text = value; }
+    }
 
     protected RectTransform rectTransform;
     protected BaseRecord[] records;
@@ -17,12 +25,11 @@ public class RecordsUI : MonoBehaviour
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        records = new BaseRecord[] { record };
     }
 
     public void LoadRecords<T>(T rankRecord) where T : DataStoreAgent.DataArray
     {
-        records = new BaseRecord[] { record };
-
         records[0].ResetPosition();
         slideInTween = records[0].SlideInTween().AsReusable(gameObject);
 

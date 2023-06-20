@@ -368,6 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   record: {fileID: 405102070}
+  tmpTitle: {fileID: 1511854699}
 --- !u!1 &719506263
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   record: {fileID: 1472013853}
+  tmpTitle: {fileID: 1651810976}
 --- !u!1 &831706854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,6 +1351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   record: {fileID: 1092380890}
+  tmpTitle: {fileID: 2032217882}
 --- !u!224 &1472013850 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3024092098359202985, guid: be83bc731cd114095917c861e7dff39e,

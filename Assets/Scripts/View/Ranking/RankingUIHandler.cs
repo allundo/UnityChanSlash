@@ -60,16 +60,28 @@ public class RankingUIHandler : MonoBehaviour
             .AddTo(this);
     }
 
-    public void ViewInfo()
+    public void ViewInfo(bool forceNotCleared = false)
     {
         fade.color = Color.black;
         fade.FadeInObservable(2f)
             .Subscribe(_ => SetInteractableBtns(true))
             .AddTo(this);
 
-        deadRankUI.LoadRecords(DataStoreAgent.Instance.LoadDeadRecords());
         clearRankUI.LoadRecords(DataStoreAgent.Instance.LoadClearRecords());
-        infoUI.LoadRecords(DataStoreAgent.Instance.LoadInfoRecord());
+        deadRankUI.LoadRecords(DataStoreAgent.Instance.LoadDeadRecords());
+
+        if (!forceNotCleared && clearRankUI.hasRecord)
+        {
+            infoUI.LoadRecords(DataStoreAgent.Instance.LoadInfoRecord());
+            deadRankUI.title = "死亡記録ランキング";
+        }
+        else
+        {
+            deadRankUI.title = "ランキング";
+            GoToLeft().Complete(true);
+            leftBtn.gameObject.SetActive(false);
+            rightBtn.gameObject.SetActive(false);
+        }
 
         centerUI.DisplayRecords();
     }

@@ -5,23 +5,17 @@ using System.Linq;
 
 public class RecordsRankingUI : RecordsUI
 {
-    protected override void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
-    }
+    public bool hasRecord { get; protected set; } = false;
 
     public void LoadRecords<T>(List<T> rankRecords) where T : DataStoreAgent.DataArray
     {
         var length = rankRecords.Count;
+        hasRecord = length > 0;
 
-        if (length > 0)
+        if (hasRecord)
         {
             records = new BaseRecord[length];
             record.SetValues(rankRecords[0].GetValues(1));
-        }
-        else
-        {
-            records = new BaseRecord[1];
         }
 
         var rankBaseOffset = new Vector2(-4f * length / 2, -80f);

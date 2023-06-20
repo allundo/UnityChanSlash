@@ -33,6 +33,6 @@ public class RankingSceneMediator : SceneMediator
     private void DebugShowRanking()
     {
         Debug.Log("DEBUG MODE");
-        ShowRanking();
+        rankingUIHandler.ViewInfo(true);
     }
 }
