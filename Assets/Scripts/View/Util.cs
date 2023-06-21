@@ -64,4 +64,13 @@ public class Util
         int min = -(int)(range / 2);
         return Mathf.Max(0, GameInfo.Instance.currentFloor + UnityEngine.Random.Range(min, min + (int)range));
     }
+    public static string TimeFormat(int sec)
+    {
+        int min = sec / 60;
+        int hour = min / 60;
+        return $"{hour,3:D}:{min % 60:00}:{sec % 60:00}";
+    }
+
+    public static string PercentFormat(ulong rate_x1000) => $"{rate_x1000 / 10,3:D}.{rate_x1000 % 10}";
+    public static string PercentFormat(float rate) => PercentFormat((ulong)(rate * 1000f));
 }

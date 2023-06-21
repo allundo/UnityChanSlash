@@ -30,6 +30,7 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public IObservable<IDirection> DirObservable => mapUtil.Dir.Where(dir => dir != null);
 
     public bool IsPlayerIcing => status.icingFrames > 0f;
+    public bool IsPlayerAlive => status.IsAlive;
 
     public DataStoreAgent.PlayerData ExportRespawnData() => ExportRespawnData(Pos);
     public DataStoreAgent.PlayerData ExportRespawnData(Pos playerPos)

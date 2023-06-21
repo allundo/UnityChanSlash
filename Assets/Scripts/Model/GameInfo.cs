@@ -50,7 +50,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public ulong moneyAmount = 0;
     public float mapComp = 0f;
     public float treasureComp = 0f;
-    public int clearTimeSec = 0;
+    public int endTimeSec = 0;
     public int defeatCount = 0;
     public int level = 1;
     public int strength = 10;
@@ -58,11 +58,14 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public int clearRank = 0;
     public string title = "なし";
     public float titleBonusRatio = 1f;
+    public int steps = 0;
+    public int storedTimeSec = 0;
+
     public DataStoreAgent.ClearRecord clearRecord = null;
 
     public void TotalClearCounts(PlayerCounter counter, int clearTimeSec, ulong moneyAmount)
     {
-        this.clearTimeSec = clearTimeSec;
+        this.endTimeSec = clearTimeSec;
         this.moneyAmount = moneyAmount;
         this.mapComp = CalcMapComp();
         this.treasureComp = CalcTreasureComp();
@@ -71,6 +74,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         title = clearData.title;
         titleBonusRatio = clearData.bonusRate;
         defeatCount = clearData.defeatCount;
+
+        this.steps = counter.StepSum;
     }
 
     public int startActionID = 0;
@@ -299,13 +304,19 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         moneyAmount = 0;
         mapComp = 0f;
-        clearTimeSec = 0;
+        endTimeSec = 0;
         defeatCount = 0;
         level = 1;
         strength = 10;
         magic = 10;
         clearRank = 0;
         clearRecord = null;
+
+        treasureComp = 0f;
+        title = "なし";
+        titleBonusRatio = 1f;
+        steps = 0;
+        storedTimeSec = 0;
     }
 
     public DataStoreAgent.MapData[] ExportMapData()

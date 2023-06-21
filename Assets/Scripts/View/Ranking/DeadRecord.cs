@@ -10,13 +10,13 @@ public class DeadRecord : RankRecord
     protected override void SetFormats()
     {
         base.SetFormats();
-        textObjects.Add(floor);
+        textObjects.Add(new TextObject(floor));
         textFormats.Add(floor => "地下" + floor + "階");
 
-        textObjects.Add(moneyAmount);
+        textObjects.Add(new TextObject(moneyAmount));
         textFormats.Add(money => $"アイテム資産: ￥{money:#,0}");
 
-        textObjects.Add(causeOfDeath);
+        textObjects.Add(new TextObject(causeOfDeath));
         textFormats.Add(cause => cause.ToString());
     }
 

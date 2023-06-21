@@ -9,7 +9,7 @@ public struct ResultBonus
     public ulong mapComp => (ulong)(gameInfo.mapComp * 1000f);
     public int mapCompBonus { get; private set; }
 
-    public ulong clearTimeSec => (ulong)gameInfo.clearTimeSec;
+    public ulong clearTimeSec => (ulong)gameInfo.endTimeSec;
     public int clearTimeBonus { get; private set; }
 
     public ulong defeatCount => (ulong)gameInfo.defeatCount;
@@ -36,7 +36,7 @@ public struct ResultBonus
 
         itemPrice = gameInfo.moneyAmount;
         mapCompBonus = (int)(100000f * gameInfo.mapComp);
-        clearTimeBonus = (int)(1000f * (Mathf.Max(0, 3600 - gameInfo.clearTimeSec)));
+        clearTimeBonus = (int)(1000f * (Mathf.Max(0, 3600 - gameInfo.endTimeSec)));
         defeatBonus = gameInfo.defeatCount * 100;
         levelBonus = gameInfo.level * 100;
         strengthBonus = gameInfo.strength * 100;

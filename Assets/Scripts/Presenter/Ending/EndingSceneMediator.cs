@@ -21,7 +21,7 @@ public class EndingSceneMediator : SceneMediator
 
     private void StartScene()
     {
-        endingUIHandler.StartScroll(SelectPeriodIndex(GameInfo.Instance.clearTimeSec))
+        endingUIHandler.StartScroll(SelectPeriodIndex(GameInfo.Instance.endTimeSec))
            .Subscribe(_ => SceneTransition(0))
            .AddTo(this);
     }

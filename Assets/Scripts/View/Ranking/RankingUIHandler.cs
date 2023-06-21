@@ -8,7 +8,7 @@ using DG.Tweening;
 public class RankingUIHandler : MonoBehaviour
 {
     [SerializeField] private FadeScreen fade = default;
-    [SerializeField] private RecordsUI infoUI = default;
+    [SerializeField] private InfoRecordsUI infoUI = default;
     [SerializeField] private RecordsRankingUI deadRankUI = default;
     [SerializeField] private RecordsRankingUI clearRankUI = default;
     [SerializeField] private Button toTitleBtn = default;

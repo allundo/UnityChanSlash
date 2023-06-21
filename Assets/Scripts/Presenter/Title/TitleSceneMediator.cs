@@ -174,7 +174,7 @@ public class TitleSceneMediator : SceneMediator
     {
         DisableOtherControls();
 
-        GameInfo.Instance.clearTimeSec = clearTimeSec;
+        GameInfo.Instance.endTimeSec = clearTimeSec;
 
         ForceTransitScene(2, 0);
     }
@@ -183,7 +183,7 @@ public class TitleSceneMediator : SceneMediator
     {
         DisableOtherControls();
 
-        GameInfo.Instance.clearTimeSec = clearTimeSec;
+        GameInfo.Instance.endTimeSec = clearTimeSec;
 
         ForceTransitScene(3, 0);
     }

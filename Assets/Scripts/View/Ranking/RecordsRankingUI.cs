@@ -5,7 +5,12 @@ using System.Linq;
 
 public class RecordsRankingUI : RecordsUI
 {
+    [SerializeField] protected BaseRecord record = default;
+
     public bool hasRecord { get; protected set; } = false;
+
+    protected override void SetRecordsActive(bool isActive)
+        => records.ForEach(record => record.gameObject.SetActive(isActive));
 
     public void LoadRecords<T>(List<T> rankRecords) where T : DataStoreAgent.DataArray
     {
@@ -16,6 +21,10 @@ public class RecordsRankingUI : RecordsUI
         {
             records = new BaseRecord[length];
             record.SetValues(rankRecords[0].GetValues(1));
+        }
+        else
+        {
+            records = new BaseRecord[1];
         }
 
         var rankBaseOffset = new Vector2(-4f * length / 2, -80f);

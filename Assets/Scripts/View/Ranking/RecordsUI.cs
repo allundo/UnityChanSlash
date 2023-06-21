@@ -2,9 +2,8 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 
-public class RecordsUI : MonoBehaviour
+public abstract class RecordsUI : MonoBehaviour
 {
-    [SerializeField] protected BaseRecord record = default;
     [SerializeField] private TextMeshProUGUI tmpTitle = default;
 
     public string title
@@ -16,35 +15,24 @@ public class RecordsUI : MonoBehaviour
     protected RectTransform rectTransform;
     protected BaseRecord[] records;
 
-    protected virtual void SetRecordsActive(bool isActive)
-        => records.ForEach(record => record.gameObject.SetActive(isActive));
+    protected abstract void SetRecordsActive(bool isActive);
 
-    protected float width = 1080f;
     protected Tween slideInTween;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        records = new BaseRecord[] { record };
-    }
-
-    public void LoadRecords<T>(T rankRecord) where T : DataStoreAgent.DataArray
-    {
-        records[0].ResetPosition();
-        slideInTween = records[0].SlideInTween().AsReusable(gameObject);
-
-        records[0].gameObject.SetActive(false);
     }
 
     public void DisplayRecords()
     {
         SetRecordsActive(true);
-        slideInTween.Restart();
+        slideInTween?.Restart();
     }
 
     public void HideRecords()
     {
-        slideInTween.Rewind();
+        slideInTween?.Rewind();
         SetRecordsActive(false);
     }
 
@@ -58,6 +46,4 @@ public class RecordsUI : MonoBehaviour
         var current = rectTransform.anchoredPosition;
         rectTransform.anchoredPosition = new Vector2(posX, current.y);
     }
-
-    public void CompleteTween() => slideInTween.Complete(true);
 }

@@ -89,7 +89,7 @@ public class ResultSceneMediator : SceneMediator
 
         var resultBonus = new ResultBonus(GameInfo.Instance);
 
-        gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, resultBonus.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, resultBonus.wagesAmount, gameInfo.endTimeSec, gameInfo.defeatCount);
 
         Result();
     }

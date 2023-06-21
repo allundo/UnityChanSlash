@@ -339,10 +339,43 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     [System.Serializable]
     public class InfoRecord : DataArray
     {
-        public ulong moneyAmount = 0;
-        public string causeOfDeath = "";
-        public int floor = 1;
-        public override object[] GetValues() => new object[] { };
+        public int minSteps = 999999999;
+        public float maxMap = 0f;
+        public int playTime = 0;
+        public int deadCount = 0;
+        public int clearCount = 0;
+
+        [SerializeField] private string[] titles = new string[0];
+        public bool HasTitle(string title) => titles.Contains(title);
+
+        public string[] TitleList(string unknown = null)
+            => PlayerCounter.Titles
+                .Select(title => HasTitle(title) ? title : unknown)
+                .ToArray();
+
+        private void GetTitle(string title)
+        {
+            var set = titles.ToHashSet();
+            set.Add(title);
+            titles = set.ToArray();
+        }
+
+        public void UpdateFullRecord(GameInfo info)
+        {
+            if (minSteps > info.steps) minSteps = info.steps;
+            if (maxMap < info.mapComp) maxMap = info.mapComp;
+            GetTitle(info.title);
+            clearCount++;
+            UpdateAccumulation(info.endTimeSec - info.storedTimeSec);
+        }
+
+        public void UpdateAccumulation(int time)
+        {
+            playTime += time;
+            if (!PlayerInfo.Instance.IsPlayerAlive) deadCount++;
+        }
+
+        public override object[] GetValues() => new object[] { minSteps, maxMap, playTime, clearCount, deadCount };
     }
 
     [System.Serializable]
@@ -456,6 +489,25 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         return rank;
     }
 
+    public void SaveInfoRecord(GameInfo info)
+    {
+        // Delete save data
+        DisableSave();
+        DeleteFile(INFO_RECORD_FILE_NAME);
+
+        infoRecord = LoadInfoRecord();
+        if (info.clearRecord != null)
+        {
+            infoRecord.UpdateFullRecord(info);
+        }
+        else
+        {
+            infoRecord.UpdateAccumulation(info.endTimeSec - info.storedTimeSec);
+
+        }
+        SaveEncryptedRecord(infoRecord, INFO_RECORD_FILE_NAME);
+    }
+
     protected void SaveEncryptedRecords<T>(List<T> records, string fileName) where T : DataArray
         => SaveEncryptedRecord(new RecordList<T>(records), fileName);
 
@@ -520,6 +572,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             eventData = gameManager.ExportEventData(),
             respawnData = SpawnHandler.Instance.ExportRespawnData(playerInfo.Pos)
         };
+
+        gameInfo.endTimeSec = saveData.elapsedTimeSec;
+        SaveInfoRecord(gameInfo);
+        gameInfo.storedTimeSec = saveData.elapsedTimeSec;
 
         SaveEncryptedRecord(saveData, SAVE_DATA_FILE_NAME);
         return true;
@@ -643,6 +699,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             if (saveData == null) throw new Exception("データがロードされていません");
 
             TimeManager.Instance.AddTimeSec(saveData.elapsedTimeSec);
+            GameInfo.Instance.storedTimeSec = saveData.elapsedTimeSec;
             SpawnHandler.Instance.ImportRespawnData(saveData.respawnData, map);
             PlayerInfo.Instance.ImportRespawnData(saveData.playerData, map);
             ItemInventory.Instance.ImportInventoryItems(saveData.inventoryItems);

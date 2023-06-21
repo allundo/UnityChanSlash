@@ -14,6 +14,8 @@ public class PlayerCounter
     [SerializeField] private int damage = 0;
     [SerializeField] private int magicDamage = 0;
 
+    public static List<string> Titles => TitleSelector.Titles;
+
     public int Defeat => defeat.Sum();
     public int AttackPoint => attack[0] + attack[1] + (critical[0] + critical[1]) * 2;
     public int ShieldPoint => shield + attack[2] + critical[2] * 2;
@@ -133,49 +135,51 @@ public class PlayerCounter
 
     protected class TitleSelector
     {
-        private struct Title
+        public struct Title
         {
-            public const string FastRunner = "俊足";
             public const string SlowPoke = "鈍足";
-            public const string PhantomThief = "怪盗";
-            public const string Zenigata = "銭形";
-            public const string Magician = "魔導士";
             public const string Fighter = "戦士";
-            public const string Mapper = "測量士";
+            public const string Magician = "魔導士";
+            public const string Shielder = "盾使い";
+            public const string SwordFighter = "剣闘士";
+            public const string Grappler = "格闘家";
             public const string FireMagician = "炎術士";
             public const string IceMagician = "氷術士";
             public const string DarkMagician = "闇術士";
-            public const string Grappler = "格闘家";
-            public const string SwordFighter = "剣闘士";
-            public const string Shielder = "盾使い";
-            public const string Kuroobi = "黒帯";
-            public const string SwordMaster = "剣聖";
+            public const string Mapper = "測量士";
+            public const string PhantomThief = "怪盗";
             public const string ShieldMaster = "盾師";
+            public const string SwordMaster = "剣聖";
+            public const string Kuroobi = "黒帯";
+            public const string FastRunner = "俊足";
             public const string MinimumStep = "低歩数";
+            public const string Zenigata = "銭形";
         }
 
         private PlayerCounter counter;
         private Dictionary<string, float> titlePoint = new Dictionary<string, float>();
-        private Dictionary<string, float> titleBonus = new Dictionary<string, float>()
+        private static Dictionary<string, float> titleBonus = new Dictionary<string, float>()
         {
-            { Title.Zenigata,       0.5f    },
-            { Title.MinimumStep,    0.25f   },
-            { Title.FastRunner,     0.2f    },
-            { Title.Kuroobi,        0.15f   },
-            { Title.SwordMaster,    0.15f   },
-            { Title.ShieldMaster,   0.15f   },
-            { Title.PhantomThief,   0.1f    },
-            { Title.Mapper,         0.08f   },
-            { Title.DarkMagician,   0.075f  },
+            { Title.SlowPoke,       0.0f    },
+            { Title.Fighter,        0.015f  },
+            { Title.Magician,       0.02f   },
+            { Title.Shielder,       0.025f  },
+            { Title.SwordFighter,   0.025f  },
+            { Title.Grappler,       0.025f  },
             { Title.FireMagician,   0.05f   },
             { Title.IceMagician,    0.05f   },
-            { Title.Grappler,       0.025f  },
-            { Title.SwordFighter,   0.025f  },
-            { Title.Shielder,       0.025f  },
-            { Title.Magician,       0.02f   },
-            { Title.Fighter,        0.015f  },
-            { Title.SlowPoke,       0.0f    },
+            { Title.DarkMagician,   0.075f  },
+            { Title.Mapper,         0.08f   },
+            { Title.PhantomThief,   0.1f    },
+            { Title.ShieldMaster,   0.15f   },
+            { Title.SwordMaster,    0.15f   },
+            { Title.Kuroobi,        0.15f   },
+            { Title.FastRunner,     0.2f    },
+            { Title.MinimumStep,    0.25f   },
+            { Title.Zenigata,       0.5f    },
         };
+
+        public static readonly List<string> Titles = titleBonus.Select(kv => kv.Key).ToList();
 
         public (string title, float bonusRate) titleData { get; private set; }
 

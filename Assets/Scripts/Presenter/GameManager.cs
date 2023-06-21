@@ -367,8 +367,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         var result = new ResultBonus(gameInfo);
 
-        gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, result.wagesAmount, gameInfo.clearTimeSec, gameInfo.defeatCount);
+        gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, result.wagesAmount, gameInfo.endTimeSec, gameInfo.defeatCount);
         gameInfo.clearRank = dataStoreAgent.SaveClearRecords(gameInfo.clearRecord);
+        dataStoreAgent.SaveInfoRecord(gameInfo);
 
         cover.ExitFadeOut(3f)
             .Subscribe(null, exitSubject.OnCompleted)

@@ -47,7 +47,7 @@ public class EndingTest
     public IEnumerator _001_NoonEndingTest()
     {
         // Setup
-        GameInfo.Instance.clearTimeSec = 2000;
+        GameInfo.Instance.endTimeSec = 2000;
 
         // When
         endingSceneMediator = Object.Instantiate(Resources.Load<EndingSceneMediator>("Prefabs/Ending/EndingSceneMediator"));
@@ -62,7 +62,7 @@ public class EndingTest
     public IEnumerator _002_EveningEndingTest()
     {
         // Setup
-        GameInfo.Instance.clearTimeSec = 6000;
+        GameInfo.Instance.endTimeSec = 6000;
 
         // When
         endingSceneMediator = Object.Instantiate(Resources.Load<EndingSceneMediator>("Prefabs/Ending/EndingSceneMediator"));
@@ -77,7 +77,7 @@ public class EndingTest
     public IEnumerator _003_NightEndingTest()
     {
         // Setup
-        GameInfo.Instance.clearTimeSec = 8000;
+        GameInfo.Instance.endTimeSec = 8000;
 
         // When
         endingSceneMediator = Object.Instantiate(Resources.Load<EndingSceneMediator>("Prefabs/Ending/EndingSceneMediator"));
@@ -92,7 +92,7 @@ public class EndingTest
     public IEnumerator _004_MorningEndingTest()
     {
         // Setup
-        GameInfo.Instance.clearTimeSec = 80000;
+        GameInfo.Instance.endTimeSec = 80000;
 
         // When
         endingSceneMediator = Object.Instantiate(Resources.Load<EndingSceneMediator>("Prefabs/Ending/EndingSceneMediator"));

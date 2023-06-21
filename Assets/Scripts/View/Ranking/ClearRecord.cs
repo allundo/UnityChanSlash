@@ -11,16 +11,16 @@ public class ClearRecord : RankRecord
     protected override void SetFormats()
     {
         base.SetFormats();
-        textObjects.Add(title);
+        textObjects.Add(new TextObject(title));
         textFormats.Add(title => title.ToString());
 
-        textObjects.Add(wagesAmount);
+        textObjects.Add(new TextObject(wagesAmount));
         textFormats.Add(wages => $"お給金: ￥{wages:#,0}");
 
-        textObjects.Add(clearTime);
-        textFormats.Add(sec => "踏破時間: " + ValueFormat((int)sec));
+        textObjects.Add(new TextObject(clearTime));
+        textFormats.Add(sec => "踏破時間: " + Util.TimeFormat((int)sec));
 
-        textObjects.Add(defeat);
+        textObjects.Add(new TextObject(defeat));
         textFormats.Add(count => "敵撃破数: " + count);
     }
 
