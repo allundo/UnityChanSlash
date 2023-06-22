@@ -101,8 +101,9 @@ public class TextHandler : MonoBehaviour
             return;
         }
 
-        // This "currentData" variable is no longer a reference of MessageData[].
-        // Update "read" flag of the MessageData via array reference.
+        // This "currentData" variable has not a reference of MessageData[] but a struct COPY.
+        // So update "read" flag of the MessageData via array reference.
+        // -> See: CSharpSpecTest.ArrayStructReferenceTest()
         messageData[index].isRead = true;
 
         tm.fontSize = currentData.fontSize;

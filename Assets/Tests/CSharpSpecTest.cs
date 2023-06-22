@@ -73,14 +73,19 @@ public class CSharpSpecTest
     [Ignore("Only for spec confirmation.")]
     [Test]
     /// <summary>
+    /// Struct is assigned into a variable not as a reference but a COPY. <br />
     /// Array is handled as reference in method and the fields are editable
     /// </summary>
     public void ArrayStructReferenceTest()
     {
         TestStruct[] tests = new TestStruct[] { new TestStruct(), new TestStruct(), new TestStruct() };
 
+        var test0 = tests[0]; // Assigns a COPY of tests[0]
+        test0.check = true;
+
         ChangeSecond(tests);
 
+        Assert.False(tests[0].check);
         Assert.True(tests[1].check);
     }
 
