@@ -648,7 +648,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
         catch (Exception e)
         {
-            Debug.LogError("loading is not implemented: " + e.Message);
+            Debug.LogError($"ファイルのロードに失敗: {e.Message} ...新しくファイルを作成します");
             infoRecord = new InfoRecord();
         }
 
