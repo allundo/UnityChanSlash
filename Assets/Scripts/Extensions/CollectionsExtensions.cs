@@ -6,7 +6,11 @@ static public class CollectionsExtensions
 {
     // List
     static public T GetRandom<T>(this List<T> list)
-        => list[UnityEngine.Random.Range(0, list.Count)];
+        => list.Count > 0 ? list[UnityEngine.Random.Range(0, list.Count)] : default;
+
+    static public T GetRandom<T>(this IEnumerable<T> collection)
+        => GetRandom(collection.ToList());
+
     static public K GetRandomKey<K, V>(this Dictionary<K, V> dictionary)
     {
         return dictionary.Select(kv => kv.Key).ToList().GetRandom();
