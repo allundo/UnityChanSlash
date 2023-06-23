@@ -6,7 +6,7 @@ public class ItemHandler : BaseHandler
     protected ItemInfo itemInfo;
     public IObservable<Unit> ObserveGo => ObserveUp;
     public IObservable<Unit> ObserveGet => ObserveDown;
-    public IObservable<MessageData[]> ObserveInspect => ObserveRL.Select(_ => MessageData.ItemDescription(itemInfo));
+    public IObservable<MessageData> ObserveInspect => ObserveRL.Select(_ => MessageData.ItemDescription(itemInfo));
     public IObservable<bool> ObserveHandOn => Observable.Merge(getItemFlickR.IsHandOn, getItemFlickL.IsHandOn);
 
     private GetItemFlick getItemFlickR;

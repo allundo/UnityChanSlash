@@ -4,7 +4,7 @@ using System;
 public class InspectUI : PointerDownUI
 {
     protected MessageWall message;
-    public IObservable<MessageData[]> OnInspectMessage => PressObservable.Select(_ => message.Read);
+    public IObservable<MessageData> OnInspectMessage => PressObservable.Select(_ => message.Read);
 
     public void SetActive(MessageWall message, IDirection dir, bool isFighting = false)
     {

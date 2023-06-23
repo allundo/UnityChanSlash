@@ -13,7 +13,7 @@ public class MessageControllerTest : MessageController
         base.Inactivator();
     }
 
-    public IObservable<Unit> AutoReadMessageData(MessageData[] data, float readSecPerLiteral = 0.1f)
+    public IObservable<Unit> AutoReadMessageData(MessageData data, float readSecPerLiteral = 0.1f)
     {
         messageLoopCoroutine = StartCoroutine(MessageLoop(data, readSecPerLiteral));
 
@@ -24,7 +24,7 @@ public class MessageControllerTest : MessageController
         }).First();
     }
 
-    public IEnumerator MessageLoop(MessageData[] data, float readSecPerLiteral = 0.1f)
+    public IEnumerator MessageLoop(MessageData data, float readSecPerLiteral = 0.1f)
     {
         InputMessageData(data);
         yield return null;
@@ -33,7 +33,7 @@ public class MessageControllerTest : MessageController
         TimeManager.Instance.Resume(false);
         yield return new WaitForSeconds(0.5f);
 
-        foreach (var mes in data)
+        foreach (var mes in data.Source)
         {
             var duration = mes.sentence.Length / mes.literalsPerSec;
             var readTime = mes.sentence.Length * readSecPerLiteral;

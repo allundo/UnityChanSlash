@@ -28,7 +28,7 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     public IObservable<ItemIcon> OnPutItem => iconHandler.OnPutItem;
     public IObservable<ItemIcon> OnPutApply => iconHandler.OnPutApply;
     public IObservable<ItemInfo> OnUseItem => iconHandler.OnUseItem;
-    public IObservable<MessageData[]> OnInspectItem => iconHandler.OnInspectItem.Select(itemInfo => MessageData.ItemDescription(itemInfo));
+    public IObservable<MessageData> OnInspectItem => iconHandler.OnInspectItem.Select(itemInfo => MessageData.ItemDescription(itemInfo));
 
     public IObservable<ItemInfo> EquipR => equipItems.EquipR;
     public IObservable<ItemInfo> EquipL => equipItems.EquipL;

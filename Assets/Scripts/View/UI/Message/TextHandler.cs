@@ -19,7 +19,7 @@ public class TextHandler : MonoBehaviour
     private int currentLength = 0;
     private float currentLiterals = 0;
     private TextMeshProUGUI tm;
-    private MessageData[] messageData;
+    private MessageData messageData;
     private int length;
     private int currentIndex = 0;
     private bool IsDisplayedAll => (int)currentLiterals == currentLength;
@@ -67,12 +67,14 @@ public class TextHandler : MonoBehaviour
         }
     }
 
-    public void InputMessageData(MessageData[] data)
+    public void InputMessageData(MessageData data)
     {
         messageData = data;
-        length = data.Length;
+        length = data.Source.Length;
         currentIndex = 0;
         SetNextSentence(currentIndex);
+
+        messageData.isRead = true;
     }
 
     private void SetNextSentence(int index)
@@ -93,18 +95,13 @@ public class TextHandler : MonoBehaviour
             return;
         }
 
-        var currentData = messageData[index];
+        var currentData = messageData.Source[index];
 
-        if (currentData.ignoreIfRead && currentData.isRead)
+        if (currentData.ignoreIfRead && messageData.isRead)
         {
             SetNextSentence(++currentIndex);
             return;
         }
-
-        // This "currentData" variable has not a reference of MessageData[] but a struct COPY.
-        // So update "read" flag of the MessageData via array reference.
-        // -> See: CSharpSpecTest.ArrayStructReferenceTest()
-        messageData[index].isRead = true;
 
         tm.fontSize = currentData.fontSize;
         tm.alignment = currentData.alignment;

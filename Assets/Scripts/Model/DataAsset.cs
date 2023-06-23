@@ -201,8 +201,6 @@ public class MessageSource
         this.ignoreIfRead = ignoreIfRead;
     }
 
-    public MessageData Convert()
-        => new MessageData(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption, ignoreIfRead);
 }
 
 [System.Serializable]

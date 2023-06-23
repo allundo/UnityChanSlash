@@ -17,47 +17,25 @@ public enum FaceID
     SURPRISE
 }
 
-public struct MessageData
+public class MessageData
 {
-    public string sentence;
-    public FaceID face;
-    public float fontSize;
-    public float literalsPerSec;
-    public TextAlignmentOptions alignment;
-    public string title;
-    public Sprite spriteImage;
-    public Material matImage;
-    public string caption;
-    public bool ignoreIfRead;
-    public bool isRead;
+    public virtual bool isRead { get; set; }
+    protected MessageSource[] source;
+    public virtual MessageSource[] Source => source;
 
-    public MessageData(
-        string sentence,
-        FaceID face = FaceID.NONE,
-        float fontSize = 64f,
-        float literalsPerSec = 20f,
-        TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft,
-        string title = null,
-        Sprite spriteImage = null,
-        Material matImage = null,
-        string caption = null,
-        bool ignoreIfRead = false
-    )
+    public MessageData(params MessageSource[] source)
     {
-        this.sentence = sentence;
-        this.face = face;
-        this.fontSize = fontSize;
-        this.literalsPerSec = literalsPerSec;
-        this.alignment = alignment;
-        this.title = title;
-        this.spriteImage = spriteImage;
-        this.matImage = matImage;
-        this.caption = caption;
-        this.ignoreIfRead = ignoreIfRead;
-        this.isRead = false;
+        isRead = false;
+        this.source = source;
     }
 
-    public static MessageData[] Inspect(
+    public static MessageData Convert(MessageSource[] source)
+    {
+        source.ForEach(src => src.sentence = src.sentence.Replace("\\n", "\n"));
+        return new MessageData(source);
+    }
+
+    public static MessageData Inspect(
         string sentence,
         string title,
         Sprite spriteImage = null,
@@ -68,12 +46,11 @@ public struct MessageData
         float literalsPerSec = 1000f
     )
     {
-        return new MessageData[] { new MessageData(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption) };
+        return new MessageData(new MessageSource(sentence, FaceID.NONE, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption));
     }
 
-    public static MessageData[] ItemDescription(ItemInfo itemInfo)
-    {
-        return Inspect(
+    public static MessageData ItemDescription(ItemInfo itemInfo)
+        => Inspect(
             itemInfo.description,
             "【" + itemInfo.name + "】 × " + itemInfo.numOfItem,
             null,
@@ -82,5 +59,4 @@ public struct MessageData
             TextAlignmentOptions.TopLeft,
             52f
         );
-    }
 }

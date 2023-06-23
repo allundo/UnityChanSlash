@@ -916,10 +916,10 @@ public class PlayerDropFloor : PlayerCommand
 
 public class PlayerMessage : PlayerAction
 {
-    protected MessageData[] data;
+    protected MessageData data;
     protected bool isUIVisibleOnCompleted;
 
-    public PlayerMessage(PlayerCommandTarget target, MessageData[] data, bool isUIVisibleOnCompleted = true) : base(target, 5f, 0.999f)
+    public PlayerMessage(PlayerCommandTarget target, MessageData data, bool isUIVisibleOnCompleted = true) : base(target, 5f, 0.999f)
     {
         this.data = data;
         this.isUIVisibleOnCompleted = isUIVisibleOnCompleted;
@@ -936,9 +936,9 @@ public class PlayerMessage : PlayerAction
 
 public class PlayerInfoMessage : PlayerAction
 {
-    protected MessageData[] data;
+    protected MessageData data;
 
-    public PlayerInfoMessage(PlayerCommandTarget target, MessageData[] data) : base(target, 5f, 0.999f)
+    public PlayerInfoMessage(PlayerCommandTarget target, MessageData data) : base(target, 5f, 0.999f)
     {
         this.data = data;
     }
@@ -953,9 +953,9 @@ public class PlayerInfoMessage : PlayerAction
 
 public class PlayerInspectWall : PlayerAction
 {
-    protected MessageData[] data;
+    protected MessageData data;
 
-    public PlayerInspectWall(PlayerCommandTarget target, MessageData[] data) : base(target, 5f, 0.999f)
+    public PlayerInspectWall(PlayerCommandTarget target, MessageData data) : base(target, 5f, 0.999f)
     {
         this.data = data;
     }

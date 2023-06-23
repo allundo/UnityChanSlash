@@ -35,11 +35,11 @@ public class DropStartEvent : GameEvent
     protected override IObservable<Unit> RestartEventFunc()
     {
         input.EnqueueMessage(
-            new MessageData[]
-            {
-                new MessageData("いきなりなんなのさ・・・", FaceID.DISATTRACT),
-                new MessageData("久々の出番なのに、扱いが雑じゃない！？", FaceID.ANGRY)
-            },
+            new MessageData
+            (
+                new MessageSource("いきなりなんなのさ・・・", FaceID.DISATTRACT),
+                new MessageSource("久々の出番なのに、扱いが雑じゃない！？", FaceID.ANGRY)
+            ),
             false
         );
 
@@ -58,13 +58,13 @@ public class DropStartEvent : GameEvent
         }
 
         ICommand message = input.EnqueueMessage(
-            new MessageData[]
-            {
-                new MessageData("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
-                new MessageData("どうみてもこれが出口だね", FaceID.NOTICE),
-                new MessageData("・・・うーん", FaceID.DISATTRACT),
-                new MessageData("鍵が掛かってますねぇ！", FaceID.DISATTRACT),
-            }
+            new MessageData
+            (
+                new MessageSource("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
+                new MessageSource("どうみてもこれが出口だね", FaceID.NOTICE),
+                new MessageSource("・・・うーん", FaceID.DISATTRACT),
+                new MessageSource("鍵が掛かってますねぇ！", FaceID.DISATTRACT)
+            )
         );
 
         return input.ObserveComplete(message).Select(_ => Unit.Default);
@@ -78,11 +78,11 @@ public class RestartEvent : GameEvent
     protected override IObservable<Unit> EventFunc()
     {
         ICommand message = input.InterruptMessage(
-            new MessageData[]
-            {
-                new MessageData("[仮] ・・・という夢だったのさ", FaceID.SMILE),
-                new MessageData("[仮] なんも解決してないんだけどねっ！", FaceID.ANGRY)
-            }
+            new MessageData
+            (
+                new MessageSource("[仮] ・・・という夢だったのさ", FaceID.SMILE),
+                new MessageSource("[仮] なんも解決してないんだけどねっ！", FaceID.ANGRY)
+            )
         );
 
         return input.ObserveComplete(message).Select(_ => Unit.Default);

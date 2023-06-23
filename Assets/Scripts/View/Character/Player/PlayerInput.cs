@@ -86,8 +86,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
         ForceEnqueue(wakeUp);
         return cmd;
     }
-    public ICommand EnqueueMessage(MessageData[] data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
-    public ICommand InterruptMessage(MessageData[] data) => Interrupt(new PlayerMessage(playerTarget, data));
+    public ICommand EnqueueMessage(MessageData data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
+    public ICommand InterruptMessage(MessageData data) => Interrupt(new PlayerMessage(playerTarget, data));
 
     public IObservable<ICommand> ObserveComplete(ICommand cmd)
         => (commander as PlayerCommander).CommandComplete

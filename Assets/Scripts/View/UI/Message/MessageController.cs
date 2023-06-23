@@ -32,7 +32,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
         textHandler.TapNext();
     }
 
-    public void InputMessageData(MessageData[] data, bool isUIVisibleOnCompleted = true)
+    public void InputMessageData(MessageData data, bool isUIVisibleOnCompleted = true)
     {
         textHandler.Sentence.Subscribe(null, () => CloseMessage(isUIVisibleOnCompleted)).AddTo(this);
 

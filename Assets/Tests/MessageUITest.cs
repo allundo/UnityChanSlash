@@ -74,7 +74,7 @@ public class MessageUITest
     private IEnumerator ReadMessages(BoardMessageData[] boardMessages)
         => ReadMessages(boardMessages.Select(msg => msg.Convert()));
 
-    private IEnumerator ReadMessages(IEnumerable<MessageData[]> msgs)
+    private IEnumerator ReadMessages(IEnumerable<MessageData> msgs)
     {
         foreach (var msg in msgs)
         {
@@ -88,21 +88,20 @@ public class MessageUITest
     {
         yield return null;
 
-        yield return messageUI.AutoReadMessageData(new MessageData[]
-        {
-            new MessageData("00_デフォルト", FaceID.DEFAULT),
-            new MessageData("01_怒り1", FaceID.ANGRY),
-            new MessageData("02_にっこり", FaceID.SMILE),
-            new MessageData("03_がっかり1", FaceID.DISATTRACT),
-            new MessageData("04_気づき", FaceID.NOTICE),
-            new MessageData("05_目閉じ", FaceID.EYECLOSE),
-            new MessageData("06_怒り2", FaceID.ANGRY2),
-            new MessageData("07_がっかり2", FaceID.DISATTRACT2),
-            new MessageData("08_ジト目", FaceID.DESPISE),
-            new MessageData("09_恥ずかし", FaceID.ASHAMED),
-            new MessageData("10_びっくり", FaceID.SURPRISE),
-            new MessageData("-1_なし", FaceID.NONE),
-        }, 0.25f).ToYieldInstruction();
+        yield return messageUI.AutoReadMessageData(new MessageData(
+            new MessageSource("00_デフォルト", FaceID.DEFAULT),
+            new MessageSource("01_怒り1", FaceID.ANGRY),
+            new MessageSource("02_にっこり", FaceID.SMILE),
+            new MessageSource("03_がっかり1", FaceID.DISATTRACT),
+            new MessageSource("04_気づき", FaceID.NOTICE),
+            new MessageSource("05_目閉じ", FaceID.EYECLOSE),
+            new MessageSource("06_怒り2", FaceID.ANGRY2),
+            new MessageSource("07_がっかり2", FaceID.DISATTRACT2),
+            new MessageSource("08_ジト目", FaceID.DESPISE),
+            new MessageSource("09_恥ずかし", FaceID.ASHAMED),
+            new MessageSource("10_びっくり", FaceID.SURPRISE),
+            new MessageSource("-1_なし", FaceID.NONE)
+        ), 0.25f).ToYieldInstruction();
 
         yield return new WaitForSeconds(0.6f);
     }
@@ -132,7 +131,7 @@ public class MessageUITest
     [UnityTest]
     public IEnumerator _004_ItemInspectMessagesTest()
     {
-        List<MessageData[]> itemDescriptions = new List<MessageData[]>();
+        List<MessageData> itemDescriptions = new List<MessageData>();
 
         foreach (var type in Enum.GetValues(typeof(ItemType)))
         {
