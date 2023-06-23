@@ -733,174 +733,116 @@ public class MapManager
 
     public class MazeCreator
     {
-        // 方向
-        private enum MoveDir
-        {
-            None = 0,
-            Up = 1,
-            Right = 2,
-            Down = 3,
-            Left = 4
-        }
+        private readonly int PATH = (int)Terrain.Path;
+        private readonly int GROUND = (int)Terrain.Ground;
+        private readonly int WALL = (int)Terrain.Wall;
+        private readonly int DOOR = (int)Terrain.Door;
+
+        public int[,] matrix { get; private set; }
 
         // 2次元配列の迷路情報
         public Terrain[,] Matrix { get; protected set; }
-        public int Width { get; }
-        public int Height { get; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         // 乱数生成用
         private Random rnd;
-        // 現在拡張中の壁情報を保持
-        private Stack<Pos> CurrentWallCells;
-        //private Stack<int> CurrentWallIndex;
-        // 壁の拡張を行う開始セルの情報
-        private List<Pos> StartCells;
-
-        public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
-            = new Dictionary<Pos, IDirection>();
 
         public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
 
         // コンストラクタ
         public MazeCreator(int width = 49, int height = 49, Random rnd = null)
         {
-            // 5未満のサイズや偶数では生成できない
-            if (width < 5 || height < 5) throw new ArgumentOutOfRangeException();
-            if (width % 2 == 0) width++;
-            if (height % 2 == 0) height++;
+            // Minimum size is 5 and even-number size is not available.
+            if (width < 5 || height < 5 || width % 2 == 0 || height % 2 == 0) throw new ArgumentOutOfRangeException();
 
             // 迷路情報を初期化
             this.Width = width;
             this.Height = height;
+            this.matrix = new int[width, height];
             this.Matrix = new Terrain[width, height];
 
-            StartCells = new List<Pos>();
-            CurrentWallCells = new Stack<Pos>();
             this.rnd = rnd ?? new Random();
         }
 
         public MazeCreator CreateMaze()
         {
-            // 各マスの初期設定を行う
-            for (int y = 0; y < this.Height; y++)
+            List<Pos> startCells = new List<Pos>();
+
+            // Set WALLs to edges of maze.
+            for (int y = 0; y < Height; y++) matrix[0, y] = matrix[Width - 1, y] = WALL;
+            for (int x = 0; x < Width; x++) matrix[x, 0] = matrix[x, Height - 1] = WALL;
+
+            for (int y = 1; y < Height - 1; y++)
             {
-                for (int x = 0; x < this.Width; x++)
+                for (int x = 1; x < Width - 1; x++)
                 {
-                    // 外周のみ壁にしておき、開始候補として保持
-                    if (x == 0 || y == 0 || x == this.Width - 1 || y == this.Height - 1)
+                    // Initialize inside edges of maze by PATHs.
+                    matrix[x, y] = PATH;
+
+                    if (x % 2 == 0 && y % 2 == 0)
                     {
-                        this.Matrix[x, y] = Terrain.Wall;
-                    }
-                    else
-                    {
-                        this.Matrix[x, y] = Terrain.Path;
-                        // 外周ではない偶数座標を壁伸ばし開始点にしておく
-                        if (x % 2 == 0 && y % 2 == 0)
-                        {
-                            // 開始候補座標
-                            StartCells.Add(new Pos(x, y));
-                        }
+                        // Store grids position as candidate to start setting walls.
+                        startCells.Add(new Pos(x, y));
                     }
                 }
             }
 
-            // 壁が拡張できなくなるまでループ
-            while (StartCells.Count > 0)
-            {
-                // ランダムに開始セルを取得し、開始候補から削除
-                var index = rnd.Next(StartCells.Count);
-                var cell = StartCells[index];
-                StartCells.RemoveAt(index);
-                var x = cell.x;
-                var y = cell.y;
+            startCells = startCells.Shuffle().ToList();
 
-                // すでに壁の場合は何もしない
-                if (this.Matrix[x, y] == Terrain.Path)
-                {
-                    // 拡張中の壁情報を初期化
-                    CurrentWallCells.Clear();
-                    ExtendWall(x, y);
-                }
+            while (startCells.Count > 0)
+            {
+                Stack<Pos> usedGrids = new Stack<Pos>();
+                ExtendWall(startCells[0], usedGrids);
+
+                startCells.Remove(usedGrids);
             }
 
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    Matrix[x, y] = Util.ConvertTo<Terrain>(matrix[x, y]);
+                }
+            }
             return this;
         }
 
-        // 指定座標から壁を生成拡張する
-        private void ExtendWall(int x, int y)
+        private bool SetWall(Pos pos, Pos dir, Stack<Pos> currentGrids)
         {
-            // 伸ばすことができる方向(1マス先が通路で2マス先まで範囲内)
-            // 2マス先が壁で自分自身の場合、伸ばせない
-            var directions = new List<MoveDir>();
-            if (this.Matrix[x, y - 1] == Terrain.Path && !IsCurrentWall(x, y - 2))
-                directions.Add(MoveDir.Up);
-            if (this.Matrix[x + 1, y] == Terrain.Path && !IsCurrentWall(x + 2, y))
-                directions.Add(MoveDir.Right);
-            if (this.Matrix[x, y + 1] == Terrain.Path && !IsCurrentWall(x, y + 2))
-                directions.Add(MoveDir.Down);
-            if (this.Matrix[x - 1, y] == Terrain.Path && !IsCurrentWall(x - 2, y))
-                directions.Add(MoveDir.Left);
+            var wallPos = pos + dir;
+            var destPos = wallPos + dir;
 
-            // ランダムに伸ばす(2マス)
-            if (directions.Count > 0)
-            {
-                // 壁を作成(この地点から壁を伸ばす)
-                SetWall(x, y);
+            // Block if extending direction is already shut by WALL or next position is an current extending wall.
+            if (matrix[wallPos.x, wallPos.y] == WALL || currentGrids.Contains(destPos)) return false;
 
-                // 伸ばす先が通路の場合は拡張を続ける
-                var isPath = false;
-                int dirIndex = rnd.Next(directions.Count);
-
-                switch (directions[dirIndex])
-                {
-                    case MoveDir.Up:
-                        isPath = (this.Matrix[x, y - 2] == Terrain.Path);
-                        SetWall(x, --y);
-                        SetWall(x, --y);
-                        break;
-                    case MoveDir.Right:
-                        isPath = (this.Matrix[x + 2, y] == Terrain.Path);
-                        SetWall(++x, y);
-                        SetWall(++x, y);
-                        break;
-                    case MoveDir.Down:
-                        isPath = (this.Matrix[x, y + 2] == Terrain.Path);
-                        SetWall(x, ++y);
-                        SetWall(x, ++y);
-                        break;
-                    case MoveDir.Left:
-                        isPath = (this.Matrix[x - 2, y] == Terrain.Path);
-                        SetWall(--x, y);
-                        SetWall(--x, y);
-                        break;
-                }
-                if (isPath)
-                {
-                    // 既存の壁に接続できていない場合は拡張続行
-                    ExtendWall(x, y);
-                }
-            }
-            else
-            {
-                // すべて現在拡張中の壁にぶつかる場合、バックして再開
-                Pos beforeCell = CurrentWallCells.Pop();
-                ExtendWall(beforeCell.x, beforeCell.y);
-            }
+            matrix[wallPos.x, wallPos.y] = WALL;
+            return true;
         }
 
-        // 壁を拡張する
-        private void SetWall(int x, int y)
+        private bool ExtendWall(Pos pos, Stack<Pos> currentGrids)
         {
-            this.Matrix[x, y] = Terrain.Wall;
-            if (x % 2 == 0 && y % 2 == 0)
-            {
-                CurrentWallCells.Push(new Pos(x, y));
-            }
-        }
+            currentGrids.Push(pos);
 
-        // 拡張中の座標かどうか判定
-        private bool IsCurrentWall(int x, int y)
-            => CurrentWallCells.Contains(new Pos(x, y));
+            if (matrix[pos.x, pos.y] == WALL) return false;
+
+            matrix[pos.x, pos.y] = WALL;
+
+            // Shuffled list of extending direction candidates.
+            Pos[] dirCandidates = new Pos[] { new Pos(0, -1), new Pos(0, 1), new Pos(-1, 0), new Pos(1, 0) }.Shuffle().ToArray();
+
+            foreach (Pos dir in dirCandidates)
+            {
+                if (SetWall(pos, dir, currentGrids))
+                {
+                    // Achieve to wall and stop extending if false.
+                    if (!ExtendWall(pos + dir * 2, currentGrids)) return false;
+                }
+            }
+
+            // No direction to extend. Back to the previous position.
+            return true;
+        }
 
         public MazeCreator SearchDeadEnds(Pos startPos)
         {
