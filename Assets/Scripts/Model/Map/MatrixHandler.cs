@@ -2,7 +2,6 @@ using System.Collections.Generic;
 
 public class MatrixHandler
 {
-    private Dictionary<Pos, IDirection> deadEndPos = new Dictionary<Pos, IDirection>();
     private int width;
     private int height;
     private int[] matrix;
