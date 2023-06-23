@@ -344,6 +344,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int playTime = 0;
         public int deadCount = 0;
         public int clearCount = 0;
+        public int[] readMessageIDs = new int[0];
+        public int secretLevel = 0;
 
         [SerializeField] private string[] titles = new string[0];
         public bool HasTitle(string title) => titles.Contains(title);
@@ -360,18 +362,19 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             titles = set.ToArray();
         }
 
-        public void UpdateFullRecord(GameInfo info)
+        public void UpdateClearRecord(GameInfo info)
         {
             if (minSteps > info.steps) minSteps = info.steps;
             if (maxMap < info.mapComp) maxMap = info.mapComp;
             GetTitle(info.title);
             clearCount++;
-            UpdateAccumulation(info.endTimeSec - info.storedTimeSec);
         }
 
-        public void UpdateAccumulation(int time)
+        public void UpdateAccumulation(GameInfo info)
         {
-            playTime += time;
+            playTime += info.endTimeSec - info.storedTimeSec;
+            readMessageIDs = info.readIDs.ToArray();
+            secretLevel = info.secretLevel;
             if (!PlayerInfo.Instance.IsPlayerAlive) deadCount++;
         }
 
@@ -496,15 +499,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         DeleteFile(INFO_RECORD_FILE_NAME);
 
         infoRecord = LoadInfoRecord();
-        if (info.clearRecord != null)
-        {
-            infoRecord.UpdateFullRecord(info);
-        }
-        else
-        {
-            infoRecord.UpdateAccumulation(info.endTimeSec - info.storedTimeSec);
 
-        }
+        if (info.clearRecord != null) infoRecord.UpdateClearRecord(info);
+
+        infoRecord.UpdateAccumulation(info);
+
         SaveEncryptedRecord(infoRecord, INFO_RECORD_FILE_NAME);
     }
 
@@ -678,9 +677,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
         if (saveData == null) return false;
 
+        var infoRecord = LoadInfoRecord();
+
         try
         {
-            GameInfo.Instance.ImportGameData(saveData);
+            GameInfo.Instance.ImportGameData(saveData, infoRecord);
         }
         catch (Exception e)
         {

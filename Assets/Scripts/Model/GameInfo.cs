@@ -60,6 +60,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public float titleBonusRatio = 1f;
     public int steps = 0;
     public int storedTimeSec = 0;
+    public HashSet<int> readIDs = new HashSet<int>();
+    public int secretLevel = 0;
 
     public DataStoreAgent.ClearRecord clearRecord = null;
 
@@ -332,7 +334,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         return export;
     }
 
-    public void ImportGameData(DataStoreAgent.SaveData import)
+    public void ImportGameData(DataStoreAgent.SaveData import, DataStoreAgent.InfoRecord infoRecord)
     {
         ClearMaps();
 
@@ -356,5 +358,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         WorldMap.isExitDoorLocked = import.isExitDoorLocked;
         WorldMap.exitDoorPos = import.exitDoorPos;
+
+        readIDs = infoRecord.readMessageIDs.ToHashSet();
+        secretLevel = infoRecord.secretLevel;
     }
 }

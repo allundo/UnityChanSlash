@@ -200,7 +200,18 @@ public class MessageSource
         this.caption = caption;
         this.ignoreIfRead = ignoreIfRead;
     }
+}
 
+[System.Serializable]
+public class SecretMessageSource
+{
+    [SerializeField] public int secretLevel = 0;
+    [SerializeField] public int floor = 0;
+    [SerializeField] public bool levelUpIfRead = false;
+    [SerializeField] public int alterIfReadNumber = -1;
+
+    [SerializeField] public BoardMessageData data = default;
+    [SerializeField] public BoardMessageData alterData = default;
 }
 
 [System.Serializable]
