@@ -184,7 +184,7 @@ public class MapManager
         }
         else
         {
-            this.deadEndPos = new MatrixHandler(matrix, width).SearchDeadEnds();
+            this.deadEndPos = new MazeCreator(matrix, width).SearchDeadEnds();
             SetDownStairs(floor);
             SetUpStairsOrStartDoor(floor);
             this.deadEndPos = this.deadEndPos.Shuffle();

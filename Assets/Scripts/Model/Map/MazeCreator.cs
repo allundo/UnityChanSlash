@@ -25,6 +25,19 @@ public class MazeCreator
 
     public Terrain[,] Matrix { get; protected set; }
 
+    private void SetTerrainData(int[] mapData)
+    {
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                int data = mapData[x + y * Width];
+                matrix[x, y] = data;
+                Matrix[x, y] = Util.ConvertTo<Terrain>(data);
+            }
+        }
+    }
+
     private void SetTerrainData(int[,] matrix)
     {
         for (int y = 0; y < Height; y++)
@@ -44,7 +57,6 @@ public class MazeCreator
 
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
 
-    // コンストラクタ
     public MazeCreator(int width = 49, int height = 49, Random rnd = null)
     {
         // Minimum size is 5 and even-number size is not available.
@@ -61,6 +73,14 @@ public class MazeCreator
         SetTerrainData(matrix);
 
         this.matrix = matrix;
+    }
+
+    public MazeCreator(int[] mapData, int width = 49)
+    {
+        this.Width = width;
+        this.Height = mapData.Length / width;
+
+        SetTerrainData(mapData);
     }
 
     private int[,] CreateMaze(int width, int height)
