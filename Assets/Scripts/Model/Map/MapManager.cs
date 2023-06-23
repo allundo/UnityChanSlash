@@ -87,11 +87,10 @@ public class MapManager
 
         var maze = new MazeCreator(width, height, new Random())
             .CreateMaze()
-            .SearchDeadEnds(new Pos(width - 2, height - 2))
             .CreateRooms();
 
         matrix = maze.Matrix.Clone() as Terrain[,];
-        deadEndPos = new Dictionary<Pos, IDirection>(maze.deadEndPos);
+        deadEndPos = new Dictionary<Pos, IDirection>(maze.SearchDeadEnds());
         roomCenterPos = new List<Pos>(maze.roomCenterPos);
 
         CreateDirMap();
@@ -844,47 +843,38 @@ public class MapManager
             return true;
         }
 
-        public MazeCreator SearchDeadEnds(Pos startPos)
+        private Pos[] GetPaths()
         {
-            if (!IsPassable(Matrix[startPos.x, startPos.y]))
+            var list = new List<Pos>();
+            for (int y = 0; y < Height; y++)
             {
-                throw new ArgumentException("Position: (" + startPos.x + ", " + startPos.y + ") is not a Path but ... " + Matrix[startPos.x, startPos.y]);
+                for (int x = 0; x < Width; x++)
+                {
+                    if (matrix[x, y] == PATH) list.Add(new Pos(x, y));
+                }
             }
 
-            var mat = (Terrain[,])Matrix.Clone();
-            var stack = new Stack<(IDirection, Pos)>();
-
-            stack.Push((new North(), startPos));
-
-            while (stack.Count > 0)
-            {
-                (IDirection dir, Pos pos) = stack.Pop();
-
-                Pos forward = dir.GetForward(pos);
-                Pos right = dir.GetRight(pos);
-                Pos left = dir.GetLeft(pos);
-
-                Terrain ft = IsOutWall(forward) ? Terrain.Wall : mat[forward.x, forward.y];
-                Terrain lt = IsOutWall(left) ? Terrain.Wall : mat[left.x, left.y];
-                Terrain rt = IsOutWall(right) ? Terrain.Wall : mat[right.x, right.y];
-
-                int count = stack.Count;
-
-                if (IsPassable(ft)) stack.Push((dir, forward));
-                if (IsPassable(lt)) stack.Push((dir.Left, left));
-                if (IsPassable(rt)) stack.Push((dir.Right, right));
-
-                if (stack.Count == count) deadEndPos[pos] = dir.Backward;
-
-                mat[pos.x, pos.y] = Terrain.Wall;
-            }
-
-            return this;
+            return list.ToArray();
         }
 
-        public bool IsPassable(Terrain terrain) => terrain == Terrain.Path || terrain == Terrain.Ground;
-        public bool IsOutWall(Pos pos) => IsOutWall(pos.x, pos.y);
-        public bool IsOutWall(int x, int y) => x <= 0 || y <= 0 || x >= Width - 1 || y >= Height - 1;
+        public Dictionary<Pos, IDirection> SearchDeadEnds()
+        {
+            var deadEndPos = new Dictionary<Pos, IDirection>();
+
+            GetPaths().ForEach(pos =>
+            {
+                var list = new List<IDirection>();
+
+                if (matrix[pos.x, pos.y - 1] != WALL) list.Add(Direction.north);
+                if (matrix[pos.x, pos.y + 1] != WALL) list.Add(Direction.south);
+                if (matrix[pos.x - 1, pos.y] != WALL) list.Add(Direction.west);
+                if (matrix[pos.x + 1, pos.y] != WALL) list.Add(Direction.east);
+
+                if (list.Count == 1) deadEndPos.Add(pos, list[0]);
+            });
+
+            return deadEndPos;
+        }
 
         public MazeCreator CreateRooms()
         {
@@ -958,7 +948,6 @@ public class MapManager
             {
                 for (int j = pos.y + 1; j < pos.y + h; j++)
                 {
-                    deadEndPos.Remove(new Pos(i, j));
                     Matrix[i, j] = Terrain.Ground;
                 }
             }
