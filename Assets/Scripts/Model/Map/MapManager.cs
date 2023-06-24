@@ -77,21 +77,21 @@ public class MapManager
 
 #endif
 
+    // Create maze
     public MapManager(int floor, int width = 49, int height = 49)
     {
         this.floor = floor;
         this.width = width;
         this.height = height;
 
-        dirMap = new Dir[width, height];
+        var maze = new MazeCreator(width, height);
+        var dirMapData = new DirMapData(maze.matrix, width, height);
 
-        var maze = new MazeCreator(width, height, new Random());
+        matrix = dirMapData.matrix;
+        dirMap = dirMapData.dirMap;
 
-        matrix = maze.Matrix.Clone() as Terrain[,];
-        deadEndPos = new Dictionary<Pos, IDirection>(maze.SearchDeadEnds());
+        deadEndPos = dirMapData.SearchDeadEnds();
         roomCenterPos = new List<Pos>(maze.roomCenterPos);
-
-        CreateDirMap();
 
         SetDownStairs(floor);
         SetUpStairsOrStartDoor(floor);
@@ -101,6 +101,7 @@ public class MapManager
         SetPitAndMessageBoards(floor);
     }
 
+    // Load from MapData
     public MapManager(int floor, DataStoreAgent.MapData mapData)
     {
         var matrix = mapData.mapMatrix;
@@ -114,19 +115,13 @@ public class MapManager
         this.stairsBottom = mapData.stairsBottom.Convert();
         this.stairsTop = mapData.stairsTop.Convert();
 
-        this.matrix = new Terrain[width, height];
-        this.dirMap = new Dir[width, height];
+        var dirMapData = new DirMapData(mapData);
 
-        for (int j = 0; j < height; j++)
-        {
-            for (int i = 0; i < width; i++)
-            {
-                this.matrix[i, j] = Util.ConvertTo<Terrain>(matrix[i + j * width]);
-                this.dirMap[i, j] = Util.ConvertTo<Dir>(dirMap[i + j * width]);
-            }
-        }
+        this.matrix = dirMapData.matrix;
+        this.dirMap = dirMapData.dirMap;
     }
 
+    // Custom map data with custom deadEndPos.
     public MapManager(
         int floor,
         int[] matrix,
@@ -172,8 +167,8 @@ public class MapManager
             }
         }
 
-        this.dirMap = new Dir[width, height];
-        CreateDirMap();
+        var dirMapData = new DirMapData(matrix, this.matrix, width);
+        this.dirMap = dirMapData.dirMap;
 
         // deadEndPos is set by user
         if (deadEndPos != null)
@@ -184,7 +179,7 @@ public class MapManager
         }
         else
         {
-            this.deadEndPos = new MazeCreator(matrix, width).SearchDeadEnds();
+            this.deadEndPos = dirMapData.SearchDeadEnds();
             SetDownStairs(floor);
             SetUpStairsOrStartDoor(floor);
             this.deadEndPos = this.deadEndPos.Shuffle();
@@ -605,39 +600,10 @@ public class MapManager
         return false;
     }
 
-    /// <summary>
-    /// matrix[,] must be set before call this.
-    /// </summary>
-    private void CreateDirMap()
-    {
-        // Set direction to door and wall
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                // Skip pillar or gate
-                if (IsGridPoint(x, y)) continue;
-
-                dirMap[x, y] = GetNonGridPointDir(x, y);
-            }
-        }
-
-        // Set pillar or gate
-        for (int y = 0; y < height; y += 2)
-        {
-            for (int x = 0; x < width; x += 2)
-            {
-                dirMap[x, y] = GetGridPointDir(x, y);
-            }
-        }
-    }
-
     public Dir CreateDir(int x, int y, Terrain terrain)
         => IsGridPoint(x, y) ? GetGridPointDir(x, y, terrain) : GetNonGridPointDir(x, y, terrain);
 
     private bool IsGridPoint(int x, int y) => x % 2 == 0 && y % 2 == 0;
-
-    private Dir GetNonGridPointDir(int x, int y) => GetNonGridPointDir(x, y, matrix[x, y]);
 
     private Dir GetNonGridPointDir(int x, int y, Terrain terrain)
     {
@@ -660,8 +626,6 @@ public class MapManager
 
         return GetWallDir(x, y);
     }
-
-    private Dir GetGridPointDir(int x, int y) => GetGridPointDir(x, y, matrix[x, y]);
 
     private Dir GetGridPointDir(int x, int y, Terrain terrain)
     {

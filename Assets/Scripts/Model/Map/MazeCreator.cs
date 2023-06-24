@@ -4,39 +4,14 @@ using System.Collections.Generic;
 
 public class MazeCreator
 {
-    private readonly int PATH = (int)Terrain.Path;
-    private readonly int GROUND = (int)Terrain.Ground;
-    private readonly int WALL = (int)Terrain.Wall;
-    private readonly int DOOR = (int)Terrain.Door;
+    public static readonly int PATH = (int)Terrain.Path;
+    public static readonly int GROUND = (int)Terrain.Ground;
+    public static readonly int WALL = (int)Terrain.Wall;
+    public static readonly int DOOR = (int)Terrain.Door;
 
-    private int[,] matrix;
-    public int[] CopyMapData()
-    {
-        int[] ret = new int[Width * Height];
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                ret[x + y * Width] = matrix[x, y];
-            }
-        }
-        return ret;
-    }
+    public int[,] matrix { get; protected set; }
 
     public Terrain[,] Matrix { get; protected set; }
-
-    private void SetTerrainData(int[] mapData)
-    {
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                int data = mapData[x + y * Width];
-                matrix[x, y] = data;
-                Matrix[x, y] = Util.ConvertTo<Terrain>(data);
-            }
-        }
-    }
 
     private void SetTerrainData(int[,] matrix)
     {
@@ -73,14 +48,6 @@ public class MazeCreator
         SetTerrainData(matrix);
 
         this.matrix = matrix;
-    }
-
-    public MazeCreator(int[] mapData, int width = 49)
-    {
-        this.Width = width;
-        this.Height = mapData.Length / width;
-
-        SetTerrainData(mapData);
     }
 
     private int[,] CreateMaze(int width, int height)
@@ -283,4 +250,21 @@ public class MazeCreator
         // Room center position
         return pos + new Pos(w / 2, h / 2);
     }
+
+#if UNITY_EDITOR
+    public void DebugMatrix()
+    {
+        var str = new System.Text.StringBuilder();
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                str.Append(matrix[x, y]);
+            }
+            str.Append("\n");
+        }
+
+        UnityEngine.Debug.Log(str);
+    }
+#endif
 }

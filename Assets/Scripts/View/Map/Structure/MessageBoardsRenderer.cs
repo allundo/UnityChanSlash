@@ -6,6 +6,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 {
     private Dictionary<Terrain, GameObject> prefabMessageN = new Dictionary<Terrain, GameObject>();
     private FloorMessagesSource floorMessages;
+    private SecretMessagesDataAsset secretMessages;
     private Stack<int> randomIndices;
 
     public MessageBoardsRenderer(Transform parent) : base(parent)
@@ -19,6 +20,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
     {
         this.map = map;
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(map.floor - 1);
+        secretMessages = ResourceLoader.Instance.secretMessagesData;
         randomIndices = null;
     }
 
@@ -80,6 +82,16 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
     }
 
     private int GetRandomIndex()
+    {
+        if (randomIndices == null || randomIndices.Count == 0)
+        {
+            randomIndices = Enumerable.Range(0, floorMessages.randomMessages.Length).Shuffle().ToStack();
+        }
+
+        return randomIndices.Pop();
+    }
+
+    private int GetRandomSecretIndex()
     {
         if (randomIndices == null || randomIndices.Count == 0)
         {
