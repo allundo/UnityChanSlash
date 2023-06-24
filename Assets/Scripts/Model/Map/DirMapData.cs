@@ -1,22 +1,15 @@
-using System.Collections.Generic;
-
-public class DirMapData
+public class DirMapData : BaseMapData<Terrain>
 {
-    public Terrain[,] matrix { get; private set; }
     public Dir[,] dirMap { get; private set; }
-    private RawMapData rawMapData;
+    public RawMapData rawMapData { get; private set; }
 
-    public DirMapData(int[] customMapData, Terrain[,] matrix, int width)
+    public DirMapData(int[] customMapData, Terrain[,] matrix, int width) : base(matrix, width, customMapData.Length / width)
     {
-        int height = customMapData.Length / width;
-
         rawMapData = RawMapData.Convert(customMapData, width);
-        this.matrix = matrix;
-
         dirMap = CreateDirMap(width, height);
     }
 
-    public DirMapData(int[,] rawMapMatrix, int width, int height)
+    public DirMapData(int[,] rawMapMatrix, int width, int height) : base(null, width, height)
     {
         rawMapData = new RawMapData(rawMapMatrix, width, height);
         matrix = new Terrain[width, height];
@@ -32,11 +25,8 @@ public class DirMapData
         dirMap = CreateDirMap(width, height);
     }
 
-    public DirMapData(DataStoreAgent.MapData mapData)
+    public DirMapData(DataStoreAgent.MapData mapData) : base(null, mapData.mapSize, mapData.mapMatrix.Length / mapData.mapSize)
     {
-        int width = mapData.mapSize;
-        int height = mapData.mapMatrix.Length / width;
-
         rawMapData = RawMapData.Convert(mapData.mapMatrix, width);
 
         matrix = new Terrain[width, height];
@@ -50,6 +40,32 @@ public class DirMapData
                 dirMap[i, j] = Util.ConvertTo<Dir>(mapData.dirMap[i + j * width]);
             }
         }
+    }
+
+    public int[] ConvertMapData()
+    {
+        var ret = new int[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                ret[x + y * width] = (int)matrix[x, y];
+            }
+        }
+        return ret;
+    }
+
+    public int[] ConvertDirData()
+    {
+        var ret = new int[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                ret[x + y * width] = (int)dirMap[x, y];
+            }
+        }
+        return ret;
     }
 
     private Dir[,] CreateDirMap(int width, int height)
@@ -68,7 +84,18 @@ public class DirMapData
         return ret;
     }
 
-    public Dictionary<Pos, IDirection> SearchDeadEnds() => rawMapData.SearchDeadEnds();
+    public void SetBloodMessageToNormal(Pos pos)
+    {
+        switch (matrix[pos.x, pos.y])
+        {
+            case Terrain.BloodMessageWall:
+                matrix[pos.x, pos.y] = Terrain.MessageWall;
+                break;
+            case Terrain.BloodMessagePillar:
+                matrix[pos.x, pos.y] = Terrain.MessagePillar;
+                break;
+        }
+    }
 
     public Dir CreateDir(int x, int y, Terrain terrain)
         => IsGridPoint(x, y) ? GetGridPointDir(x, y, terrain) : GetNonGridPointDir(x, y, terrain);
@@ -124,4 +151,7 @@ public class DirMapData
 
         return rawMapData.GetWallDir(x, y);
     }
+
+    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar) | GetDir(x, y, Terrain.BloodMessagePillar);
+    private Dir GetDir(int x, int y, Terrain type) => GetDir(x, y, type, Terrain.Ground);
 }

@@ -30,52 +30,9 @@ public class MapManager
 
     private bool IsDownstairsSet => !stairsTop.Key.IsNull;
 
+    public DirMapData dirMapData { get; protected set; }
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
-
-    public int[] GetMapData()
-    {
-        var ret = new int[width * height];
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                ret[x + y * width] = (int)matrix[x, y];
-            }
-        }
-        return ret;
-    }
-
-    public int[] GetDirData()
-    {
-        var ret = new int[width * height];
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                ret[x + y * width] = (int)dirMap[x, y];
-            }
-        }
-        return ret;
-    }
-
-#if UNITY_EDITOR
-    public void DebugMatrix()
-    {
-        var str = new System.Text.StringBuilder();
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                str.Append((int)matrix[x, y]);
-            }
-            str.Append("\n");
-        }
-
-        UnityEngine.Debug.Log(str);
-    }
-
-#endif
 
     // Create maze
     public MapManager(int floor, int width = 49, int height = 49)
@@ -85,12 +42,11 @@ public class MapManager
         this.height = height;
 
         var maze = new MazeCreator(width, height);
-        var dirMapData = new DirMapData(maze.matrix, width, height);
-
+        dirMapData = new DirMapData(maze.matrix, width, height);
         matrix = dirMapData.matrix;
         dirMap = dirMapData.dirMap;
 
-        deadEndPos = dirMapData.SearchDeadEnds();
+        deadEndPos = dirMapData.rawMapData.SearchDeadEnds();
         roomCenterPos = new List<Pos>(maze.roomCenterPos);
 
         SetDownStairs(floor);
@@ -104,19 +60,15 @@ public class MapManager
     // Load from MapData
     public MapManager(int floor, DataStoreAgent.MapData mapData)
     {
-        var matrix = mapData.mapMatrix;
-        var dirMap = mapData.dirMap;
-
         this.floor = floor;
         this.width = mapData.mapSize;
-        this.height = matrix.Length / width;
+        this.height = mapData.mapMatrix.Length / width;
         this.roomCenterPos = mapData.roomCenterPos.ToList();
         this.deadEndPos = new Dictionary<Pos, IDirection>();
         this.stairsBottom = mapData.stairsBottom.Convert();
         this.stairsTop = mapData.stairsTop.Convert();
 
-        var dirMapData = new DirMapData(mapData);
-
+        this.dirMapData = new DirMapData(mapData);
         this.matrix = dirMapData.matrix;
         this.dirMap = dirMapData.dirMap;
     }
@@ -124,7 +76,7 @@ public class MapManager
     // Custom map data with custom deadEndPos.
     public MapManager(
         int floor,
-        int[] matrix,
+        int[] importMapData,
         int width,
         Dictionary<Pos, IDirection> deadEndPos = null,
         Dictionary<Pos, IDirection> fixedMessagePos = null,
@@ -133,7 +85,7 @@ public class MapManager
     {
         this.floor = floor;
         this.width = width;
-        this.height = matrix.Length / width;
+        this.height = importMapData.Length / width;
         this.roomCenterPos = new List<Pos>();
 
         this.matrix = new Terrain[width, height];
@@ -145,13 +97,13 @@ public class MapManager
         {
             for (int i = 0; i < width; i++)
             {
-                this.matrix[i, j] = Util.ConvertTo<Terrain>(matrix[i + j * width]);
+                matrix[i, j] = Util.ConvertTo<Terrain>(importMapData[i + j * width]);
 
-                switch (this.matrix[i, j])
+                switch (matrix[i, j])
                 {
                     case Terrain.RoomCenter:
                         this.roomCenterPos.Add(new Pos(i, j));
-                        this.matrix[i, j] = Terrain.Ground;
+                        matrix[i, j] = Terrain.Ground;
                         continue;
 
                     case Terrain.MessageWall:
@@ -167,7 +119,7 @@ public class MapManager
             }
         }
 
-        var dirMapData = new DirMapData(matrix, this.matrix, width);
+        this.dirMapData = new DirMapData(importMapData, matrix, width);
         this.dirMap = dirMapData.dirMap;
 
         // deadEndPos is set by user
@@ -179,7 +131,7 @@ public class MapManager
         }
         else
         {
-            this.deadEndPos = dirMapData.SearchDeadEnds();
+            this.deadEndPos = dirMapData.rawMapData.SearchDeadEnds();
             SetDownStairs(floor);
             SetUpStairsOrStartDoor(floor);
             this.deadEndPos = this.deadEndPos.Shuffle();
@@ -212,11 +164,7 @@ public class MapManager
             bloodMessageBuffer.RemoveRange(bloodCount - bloodOverCount, bloodOverCount);
 
             // Convert surplus blood messages to random messages.
-            bloodOver.ForEach(pos => this.matrix[pos.x, pos.y] =
-                this.matrix[pos.x, pos.y] == Terrain.BloodMessageWall
-                    ? Terrain.MessageWall
-                    : Terrain.MessagePillar
-            );
+            bloodOver.ForEach(pos => dirMapData.SetBloodMessageToNormal(pos));
         }
 
         this.bloodMessagePos.AddRange(bloodMessageBuffer);
@@ -229,7 +177,6 @@ public class MapManager
     }
     private MapManager SetDownStairs() => SetDownStairs(deadEndPos.First().Key);
     private MapManager SetDownStairs(Pos pos) => SetDownStairs(pos, GetDownStairsDir);
-    private MapManager SetDownStairs(Pos pos, IDirection dir) => SetDownStairs(pos, _ => dir);
     private MapManager SetDownStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         if (IsDownstairsSet) return this;
@@ -258,7 +205,6 @@ public class MapManager
 
     private MapManager SetStartDoor() => SetStartDoor(GetStartPos());
     private MapManager SetStartDoor(Pos pos) => SetStartDoor(pos, GetUpStairsDir);
-    private MapManager SetStartDoor(Pos pos, IDirection dir) => SetStartDoor(pos, _ => dir);
     private MapManager SetStartDoor(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         if (!stairsBottom.Key.IsNull) return this;
@@ -269,7 +215,7 @@ public class MapManager
 
         // Don't set door in front of player start position
         Pos front = dir.GetForward(pos);
-        matrix[front.x, front.y] = Terrain.Ground;
+        dirMapData.matrix[front.x, front.y] = Terrain.Ground;
 
         if (IsAroundWall(doorPos = dir.GetLeft(pos)))
         {
@@ -289,7 +235,7 @@ public class MapManager
         else
         {
 #if UNITY_EDITOR
-            DebugMatrix();
+            dirMapData.rawMapData.DebugMatrix();
 #endif
             throw new Exception("Position: (" + pos.x + ", " + pos.y + ") isn't suitable to start.");
         }
@@ -357,7 +303,6 @@ public class MapManager
     }
     private MapManager SetUpStairs() => SetUpStairs(GetUpStairsPos());
     public MapManager SetUpStairs(Pos pos) => SetUpStairs(pos, GetUpStairsDir);
-    private MapManager SetUpStairs(Pos pos, IDirection dir) => SetUpStairs(pos, _ => dir);
     private MapManager SetUpStairs(Pos pos, Func<Pos, IDirection> DirGetter)
     {
         IDirection dir = DirGetter(pos);
@@ -599,99 +544,4 @@ public class MapManager
 
         return false;
     }
-
-    public Dir CreateDir(int x, int y, Terrain terrain)
-        => IsGridPoint(x, y) ? GetGridPointDir(x, y, terrain) : GetNonGridPointDir(x, y, terrain);
-
-    private bool IsGridPoint(int x, int y) => x % 2 == 0 && y % 2 == 0;
-
-    private Dir GetNonGridPointDir(int x, int y, Terrain terrain)
-    {
-        switch (terrain)
-        {
-            case Terrain.Door:
-                return GetGateDir(x, y);
-
-            case Terrain.LockedDoor:
-                return GetValidDir(x, y, IsPath);
-
-            case Terrain.MessageWall:
-            case Terrain.BloodMessageWall:
-            case Terrain.ExitDoor:
-                return GetValidDir(x, y, IsEnterable);
-
-            case Terrain.Box:
-                return GetValidDir(x, y, terrain => IsEnterable(terrain) || terrain == Terrain.Door);
-        }
-
-        return GetWallDir(x, y);
-    }
-
-    private Dir GetGridPointDir(int x, int y, Terrain terrain)
-    {
-        if (terrain == Terrain.MessagePillar || terrain == Terrain.BloodMessagePillar || terrain == Terrain.Box)
-        {
-            return GetValidDir(x, y, IsEnterable);
-        }
-
-        Dir doorDir = GetDoorDir(x, y);
-
-        // Leave it as is if strait wall or room ground
-        if (doorDir == Dir.NONE)
-        {
-            Dir wallDir = GetWallDir(x, y);
-            if (wallDir == Dir.NS || wallDir == Dir.EW || wallDir == Dir.NONE)
-            {
-                return wallDir;
-            }
-        }
-
-        // Set gate as wall next to door
-        // Set pillar as corner wall
-        matrix[x, y] = Terrain.Pillar;
-
-        return doorDir;
-    }
-
-    private Dir GetDir(int x, int y, Terrain type)
-    {
-        Dir dir = Dir.NONE;
-
-        Terrain up = (y - 1 < 0) ? Terrain.Ground : matrix[x, y - 1];
-        Terrain left = (x - 1 < 0) ? Terrain.Ground : matrix[x - 1, y];
-        Terrain down = (y + 1 >= height) ? Terrain.Ground : matrix[x, y + 1];
-        Terrain right = (x + 1 >= width) ? Terrain.Ground : matrix[x + 1, y];
-
-        if (up == type) dir |= Dir.N;
-        if (down == type) dir |= Dir.S;
-        if (left == type) dir |= Dir.W;
-        if (right == type) dir |= Dir.E;
-
-        return dir;
-    }
-    public Dir GetDoorDir(int x, int y) => GetDir(x, y, Terrain.Door) | GetDir(x, y, Terrain.LockedDoor) | GetDir(x, y, Terrain.ExitDoor);
-    private Dir GetWallDir(int x, int y) => GetDir(x, y, Terrain.Wall) | GetDir(x, y, Terrain.MessageWall) | GetDir(x, y, Terrain.BloodMessageWall);
-    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar) | GetDir(x, y, Terrain.BloodMessagePillar);
-
-    public Dir GetValidDir(int x, int y) => GetValidDir(x, y, IsEnterable);
-
-    private Dir GetGateDir(int x, int y)
-    {
-        Dir validDir = GetValidDir(x, y);
-        Dir invDir = Direction.Convert(validDir).Backward.Enum;
-        return Dir.NESW ^ validDir ^ invDir;
-    }
-
-    private Dir GetValidDir(int x, int y, Func<Terrain, bool> validChecker)
-    {
-        if (y > 0 && validChecker(matrix[x, y - 1])) return Dir.N;
-        if (x > 0 && validChecker(matrix[x - 1, y])) return Dir.W;
-        if (y < height - 2 && validChecker(matrix[x, y + 1])) return Dir.S;
-        if (x < width - 2 && validChecker(matrix[x + 1, y])) return Dir.E;
-
-        return Dir.NONE;
-    }
-
-    private bool IsEnterable(Terrain terrain) => terrain == Terrain.Ground || terrain == Terrain.Path;
-    private bool IsPath(Terrain terrain) => terrain == Terrain.Path;
 }

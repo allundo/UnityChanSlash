@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class RawMapData
+public class RawMapData : BaseMapData<int>
 {
     public static readonly int PATH = MazeCreator.PATH;
     public static readonly int GROUND = MazeCreator.GROUND;
@@ -25,17 +25,10 @@ public class RawMapData
 
     private static int ConvertToRaw(int data) => RAW_DATA_MAP.TryGetValue(data, out data) ? data : GROUND;
 
-    private int width;
-    private int height;
-    private int[,] matrix;
     public int[,] CopyMatrix() => matrix.Clone() as int[,];
 
-    public RawMapData(int[,] matrix, int width, int height)
-    {
-        this.matrix = matrix;
-        this.width = width;
-        this.height = height;
-    }
+    public RawMapData(int[,] matrix, int width, int height) : base(matrix, width, height)
+    { }
 
     public static RawMapData Convert(int[] mapData, int width)
     {
@@ -85,22 +78,8 @@ public class RawMapData
 
         return deadEndPos;
     }
-    public Dir GetDir(int x, int y, int terrainID)
-    {
-        Dir dir = Dir.NONE;
 
-        int up = (y - 1 < 0) ? -1 : matrix[x, y - 1];
-        int left = (x - 1 < 0) ? -1 : matrix[x - 1, y];
-        int down = (y + 1 >= height) ? -1 : matrix[x, y + 1];
-        int right = (x + 1 >= width) ? -1 : matrix[x + 1, y];
-
-        if (up == terrainID) dir |= Dir.N;
-        if (down == terrainID) dir |= Dir.S;
-        if (left == terrainID) dir |= Dir.W;
-        if (right == terrainID) dir |= Dir.E;
-
-        return dir;
-    }
+    public Dir GetDir(int x, int y, int terrainID) => GetDir(x, y, terrainID, -1);
 
     public Dir GetValidDir(int x, int y, Func<int, bool> validChecker)
     {
@@ -128,4 +107,21 @@ public class RawMapData
         => GetValidDir(x, y, terrainID => terrainID == PATH);
     public Dir GetNotWallDir(int x, int y)
         => GetValidDir(x, y, terrainID => terrainID != WALL);
+
+#if UNITY_EDITOR
+    public void DebugMatrix()
+    {
+        var str = new System.Text.StringBuilder();
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                str.Append(matrix[x, y]);
+            }
+            str.Append("\n");
+        }
+
+        UnityEngine.Debug.Log(str);
+    }
+#endif
 }

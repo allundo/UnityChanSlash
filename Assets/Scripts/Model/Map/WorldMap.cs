@@ -25,15 +25,16 @@ public class WorldMap
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
+    private DirMapData dirMapData;
+    private RawMapData rawMapData;
     private MapManager map;
-    public Terrain[,] CloneMatrix() => map.matrix.Clone() as Terrain[,];
-    public Dir[,] CloneDirMap() => map.dirMap.Clone() as Dir[,];
-    public int[] GetMapMatrix() => map.GetMapData();
-    public int[] GetDirData() => map.GetDirData();
+    public Terrain[,] CloneMatrix() => dirMapData.matrix.Clone() as Terrain[,];
+    public Dir[,] CloneDirMap() => dirMapData.dirMap.Clone() as Dir[,];
+    public int[] ConvertMapData() => dirMapData.ConvertMapData();
+    public int[] ConvertDirData() => dirMapData.ConvertDirData();
 
-    public Dir GetDoorDir(int x, int y) => map.GetDoorDir(x, y);
-    public Dir GetPillarDir(int x, int y) => map.GetPillarDir(x, y);
-    public Dir GetValidDir(int x, int y) => map.GetValidDir(x, y);
+    public Dir GetDoorDir(int x, int y) => rawMapData.GetDoorDir(x, y);
+    public Dir GetPillarDir(int x, int y) => dirMapData.GetPillarDir(x, y);
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
@@ -204,6 +205,10 @@ public class WorldMap
     public int Width { get; protected set; } = 49;
     public int Height { get; protected set; } = 49;
 
+    // Create new map data
+    public WorldMap(int floor = 1, int width = 49, int height = 49) : this(new MapManager(floor, width, height))
+    { }
+
     public WorldMap(MapManager map)
     {
         this.map = map;
@@ -222,6 +227,9 @@ public class WorldMap
 
         Width = map.width;
         Height = map.height;
+
+        dirMapData = map.dirMapData;
+        rawMapData = dirMapData.rawMapData;
 
         tileInfo = new ITile[Width, Height];
 
@@ -283,7 +291,7 @@ public class WorldMap
 
     public Dir SetTerrain(int x, int y, Terrain terrain)
     {
-        Dir dir = map.CreateDir(x, y, terrain);
+        Dir dir = dirMapData.CreateDir(x, y, terrain);
 
         map.matrix[x, y] = terrain;
         map.dirMap[x, y] = dir;
@@ -300,8 +308,7 @@ public class WorldMap
         return dir;
     }
 
-    public WorldMap(int floor = 1, int w = 49, int h = 49) : this(new MapManager(floor, w, h))
-    { }
+
 
     public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
     public Vector3 WorldPos(int x, int y) => new Vector3((0.5f + x - Width * 0.5f) * TILE_UNIT, 0.0f, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
