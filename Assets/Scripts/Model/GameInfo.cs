@@ -143,11 +143,11 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         int[] matrix =
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
+            2,11, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
             2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            23, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            5, 1,22, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            5, 1,22, 1, 4,10, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -161,7 +161,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         var deadEnds = new Dictionary<Pos, IDirection>()
         {
-            { new Pos( 5, 5),    Direction.west  },
             { new Pos( 3, 1),    Direction.north },
             { new Pos( 4, 1),    Direction.north },
             { new Pos( 5, 1),    Direction.north },
@@ -187,21 +186,21 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(11, 5),    Direction.north },
             { new Pos( 1, 3),    Direction.north },
             { new Pos( 1, 5),    Direction.north },
-            { new Pos(13, 13),  Direction.north },
-            { new Pos( 1, 1),    Direction.south },
+            { new Pos(13, 13),   Direction.north },
         };
 
         var fixedMessagePos = new Dictionary<Pos, IDirection>() { { new Pos(0, 2), Direction.east } };
 
-        maps[MAX_FLOOR] = new WorldMap(new MapManager(2, matrix, 15, deadEnds, fixedMessagePos));
+        // Create map from custom map data
+        maps[MAX_FLOOR] = new WorldMap(new MapManager(new CustomMapData(2, matrix, 15, deadEnds, fixedMessagePos)));
     }
 
-    private int[] FinalMapMatrix()
+    private CustomMapData FinalMap()
     {
-        return new[]
+        var matrix = new int[]
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 2, 1, 1,21, 2,21, 1, 1, 1,21, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 1, 1, 1, 2, 0, 2,
+            2,11, 2, 1, 1,21, 2,21, 1, 1, 1,21, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 1, 1, 1, 2, 0, 2,
             2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 4, 2, 4, 2, 2, 2, 0, 2, 1,21, 1, 2, 0, 2,
             2, 1, 1, 1, 1, 1, 4, 1, 1,21, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 4, 1, 1, 1, 4, 0, 2,
             2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1,21, 1, 2, 1,21, 1, 2, 0, 2, 2, 2, 2, 2, 2, 2,
@@ -230,10 +229,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2,21, 1, 1, 1,21, 1, 1, 1,21, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         };
-    }
 
-    private Dictionary<Pos, IDirection> FinalMapDeadEnds()
-    {
         var randomPos = new Dictionary<Pos, IDirection>()
         {
             { new Pos(19,  1), Direction.west  },
@@ -243,7 +239,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         }
         .OrderBy(pos => Guid.NewGuid()).ToArray();
 
-        return new Dictionary<Pos, IDirection>()
+        var deadEndPos = new Dictionary<Pos, IDirection>()
         {
             { new Pos(16, 12),  Direction.north     },
             { new Pos(16, 16),  Direction.north     },
@@ -266,25 +262,20 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(16, 14),  Direction.north     }, // Coin
             { new Pos(14, 16),  Direction.north     }, // Coin
             { new Pos(14, 14),  Direction.north     }, // KeyBlade
-            { new Pos( 1,  1),  Direction.south     }, // up stairs
         };
-    }
 
-    private Dictionary<Pos, IDirection> FinalMapFixedMessagePos()
-    {
-        return new Dictionary<Pos, IDirection>()
+        var fixedMes = new Dictionary<Pos, IDirection>()
         {
             { new Pos(12, 10), Direction.north},
             { new Pos(22,  7), Direction.west },
         };
-    }
 
-    private Dictionary<Pos, IDirection> FinalMapBloodMessagePos()
-    {
-        return new Dictionary<Pos, IDirection>()
+        var bloodMes = new Dictionary<Pos, IDirection>()
         {
             { new Pos(23, 8), Direction.south },
-       };
+        };
+
+        return new CustomMapData(LastFloor, matrix, 29, deadEndPos, fixedMes, bloodMes);
     }
 
     public void ClearMaps()
@@ -297,7 +288,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[1] = 31;
         mapSize[LastFloor - 1] = 29;
 
-        maps[LastFloor - 1] = new WorldMap(new MapManager(LastFloor, FinalMapMatrix(), 29, FinalMapDeadEnds(), FinalMapFixedMessagePos(), FinalMapBloodMessagePos()));
+        // Create map from custom map data
+        maps[LastFloor - 1] = new WorldMap(new MapManager(FinalMap()));
     }
 
     public void InitData(bool clearMaps = true)
@@ -346,18 +338,18 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
             if (mapData != null)
             {
+                // Create map from custom import data
                 maps[i] = new WorldMap(new MapManager(i + 1, mapData));
                 maps[i].ImportMapData(mapData);
             }
             else if (i + 1 == currentFloor)
             {
                 var map = Map(currentFloor);
-                import.playerData.kvPosDir = map.StairsBottom;
+                import.playerData.kvPosDir = map.stairsBottom;
             }
         }
 
         WorldMap.isExitDoorLocked = import.isExitDoorLocked;
-        WorldMap.exitDoorPos = import.exitDoorPos;
 
         readIDs = infoRecord.readMessageIDs.ToHashSet();
         secretLevel = infoRecord.secretLevel;

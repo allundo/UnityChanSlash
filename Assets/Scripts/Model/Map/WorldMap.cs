@@ -21,10 +21,10 @@ public class WorldMap
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
     public static bool isExitDoorLocked = true;
-    public static Pos exitDoorPos = new Pos();
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
+    private StairsPlacer stairsPlacer;
     private DirMapData dirMapData;
     private RawMapData rawMapData;
     private MapManager map;
@@ -39,13 +39,11 @@ public class WorldMap
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
-    public void Unlock(Pos pos)
-    {
-        if (map.matrix[pos.x, pos.y] == Terrain.LockedDoor)
-        {
-            map.matrix[pos.x, pos.y] = Terrain.Door;
-        }
-    }
+    public bool Unlock(Pos pos) => dirMapData.Unlock(pos);
+
+    public Pos UpStairs => stairsPlacer.upStairs;
+    public Pos DownStairs => stairsPlacer.downStairs;
+    public Pos ExitDoor => stairsPlacer.exitDoor;
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {
@@ -94,7 +92,8 @@ public class WorldMap
 
         if (floor == 1 && !isExitDoorLocked)
         {
-            var exitDoor = (tileInfo[exitDoorPos.x, exitDoorPos.y] as ExitDoor);
+            Pos pos = stairsPlacer.exitDoor;
+            var exitDoor = (tileInfo[pos.x, pos.y] as ExitDoor);
             if (!exitDoor.IsOpen) exitDoor.Unlock();
         }
     }
@@ -105,7 +104,8 @@ public class WorldMap
 
         if (floor == 1)
         {
-            isExitDoorLocked = (tileInfo[exitDoorPos.x, exitDoorPos.y] as ExitDoor).IsLocked;
+            Pos pos = stairsPlacer.exitDoor;
+            isExitDoorLocked = (tileInfo[pos.x, pos.y] as ExitDoor).IsLocked;
         }
     }
 
@@ -215,21 +215,20 @@ public class WorldMap
 
         floor = map.floor;
 
-        if (floor == 1) exitDoorPos = map.doorPos;
+        stairsPlacer = map.stairsPlacer;
+        dirMapData = stairsPlacer.dirMapData;
+        rawMapData = dirMapData.rawMapData;
 
-        stairsBottom = map.stairsBottom;
+        stairsBottom = new KeyValuePair<Pos, IDirection>(stairsPlacer.StairsBottom, stairsPlacer.UpStairsDir);
+        stairsTop = new KeyValuePair<Pos, IDirection>(stairsPlacer.StairsTop, stairsPlacer.DownStairsDir);
 
-        stairsTop = map.stairsTop;
-        deadEndPos = new Dictionary<Pos, IDirection>(this.map.deadEndPos);
+        deadEndPos = new Dictionary<Pos, IDirection>(stairsPlacer.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
         fixedMessagePos = new List<Pos>(this.map.fixedMessagePos);
         bloodMessagePos = new List<Pos>(this.map.bloodMessagePos);
 
         Width = map.width;
         Height = map.height;
-
-        dirMapData = map.dirMapData;
-        rawMapData = dirMapData.rawMapData;
 
         tileInfo = new ITile[Width, Height];
 
@@ -291,10 +290,7 @@ public class WorldMap
 
     public Dir SetTerrain(int x, int y, Terrain terrain)
     {
-        Dir dir = dirMapData.CreateDir(x, y, terrain);
-
-        map.matrix[x, y] = terrain;
-        map.dirMap[x, y] = dir;
+        Dir dir = dirMapData.SetTerrain(x, y, terrain);
 
         var pixels = texMap.GetPixels();
 
@@ -307,8 +303,6 @@ public class WorldMap
 
         return dir;
     }
-
-
 
     public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
     public Vector3 WorldPos(int x, int y) => new Vector3((0.5f + x - Width * 0.5f) * TILE_UNIT, 0.0f, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
@@ -411,29 +405,7 @@ public class WorldMap
         return pixels;
     }
 
-    public KeyValuePair<Pos, IDirection> StairsBottom
-    {
-        get
-        {
-            if (!stairsBottom.Key.IsNull) return stairsBottom;
-
-            for (int j = 1; j < Height - 1; j++)
-            {
-                for (int i = 1; i < Width - 1; i++)
-                {
-                    if (tileInfo[i, j] is Ground)
-                    {
-                        stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(i, j), null);
-                        return stairsBottom;
-                    }
-                }
-            }
-
-            return stairsBottom;
-        }
-        set { stairsBottom = value; }
-    }
-    private KeyValuePair<Pos, IDirection> stairsBottom = new KeyValuePair<Pos, IDirection>(new Pos(), null);
+    public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
 
     public KeyValuePair<Pos, IDirection> StairsEnter(bool isDownStairs) => isDownStairs ? stairsTop : stairsBottom;

@@ -59,7 +59,7 @@ public class DataIOTest
         dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
 
         var floor1Map = new WorldMap();
-        var stairsBottom = floor1Map.StairsBottom;
+        var stairsBottom = floor1Map.stairsBottom;
         var stairsTop = floor1Map.stairsTop;
 
         var counter = new PlayerCounter();
@@ -141,10 +141,8 @@ public class DataIOTest
         Assert.AreEqual(ItemType.Null, loadData.inventoryItems[2].itemType);
         Assert.AreEqual(0, loadData.inventoryItems[4].numOfItem);
 
-        Assert.AreEqual(stairsBottom, map.StairsBottom);
+        Assert.AreEqual(stairsBottom, map.stairsBottom);
         Assert.AreEqual(stairsTop, map.stairsTop);
-        Assert.AreEqual(mapData.stairsBottom.Convert(), map.StairsBottom);
-        Assert.AreEqual(mapData.stairsTop.Convert(), map.stairsTop);
 
         Assert.AreEqual(1, loadData.playerData.counter.Defeat);
         Assert.AreEqual(3, loadData.playerData.counter.AttackPoint);

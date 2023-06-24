@@ -3,9 +3,9 @@ public class DirMapData : BaseMapData<Terrain>
     public Dir[,] dirMap { get; private set; }
     public RawMapData rawMapData { get; private set; }
 
-    public DirMapData(int[] customMapData, Terrain[,] matrix, int width) : base(matrix, width, customMapData.Length / width)
+    public DirMapData(CustomMapData data) : base(data.matrix, data.width, data.height)
     {
-        rawMapData = RawMapData.Convert(customMapData, width);
+        rawMapData = data.rawMapData;
         dirMap = CreateDirMap(width, height);
     }
 
@@ -97,7 +97,26 @@ public class DirMapData : BaseMapData<Terrain>
         }
     }
 
-    public Dir CreateDir(int x, int y, Terrain terrain)
+    public Dir SetTerrain(int x, int y, Terrain terrain)
+    {
+        var dir = CreateDir(x, y, terrain);
+        matrix[x, y] = terrain;
+        dirMap[x, y] = dir;
+        return dir;
+    }
+
+    public bool Unlock(Pos pos)
+    {
+        if (matrix[pos.x, pos.y] == Terrain.LockedDoor)
+        {
+            matrix[pos.x, pos.y] = Terrain.Door;
+            return true;
+        }
+
+        return false;
+    }
+
+    private Dir CreateDir(int x, int y, Terrain terrain)
         => IsGridPoint(x, y) ? GetGridPointDir(x, y, terrain) : GetNonGridPointDir(x, y, terrain);
 
     private bool IsGridPoint(int x, int y) => x % 2 == 0 && y % 2 == 0;
@@ -140,12 +159,12 @@ public class DirMapData : BaseMapData<Terrain>
 
             case Terrain.MessageWall:
             case Terrain.BloodMessageWall:
-            case Terrain.UpStairs:
-            case Terrain.DownStairs:
             case Terrain.ExitDoor:
                 return rawMapData.GetValidDir(x, y);
 
             case Terrain.Box:
+            case Terrain.UpStairs:
+            case Terrain.DownStairs:
                 return rawMapData.GetNotWallDir(x, y);
         }
 

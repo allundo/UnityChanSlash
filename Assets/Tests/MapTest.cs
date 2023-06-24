@@ -32,11 +32,11 @@ public class MapTest
         int[] matrix =
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
+            2,11, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
             6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            20, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
-            5, 1,22, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            5, 1,22, 1, 4,10, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -50,38 +50,36 @@ public class MapTest
 
         var deadEnds = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(5, 5),    Direction.west  },
             { new Pos(1, 3),    Direction.north },
             { new Pos(1, 5),    Direction.north },
             { new Pos(13, 13),  Direction.north },
-            { new Pos(1, 1),    Direction.south },
         };
 
-        var firstDeadEndPos = deadEnds.First();
-        Pos downStairsPos = firstDeadEndPos.Key;
-        IDirection downStairsDir = firstDeadEndPos.Value;
+        Pos downStairsPos = new Pos(5, 5);
+        IDirection downStairsDir = Direction.west;
         Pos inFrontOfDownStairsPos = downStairsDir.GetForward(downStairsPos);
 
         // when
-        MapManager sut1 = new MapManager(1, matrix, 15, deadEnds);
-        MapManager sut5 = new MapManager(5, matrix, 15, deadEnds); // Down stairs isn't set to last floor
+        MapManager sut1 = new MapManager(new CustomMapData(1, matrix, 15, deadEnds));
+        MapManager sut5 = new MapManager(new CustomMapData(5, matrix, 15, deadEnds)); // Down stairs isn't set to last floor
 
         // then
-        Assert.False(sut1.deadEndPos.ContainsKey(downStairsPos));
+        Assert.False(sut1.stairsPlacer.deadEndPos.ContainsKey(downStairsPos));
         Assert.AreEqual(Terrain.DownStairs, sut1.matrix[downStairsPos.x, downStairsPos.y]);
         Assert.AreEqual(downStairsDir.Enum, sut1.dirMap[downStairsPos.x, downStairsPos.y]);
         Assert.AreEqual(Terrain.Ground, sut1.matrix[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
-        Assert.AreEqual(new KeyValuePair<Pos, IDirection>(inFrontOfDownStairsPos, downStairsDir), sut1.stairsTop);
+        Assert.AreEqual(inFrontOfDownStairsPos, sut1.stairsPlacer.StairsTop);
+        Assert.AreEqual(downStairsDir, sut1.stairsPlacer.DownStairsDir);
 
         // then last floor
         Pos itemPlacedPos = downStairsPos;
         Pos inFrontOfItemPlacedPos = inFrontOfDownStairsPos;
 
-        Assert.False(sut5.deadEndPos.ContainsKey(itemPlacedPos));
+        Assert.False(sut5.stairsPlacer.deadEndPos.ContainsKey(itemPlacedPos));
         Assert.AreEqual(Terrain.Path, sut5.matrix[itemPlacedPos.x, itemPlacedPos.y]);
         Assert.AreEqual(Dir.NES, sut5.dirMap[itemPlacedPos.x, itemPlacedPos.y]);
         Assert.AreEqual(Terrain.Door, sut5.matrix[inFrontOfItemPlacedPos.x, inFrontOfItemPlacedPos.y]);
-        Assert.AreEqual(new KeyValuePair<Pos, IDirection>(new Pos(0, 0), null), sut5.stairsTop);
+        Assert.AreEqual(new Pos(), sut5.stairsPlacer.StairsTop);
     }
 
     [Test]
@@ -128,10 +126,10 @@ public class MapTest
         MapManager sut = new MapManager(1, 49, 49);
 
         // then
-        Pos startPos = sut.stairsBottom.Key;
-        IDirection startDir = sut.stairsBottom.Value;
+        Pos startPos = sut.stairsPlacer.StairsBottom;
+        IDirection startDir = sut.stairsPlacer.UpStairsDir;
 
-        Assert.False(sut.deadEndPos.ContainsKey(startPos));
+        Assert.False(sut.stairsPlacer.deadEndPos.ContainsKey(startPos));
 
         Pos posF = startDir.GetForward(startPos);
         Pos posL = startDir.GetLeft(startPos);
@@ -186,7 +184,7 @@ public class MapTest
         // then
         sut.ForEach(sutFloor =>
         {
-            sutFloor.deadEndPos.ForEach(kv =>
+            sutFloor.stairsPlacer.deadEndPos.ForEach(kv =>
             {
                 Pos inFrontOfDeadEnd = kv.Value.GetForward(kv.Key);
                 Assert.AreNotEqual(Terrain.Pit, sutFloor.matrix[inFrontOfDeadEnd.x, inFrontOfDeadEnd.y]);
@@ -271,8 +269,8 @@ public class MapTest
         int numOfBloodMessage5 = src5.bloodMessages.Length;
 
         // when
-        MapManager sut1 = new MapManager(1, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos);
-        MapManager sut5 = new MapManager(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos); // Down stairs isn't set to last floor
+        MapManager sut1 = new MapManager(new CustomMapData(1, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos));
+        MapManager sut5 = new MapManager(new CustomMapData(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
 
         // then
         Assert.AreEqual(numOfFixedMessage1, sut1.fixedMessagePos.Count);

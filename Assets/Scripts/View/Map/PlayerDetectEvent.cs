@@ -59,7 +59,7 @@ public class PlayerDetectFloor : PlayerDetectEvent
     }
 
     protected override bool IsEventValid(WorldMap map) => true;
-    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(map.StairsBottom.Key);
+    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(map.stairsBottom.Key);
 
     protected override IObservable<Unit> EventFunc()
         => input

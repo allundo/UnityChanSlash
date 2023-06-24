@@ -4,8 +4,8 @@ public class BaseMapData<T> where T : IComparable
 {
     public T[,] matrix { get; protected set; }
 
-    protected int width;
-    protected int height;
+    public int width { get; protected set; }
+    public int height { get; protected set; }
 
     public BaseMapData(T[,] matrix, int width, int height)
     {

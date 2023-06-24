@@ -40,7 +40,7 @@ public class PlayerMapUtil : MobMapUtil, IPlayerMapUtil
     public bool IsPitJumpable => IsMovable(dir.GetForward(onTilePos), dir);
 
     public void SetFloorStartPos(WorldMap map, bool isDownStairs = true)
-        => SetStartPos(map, isDownStairs ? map.StairsBottom : map.stairsTop);
+        => SetStartPos(map, isDownStairs ? map.stairsBottom : map.stairsTop);
 
     public void SetStartPos(WorldMap map, KeyValuePair<Pos, IDirection> initPos)
     {

@@ -87,7 +87,6 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int currentEvent = -1;
         public EventData[] eventData = null;
         public MapData[] mapData = null;
-        public Pos exitDoorPos;
         public bool isExitDoorLocked = true;
         public RespawnData[] respawnData = null;
     }
@@ -101,12 +100,6 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             mapSize = map.Width;
             dirMap = map.ConvertDirData();
 
-            var bottom = map.StairsBottom;
-            var top = map.stairsTop;
-
-            if (!bottom.Key.IsNull) stairsBottom = new PosDirPair(bottom);
-            if (!top.Key.IsNull) stairsTop = new PosDirPair(top);
-
             var (open, broken) = map.ExportTileStateData();
             tileOpenData = open.ToArray();
             tileBrokenData = broken.ToArray();
@@ -115,13 +108,15 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             randomMessagePos = map.ExportRandomMessagePos();
             fixedMessagePos = map.fixedMessagePos.ToArray();
             bloodMessagePos = map.bloodMessagePos.ToArray();
+
+            upStairs = map.UpStairs;
+            downStairs = map.DownStairs;
+            exitDoor = map.ExitDoor;
         }
 
         public int[] mapMatrix = null;
         public int[] dirMap = null;
         public int mapSize = 0;
-        public PosDirPair stairsBottom = null;
-        public PosDirPair stairsTop = null;
         public Pos[] tileOpenData = null;
         public Pos[] tileBrokenData = null;
         public bool[] tileDiscoveredData = null;
@@ -129,6 +124,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public Pos[] fixedMessagePos = null;
         public PosList[] randomMessagePos = null;
         public Pos[] bloodMessagePos = null;
+
+        public Pos upStairs;
+        public Pos downStairs;
+        public Pos exitDoor;
     }
 
     [System.Serializable]
@@ -563,7 +562,6 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             playerData = playerInfo.ExportRespawnData(),
             inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
-            exitDoorPos = WorldMap.exitDoorPos,
             isExitDoorLocked = WorldMap.isExitDoorLocked,
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
