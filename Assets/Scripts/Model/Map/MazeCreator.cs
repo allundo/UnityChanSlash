@@ -11,23 +11,6 @@ public class MazeCreator
 
     public int[,] matrix { get; protected set; }
 
-    public Terrain[,] Matrix { get; protected set; }
-
-    private void SetTerrainData(int[,] matrix)
-    {
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                Matrix[x, y] = Util.ConvertTo<Terrain>(matrix[x, y]);
-            }
-        }
-    }
-
-    public int Width { get; private set; }
-    public int Height { get; private set; }
-
-    // 乱数生成用
     private Random rnd;
 
     public List<Pos> roomCenterPos { get; private set; } = new List<Pos>();
@@ -37,15 +20,10 @@ public class MazeCreator
         // Minimum size is 5 and even-number size is not available.
         if (width < 5 || height < 5 || width % 2 == 0 || height % 2 == 0) throw new ArgumentOutOfRangeException();
 
-        this.Width = width;
-        this.Height = height;
-
-        this.Matrix = new Terrain[width, height];
         this.rnd = rnd ?? new Random();
 
         var matrix = CreateMaze(width, height);
         this.roomCenterPos = CreateRooms(matrix, width, height);
-        SetTerrainData(matrix);
 
         this.matrix = matrix;
     }
@@ -121,39 +99,6 @@ public class MazeCreator
 
         // No direction to extend. Back to the previous position.
         return true;
-    }
-
-    private Pos[] GetPaths()
-    {
-        var list = new List<Pos>();
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                if (matrix[x, y] == PATH) list.Add(new Pos(x, y));
-            }
-        }
-
-        return list.ToArray();
-    }
-
-    public Dictionary<Pos, IDirection> SearchDeadEnds()
-    {
-        var deadEndPos = new Dictionary<Pos, IDirection>();
-
-        GetPaths().ForEach(pos =>
-        {
-            var list = new List<IDirection>();
-
-            if (matrix[pos.x, pos.y - 1] != WALL) list.Add(Direction.north);
-            if (matrix[pos.x, pos.y + 1] != WALL) list.Add(Direction.south);
-            if (matrix[pos.x - 1, pos.y] != WALL) list.Add(Direction.west);
-            if (matrix[pos.x + 1, pos.y] != WALL) list.Add(Direction.east);
-
-            if (list.Count == 1) deadEndPos.Add(pos, list[0]);
-        });
-
-        return deadEndPos;
     }
 
     private List<Pos> CreateRooms(int[,] matrix, int width, int height)
@@ -250,21 +195,5 @@ public class MazeCreator
         // Room center position
         return pos + new Pos(w / 2, h / 2);
     }
-
-#if UNITY_EDITOR
-    public void DebugMatrix()
-    {
-        var str = new System.Text.StringBuilder();
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                str.Append(matrix[x, y]);
-            }
-            str.Append("\n");
-        }
-
-        UnityEngine.Debug.Log(str);
-    }
-#endif
 }
+
