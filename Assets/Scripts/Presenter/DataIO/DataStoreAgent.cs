@@ -97,9 +97,9 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public MapData(WorldMap map)
         {
-            mapMatrix = map.GetMapMatrix();
+            mapMatrix = map.ConvertMapData();
             mapSize = map.Width;
-            dirMap = map.GetDirData();
+            dirMap = map.ConvertDirData();
 
             var bottom = map.StairsBottom;
             var top = map.stairsTop;
@@ -494,9 +494,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
     public void SaveInfoRecord(GameInfo info)
     {
-        // Delete save data
         DisableSave();
-        DeleteFile(INFO_RECORD_FILE_NAME);
 
         infoRecord = LoadInfoRecord();
 
