@@ -32,7 +32,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         int open = 0;
         for (int i = 0; i < LastFloor; i++)
         {
-            if (maps[i] == null) break;
+            if (maps[i] == null) throw new NullReferenceException($"Floor: {i + 1} is not loaded. This game may not be completed.");
             maps[i].ForEachTiles(tile =>
             {
                 if (tile is Box)
