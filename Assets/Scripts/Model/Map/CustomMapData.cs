@@ -11,6 +11,8 @@ public class CustomMapData : IStairsData
     public Terrain[,] matrix { get; private set; }
     public RawMapData rawMapData { get; private set; }
 
+    public int numOfPits { get; private set; }
+
     public List<Pos> roomCenter { get; private set; } = new List<Pos>();
     public List<Pos> fixedMes { get; private set; } = new List<Pos>();
     public List<Pos> bloodMes { get; private set; } = new List<Pos>();
@@ -41,6 +43,8 @@ public class CustomMapData : IStairsData
         this.floor = floor;
         this.width = width;
         this.height = rawMapData.height;
+
+        this.numOfPits = 0;
 
         matrix = new Terrain[width, height];
 
@@ -88,6 +92,10 @@ public class CustomMapData : IStairsData
 
                     case Terrain.ExitDoor:
                         exitDoor = new Pos(i, j);
+                        break;
+
+                    case Terrain.Pit:
+                        ++numOfPits;
                         break;
                 }
             }

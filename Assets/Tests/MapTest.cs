@@ -90,10 +90,10 @@ public class MapTest
         MapManager sut = new MapManager(1);
 
         // then
-        Assert.AreEqual(4, sut.pitTrapPos.Count);
+        Assert.AreEqual(4, sut.pitMessageMapData.numOfPits);
 
         bool isExitDoorFound = false;
-        sut.fixedMessagePos.ForEach(pos =>
+        sut.pitMessageMapData.fixedMessagePos.ForEach(pos =>
         {
             IDirection messageDir = Direction.Convert(sut.dirMap[pos.x, pos.y]);
             Pos readPos = messageDir.GetForward(pos);
@@ -273,20 +273,20 @@ public class MapTest
         MapManager sut5 = new MapManager(new CustomMapData(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
 
         // then
-        Assert.AreEqual(numOfFixedMessage1, sut1.fixedMessagePos.Count);
-        Assert.AreEqual(new Pos(2, 2), sut1.fixedMessagePos[0]);
-        Assert.AreEqual(new Pos(0, 8), sut1.fixedMessagePos[1]);
-        Assert.AreEqual(new Pos(0, 10), sut1.fixedMessagePos[2]);
-        Assert.AreEqual(new Pos(0, 12), sut1.fixedMessagePos[3]);
-        Assert.AreEqual(new Pos(2, 14), sut1.fixedMessagePos[4]);
+        Assert.AreEqual(numOfFixedMessage1, sut1.pitMessageMapData.fixedMessagePos.Count);
+        Assert.AreEqual(new Pos(2, 2), sut1.pitMessageMapData.fixedMessagePos[0]);
+        Assert.AreEqual(new Pos(0, 8), sut1.pitMessageMapData.fixedMessagePos[1]);
+        Assert.AreEqual(new Pos(0, 10), sut1.pitMessageMapData.fixedMessagePos[2]);
+        Assert.AreEqual(new Pos(0, 12), sut1.pitMessageMapData.fixedMessagePos[3]);
+        Assert.AreEqual(new Pos(2, 14), sut1.pitMessageMapData.fixedMessagePos[4]);
 
-        Assert.AreEqual(numOfBloodMessage1, sut1.bloodMessagePos.Count);
+        Assert.AreEqual(numOfBloodMessage1, sut1.pitMessageMapData.bloodMessagePos.Count);
 
         // then last floor
-        Assert.AreEqual(numOfFixedMessage5, sut5.fixedMessagePos.Count);
-        Assert.AreEqual(new Pos(2, 2), sut5.fixedMessagePos[0]);
+        Assert.AreEqual(numOfFixedMessage5, sut5.pitMessageMapData.fixedMessagePos.Count);
+        Assert.AreEqual(new Pos(2, 2), sut5.pitMessageMapData.fixedMessagePos[0]);
 
-        Assert.AreEqual(numOfBloodMessage5, sut5.bloodMessagePos.Count);
-        Assert.AreEqual(new Pos(14, 12), sut5.bloodMessagePos[0]);
+        Assert.AreEqual(numOfBloodMessage5, sut5.pitMessageMapData.bloodMessagePos.Count);
+        Assert.AreEqual(new Pos(14, 12), sut5.pitMessageMapData.bloodMessagePos[0]);
     }
 }

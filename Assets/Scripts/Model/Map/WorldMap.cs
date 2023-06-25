@@ -224,8 +224,8 @@ public class WorldMap
 
         deadEndPos = new Dictionary<Pos, IDirection>(stairsMapData.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
-        fixedMessagePos = new List<Pos>(this.map.fixedMessagePos);
-        bloodMessagePos = new List<Pos>(this.map.bloodMessagePos);
+        fixedMessagePos = new List<Pos>(this.map.pitMessageMapData.fixedMessagePos);
+        bloodMessagePos = new List<Pos>(this.map.pitMessageMapData.bloodMessagePos);
 
         Width = map.width;
         Height = map.height;
