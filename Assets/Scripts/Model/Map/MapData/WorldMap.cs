@@ -40,6 +40,13 @@ public class WorldMap
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
     public bool Unlock(Pos pos) => dirMapHandler.Unlock(pos);
 
+    /// <summary>
+    /// The tile can be seen through
+    /// </summary>
+    public bool IsTileViewOpen(int x, int y) => !IsOutOfRange(x, y) && tileInfo[x, y].IsViewOpen;
+
+    private bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= width || y >= height;
+
     public StairsData stairsData { get; private set; }
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
@@ -140,9 +147,6 @@ public class WorldMap
         return (open, broken);
     }
 
-
-
-    public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= width || y >= height;
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
     {
@@ -340,11 +344,6 @@ public class WorldMap
             (int)Math.Round((width - 1) * 0.5f + pos.x / TILE_UNIT, MidpointRounding.AwayFromZero),
             (int)Math.Round((height - 1) * 0.5f - pos.z / TILE_UNIT, MidpointRounding.AwayFromZero)
         );
-
-    /// <summary>
-    /// The tile can be seen through
-    /// </summary>
-    public bool IsTileViewOpen(int x, int y) => IsOutOfRange(x, y) ? false : tileInfo[x, y].IsViewOpen;
 
     public bool IsCurrentViewOpen(Vector3 worldPos) => IsCurrentViewOpen(MapPos(worldPos));
     public bool IsCurrentViewOpen(Pos pos) => currentViewOpen.Contains(pos);
