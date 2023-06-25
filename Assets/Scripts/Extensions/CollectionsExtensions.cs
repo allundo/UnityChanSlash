@@ -21,7 +21,7 @@ static public class CollectionsExtensions
 
     static public K GetRandomKey<K, V>(this Dictionary<K, V> dictionary)
     {
-        return dictionary.Select(kv => kv.Key).ToList().GetRandom();
+        return dictionary.Keys.ToList().GetRandom();
     }
 
     static public KeyValuePair<K, V> GetRandom<K, V>(this Dictionary<K, V> dictionary)
