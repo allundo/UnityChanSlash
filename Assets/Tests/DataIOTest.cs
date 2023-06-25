@@ -168,7 +168,7 @@ public class DataIOTest
         {
             for (int x = 0; x < 49; x++)
             {
-                Assert.False(map.discovered[x, y]);
+                Assert.False(map.miniMapData.discovered[x, y]);
             }
         }
 

@@ -1,6 +1,4 @@
-using System;
-
-public class BaseMapData<T> where T : IComparable
+public class BaseMapData<T>
 {
     public T[,] matrix { get; protected set; }
 
@@ -15,7 +13,7 @@ public class BaseMapData<T> where T : IComparable
     }
 }
 
-public class DirHandler<T> : BaseMapData<T> where T : IComparable
+public class DirHandler<T> : BaseMapData<T>
 {
     public DirHandler(T[,] matrix, int width, int height) : base(matrix, width, height) { }
 
