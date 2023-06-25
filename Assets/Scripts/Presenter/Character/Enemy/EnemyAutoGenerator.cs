@@ -62,7 +62,7 @@ public class EnemyAutoGenerator : EnemyGenerator
             other.GetComponent<MobStatus>() != null
 
             // Cancel spawning if this point is inside player view.
-            || (other.GetComponent<MiniMapHandler>() != null && GameManager.Instance.worldMap.IsCurrentViewOpen(spawnPoint))
+            || (other.GetComponent<MiniMapHandler>() != null && GameManager.Instance.worldMap.miniMapData.IsCurrentViewOpen(spawnPoint))
         )
         {
             StopSearchCharacter();

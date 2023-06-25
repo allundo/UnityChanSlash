@@ -30,7 +30,7 @@ public class HidePlateFront : MonoBehaviour
 
     private Material[] floorMaterials;
 
-    protected WorldMap map;
+    protected TileMapData map;
     protected Renderer plateRenderer;
     protected Material material;
 
@@ -92,7 +92,7 @@ public class HidePlateFront : MonoBehaviour
         .Play();
     }
 
-    public void SwitchWorldMap(WorldMap map)
+    public void SwitchWorldMap(TileMapData map)
     {
         Util.SwitchMaterial(plateRenderer, floorMaterials[map.floor - 1]);
         material = plateRenderer.sharedMaterial;

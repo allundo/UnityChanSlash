@@ -20,7 +20,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         for (int i = 0; i < LastFloor; i++)
         {
             totalMapArea += mapSize[i] * mapSize[i];
-            totalMapDiscovered += (maps[i] != null) ? maps[i].SumUpDiscovered() : 0;
+            totalMapDiscovered += (maps[i] != null) ? maps[i].miniMapData.SumUpDiscovered() : 0;
         }
 
         return totalMapArea > 0 ? totalMapDiscovered / totalMapArea : 0f;

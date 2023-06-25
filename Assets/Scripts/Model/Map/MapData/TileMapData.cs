@@ -5,7 +5,12 @@ public class TileMapData : BaseMapData<ITile>
 {
     public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
-    protected TileMapData(ITile[,] matrix, int width, int height) : base(matrix, width, height) { }
+    public int floor { get; protected set; } = 0;
+
+    protected TileMapData(ITile[,] matrix, int floor, int width, int height) : base(matrix, width, height)
+    {
+        this.floor = floor;
+    }
 
     public Pos MapPos(Vector3 pos) =>
         new Pos(

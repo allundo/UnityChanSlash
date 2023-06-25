@@ -12,7 +12,12 @@ public class MiniMapData : TileMapData
     public bool IsCurrentViewOpen(Vector3 worldPos) => IsCurrentViewOpen(MapPos(worldPos));
     public bool IsCurrentViewOpen(Pos pos) => currentViewOpen.Contains(pos);
 
-    public static MiniMapData Convert(Terrain[,] matrix, int width, int height)
+    /// <summary>
+    /// The tile can be seen through
+    /// </summary>
+    public bool IsTileViewOpen(int x, int y) => !IsOutOfRange(x, y) && matrix[x, y].IsViewOpen;
+
+    public static MiniMapData Convert(Terrain[,] matrix, int floor, int width, int height)
     {
         var tileMatrix = new ITile[width, height];
 
@@ -27,10 +32,10 @@ public class MiniMapData : TileMapData
             }
         }
 
-        return new MiniMapData(pixels, tileMatrix, width, height);
+        return new MiniMapData(pixels, tileMatrix, floor, width, height);
     }
 
-    public MiniMapData(Color[] pixels, ITile[,] matrix, int width, int height) : base(matrix, width, height)
+    public MiniMapData(Color[] pixels, ITile[,] matrix, int floor, int width, int height) : base(matrix, floor, width, height)
     {
         texMap = new Texture2D(width, height, TextureFormat.RGB24, false);
         texMap.SetPixels(pixels);

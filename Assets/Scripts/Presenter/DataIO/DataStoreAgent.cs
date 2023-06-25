@@ -96,14 +96,15 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         public MapData(WorldMap map)
         {
-            mapMatrix = map.ConvertMapData();
-            mapSize = map.width;
-            dirMap = map.ConvertDirData();
+            var converter = map.dirMapHandler;
+            mapMatrix = converter.ConvertMapData();
+            dirMap = converter.ConvertDirData();
+            mapSize = converter.width;
 
             var (open, broken) = map.ExportTileStateData();
             tileOpenData = open.ToArray();
             tileBrokenData = broken.ToArray();
-            tileDiscoveredData = map.ExportTileDiscoveredData();
+            tileDiscoveredData = map.miniMapData.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
             randomMessagePos = map.ExportRandomMessagePos();
             fixedMessagePos = map.fixedMessagePos.ToArray();

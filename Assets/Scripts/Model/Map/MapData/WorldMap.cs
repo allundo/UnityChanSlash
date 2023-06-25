@@ -5,10 +5,7 @@ using UnityEngine;
 
 public class WorldMap : TileMapData
 {
-    public int floor { get; protected set; } = 0;
-
     public MiniMapData miniMapData { get; protected set; }
-    public void ClearCurrentViewOpen() => miniMapData.ClearCurrentViewOpen();
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
@@ -22,25 +19,13 @@ public class WorldMap : TileMapData
 
     public StairsMapData stairsMapData { get; private set; }
     public DirMapHandler dirMapHandler { get; private set; }
-    private RawMapData rawMapData;
 
     public Terrain[,] CloneMatrix() => dirMapHandler.matrix.Clone() as Terrain[,];
     public Dir[,] CloneDirMap() => dirMapHandler.dirMap.Clone() as Dir[,];
-    public int[] ConvertMapData() => dirMapHandler.ConvertMapData();
-    public int[] ConvertDirData() => dirMapHandler.ConvertDirData();
-
-    public Dir GetDoorDir(int x, int y) => rawMapData.GetDoorDir(x, y);
-    public Dir GetPillarDir(int x, int y) => dirMapHandler.GetPillarDir(x, y);
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : matrix[x, y];
-    public bool Unlock(Pos pos) => dirMapHandler.Unlock(pos);
-
-    /// <summary>
-    /// The tile can be seen through
-    /// </summary>
-    public bool IsTileViewOpen(int x, int y) => !IsOutOfRange(x, y) && matrix[x, y].IsViewOpen;
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {
@@ -140,7 +125,6 @@ public class WorldMap : TileMapData
         return (open, broken);
     }
 
-
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
     {
         var spaceCandidates = new List<Pos>();
@@ -210,12 +194,9 @@ public class WorldMap : TileMapData
 
     // Create map data
     protected WorldMap(int floor, List<Pos> roomCenterPos, DirMapHandler dirMapHandler, StairsMapData stairsMapData, PitMessageMapData pitMessageMapData)
-        : base(null, dirMapHandler.width, dirMapHandler.height)
+        : base(null, floor, dirMapHandler.width, dirMapHandler.height)
     {
-        this.floor = floor;
-
         this.dirMapHandler = dirMapHandler;
-        this.rawMapData = dirMapHandler.rawMapData;
         this.stairsMapData = stairsMapData;
 
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
@@ -227,20 +208,15 @@ public class WorldMap : TileMapData
         this.bloodMessagePos = new List<Pos>(pitMessageMapData.bloodMessagePos);
 
         // Generate tile matrix by MiniMapData constructor to save a for-loop to convert terrain to mini map color.
-        miniMapData = MiniMapData.Convert(dirMapHandler.matrix, width, height);
+        miniMapData = MiniMapData.Convert(dirMapHandler.matrix, floor, width, height);
         matrix = miniMapData.matrix;
     }
 
-
     // Import map data
     protected WorldMap(int floor, DirMapHandler dirMapHandler, DataStoreAgent.MapData import)
-        : base(null, dirMapHandler.width, dirMapHandler.height)
+        : base(null, floor, dirMapHandler.width, dirMapHandler.height)
     {
-        this.floor = floor;
-
         this.dirMapHandler = dirMapHandler;
-        this.rawMapData = dirMapHandler.rawMapData;
-
         this.stairsMapData = new StairsMapData(dirMapHandler, import);
 
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
@@ -259,7 +235,7 @@ public class WorldMap : TileMapData
         }
 
         // Generate tile matrix by MiniMapData constructor to save a for-loop to convert terrain to mini map color.
-        miniMapData = MiniMapData.Convert(dirMapHandler.matrix, width, height);
+        miniMapData = MiniMapData.Convert(dirMapHandler.matrix, floor, width, height);
         matrix = miniMapData.matrix;
 
         miniMapData.ImportTileDiscoveredData(import.tileDiscoveredData);
@@ -276,13 +252,6 @@ public class WorldMap : TileMapData
         miniMapData.SetTerrain(x, y, terrain);
         return dir;
     }
-
-    public bool IsCurrentViewOpen(Vector3 worldPos) => miniMapData.IsCurrentViewOpen(worldPos);
-    public Texture2D GetMiniMap(int mapSize = 15) => miniMapData.GetMiniMap(mapSize);
-    public Vector3 MiniMapCenterWorldPos(int mapSize = 15) => miniMapData.MiniMapCenterWorldPos(mapSize);
-    public void SetDiscovered(Pos pos) => miniMapData.SetDiscovered(pos);
-    public int SumUpDiscovered() => miniMapData.SumUpDiscovered();
-    public bool[] ExportTileDiscoveredData() => miniMapData.ExportTileDiscoveredData();
 
     public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);
     public KeyValuePair<Pos, IDirection> stairsTop { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);

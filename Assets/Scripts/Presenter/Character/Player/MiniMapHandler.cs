@@ -11,7 +11,7 @@ public class MiniMapHandler : MonoBehaviour
         enemyDetector = GetComponent<Collider>();
     }
 
-    public void SwitchWorldMap(WorldMap map) => miniMap.SwitchWorldMap(map);
+    public void SwitchWorldMap(MiniMapData mapData) => miniMap.SwitchWorldMap(mapData);
 
     public void OnStartFloor()
     {

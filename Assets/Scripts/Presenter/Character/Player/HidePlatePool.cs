@@ -22,10 +22,10 @@ public class HidePlatePool : MonoBehaviour
 
     private HidePlateGenerator[] generator = new HidePlateGenerator[0b10000];
 
-    private WorldMap map;
+    private TileMapData map;
 
     private FloorMaterialsData floorMaterialsData;
-    private FloorMaterialsSource FloorMaterialSource(WorldMap map) => floorMaterialsData.Param(map.floor - 1);
+    private FloorMaterialsSource FloorMaterialSource(TileMapData map) => floorMaterialsData.Param(map.floor - 1);
 
     void Awake()
     {
@@ -64,7 +64,7 @@ public class HidePlatePool : MonoBehaviour
         return generator[(int)plate]?.Spawn(map.WorldPos(pos), plate, duration);
     }
 
-    public void SwitchWorldMap(WorldMap map)
+    public void SwitchWorldMap(TileMapData map)
     {
         this.map = map;
         Material mat = FloorMaterialSource(map).hidePlate;

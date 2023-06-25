@@ -91,7 +91,7 @@ public class MapTest
 
         // then
         int pitID = (int)Terrain.Pit;
-        Assert.AreEqual(4, sut.ConvertMapData().Where(id => id == pitID).Count());
+        Assert.AreEqual(4, sut.dirMapHandler.ConvertMapData().Where(id => id == pitID).Count());
 
         var matrix = sut.CloneMatrix();
         var dirMap = sut.CloneDirMap();

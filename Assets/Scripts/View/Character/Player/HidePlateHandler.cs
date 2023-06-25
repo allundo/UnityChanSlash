@@ -30,10 +30,9 @@ public class HidePlateHandler : MonoBehaviour
     private PlateUpdater currentUpdater = null;
 
     /// <summary>
-    /// FIXME: Directly handling WorldMap MODEL data by this VIEW class for now. <br />
-    /// (Could be regarded as PRESENTER class?)
+    /// Handle view range data
     /// </summary>
-    private WorldMap map;
+    private MiniMapData mapData;
 
     /// <summary>
     /// Player's direction related data for Turn.
@@ -53,11 +52,12 @@ public class HidePlateHandler : MonoBehaviour
     /// <summary>
     /// Calculate current player's map tile position
     /// </summary>
-    private Pos CurrentPos => map.MapPos(transform.position);
+    private Pos CurrentPos => mapData.MapPos(transform.position);
 
     void Awake()
     {
-        map = GameManager.Instance.worldMap;
+        mapData = GameManager.Instance.worldMap.miniMapData;
+
         mapUtil = GetComponent<PlayerMapUtil>();
 
         landscape = new LandscapeUpdater(this, RANGE);
@@ -174,14 +174,14 @@ public class HidePlateHandler : MonoBehaviour
     }
 #endif
 
-    public void SwitchWorldMap(WorldMap map)
+    public void SwitchWorldMap(MiniMapData mapData)
     {
-        this.map = map;
+        this.mapData = mapData;
 
-        miniMap.SwitchWorldMap(map);
+        miniMap.SwitchWorldMap(mapData);
 
         currentUpdater?.ClearRangeImmediately(prevPos);
-        hidePlatePool.SwitchWorldMap(map);
+        hidePlatePool.SwitchWorldMap(mapData);
 
         landscape.ResetWorldMapRange();
         portrait.ForEach(updater => updater.Value.ResetWorldMapRange());
@@ -211,7 +211,7 @@ public class HidePlateHandler : MonoBehaviour
         /// <summary>
         /// To get tile map info and to set player visible range info
         /// </summary>
-        protected WorldMap map;
+        protected MiniMapData mapData;
 
         /// <summary>
         /// HidePlates data covers drawing range. <br />
@@ -252,9 +252,10 @@ public class HidePlateHandler : MonoBehaviour
 
         public void ResetWorldMapRange()
         {
-            map = hidePlateHandler.map;
+            mapData = hidePlateHandler.mapData;
+
             int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
-            plateData = new HidePlate[map.width + maxRange, map.height + maxRange];
+            plateData = new HidePlate[mapData.width + maxRange, mapData.height + maxRange];
         }
 
         /// <summary>
@@ -454,7 +455,7 @@ public class HidePlateHandler : MonoBehaviour
             {
                 for (int i = 1; i < tileWidth - 1; i++)
                 {
-                    region[i, j] = map.IsTileViewOpen(startPos.x + i, startPos.y + j);
+                    region[i, j] = mapData.IsTileViewOpen(startPos.x + i, startPos.y + j);
                 }
             }
 
@@ -481,7 +482,7 @@ public class HidePlateHandler : MonoBehaviour
                 }
             }
 
-            map.ClearCurrentViewOpen();
+            mapData.ClearCurrentViewOpen();
 
             var edgePos = playerPos - playerOffsetPos;
             var openStack = new Stack<Pos>();
@@ -492,7 +493,7 @@ public class HidePlateHandler : MonoBehaviour
                 Pos pos = openStack.Pop();
 
                 // Set open plate as discovered area
-                map.SetDiscovered(edgePos + pos);
+                mapData.SetDiscovered(edgePos + pos);
 
                 // Delete focused hide plate
                 plateMap[pos.x, pos.y] = Plate.NONE;

@@ -288,7 +288,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         playerCollider.enabled = false;
         playerMap.SetFloorStartPos(nextFloorMap, isDownStairs);
-        hidePlateHandler.SwitchWorldMap(nextFloorMap);
+        hidePlateHandler.SwitchWorldMap(nextFloorMap.miniMapData);
         playerReact.SwitchFloor(nextFloorMap.floor);
         mainCamera.SwitchFloor(nextFloorMap.floor);
         anim.ResetToIdle();
@@ -316,7 +316,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.InitMeshes();
         yield return waitForEndOfFrame;
 
-        var terrainMeshes = mapRenderer.SetUpTerrainMeshes(nextFloorMap);
+        var terrainMeshes = mapRenderer.SetUpTerrainMeshes(nextFloorMap.dirMapHandler);
         yield return waitForHalfSecond;
 
         mapRenderer.GenerateTerrain(terrainMeshes);

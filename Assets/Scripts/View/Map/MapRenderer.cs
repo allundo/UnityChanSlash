@@ -113,7 +113,7 @@ public class MapRenderer : MonoBehaviour
         DestroyObjects();
         LoadFloorMaterials(map);
         InitMeshes();
-        GenerateTerrain(SetUpTerrainMeshes(map));
+        GenerateTerrain(SetUpTerrainMeshes(map.dirMapHandler));
         SwitchTerrainMaterials(map);
         SetActiveTerrains(true);
     }
@@ -125,19 +125,16 @@ public class MapRenderer : MonoBehaviour
         renderers.ForEach(renderer => renderer.SwitchWorldMap(map));
     }
 
-    public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
+    public List<CombineInstance> SetUpTerrainMeshes(DirMapHandler map)
     {
-        int width = map.width;
-        int height = map.height;
-
-        var dirMap = map.CloneDirMap();
-        var matrix = map.CloneMatrix();
+        var dirMap = map.dirMap.Clone() as Dir[,];
+        var matrix = map.matrix.Clone() as Terrain[,];
 
         var terrainMeshes = new List<CombineInstance>();
 
-        for (int j = 0; j < height; j++)
+        for (int j = 0; j < map.height; j++)
         {
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < map.width; i++)
             {
                 Pos pos = new Pos(i, j);
 
@@ -156,7 +153,7 @@ public class MapRenderer : MonoBehaviour
                         messageBoardsRenderer.SetMessage(pos, Direction.Convert(dirMap[i, j]), matrix[i, j]);
 
                         // Render a pillar
-                        terrainMeshes.Add(GetMeshInstance(gateMesh[(int)map.GetDoorDir(i, j)], pos));
+                        terrainMeshes.Add(GetMeshInstance(gateMesh[(int)map.rawMapData.GetDoorDir(i, j)], pos));
                         break;
 
                     case Terrain.Door:

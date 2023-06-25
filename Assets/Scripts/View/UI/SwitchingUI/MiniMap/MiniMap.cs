@@ -18,7 +18,7 @@ public class MiniMap : SwitchingContentBase
 
     private static readonly Vector2 OUT_OF_SCREEN = new Vector2(1024f, 1024f);
 
-    private WorldMap map;
+    private MiniMapData mapData;
 
     private Vector3 center;
 
@@ -30,7 +30,7 @@ public class MiniMap : SwitchingContentBase
     {
         base.Awake();
 
-        map = GameManager.Instance.worldMap;
+        mapData = GameManager.Instance.worldMap.miniMapData;
         isShown = true;
     }
 
@@ -52,9 +52,9 @@ public class MiniMap : SwitchingContentBase
         DrawMap();
     }
 
-    public void SwitchWorldMap(WorldMap map)
+    public void SwitchWorldMap(MiniMapData mapData)
     {
-        this.map = map;
+        this.mapData = mapData;
         enemies.ForEach(kv => kv.Value.Inactivate());
         enemies.Clear();
     }
@@ -78,7 +78,7 @@ public class MiniMap : SwitchingContentBase
 
     private Vector2 UIOffset(Vector3 worldPos)
     {
-        if (!map.IsCurrentViewOpen(worldPos)) return OUT_OF_SCREEN;
+        if (!mapData.IsCurrentViewOpen(worldPos)) return OUT_OF_SCREEN;
 
         Vector3 tileUnitVec = (worldPos - center) / WorldMap.TILE_UNIT;
         return new Vector2(tileUnitVec.x * uiTileUnit.x, tileUnitVec.z * uiTileUnit.y);
@@ -96,14 +96,14 @@ public class MiniMap : SwitchingContentBase
     {
         DrawMap(miniMapSize);
 
-        center = map.MiniMapCenterWorldPos(miniMapSize);
+        center = mapData.MiniMapCenterWorldPos(miniMapSize);
         playerSymbol.SetPos(UIOffsetDiscrete(playerPos));
         MoveEnemySymbols();
         isUpdated = true;
     }
 
     protected void DrawMap() => DrawMap(currentMiniMapSize);
-    protected void DrawMap(int miniMapSize) => Graphics.Blit(map.GetMiniMap(miniMapSize), renderTexture);
+    protected void DrawMap(int miniMapSize) => Graphics.Blit(mapData.GetMiniMap(miniMapSize), renderTexture);
 
     public PlayerSymbol Turn(IDirection dir) => playerSymbol.SetDir(dir);
 
@@ -140,7 +140,7 @@ public class MiniMap : SwitchingContentBase
 
     public override void ExpandUI()
     {
-        int miniMapSize = Mathf.Min(EXPAND_MAP_SIZE, map.width);
+        int miniMapSize = Mathf.Min(EXPAND_MAP_SIZE, mapData.width);
         ResetUISize(expandSize, miniMapSize, 1f);
         rectTransform.anchoredPosition = anchoredCenter;
 
