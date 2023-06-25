@@ -2,17 +2,15 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public class StairsPlacer
+public interface IStairsData
 {
-    public Terrain[,] matrix { get; private set; }
-    public Dir[,] dirMap { get; private set; }
-    public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
+    Pos upStairs { get; }
+    Pos downStairs { get; }
+    Pos exitDoor { get; }
+}
 
-    private int width;
-    private int height;
-
-    public DirMapData dirMapData { get; private set; }
-
+public class StairsMapData : DirMapData, IStairsData
+{
     public Pos upStairs { get; private set; }
     public Pos downStairs { get; private set; }
     public Pos exitDoor { get; private set; }
@@ -26,46 +24,24 @@ public class StairsPlacer
 
     public IDirection GetDir(Pos pos) => Direction.Convert(dirMap[pos.x, pos.y]);
     public Pos GetStartPos(Pos stairsPos) => stairsPos.IsNull ? new Pos() : GetDir(stairsPos).GetForward(stairsPos);
-    private IDirection GetValidDir(Pos pos) => Direction.Convert(dirMapData.rawMapData.GetValidDir(pos.x, pos.y));
+    private IDirection GetValidDir(Pos pos) => Direction.Convert(rawMapData.GetValidDir(pos.x, pos.y));
 
 
-    public StairsPlacer(CustomMapData data)
+    // Imported from sava data or created from custom map data
+    public StairsMapData(IDirMapData mapData, IStairsData stairsData) : base(mapData)
     {
-        dirMapData = new DirMapData(data);
-        matrix = dirMapData.matrix;
-        dirMap = dirMapData.dirMap;
-        deadEndPos = data.deadEndPos;
-        downStairs = data.downStairs;
-        upStairs = data.upStairs;
-        exitDoor = data.exitDoor;
+        downStairs = stairsData.downStairs;
+        upStairs = stairsData.upStairs;
+        exitDoor = stairsData.exitDoor;
 
         // Don't set door in front of stairs
         SetGround(StairsBottom);
         SetGround(StairsTop);
     }
 
-    public StairsPlacer(DataStoreAgent.MapData data)
+    // New created data
+    public StairsMapData(IDirMapData data, int floor) : base(data)
     {
-        dirMapData = new DirMapData(data);
-        matrix = dirMapData.matrix;
-        dirMap = dirMapData.dirMap;
-        downStairs = data.downStairs;
-        upStairs = data.upStairs;
-        exitDoor = data.exitDoor;
-        deadEndPos = new Dictionary<Pos, IDirection>();
-    }
-
-    public StairsPlacer(int[,] rawMapMatrix, int floor, int width, int height)
-    {
-        dirMapData = new DirMapData(rawMapMatrix, width, height);
-
-        this.width = dirMapData.width;
-        this.height = dirMapData.height;
-
-        matrix = dirMapData.matrix;
-        dirMap = dirMapData.dirMap;
-        deadEndPos = dirMapData.rawMapData.SearchDeadEnds().Shuffle();
-
         downStairs = upStairs = exitDoor = new Pos();
 
         if (floor < GameInfo.Instance.LastFloor)
@@ -122,7 +98,7 @@ public class StairsPlacer
         else
         {
 #if UNITY_EDITOR
-            dirMapData.rawMapData.DebugMatrix();
+            rawMapData.DebugMatrix();
 #endif
             throw new Exception("Position: (" + pos.x + ", " + pos.y + ") isn't suitable to start.");
         }

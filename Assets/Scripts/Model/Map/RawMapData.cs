@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class RawMapData : BaseMapData<int>
+public class RawMapData : DirHandler<int>
 {
     public static readonly int PATH = MazeCreator.PATH;
     public static readonly int GROUND = MazeCreator.GROUND;

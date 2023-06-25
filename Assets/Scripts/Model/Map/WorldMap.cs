@@ -24,26 +24,26 @@ public class WorldMap
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
-    private StairsPlacer stairsPlacer;
-    private DirMapData dirMapData;
+    private StairsMapData stairsMapData;
+    private DirMapHandler dirMapHandler;
     private RawMapData rawMapData;
     private MapManager map;
-    public Terrain[,] CloneMatrix() => dirMapData.matrix.Clone() as Terrain[,];
-    public Dir[,] CloneDirMap() => dirMapData.dirMap.Clone() as Dir[,];
-    public int[] ConvertMapData() => dirMapData.ConvertMapData();
-    public int[] ConvertDirData() => dirMapData.ConvertDirData();
+    public Terrain[,] CloneMatrix() => dirMapHandler.matrix.Clone() as Terrain[,];
+    public Dir[,] CloneDirMap() => dirMapHandler.dirMap.Clone() as Dir[,];
+    public int[] ConvertMapData() => dirMapHandler.ConvertMapData();
+    public int[] ConvertDirData() => dirMapHandler.ConvertDirData();
 
     public Dir GetDoorDir(int x, int y) => rawMapData.GetDoorDir(x, y);
-    public Dir GetPillarDir(int x, int y) => dirMapData.GetPillarDir(x, y);
+    public Dir GetPillarDir(int x, int y) => dirMapHandler.GetPillarDir(x, y);
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
-    public bool Unlock(Pos pos) => dirMapData.Unlock(pos);
+    public bool Unlock(Pos pos) => dirMapHandler.Unlock(pos);
 
-    public Pos UpStairs => stairsPlacer.upStairs;
-    public Pos DownStairs => stairsPlacer.downStairs;
-    public Pos ExitDoor => stairsPlacer.exitDoor;
+    public Pos UpStairs => stairsMapData.upStairs;
+    public Pos DownStairs => stairsMapData.downStairs;
+    public Pos ExitDoor => stairsMapData.exitDoor;
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {
@@ -92,7 +92,7 @@ public class WorldMap
 
         if (floor == 1 && !isExitDoorLocked)
         {
-            Pos pos = stairsPlacer.exitDoor;
+            Pos pos = stairsMapData.exitDoor;
             var exitDoor = (tileInfo[pos.x, pos.y] as ExitDoor);
             if (!exitDoor.IsOpen) exitDoor.Unlock();
         }
@@ -104,7 +104,7 @@ public class WorldMap
 
         if (floor == 1)
         {
-            Pos pos = stairsPlacer.exitDoor;
+            Pos pos = stairsMapData.exitDoor;
             isExitDoorLocked = (tileInfo[pos.x, pos.y] as ExitDoor).IsLocked;
         }
     }
@@ -215,14 +215,14 @@ public class WorldMap
 
         floor = map.floor;
 
-        stairsPlacer = map.stairsPlacer;
-        dirMapData = stairsPlacer.dirMapData;
-        rawMapData = dirMapData.rawMapData;
+        stairsMapData = map.stairsMapData;
+        dirMapHandler = map.dirMapHandler;
+        rawMapData = dirMapHandler.rawMapData;
 
-        stairsBottom = new KeyValuePair<Pos, IDirection>(stairsPlacer.StairsBottom, stairsPlacer.UpStairsDir);
-        stairsTop = new KeyValuePair<Pos, IDirection>(stairsPlacer.StairsTop, stairsPlacer.DownStairsDir);
+        stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
+        stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
 
-        deadEndPos = new Dictionary<Pos, IDirection>(stairsPlacer.deadEndPos);
+        deadEndPos = new Dictionary<Pos, IDirection>(stairsMapData.deadEndPos);
         roomCenterPos = new List<Pos>(this.map.roomCenterPos);
         fixedMessagePos = new List<Pos>(this.map.fixedMessagePos);
         bloodMessagePos = new List<Pos>(this.map.bloodMessagePos);
@@ -290,7 +290,7 @@ public class WorldMap
 
     public Dir SetTerrain(int x, int y, Terrain terrain)
     {
-        Dir dir = dirMapData.SetTerrain(x, y, terrain);
+        Dir dir = dirMapHandler.SetTerrain(x, y, terrain);
 
         var pixels = texMap.GetPixels();
 
@@ -413,6 +413,7 @@ public class WorldMap
 
     public DataStoreAgent.PosList[] ExportRandomMessagePos()
     {
+        // export[RANDOM_MESSAGE_ID] = List<PLACED_BOARD_POSITION>
         var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();
         randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
         return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();

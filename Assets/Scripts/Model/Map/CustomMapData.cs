@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class CustomMapData
+public class CustomMapData : IStairsData
 {
     public int floor { get; private set; }
 

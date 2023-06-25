@@ -13,7 +13,9 @@ public class MapManager
     public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
     public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
 
-    public StairsPlacer stairsPlacer { get; protected set; }
+    public StairsMapData stairsMapData { get; protected set; }
+    public DirMapHandler dirMapHandler { get; protected set; }
+
     public Terrain[,] matrix { get; protected set; }
     public Dir[,] dirMap { get; protected set; }
 
@@ -28,11 +30,15 @@ public class MapManager
 
         roomCenterPos = new List<Pos>(maze.roomCenterPos);
 
-        stairsPlacer = new StairsPlacer(maze.matrix, floor, width, height);
-        if (floor == 1) fixedMessagePos.Add(stairsPlacer.exitDoorMessage);
+        var dirMapData = new DirMapData(maze.matrix, width, height);
 
-        matrix = stairsPlacer.matrix;
-        dirMap = stairsPlacer.dirMap;
+        dirMapHandler = new DirMapHandler(dirMapData);
+        stairsMapData = new StairsMapData(dirMapData, floor);
+
+        if (floor == 1) fixedMessagePos.Add(stairsMapData.exitDoorMessage);
+
+        matrix = stairsMapData.matrix;
+        dirMap = stairsMapData.dirMap;
 
         SetPitAndMessageBoards(floor);
     }
@@ -45,10 +51,12 @@ public class MapManager
         this.height = mapData.mapMatrix.Length / width;
         this.roomCenterPos = mapData.roomCenterPos.ToList();
 
-        this.stairsPlacer = new StairsPlacer(mapData);
+        var dirMapData = new DirMapData(mapData);
+        dirMapHandler = new DirMapHandler(dirMapData);
+        stairsMapData = new StairsMapData(dirMapData, mapData);
 
-        this.matrix = stairsPlacer.matrix;
-        this.dirMap = stairsPlacer.dirMap;
+        this.matrix = stairsMapData.matrix;
+        this.dirMap = stairsMapData.dirMap;
     }
 
     // Custom map data with custom deadEndPos.
@@ -63,10 +71,12 @@ public class MapManager
         var fixedMessageBuffer = data.fixedMes;
         var bloodMessageBuffer = data.bloodMes;
 
-        stairsPlacer = new StairsPlacer(data);
+        var dirMapData = new DirMapData(data);
+        dirMapHandler = new DirMapHandler(dirMapData);
+        stairsMapData = new StairsMapData(dirMapData, data);
 
-        matrix = stairsPlacer.matrix;
-        dirMap = stairsPlacer.dirMap;
+        matrix = stairsMapData.matrix;
+        dirMap = stairsMapData.dirMap;
 
         FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
         int numOfFixedMessage = src.fixedMessages.Length;
@@ -95,7 +105,7 @@ public class MapManager
             data.bloodMes.RemoveRange(bloodCount - bloodOverCount, bloodOverCount);
 
             // Convert surplus blood messages to random messages.
-            bloodOver.ForEach(pos => stairsPlacer.dirMapData.SetBloodMessageToNormal(pos));
+            bloodOver.ForEach(pos => dirMapHandler.SetBloodMessageToNormal(pos));
         }
 
         this.bloodMessagePos.AddRange(data.bloodMes);
@@ -153,7 +163,7 @@ public class MapManager
                 {
                     // To avoid unreadable boards on the walls around stairs or boxes,
                     // forbid placing boards on the walls around dead end positions.
-                    if (!stairsPlacer.deadEndPos.ContainsKey(pos)) SetBoardCandidate(boardCandidates, x, y);
+                    if (!stairsMapData.deadEndPos.ContainsKey(pos)) SetBoardCandidate(boardCandidates, x, y);
                 }
                 else
                 {
@@ -163,9 +173,9 @@ public class MapManager
         }
 
         // Forbid placing pit traps in front of items and stairs
-        stairsPlacer.deadEndPos.ForEach(kv => { pitCandidates.Remove(kv.Value.GetForward(kv.Key)); });
-        pitCandidates.Remove(stairsPlacer.StairsBottom);
-        pitCandidates.Remove(stairsPlacer.StairsTop);
+        stairsMapData.deadEndPos.ForEach(kv => { pitCandidates.Remove(kv.Value.GetForward(kv.Key)); });
+        pitCandidates.Remove(stairsMapData.StairsBottom);
+        pitCandidates.Remove(stairsMapData.StairsTop);
 
         FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 

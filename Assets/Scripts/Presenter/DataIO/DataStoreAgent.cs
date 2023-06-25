@@ -92,7 +92,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     }
 
     [System.Serializable]
-    public class MapData
+    public class MapData : IStairsData
     {
         public MapData(WorldMap map)
         {
@@ -124,10 +124,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public Pos[] fixedMessagePos = null;
         public PosList[] randomMessagePos = null;
         public Pos[] bloodMessagePos = null;
+        public Pos[] stairsData = new Pos[3];
 
-        public Pos upStairs;
-        public Pos downStairs;
-        public Pos exitDoor;
+        public Pos upStairs { get => stairsData[0]; private set => stairsData[0] = value; }
+        public Pos downStairs { get => stairsData[1]; private set => stairsData[1] = value; }
+        public Pos exitDoor { get => stairsData[2]; private set => stairsData[2] = value; }
     }
 
     [System.Serializable]

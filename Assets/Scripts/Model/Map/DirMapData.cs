@@ -1,14 +1,35 @@
-public class DirMapData : BaseMapData<Terrain>
-{
-    public Dir[,] dirMap { get; private set; }
-    public RawMapData rawMapData { get; private set; }
+using System.Collections.Generic;
 
+public interface IDirMapData
+{
+    Terrain[,] matrix { get; }
+    Dir[,] dirMap { get; }
+    RawMapData rawMapData { get; }
+    Dictionary<Pos, IDirection> deadEndPos { get; }
+}
+
+public class DirMapData : DirHandler<Terrain>, IDirMapData
+{
+    public Dir[,] dirMap { get; protected set; }
+    public RawMapData rawMapData { get; protected set; }
+    public Dictionary<Pos, IDirection> deadEndPos { get; protected set; }
+
+    protected DirMapData(IDirMapData data) : base(data.matrix, data.rawMapData.width, data.rawMapData.height)
+    {
+        rawMapData = data.rawMapData;
+        dirMap = data.dirMap;
+        deadEndPos = data.deadEndPos;
+    }
+
+    // Create from custom map data
     public DirMapData(CustomMapData data) : base(data.matrix, data.width, data.height)
     {
         rawMapData = data.rawMapData;
         dirMap = CreateDirMap(width, height);
+        deadEndPos = data.deadEndPos;
     }
 
+    // Create new map
     public DirMapData(int[,] rawMapMatrix, int width, int height) : base(null, width, height)
     {
         rawMapData = new RawMapData(rawMapMatrix, width, height);
@@ -23,8 +44,10 @@ public class DirMapData : BaseMapData<Terrain>
         }
 
         dirMap = CreateDirMap(width, height);
+        deadEndPos = rawMapData.SearchDeadEnds().Shuffle();
     }
 
+    // Import from save data.
     public DirMapData(DataStoreAgent.MapData mapData) : base(null, mapData.mapSize, mapData.mapMatrix.Length / mapData.mapSize)
     {
         rawMapData = RawMapData.Convert(mapData.mapMatrix, width);
@@ -40,32 +63,8 @@ public class DirMapData : BaseMapData<Terrain>
                 dirMap[i, j] = Util.ConvertTo<Dir>(mapData.dirMap[i + j * width]);
             }
         }
-    }
 
-    public int[] ConvertMapData()
-    {
-        var ret = new int[width * height];
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                ret[x + y * width] = (int)matrix[x, y];
-            }
-        }
-        return ret;
-    }
-
-    public int[] ConvertDirData()
-    {
-        var ret = new int[width * height];
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                ret[x + y * width] = (int)dirMap[x, y];
-            }
-        }
-        return ret;
+        deadEndPos = new Dictionary<Pos, IDirection>();
     }
 
     private Dir[,] CreateDirMap(int width, int height)
@@ -84,39 +83,7 @@ public class DirMapData : BaseMapData<Terrain>
         return ret;
     }
 
-    public void SetBloodMessageToNormal(Pos pos)
-    {
-        switch (matrix[pos.x, pos.y])
-        {
-            case Terrain.BloodMessageWall:
-                matrix[pos.x, pos.y] = Terrain.MessageWall;
-                break;
-            case Terrain.BloodMessagePillar:
-                matrix[pos.x, pos.y] = Terrain.MessagePillar;
-                break;
-        }
-    }
-
-    public Dir SetTerrain(int x, int y, Terrain terrain)
-    {
-        var dir = CreateDir(x, y, terrain);
-        matrix[x, y] = terrain;
-        dirMap[x, y] = dir;
-        return dir;
-    }
-
-    public bool Unlock(Pos pos)
-    {
-        if (matrix[pos.x, pos.y] == Terrain.LockedDoor)
-        {
-            matrix[pos.x, pos.y] = Terrain.Door;
-            return true;
-        }
-
-        return false;
-    }
-
-    private Dir CreateDir(int x, int y, Terrain terrain)
+    protected Dir CreateDir(int x, int y, Terrain terrain)
         => IsGridPoint(x, y) ? GetGridPointDir(x, y, terrain) : GetNonGridPointDir(x, y, terrain);
 
     private bool IsGridPoint(int x, int y) => x % 2 == 0 && y % 2 == 0;
@@ -171,6 +138,4 @@ public class DirMapData : BaseMapData<Terrain>
         return rawMapData.GetWallDir(x, y);
     }
 
-    public Dir GetPillarDir(int x, int y) => GetDir(x, y, Terrain.Pillar) | GetDir(x, y, Terrain.MessagePillar) | GetDir(x, y, Terrain.BloodMessagePillar);
-    private Dir GetDir(int x, int y, Terrain type) => GetDir(x, y, type, Terrain.Ground);
 }

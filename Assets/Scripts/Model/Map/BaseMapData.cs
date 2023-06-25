@@ -13,6 +13,11 @@ public class BaseMapData<T> where T : IComparable
         this.width = width;
         this.height = height;
     }
+}
+
+public class DirHandler<T> : BaseMapData<T> where T : IComparable
+{
+    public DirHandler(T[,] matrix, int width, int height) : base(matrix, width, height) { }
 
     protected Dir GetDir(int x, int y, T type, T outRange)
     {
