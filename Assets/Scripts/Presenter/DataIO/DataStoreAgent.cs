@@ -109,7 +109,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             fixedMessagePos = map.fixedMessagePos.ToArray();
             bloodMessagePos = map.bloodMessagePos.ToArray();
 
-            stairsData = map.stairsData.Values;
+            stairsData = map.stairsMapData.ExportValues;
         }
 
         public int[] mapMatrix = null;

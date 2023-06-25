@@ -9,28 +9,14 @@ public interface IStairsData
     Pos exitDoor { get; }
 }
 
-public class StairsData : IStairsData
-{
-    public Pos upStairs { get; protected set; }
-    public Pos downStairs { get; protected set; }
-    public Pos exitDoor { get; protected set; }
-
-    public Pos[] Values => new Pos[] { upStairs, downStairs, exitDoor };
-
-    public StairsData(IStairsData data)
-    {
-        upStairs = data.upStairs;
-        downStairs = data.downStairs;
-        exitDoor = data.exitDoor;
-    }
-}
-
 public class StairsMapData : DirMapData, IStairsData
 {
     public Pos upStairs { get; private set; }
     public Pos downStairs { get; private set; }
     public Pos exitDoor { get; private set; }
     public Pos exitDoorMessage { get; private set; }
+
+    public Pos[] ExportValues => new Pos[] { upStairs, downStairs, exitDoor };
 
     public Pos StairsBottom => upStairs.IsNull ? GetStartPos(exitDoor) : GetStartPos(upStairs);
     public Pos StairsTop => GetStartPos(downStairs);

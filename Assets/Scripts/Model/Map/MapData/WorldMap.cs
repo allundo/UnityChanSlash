@@ -7,7 +7,7 @@ public class WorldMap : TileMapData
 {
     public int floor { get; protected set; } = 0;
 
-    private MiniMapData miniMapData;
+    public MiniMapData miniMapData { get; protected set; }
     public void ClearCurrentViewOpen() => miniMapData.ClearCurrentViewOpen();
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
@@ -20,7 +20,8 @@ public class WorldMap : TileMapData
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
-    private DirMapHandler dirMapHandler;
+    public StairsMapData stairsMapData { get; private set; }
+    public DirMapHandler dirMapHandler { get; private set; }
     private RawMapData rawMapData;
 
     public Terrain[,] CloneMatrix() => dirMapHandler.matrix.Clone() as Terrain[,];
@@ -40,8 +41,6 @@ public class WorldMap : TileMapData
     /// The tile can be seen through
     /// </summary>
     public bool IsTileViewOpen(int x, int y) => !IsOutOfRange(x, y) && matrix[x, y].IsViewOpen;
-
-    public StairsData stairsData { get; private set; }
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {
@@ -90,7 +89,7 @@ public class WorldMap : TileMapData
 
         if (floor == 1 && !isExitDoorLocked)
         {
-            Pos pos = stairsData.exitDoor;
+            Pos pos = stairsMapData.exitDoor;
             var exitDoor = (matrix[pos.x, pos.y] as ExitDoor);
             if (!exitDoor.IsOpen) exitDoor.Unlock();
         }
@@ -102,7 +101,7 @@ public class WorldMap : TileMapData
 
         if (floor == 1)
         {
-            Pos pos = stairsData.exitDoor;
+            Pos pos = stairsMapData.exitDoor;
             isExitDoorLocked = (matrix[pos.x, pos.y] as ExitDoor).IsLocked;
         }
     }
@@ -217,7 +216,7 @@ public class WorldMap : TileMapData
 
         this.dirMapHandler = dirMapHandler;
         this.rawMapData = dirMapHandler.rawMapData;
-        this.stairsData = new StairsData(stairsMapData);
+        this.stairsMapData = stairsMapData;
 
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
         this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
@@ -242,8 +241,7 @@ public class WorldMap : TileMapData
         this.dirMapHandler = dirMapHandler;
         this.rawMapData = dirMapHandler.rawMapData;
 
-        var stairsMapData = new StairsMapData(dirMapHandler, import);
-        this.stairsData = new StairsData(stairsMapData);
+        this.stairsMapData = new StairsMapData(dirMapHandler, import);
 
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
         this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
