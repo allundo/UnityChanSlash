@@ -11,14 +11,6 @@ static public class CollectionsExtensions
     static public T GetRandom<T>(this IEnumerable<T> collection)
         => GetRandom(collection.ToList());
 
-    static public void Remove<T>(this List<T> list, IEnumerable<T> removeElems)
-    {
-        foreach (T elem in removeElems)
-        {
-            list.Remove(elem);
-        }
-    }
-
     static public K GetRandomKey<K, V>(this Dictionary<K, V> dictionary)
     {
         return dictionary.Keys.ToList().GetRandom();

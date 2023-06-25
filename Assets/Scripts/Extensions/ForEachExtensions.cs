@@ -12,12 +12,12 @@ static public class ForEachExtensions
 
     static public void ForEach<T>(this IEnumerable<T> sequence, Action<T> action, params T[] exceptFor)
     {
-        Filter(sequence, exceptFor).ForEach(action);
+        sequence.Filter(exceptFor).ForEach(action);
     }
 
     static public void ForEach<T>(this IEnumerable<T> sequence, Action<T> action, IEnumerable<T> filters)
     {
-        Filter(sequence, filters).ForEach(action);
+        sequence.Filter(filters).ForEach(action);
     }
 
     /// <summary>
@@ -32,12 +32,12 @@ static public class ForEachExtensions
     }
 
     static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, params T[] exceptFor)
-        => Filter(sequence, exceptFor).ForEach(func);
+        => sequence.Filter(exceptFor).ForEach(func);
 
     static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, IEnumerable<T> filter)
-        => Filter(sequence, filter).ForEach(func);
+        => sequence.Filter(filter).ForEach(func);
 
-    static private IEnumerable<T> Filter<T>(IEnumerable<T> sequence, IEnumerable<T> filters)
+    static public IEnumerable<T> Filter<T>(this IEnumerable<T> sequence, IEnumerable<T> filters)
     {
         if (filters == null) return sequence.Where(elem => elem != null);
         return sequence.Where(elem => !filters.Contains(elem));

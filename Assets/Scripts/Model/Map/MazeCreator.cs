@@ -59,7 +59,7 @@ public class MazeCreator
             Stack<Pos> usedGrids = new Stack<Pos>();
             ExtendWall(matrix, startCells[0], usedGrids);
 
-            startCells.Remove(usedGrids);
+            startCells = startCells.Filter(usedGrids).ToList();
         }
 
         return matrix;
