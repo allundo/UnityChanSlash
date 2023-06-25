@@ -244,7 +244,7 @@ public class UITest
         {
             currentFloor = 1,
             inventoryItems = export.Clone() as DataStoreAgent.ItemInfo[],
-            mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(new WorldMap()), null, null, null, null },
+            mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(WorldMap.Create()), null, null, null, null },
         };
 
         dataStoreAgent.SaveEncryptedRecordTest(saveData, dataStoreAgent.SAVE_DATA_FILE_NAME);

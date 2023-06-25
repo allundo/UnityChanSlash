@@ -24,10 +24,9 @@ public class WorldMap
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
-    private StairsMapData stairsMapData;
     private DirMapHandler dirMapHandler;
     private RawMapData rawMapData;
-    private MapManager map;
+
     public Terrain[,] CloneMatrix() => dirMapHandler.matrix.Clone() as Terrain[,];
     public Dir[,] CloneDirMap() => dirMapHandler.dirMap.Clone() as Dir[,];
     public int[] ConvertMapData() => dirMapHandler.ConvertMapData();
@@ -41,9 +40,7 @@ public class WorldMap
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : tileInfo[x, y];
     public bool Unlock(Pos pos) => dirMapHandler.Unlock(pos);
 
-    public Pos UpStairs => stairsMapData.upStairs;
-    public Pos DownStairs => stairsMapData.downStairs;
-    public Pos ExitDoor => stairsMapData.exitDoor;
+    public StairsData stairsData { get; private set; }
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {
@@ -61,9 +58,9 @@ public class WorldMap
 
     public void ForEachTiles(Action<ITile> action)
     {
-        for (int j = 0; j < Height; j++)
+        for (int j = 0; j < height; j++)
         {
-            for (int i = 0; i < Width; i++)
+            for (int i = 0; i < width; i++)
             {
                 action(tileInfo[i, j]);
             }
@@ -71,9 +68,9 @@ public class WorldMap
     }
     public void ForEachTiles(Action<ITile, Pos> action)
     {
-        for (int j = 0; j < Height; j++)
+        for (int j = 0; j < height; j++)
         {
-            for (int i = 0; i < Width; i++)
+            for (int i = 0; i < width; i++)
             {
                 action(tileInfo[i, j], new Pos(i, j));
             }
@@ -92,7 +89,7 @@ public class WorldMap
 
         if (floor == 1 && !isExitDoorLocked)
         {
-            Pos pos = stairsMapData.exitDoor;
+            Pos pos = stairsData.exitDoor;
             var exitDoor = (tileInfo[pos.x, pos.y] as ExitDoor);
             if (!exitDoor.IsOpen) exitDoor.Unlock();
         }
@@ -104,7 +101,7 @@ public class WorldMap
 
         if (floor == 1)
         {
-            Pos pos = stairsMapData.exitDoor;
+            Pos pos = stairsData.exitDoor;
             isExitDoorLocked = (tileInfo[pos.x, pos.y] as ExitDoor).IsLocked;
         }
     }
@@ -143,29 +140,9 @@ public class WorldMap
         return (open, broken);
     }
 
-    public void ImportMapData(DataStoreAgent.MapData import)
-    {
-        tileOpenPosList = import.tileOpenData.ToList();
-        tileBrokenPosList = import.tileBrokenData.ToList();
 
-        fixedMessagePos = import.fixedMessagePos.ToList();
-        bloodMessagePos = import.bloodMessagePos.ToList();
-        for (int i = 0; i < import.randomMessagePos.Length; i++)
-        {
-            var posList = import.randomMessagePos[i];
-            posList.pos.ForEach(pos => randomMessagePos[pos] = i);
-        }
 
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                discovered[x, y] = import.tileDiscoveredData[x + Width * y];
-            }
-        }
-    }
-
-    public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= Width || y >= Height;
+    public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= width || y >= height;
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
     {
@@ -202,51 +179,102 @@ public class WorldMap
         return false;
     }
 
-    public int Width { get; protected set; } = 49;
-    public int Height { get; protected set; } = 49;
+    public int width { get; protected set; } = 49;
+    public int height { get; protected set; } = 49;
 
     // Create new map data
-    public WorldMap(int floor = 1, int width = 49, int height = 49) : this(new MapManager(floor, width, height))
-    { }
-
-    public WorldMap(MapManager map)
+    public static WorldMap Create(int floor = 1, int width = 49, int height = 49)
     {
-        this.map = map;
+        var maze = new MazeCreator(width, height);
+        var dirMapData = new DirMapData(maze.matrix, width, height);
+        var dirMapHandler = new DirMapHandler(dirMapData);
+        var stairsMapData = new StairsMapData(dirMapData, floor);
+        var pitMessageMapData = new PitMessageMapData(stairsMapData, floor);
 
-        floor = map.floor;
+        return new WorldMap(floor, maze.roomCenterPos, dirMapHandler, stairsMapData, pitMessageMapData);
+    }
 
-        stairsMapData = map.stairsMapData;
-        dirMapHandler = map.dirMapHandler;
-        rawMapData = dirMapHandler.rawMapData;
+    // Create from custom map data
+    public static WorldMap Create(CustomMapData data)
+    {
+        var dirMapData = new DirMapData(data);
+        var dirMapHandler = new DirMapHandler(dirMapData);
+        var stairsMapData = new StairsMapData(dirMapData, data);
+        var pitMessageMapData = new PitMessageMapData(dirMapHandler, data);
 
-        stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
-        stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
+        return new WorldMap(data.floor, data.roomCenter, dirMapHandler, stairsMapData, pitMessageMapData);
+    }
 
-        deadEndPos = new Dictionary<Pos, IDirection>(stairsMapData.deadEndPos);
-        roomCenterPos = new List<Pos>(this.map.roomCenterPos);
-        fixedMessagePos = new List<Pos>(this.map.pitMessageMapData.fixedMessagePos);
-        bloodMessagePos = new List<Pos>(this.map.pitMessageMapData.bloodMessagePos);
+    // Import from MapData
+    public static WorldMap Import(int floor, DataStoreAgent.MapData mapData)
+    {
+        var dirMapData = new DirMapData(mapData);
+        var dirMapHandler = new DirMapHandler(dirMapData);
+        var stairsMapData = new StairsMapData(dirMapData, mapData);
+        var pitMessageMapData = new PitMessageMapData(dirMapData);
 
-        Width = map.width;
-        Height = map.height;
+        var map = new WorldMap(floor, mapData.roomCenterPos.ToList(), dirMapHandler, stairsMapData, pitMessageMapData);
+        map.ImportMapData(mapData);
+        return map;
+    }
 
-        tileInfo = new ITile[Width, Height];
+    private void ImportMapData(DataStoreAgent.MapData import)
+    {
+        tileOpenPosList = import.tileOpenData.ToList();
+        tileBrokenPosList = import.tileBrokenData.ToList();
 
-        texMap = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+        fixedMessagePos = import.fixedMessagePos.ToList();
+        bloodMessagePos = import.bloodMessagePos.ToList();
+        for (int i = 0; i < import.randomMessagePos.Length; i++)
+        {
+            var posList = import.randomMessagePos[i];
+            posList.pos.ForEach(pos => randomMessagePos[pos] = i);
+        }
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                discovered[x, y] = import.tileDiscoveredData[x + width * y];
+            }
+        }
+    }
+
+    protected WorldMap(int floor, List<Pos> roomCenterPos, DirMapHandler dirMapHandler, StairsMapData stairsMapData, PitMessageMapData pitMessageMapData)
+    {
+        this.floor = floor;
+        this.width = dirMapHandler.width;
+        this.height = dirMapHandler.height;
+
+        this.dirMapHandler = dirMapHandler;
+        this.rawMapData = dirMapHandler.rawMapData;
+        this.stairsData = new StairsData(stairsMapData);
+
+        this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
+        this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
+
+        this.deadEndPos = new Dictionary<Pos, IDirection>(stairsMapData.deadEndPos);
+        this.roomCenterPos = new List<Pos>(roomCenterPos);
+        this.fixedMessagePos = new List<Pos>(pitMessageMapData.fixedMessagePos);
+        this.bloodMessagePos = new List<Pos>(pitMessageMapData.bloodMessagePos);
+
+        tileInfo = new ITile[width, height];
+
+        texMap = new Texture2D(width, height, TextureFormat.RGB24, false);
 
         var pixels = texMap.GetPixels();
         var matrix = CloneMatrix();
 
-        for (int i = 0; i < Width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < Height; j++)
+            for (int j = 0; j < height; j++)
             {
-                (tileInfo[i, j], pixels[i + Width * j]) = ConvertTerrain(matrix[i, j]);
+                (tileInfo[i, j], pixels[i + width * j]) = ConvertTerrain(matrix[i, j]);
             }
         }
 
         // The elements are initialized by false automatically
-        discovered = new bool[Width, Height];
+        discovered = new bool[width, height];
 
         texMap.SetPixels(pixels);
         texMap.Apply();
@@ -295,7 +323,7 @@ public class WorldMap
         var pixels = texMap.GetPixels();
 
         ITile temp = tileInfo[x, y];
-        (tileInfo[x, y], pixels[x + Width * y]) = ConvertTerrain(terrain);
+        (tileInfo[x, y], pixels[x + width * y]) = ConvertTerrain(terrain);
         tileInfo[x, y].items = temp.items;
 
         texMap.SetPixels(pixels);
@@ -305,12 +333,12 @@ public class WorldMap
     }
 
     public Vector3 WorldPos(Pos pos) => WorldPos(pos.x, pos.y);
-    public Vector3 WorldPos(int x, int y) => new Vector3((0.5f + x - Width * 0.5f) * TILE_UNIT, 0.0f, (-0.5f - y + Height * 0.5f) * TILE_UNIT);
+    public Vector3 WorldPos(int x, int y) => new Vector3((0.5f + x - width * 0.5f) * TILE_UNIT, 0.0f, (-0.5f - y + height * 0.5f) * TILE_UNIT);
 
     public Pos MapPos(Vector3 pos) =>
         new Pos(
-            (int)Math.Round((Width - 1) * 0.5f + pos.x / TILE_UNIT, MidpointRounding.AwayFromZero),
-            (int)Math.Round((Height - 1) * 0.5f - pos.z / TILE_UNIT, MidpointRounding.AwayFromZero)
+            (int)Math.Round((width - 1) * 0.5f + pos.x / TILE_UNIT, MidpointRounding.AwayFromZero),
+            (int)Math.Round((height - 1) * 0.5f - pos.z / TILE_UNIT, MidpointRounding.AwayFromZero)
         );
 
     /// <summary>
@@ -344,8 +372,8 @@ public class WorldMap
         int half = mapSize / 2;
 
         return new Pos(
-            Mathf.Clamp(pos.x, half, Width - half - 1),
-            Mathf.Clamp(pos.y, half, Height - half - 1)
+            Mathf.Clamp(pos.x, half, width - half - 1),
+            Mathf.Clamp(pos.y, half, height - half - 1)
         );
     }
 
@@ -373,9 +401,9 @@ public class WorldMap
     public int SumUpDiscovered()
     {
         int discoveredCount = 0;
-        for (int y = 0; y < Height; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < Width; x++)
+            for (int x = 0; x < width; x++)
             {
                 if (discovered[x, y]) discoveredCount++;
             }
@@ -421,13 +449,13 @@ public class WorldMap
 
     public bool[] ExportTileDiscoveredData()
     {
-        var export = new bool[Width * Height];
+        var export = new bool[width * height];
 
-        for (int y = 0; y < Height; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < Width; x++)
+            for (int x = 0; x < width; x++)
             {
-                export[x + Width * y] = discovered[x, y];
+                export[x + width * y] = discovered[x, y];
             }
         }
         return export;

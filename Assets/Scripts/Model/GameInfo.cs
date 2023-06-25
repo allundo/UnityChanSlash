@@ -113,7 +113,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         {
             int size = mapSize[floor - 1];
 
-            if (createNew) maps[floor - 1] = (maps[floor - 1] ?? new WorldMap(floor, size, size));
+            if (createNew) maps[floor - 1] = (maps[floor - 1] ?? WorldMap.Create(floor, size, size));
 
             return maps[floor - 1];
         }
@@ -192,7 +192,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         var fixedMessagePos = new Dictionary<Pos, IDirection>() { { new Pos(0, 2), Direction.east } };
 
         // Create map from custom map data
-        maps[MAX_FLOOR] = new WorldMap(new MapManager(new CustomMapData(2, matrix, 15, deadEnds, fixedMessagePos)));
+        maps[MAX_FLOOR] = WorldMap.Create(new CustomMapData(2, matrix, 15, deadEnds, fixedMessagePos));
     }
 
     private CustomMapData FinalMap()
@@ -289,7 +289,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[LastFloor - 1] = 29;
 
         // Create map from custom map data
-        maps[LastFloor - 1] = new WorldMap(new MapManager(FinalMap()));
+        maps[LastFloor - 1] = WorldMap.Create(FinalMap());
     }
 
     public void InitData(bool clearMaps = true)
@@ -339,8 +339,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             if (mapData != null)
             {
                 // Create map from custom import data
-                maps[i] = new WorldMap(new MapManager(i + 1, mapData));
-                maps[i].ImportMapData(mapData);
+                maps[i] = WorldMap.Import(i + 1, mapData);
             }
             else if (i + 1 == currentFloor)
             {

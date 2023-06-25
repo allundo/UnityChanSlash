@@ -254,7 +254,7 @@ public class HidePlateHandler : MonoBehaviour
         {
             map = hidePlateHandler.map;
             int maxRange = 2 * Mathf.Max(width, height) - Mathf.Min(width, height) - 1;
-            plateData = new HidePlate[map.Width + maxRange, map.Height + maxRange];
+            plateData = new HidePlate[map.width + maxRange, map.height + maxRange];
         }
 
         /// <summary>

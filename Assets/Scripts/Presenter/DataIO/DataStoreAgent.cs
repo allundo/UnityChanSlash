@@ -97,7 +97,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public MapData(WorldMap map)
         {
             mapMatrix = map.ConvertMapData();
-            mapSize = map.Width;
+            mapSize = map.width;
             dirMap = map.ConvertDirData();
 
             var (open, broken) = map.ExportTileStateData();
@@ -109,9 +109,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             fixedMessagePos = map.fixedMessagePos.ToArray();
             bloodMessagePos = map.bloodMessagePos.ToArray();
 
-            upStairs = map.UpStairs;
-            downStairs = map.DownStairs;
-            exitDoor = map.ExitDoor;
+            stairsData = map.stairsData.Values;
         }
 
         public int[] mapMatrix = null;

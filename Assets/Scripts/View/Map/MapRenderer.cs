@@ -127,8 +127,8 @@ public class MapRenderer : MonoBehaviour
 
     public List<CombineInstance> SetUpTerrainMeshes(WorldMap map)
     {
-        int width = map.Width;
-        int height = map.Height;
+        int width = map.width;
+        int height = map.height;
 
         var dirMap = map.CloneDirMap();
         var matrix = map.CloneMatrix();

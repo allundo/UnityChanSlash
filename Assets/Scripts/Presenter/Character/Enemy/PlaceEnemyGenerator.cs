@@ -56,13 +56,13 @@ public class PlaceEnemyGenerator : EnemyGenerator
     {
         map.roomCenterPos.ForEach(pos => PlaceGenerator(pos));
 
-        int numOfRandomSpawn = (int)(map.Width * map.Height * 0.012f);
+        int numOfRandomSpawn = (int)(map.width * map.height * 0.012f);
 
         if (numOfRandomSpawn < 4) return;
 
         int division = (int)Mathf.Log(numOfRandomSpawn, 4);
 
-        var regions = GetRegions(new Pos(0, 0), new Pos(map.Width - 1, map.Height - 1), division);
+        var regions = GetRegions(new Pos(0, 0), new Pos(map.width - 1, map.height - 1), division);
 
         List<Pos> placeAlready = new List<Pos>();
         for (int i = 0; i < numOfRandomSpawn; i++)

@@ -140,7 +140,7 @@ public class MiniMap : SwitchingContentBase
 
     public override void ExpandUI()
     {
-        int miniMapSize = Mathf.Min(EXPAND_MAP_SIZE, map.Width);
+        int miniMapSize = Mathf.Min(EXPAND_MAP_SIZE, map.width);
         ResetUISize(expandSize, miniMapSize, 1f);
         rectTransform.anchoredPosition = anchoredCenter;
 

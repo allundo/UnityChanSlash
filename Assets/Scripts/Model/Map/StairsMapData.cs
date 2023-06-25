@@ -9,6 +9,22 @@ public interface IStairsData
     Pos exitDoor { get; }
 }
 
+public class StairsData : IStairsData
+{
+    public Pos upStairs { get; protected set; }
+    public Pos downStairs { get; protected set; }
+    public Pos exitDoor { get; protected set; }
+
+    public Pos[] Values => new Pos[] { upStairs, downStairs, exitDoor };
+
+    public StairsData(IStairsData data)
+    {
+        upStairs = data.upStairs;
+        downStairs = data.downStairs;
+        exitDoor = data.exitDoor;
+    }
+}
+
 public class StairsMapData : DirMapData, IStairsData
 {
     public Pos upStairs { get; private set; }

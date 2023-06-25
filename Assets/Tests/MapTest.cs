@@ -60,26 +60,26 @@ public class MapTest
         Pos inFrontOfDownStairsPos = downStairsDir.GetForward(downStairsPos);
 
         // when
-        MapManager sut1 = new MapManager(new CustomMapData(1, matrix, 15, deadEnds));
-        MapManager sut5 = new MapManager(new CustomMapData(5, matrix, 15, deadEnds)); // Down stairs isn't set to last floor
+        WorldMap sut1 = WorldMap.Create(new CustomMapData(1, matrix, 15, deadEnds));
+        WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, deadEnds)); // Down stairs isn't set to last floor
 
         // then
-        Assert.False(sut1.stairsMapData.deadEndPos.ContainsKey(downStairsPos));
-        Assert.AreEqual(Terrain.DownStairs, sut1.matrix[downStairsPos.x, downStairsPos.y]);
-        Assert.AreEqual(downStairsDir.Enum, sut1.dirMap[downStairsPos.x, downStairsPos.y]);
-        Assert.AreEqual(Terrain.Ground, sut1.matrix[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
-        Assert.AreEqual(inFrontOfDownStairsPos, sut1.stairsMapData.StairsTop);
-        Assert.AreEqual(downStairsDir, sut1.stairsMapData.DownStairsDir);
+        Assert.False(sut1.deadEndPos.ContainsKey(downStairsPos));
+        Assert.AreEqual(Terrain.DownStairs, sut1.CloneMatrix()[downStairsPos.x, downStairsPos.y]);
+        Assert.AreEqual(downStairsDir.Enum, sut1.CloneDirMap()[downStairsPos.x, downStairsPos.y]);
+        Assert.AreEqual(Terrain.Ground, sut1.CloneMatrix()[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
+        Assert.AreEqual(inFrontOfDownStairsPos, sut1.stairsTop.Key);
+        Assert.AreEqual(downStairsDir, sut1.stairsTop.Value);
 
         // then last floor
         Pos itemPlacedPos = downStairsPos;
         Pos inFrontOfItemPlacedPos = inFrontOfDownStairsPos;
 
-        Assert.False(sut5.stairsMapData.deadEndPos.ContainsKey(itemPlacedPos));
-        Assert.AreEqual(Terrain.Path, sut5.matrix[itemPlacedPos.x, itemPlacedPos.y]);
-        Assert.AreEqual(Dir.NES, sut5.dirMap[itemPlacedPos.x, itemPlacedPos.y]);
-        Assert.AreEqual(Terrain.Door, sut5.matrix[inFrontOfItemPlacedPos.x, inFrontOfItemPlacedPos.y]);
-        Assert.AreEqual(new Pos(), sut5.stairsMapData.StairsTop);
+        Assert.False(sut5.deadEndPos.ContainsKey(itemPlacedPos));
+        Assert.AreEqual(Terrain.Path, sut5.CloneMatrix()[itemPlacedPos.x, itemPlacedPos.y]);
+        Assert.AreEqual(Dir.NES, sut5.CloneDirMap()[itemPlacedPos.x, itemPlacedPos.y]);
+        Assert.AreEqual(Terrain.Door, sut5.CloneMatrix()[inFrontOfItemPlacedPos.x, inFrontOfItemPlacedPos.y]);
+        Assert.AreEqual(new Pos(), sut5.stairsTop.Key);
     }
 
     [Test]
@@ -87,23 +87,27 @@ public class MapTest
     {
         // setup
         // when
-        MapManager sut = new MapManager(1);
+        WorldMap sut = WorldMap.Create(1);
 
         // then
-        Assert.AreEqual(4, sut.pitMessageMapData.numOfPits);
+        int pitID = (int)Terrain.Pit;
+        Assert.AreEqual(4, sut.ConvertMapData().Where(id => id == pitID).Count());
+
+        var matrix = sut.CloneMatrix();
+        var dirMap = sut.CloneDirMap();
 
         bool isExitDoorFound = false;
-        sut.pitMessageMapData.fixedMessagePos.ForEach(pos =>
+        sut.fixedMessagePos.ForEach(pos =>
         {
-            IDirection messageDir = Direction.Convert(sut.dirMap[pos.x, pos.y]);
+            IDirection messageDir = Direction.Convert(dirMap[pos.x, pos.y]);
             Pos readPos = messageDir.GetForward(pos);
 
-            Assert.That(sut.matrix[readPos.x, readPos.y], Is.EqualTo(Terrain.Path).Or.EqualTo(Terrain.Ground));
+            Assert.That(matrix[readPos.x, readPos.y], Is.EqualTo(Terrain.Path).Or.EqualTo(Terrain.Ground));
 
             Pos posL = messageDir.GetLeft(readPos);
             Pos posR = messageDir.GetRight(readPos);
-            Terrain pitCandidateL = sut.matrix[posL.x, posL.y];
-            Terrain pitCandidateR = sut.matrix[posR.x, posR.y];
+            Terrain pitCandidateL = matrix[posL.x, posL.y];
+            Terrain pitCandidateR = matrix[posR.x, posR.y];
 
             // Skip message board for exit door
             if (pitCandidateL == Terrain.ExitDoor || pitCandidateR == Terrain.ExitDoor)
@@ -123,41 +127,44 @@ public class MapTest
     {
         // setup
         // when
-        MapManager sut = new MapManager(1, 49, 49);
+        WorldMap sut = WorldMap.Create(1, 49, 49);
 
         // then
-        Pos startPos = sut.stairsMapData.StairsBottom;
-        IDirection startDir = sut.stairsMapData.UpStairsDir;
+        Pos startPos = sut.stairsBottom.Key;
+        IDirection startDir = sut.stairsBottom.Value;
 
-        Assert.False(sut.stairsMapData.deadEndPos.ContainsKey(startPos));
+        Assert.False(sut.deadEndPos.ContainsKey(startPos));
 
         Pos posF = startDir.GetForward(startPos);
         Pos posL = startDir.GetLeft(startPos);
         Pos posR = startDir.GetRight(startPos);
         Pos posB = startDir.GetBackward(startPos);
 
-        Assert.That(sut.matrix[posF.x, posF.y], Is.EqualTo(Terrain.Path).Or.EqualTo(Terrain.Ground));
+        var matrix = sut.CloneMatrix();
+        var dirMap = sut.CloneDirMap();
 
-        if (sut.matrix[posL.x, posL.y] == Terrain.ExitDoor)
+        Assert.That(matrix[posF.x, posF.y], Is.EqualTo(Terrain.Path).Or.EqualTo(Terrain.Ground));
+
+        if (matrix[posL.x, posL.y] == Terrain.ExitDoor)
         {
             Assert.True(posL.x == 0 || posL.y == 0 || posL.x == 48 || posL.y == 48);
-            Assert.AreEqual(startDir.Right.Enum, sut.dirMap[posL.x, posL.y]);
-            Assert.AreEqual(Terrain.MessageWall, sut.matrix[posB.x, posB.y]);
-            Assert.AreEqual(startDir.Enum, sut.dirMap[posB.x, posB.y]);
+            Assert.AreEqual(startDir.Right.Enum, dirMap[posL.x, posL.y]);
+            Assert.AreEqual(Terrain.MessageWall, matrix[posB.x, posB.y]);
+            Assert.AreEqual(startDir.Enum, dirMap[posB.x, posB.y]);
         }
-        else if (sut.matrix[posR.x, posR.y] == Terrain.ExitDoor)
+        else if (matrix[posR.x, posR.y] == Terrain.ExitDoor)
         {
             Assert.True(posR.x == 0 || posR.y == 0 || posR.x == 48 || posR.y == 48);
-            Assert.AreEqual(startDir.Left.Enum, sut.dirMap[posR.x, posR.y]);
-            Assert.AreEqual(Terrain.MessageWall, sut.matrix[posB.x, posB.y]);
-            Assert.AreEqual(startDir.Enum, sut.dirMap[posB.x, posB.y]);
+            Assert.AreEqual(startDir.Left.Enum, dirMap[posR.x, posR.y]);
+            Assert.AreEqual(Terrain.MessageWall, matrix[posB.x, posB.y]);
+            Assert.AreEqual(startDir.Enum, dirMap[posB.x, posB.y]);
         }
-        else if (sut.matrix[posB.x, posB.y] == Terrain.ExitDoor)
+        else if (matrix[posB.x, posB.y] == Terrain.ExitDoor)
         {
             Assert.True(posB.x == 0 || posB.y == 0 || posB.x == 48 || posB.y == 48);
-            Assert.AreEqual(startDir.Enum, sut.dirMap[posB.x, posB.y]);
-            Assert.AreEqual(Terrain.MessageWall, sut.matrix[posL.x, posL.y]);
-            Assert.AreEqual(startDir.Right.Enum, sut.dirMap[posL.x, posL.y]);
+            Assert.AreEqual(startDir.Enum, dirMap[posB.x, posB.y]);
+            Assert.AreEqual(Terrain.MessageWall, matrix[posL.x, posL.y]);
+            Assert.AreEqual(startDir.Right.Enum, dirMap[posL.x, posL.y]);
         }
         else
         {
@@ -173,21 +180,22 @@ public class MapTest
     public void _004_PitPlacingTest()
     {
         // setup
-        MapManager[] sut = new MapManager[5];
+        WorldMap[] sut = new WorldMap[5];
 
         // when
         for (int floor = 1; floor <= 5; floor++)
         {
-            sut[floor - 1] = new MapManager(floor, 49, 49);
+            sut[floor - 1] = WorldMap.Create(floor, 49, 49);
         }
 
         // then
         sut.ForEach(sutFloor =>
         {
-            sutFloor.stairsMapData.deadEndPos.ForEach(kv =>
+            var matrix = sutFloor.CloneMatrix();
+            sutFloor.deadEndPos.ForEach(kv =>
             {
                 Pos inFrontOfDeadEnd = kv.Value.GetForward(kv.Key);
-                Assert.AreNotEqual(Terrain.Pit, sutFloor.matrix[inFrontOfDeadEnd.x, inFrontOfDeadEnd.y]);
+                Assert.AreNotEqual(Terrain.Pit, matrix[inFrontOfDeadEnd.x, inFrontOfDeadEnd.y]);
             });
         });
     }
@@ -199,7 +207,7 @@ public class MapTest
         {
             try
             {
-                new MapManager(1, 19, 19);
+                WorldMap.Create(1, 19, 19);
             }
             catch (Exception e)
             {
@@ -269,24 +277,24 @@ public class MapTest
         int numOfBloodMessage5 = src5.bloodMessages.Length;
 
         // when
-        MapManager sut1 = new MapManager(new CustomMapData(1, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos));
-        MapManager sut5 = new MapManager(new CustomMapData(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
+        WorldMap sut1 = WorldMap.Create(new CustomMapData(1, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos));
+        WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
 
         // then
-        Assert.AreEqual(numOfFixedMessage1, sut1.pitMessageMapData.fixedMessagePos.Count);
-        Assert.AreEqual(new Pos(2, 2), sut1.pitMessageMapData.fixedMessagePos[0]);
-        Assert.AreEqual(new Pos(0, 8), sut1.pitMessageMapData.fixedMessagePos[1]);
-        Assert.AreEqual(new Pos(0, 10), sut1.pitMessageMapData.fixedMessagePos[2]);
-        Assert.AreEqual(new Pos(0, 12), sut1.pitMessageMapData.fixedMessagePos[3]);
-        Assert.AreEqual(new Pos(2, 14), sut1.pitMessageMapData.fixedMessagePos[4]);
+        Assert.AreEqual(numOfFixedMessage1, sut1.fixedMessagePos.Count);
+        Assert.AreEqual(new Pos(2, 2), sut1.fixedMessagePos[0]);
+        Assert.AreEqual(new Pos(0, 8), sut1.fixedMessagePos[1]);
+        Assert.AreEqual(new Pos(0, 10), sut1.fixedMessagePos[2]);
+        Assert.AreEqual(new Pos(0, 12), sut1.fixedMessagePos[3]);
+        Assert.AreEqual(new Pos(2, 14), sut1.fixedMessagePos[4]);
 
-        Assert.AreEqual(numOfBloodMessage1, sut1.pitMessageMapData.bloodMessagePos.Count);
+        Assert.AreEqual(numOfBloodMessage1, sut1.bloodMessagePos.Count);
 
         // then last floor
-        Assert.AreEqual(numOfFixedMessage5, sut5.pitMessageMapData.fixedMessagePos.Count);
-        Assert.AreEqual(new Pos(2, 2), sut5.pitMessageMapData.fixedMessagePos[0]);
+        Assert.AreEqual(numOfFixedMessage5, sut5.fixedMessagePos.Count);
+        Assert.AreEqual(new Pos(2, 2), sut5.fixedMessagePos[0]);
 
-        Assert.AreEqual(numOfBloodMessage5, sut5.pitMessageMapData.bloodMessagePos.Count);
-        Assert.AreEqual(new Pos(14, 12), sut5.pitMessageMapData.bloodMessagePos[0]);
+        Assert.AreEqual(numOfBloodMessage5, sut5.bloodMessagePos.Count);
+        Assert.AreEqual(new Pos(14, 12), sut5.bloodMessagePos[0]);
     }
 }

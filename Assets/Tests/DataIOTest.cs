@@ -58,7 +58,7 @@ public class DataIOTest
     {
         dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
 
-        var floor1Map = new WorldMap();
+        var floor1Map = WorldMap.Create();
         var stairsBottom = floor1Map.stairsBottom;
         var stairsTop = floor1Map.stairsTop;
 
