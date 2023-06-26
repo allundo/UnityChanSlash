@@ -11,8 +11,6 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     private PlayerMapUtil mapUtil;
     private PlayerInput input;
     private PlayerStatus status;
-    private PlayerEffect effect;
-    private PlayerAnimator anim;
 
     protected override void Awake()
     {
@@ -20,8 +18,6 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
         mapUtil = GetComponent<PlayerMapUtil>();
         input = GetComponent<PlayerInput>();
         status = GetComponent<PlayerStatus>();
-        effect = GetComponent<PlayerEffect>();
-        anim = GetComponent<PlayerAnimator>();
     }
 
     public Pos Pos => mapUtil.onTilePos;
