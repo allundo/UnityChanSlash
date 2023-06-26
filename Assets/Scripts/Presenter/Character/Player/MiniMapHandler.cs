@@ -3,7 +3,7 @@
 [RequireComponent(typeof(Collider))]
 public class MiniMapHandler : MonoBehaviour
 {
-    [SerializeField] private MiniMap miniMap = default;
+    [SerializeField] protected MiniMap miniMap = default;
     private Collider enemyDetector;
 
     void Awake()

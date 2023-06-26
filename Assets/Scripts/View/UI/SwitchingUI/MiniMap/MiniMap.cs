@@ -30,7 +30,7 @@ public class MiniMap : SwitchingContentBase
     {
         base.Awake();
 
-        mapData = GameManager.Instance.worldMap.miniMapData;
+        mapData = GameInfo.Instance.Map(0).miniMapData;
         isShown = true;
     }
 
