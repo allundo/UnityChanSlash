@@ -118,11 +118,24 @@ public class MiniMapData : TileMapData
                 if (!discovered[x + i, y + j]) continue;
 
                 int inverseJ = blockHeight - j - 1;
-                ITile tile = matrix[x + i, y + j];
+                Door door = matrix[x + i, y + j] as Door;
 
-                pixels[i + inverseJ * blockWidth] =
-                    tile is Door && (tile as Door).IsOpen ?
-                        new Color(0.75f, 0, 0, 1f) : texPixels[i + j * blockWidth];
+                Color color;
+                if (door != null)
+                {
+                    float red =
+                        door.IsOpen ? 0.75f
+                        : door.IsBroken ? 0.25f
+                        : 1f;
+
+                    color = new Color(red, 0f, 0f, 1f);
+                }
+                else
+                {
+                    color = texPixels[i + j * blockWidth];
+                }
+
+                pixels[i + inverseJ * blockWidth] = color;
             }
         }
 
