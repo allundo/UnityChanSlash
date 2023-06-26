@@ -19,7 +19,7 @@ public class PlayerReactor : MobReactor
     [SerializeField] protected StatusUI statusUI = default;
 
     protected PlayerAnimator playerAnim;
-    protected PlayerInput playerInput;
+    protected IPlayerInput playerInput;
     protected PlayerStatus playerStatus;
     protected PlayerEffect playerEffect;
     protected PlayerMapUtil playerMap;

@@ -7,6 +7,8 @@ public interface IPlayerMapUtil : IMobMapUtil
 {
     bool IsInPit { get; }
     bool IsPitJumpable { get; }
+    IObservable<IDirection> Dir { get; }
+    void SetStartPos(WorldMap map, KeyValuePair<Pos, IDirection> initPos);
 }
 
 [RequireComponent(typeof(PlayerStatus))]

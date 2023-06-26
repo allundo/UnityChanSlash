@@ -4,8 +4,6 @@ using UniRx;
 /// <summary>
 /// Keeps attached component used by Command execution.
 /// </summary>
-[RequireComponent(typeof(Reactor))]
-[RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(FightStyle))]
 public class CommandTarget : MonoBehaviour
 {

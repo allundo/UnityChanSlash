@@ -2,15 +2,12 @@ using UnityEngine;
 using System;
 using UniRx;
 
-[RequireComponent(typeof(PlayerMapUtil))]
-[RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerStatus))]
-[RequireComponent(typeof(PlayerAnimator))]
 public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
 {
-    private PlayerMapUtil mapUtil;
-    private PlayerInput input;
-    private PlayerStatus status;
+    protected IPlayerMapUtil mapUtil;
+    protected IPlayerInput input;
+    protected PlayerStatus status;
 
     protected override void Awake()
     {

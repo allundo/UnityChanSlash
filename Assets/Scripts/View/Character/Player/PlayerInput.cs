@@ -6,6 +6,12 @@ public interface IPlayerInput : IInput
 {
     void SetInputVisible(bool isVisible = true, bool withSubUI = true);
     void SetSubUIEnable(bool isEnable = true);
+    ShieldInput.GuardState guardState { get; }
+    void SetFightInput(IEquipmentStyle equipments);
+    ICommand InputPitFall(float damage);
+    ICommand InputIced(float duration);
+    ICommand EnqueueLanding(Vector3 moveVec);
+    ICommand InterruptIcedFall(float framesToMelt, bool isPitFall = false);
 }
 
 /// <summary>
@@ -13,7 +19,6 @@ public interface IPlayerInput : IInput
 /// In addition to MobInput, there is 'Trigger type' input implemented to improve usability.<br />
 /// </summary>
 [RequireComponent(typeof(PlayerCommandTarget))]
-[RequireComponent(typeof(PlayerMapUtil))]
 public class PlayerInput : ShieldInput, IPlayerInput
 {
     // Fight UI to fight against Enemy on front Tile

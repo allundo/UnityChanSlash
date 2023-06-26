@@ -34,10 +34,6 @@ public interface IUndeadReactor : IMobReactor
     void OnSleep();
 }
 
-[RequireComponent(typeof(MobEffect))]
-[RequireComponent(typeof(MobMapUtil))]
-[RequireComponent(typeof(MobInput))]
-[RequireComponent(typeof(MobStatus))]
 [RequireComponent(typeof(MobFightStyle))]
 public class MobReactor : Reactor, IMobReactor
 {
