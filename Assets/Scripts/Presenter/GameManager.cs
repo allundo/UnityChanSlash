@@ -115,6 +115,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         playerCollider.enabled = false;
         dataStoreAgent.RespawnByGameData(worldMap);
+        input.SetInputVisible();
 
         try
         {

@@ -58,7 +58,6 @@ public class PlayerInfo : SingletonMonoBehaviour<PlayerInfo>
     public void ImportRespawnData(DataStoreAgent.PlayerData data, WorldMap map)
     {
         mapUtil.SetStartPos(map, data.kvPosDir);
-        input.SetInputVisible();
     }
 
     public void RestorePlayerStatus(DataStoreAgent.PlayerData data)
