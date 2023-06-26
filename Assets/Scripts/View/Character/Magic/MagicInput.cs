@@ -1,3 +1,5 @@
+using UniRx;
+
 public class MagicInput : InputHandler
 {
     protected ICommand fire;
@@ -5,9 +7,21 @@ public class MagicInput : InputHandler
 
     protected override void SetCommands()
     {
-        fire = new MagicFire(target, 28f);
-        moveForward = new MagicMove(target, 28f);
         die = new MagicDie(target, 28f);
+        fire = new MagicFire(target, 28f, die);
+        moveForward = new MagicMove(target, 28f, die);
+    }
+
+    protected override void Start()
+    {
+        target.interrupt.Subscribe(data =>
+        {
+            Interrupt(data.cmd, data.isCancel, data.isQueueClear);
+            if (data.cmd == die) DisableInput();
+        })
+        .AddTo(this);
+
+        target.validate.Subscribe(triggerOnly => ValidateInput(triggerOnly)).AddTo(this);
     }
 
     public override void OnActive()
@@ -17,7 +31,6 @@ public class MagicInput : InputHandler
     }
     public override ICommand InterruptDie()
     {
-        ClearAll();
         Interrupt(die);
         DisableInput();
         return die;

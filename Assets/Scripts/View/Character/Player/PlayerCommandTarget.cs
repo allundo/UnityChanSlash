@@ -1,8 +1,8 @@
 using UnityEngine;
+using UniRx;
 
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(PlayerReactor))]
-[RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerMapUtil))]
 [RequireComponent(typeof(HidePlateHandler))]
 public class PlayerCommandTarget : CommandTarget
@@ -31,6 +31,10 @@ public class PlayerCommandTarget : CommandTarget
     /// Hide plate handler to update HidePlate positions at players Move and Turn Command execution.
     /// </summary>
     public HidePlateHandler hidePlateHandler { get; protected set; }
+
+    public ISubject<bool> inputVisible { get; protected set; } = new Subject<bool>();
+    public ISubject<bool> subUIEnable { get; protected set; } = new Subject<bool>();
+    public ISubject<Unit> cancel { get; protected set; } = new Subject<Unit>();
 
     protected override void Awake()
     {

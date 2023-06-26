@@ -121,7 +121,7 @@ public class RabbitSomersault : RabbitAttack
 
         if (!mobMap.IsMovable(backward))
         {
-            target.input.Interrupt(attack, false);
+            target.interrupt.OnNext(Data(attack));
             return false;
         }
 

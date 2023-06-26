@@ -1,5 +1,4 @@
 using DG.Tweening;
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UniRx;
@@ -36,6 +35,23 @@ public class Command : ICommand
     public static readonly float FRAME_UNIT = Constants.FRAME_SEC_UNIT;
     public static readonly float TILE_UNIT = Constants.TILE_UNIT;
 
+    public struct InterruptDataSet
+    {
+        public ICommand cmd;
+        public bool isCancel;
+        public bool isQueueClear;
+
+        public InterruptDataSet(ICommand cmd, bool isCancel, bool isQueueClear)
+        {
+            this.cmd = cmd;
+            this.isCancel = isCancel;
+            this.isQueueClear = isQueueClear;
+        }
+    }
+
+    public static InterruptDataSet Data(ICommand cmd, bool isCancel = false, bool isQueueClear = false)
+        => new InterruptDataSet(cmd, isCancel, isQueueClear);
+
     protected float duration;
     protected float invalidDuration;
 
@@ -44,7 +60,6 @@ public class Command : ICommand
     protected CommandTarget target;
     protected MobAnimator anim;
     protected IReactor react;
-    protected IInput input;
     protected IMapUtil map;
 
     protected IObserver<bool> onValidateInput;
@@ -65,13 +80,12 @@ public class Command : ICommand
 
         anim = target.anim;
         react = target.react;
-        input = target.input;
         map = target.map;
     }
 
-    public Command(IInput input, Tween playing, Tween complete, float duration, List<Action> onCompleted = null)
+    public Command(CommandTarget target, Tween playing, Tween complete, float duration, List<Action> onCompleted = null)
     {
-        this.input = input;
+        this.target = target;
         this.playingTween = playing;
         this.completeTween = complete;
         this.onCompleted = onCompleted ?? new List<Action>();
@@ -92,7 +106,7 @@ public class Command : ICommand
     public virtual ICommand GetContinuation()
     {
         CancelValidate();
-        return new Command(input, Pause(playingTween), Pause(completeTween), RemainingDuration, onCompleted);
+        return new Command(target, Pause(playingTween), Pause(completeTween), RemainingDuration, onCompleted);
     }
 
     public virtual void Cancel()
@@ -129,7 +143,7 @@ public class Command : ICommand
 
     protected virtual Tween ValidateTween()
     {
-        return DOTweenTimer(invalidDuration, () => input.ValidateInput());
+        return DOTweenTimer(invalidDuration, () => target.validate.OnNext(false));
     }
 
     protected virtual IObservable<Unit> ExecOnCompleted(params Action[] onCompleted)

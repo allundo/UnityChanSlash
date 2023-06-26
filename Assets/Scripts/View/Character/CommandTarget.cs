@@ -1,10 +1,10 @@
 using UnityEngine;
+using UniRx;
 
 /// <summary>
 /// Keeps attached component used by Command execution.
 /// </summary>
 [RequireComponent(typeof(Reactor))]
-[RequireComponent(typeof(InputHandler))]
 [RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(FightStyle))]
 public class CommandTarget : MonoBehaviour
@@ -18,11 +18,6 @@ public class CommandTarget : MonoBehaviour
     /// Reaction handler for Command execution.
     /// </summary>
     public IReactor react { get; protected set; }
-
-    /// <summary>
-    /// Input handler for Command execution.
-    /// </summary>
-    public IInput input { get; protected set; }
 
     /// <summary>
     /// Direction related data for Command execution.
@@ -40,12 +35,13 @@ public class CommandTarget : MonoBehaviour
     public Magic magic { get; protected set; }
 
     protected FightStyle fightStyle;
+    public ISubject<Command.InterruptDataSet> interrupt { get; protected set; } = new Subject<Command.InterruptDataSet>();
+    public ISubject<bool> validate { get; protected set; } = new Subject<bool>();
 
     protected virtual void Awake()
     {
         anim = GetComponent<MobAnimator>();
         react = GetComponent<Reactor>();
-        input = GetComponent<InputHandler>();
         map = GetComponent<MapUtil>();
         magic = GetComponent<Magic>();
         fightStyle = GetComponent<FightStyle>();

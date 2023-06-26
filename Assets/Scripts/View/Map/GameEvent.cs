@@ -6,24 +6,22 @@ public abstract class GameEvent
     protected abstract IObservable<Unit> EventFunc();
     protected virtual IObservable<Unit> RestartEventFunc() => EventFunc();
     public virtual IObservable<Unit> Invoke(bool isRestart = false) => isRestart ? RestartEventFunc() : EventFunc();
-    protected PlayerCommandTarget target;
     protected PlayerInput input;
-    protected IPlayerMapUtil map;
 
-    public GameEvent(PlayerCommandTarget target)
+    public GameEvent(PlayerInput input)
     {
-        this.target = target;
-        input = target.input as PlayerInput;
-        map = target.map as PlayerMapUtil;
+        this.input = input;
     }
 }
 
 public class DropStartEvent : GameEvent
 {
     private ICommand dropFloor;
-    public DropStartEvent(PlayerCommandTarget target) : base(target)
+    private IPlayerMapUtil map;
+    public DropStartEvent(PlayerInput input) : base(input)
     {
-        dropFloor = new PlayerDropFloor(target, 220f);
+        map = input.playerMap;
+        dropFloor = new PlayerDropFloor(input.playerTarget, 220f);
     }
 
     protected override IObservable<Unit> EventFunc()
@@ -73,7 +71,7 @@ public class DropStartEvent : GameEvent
 
 public class RestartEvent : GameEvent
 {
-    public RestartEvent(PlayerCommandTarget target) : base(target) { }
+    public RestartEvent(PlayerInput input) : base(input) { }
 
     protected override IObservable<Unit> EventFunc()
     {

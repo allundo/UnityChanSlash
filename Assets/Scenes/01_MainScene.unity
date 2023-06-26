@@ -12572,7 +12572,7 @@ MonoBehaviour:
   spawnPoint: {x: 0, y: 0, z: 0}
   fixedPrefab: {fileID: 4718034046630093612, guid: 83fe4847ca67c484abec2a369ba96ef9,
     type: 3}
-  playerTarget: {fileID: 2098669941}
+  playerInput: {fileID: 3226490253342392729}
   lightManager: {fileID: 53870344}
 --- !u!4 &1086912730
 Transform:
@@ -30380,18 +30380,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3226490253342392728}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2098669941 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2098669941, guid: b6767695d090e403590b881951615ed1,
-    type: 3}
-  m_PrefabInstance: {fileID: 3226490253342392728}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098669940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d79d988eb8354eaab0645fe140b9968, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2101215252
 GameObject:
   m_ObjectHideFlags: 0

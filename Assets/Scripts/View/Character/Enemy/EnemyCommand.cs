@@ -120,7 +120,7 @@ public class EnemyMoveContinue : Command
     protected Tween resetTween;
 
     public EnemyMoveContinue(CommandTarget target, Tween playing, Tween speedTween, Tween resetTween, float duration, List<Action> onCompleted = null)
-        : base(target.input, playing, null, duration, onCompleted)
+        : base(target, playing, null, duration, onCompleted)
     {
         this.target = target;
         this.enemyAnim = target.anim as IEnemyAnimator;

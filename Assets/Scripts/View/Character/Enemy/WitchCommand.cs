@@ -78,14 +78,14 @@ public class WitchJumpOverAttack : WitchJumpOver
         if (!enemyMap.IsJumpable)
         {
             // Cancel attack
-            input.ValidateInput();
+            target.validate.OnNext(false);
             return Observable.Empty(Unit.Default);
         }
 
         magicAndDouble.backStepWitchLauncher.Fire();
         base.Action();
 
-        input.Interrupt(doubleAttack, false);
+        target.interrupt.OnNext(Data(doubleAttack));
         return ObservableComplete();
     }
 }
@@ -128,14 +128,14 @@ public class WitchBackStepAttack : WitchBackStep
         if (!enemyMap.IsBackwardMovable)
         {
             // Cancel attack
-            input.ValidateInput();
+            target.validate.OnNext(false);
             return Observable.Empty(Unit.Default);
         }
 
         magicAndDouble.jumpOverWitchLauncher.Fire();
         base.Action();
 
-        input.Interrupt(doubleAttack, false);
+        target.interrupt.OnNext(Data(doubleAttack));
         return ObservableComplete();
     }
 }
@@ -237,12 +237,12 @@ public class WitchDoubleAttackLaunch : FlyingAttack
         if (!IsForwardMovable)
         {
             // Cancel attack
-            input.ValidateInput();
+            target.validate.OnNext(false);
             return Observable.Empty(Unit.Default);
         }
 
         (anim as WitchAnimator).attackStart.Fire();
-        input.Interrupt(doubleAttackStart, false);
+        target.interrupt.OnNext(Data(doubleAttackStart));
         return ObservableComplete();
     }
 }

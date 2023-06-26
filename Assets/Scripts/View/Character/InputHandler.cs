@@ -1,9 +1,9 @@
 using UnityEngine;
+using UniRx;
 
 public interface IInput
 {
     bool isCommandValid { get; }
-    bool IsFightValid { get; }
     ICommand InputCommand(ICommand cmd);
     ICommand ForceEnqueue(ICommand cmd);
     ICommand Interrupt(ICommand cmd, bool isCancel = true, bool isQueueClear = false);
@@ -37,7 +37,6 @@ public abstract class InputHandler : MonoBehaviour, IInput
     public bool isCommandValid { get; protected set; } = true;
 
     protected bool IsIdling => commander.IsIdling;
-    public virtual bool IsFightValid => IsIdling;
 
     protected ICommand die = null;
 
@@ -64,6 +63,12 @@ public abstract class InputHandler : MonoBehaviour, IInput
     protected virtual void SetCommands()
     {
         die = new DieCommand(target, 60f);
+    }
+
+    protected virtual void Start()
+    {
+        target.interrupt.Subscribe(data => Interrupt(data.cmd, data.isCancel, data.isQueueClear)).AddTo(this);
+        target.validate.Subscribe(triggerOnly => ValidateInput(triggerOnly)).AddTo(this);
     }
 
     /// <summary>

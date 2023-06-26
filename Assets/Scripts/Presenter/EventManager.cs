@@ -6,7 +6,7 @@ using System.Linq;
 
 public class EventManager : MobGenerator<EventInvoker>
 {
-    [SerializeField] private PlayerCommandTarget playerTarget = default;
+    [SerializeField] private PlayerInput playerInput = default;
     [SerializeField] private LightManager lightManager = default;
 
     private int currentFloor = 0;
@@ -22,15 +22,15 @@ public class EventManager : MobGenerator<EventInvoker>
         // Register game events
         gameEvents = new List<GameEvent>()
         {
-            new DropStartEvent(playerTarget),
-            new RestartEvent(playerTarget),
-            new PlayerMessageFloor3(playerTarget),
-            new PlayerMessageFloor4(playerTarget),
-            new PlayerMessageFloor5(playerTarget),
-            new WitchGenerateEvent(playerTarget, lightManager, new Pos(11, 11)),
-            new SkeletonsGenerateEvent(playerTarget, new Pos(21, 7)),
-            new SkeletonWizardGenerateEvent(playerTarget, new Pos(1, 11)),
-            new RedSlimeGenerateEvent(playerTarget, new Pos(1, 13)),
+            new DropStartEvent(playerInput),
+            new RestartEvent(playerInput),
+            new PlayerMessageFloor3(playerInput),
+            new PlayerMessageFloor4(playerInput),
+            new PlayerMessageFloor5(playerInput),
+            new WitchGenerateEvent(playerInput, lightManager, new Pos(11, 11)),
+            new SkeletonsGenerateEvent(playerInput, new Pos(21, 7)),
+            new SkeletonWizardGenerateEvent(playerInput, new Pos(1, 11)),
+            new RedSlimeGenerateEvent(playerInput, new Pos(1, 13)),
         };
     }
 

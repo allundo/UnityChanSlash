@@ -13,7 +13,7 @@ public abstract class PlayerDetectEvent : GameEvent
 
     protected abstract bool IsEventValid(WorldMap map);
 
-    public PlayerDetectEvent(PlayerCommandTarget target, bool isOneShot = true) : base(target)
+    public PlayerDetectEvent(PlayerInput input, bool isOneShot = true) : base(input)
     {
         this.isOneShot = isOneShot;
     }
@@ -53,7 +53,7 @@ public class PlayerDetectFloor : PlayerDetectEvent
 {
     protected MessageData eventMessages;
 
-    public PlayerDetectFloor(PlayerCommandTarget target, MessageData eventMessages) : base(target)
+    public PlayerDetectFloor(PlayerInput input, MessageData eventMessages) : base(input)
     {
         this.eventMessages = eventMessages;
     }
@@ -69,7 +69,7 @@ public class PlayerDetectFloor : PlayerDetectEvent
 
 public class PlayerMessageFloor3 : PlayerDetectFloor
 {
-    public PlayerMessageFloor3(PlayerCommandTarget target) : base(target, new MessageData
+    public PlayerMessageFloor3(PlayerInput input) : base(input, new MessageData
     (
         new MessageSource("そろそろ地下 3 階ってもんかしら？\n…なんかめっちゃ暑いんですけど。", FaceID.DEFAULT),
         new MessageSource("体力が奪われてく感じがする…。\nこまめに休息とらないとしんどいね、こりゃ。", FaceID.DESPISE)
@@ -78,7 +78,7 @@ public class PlayerMessageFloor3 : PlayerDetectFloor
 }
 public class PlayerMessageFloor4 : PlayerDetectFloor
 {
-    public PlayerMessageFloor4(PlayerCommandTarget target) : base(target, new MessageData
+    public PlayerMessageFloor4(PlayerInput input) : base(input, new MessageData
     (
         new MessageSource("いよいよ地下 4 階！\n・・・って、寒ゥ！！！", FaceID.SURPRISE),
         new MessageSource("フィンランド式サウナか！\n一体どうなってんの？！", FaceID.ANGRY),
@@ -89,7 +89,7 @@ public class PlayerMessageFloor4 : PlayerDetectFloor
 
 public class PlayerMessageFloor5 : PlayerDetectFloor
 {
-    public PlayerMessageFloor5(PlayerCommandTarget target) : base(target, new MessageData
+    public PlayerMessageFloor5(PlayerInput input) : base(input, new MessageData
     (
         new MessageSource("地下 5 階とーちゃーく！\nうぇ〜寒かったぁ…。", FaceID.SMILE),
         new MessageSource("…なんだかモノモノシイ雰囲気。\nこれが最後って感じかな？", FaceID.EYECLOSE),
@@ -103,7 +103,7 @@ public abstract class PlayerHasItemEvent : PlayerDetectEvent
     protected Pos pos;
     protected ItemType itemTypeToCheck;
 
-    public PlayerHasItemEvent(PlayerCommandTarget target, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true) : base(target, isOneShot)
+    public PlayerHasItemEvent(PlayerInput input, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true) : base(input, isOneShot)
     {
         this.itemTypeToCheck = itemTypeToCheck;
         this.pos = pos;
@@ -114,8 +114,8 @@ public abstract class PlayerHasItemEvent : PlayerDetectEvent
     protected override bool IsEventValid(WorldMap map)
     {
         var playerHasItem = ItemInventory.Instance.hasItemType(itemTypeToCheck);
-        var itemIsOnEventTile = target.map.OnTile.HasItem(itemTypeToCheck);
-        var jumpLeapedEventTileWithItem = target.map.BackwardTile.HasItem(itemTypeToCheck);
+        var itemIsOnEventTile = input.playerMap.OnTile.HasItem(itemTypeToCheck);
+        var jumpLeapedEventTileWithItem = input.playerMap.BackwardTile.HasItem(itemTypeToCheck);
 
         return playerHasItem || itemIsOnEventTile || jumpLeapedEventTileWithItem;
     }
@@ -125,7 +125,7 @@ public abstract class SimpleEnemyGenerateEvent : PlayerDetectEvent
 {
     protected Pos pos;
 
-    public SimpleEnemyGenerateEvent(PlayerCommandTarget target, Pos pos, bool isOneShot = false) : base(target, isOneShot)
+    public SimpleEnemyGenerateEvent(PlayerInput input, Pos pos, bool isOneShot = false) : base(input, isOneShot)
     {
         this.pos = pos;
     }
@@ -140,7 +140,7 @@ public abstract class SimpleEnemyGenerateEvent : PlayerDetectEvent
 
 public class SkeletonWizardGenerateEvent : SimpleEnemyGenerateEvent
 {
-    public SkeletonWizardGenerateEvent(PlayerCommandTarget target, Pos pos) : base(target, pos) { }
+    public SkeletonWizardGenerateEvent(PlayerInput input, Pos pos) : base(input, pos) { }
 
     protected override bool IsEventValid(WorldMap map)
     {
@@ -154,7 +154,7 @@ public class SkeletonWizardGenerateEvent : SimpleEnemyGenerateEvent
 
 public class RedSlimeGenerateEvent : SimpleEnemyGenerateEvent
 {
-    public RedSlimeGenerateEvent(PlayerCommandTarget target, Pos pos) : base(target, pos) { }
+    public RedSlimeGenerateEvent(PlayerInput input, Pos pos) : base(input, pos) { }
 
     protected override bool IsEventValid(WorldMap map)
     {
@@ -169,7 +169,7 @@ public class RedSlimeGenerateEvent : SimpleEnemyGenerateEvent
 public class SkeletonsGenerateEvent : PlayerHasItemEvent
 {
     private DoorOpener prefabDoorOpener;
-    public SkeletonsGenerateEvent(PlayerCommandTarget target, Pos pos) : base(target, pos, ItemType.TreasureKey)
+    public SkeletonsGenerateEvent(PlayerInput input, Pos pos) : base(input, pos, ItemType.TreasureKey)
     {
         prefabDoorOpener = Resources.Load<DoorOpener>("Prefabs/Map/DoorOpener");
     }
@@ -195,7 +195,7 @@ public class SkeletonsGenerateEvent : PlayerHasItemEvent
         return opener.Shoot(map.WorldPos(new Pos(21, 17)))
             .ContinueWith(_ =>
             {
-                target.hidePlateHandler.Redraw();
+                GameManager.Instance.RedrawPlates();
                 UnityEngine.Object.Destroy(opener.gameObject, 0.1f);
                 return Observable.NextFrame();
             });
@@ -205,10 +205,12 @@ public class SkeletonsGenerateEvent : PlayerHasItemEvent
 public class WitchGenerateEvent : PlayerHasItemEvent
 {
     private LightManager lightManager;
+    private IPlayerMapUtil map;
 
-    public WitchGenerateEvent(PlayerCommandTarget target, LightManager lightManager, Pos pos) : base(target, pos, ItemType.KeyBlade)
+    public WitchGenerateEvent(PlayerInput input, LightManager lightManager, Pos pos) : base(input, pos, ItemType.KeyBlade)
     {
         this.lightManager = lightManager;
+        map = input.playerMap;
     }
 
     protected override IObservable<Unit> EventFunc()

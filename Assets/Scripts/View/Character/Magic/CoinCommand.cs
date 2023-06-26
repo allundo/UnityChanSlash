@@ -5,11 +5,12 @@ using DG.Tweening;
 
 public class CoinCommand : MagicCommand
 {
-    protected CoinInput coinInput;
+    protected CoinDrop drop;
+    protected CoinDrop PlaceCoin => drop.SetCoin(SpawnHandler.Instance.PlaceItem(ItemType.Coin, 1, map.onTilePos));
 
-    public CoinCommand(CommandTarget target, float duration) : base(target, duration)
+    public CoinCommand(CommandTarget target, float duration, CoinDrop drop) : base(target, duration)
     {
-        coinInput = target.input as CoinInput;
+        this.drop = drop;
     }
 }
 public class CoinMove : CoinCommand
@@ -17,10 +18,10 @@ public class CoinMove : CoinCommand
     protected IMortalReactor mortalReact;
     protected CoinBound coinBound;
 
-    public CoinMove(CommandTarget target, float duration) : base(target, duration)
+    public CoinMove(CommandTarget target, float duration, CoinDrop drop) : base(target, duration, drop)
     {
         mortalReact = react as IMortalReactor;
-        coinBound = new CoinBound(target, duration);
+        coinBound = new CoinBound(target, duration, drop);
     }
 
     protected virtual Tween AttackSequence => attack.AttackSequence(duration);
@@ -35,7 +36,7 @@ public class CoinMove : CoinCommand
                 map.MoveObjectOn(map.GetForward);
                 playingTween = tweenMove.JumpHalf(map.DestVec - new Vector3(0, 1f, 0), 0.75f, false).Play();
                 completeTween = AttackSequence.Play();
-                target.input.Interrupt(coinBound, false, true);
+                target.interrupt.OnNext(Data(coinBound, false, true));
                 return ObservableComplete(0.75f);
             }
 
@@ -50,7 +51,10 @@ public class CoinMove : CoinCommand
         {
             playingTween = tweenMove.MoveRelative(map.GetForwardVector() * 0.75f).Play();
 
-            validateTween = tweenMove.DelayedCall(0.75f, () => coinInput.InputDrop()).Play();
+            validateTween = tweenMove
+                .DelayedCall(0.75f, () => target.interrupt.OnNext(Data(PlaceCoin)))
+                .Play();
+
             return ObservableComplete(0.75f);
         }
     }
@@ -58,7 +62,7 @@ public class CoinMove : CoinCommand
 
 public class CoinFire : CoinMove
 {
-    public CoinFire(CommandTarget target, float duration) : base(target, duration) { }
+    public CoinFire(CommandTarget target, float duration, CoinDrop drop) : base(target, duration, drop) { }
 
     // Enable attack collider after a half duration
     protected override Tween AttackSequence => attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f);
@@ -66,7 +70,7 @@ public class CoinFire : CoinMove
 
 public class CoinBound : CoinCommand
 {
-    public CoinBound(CommandTarget target, float duration) : base(target, duration) { }
+    public CoinBound(CommandTarget target, float duration, CoinDrop drop) : base(target, duration, drop) { }
 
     public override IObservable<Unit> Execute()
     {
@@ -75,21 +79,25 @@ public class CoinBound : CoinCommand
         {
             map.MoveObjectOn(map.GetForward);
             playingTween = tweenMove.JumpHalf(map.DestVec * 0.5f + new Vector3(0f, 0.4f, 0), 0.5f).Play();
-            validateTween = tweenMove.DelayedCall(0.5f, () => coinInput.InputDrop()).Play();
+            validateTween = tweenMove
+                .DelayedCall(0.5f, () => target.interrupt.OnNext(Data(PlaceCoin)))
+                .Play();
 
             return ObservableComplete(0.5f);
         }
         else
         {
             playingTween = tweenMove.JumpHalf(map.GetForwardVector() * 0.75f + new Vector3(0f, 0.5f, 0), 0.75f).Play();
-            validateTween = tweenMove.DelayedCall(0.75f, () => coinInput.InputDrop()).Play();
+            validateTween = tweenMove
+                .DelayedCall(0.75f, () => target.interrupt.OnNext(Data(PlaceCoin)))
+                .Play();
 
             return ObservableComplete(0.75f);
         }
     }
 }
 
-public class CoinDrop : CoinCommand
+public class CoinDrop : MagicCommand
 {
     protected Item coin;
 

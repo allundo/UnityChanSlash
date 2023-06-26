@@ -7,7 +7,6 @@ public abstract class PlayerCommand : MobCommand
 {
     protected PlayerCommandTarget playerTarget;
     protected PlayerAnimator playerAnim;
-    protected PlayerInput playerInput;
     protected PlayerReactor playerReact;
     protected ThirdPersonCamera mainCamera;
     protected HidePlateHandler hidePlateHandler;
@@ -24,7 +23,6 @@ public abstract class PlayerCommand : MobCommand
         this.triggerInvalidDuration = this.duration * triggerTiming;
 
         playerAnim = anim as PlayerAnimator;
-        playerInput = input as PlayerInput;
         playerReact = react as PlayerReactor;
         mainCamera = target.mainCamera;
         hidePlateHandler = target.hidePlateHandler;
@@ -39,14 +37,15 @@ public abstract class PlayerCommand : MobCommand
         if (triggerInvalidDuration >= invalidDuration) return validateTween;
 
         return DOTween.Sequence()
-            .Join(DOTweenTimer(triggerInvalidDuration, () => input.ValidateInput(true)))
+            .Join(DOTweenTimer(triggerInvalidDuration, () => target.validate.OnNext(true)))
             .Join(validateTween);
     }
 
     protected void SetUIInvisible(bool isVisibleOnCompleted = true)
     {
-        playerInput.SetInputVisible(false);
-        onCompleted.Add(() => playerInput.SetInputVisible(isVisibleOnCompleted));
+        var subject = playerTarget.inputVisible;
+        subject.OnNext(false);
+        onCompleted.Add(() => subject.OnNext(isVisibleOnCompleted));
     }
 }
 
@@ -160,7 +159,7 @@ public class PlayerStartRunning : PlayerRun
 
         playingTween = tweenMove.Linear(mobMap.CurrentVec3Pos + dest, timeScale);
 
-        playerInput.SetSubUIEnable(false);
+        playerTarget.subUIEnable.OnNext(false);
 
         playerAnim.speed.Float = RUN_SPEED * 0.5f;
         completeTween = DOTween.Sequence()
@@ -172,7 +171,7 @@ public class PlayerStartRunning : PlayerRun
             })
             .Play();
 
-        target.input.Interrupt(run, false);
+        target.interrupt.OnNext(Data(run));
 
         return ObservableComplete(timeScale);
     }
@@ -197,7 +196,7 @@ public class PlayerRun : PlayerDash
             map.MoveObjectOn(destPos);
             playingTween = DOTween.Sequence()
                 .Join(tweenMove.Move(destPos, 1f))
-                .Join(tweenMove.DelayedCall(RUN_RATIO, () => { if (!mobMap.IsForwardMovable) target.input.Interrupt(brakeHalf, true, true); }))
+                .Join(tweenMove.DelayedCall(RUN_RATIO, () => { if (!mobMap.IsForwardMovable) target.interrupt.OnNext(Data(brakeHalf, true, true)); }))
                 .Play();
 
             playerAnim.speed.Float = RUN_SPEED;
@@ -207,13 +206,13 @@ public class PlayerRun : PlayerDash
                 hidePlateHandler.Move();
             }).Play();
 
-            target.input.Interrupt(this, false);
+            target.interrupt.OnNext(Data(this));
 
             return ObservableComplete();
         }
         else
         {
-            input.Interrupt(brakeAndBackStep, false);
+            target.interrupt.OnNext(Data(brakeAndBackStep));
             return Observable.Empty<Unit>();
         }
     }
@@ -223,9 +222,12 @@ public class PlayerBrake : PlayerDash
 {
     protected static readonly float COOL_TIME_SCALE = 0.5f;
     protected static float WholeTimeScale(float remainingTimeScale = 1f) => remainingTimeScale + BRAKE_RATIO + COOL_TIME_SCALE;
+    protected ISubject<bool> subUIEnable;
 
     public PlayerBrake(PlayerCommandTarget target, float duration) : base(target, duration)
-    { }
+    {
+        subUIEnable = target.subUIEnable;
+    }
 
     protected Tween DampenSpeed(TweenCallback startCallback = null, float timeScale = 1f, float remainingRatio = 1f)
     {
@@ -255,7 +257,7 @@ public class PlayerBrakeStop : PlayerBrake
 
     public override IObservable<Unit> Execute()
     {
-        playerInput.SetSubUIEnable(true);
+        subUIEnable.OnNext(true);
 
         if (mobMap.IsForwardMovable)
         {
@@ -268,7 +270,7 @@ public class PlayerBrakeStop : PlayerBrake
         }
         else
         {
-            input.Interrupt(brakeAndBackStep, false);
+            target.interrupt.OnNext(Data(brakeAndBackStep));
             return Observable.Empty<Unit>();
         }
     }
@@ -291,7 +293,7 @@ public class PlayerBrakeStopHalf : PlayerBrake
 
         if (!isCommandInput) validateTween = ValidateTween().Play();
 
-        playerInput.SetSubUIEnable(true);
+        subUIEnable.OnNext(true);
         playingTween = tweenMove.Brake(map.DestVec3Pos, remainingRatio, BRAKE_RATIO, COOL_TIME_SCALE);
         completeTween = DampenSpeed(playerAnim.brake.Fire, 0.5f, remainingRatio);
 
@@ -306,7 +308,7 @@ public class PlayerBrakeAndBackStep : PlayerBrake
 
     public override IObservable<Unit> Execute()
     {
-        playerInput.SetSubUIEnable(true);
+        subUIEnable.OnNext(true);
 
         playingTween = tweenMove.BrakeAndBack();
         validateTween = ValidateTween().Play();
@@ -334,7 +336,7 @@ public class PlayerJump : PlayerCommand
         playerAnim.jump.Fire();
 
         // Enable sub UIs when run and jumping without braking.
-        playerInput.SetSubUIEnable(true);
+        playerTarget.subUIEnable.OnNext(true);
 
         playingTween = tweenMove
             .JumpLeap(
@@ -385,7 +387,7 @@ public class PlayerPitJump : PlayerJump
             map.MoveObjectOn(map.GetForward);
             moveVec = map.DestVec;
             completeTween = tweenMove.DelayedCall(0.8f, hidePlateHandler.Move).Play();
-            playerInput.SetInputVisible();
+            playerTarget.inputVisible.OnNext(true);
         }
         else
         {
@@ -418,7 +420,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
         playerAnim.speed.Float = 0f;
         playerAnim.fall.Bool = true;
 
-        playerInput.SetInputVisible(false);
+        playerTarget.inputVisible.OnNext(false);
 
         Vector3 moveVec = mobMap.DestVec;
 
@@ -439,7 +441,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
         {
             float pitFallFrames = 40f;
             float remainingMeltTime = Mathf.Clamp(framesToMelt * FRAME_UNIT - duration, 0f, (pitFallFrames + 1) * FRAME_UNIT);
-            input.Interrupt(new PlayerIcedPitFall(playerTarget, tile.Damage, pitFallFrames, remainingMeltTime), false, false);
+            target.interrupt.OnNext(Data(new PlayerIcedPitFall(playerTarget, tile.Damage, pitFallFrames, remainingMeltTime), false));
 
             if (remainingMeltTime == 0f) meltTimer.Play();
         }
@@ -471,7 +473,7 @@ public class PlayerPitFall : PlayerCommand
         playerAnim.speed.Float = 0f;
         playerAnim.fall.Bool = true;
 
-        playerInput.SetInputVisible(false);
+        playerTarget.inputVisible.OnNext(false);
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
@@ -737,7 +739,7 @@ public class PlayerAttackCommand : PlayerAction
         if (cancelStart < 1f)
         {
             cancelTimer = tweenMove
-                .DelayedCall(cancelStart, playerInput.SetCancel)
+                .DelayedCall(cancelStart, () => playerTarget.cancel.OnNext(Unit.Default))
                 .AsReusable(target.gameObject);
         }
 
@@ -986,18 +988,18 @@ public class PlayerInspectTile : PlayerAction
 
 public class PlayerIcedCommand : IcedCommand
 {
-    protected PlayerInput playerInput;
+    protected ISubject<bool> inputVisible;
     public PlayerIcedCommand(PlayerCommandTarget target, float duration, float validateTiming) : base(target, duration, validateTiming)
     {
-        playerInput = input as PlayerInput;
+        inputVisible = target.inputVisible;
     }
 
     protected override bool Action()
     {
         mobReact.Iced(framesToMelt);
 
-        playerInput.SetInputVisible(false);
-        SetOnCompleted(() => playerInput.SetInputVisible(true));
+        inputVisible.OnNext(false);
+        SetOnCompleted(() => inputVisible.OnNext(true));
 
         SetOnCompleted(() => mobReact.Melt());
 

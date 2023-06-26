@@ -41,7 +41,7 @@ public class WitchDoubleJump : WitchDoubleCommand
 
         map.TurnBack();
 
-        input.Interrupt(doubleAttack, false);
+        target.interrupt.OnNext(Data(doubleAttack));
         return ObservableComplete();
     }
 }
@@ -64,7 +64,7 @@ public class WitchDoubleBackStep : WitchDoubleCommand
 
         playingTween = tweenMove.Jump(dest, 1f, 1f).Play();
 
-        input.Interrupt(doubleAttack, false);
+        target.interrupt.OnNext(Data(doubleAttack));
         return ObservableComplete();
     }
 }
@@ -79,7 +79,7 @@ public class WitchDoubleLaunch : WitchDoubleCommand
 
     public override IObservable<Unit> Execute()
     {
-        input.Interrupt(doubleAttackStart, false);
+        target.interrupt.OnNext(Data(doubleAttackStart));
         return ObservableComplete();
     }
 }
@@ -106,7 +106,7 @@ public class WitchDoubleStart : WitchDoubleCommand
 
         witchReact.OnAttackStart();
 
-        input.Interrupt(attackKeep, false);
+        target.interrupt.OnNext(Data(attackKeep));
 
         return ObservableComplete(attackTimeScale);
     }
@@ -130,7 +130,7 @@ public class WitchDoubleKeep : WitchDoubleCommand
 
         completeTween = attack.AttackSequence(duration).Play();
 
-        input.Interrupt(attackEnd, false);
+        target.interrupt.OnNext(Data(attackEnd));
 
         return ObservableComplete();
     }
@@ -152,7 +152,7 @@ public class WitchDoubleEnd : WitchDoubleCommand
 
         witchReact.OnAttackEnd();
 
-        input.Interrupt(leave, false);
+        target.interrupt.OnNext(Data(leave));
 
         return ObservableComplete();
     }

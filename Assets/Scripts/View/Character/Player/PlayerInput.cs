@@ -6,7 +6,6 @@ public interface IPlayerInput : IInput
 {
     void SetInputVisible(bool isVisible = true, bool withSubUI = true);
     void SetSubUIEnable(bool isEnable = true);
-    void SetCancel();
 }
 
 /// <summary>
@@ -48,8 +47,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     [SerializeField] protected GameObject uiMask = default;
 
-    protected IPlayerMapUtil playerMap;
-    protected PlayerCommandTarget playerTarget;
+    public IPlayerMapUtil playerMap { get; protected set; }
+    public PlayerCommandTarget playerTarget { get; protected set; }
     protected ItemInventory itemInventory;
 
     protected bool IsAttack => currentCommand is PlayerAttackCommand;
@@ -114,6 +113,15 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         die = new PlayerDie(playerTarget, 288f);
         wakeUp = new PlayerWakeUp(playerTarget, 150f);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        playerTarget.inputVisible.Subscribe(isVisible => SetInputVisible(isVisible)).AddTo(this);
+        playerTarget.subUIEnable.Subscribe(isEnable => SetSubUIEnable(isEnable)).AddTo(this);
+        playerTarget.cancel.Subscribe(_ => (commander as PlayerCommander).SetCancel()).AddTo(this);
     }
 
     protected override void SetInputs()

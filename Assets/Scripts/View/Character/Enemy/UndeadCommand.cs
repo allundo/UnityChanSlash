@@ -35,7 +35,7 @@ public class Resurrection : UndeadCommand
 
             if (map.DestVec.magnitude > 0f)
             {
-                input.Interrupt(startMoving, false);
+                target.interrupt.OnNext(Data(startMoving));
             }
             else
             {
@@ -45,7 +45,7 @@ public class Resurrection : UndeadCommand
         }
         else
         {
-            input.Interrupt(this, false);
+            target.interrupt.OnNext(Data(this));
         }
 
         return ObservableComplete();
@@ -61,7 +61,7 @@ public class Resurrection : UndeadCommand
 public class ResurrectionContinue : Command
 {
     private ICommand startMoving;
-    public ResurrectionContinue(CommandTarget target, ICommand startMoving, float duration) : base(target.input, null, null, duration)
+    public ResurrectionContinue(CommandTarget target, ICommand startMoving, float duration) : base(target, null, null, duration)
     {
         this.target = target;
         this.map = target.map;
@@ -72,7 +72,7 @@ public class ResurrectionContinue : Command
     {
         if (map.DestVec.magnitude > 0f)
         {
-            input.Interrupt(startMoving, false);
+            target.interrupt.OnNext(Data(startMoving));
         }
         return true;
     }
@@ -107,7 +107,7 @@ public class StartMoving : UndeadCommand
         anim.speed.Float = Speed;
         completeTween = tweenMove.DelayedCall(timeScale, () => anim.speed.Float = 0f).Play();
 
-        validateTween = DOVirtual.DelayedCall(timeScale * invalidDuration, () => input.ValidateInput()).Play();
+        validateTween = DOVirtual.DelayedCall(timeScale * invalidDuration, () => target.validate.OnNext(false)).Play();
 
         return ObservableComplete(timeScale);
     }
@@ -127,7 +127,7 @@ public class UndeadSleep : UndeadCommand
 
         undeadAnim.die.Bool = undeadAnim.sleep.Bool = true;
         undeadReact.OnSleep();
-        input.Interrupt(resurrection, false);
+        target.interrupt.OnNext(Data(resurrection));
 
         return ObservableComplete(); // Don't validate input
     }
@@ -145,7 +145,7 @@ public class UndeadQuickSleep : UndeadCommand
     {
         undeadAnim.die.Bool = undeadAnim.sleep.Bool = true;
         target.anim.SetSpeed(100f);
-        input.Interrupt(resurrection, false);
+        target.interrupt.OnNext(Data(resurrection));
 
         return ExecOnCompleted(target.anim.Resume); // Don't validate input
     }

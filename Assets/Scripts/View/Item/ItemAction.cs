@@ -59,7 +59,7 @@ public class CoinAction : ItemAction
 
     public override int Action(PlayerCommandTarget target)
     {
-        target.input.Interrupt(new PlayerCoinThrow(target, 60f), false);
+        target.interrupt.OnNext(Command.Data(new PlayerCoinThrow(target, 60f)));
         return 1;
     }
 }
@@ -75,7 +75,7 @@ public class MagicRingAction : ItemAction
     public override int Action(PlayerCommandTarget target)
     {
         // Force command input while PlayerInput.isCommandValid is false.
-        target.input.Interrupt(new PlayerFire(target, 40f, bulletType), false);
+        target.interrupt.OnNext(Command.Data(new PlayerFire(target, 40f, bulletType)));
         return 1;
     }
 }

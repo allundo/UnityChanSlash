@@ -20,7 +20,12 @@ public abstract class MagicCommand : Command
 
 public class MagicMove : MagicCommand
 {
-    public MagicMove(CommandTarget target, float duration) : base(target, duration) { }
+    protected ICommand die;
+
+    public MagicMove(CommandTarget target, float duration, ICommand die) : base(target, duration)
+    {
+        this.die = die;
+    }
 
     protected virtual Tween AttackSequence => attack.AttackSequence(duration);
 
@@ -40,7 +45,7 @@ public class MagicMove : MagicCommand
 
             // Call InputDie() independently because it cancels OnComplete Actions during executing them.
             // FIXME: currently handling it as validate tween to make it cancelable
-            validateTween = tweenMove.DelayedCall(0.75f, () => target.input.InterruptDie()).Play();
+            validateTween = tweenMove.DelayedCall(0.75f, () => target.interrupt.OnNext(Data(die, true, true))).Play();
             return ObservableComplete(0.75f);
         }
     }
@@ -48,7 +53,7 @@ public class MagicMove : MagicCommand
 
 public class MagicFire : MagicMove
 {
-    public MagicFire(CommandTarget target, float duration) : base(target, duration) { }
+    public MagicFire(CommandTarget target, float duration, ICommand die) : base(target, duration, die) { }
 
     // Enable attack collider after a half duration
     protected override Tween AttackSequence => attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f);

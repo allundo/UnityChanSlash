@@ -55,7 +55,7 @@ public class FlyingAttackStart : FlyingAttack
         if (!IsForwardMovable)
         {
             // Cancel attack
-            input.ValidateInput();
+            target.validate.OnNext(false);
             return Observable.Empty(Unit.Default);
         }
 
@@ -71,7 +71,7 @@ public class FlyingAttackStart : FlyingAttack
         flyingAnim.attack.Fire();
         completeTween = flyingAttack.AttackSequence(duration).Play();
 
-        target.input.Interrupt(PlayNext(), false);
+        target.interrupt.OnNext(Data(PlayNext()));
 
         return ObservableComplete(attackTimeScale);
     }
@@ -128,7 +128,7 @@ public class FlyingAttackEnd : FlyingAttack
 
         playingTween = seq.SetUpdate(false).Play();
 
-        input.Interrupt(leave, false);
+        target.interrupt.OnNext(Data(leave));
 
         return ObservableComplete();
     }

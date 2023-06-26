@@ -8,10 +8,16 @@ public abstract class ShieldInput : MobInput
 
     public bool IsShield => commander.currentCommand is ShieldCommand;
 
-    public override bool IsFightValid => IsIdling || IsShield;
+    public bool IsFightValid => IsIdling || IsShield;
 
-    protected virtual void Start()
+    protected override void SetCommander()
     {
+        commander = new ShieldCommander(gameObject);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
         SetInputs();
     }
 
@@ -22,10 +28,6 @@ public abstract class ShieldInput : MobInput
     protected virtual void SetInputs()
     {
         guardState = new GuardState(this);
-    }
-    protected override void SetCommander()
-    {
-        commander = new ShieldCommander(gameObject);
     }
 
     public class GuardState

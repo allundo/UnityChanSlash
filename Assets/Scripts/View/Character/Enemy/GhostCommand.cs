@@ -53,7 +53,7 @@ public class GhostThrough : EnemyForward
 
         playingTween = LinearMove(GetDest);
 
-        input.Interrupt(map.IsOnPlayer(map.GetForward) ? attack : throughEnd, false);
+        target.interrupt.OnNext(Data(map.IsOnPlayer(map.GetForward) ? attack : throughEnd));
 
         return ObservableComplete();
     }
@@ -100,7 +100,7 @@ public class GhostAttackStart : FlyingAttackStart
         if (!IsForwardMovable)
         {
             // Cancel attack
-            input.ValidateInput();
+            target.validate.OnNext(false);
             return Observable.Empty(Unit.Default);
         }
 
@@ -125,7 +125,7 @@ public class GhostAttackKeep : FlyingAttack
         if (!IsForwardMovable)
         {
             // Execute AttackEnd
-            input.Interrupt(attackEnd, false);
+            target.interrupt.OnNext(Data(attackEnd));
             return Observable.Empty(Unit.Default);
         }
 
@@ -141,7 +141,7 @@ public class GhostAttackKeep : FlyingAttack
         flyingAnim.attack.Fire();
         completeTween = flyingAttack.AttackSequence(duration).Play();
 
-        target.input.Interrupt(PlayNext(), false);
+        target.interrupt.OnNext(Data(PlayNext()));
 
         return ObservableComplete();
     }

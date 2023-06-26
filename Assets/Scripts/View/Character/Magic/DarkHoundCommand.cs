@@ -17,7 +17,7 @@ public class DarkHoundMove : MagicMove
             .Play();
     }
 
-    public DarkHoundMove(CommandTarget target, float duration) : base(target, duration) { }
+    public DarkHoundMove(CommandTarget target, float duration, ICommand die) : base(target, duration, die) { }
 
     public override IObservable<Unit> Execute()
     {
