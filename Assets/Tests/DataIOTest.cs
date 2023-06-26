@@ -7,8 +7,6 @@ using System.Text.RegularExpressions;
 public class DataIOTest
 {
     private DataStoreAgentTest dataStoreAgent;
-    private string[] tempFiles;
-    private string[] fileNames;
     private GameInfo gameInfo;
     private ResourceLoader resourceLoader;
 
