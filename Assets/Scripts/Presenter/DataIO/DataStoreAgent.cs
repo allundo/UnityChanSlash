@@ -106,9 +106,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             tileBrokenData = broken.ToArray();
             tileDiscoveredData = map.miniMapData.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
-            randomMessagePos = map.ExportRandomMessagePos();
-            fixedMessagePos = map.fixedMessagePos.ToArray();
-            bloodMessagePos = map.bloodMessagePos.ToArray();
+
+            var mesData = map.messagePosData;
+            fixedMessagePos = mesData.fixedMessagePos.ToArray();
+            bloodMessagePos = mesData.bloodMessagePos.ToArray();
+            randomMessagePos = mesData.ExportRandomMessagePos();
 
             stairsData = map.stairsMapData.ExportValues;
         }

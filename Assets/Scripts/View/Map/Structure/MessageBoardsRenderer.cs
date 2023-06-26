@@ -47,7 +47,8 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 
         if (tile.Read == null)
         {
-            int fixedIndex = map.fixedMessagePos.IndexOf(pos);
+            var mesData = map.messagePosData;
+            int fixedIndex = mesData.fixedMessagePos.IndexOf(pos);
             if (fixedIndex != -1)
             {
                 tile.data = floorMessages.fixedMessages[fixedIndex].Convert();
@@ -55,10 +56,10 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
             else
             {
                 int randomIndex;
-                if (!map.randomMessagePos.TryGetValue(pos, out randomIndex))
+                if (!mesData.randomMessagePos.TryGetValue(pos, out randomIndex))
                 {
                     randomIndex = GetRandomIndex();
-                    map.randomMessagePos[pos] = randomIndex;
+                    mesData.randomMessagePos[pos] = randomIndex;
                 }
 
                 tile.data = floorMessages.randomMessages[randomIndex].Convert();
@@ -73,7 +74,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
 
         if (tile.Read == null)
         {
-            int bloodIndex = map.bloodMessagePos.IndexOf(pos);
+            int bloodIndex = map.messagePosData.bloodMessagePos.IndexOf(pos);
             if (bloodIndex != -1)
             {
                 tile.data = floorMessages.bloodMessages[bloodIndex].Convert();

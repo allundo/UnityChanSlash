@@ -9,14 +9,12 @@ public class WorldMap : TileMapData
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
-    public List<Pos> fixedMessagePos { get; private set; }
-    public List<Pos> bloodMessagePos { get; private set; }
-    public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
     public static bool isExitDoorLocked = true;
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
 
+    public PitMessageMapData messagePosData { get; private set; }
     public StairsMapData stairsMapData { get; private set; }
     public DirMapHandler dirMapHandler { get; private set; }
 
@@ -103,7 +101,7 @@ public class WorldMap : TileMapData
         var broken = new List<Pos>();
 
         // FIXME: use random message count as initialized flag for now.
-        bool isTilesReady = randomMessagePos.Count() > 0;
+        bool isTilesReady = messagePosData.randomMessagePos.Count() > 0;
         if (isTilesReady)
         {
             ForEachTiles((tile, pos) =>
@@ -188,8 +186,19 @@ public class WorldMap : TileMapData
     {
         var dirMapData = new DirMapData(import);
         var dirMapHandler = new DirMapHandler(dirMapData);
+        var stairsMapData = new StairsMapData(dirMapData, import);
+        var pitMessageMapData = new PitMessageMapData(dirMapData, floor, import);
+        var map = new WorldMap(floor, import.roomCenterPos.ToList(), dirMapHandler, stairsMapData, pitMessageMapData);
+        map.ImportTileData(import.tileOpenData, import.tileBrokenData, import.tileDiscoveredData);
 
-        return new WorldMap(floor, dirMapHandler, import);
+        return map;
+    }
+
+    private void ImportTileData(Pos[] open, Pos[] broken, bool[] discovered)
+    {
+        tileOpenPosList = open.ToList();
+        tileBrokenPosList = broken.ToList();
+        miniMapData.ImportTileDiscoveredData(discovered);
     }
 
     // Create map data
@@ -198,48 +207,17 @@ public class WorldMap : TileMapData
     {
         this.dirMapHandler = dirMapHandler;
         this.stairsMapData = stairsMapData;
+        this.messagePosData = pitMessageMapData;
 
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
         this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
 
         this.deadEndPos = new Dictionary<Pos, IDirection>(stairsMapData.deadEndPos);
         this.roomCenterPos = new List<Pos>(roomCenterPos);
-        this.fixedMessagePos = new List<Pos>(pitMessageMapData.fixedMessagePos);
-        this.bloodMessagePos = new List<Pos>(pitMessageMapData.bloodMessagePos);
 
         // Generate tile matrix by MiniMapData constructor to save a for-loop to convert terrain to mini map color.
         miniMapData = MiniMapData.Convert(dirMapHandler.matrix, floor, width, height);
         matrix = miniMapData.matrix;
-    }
-
-    // Import map data
-    protected WorldMap(int floor, DirMapHandler dirMapHandler, DataStoreAgent.MapData import)
-        : base(null, floor, dirMapHandler.width, dirMapHandler.height)
-    {
-        this.dirMapHandler = dirMapHandler;
-        this.stairsMapData = new StairsMapData(dirMapHandler, import);
-
-        this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
-        this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
-
-        this.deadEndPos = new Dictionary<Pos, IDirection>();
-        this.roomCenterPos = import.roomCenterPos.ToList();
-        this.tileOpenPosList = import.tileOpenData.ToList();
-        this.tileBrokenPosList = import.tileBrokenData.ToList();
-
-        this.fixedMessagePos = import.fixedMessagePos.ToList();
-        this.bloodMessagePos = import.bloodMessagePos.ToList();
-        for (int i = 0; i < import.randomMessagePos.Length; i++)
-        {
-            var posList = import.randomMessagePos[i];
-            posList.pos.ForEach(pos => this.randomMessagePos[pos] = i);
-        }
-
-        // Generate tile matrix by MiniMapData constructor to save a for-loop to convert terrain to mini map color.
-        miniMapData = MiniMapData.Convert(dirMapHandler.matrix, floor, width, height);
-        matrix = miniMapData.matrix;
-
-        miniMapData.ImportTileDiscoveredData(import.tileDiscoveredData);
     }
 
     public Dir SetTerrain(int x, int y, Terrain terrain)
@@ -259,13 +237,4 @@ public class WorldMap : TileMapData
 
     public KeyValuePair<Pos, IDirection> StairsEnter(bool isDownStairs) => isDownStairs ? stairsTop : stairsBottom;
     public KeyValuePair<Pos, IDirection> StairsExit(bool isDownStairs) => StairsEnter(!isDownStairs);
-
-    public DataStoreAgent.PosList[] ExportRandomMessagePos()
-    {
-        // export[RANDOM_MESSAGE_ID] = List<PLACED_BOARD_POSITION>
-        var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();
-        randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
-        return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();
-    }
-
 }

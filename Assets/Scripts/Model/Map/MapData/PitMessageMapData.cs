@@ -4,16 +4,24 @@ using System.Collections.Generic;
 
 public class PitMessageMapData : DirMapData
 {
+    public int floor { get; private set; }
     public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
     public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
-    public int numOfPits { get; private set; }
+    public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
 
-    // Create default data
-    public PitMessageMapData(IDirMapData data) : base(data) { }
+    public DataStoreAgent.PosList[] ExportRandomMessagePos()
+    {
+        // export[RANDOM_MESSAGE_ID] = List<PLACED_BOARD_POSITION>
+        var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();
+        randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
+        return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();
+    }
 
     // Newly created maze
     public PitMessageMapData(StairsMapData data, int floor) : base(data)
     {
+        this.floor = floor;
+
         // Don't set pit in front of items(dead ends)
         List<Pos> pitIgnore = deadEndPos.Select(kv => kv.Value.GetForward(kv.Key)).ToList();
         pitIgnore.Add(data.StairsBottom);
@@ -28,7 +36,7 @@ public class PitMessageMapData : DirMapData
         int numOfRandomMessages = src.randomMessages.Length;
         int numOfBloodMessages = src.bloodMessages.Length;
 
-        numOfPits = new int[] { floor * floor * 4, width * height / 10, pitCandidates.Count }.Min();
+        var numOfPits = new int[] { floor * floor * 4, width * height / 10, pitCandidates.Count }.Min();
 
         if (floor == 1)
         {
@@ -51,10 +59,25 @@ public class PitMessageMapData : DirMapData
         PlaceMessageBoards(boardCandidates, numOfFixedMessages, numOfRandomMessages, numOfBloodMessages);
     }
 
+    // Import map data
+    public PitMessageMapData(IDirMapData data, int floor, DataStoreAgent.MapData import) : base(data)
+    {
+        this.floor = floor;
+
+        fixedMessagePos = import.fixedMessagePos.ToList();
+        bloodMessagePos = import.bloodMessagePos.ToList();
+
+        for (int i = 0; i < import.randomMessagePos.Length; i++)
+        {
+            var posList = import.randomMessagePos[i];
+            posList.pos.ForEach(pos => this.randomMessagePos[pos] = i);
+        }
+    }
+
     // Custom map data with custom message board positions.
     public PitMessageMapData(DirMapHandler dirMapHandler, CustomMapData data) : base(dirMapHandler)
     {
-        numOfPits = data.numOfPits;
+        floor = data.floor;
 
         var fixedMessageBuffer = data.fixedMes;
         var bloodMessageBuffer = data.bloodMes;
