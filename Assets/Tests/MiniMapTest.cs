@@ -62,6 +62,7 @@ public class MiniMapTest
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         miniMap = Object.Instantiate(prefabMiniMap, rectTfCanvas);
         miniMapHandler.SetMiniMap(miniMap);
+        miniMap.InitUISize(420f, 480f, 960f);
 
         RectTransform rectTf = miniMap.GetComponent<RectTransform>();
         rectTf.anchoredPosition = new Vector2(-260, 420);
@@ -78,18 +79,18 @@ public class MiniMapTest
 
     //[Ignore("need to implement.")]
     [UnityTest]
-    public IEnumerator _001_NEED_TO_IMPLEMENT()
+    public IEnumerator _001_MiniMapSetDiscoveredTest()
     {
         // setup
-        Pos pos = map.MapPos(playerInfo.transform.position);
+        Pos pos = map.stairsBottom.Key;
         yield return new WaitForSeconds(0.5f);
         miniMapHandler.OnStartFloor();
         yield return new WaitForSeconds(0.5f);
-        map.miniMapData.SetDiscovered(pos);
-        miniMapHandler.UpdateMiniMap();
-        yield return new WaitForSeconds(0.5f);
-        map.miniMapData.SetDiscovered(pos + new Pos(0, 2));
-        miniMapHandler.UpdateMiniMap();
-        yield return new WaitForSeconds(0.5f);
+        for (Pos pointer = pos; pointer.y < map.height - 2; pointer += new Pos(0, 2))
+        {
+            map.miniMapData.SetDiscovered(pointer);
+            miniMapHandler.UpdateMiniMap();
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }
