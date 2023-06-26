@@ -222,6 +222,7 @@ public class WorldMap : TileMapData
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
         this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
 
+        this.deadEndPos = new Dictionary<Pos, IDirection>();
         this.roomCenterPos = import.roomCenterPos.ToList();
         this.tileOpenPosList = import.tileOpenData.ToList();
         this.tileBrokenPosList = import.tileBrokenData.ToList();
