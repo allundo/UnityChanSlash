@@ -7,7 +7,7 @@ public abstract class RabbitCommand : EnemyCommand
 {
     protected RabbitAnimator rabbitAnim;
 
-    public RabbitCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public RabbitCommand(CommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         rabbitAnim = target.anim as RabbitAnimator;
     }
@@ -18,7 +18,7 @@ public abstract class RabbitAttack : RabbitCommand
     protected IAttack jumpAttack;
     protected IAttack somersault;
 
-    public RabbitAttack(ICommandTarget target, float duration) : base(target, duration)
+    public RabbitAttack(CommandTarget target, float duration) : base(target, duration)
     {
         jumpAttack = target.Attack(0);
         somersault = target.Attack(1);
@@ -68,7 +68,7 @@ public abstract class RabbitAttack : RabbitCommand
 
 public class RabbitJumpAttack : RabbitAttack
 {
-    public RabbitJumpAttack(ICommandTarget target, float duration) : base(target, duration) { }
+    public RabbitJumpAttack(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -81,7 +81,7 @@ public class RabbitJumpAttack : RabbitAttack
 
 public class RabbitLongJumpAttack : RabbitAttack
 {
-    public RabbitLongJumpAttack(ICommandTarget target, float duration) : base(target, duration) { }
+    public RabbitLongJumpAttack(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -110,7 +110,7 @@ public class RabbitLongJumpAttack : RabbitAttack
 public class RabbitSomersault : RabbitAttack
 {
     private Command attack;
-    public RabbitSomersault(ICommandTarget target, float duration) : base(target, duration)
+    public RabbitSomersault(CommandTarget target, float duration) : base(target, duration)
     {
         attack = new RabbitJumpAttack(target, duration);
     }
@@ -141,7 +141,7 @@ public class RabbitSomersault : RabbitAttack
 }
 public class RabbitWondering : RabbitCommand
 {
-    public RabbitWondering(ICommandTarget target, float duration) : base(target, duration) { }
+    public RabbitWondering(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -155,7 +155,7 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
     protected float meltTime;
     public float framesToMelt { get; protected set; }
 
-    public RabbitIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    public RabbitIcedFall(CommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
         this.framesToMelt = framesToMelt;
         meltTime = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
@@ -184,7 +184,7 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
 public class RabbitWakeUp : RabbitCommand
 {
     protected float wakeUpTiming;
-    public RabbitWakeUp(ICommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
+    public RabbitWakeUp(CommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
     {
         this.wakeUpTiming = wakeUpTiming;
     }

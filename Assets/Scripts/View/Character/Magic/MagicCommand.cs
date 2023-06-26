@@ -5,7 +5,7 @@ using DG.Tweening;
 public abstract class MagicCommand : Command
 {
     protected IAttack attack;
-    public MagicCommand(ICommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming)
+    public MagicCommand(CommandTarget target, float duration, float validateTiming = 1f) : base(target, duration, validateTiming)
     {
         attack = target.Attack(0);
     }
@@ -20,7 +20,7 @@ public abstract class MagicCommand : Command
 
 public class MagicMove : MagicCommand
 {
-    public MagicMove(ICommandTarget target, float duration) : base(target, duration) { }
+    public MagicMove(CommandTarget target, float duration) : base(target, duration) { }
 
     protected virtual Tween AttackSequence => attack.AttackSequence(duration);
 
@@ -48,7 +48,7 @@ public class MagicMove : MagicCommand
 
 public class MagicFire : MagicMove
 {
-    public MagicFire(ICommandTarget target, float duration) : base(target, duration) { }
+    public MagicFire(CommandTarget target, float duration) : base(target, duration) { }
 
     // Enable attack collider after a half duration
     protected override Tween AttackSequence => attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f);
@@ -56,7 +56,7 @@ public class MagicFire : MagicMove
 
 public class MagicDie : MagicCommand
 {
-    public MagicDie(ICommandTarget target, float duration) : base(target, duration) { }
+    public MagicDie(CommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

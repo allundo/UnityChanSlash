@@ -4,7 +4,7 @@ public abstract class EnemyTurnCommand : EnemyCommand
 {
     protected EnemyTurnAnimator turnAnim;
 
-    public EnemyTurnCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public EnemyTurnCommand(CommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         turnAnim = target.anim as EnemyTurnAnimator;
     }
@@ -12,7 +12,7 @@ public abstract class EnemyTurnCommand : EnemyCommand
 
 public class EnemyTurnAnimL : EnemyTurnCommand
 {
-    public EnemyTurnAnimL(ICommandTarget target, float duration) : base(target, duration) { }
+    public EnemyTurnAnimL(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -25,7 +25,7 @@ public class EnemyTurnAnimL : EnemyTurnCommand
 
 public class EnemyTurnAnimR : EnemyTurnCommand
 {
-    public EnemyTurnAnimR(ICommandTarget target, float duration) : base(target, duration) { }
+    public EnemyTurnAnimR(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {

@@ -5,7 +5,7 @@ public class MagicianCommand : EnemyTurnCommand
     protected IMagicianAnimator magicianAnim;
     protected IMagicianReactor magicianReact;
 
-    public MagicianCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public MagicianCommand(CommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         magicianAnim = target.anim as IMagicianAnimator;
         magicianReact = target.react as IMagicianReactor;
@@ -15,7 +15,7 @@ public class MagicianCommand : EnemyTurnCommand
 public class MagicianTeleport : MagicianCommand
 {
     protected int range;
-    public MagicianTeleport(ICommandTarget target, float duration, int teleportRange = 2) : base(target, duration)
+    public MagicianTeleport(CommandTarget target, float duration, int teleportRange = 2) : base(target, duration)
     {
         range = teleportRange;
     }

@@ -26,7 +26,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
     /// Target Commander to input Command.
     /// </summary>
     public Commander commander { get; protected set; }
-    protected ICommandTarget target;
+    protected CommandTarget target;
 
     /// <summary>
     /// Stops input ICommand if false. <br />

@@ -41,7 +41,7 @@ public class Command : ICommand
 
     protected TweenMove tweenMove;
 
-    protected ICommandTarget target;
+    protected CommandTarget target;
     protected MobAnimator anim;
     protected IReactor react;
     protected IInput input;
@@ -55,7 +55,7 @@ public class Command : ICommand
     /// <param name="target">Target GameObject to apply Command execution</param>
     /// <param name="duration">Command duration time with frame unit</param>
     /// <param name="validateTiming">Normalized input validating timing of command duration</param>
-    public Command(ICommandTarget target, float duration, float validateTiming = 0.5f)
+    public Command(CommandTarget target, float duration, float validateTiming = 0.5f)
     {
         this.target = target;
 

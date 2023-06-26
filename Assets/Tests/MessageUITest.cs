@@ -28,9 +28,7 @@ public class MessageUITest
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
 
         timeManager = Object.Instantiate(Resources.Load<TimeManager>("Prefabs/TimeManager"));
-        var playerTargetMock = new Mock<ICommandTarget>();
-        playerTargetMock.Setup(m => m.input).Returns(new Mock<IPlayerInput>().Object);
-        timeManager.target = playerTargetMock.Object;
+        timeManager.input = new Mock<IPlayerInput>().Object;
 
         // Load from test resources
         mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));

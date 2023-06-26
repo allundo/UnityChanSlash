@@ -7,7 +7,7 @@ public class CoinCommand : MagicCommand
 {
     protected CoinInput coinInput;
 
-    public CoinCommand(ICommandTarget target, float duration) : base(target, duration)
+    public CoinCommand(CommandTarget target, float duration) : base(target, duration)
     {
         coinInput = target.input as CoinInput;
     }
@@ -17,7 +17,7 @@ public class CoinMove : CoinCommand
     protected IMortalReactor mortalReact;
     protected CoinBound coinBound;
 
-    public CoinMove(ICommandTarget target, float duration) : base(target, duration)
+    public CoinMove(CommandTarget target, float duration) : base(target, duration)
     {
         mortalReact = react as IMortalReactor;
         coinBound = new CoinBound(target, duration);
@@ -58,7 +58,7 @@ public class CoinMove : CoinCommand
 
 public class CoinFire : CoinMove
 {
-    public CoinFire(ICommandTarget target, float duration) : base(target, duration) { }
+    public CoinFire(CommandTarget target, float duration) : base(target, duration) { }
 
     // Enable attack collider after a half duration
     protected override Tween AttackSequence => attack.AttackSequence(duration * 0.5f).SetDelay(duration * 0.5f);
@@ -66,7 +66,7 @@ public class CoinFire : CoinMove
 
 public class CoinBound : CoinCommand
 {
-    public CoinBound(ICommandTarget target, float duration) : base(target, duration) { }
+    public CoinBound(CommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {
@@ -93,7 +93,7 @@ public class CoinDrop : CoinCommand
 {
     protected Item coin;
 
-    public CoinDrop(ICommandTarget target, float duration) : base(target, duration) { }
+    public CoinDrop(CommandTarget target, float duration) : base(target, duration) { }
 
     public CoinDrop SetCoin(Item coin)
     {

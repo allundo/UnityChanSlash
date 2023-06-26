@@ -1007,7 +1007,7 @@ public class PlayerIcedCommand : IcedCommand
 
 public class PlayerGuardCommand : GuardCommand
 {
-    public PlayerGuardCommand(ICommandTarget target, float duration) : base(target, duration, 0f) { }
+    public PlayerGuardCommand(CommandTarget target, float duration) : base(target, duration, 0f) { }
 
     public override ICommand GetContinuation()
     {

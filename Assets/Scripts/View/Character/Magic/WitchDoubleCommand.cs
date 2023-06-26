@@ -10,7 +10,7 @@ public class WitchDoubleCommand : MagicCommand
     protected float attackTimeScale = 0.75f;
     protected float decentVec = -0.5f;
 
-    public WitchDoubleCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public WitchDoubleCommand(CommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         witchAnim = target.anim as WitchDoubleAnimator;
         witchReact = target.react as WitchDoubleReactor;
@@ -21,7 +21,7 @@ public class WitchDoubleJump : WitchDoubleCommand
 {
     protected ICommand doubleAttack;
 
-    public WitchDoubleJump(ICommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
+    public WitchDoubleJump(CommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
     {
         this.doubleAttack = doubleAttack;
     }
@@ -50,7 +50,7 @@ public class WitchDoubleBackStep : WitchDoubleCommand
 {
     protected ICommand doubleAttack;
 
-    public WitchDoubleBackStep(ICommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
+    public WitchDoubleBackStep(CommandTarget target, float duration, ICommand doubleAttack) : base(target, duration)
     {
         this.doubleAttack = doubleAttack;
     }
@@ -72,7 +72,7 @@ public class WitchDoubleBackStep : WitchDoubleCommand
 public class WitchDoubleLaunch : WitchDoubleCommand
 {
     protected ICommand doubleAttackStart;
-    public WitchDoubleLaunch(ICommandTarget target, float duration) : base(target, duration)
+    public WitchDoubleLaunch(CommandTarget target, float duration) : base(target, duration)
     {
         doubleAttackStart = new WitchDoubleStart(target, duration * 0.5f);
     }
@@ -88,7 +88,7 @@ public class WitchDoubleStart : WitchDoubleCommand
 {
     protected ICommand attackKeep;
 
-    public WitchDoubleStart(ICommandTarget target, float duration) : base(target, duration)
+    public WitchDoubleStart(CommandTarget target, float duration) : base(target, duration)
     {
         attackKeep = new WitchDoubleKeep(target, duration);
     }
@@ -115,7 +115,7 @@ public class WitchDoubleKeep : WitchDoubleCommand
 {
     protected ICommand attackEnd;
 
-    public WitchDoubleKeep(ICommandTarget target, float duration) : base(target, duration)
+    public WitchDoubleKeep(CommandTarget target, float duration) : base(target, duration)
     {
         attackEnd = new WitchDoubleEnd(target, duration * (1f - attackTimeScale));
     }
@@ -139,7 +139,7 @@ public class WitchDoubleKeep : WitchDoubleCommand
 public class WitchDoubleEnd : WitchDoubleCommand
 {
     protected ICommand leave;
-    public WitchDoubleEnd(ICommandTarget target, float duration) : base(target, duration)
+    public WitchDoubleEnd(CommandTarget target, float duration) : base(target, duration)
     {
         leave = new WitchDoubleLeave(target, duration / (1f - attackTimeScale) * 2f);
     }
@@ -160,7 +160,7 @@ public class WitchDoubleEnd : WitchDoubleCommand
 
 public class WitchDoubleLeave : WitchDoubleCommand
 {
-    public WitchDoubleLeave(ICommandTarget target, float duration) : base(target, duration) { }
+    public WitchDoubleLeave(CommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

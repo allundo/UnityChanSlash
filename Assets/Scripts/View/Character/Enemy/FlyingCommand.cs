@@ -7,7 +7,7 @@ public abstract class FlyingCommand : EnemyTurnCommand
 {
     protected FlyingAnimator flyingAnim;
 
-    public FlyingCommand(ICommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    public FlyingCommand(CommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
     {
         flyingAnim = target.anim as FlyingAnimator;
     }
@@ -15,7 +15,7 @@ public abstract class FlyingCommand : EnemyTurnCommand
 
 public class FlyingForward : EnemyForward
 {
-    public FlyingForward(ICommandTarget target, float duration) : base(target, duration) { }
+    public FlyingForward(CommandTarget target, float duration) : base(target, duration) { }
     protected override bool IsMovable => map.ForwardTile.IsViewOpen;
 }
 
@@ -30,7 +30,7 @@ public abstract class FlyingAttack : FlyingCommand
 
     protected virtual bool IsForwardMovable => map.ForwardTile.IsViewOpen;
 
-    public FlyingAttack(ICommandTarget target, float duration) : base(target, duration)
+    public FlyingAttack(CommandTarget target, float duration) : base(target, duration)
     {
         flyingAttack = target.Attack(0);
     }
@@ -40,12 +40,12 @@ public class FlyingAttackStart : FlyingAttack
 {
     protected ICommand attackEnd;
 
-    protected virtual ICommand AttackEndCommand(ICommandTarget target, float duration)
+    protected virtual ICommand AttackEndCommand(CommandTarget target, float duration)
         => new FlyingAttackEnd(target, duration);
 
     protected virtual ICommand PlayNext() => attackEnd;
 
-    public FlyingAttackStart(ICommandTarget target, float duration) : base(target, duration)
+    public FlyingAttackStart(CommandTarget target, float duration) : base(target, duration)
     {
         attackEnd = AttackEndCommand(target, duration * (1f - attackTimeScale));
     }
@@ -85,7 +85,7 @@ public class FlyingAttackEnd : FlyingAttack
     protected virtual bool IsRightMovable => map.RightTile.IsViewOpen;
     protected virtual bool IsLeftMovable => map.LeftTile.IsViewOpen;
 
-    public FlyingAttackEnd(ICommandTarget target, float duration) : base(target, duration)
+    public FlyingAttackEnd(CommandTarget target, float duration) : base(target, duration)
     {
         leave = new FlyingAttackLeave(target, duration / (1f - attackTimeScale) * 2f);
     }
@@ -136,7 +136,7 @@ public class FlyingAttackEnd : FlyingAttack
 
 public class FlyingAttackLeave : FlyingAttack
 {
-    public FlyingAttackLeave(ICommandTarget target, float duration) : base(target, duration) { }
+    public FlyingAttackLeave(CommandTarget target, float duration) : base(target, duration) { }
     protected override bool Action()
     {
         playingTween = DOTween.Sequence()
@@ -153,7 +153,7 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
     protected float meltTime;
     public float framesToMelt { get; protected set; }
 
-    public FlyingIcedFall(ICommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    public FlyingIcedFall(CommandTarget target, float framesToMelt, float duration) : base(target, duration)
     {
         this.framesToMelt = framesToMelt;
         meltTime = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
@@ -195,7 +195,7 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
 public class FlyingWakeUp : FlyingCommand
 {
     protected float wakeUpTiming;
-    public FlyingWakeUp(ICommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
+    public FlyingWakeUp(CommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
     {
         this.wakeUpTiming = wakeUpTiming;
     }
@@ -219,7 +219,7 @@ public class FlyingWakeUp : FlyingCommand
 }
 public class FlyingDie : FlyingCommand
 {
-    public FlyingDie(ICommandTarget target, float duration) : base(target, duration) { }
+    public FlyingDie(CommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

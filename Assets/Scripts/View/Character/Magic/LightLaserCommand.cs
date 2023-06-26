@@ -4,7 +4,7 @@ using DG.Tweening;
 
 public class LightLaserFire : MagicCommand
 {
-    public LightLaserFire(ICommandTarget target, float duration) : base(target, duration) { }
+    public LightLaserFire(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -16,7 +16,7 @@ public class LightLaserFire : MagicCommand
 
 public class SubLaserFire : MagicCommand
 {
-    public SubLaserFire(ICommandTarget target, float duration) : base(target, duration) { }
+    public SubLaserFire(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -27,7 +27,7 @@ public class SubLaserFire : MagicCommand
 
 public class LightLaserActive : MagicCommand
 {
-    public LightLaserActive(ICommandTarget target, float duration) : base(target, duration) { }
+    public LightLaserActive(CommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -39,7 +39,7 @@ public class LightLaserActive : MagicCommand
 
 public class LightLaserDie : MagicCommand
 {
-    public LightLaserDie(ICommandTarget target, float duration) : base(target, duration) { }
+    public LightLaserDie(CommandTarget target, float duration) : base(target, duration) { }
 
     public override IObservable<Unit> Execute()
     {

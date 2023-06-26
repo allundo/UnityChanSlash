@@ -6,7 +6,7 @@ public class UndeadInput
     private ICommand sleep;
     private ICommand quickSleep;
 
-    public UndeadInput(ICommandTarget target, Action<ICommand> interrupt)
+    public UndeadInput(CommandTarget target, Action<ICommand> interrupt)
         : this(interrupt, new UndeadSleep(target), new UndeadQuickSleep(target))
     { }
 

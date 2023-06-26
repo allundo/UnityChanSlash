@@ -1,40 +1,5 @@
 using UnityEngine;
 
-public interface ICommandTarget
-{
-    /// <summary>
-    /// Animation handler for Command execution.
-    /// </summary>
-    MobAnimator anim { get; }
-
-    /// <summary>
-    /// Reaction handler for Command execution.
-    /// </summary>
-    IReactor react { get; }
-
-    /// <summary>
-    /// Input handler for Command execution.
-    /// </summary>
-    IInput input { get; }
-
-    /// <summary>
-    /// Direction related data for Command execution.
-    /// </summary>
-    IMapUtil map { get; }
-
-    /// <summary>
-    /// Attack collider and type handlers invoked on attack commands.
-    /// </summary>
-    IAttack Attack(int index);
-
-    /// <summary>
-    /// Bullet attack source. Not imperative.
-    /// </summary>
-    Magic magic { get; }
-
-    Transform transform { get; }
-}
-
 /// <summary>
 /// Keeps attached component used by Command execution.
 /// </summary>
@@ -42,20 +7,39 @@ public interface ICommandTarget
 [RequireComponent(typeof(InputHandler))]
 [RequireComponent(typeof(MapUtil))]
 [RequireComponent(typeof(FightStyle))]
-public class CommandTarget : MonoBehaviour, ICommandTarget
+public class CommandTarget : MonoBehaviour
 {
+    /// <summary>
+    /// Animation handler for Command execution.
+    /// </summary>
     public MobAnimator anim { get; protected set; }
 
+    /// <summary>
+    /// Reaction handler for Command execution.
+    /// </summary>
     public IReactor react { get; protected set; }
 
+    /// <summary>
+    /// Input handler for Command execution.
+    /// </summary>
     public IInput input { get; protected set; }
 
+    /// <summary>
+    /// Direction related data for Command execution.
+    /// </summary>
     public IMapUtil map { get; protected set; }
 
-    protected FightStyle fightStyle;
+    /// <summary>
+    /// Attack collider and type handlers invoked on attack commands.
+    /// </summary>
     public IAttack Attack(int index) => fightStyle.Attack(index);
 
+    /// <summary>
+    /// Bullet attack source. Not imperative.
+    /// </summary>
     public Magic magic { get; protected set; }
+
+    protected FightStyle fightStyle;
 
     protected virtual void Awake()
     {
