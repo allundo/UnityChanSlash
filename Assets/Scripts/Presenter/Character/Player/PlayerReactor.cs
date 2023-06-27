@@ -238,6 +238,14 @@ public class PlayerReactor : MobReactor
         playerInput.SetInputVisible(false);
     }
 
+    public void OnDrop() => playerEffect.OnDrop();
+
+    public void OnGround()
+    {
+        Damage(1f, map.dir, AttackType.Smash);
+        playerEffect.OnGround();
+    }
+
     public override void OnWakeUp()
     {
         bodyCollider.enabled = true;

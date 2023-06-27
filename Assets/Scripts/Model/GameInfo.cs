@@ -9,6 +9,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 {
     public static readonly int MAX_FLOOR = 10;
 
+    public AudioSource dropStart { get; protected set; }
+
     private WorldMap[] maps;
     private int[] mapSize;
 
@@ -131,6 +133,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         Application.targetFrameRate = Constants.FRAME_RATE;
 
         InitData();
+
+        // Assign player drop start audio source to persistent object to keep sound during scene transition.
+        dropStart = ResourceLoader.Instance.LoadSnd(SNDType.DropStart);
+        dropStart.transform.SetParent(transform);
 
         // DEBUG ONLY
         if (Debug.isDebugBuild) CreateDebugMap();

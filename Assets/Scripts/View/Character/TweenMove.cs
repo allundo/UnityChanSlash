@@ -200,11 +200,12 @@ public class TweenMove
             .AppendInterval(edgeTime);
     }
 
-    public Sequence Drop(float startY, float endY, float stunDuration = 0.0f, float wakeUpDuration = 0.65f, TweenCallback onGround = null)
+    public Sequence Drop(float startY, float endY, float stunDuration = 0.0f, float wakeUpDuration = 0.65f, TweenCallback onDrop = null, TweenCallback onGround = null)
     {
         float fallDuration = duration - stunDuration - wakeUpDuration;
 
         return DOTween.Sequence()
+            .AppendCallback(onDrop)
             .Append(tf.DOMoveY(startY, 0f).SetRelative())
             .Append(tf.DOMoveY(endY - startY, fallDuration).SetRelative().SetEase(Ease.InQuad))
             .AppendCallback(onGround)

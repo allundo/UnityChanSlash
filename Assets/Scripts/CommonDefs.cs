@@ -572,6 +572,7 @@ public enum SNDType
     Decision,
     Select,
     DropStart,
+    DropToGround,
     HitLaser,
 }
 

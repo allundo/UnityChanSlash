@@ -28,7 +28,7 @@ public class TitleUIHandler : MonoBehaviour
     void Awake()
     {
         tfUnityChan = unityChanAnim.GetComponent<Transform>();
-        dropStart = ResourceLoader.Instance.LoadSnd(SNDType.DropStart);
+        dropStart = GameInfo.Instance.dropStart;
 
         TransitSignal =
             selectButtons.startButton
@@ -113,8 +113,9 @@ public class TitleUIHandler : MonoBehaviour
         return
             DOTween.Sequence()
                 .Append(startTween)
+                .AppendInterval(0.2f)
                 .AppendCallback(() => dropStart.PlayEx())
-                .AppendInterval(0.4f)
+                .AppendInterval(0.2f)
                 .Append(unityChanDropTween)
                 .Join(fadeOutTween.SetDelay(0.75f))
                 .AppendInterval(0.5f);

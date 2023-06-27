@@ -105,6 +105,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.Decision,             Resources.Load<AudioSource>("Prefabs/Sound/SND_UI_DECISION")        },
             { SNDType.Select,               Resources.Load<AudioSource>("Prefabs/Sound/SND_UI_SELECT")          },
             { SNDType.DropStart,            Resources.Load<AudioSource>("Prefabs/Sound/SND_TITLE_DROP_START")   },
+            { SNDType.DropToGround,         Resources.Load<AudioSource>("Prefabs/Sound/SND_DROP_GROUND")        },
             { SNDType.HitLaser,             Resources.Load<AudioSource>("Prefabs/Sound/SND_HIT_LASER")          },
         };
 

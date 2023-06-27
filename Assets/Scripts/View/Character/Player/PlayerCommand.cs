@@ -911,7 +911,7 @@ public class PlayerDropFloor : PlayerCommand
         SetUIInvisible(false);
         playerAnim.dropFloor.Fire();
 
-        playingTween = tweenMove.Drop(25.0f, 0f, 0.66f, 1.34f, () => playerReact.Damage(1f, map.dir.Backward, AttackType.Smash)).Play();
+        playingTween = tweenMove.Drop(25.0f, 0f, 0.66f, 1.34f, playerReact.OnDrop, playerReact.OnGround).Play();
         return true;
     }
 }

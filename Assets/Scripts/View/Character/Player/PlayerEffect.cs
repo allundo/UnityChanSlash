@@ -16,7 +16,6 @@ public class PlayerEffect : MobEffect
         base.OnDamage(damageRatio, type, attr);
         (anim as PlayerAnimator).rest.Bool = false;
     }
-    public void PlayDamageSnd(AttackType type = AttackType.Smash) => PlayDamage(type);
 
     public override void OnActive()
     {
@@ -31,4 +30,14 @@ public class PlayerEffect : MobEffect
     }
 
     public void OnShield() => (animFX as ShieldAnimFX).OnShield();
+
+    public void OnDrop()
+    {
+        resourceFX.PlaySnd(SNDType.DropToGround);
+    }
+
+    public void OnGround()
+    {
+        resourceFX.StopSnd(SNDType.DropToGround);
+    }
 }

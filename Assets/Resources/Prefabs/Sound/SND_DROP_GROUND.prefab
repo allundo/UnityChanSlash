@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4475045342671999933}
   - component: {fileID: 881742149359257920}
   m_Layer: 0
-  m_Name: SND_TITLE_DROP_START
+  m_Name: SND_DROP_GROUND
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b716192a0c0944ab6a22525e3d9ff68d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b2d25b02f14484930a32abbf85aba3ec, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.434
   m_Pitch: 1
