@@ -232,6 +232,13 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mainCamera.Amplify(0.8f);
     }
 
+    public void PitDropFX(Vector3 pos)
+    {
+        PlayVFX(VFXType.PitDrop, pos);
+        PlaySnd(SNDType.PitDrop, pos);
+        mainCamera.Amplify(0.3f);
+    }
+
     public void EnterStair(bool isDownStairs)
     {
         mainCamera.StopAmplify();

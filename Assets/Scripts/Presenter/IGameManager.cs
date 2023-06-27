@@ -15,6 +15,7 @@ public interface IGameManager
 
     void RedrawPlates();
     void DestructDoor(Vector3 pos, IDirection forceDir);
+    void PitDropFX(Vector3 pos);
 
     DataStoreAgent.EventData[] ExportEventData();
     int GetCurrentEvent();
