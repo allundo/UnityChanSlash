@@ -31,6 +31,12 @@ public interface IHandleTile : IOpenable
     bool IsLocked { get; }
 }
 
+public interface IReadable : ITile
+{
+    void Read();
+    bool IsRead { get; }
+}
+
 public class Tile
 {
     public Stack<Item> items { get; set; } = new Stack<Item>();
@@ -96,12 +102,13 @@ public class Wall : Tile, ITile
     public override ItemInfo TopItem => null;
 }
 
-public class MessageWall : Wall
+public class MessageWall : Wall, IReadable
 {
     public bool IsReadable(IDirection dir = null) => boardDir.IsInverse(dir);
-    public MessageData Read => data;
+    public void Read() => data.Read();
+    public bool IsRead => data.isRead;
     public IDirection boardDir { protected get; set; }
-    public MessageData data { protected get; set; }
+    public MessageData data;
 }
 
 public class Door : HandleTile, IHandleTile

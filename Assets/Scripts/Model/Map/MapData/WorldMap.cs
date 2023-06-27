@@ -3,6 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public interface ITileState
+{
+    List<Pos> tileOpenPosList { get; }
+    List<Pos> tileBrokenPosList { get; }
+    List<Pos> messageReadPosList { get; }
+}
+
+public class TileState : ITileState
+{
+    public List<Pos> tileOpenPosList { get; protected set; }
+    public List<Pos> tileBrokenPosList { get; protected set; }
+    public List<Pos> messageReadPosList { get; protected set; }
+
+    public TileState(List<Pos> tileOpenPosList, List<Pos> tileBrokenPosList, List<Pos> messageReadPosList)
+    {
+        this.tileOpenPosList = tileOpenPosList;
+        this.tileBrokenPosList = tileBrokenPosList;
+        this.messageReadPosList = messageReadPosList;
+    }
+}
+
 public class WorldMap : TileMapData
 {
     public MiniMapData miniMapData { get; protected set; }
@@ -13,6 +34,7 @@ public class WorldMap : TileMapData
     public static bool isExitDoorLocked = true;
     private List<Pos> tileOpenPosList = null;
     private List<Pos> tileBrokenPosList = null;
+    private List<Pos> messageReadPosList = null;
 
     public PitMessageMapData messagePosData { get; private set; }
     public StairsMapData stairsMapData { get; private set; }
@@ -69,6 +91,7 @@ public class WorldMap : TileMapData
     {
         if (tileOpenPosList != null) tileOpenPosList.ForEach(pos => (matrix[pos.x, pos.y] as IOpenable).Open());
         if (tileBrokenPosList != null) tileBrokenPosList.ForEach(pos => (matrix[pos.x, pos.y] as Door).Break());
+        if (messageReadPosList != null) messageReadPosList.ForEach(pos => (matrix[pos.x, pos.y] as IReadable).Read());
 
         if (floor == 1 && !isExitDoorLocked)
         {
@@ -80,7 +103,11 @@ public class WorldMap : TileMapData
 
     public void StoreTileStateData()
     {
-        (tileOpenPosList, tileBrokenPosList) = RetrieveTileStateData();
+        var tileState = RetrieveTileStateData();
+
+        tileOpenPosList = tileState.tileOpenPosList;
+        tileBrokenPosList = tileState.tileBrokenPosList;
+        messageReadPosList = tileState.messageReadPosList;
 
         if (floor == 1)
         {
@@ -89,16 +116,17 @@ public class WorldMap : TileMapData
         }
     }
 
-    public (List<Pos>, List<Pos>) ExportTileStateData()
+    public TileState ExportTileStateData()
     {
         return (tileOpenPosList == null || tileBrokenPosList == null)
-            ? RetrieveTileStateData() : (tileOpenPosList, tileBrokenPosList);
+            ? RetrieveTileStateData() : new TileState(tileOpenPosList, tileBrokenPosList, messageReadPosList);
     }
 
-    private (List<Pos>, List<Pos>) RetrieveTileStateData()
+    private TileState RetrieveTileStateData()
     {
         var open = new List<Pos>();
         var broken = new List<Pos>();
+        var read = new List<Pos>();
 
         // FIXME: use random message count as initialized flag for now.
         bool isTilesReady = messagePosData.randomMessagePos.Count() > 0;
@@ -117,10 +145,12 @@ public class WorldMap : TileMapData
                         open.Add(pos);
                     }
                 }
+
+                if (tile is IReadable && (tile as IReadable).IsRead) read.Add(pos);
             });
         }
 
-        return (open, broken);
+        return new TileState(open, broken, read);
     }
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
@@ -189,15 +219,16 @@ public class WorldMap : TileMapData
         var stairsMapData = new StairsMapData(dirMapData, import);
         var pitMessageMapData = new PitMessageMapData(dirMapData, floor, import);
         var map = new WorldMap(floor, import.roomCenterPos.ToList(), dirMapHandler, stairsMapData, pitMessageMapData);
-        map.ImportTileData(import.tileOpenData, import.tileBrokenData, import.tileDiscoveredData);
+        map.ImportTileData(import.tileOpenData, import.tileBrokenData, import.messageReadData, import.tileDiscoveredData);
 
         return map;
     }
 
-    private void ImportTileData(Pos[] open, Pos[] broken, bool[] discovered)
+    private void ImportTileData(Pos[] open, Pos[] broken, Pos[] read, bool[] discovered)
     {
         tileOpenPosList = open.ToList();
         tileBrokenPosList = broken.ToList();
+        messageReadPosList = read.ToList();
         miniMapData.ImportTileDiscoveredData(discovered);
     }
 

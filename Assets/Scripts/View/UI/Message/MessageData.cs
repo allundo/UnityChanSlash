@@ -19,7 +19,8 @@ public enum FaceID
 
 public class MessageData
 {
-    public virtual bool isRead { get; set; }
+    public virtual bool isRead { get; protected set; }
+    public virtual void Read() => isRead = true;
     protected MessageSource[] source;
     public virtual MessageSource[] Source => source;
 

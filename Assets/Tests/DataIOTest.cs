@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.TestTools;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public class DataIOTest
@@ -9,13 +11,15 @@ public class DataIOTest
     private DataStoreAgentTest dataStoreAgent;
     private GameInfo gameInfo;
     private ResourceLoader resourceLoader;
+    private MapRenderer mapRenderer;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        dataStoreAgent = UnityEngine.Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
-        resourceLoader = UnityEngine.Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"), Vector3.zero, Quaternion.identity); ;
-        gameInfo = UnityEngine.Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"), Vector3.zero, Quaternion.identity); ;
+        dataStoreAgent = Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"), Vector3.zero, Quaternion.identity); ;
+        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"), Vector3.zero, Quaternion.identity); ;
+        mapRenderer = Object.Instantiate(Resources.Load<MapRenderer>("Prefabs/Map/Dungeon"), Vector3.zero, Quaternion.identity); ;
 
         dataStoreAgent.KeepSaveDataFiles();
     }
@@ -25,9 +29,10 @@ public class DataIOTest
     {
         dataStoreAgent.RestoreSaveDataFiles();
 
-        UnityEngine.Object.Destroy(dataStoreAgent.gameObject);
-        UnityEngine.Object.Destroy(resourceLoader.gameObject);
-        UnityEngine.Object.Destroy(gameInfo.gameObject);
+        Object.Destroy(dataStoreAgent.gameObject);
+        Object.Destroy(resourceLoader.gameObject);
+        Object.Destroy(gameInfo.gameObject);
+        Object.Destroy(mapRenderer.gameObject);
     }
 
     [Test]
@@ -190,6 +195,121 @@ public class DataIOTest
         Assert.AreEqual(0.3f, loadData[UIType.AttackRegion]);
         Assert.AreEqual(0.4f, loadData[UIType.MoveButton]);
         Assert.AreEqual(0.5f, loadData[UIType.HandleButton]);
+
+        dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
+    }
+
+    [UnityTest]
+    public IEnumerator _004_SaveTileDataAndLoadTest()
+    {
+        var waitForEndOfFrame = new WaitForEndOfFrame();
+        var waitForHalfSecond = new WaitForSeconds(0.5f);
+
+        dataStoreAgent.DeleteFile(dataStoreAgent.SAVE_DATA_FILE_NAME);
+
+        yield return waitForHalfSecond;
+
+        var floor1Map = WorldMap.Create(1);
+
+        mapRenderer.Render(floor1Map);
+
+        yield return waitForHalfSecond;
+
+        var tileOpenData = new Dictionary<Pos, bool>();
+        var tileBrokenData = new Dictionary<Pos, bool>();
+        var messageReadData = new Dictionary<Pos, bool>();
+
+        floor1Map.ForEachTiles((tile, pos) =>
+        {
+            var openable = tile as IOpenable;
+            var door = openable as Door;
+            var readable = tile as IReadable;
+
+            if (openable != null)
+            {
+                if (Util.Judge(2)) openable.Open();
+                tileOpenData[pos] = openable.IsOpen;
+
+                if (door != null)
+                {
+                    if (Util.Judge(2)) door.Break();
+                    tileBrokenData[pos] = door.IsBroken;
+                }
+            }
+
+            if (readable != null)
+            {
+                if (Util.Judge(2)) readable.Read();
+                messageReadData[pos] = readable.IsRead;
+            }
+        });
+
+        var saveData = new DataStoreAgent.SaveData()
+        {
+            currentFloor = 1,
+            elapsedTimeSec = 1000,
+            playerData = new DataStoreAgent.PlayerData(new Pos(1, 1), Direction.north, 12f, 3, 100f, false, 60f, ExitState.PitFall, new PlayerCounter(), LevelGainType.Attacker),
+            inventoryItems = new DataStoreAgent.ItemInfo[] { new DataStoreAgent.ItemInfo(ItemType.FireRing, 12), null, null, new DataStoreAgent.ItemInfo(ItemType.Potion, 9), null, null, null },
+            mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(floor1Map), null, null, null, null },
+            respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
+        };
+
+        dataStoreAgent.SaveEncryptedRecordTest(saveData, dataStoreAgent.SAVE_DATA_FILE_NAME);
+
+        yield return new WaitForSeconds(1f);
+
+        var loadData = dataStoreAgent.LoadGameData();
+
+        var importMap = WorldMap.Import(1, loadData.mapData[0]);
+
+
+        mapRenderer.SetActiveTerrains(false);
+        yield return waitForEndOfFrame;
+
+        mapRenderer.DestroyObjects();
+        yield return waitForEndOfFrame;
+
+        mapRenderer.LoadFloorMaterials(importMap); // Switch world map for MapRenderer
+        yield return waitForEndOfFrame;
+
+        mapRenderer.InitMeshes();
+        yield return waitForEndOfFrame;
+
+        var terrainMeshes = mapRenderer.SetUpTerrainMeshes(importMap.dirMapHandler);
+        yield return waitForHalfSecond;
+
+        mapRenderer.GenerateTerrain(terrainMeshes);
+        yield return waitForEndOfFrame;
+
+        mapRenderer.SwitchTerrainMaterials(importMap);
+        yield return waitForEndOfFrame;
+
+        mapRenderer.SetActiveTerrains(true);
+        yield return waitForEndOfFrame;
+
+        mapRenderer.ApplyTileOpen(importMap);
+        yield return waitForEndOfFrame;
+
+        importMap.ForEachTiles((tile, pos) =>
+        {
+            var openable = tile as IOpenable;
+            var door = openable as Door;
+            var readable = tile as IReadable;
+
+            if (openable != null)
+            {
+                if (door != null)
+                {
+                    Assert.AreEqual(tileBrokenData[pos], door.IsBroken, $"door is broken: {door.IsBroken}, pos (x, y) = ({pos.x}, {pos.y})");
+                    Assert.AreEqual(door.IsBroken || tileOpenData[pos], openable.IsOpen, $"door is broken: {door.IsBroken}, pos (x, y) = ({pos.x}, {pos.y})");
+                }
+                else
+                {
+                    Assert.AreEqual(tileOpenData[pos], openable.IsOpen, $"tile = {tile}, pos (x, y) = ({pos.x}, {pos.y})");
+                }
+            }
+            if (readable != null) Assert.AreEqual(messageReadData[pos], readable.IsRead, $"tile = {tile}, pos (x, y) = ({pos.x}, {pos.y})");
+        });
 
         dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
     }

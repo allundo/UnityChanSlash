@@ -74,7 +74,7 @@ public class TextHandler : MonoBehaviour
         currentIndex = 0;
         SetNextSentence(currentIndex);
 
-        messageData.isRead = true;
+        messageData.Read();
     }
 
     private void SetNextSentence(int index)

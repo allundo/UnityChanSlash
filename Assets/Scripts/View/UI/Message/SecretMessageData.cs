@@ -1,5 +1,6 @@
 public class SecretMessageData : MessageData
 {
+    public override void Read() => base.isRead = true;
     protected MessageSource[] alterSource;
     protected SecretMessageSource secretSource;
 
@@ -24,7 +25,7 @@ public class SecretMessageData : MessageData
     public override bool isRead
     {
         get => base.isRead;
-        set
+        protected set
         {
             if (value)
             {

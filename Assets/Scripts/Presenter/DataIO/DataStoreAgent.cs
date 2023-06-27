@@ -101,9 +101,11 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             dirMap = converter.ConvertDirData();
             mapSize = converter.width;
 
-            var (open, broken) = map.ExportTileStateData();
-            tileOpenData = open.ToArray();
-            tileBrokenData = broken.ToArray();
+            var tileState = map.ExportTileStateData();
+            tileOpenData = tileState.tileOpenPosList.ToArray();
+            tileBrokenData = tileState.tileBrokenPosList.ToArray();
+            messageReadData = tileState.messageReadPosList.ToArray();
+
             tileDiscoveredData = map.miniMapData.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
 
@@ -120,6 +122,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public int mapSize = 0;
         public Pos[] tileOpenData = null;
         public Pos[] tileBrokenData = null;
+        public Pos[] messageReadData = null;
         public bool[] tileDiscoveredData = null;
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;

@@ -45,7 +45,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
         MessageWall tile = map.GetTile(pos) as MessageWall;
         tile.boardDir = dir;
 
-        if (tile.Read == null)
+        if (tile.data == null)
         {
             var mesData = map.messagePosData;
             int fixedIndex = mesData.fixedMessagePos.IndexOf(pos);
@@ -72,7 +72,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
         MessageWall tile = map.GetTile(pos) as MessageWall;
         tile.boardDir = dir;
 
-        if (tile.Read == null)
+        if (tile.data == null)
         {
             int bloodIndex = map.messagePosData.bloodMessagePos.IndexOf(pos);
             if (bloodIndex != -1)
