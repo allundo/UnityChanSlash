@@ -12,7 +12,6 @@ public class RedSlimeAIInput : EnemyAIInput
         Pos left = mobMap.GetLeft;
         Pos right = mobMap.GetRight;
 
-        bool isForwardMovable = mobMap.IsMovable(forward);
         bool isBackwardMovable = mobMap.IsMovable(backward);
         bool isLeftMovable = mobMap.IsMovable(left);
         bool isRightMovable = mobMap.IsMovable(right);
@@ -20,6 +19,16 @@ public class RedSlimeAIInput : EnemyAIInput
         // Get away if player found at forward, or attack if not movable.
         if (IsOnPlayer(forward)) return choice.TurnToMovable(isLeftMovable, isRightMovable, isBackwardMovable) ?? attack;
 
+        // Get away if player found at backward or player found at 2 tiles backward even when fleeing
+        bool isOnPlayerBackward = IsOnPlayer(backward);
+        Pos backward2 = mobMap.dir.GetBackward(backward);
+        bool isOnPlayerBackward2 = IsOnPlayer(backward2);
+        bool isForwardMovable = mobMap.IsMovable(forward);
+        if (isOnPlayerBackward || isOnPlayerBackward2 && currentCommand == moveForward)
+        {
+            if (isForwardMovable) return moveForward;
+            return choice.TurnToMovable(isLeftMovable, isRightMovable, true);
+        }
 
         // Get away if player found at left or right
         if (IsOnPlayer(left))
@@ -46,17 +55,26 @@ public class RedSlimeAIInput : EnemyAIInput
         bool isForwardOpen = mobMap.GetTile(forward).IsViewOpen;
         if (IsPlayerFound(forward) && isForwardOpen) return fire;
 
-        Pos backward2 = mobMap.dir.GetBackward(backward);
+        // Turn to player if player is found in 2 or 3 tile distance
         Pos left2 = mobMap.dir.GetLeft(left);
-        Pos right2 = mobMap.dir.GetRight(right);
-
-        // Turn to player if player is found in 2 tile distance
-        bool isBackwardViewOpen = IsViewOpen(backward);
-        if (IsOnPlayer(backward2) && isBackwardViewOpen) return RandomChoice(turnL, turnR);
+        Pos left3 = mobMap.dir.GetLeft(left2);
         bool isLeftViewOpen = IsViewOpen(left);
-        if (IsOnPlayer(left2) && isLeftViewOpen) return turnL;
+        if (isLeftViewOpen && IsOnPlayer(left2) || IsViewOpen(left2) && IsOnPlayer(left3)) return turnL;
+
+        Pos right2 = mobMap.dir.GetRight(right);
+        Pos right3 = mobMap.dir.GetLeft(right2);
         bool isRightViewOpen = IsViewOpen(right);
-        if (IsOnPlayer(right2) && isRightViewOpen) return turnR;
+        if (isRightViewOpen && IsOnPlayer(right2) || IsViewOpen(right2) && IsOnPlayer(right3)) return turnR;
+
+        Pos backward3 = mobMap.dir.GetBackward(backward2);
+        bool isBackwardViewOpen = IsViewOpen(backward);
+        if (isBackwardViewOpen && isOnPlayerBackward2 || IsViewOpen(backward2) && IsOnPlayer(backward3))
+        {
+            ICommand choice = RandomChoice(turnL, turnR);
+            if (choice == turnL && !isLeftMovable) return turnR;
+            if (choice == turnR && !isRightMovable) return turnL;
+            return choice;
+        }
 
         return choice.MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable || IsOnPlayer(backward))
             ?? choice.TurnToViewOpen(IsViewOpen(forward), isLeftViewOpen, isRightViewOpen, isBackwardViewOpen);
