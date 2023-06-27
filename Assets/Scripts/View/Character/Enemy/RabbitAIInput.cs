@@ -98,7 +98,7 @@ public class RabbitAIInput : EnemyAIInput
 
         // Wonder if unmovable
         return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable)
+            ?? TurnToMovable(isLeftMovable, isRightMovable, isBackwardMovable)
             ?? wondering;
     }
 

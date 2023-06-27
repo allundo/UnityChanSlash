@@ -46,7 +46,7 @@ public class BlueSlimeAIInput : EnemyAIInput
         bool isRightMovable = mobMap.IsMovable(right);
 
         return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
+            ?? TurnToMovable(isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
             ?? TurnToViewOpen(IsViewOpen(forward), isLeftViewOpen, isRightViewOpen, isBackwardViewOpen);
     }
 }

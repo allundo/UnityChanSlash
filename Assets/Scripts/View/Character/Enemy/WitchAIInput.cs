@@ -125,7 +125,7 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
 
         return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
             ?? ThroughWall(isForward2Movable)
-            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable)
+            ?? TurnToMovable(isLeftMovable, isRightMovable, isBackwardMovable)
             ?? idle;
     }
     protected override ICommand ThroughWall(bool isForward2Movable)

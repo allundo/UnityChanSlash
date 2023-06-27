@@ -79,7 +79,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
         bool isRightMovable = mobMap.IsMovable(right);
 
         return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? TurnToMovable(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
+            ?? TurnToMovable(isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
             ?? idle;
     }
 
@@ -111,7 +111,7 @@ public class EnemyAIInput : MobInput, IEnemyInput
         return null;
     }
 
-    protected virtual ICommand TurnToMovable(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
+    protected virtual ICommand TurnToMovable(bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
     {
         // Turn if forward unmovable and left or right or backward  movable
         if ((isLeftMovable && isRightMovable) || isBackwardMovable) return RandomChoice(turnL, turnR);
