@@ -26,8 +26,9 @@ public class ThirdPersonCamera : MonoBehaviour
     public void SetLookAt(Transform lookAt) => this.lookAt = lookAt;
 
     private float ampFactor = 0f;
+    private float ampSign = 1f;
     private Tween ampTween;
-    public void Amplify(float power = 0.01f, float duration = 1f)
+    public void Amplify(float duration = 1f, float power = 0.01f)
     {
         ampTween?.Kill();
         ampTween = DOVirtual.Float(power, 0f, duration, value => ampFactor = value).Play();
@@ -66,8 +67,10 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (ampFactor == 0f) return;
 
-        transform.position += ampFactor * Random.insideUnitSphere;
+
+        transform.position += new Vector3(0, 25f * ampFactor * ampSign, 0);
         transform.Rotate(ampFactor * Random.insideUnitSphere * 90f);
+        ampSign *= -1f;
     }
 
     public void SwitchFloor(int floor)
