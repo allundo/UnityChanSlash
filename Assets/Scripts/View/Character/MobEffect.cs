@@ -134,7 +134,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
     protected Tween fxTimer;
     protected void OnHitLaser(float duration = 0.8f)
     {
-        if (fxTimer != null && fxTimer.IsPlaying())
+        if (fxTimer != null && fxTimer.IsActive())
         {
             fxTimer.Kill();
         }
