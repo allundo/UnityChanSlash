@@ -123,14 +123,15 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
         bool isLeftMovable = mobMap.IsMovable(left);
         bool isRightMovable = mobMap.IsMovable(right);
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? ThroughWall(isForward2Movable)
-            ?? TurnToMovable(isLeftMovable, isRightMovable, isBackwardMovable)
+        return ThroughWall(isForwardMovable, isForward2Movable)
+            ?? Teleport(isForwardMovable)
+            ?? choice.MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable)
             ?? idle;
     }
-    protected override ICommand ThroughWall(bool isForward2Movable)
+
+    protected ICommand Teleport(bool isForwardMovable)
     {
-        return isForward2Movable ? RandomChoice(throughForward, teleport) : null;
+        return !isForwardMovable && Util.Judge(2) ? teleport : null;
     }
 
     public void InputTeleport() => ForceEnqueue(teleport);

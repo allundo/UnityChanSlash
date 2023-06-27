@@ -7,13 +7,15 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
 {
     protected ShieldEnemyAnimator shieldAnim;
 
-    protected ICommand idle;
-    protected ICommand moveForward;
+    public ICommand idle { get; protected set; }
+    public ICommand turnL { get; protected set; }
+    public ICommand turnR { get; protected set; }
+    public ICommand moveForward { get; protected set; }
     protected ICommand run;
-    protected ICommand turnL;
-    protected ICommand turnR;
     protected ICommand guard;
     protected ICommand attack;
+
+    protected EnemyCommandChoice choice;
 
     // Doesn't pay attention to the player if tamed.
     protected bool IsOnPlayer(Pos pos) => !(target.react as IEnemyReactor).IsTamed && map.IsOnPlayer(pos);
@@ -30,6 +32,12 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         turnR = new ShieldEnemyTurnR(target, 16f);
         guard = new GuardCommand(target, 36f, 0.95f);
         attack = new EnemyAttack(target, 60f);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        choice = new EnemyCommandChoice(this);
     }
 
     protected override void SetInputs()
@@ -72,42 +80,7 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
         // Move forward if player found in front
         if (IsPlayerFound(forward) && isForwardMovable) return run;
 
-        return MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward)) ?? idle;
-    }
-
-    protected virtual ICommand MoveForwardOrTurn(bool isForwardMovable, bool isLeftMovable, bool isRightMovable, bool isBackwardMovable)
-    {
-        if (isForwardMovable)
-        {
-            // Turn 50% if left or right movable
-            if (Util.Judge(2))
-            {
-                if (Util.Judge(2))
-                {
-                    if (currentCommand == turnR) return moveForward;
-                    if (isLeftMovable) return turnL;
-                    if (isRightMovable) return turnR;
-                }
-                else
-                {
-                    if (currentCommand == turnL) return moveForward;
-                    if (isRightMovable) return turnR;
-                    if (isLeftMovable) return turnL;
-                }
-            }
-
-            // Move forward if not turned and forward movable
-            return moveForward;
-        }
-        else
-        {
-            // Turn if forward unmovable and left or right or backward movable
-            if ((isLeftMovable && isRightMovable) || isBackwardMovable) return RandomChoice(turnL, turnR);
-            if (isLeftMovable) return turnL;
-            if (isRightMovable) return turnR;
-
-            return null;
-        }
+        return choice.MoveForwardOrTurn(isForwardMovable, mobMap.IsMovable(left), mobMap.IsMovable(right), mobMap.IsMovable(backward)) ?? idle;
     }
 
     public virtual void OnActive(EnemyStatus.ActivateOption option)

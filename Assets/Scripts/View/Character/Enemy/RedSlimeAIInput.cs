@@ -18,8 +18,7 @@ public class RedSlimeAIInput : EnemyAIInput
         bool isRightMovable = mobMap.IsMovable(right);
 
         // Get away if player found at forward, or attack if not movable.
-        if (IsOnPlayer(forward)) return TurnToMovable(isLeftMovable, isRightMovable, isBackwardMovable) ?? attack;
-
+        if (IsOnPlayer(forward)) return choice.TurnToMovable(isLeftMovable, isRightMovable, isBackwardMovable) ?? attack;
 
 
         // Get away if player found at left or right
@@ -59,9 +58,7 @@ public class RedSlimeAIInput : EnemyAIInput
         bool isRightViewOpen = IsViewOpen(right);
         if (IsOnPlayer(right2) && isRightViewOpen) return turnR;
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? TurnToMovable(isLeftMovable, isRightMovable, mobMap.IsMovable(backward) || IsOnPlayer(backward))
-            ?? TurnToViewOpen(IsViewOpen(forward), isLeftViewOpen, isRightViewOpen, isBackwardViewOpen);
+        return choice.MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable || IsOnPlayer(backward))
+            ?? choice.TurnToViewOpen(IsViewOpen(forward), isLeftViewOpen, isRightViewOpen, isBackwardViewOpen);
     }
-
 }

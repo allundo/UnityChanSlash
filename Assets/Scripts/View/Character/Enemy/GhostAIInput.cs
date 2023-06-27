@@ -57,14 +57,13 @@ public class GhostAIInput : EnemyAIInput
         bool isLeftMovable = mobMap.IsMovable(left);
         bool isRightMovable = mobMap.IsMovable(right);
 
-        return MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable)
-            ?? ThroughWall(mobMap.IsMovable(forward2))
-            ?? TurnToMovable(isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
+        return ThroughWall(isForwardMovable, mobMap.IsMovable(forward2))
+            ?? choice.MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, mobMap.IsMovable(backward))
             ?? idle;
     }
 
-    protected virtual ICommand ThroughWall(bool isForward2Movable)
+    protected ICommand ThroughWall(bool isForwardMovable, bool isForward2Movable)
     {
-        return isForward2Movable ? throughForward : null;
+        return !isForwardMovable && isForward2Movable && Util.Judge(2) ? throughForward : null;
     }
 }
