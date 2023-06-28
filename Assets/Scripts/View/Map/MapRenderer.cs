@@ -222,7 +222,7 @@ public class MapRenderer : MonoBehaviour
 
     public void ApplyTileState()
     {
-        map.ApplyTileState();
+        map.tileStateHandler.ApplyTileState();
 
         doorsRenderer.CompleteTween();
         boxesRenderer.CompleteTween();

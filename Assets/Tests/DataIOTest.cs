@@ -250,6 +250,11 @@ public class DataIOTest
             }
         });
 
+        Pos pos = floor1Map.stairsMapData.exitDoor;
+        ExitDoor exit = (floor1Map.GetTile(pos) as ExitDoor);
+        if (Util.Judge(2)) exit.Unlock();
+        bool isExitDoorLocked = exit.IsLocked;
+
         var saveData = new DataStoreAgent.SaveData()
         {
             currentFloor = 1,
@@ -257,6 +262,7 @@ public class DataIOTest
             playerData = new DataStoreAgent.PlayerData(new Pos(1, 1), Direction.north, 12f, 3, 100f, false, 60f, ExitState.PitFall, new PlayerCounter(), LevelGainType.Attacker),
             inventoryItems = new DataStoreAgent.ItemInfo[] { new DataStoreAgent.ItemInfo(ItemType.FireRing, 12), null, null, new DataStoreAgent.ItemInfo(ItemType.Potion, 9), null, null, null },
             mapData = new DataStoreAgent.MapData[] { new DataStoreAgent.MapData(floor1Map), null, null, null, null },
+            isExitDoorLocked = ITileStateData.isExitDoorLocked,
             respawnData = Enumerable.Repeat(new DataStoreAgent.RespawnData(new DataStoreAgent.EnemyData[0], new DataStoreAgent.ItemData[] { new DataStoreAgent.ItemData(new Pos(13, 32), ItemType.Coin, 2) }), 5).ToArray()
         };
 
@@ -264,10 +270,9 @@ public class DataIOTest
 
         yield return new WaitForSeconds(1f);
 
-        var loadData = dataStoreAgent.LoadGameData();
+        GameInfo.Instance.ImportGameData(dataStoreAgent.LoadGameData(), dataStoreAgent.LoadInfoRecord());
 
-        var importMap = WorldMap.Import(1, loadData.mapData[0]);
-
+        var importMap = GameInfo.Instance.Map(1);
 
         mapRenderer.SetActiveTerrains(false);
         yield return waitForEndOfFrame;
@@ -316,6 +321,9 @@ public class DataIOTest
             }
             if (readable != null) Assert.AreEqual(messageReadData[pos], readable.IsRead, $"tile = {tile}, pos (x, y) = ({pos.x}, {pos.y})");
         });
+
+        Pos importPos = importMap.stairsMapData.exitDoor;
+        Assert.AreEqual(isExitDoorLocked, (importMap.GetTile(importPos) as ExitDoor).IsLocked);
 
         dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
     }

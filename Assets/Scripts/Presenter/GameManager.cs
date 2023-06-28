@@ -303,7 +303,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         yield return waitForEndOfFrame;
 
         // Clear character on tile info just before delete all enemies.
-        worldMap.ClearCharacterOnTileInfo();
+        worldMap.tileStateHandler.ClearCharacterOnTileInfo();
 
         // Stored floor enemies are respawn in this method.
         spawnHandler.DestroyCharacters();

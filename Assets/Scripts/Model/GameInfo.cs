@@ -322,12 +322,11 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public DataStoreAgent.MapData[] ExportMapData()
     {
         var export = Enumerable.Repeat<DataStoreAgent.MapData>(null, LastFloor).ToArray();
+        maps[currentFloor - 1].tileStateHandler.StoreTileStateData();
+
         for (int i = 0; i < LastFloor; i++)
         {
-            if (maps[i] == null) continue;
-            if (i + 1 == currentFloor) maps[i].StoreTileStateData();
-
-            export[i] = new DataStoreAgent.MapData(maps[i]);
+            if (maps[i] != null) export[i] = new DataStoreAgent.MapData(maps[i]);
         }
         return export;
     }
@@ -354,7 +353,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             }
         }
 
-        WorldMap.isExitDoorLocked = import.isExitDoorLocked;
+        ITileStateData.isExitDoorLocked = import.isExitDoorLocked;
 
         readIDs = infoRecord.readMessageIDs.ToHashSet();
         secretLevel = infoRecord.secretLevel;

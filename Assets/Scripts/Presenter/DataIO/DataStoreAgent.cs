@@ -101,10 +101,10 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             dirMap = converter.ConvertDirData();
             mapSize = converter.width;
 
-            var tileState = map.ExportTileStateData();
-            tileOpenData = tileState.tileOpenPosList.ToArray();
-            tileBrokenData = tileState.tileBrokenPosList.ToArray();
-            messageReadData = tileState.messageReadPosList.ToArray();
+            var tileState = map.tileStateHandler.ExportTileStateData();
+            tileOpenData = tileState.open.ToArray();
+            tileBrokenData = tileState.broken.ToArray();
+            messageReadData = tileState.read.ToArray();
 
             tileDiscoveredData = map.miniMapData.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
@@ -526,7 +526,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         if (GameInfo.Instance.isScenePlayedByEditor)
         {
             SpawnHandler.Instance.SaveEnemyRespawnData(stairsEnterPos);
-            map.StoreTileStateData();
+            map.tileStateHandler.StoreTileStateData();
             return;
         }
 #endif
@@ -541,6 +541,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             playerData = data,
             inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
+            isExitDoorLocked = ITileStateData.isExitDoorLocked,
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
             respawnData = SpawnHandler.Instance.ExportRespawnData(stairsEnterPos)
@@ -567,7 +568,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             playerData = playerInfo.ExportRespawnData(),
             inventoryItems = ItemInventory.Instance.ExportInventoryItems(),
             mapData = gameInfo.ExportMapData(),
-            isExitDoorLocked = WorldMap.isExitDoorLocked,
+            isExitDoorLocked = ITileStateData.isExitDoorLocked,
             currentEvent = gameManager.GetCurrentEvent(),
             eventData = gameManager.ExportEventData(),
             respawnData = SpawnHandler.Instance.ExportRespawnData(playerInfo.Pos)

@@ -35,7 +35,7 @@ public class MiniMapData : TileMapData
         return new MiniMapData(pixels, tileMatrix, floor, width, height);
     }
 
-    public MiniMapData(Color[] pixels, ITile[,] matrix, int floor, int width, int height) : base(matrix, floor, width, height)
+    protected MiniMapData(Color[] pixels, ITile[,] matrix, int floor, int width, int height) : base(matrix, floor, width, height)
     {
         texMap = new Texture2D(width, height, TextureFormat.RGB24, false);
         texMap.SetPixels(pixels);

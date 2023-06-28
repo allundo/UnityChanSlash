@@ -1,40 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public interface ITileState
-{
-    List<Pos> tileOpenPosList { get; }
-    List<Pos> tileBrokenPosList { get; }
-    List<Pos> messageReadPosList { get; }
-}
-
-public class TileState : ITileState
-{
-    public List<Pos> tileOpenPosList { get; protected set; }
-    public List<Pos> tileBrokenPosList { get; protected set; }
-    public List<Pos> messageReadPosList { get; protected set; }
-
-    public TileState(List<Pos> tileOpenPosList, List<Pos> tileBrokenPosList, List<Pos> messageReadPosList)
-    {
-        this.tileOpenPosList = tileOpenPosList;
-        this.tileBrokenPosList = tileBrokenPosList;
-        this.messageReadPosList = messageReadPosList;
-    }
-}
-
-public class WorldMap : TileMapData
+public class WorldMap : TileMapHandler
 {
     public MiniMapData miniMapData { get; protected set; }
+    public TileStateHandler tileStateHandler { get; private set; }
 
     public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
-
-    public static bool isExitDoorLocked = true;
-    private List<Pos> tileOpenPosList = null;
-    private List<Pos> tileBrokenPosList = null;
-    private List<Pos> messageReadPosList = null;
 
     public PitMessageMapData messagePosData { get; private set; }
     public StairsMapData stairsMapData { get; private set; }
@@ -61,96 +35,9 @@ public class WorldMap : TileMapData
         return new Pos();
     }
 
-    public void ForEachTiles(Action<ITile> action)
-    {
-        for (int j = 0; j < height; j++)
-        {
-            for (int i = 0; i < width; i++)
-            {
-                action(matrix[i, j]);
-            }
-        }
-    }
-    public void ForEachTiles(Action<ITile, Pos> action)
-    {
-        for (int j = 0; j < height; j++)
-        {
-            for (int i = 0; i < width; i++)
-            {
-                action(matrix[i, j], new Pos(i, j));
-            }
-        }
-    }
-
     public void ClearCharacterOnTileInfo()
     {
         ForEachTiles(tile => tile.OnCharacterDest = tile.OnEnemy = tile.AboveEnemy = null);
-    }
-
-    public void ApplyTileState()
-    {
-        if (tileOpenPosList != null) tileOpenPosList.ForEach(pos => (matrix[pos.x, pos.y] as IOpenable).Open());
-        if (tileBrokenPosList != null) tileBrokenPosList.ForEach(pos => (matrix[pos.x, pos.y] as Door).Break());
-        if (messageReadPosList != null) messageReadPosList.ForEach(pos => (matrix[pos.x, pos.y] as IReadable).Read());
-
-        if (floor == 1 && !isExitDoorLocked)
-        {
-            Pos pos = stairsMapData.exitDoor;
-            var exitDoor = (matrix[pos.x, pos.y] as ExitDoor);
-            if (!exitDoor.IsOpen) exitDoor.Unlock();
-        }
-    }
-
-    public void StoreTileStateData()
-    {
-        var tileState = RetrieveTileStateData();
-
-        tileOpenPosList = tileState.tileOpenPosList;
-        tileBrokenPosList = tileState.tileBrokenPosList;
-        messageReadPosList = tileState.messageReadPosList;
-
-        if (floor == 1)
-        {
-            Pos pos = stairsMapData.exitDoor;
-            isExitDoorLocked = (matrix[pos.x, pos.y] as ExitDoor).IsLocked;
-        }
-    }
-
-    public TileState ExportTileStateData()
-    {
-        return (tileOpenPosList == null || tileBrokenPosList == null)
-            ? RetrieveTileStateData() : new TileState(tileOpenPosList, tileBrokenPosList, messageReadPosList);
-    }
-
-    private TileState RetrieveTileStateData()
-    {
-        var open = new List<Pos>();
-        var broken = new List<Pos>();
-        var read = new List<Pos>();
-
-        // FIXME: use random message count as initialized flag for now.
-        bool isTilesReady = messagePosData.randomMessagePos.Count() > 0;
-        if (isTilesReady)
-        {
-            ForEachTiles((tile, pos) =>
-            {
-                if (tile is IOpenable)
-                {
-                    if (tile is Door && (tile as Door).IsBroken)
-                    {
-                        broken.Add(pos);
-                    }
-                    else if ((tile as IOpenable).IsOpen)
-                    {
-                        open.Add(pos);
-                    }
-                }
-
-                if (tile is IReadable && (tile as IReadable).IsRead) read.Add(pos);
-            });
-        }
-
-        return new TileState(open, broken, read);
     }
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)
@@ -226,9 +113,7 @@ public class WorldMap : TileMapData
 
     private void ImportTileData(Pos[] open, Pos[] broken, Pos[] read, bool[] discovered)
     {
-        tileOpenPosList = open.ToList();
-        tileBrokenPosList = broken.ToList();
-        messageReadPosList = read.ToList();
+        tileStateHandler.Import(open, broken, read);
         miniMapData.ImportTileDiscoveredData(discovered);
     }
 
@@ -251,6 +136,9 @@ public class WorldMap : TileMapData
         matrix = miniMapData.matrix;
 
         pitMessageMapData.ApplyMessages(matrix);
+
+        tileStateHandler = new TileStateHandler(matrix, floor, width, height);
+        if (floor == 1) tileStateHandler.SetExitDoor(stairsMapData.exitDoor);
     }
 
     public Dir SetTerrain(int x, int y, Terrain terrain)
