@@ -34,14 +34,6 @@ public class DirMapHandler : DirMapData
         }
     }
 
-    public Dir SetTerrain(int x, int y, Terrain terrain)
-    {
-        var dir = CreateDir(x, y, terrain);
-        matrix[x, y] = terrain;
-        dirMap[x, y] = dir;
-        return dir;
-    }
-
     public bool Unlock(Pos pos)
     {
         if (matrix[pos.x, pos.y] == Terrain.LockedDoor)

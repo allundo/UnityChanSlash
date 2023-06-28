@@ -25,13 +25,8 @@ public class PitMessageMapData : DirMapData
         this.floor = floor;
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
-        // Don't set pit in front of items(dead ends)
-        List<Pos> pitIgnore = deadEndPos.Select(kv => kv.Value.GetForward(kv.Key)).ToList();
-        pitIgnore.Add(data.StairsBottom);
-        pitIgnore.Add(data.StairsTop);
-
         var boardCandidates = new Dictionary<Pos, IDirection>();
-        var pitCandidates = GetPitAndMessageCandidates(boardCandidates, pitIgnore);
+        var pitCandidates = GetPitAndMessageCandidates(boardCandidates, data.deadEndPos);
 
         FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
@@ -203,11 +198,11 @@ public class PitMessageMapData : DirMapData
     /// Retrieve available pit and message placing positions.
     /// </summary>
     /// <param name="boardCandidates">Empty dictionary to take message board position candidates</param>
-    /// <param name="pitIgnore">Exclude positions to place pits</param>
     /// <returns>Pit trap position candidates</returns>
-    private List<Pos> GetPitAndMessageCandidates(Dictionary<Pos, IDirection> boardCandidates, List<Pos> pitIgnore)
+    private List<Pos> GetPitAndMessageCandidates(Dictionary<Pos, IDirection> boardCandidates, Dictionary<Pos, IDirection> deadEndPos)
     {
         var pitCandidates = new List<Pos>();
+        List<Pos> pitIgnore = deadEndPos.Select(kv => kv.Value.GetForward(kv.Key)).ToList();
 
         for (int y = 1; y < height; y++)
         {
@@ -226,12 +221,13 @@ public class PitMessageMapData : DirMapData
                 }
                 else
                 {
-                    pitCandidates.Add(pos);
+                    // Forbid placing pit trap in front of items and stairs.
+                    if (!pitIgnore.Contains(pos)) pitCandidates.Add(pos);
                 }
             }
         }
 
-        return pitCandidates.Filter(pitIgnore).Shuffle().ToList();
+        return pitCandidates.Shuffle().ToList();
     }
 
     /// <summary>

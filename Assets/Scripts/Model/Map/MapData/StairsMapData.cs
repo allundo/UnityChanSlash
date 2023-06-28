@@ -16,6 +16,8 @@ public class StairsMapData : DirMapData, IStairsData
     public Pos exitDoor { get; private set; }
     public Pos exitDoorMessage { get; private set; }
 
+    public Dictionary<Pos, IDirection> deadEndPos { get; protected set; }
+
     public Pos[] ExportValues => new Pos[] { upStairs, downStairs, exitDoor };
 
     public Pos StairsBottom => upStairs.IsNull ? GetStartPos(exitDoor) : GetStartPos(upStairs);
@@ -46,24 +48,23 @@ public class StairsMapData : DirMapData, IStairsData
     {
         downStairs = upStairs = exitDoor = new Pos();
 
+        deadEndPos = data.rawMapData.SearchDeadEnds().Shuffle();
+
         if (floor < GameInfo.Instance.LastFloor)
         {
             downStairs = deadEndPos.First().Key;
             SetStairs(downStairs, deadEndPos[downStairs], Terrain.DownStairs);
-            deadEndPos.Remove(downStairs);
         }
 
         if (floor == 1)
         {
             Pos startPos = GetStartPos(downStairs, deadEndPos);
             exitDoor = SetStartPos(startPos, deadEndPos[startPos]);
-            deadEndPos.Remove(startPos);
         }
         else
         {
             upStairs = GetUpStairsPos(downStairs, deadEndPos);
             SetStairs(upStairs, deadEndPos[upStairs], Terrain.UpStairs);
-            deadEndPos.Remove(upStairs);
         }
     }
 

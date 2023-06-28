@@ -7,12 +7,13 @@ public class WorldMap : TileMapHandler
     public MiniMapData miniMapData { get; protected set; }
     public TileStateHandler tileStateHandler { get; private set; }
 
-    public Dictionary<Pos, IDirection> deadEndPos { get; private set; }
     public List<Pos> roomCenterPos { get; private set; }
 
     public PitMessageMapData messagePosData { get; private set; }
     public StairsMapData stairsMapData { get; private set; }
     public DirMapHandler dirMapHandler { get; private set; }
+
+    public ItemBoxMapData itemBoxMapData { get; private set; } = null;
 
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
@@ -75,8 +76,9 @@ public class WorldMap : TileMapHandler
         var dirMapHandler = new DirMapHandler(dirMapData);
         var stairsMapData = new StairsMapData(dirMapData, floor);
         var pitMessageMapData = new PitMessageMapData(stairsMapData, floor);
+        var itemBoxMapData = new ItemBoxMapData(stairsMapData, floor);
 
-        return new WorldMap(floor, maze.roomCenterPos, dirMapHandler, stairsMapData, pitMessageMapData);
+        return new WorldMap(floor, maze.roomCenterPos, dirMapHandler, stairsMapData, pitMessageMapData, itemBoxMapData);
     }
 
     // Create from custom map data
@@ -86,8 +88,9 @@ public class WorldMap : TileMapHandler
         var dirMapHandler = new DirMapHandler(dirMapData);
         var stairsMapData = new StairsMapData(dirMapData, data);
         var pitMessageMapData = new PitMessageMapData(dirMapHandler, data);
+        var itemBoxMapData = new ItemBoxMapData(dirMapData, data);
 
-        return new WorldMap(data.floor, data.roomCenter, dirMapHandler, stairsMapData, pitMessageMapData);
+        return new WorldMap(data.floor, data.roomCenter, dirMapHandler, stairsMapData, pitMessageMapData, itemBoxMapData);
     }
 
     // Import from MapData
@@ -110,17 +113,17 @@ public class WorldMap : TileMapHandler
     }
 
     // Create map data
-    protected WorldMap(int floor, List<Pos> roomCenterPos, DirMapHandler dirMapHandler, StairsMapData stairsMapData, PitMessageMapData pitMessageMapData)
+    protected WorldMap(int floor, List<Pos> roomCenterPos, DirMapHandler dirMapHandler, StairsMapData stairsMapData, PitMessageMapData pitMessageMapData, ItemBoxMapData itemBoxMapData = null)
         : base(null, floor, dirMapHandler.width, dirMapHandler.height)
     {
         this.dirMapHandler = dirMapHandler;
         this.stairsMapData = stairsMapData;
         this.messagePosData = pitMessageMapData;
+        this.itemBoxMapData = itemBoxMapData;
 
         this.stairsBottom = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsBottom, stairsMapData.UpStairsDir);
         this.stairsTop = new KeyValuePair<Pos, IDirection>(stairsMapData.StairsTop, stairsMapData.DownStairsDir);
 
-        this.deadEndPos = new Dictionary<Pos, IDirection>(stairsMapData.deadEndPos);
         this.roomCenterPos = new List<Pos>(roomCenterPos);
 
         // Generate tile matrix by MiniMapData constructor to save a for-loop to convert terrain to mini map color.
@@ -131,18 +134,6 @@ public class WorldMap : TileMapHandler
 
         tileStateHandler = new TileStateHandler(matrix, floor, width, height);
         if (floor == 1) tileStateHandler.SetExitDoor(stairsMapData.exitDoor);
-    }
-
-    public Dir SetTerrain(int x, int y, Terrain terrain)
-    {
-        Dir dir = dirMapHandler.SetTerrain(x, y, terrain);
-
-        ITile temp = matrix[x, y];
-        matrix[x, y] = TileMapData.ConvertToTile(terrain);
-        matrix[x, y].items = temp.items;
-
-        miniMapData.SetTerrain(x, y, terrain);
-        return dir;
     }
 
     public KeyValuePair<Pos, IDirection> stairsBottom { get; private set; } = new KeyValuePair<Pos, IDirection>(new Pos(), null);

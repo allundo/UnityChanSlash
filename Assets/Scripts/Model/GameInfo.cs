@@ -165,40 +165,44 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         };
 
-        var deadEnds = new Dictionary<Pos, IDirection>()
+        var randomItemPos = new List<Pos>()
         {
-            { new Pos( 3, 1),    Direction.north },
-            { new Pos( 4, 1),    Direction.north },
-            { new Pos( 5, 1),    Direction.north },
-            { new Pos( 3, 2),    Direction.north },
-            { new Pos( 4, 2),    Direction.north },
-            { new Pos( 5, 2),    Direction.north },
-            { new Pos( 3, 3),    Direction.north },
-            { new Pos( 4, 3),    Direction.north },
-            { new Pos( 9, 1),    Direction.north },
-            { new Pos(10, 1),    Direction.north },
-            { new Pos(11, 1),    Direction.north },
-            { new Pos( 9, 2),    Direction.north },
-            { new Pos(10, 2),    Direction.north },
-            { new Pos(11, 2),    Direction.north },
-            { new Pos( 9, 3),    Direction.north },
-            { new Pos(10, 3),    Direction.north },
-            { new Pos(11, 3),    Direction.north },
-            { new Pos( 9, 4),    Direction.north },
-            { new Pos(10, 4),    Direction.north },
-            { new Pos(11, 4),    Direction.north },
-            { new Pos( 9, 5),    Direction.north },
-            { new Pos(10, 5),    Direction.north },
-            { new Pos(11, 5),    Direction.north },
-            { new Pos( 1, 3),    Direction.north },
-            { new Pos( 1, 5),    Direction.north },
+            new Pos( 3, 1),
+            new Pos( 4, 1),
+            new Pos( 5, 1),
+            new Pos( 3, 2),
+            new Pos( 4, 2),
+            new Pos( 5, 2),
+            new Pos( 3, 3),
+            new Pos( 4, 3),
+            new Pos( 9, 1),
+            new Pos(10, 1),
+            new Pos(11, 1),
+            new Pos( 9, 2),
+            new Pos(10, 2),
+            new Pos(11, 2),
+            new Pos( 9, 3),
+            new Pos(10, 3),
+            new Pos(11, 3),
+            new Pos( 9, 4),
+            new Pos(10, 4),
+            new Pos(11, 4),
+            new Pos( 9, 5),
+            new Pos(10, 5),
+            new Pos(11, 5),
+            new Pos( 1, 3),
+            new Pos( 1, 5),
+        };
+
+        var boxItemPos = new Dictionary<Pos, IDirection>()
+        {
             { new Pos(13, 13),   Direction.north },
         };
 
         var fixedMessagePos = new Dictionary<Pos, IDirection>() { { new Pos(0, 2), Direction.east } };
 
         // Create map from custom map data
-        maps[MAX_FLOOR] = WorldMap.Create(new CustomMapData(2, matrix, 15, deadEnds, fixedMessagePos));
+        maps[MAX_FLOOR] = WorldMap.Create(new CustomMapData(2, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos));
     }
 
     private CustomMapData FinalMap()
@@ -245,20 +249,24 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         }
         .OrderBy(pos => Guid.NewGuid()).ToArray();
 
-        var deadEndPos = new Dictionary<Pos, IDirection>()
+        var randomItemPos = new List<Pos>()
         {
-            { new Pos(16, 12),  Direction.north     },
-            { new Pos(16, 16),  Direction.north     },
-            { new Pos(12, 16),  Direction.north     },
-            { new Pos(12, 12),  Direction.north     },
-            { new Pos( 3, 21),  Direction.north     },
-            { new Pos(11, 27),  Direction.north     },
-            { new Pos( 6, 13),  Direction.east      },
-            { new Pos( 5, 14),  Direction.west      },
-            { new Pos( 6, 15),  Direction.east      },
-            { new Pos( 5, 16),  Direction.west      },
-            { new Pos( 6, 17),  Direction.east      },
-            { new Pos(13,  7),  Direction.west      },
+            new Pos(16, 12),
+            new Pos(16, 16),
+            new Pos(12, 16),
+            new Pos(12, 12),
+            new Pos( 3, 21),
+            new Pos(11, 27),
+            new Pos( 6, 13),
+            new Pos( 5, 14),
+            new Pos( 6, 15),
+            new Pos( 5, 16),
+            new Pos( 6, 17),
+            new Pos(13,  7),
+        };
+
+        var boxItemPos = new Dictionary<Pos, IDirection>()
+        {
             { randomPos[0].Key, randomPos[0].Value  }, // Battle Shield
             { randomPos[1].Key, randomPos[1].Value  }, // Jamadhar
             { randomPos[2].Key, randomPos[2].Value  }, // Coin
@@ -281,7 +289,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(23, 8), Direction.south },
         };
 
-        return new CustomMapData(LastFloor, matrix, 29, deadEndPos, fixedMes, bloodMes);
+        return new CustomMapData(LastFloor, matrix, 29, boxItemPos, randomItemPos, fixedMes, bloodMes);
     }
 
     public void ClearMaps()

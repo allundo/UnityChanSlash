@@ -66,7 +66,6 @@ public class MapTest
         // then
         var matrix1 = sut1.dirMapHandler.CloneMatrix();
         var dirMap1 = sut1.dirMapHandler.CloneDirMap();
-        Assert.False(sut1.deadEndPos.ContainsKey(downStairsPos));
         Assert.AreEqual(Terrain.DownStairs, matrix1[downStairsPos.x, downStairsPos.y]);
         Assert.AreEqual(downStairsDir.Enum, dirMap1[downStairsPos.x, downStairsPos.y]);
         Assert.AreEqual(Terrain.Ground, matrix1[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
@@ -77,7 +76,6 @@ public class MapTest
         Pos itemPlacedPos = downStairsPos;
         Pos inFrontOfItemPlacedPos = inFrontOfDownStairsPos;
 
-        Assert.False(sut5.deadEndPos.ContainsKey(itemPlacedPos));
         var matrix5 = sut5.dirMapHandler.CloneMatrix();
         var dirMap5 = sut5.dirMapHandler.CloneDirMap();
         Assert.AreEqual(Terrain.Path, matrix5[itemPlacedPos.x, itemPlacedPos.y]);
@@ -137,8 +135,6 @@ public class MapTest
         Pos startPos = sut.stairsBottom.Key;
         IDirection startDir = sut.stairsBottom.Value;
 
-        Assert.False(sut.deadEndPos.ContainsKey(startPos));
-
         Pos posF = startDir.GetForward(startPos);
         Pos posL = startDir.GetLeft(startPos);
         Pos posR = startDir.GetRight(startPos);
@@ -196,7 +192,7 @@ public class MapTest
         sut.ForEach(sutFloor =>
         {
             var matrix = sutFloor.dirMapHandler.CloneMatrix();
-            sutFloor.deadEndPos.ForEach(kv =>
+            sutFloor.dirMapHandler.rawMapData.SearchDeadEnds().ForEach(kv =>
             {
                 Pos inFrontOfDeadEnd = kv.Value.GetForward(kv.Key);
                 Assert.AreNotEqual(Terrain.Pit, matrix[inFrontOfDeadEnd.x, inFrontOfDeadEnd.y]);
@@ -243,13 +239,15 @@ public class MapTest
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         };
 
-        var deadEnds = new Dictionary<Pos, IDirection>()
+        var randomItemPos = new List<Pos>()
         {
-            { new Pos(5, 5),    Direction.west  },
-            { new Pos(1, 3),    Direction.north },
-            { new Pos(1, 5),    Direction.north },
+            new Pos(1, 3),
+            new Pos(1, 5),
+        };
+
+        var boxItemPos = new Dictionary<Pos, IDirection>()
+        {
             { new Pos(13, 13),  Direction.north },
-            { new Pos(1, 1),    Direction.south },
         };
 
         var fixedMessagePos = new Dictionary<Pos, IDirection>()
@@ -268,11 +266,6 @@ public class MapTest
             { new Pos(14, 11),    Direction.east },
         };
 
-        var firstDeadEndPos = deadEnds.First();
-        Pos downStairsPos = firstDeadEndPos.Key;
-        IDirection downStairsDir = firstDeadEndPos.Value;
-        Pos inFrontOfDownStairsPos = downStairsDir.GetForward(downStairsPos);
-
         FloorMessagesSource src1 = ResourceLoader.Instance.floorMessagesData.Param(0);
         FloorMessagesSource src5 = ResourceLoader.Instance.floorMessagesData.Param(4);
         int numOfFixedMessage1 = src1.fixedMessages.Length;
@@ -281,8 +274,8 @@ public class MapTest
         int numOfBloodMessage5 = src5.bloodMessages.Length;
 
         // when
-        WorldMap sut1 = WorldMap.Create(new CustomMapData(1, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos));
-        WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, deadEnds, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
+        WorldMap sut1 = WorldMap.Create(new CustomMapData(1, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos, bloodMessagePos));
+        WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
 
         // then
         var mesData1 = sut1.messagePosData;

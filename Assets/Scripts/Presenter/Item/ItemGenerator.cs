@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class ItemGenerator : MobGenerator<Item>
 {
-    [SerializeField] private MapRenderer mapRenderer = default;
-
     private ItemData itemData;
     private ItemTypesData itemTypesData;
 
@@ -93,21 +91,13 @@ public class ItemGenerator : MobGenerator<Item>
 
     private void PlaceItems(WorldMap map)
     {
-        if (map.deadEndPos.Count == 0) return;
         IDirection playerDir = PlayerInfo.Instance.Dir;
 
-        for (int i = 0; i < singleItemTypes.Length && map.deadEndPos.Count > 0; i++)
+        if (map.itemBoxMapData != null)
         {
-            var last = map.deadEndPos.Last();
-            PutNew(singleItemTypes[i], last.Key, playerDir);
-
-            mapRenderer.PlaceBox(last.Key);
-
-            map.deadEndPos.Remove(last.Key);
+            map.itemBoxMapData.itemType.ForEach(kv => PutNew(kv.Value, kv.Key, playerDir));
+            map.itemBoxMapData.itemType.Clear();
         }
-
-        map.deadEndPos.ForEach(kvp => { PutNew(RandomItemType, kvp.Key, playerDir); });
-        map.deadEndPos.Clear();
     }
 
     private Item Spawn(ItemInfo itemInfo, Pos pos, IDirection dir = null)

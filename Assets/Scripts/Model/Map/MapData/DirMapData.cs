@@ -5,20 +5,17 @@ public interface IDirMapData
     Terrain[,] matrix { get; }
     Dir[,] dirMap { get; }
     RawMapData rawMapData { get; }
-    Dictionary<Pos, IDirection> deadEndPos { get; }
 }
 
 public class DirMapData : DirHandler<Terrain>, IDirMapData
 {
     public Dir[,] dirMap { get; protected set; }
     public RawMapData rawMapData { get; protected set; }
-    public Dictionary<Pos, IDirection> deadEndPos { get; protected set; }
 
     protected DirMapData(IDirMapData data) : base(data.matrix, data.rawMapData.width, data.rawMapData.height)
     {
         rawMapData = data.rawMapData;
         dirMap = data.dirMap;
-        deadEndPos = data.deadEndPos;
     }
 
     // Create from custom map data
@@ -26,7 +23,6 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
     {
         rawMapData = data.rawMapData;
         dirMap = CreateDirMap(width, height);
-        deadEndPos = data.deadEndPos;
     }
 
     // Create new map
@@ -44,7 +40,6 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
         }
 
         dirMap = CreateDirMap(width, height);
-        deadEndPos = rawMapData.SearchDeadEnds().Shuffle();
     }
 
     // Import from save data.
@@ -63,8 +58,6 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
                 dirMap[i, j] = Util.ConvertTo<Dir>(mapData.dirMap[i + j * width]);
             }
         }
-
-        deadEndPos = new Dictionary<Pos, IDirection>();
     }
 
     private Dir[,] CreateDirMap(int width, int height)

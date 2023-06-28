@@ -45,14 +45,6 @@ public class MiniMapData : TileMapData
         discovered = new bool[width, height];
     }
 
-    public void SetTerrain(int x, int y, Terrain terrain)
-    {
-        var pixels = texMap.GetPixels();
-        pixels[x + width * y] = MiniMapData.ConvertToColor(terrain);
-        texMap.SetPixels(pixels);
-        texMap.Apply();
-    }
-
     public void SetDiscovered(Pos pos)
     {
         currentViewOpen.Add(pos);

@@ -20,23 +20,27 @@ public class CustomMapData : IStairsData
     public Pos downStairs { get; private set; }
     public Pos exitDoor { get; private set; }
 
-    public Dictionary<Pos, IDirection> deadEndPos { get; private set; } = null;
-    public Dictionary<Pos, IDirection> fixedMessagePos { get; private set; } = null;
-    public Dictionary<Pos, IDirection> bloodMessagePos { get; private set; } = null;
+    public Dictionary<Pos, IDirection> boxItemPos { get; private set; }
+    public List<Pos> randomItemPos { get; private set; }
+
+    public Dictionary<Pos, IDirection> fixedMessagePos { get; private set; }
+    public Dictionary<Pos, IDirection> bloodMessagePos { get; private set; }
 
     private Dictionary<Terrain, Action<Pos>> dataMap;
     public CustomMapData(
         int floor,
         int[] customMapData,
         int width,
-        Dictionary<Pos, IDirection> deadEndPos = null,
+        Dictionary<Pos, IDirection> boxItemPos = null,
+        List<Pos> randomItemPos = null,
         Dictionary<Pos, IDirection> fixedMessagePos = null,
         Dictionary<Pos, IDirection> bloodMessagePos = null
     )
     {
-        this.deadEndPos = deadEndPos;
-        this.fixedMessagePos = fixedMessagePos;
-        this.bloodMessagePos = bloodMessagePos;
+        this.boxItemPos = boxItemPos ?? new Dictionary<Pos, IDirection>();
+        this.randomItemPos = randomItemPos ?? new List<Pos>();
+        this.fixedMessagePos = fixedMessagePos ?? new Dictionary<Pos, IDirection>();
+        this.bloodMessagePos = bloodMessagePos ?? new Dictionary<Pos, IDirection>();
 
         rawMapData = RawMapData.Convert(customMapData, width);
 
