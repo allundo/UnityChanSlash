@@ -23,16 +23,15 @@ public class PitMessageMapData : DirMapData
     public PitMessageMapData(StairsMapData data, int floor) : base(data)
     {
         this.floor = floor;
-        floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
         var boardCandidates = new Dictionary<Pos, IDirection>();
         var pitCandidates = GetPitAndMessageCandidates(boardCandidates, data.deadEndPos);
 
-        FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
+        floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
-        int numOfFixedMessages = src.fixedMessages.Length;
-        int numOfRandomMessages = src.randomMessages.Length;
-        int numOfBloodMessages = src.bloodMessages.Length;
+        int numOfFixedMessages = floorMessages.fixedMessages.Length;
+        int numOfRandomMessages = floorMessages.randomMessages.Length;
+        int numOfBloodMessages = floorMessages.bloodMessages.Length;
 
         var numOfPits = new int[] { floor * floor * 4, width * height / 10, pitCandidates.Count }.Min();
 
