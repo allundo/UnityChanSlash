@@ -64,10 +64,12 @@ public class MapTest
         WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, deadEnds)); // Down stairs isn't set to last floor
 
         // then
+        var matrix1 = sut1.dirMapHandler.CloneMatrix();
+        var dirMap1 = sut1.dirMapHandler.CloneDirMap();
         Assert.False(sut1.deadEndPos.ContainsKey(downStairsPos));
-        Assert.AreEqual(Terrain.DownStairs, sut1.CloneMatrix()[downStairsPos.x, downStairsPos.y]);
-        Assert.AreEqual(downStairsDir.Enum, sut1.CloneDirMap()[downStairsPos.x, downStairsPos.y]);
-        Assert.AreEqual(Terrain.Ground, sut1.CloneMatrix()[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
+        Assert.AreEqual(Terrain.DownStairs, matrix1[downStairsPos.x, downStairsPos.y]);
+        Assert.AreEqual(downStairsDir.Enum, dirMap1[downStairsPos.x, downStairsPos.y]);
+        Assert.AreEqual(Terrain.Ground, matrix1[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
         Assert.AreEqual(inFrontOfDownStairsPos, sut1.stairsTop.Key);
         Assert.AreEqual(downStairsDir, sut1.stairsTop.Value);
 
@@ -76,9 +78,11 @@ public class MapTest
         Pos inFrontOfItemPlacedPos = inFrontOfDownStairsPos;
 
         Assert.False(sut5.deadEndPos.ContainsKey(itemPlacedPos));
-        Assert.AreEqual(Terrain.Path, sut5.CloneMatrix()[itemPlacedPos.x, itemPlacedPos.y]);
-        Assert.AreEqual(Dir.NES, sut5.CloneDirMap()[itemPlacedPos.x, itemPlacedPos.y]);
-        Assert.AreEqual(Terrain.Door, sut5.CloneMatrix()[inFrontOfItemPlacedPos.x, inFrontOfItemPlacedPos.y]);
+        var matrix5 = sut5.dirMapHandler.CloneMatrix();
+        var dirMap5 = sut5.dirMapHandler.CloneDirMap();
+        Assert.AreEqual(Terrain.Path, matrix5[itemPlacedPos.x, itemPlacedPos.y]);
+        Assert.AreEqual(Dir.NES, dirMap5[itemPlacedPos.x, itemPlacedPos.y]);
+        Assert.AreEqual(Terrain.Door, matrix5[inFrontOfItemPlacedPos.x, inFrontOfItemPlacedPos.y]);
         Assert.AreEqual(new Pos(), sut5.stairsTop.Key);
     }
 
@@ -93,8 +97,8 @@ public class MapTest
         int pitID = (int)Terrain.Pit;
         Assert.AreEqual(4, sut.dirMapHandler.ConvertMapData().Where(id => id == pitID).Count());
 
-        var matrix = sut.CloneMatrix();
-        var dirMap = sut.CloneDirMap();
+        var matrix = sut.dirMapHandler.CloneMatrix();
+        var dirMap = sut.dirMapHandler.CloneDirMap();
 
         bool isExitDoorFound = false;
         sut.messagePosData.fixedMessagePos.ForEach(pos =>
@@ -140,8 +144,8 @@ public class MapTest
         Pos posR = startDir.GetRight(startPos);
         Pos posB = startDir.GetBackward(startPos);
 
-        var matrix = sut.CloneMatrix();
-        var dirMap = sut.CloneDirMap();
+        var matrix = sut.dirMapHandler.CloneMatrix();
+        var dirMap = sut.dirMapHandler.CloneDirMap();
 
         Assert.That(matrix[posF.x, posF.y], Is.EqualTo(Terrain.Path).Or.EqualTo(Terrain.Ground));
 
@@ -191,7 +195,7 @@ public class MapTest
         // then
         sut.ForEach(sutFloor =>
         {
-            var matrix = sutFloor.CloneMatrix();
+            var matrix = sutFloor.dirMapHandler.CloneMatrix();
             sutFloor.deadEndPos.ForEach(kv =>
             {
                 Pos inFrontOfDeadEnd = kv.Value.GetForward(kv.Key);

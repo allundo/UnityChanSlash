@@ -14,9 +14,6 @@ public class WorldMap : TileMapHandler
     public StairsMapData stairsMapData { get; private set; }
     public DirMapHandler dirMapHandler { get; private set; }
 
-    public Terrain[,] CloneMatrix() => dirMapHandler.matrix.Clone() as Terrain[,];
-    public Dir[,] CloneDirMap() => dirMapHandler.dirMap.Clone() as Dir[,];
-
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : matrix[x, y];
@@ -33,11 +30,6 @@ public class WorldMap : TileMapHandler
         }
 
         return new Pos();
-    }
-
-    public void ClearCharacterOnTileInfo()
-    {
-        ForEachTiles(tile => tile.OnCharacterDest = tile.OnEnemy = tile.AboveEnemy = null);
     }
 
     public Pos SearchSpaceNearBy(Pos targetPos, int range = 2, List<Pos> exceptFor = null)

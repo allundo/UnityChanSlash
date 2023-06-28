@@ -15,6 +15,9 @@ public class DirMapHandler : DirMapData
         return ret;
     }
 
+    public Terrain[,] CloneMatrix() => matrix.Clone() as Terrain[,];
+    public Dir[,] CloneDirMap() => dirMap.Clone() as Dir[,];
+
     public int[] ConvertMapData() => ConvertToArray(matrix);
     public int[] ConvertDirData() => ConvertToArray(dirMap);
 

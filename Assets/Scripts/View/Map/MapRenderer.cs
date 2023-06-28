@@ -127,8 +127,8 @@ public class MapRenderer : MonoBehaviour
 
     public List<CombineInstance> SetUpTerrainMeshes(DirMapHandler map)
     {
-        var dirMap = map.dirMap.Clone() as Dir[,];
-        var matrix = map.matrix.Clone() as Terrain[,];
+        var dirMap = map.CloneDirMap();
+        var matrix = map.CloneMatrix();
 
         var terrainMeshes = new List<CombineInstance>();
 
