@@ -14,8 +14,19 @@ public class CustomMapData : IStairsData
     public int numOfPits { get; private set; }
 
     public List<Pos> roomCenter { get; private set; } = new List<Pos>();
+
+    /// <summary>
+    /// Random message boards list retrieved from custom Terrain matrix.<br />
+    /// Load messages from FloorMessagesData.RandomMessages[] randomly.
+    /// </summary>
     public List<Pos> randomMes { get; private set; } = new List<Pos>();
+
+    /// <summary>
+    /// Secret blood message boards list retrieved from custom Terrain matrix.<br />
+    /// Load messages from SecretMessagesDataAsset.SecretMessageData[] randomly.
+    /// </summary>
     public List<Pos> secretMes { get; private set; } = new List<Pos>();
+
     public Pos upStairs { get; private set; }
     public Pos downStairs { get; private set; }
     public Pos exitDoor { get; private set; }
@@ -23,7 +34,16 @@ public class CustomMapData : IStairsData
     public Dictionary<Pos, IDirection> boxItemPos { get; private set; }
     public List<Pos> randomItemPos { get; private set; }
 
+    /// <summary>
+    /// Message boards list with fixed place and direction. <br />
+    /// Load messages from FloorMessagesData.FixedMessages[] according to its Dictionary order.
+    /// </summary>
     public Dictionary<Pos, IDirection> fixedMessagePos { get; private set; }
+
+    /// <summary>
+    /// Blood message boards list with fixed place and direction. <br />
+    /// Load messages from FloorMessagesData.BloodMessages[] according to its Dictionary order.
+    /// </summary>
     public Dictionary<Pos, IDirection> bloodMessagePos { get; private set; }
 
     private Dictionary<Terrain, Action<Pos>> dataMap;
