@@ -113,6 +113,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             fixedMessagePos = mesData.fixedMessagePos.ToArray();
             bloodMessagePos = mesData.bloodMessagePos.ToArray();
             randomMessagePos = mesData.ExportRandomMessagePos();
+            secretMessagePos = mesData.ExportSecretMessagePos();
 
             stairsData = map.stairsMapData.ExportValues;
         }
@@ -127,6 +128,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;
         public PosList[] randomMessagePos = null;
+        public PosList[] secretMessagePos = null;
         public Pos[] bloodMessagePos = null;
         public Pos[] stairsData = new Pos[3];
 

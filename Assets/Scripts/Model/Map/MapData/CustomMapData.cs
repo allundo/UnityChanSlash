@@ -14,8 +14,8 @@ public class CustomMapData : IStairsData
     public int numOfPits { get; private set; }
 
     public List<Pos> roomCenter { get; private set; } = new List<Pos>();
-    public List<Pos> fixedMes { get; private set; } = new List<Pos>();
-    public List<Pos> bloodMes { get; private set; } = new List<Pos>();
+    public List<Pos> randomMes { get; private set; } = new List<Pos>();
+    public List<Pos> secretMes { get; private set; } = new List<Pos>();
     public Pos upStairs { get; private set; }
     public Pos downStairs { get; private set; }
     public Pos exitDoor { get; private set; }
@@ -68,12 +68,12 @@ public class CustomMapData : IStairsData
 
                     case Terrain.MessageWall:
                     case Terrain.MessagePillar:
-                        fixedMes.Add(new Pos(i, j));
+                        randomMes.Add(new Pos(i, j));
                         break;
 
                     case Terrain.BloodMessageWall:
                     case Terrain.BloodMessagePillar:
-                        bloodMes.Add(new Pos(i, j));
+                        secretMes.Add(new Pos(i, j));
                         break;
 
                     case Terrain.DownStairs:

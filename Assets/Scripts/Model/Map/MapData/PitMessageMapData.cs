@@ -8,14 +8,24 @@ public class PitMessageMapData : DirMapData
     public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
     public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
+    public Dictionary<Pos, int> secretMessagePos { get; private set; } = new Dictionary<Pos, int>();
     private Stack<int> randomIndices = null;
+    private Stack<int> secretIndices = null;
     private FloorMessagesSource floorMessages;
+    private SecretMessageData[] secretMessages;
+    private SecretMessagesDataAsset secretMessagesData;
 
     public DataStoreAgent.PosList[] ExportRandomMessagePos()
+        => ExportPosList(randomMessagePos, floorMessages.randomMessages.Length);
+
+    public DataStoreAgent.PosList[] ExportSecretMessagePos()
+        => ExportPosList(secretMessagePos, secretMessagesData.Length);
+
+    private DataStoreAgent.PosList[] ExportPosList(Dictionary<Pos, int> messageMap, int numOfMessages)
     {
         // export[RANDOM_MESSAGE_ID] = List<PLACED_BOARD_POSITION>
-        var export = Enumerable.Repeat(new List<Pos>(), floorMessages.randomMessages.Length).ToArray();
-        randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
+        var export = Enumerable.Repeat(new List<Pos>(), numOfMessages).ToArray();
+        messageMap.ForEach(kv => export[kv.Value].Add(kv.Key));
         return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();
     }
 
@@ -28,10 +38,11 @@ public class PitMessageMapData : DirMapData
         var pitCandidates = GetPitAndMessageCandidates(boardCandidates, data.deadEndPos);
 
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
+        secretMessagesData = ResourceLoader.Instance.secretMessagesData;
+        secretMessages = secretMessagesData.GetFloorMessages(floor, GameInfo.Instance.secretLevel);
 
         int numOfFixedMessages = floorMessages.fixedMessages.Length;
         int numOfRandomMessages = floorMessages.randomMessages.Length;
-        int numOfBloodMessages = floorMessages.bloodMessages.Length;
 
         var numOfPits = new int[] { floor * floor * 4, width * height / 10, pitCandidates.Count }.Min();
 
@@ -53,7 +64,7 @@ public class PitMessageMapData : DirMapData
             pitCandidates.GetRange(0, numOfPits).ForEach(pos => SetPitTrap(pos));
         }
 
-        PlaceMessageBoards(boardCandidates, numOfFixedMessages, numOfRandomMessages, numOfBloodMessages);
+        PlaceMessageBoards(boardCandidates, numOfFixedMessages, numOfRandomMessages);
     }
 
     // Import map data
@@ -61,6 +72,7 @@ public class PitMessageMapData : DirMapData
     {
         this.floor = floor;
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
+        secretMessagesData = ResourceLoader.Instance.secretMessagesData;
 
         fixedMessagePos = import.fixedMessagePos.ToList();
         bloodMessagePos = import.bloodMessagePos.ToList();
@@ -70,6 +82,12 @@ public class PitMessageMapData : DirMapData
             var posList = import.randomMessagePos[i];
             posList.pos.ForEach(pos => this.randomMessagePos[pos] = i);
         }
+
+        for (int i = 0; i < import.secretMessagePos.Length; i++)
+        {
+            var posList = import.secretMessagePos[i];
+            posList.pos.ForEach(pos => this.secretMessagePos[pos] = i);
+        }
     }
 
     // Custom map data with custom message board positions.
@@ -77,9 +95,8 @@ public class PitMessageMapData : DirMapData
     {
         floor = data.floor;
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
-
-        var fixedMessageBuffer = data.fixedMes;
-        var bloodMessageBuffer = data.bloodMes;
+        secretMessagesData = ResourceLoader.Instance.secretMessagesData;
+        secretMessages = secretMessagesData.GetFloorMessages(floor, GameInfo.Instance.secretLevel);
 
         FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(data.floor - 1);
         int numOfFixedMessage = src.fixedMessages.Length;
@@ -90,9 +107,9 @@ public class PitMessageMapData : DirMapData
             if (numOfFixedMessage-- > 0) SetFixedMessage(kv.Key, kv.Value);
         });
 
-        for (int i = 0; i < data.fixedMes.Count && i < numOfFixedMessage; i++)
+        for (int i = 0; i < data.randomMes.Count && i < numOfFixedMessage; i++)
         {
-            this.fixedMessagePos.Add(data.fixedMes[i]);
+            this.randomMessagePos[data.randomMes[i]] = GetRandomIndex();
         }
 
         data.bloodMessagePos?.ForEach(kv =>
@@ -100,18 +117,24 @@ public class PitMessageMapData : DirMapData
             if (numOfBloodMessage-- > 0) SetBloodMessage(kv.Key, kv.Value);
         });
 
-        int bloodCount = data.bloodMes.Count;
+        for (int i = 0; i < data.secretMes.Count && i < secretMessages.Length; i++)
+        {
+            this.secretMessagePos[data.secretMes[i]] = GetSecretIndex();
+        }
+
+        var secretMessageBuffer = data.secretMes;
+        int bloodCount = data.secretMes.Count;
         int bloodOverCount = bloodCount - Math.Max(0, numOfBloodMessage);
         if (bloodOverCount > 0)
         {
-            var bloodOver = data.bloodMes.GetRange(bloodCount - bloodOverCount, bloodOverCount);
-            data.bloodMes.RemoveRange(bloodCount - bloodOverCount, bloodOverCount);
+            var bloodOver = data.secretMes.GetRange(bloodCount - bloodOverCount, bloodOverCount);
+            data.secretMes.RemoveRange(bloodCount - bloodOverCount, bloodOverCount);
 
             // Convert surplus blood messages to random messages.
             bloodOver.ForEach(pos => dirMapHandler.SetBloodMessageToNormal(pos));
         }
 
-        this.bloodMessagePos.AddRange(data.bloodMes);
+        this.bloodMessagePos.AddRange(data.secretMes);
     }
 
     public void ApplyMessages(ITile[,] matrix)
@@ -139,6 +162,14 @@ public class PitMessageMapData : DirMapData
             messageWall.data = floorMessages.randomMessages[kv.Value].Convert();
             messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
         });
+
+        secretMessagePos.ForEach(kv =>
+        {
+            Pos pos = kv.Key;
+            var messageWall = matrix[pos.x, pos.y] as MessageWall;
+            messageWall.data = secretMessagesData.Convert(kv.Value);
+            messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
+        });
     }
 
     private void SetPitTrap(Pos pos) => matrix[pos.x, pos.y] = Terrain.Pit;
@@ -161,6 +192,12 @@ public class PitMessageMapData : DirMapData
         SetMessageBoard(pos, boardDir, Terrain.MessageWall);
     }
 
+    private void SetSecretMessage(Pos pos, IDirection boardDir)
+    {
+        secretMessagePos[pos] = GetSecretIndex();
+        SetMessageBoard(pos, boardDir, Terrain.BloodMessageWall);
+    }
+
     private int GetRandomIndex()
     {
         if (randomIndices == null || randomIndices.Count == 0)
@@ -169,6 +206,16 @@ public class PitMessageMapData : DirMapData
         }
 
         return randomIndices.Pop();
+    }
+
+    private int GetSecretIndex()
+    {
+        if (secretIndices == null || secretIndices.Count == 0)
+        {
+            secretIndices = secretMessages.Select(data => data.messageID).ToStack();
+        }
+
+        return secretIndices.Pop();
     }
 
     private void SetMessageBoard(Pos pos, IDirection boardDir, Terrain type = Terrain.MessageWall)
@@ -267,14 +314,9 @@ public class PitMessageMapData : DirMapData
         return placeCount;
     }
 
-    private void PlaceMessageBoards(
-        Dictionary<Pos, IDirection> boardCandidates,
-        int numOfFixedMessages,
-        int numOfRandomMessages,
-        int numOfBloodMessages
-    )
+    private void PlaceMessageBoards(Dictionary<Pos, IDirection> boardCandidates, int numOfFixedMessages, int numOfRandomMessages)
     {
-        for (int i = 0; i < numOfBloodMessages && boardCandidates.Count > 0; i++)
+        for (int i = 0; i < floorMessages.bloodMessages.Length && boardCandidates.Count > 0; i++)
         {
             Pos pos = boardCandidates.GetRandomKey();
             SetBloodMessage(pos, boardCandidates[pos]);
@@ -292,6 +334,13 @@ public class PitMessageMapData : DirMapData
         {
             Pos pos = boardCandidates.GetRandomKey();
             SetRandomMessage(pos, boardCandidates[pos]);
+            boardCandidates.Remove(pos);
+        }
+
+        for (int i = 0; i < secretMessages.Length && boardCandidates.Count > 0; i++)
+        {
+            Pos pos = boardCandidates.GetRandomKey();
+            SetSecretMessage(pos, boardCandidates[pos]);
             boardCandidates.Remove(pos);
         }
     }
