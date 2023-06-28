@@ -220,7 +220,7 @@ public class MapRenderer : MonoBehaviour
         boxesRenderer.SetBox(pos, dir);
     }
 
-    public void ApplyTileOpen(WorldMap map)
+    public void ApplyTileState(WorldMap map)
     {
         map.ApplyTileState();
 

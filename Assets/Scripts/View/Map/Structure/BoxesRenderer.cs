@@ -14,12 +14,8 @@ public class BoxesRenderer : StructuresRenderer<BoxControl>
         this.map = map;
     }
 
-    public void SetBox(Pos pos, IDirection dir)
-    {
-        var state = new BoxState();
-        var box = PlacePrefab(pos, prefabBoxN, dir).SetState(state) as BoxControl;
-        (map.GetTile(pos) as Box).state = state;
-    }
+    public void SetBox(Pos pos, IDirection dir) => PlacePrefab(pos, prefabBoxN, dir).SetTileState((map.GetTile(pos) as Box));
+
 
     protected override void OnDestroyObject(BoxControl box) => box.KillTween();
     public void CompleteTween() => objectsPool.ForEach(box => box.CompleteTween());

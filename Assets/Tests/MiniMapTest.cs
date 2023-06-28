@@ -51,7 +51,6 @@ public class MiniMapTest
     {
         map = GameInfo.Instance.Map(0);
 
-        map.ForEachTiles(tile => { if (tile is Door) (tile as Door).state = new DoorState(); });
         playerInfo = Object.Instantiate(prefabPlayerInfo, map.WorldPos(map.stairsBottom.Key), Quaternion.identity);
         miniMapHandler = Object.Instantiate(prefabMiniMapHandler, playerInfo.transform);
 

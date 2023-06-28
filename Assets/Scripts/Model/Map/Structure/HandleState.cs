@@ -1,17 +1,21 @@
 using UniRx;
 using System;
 
-public interface IHandleState
+public interface IOpenState
+{
+    bool IsOpen { get; }
+    void Open();
+}
+
+public interface IHandleState : IOpenState
 {
     IReadOnlyReactiveProperty<HandleState.StateEnum> State { get; }
     IObservable<bool> LockedState { get; }
 
-    bool IsOpen { get; }
     bool IsControllable { get; }
     bool IsLocked { get; }
 
     void TransitToNextState();
-    void Open();
 }
 
 public abstract class HandleState : IHandleState

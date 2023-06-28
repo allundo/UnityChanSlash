@@ -8,18 +8,22 @@ using System.Text.RegularExpressions;
 
 public class DataIOTest
 {
+    private Camera mainCamera;
     private DataStoreAgentTest dataStoreAgent;
     private GameInfo gameInfo;
     private ResourceLoader resourceLoader;
     private MapRenderer mapRenderer;
+    private GameManagerTest gameManager;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         dataStoreAgent = Object.Instantiate(Resources.Load<DataStoreAgentTest>("Prefabs/System/DataStoreAgentTest"), Vector3.zero, Quaternion.identity); ;
+        gameManager = Object.Instantiate(Resources.Load<GameManagerTest>("Prefabs/System/GameManagerTest"), Vector3.zero, Quaternion.identity); ;
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"), Vector3.zero, Quaternion.identity); ;
-        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"), Vector3.zero, Quaternion.identity); ;
+        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"), Vector3.zero, Quaternion.identity);
         mapRenderer = Object.Instantiate(Resources.Load<MapRenderer>("Prefabs/Map/Dungeon"), Vector3.zero, Quaternion.identity); ;
+        mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
 
         dataStoreAgent.KeepSaveDataFiles();
     }
@@ -30,9 +34,11 @@ public class DataIOTest
         dataStoreAgent.RestoreSaveDataFiles();
 
         Object.Destroy(dataStoreAgent.gameObject);
+        Object.Destroy(gameManager.gameObject);
         Object.Destroy(resourceLoader.gameObject);
         Object.Destroy(gameInfo.gameObject);
         Object.Destroy(mapRenderer.gameObject);
+        Object.Destroy(mainCamera.gameObject);
     }
 
     [Test]
@@ -287,7 +293,7 @@ public class DataIOTest
         mapRenderer.SetActiveTerrains(true);
         yield return waitForEndOfFrame;
 
-        mapRenderer.ApplyTileOpen(importMap);
+        mapRenderer.ApplyTileState(importMap);
         yield return waitForEndOfFrame;
 
         importMap.ForEachTiles((tile, pos) =>

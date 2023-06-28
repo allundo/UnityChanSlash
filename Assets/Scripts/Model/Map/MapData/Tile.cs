@@ -21,6 +21,7 @@ public interface ITile
 
 public interface IOpenable : ITile
 {
+    IOpenState state { get; }
     void Open();
     bool IsOpen { get; }
 }
@@ -75,9 +76,19 @@ public class Tile
         => OnEnemy ?? OnCharacterDest as IEnemyStatus ?? AboveEnemy;
 }
 
-public abstract class HandleTile : Tile
+public class OpenTile : Tile
 {
-    public virtual void Open() => Handle();
+    public IOpenState state { get; protected set; }
+    public OpenTile(IOpenState state) => this.state = state;
+
+    public virtual void Open() => state.Open();
+    public virtual bool IsOpen => state.IsOpen;
+}
+
+public abstract class HandleTile : OpenTile
+{
+    public HandleTile(IHandleState state) : base(state) { }
+    public override void Open() => Handle();
     public abstract void Handle();
 }
 
@@ -113,26 +124,28 @@ public class MessageWall : Wall, IReadable
 
 public class Door : HandleTile, IHandleTile
 {
-    public bool IsEnterable(IDirection dir = null) => state.IsOpen && !IsCharacterOn;
+    protected DoorState doorState;
+    public Door(ItemType keyItem = ItemType.Null) : base(new DoorState(keyItem)) => this.doorState = state as DoorState;
+
+    public override void Open() => doorState.Open();
+    public override void Handle() => doorState.TransitToNextState();
+
+    public bool IsEnterable(IDirection dir = null) => doorState.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
-    public virtual bool IsViewOpen => state.IsOpen;
-    public override bool IsCharacterOn => state.IsCharacterOn;
+    public virtual bool IsViewOpen => doorState.IsOpen;
+    public override bool IsCharacterOn => doorState.IsCharacterOn;
     public override IStatus OnCharacterDest
     {
-        get { return IsOpen ? state.onCharacterDest : null; }
-        set { if (IsOpen) state.onCharacterDest = value; }
+        get { return IsOpen ? doorState.onCharacterDest : null; }
+        set { if (IsOpen) doorState.onCharacterDest = value; }
     }
 
-    public DoorState state { protected get; set; }
-    public override void Open() => state.Open();
-    public override void Handle() => state.TransitToNextState();
-    public bool IsOpen => state.IsOpen;
-    public bool IsLocked => state.IsLocked;
-    public bool IsControllable => state.IsControllable;
-    public bool Unlock(ItemType type) => state.Unlock(type);
+    public bool IsLocked => doorState.IsLocked;
+    public bool IsControllable => doorState.IsControllable;
+    public bool Unlock(ItemType type) => doorState.Unlock(type);
 
-    public void Break() => state.Break();
-    public bool IsBroken => state.isBroken;
+    public void Break() => doorState.Break();
+    public bool IsBroken => doorState.isBroken;
 
     public override bool PutItem(Item item) => IsOpen ? base.PutItem(item) : false;
     public override Item PickItem() => IsOpen ? base.PickItem() : null;
@@ -141,22 +154,22 @@ public class Door : HandleTile, IHandleTile
 
 public class ExitDoor : Door
 {
+    public ExitDoor() : base(ItemType.KeyBlade) { }
     public override bool IsViewOpen => false;
-    public void Unlock() => state.Unlock();
+    public void Unlock() => doorState.Unlock();
 }
 
 public class Box : HandleTile, IHandleTile
 {
+    protected BoxState boxState;
+    public Box() : base(new BoxState()) => this.boxState = state as BoxState;
     public bool IsEnterable(IDirection dir = null) => false;
     public bool IsLeapable => true;
     public virtual bool IsViewOpen => true;
 
-    public BoxState state { protected get; set; }
-    public override void Open() => state.Open();
-    public override void Handle() => state.TransitToNextState();
-    public bool IsOpen => state.IsOpen;
-    public bool IsLocked => state.IsLocked;
-    public bool IsControllable => state.IsControllable;
+    public bool IsLocked => boxState.IsLocked;
+    public bool IsControllable => boxState.IsControllable;
+    public override void Handle() => boxState.TransitToNextState();
 
     public override bool PutItem(Item item)
     {
@@ -174,17 +187,16 @@ public class Box : HandleTile, IHandleTile
 
     public override ItemInfo TopItem => null;
 }
-public class Pit : Tile, IOpenable
+public class Pit : OpenTile, IOpenable
 {
+    protected PitState pitState;
+    public Pit() : base(new PitState()) => this.pitState = state as PitState;
     public bool IsEnterable(IDirection dir = null) => dir != null;
     public bool IsLeapable => true;
     public virtual bool IsViewOpen => true;
 
-    public PitState state { protected get; set; }
-    public void Open() => state.Drop(false);
-    public void Drop() => state.Drop(true);
-    public bool IsOpen => state.isDropped;
-    public float Damage => state.damage;
+    public void Drop() => pitState.Drop(true);
+    public float Damage => pitState.damage;
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;

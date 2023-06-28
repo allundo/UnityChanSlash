@@ -11,9 +11,6 @@ public class PitTrapsRenderer : StructuresRenderer<PitControl>
 
     public void SetPitTrap(Pos pos)
     {
-        var state = new PitState(floorMaterials.pitDamage);
-
-        PlacePrefab(pos, prefabPitTrap).SetState(state).SetMaterials(floorMaterials.pitLid, floorMaterials.wall);
-        (map.GetTile(pos) as Pit).state = state;
+        PlacePrefab(pos, prefabPitTrap).SetMaterials(floorMaterials.pitLid, floorMaterials.wall).SetPitState(map.GetTile(pos) as Pit);
     }
 }

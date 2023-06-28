@@ -44,9 +44,9 @@ public class PitControl : MonoBehaviour
         }
     }
 
-    public PitControl SetState(PitState state)
+    public PitControl SetPitState(Pit pit)
     {
-        this.pitState = state;
+        this.pitState = pit.state as PitState;
         return this;
     }
     public void OnTriggerEnter(Collider other)

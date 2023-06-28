@@ -8,11 +8,13 @@ public class PitMessageMapData : DirMapData
     public List<Pos> fixedMessagePos { get; private set; } = new List<Pos>();
     public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
+    private Stack<int> randomIndices = null;
+    private FloorMessagesSource floorMessages;
 
     public DataStoreAgent.PosList[] ExportRandomMessagePos()
     {
         // export[RANDOM_MESSAGE_ID] = List<PLACED_BOARD_POSITION>
-        var export = Enumerable.Repeat(new List<Pos>(), ResourceLoader.Instance.floorMessagesData.Param(floor - 1).randomMessages.Length).ToArray();
+        var export = Enumerable.Repeat(new List<Pos>(), floorMessages.randomMessages.Length).ToArray();
         randomMessagePos.ForEach(kv => export[kv.Value].Add(kv.Key));
         return export.Select(posList => new DataStoreAgent.PosList(posList)).ToArray();
     }
@@ -21,6 +23,7 @@ public class PitMessageMapData : DirMapData
     public PitMessageMapData(StairsMapData data, int floor) : base(data)
     {
         this.floor = floor;
+        floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
         // Don't set pit in front of items(dead ends)
         List<Pos> pitIgnore = deadEndPos.Select(kv => kv.Value.GetForward(kv.Key)).ToList();
@@ -63,6 +66,7 @@ public class PitMessageMapData : DirMapData
     public PitMessageMapData(IDirMapData data, int floor, DataStoreAgent.MapData import) : base(data)
     {
         this.floor = floor;
+        floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
         fixedMessagePos = import.fixedMessagePos.ToList();
         bloodMessagePos = import.bloodMessagePos.ToList();
@@ -78,6 +82,7 @@ public class PitMessageMapData : DirMapData
     public PitMessageMapData(DirMapHandler dirMapHandler, CustomMapData data) : base(dirMapHandler)
     {
         floor = data.floor;
+        floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
 
         var fixedMessageBuffer = data.fixedMes;
         var bloodMessageBuffer = data.bloodMes;
@@ -115,6 +120,33 @@ public class PitMessageMapData : DirMapData
         this.bloodMessagePos.AddRange(data.bloodMes);
     }
 
+    public void ApplyMessages(ITile[,] matrix)
+    {
+        for (int i = 0; i < floorMessages.fixedMessages.Length && i < fixedMessagePos.Count; i++)
+        {
+            Pos pos = fixedMessagePos[i];
+            var messageWall = matrix[pos.x, pos.y] as MessageWall;
+            messageWall.data = floorMessages.fixedMessages[i].Convert();
+            messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
+        }
+
+        for (int i = 0; i < floorMessages.bloodMessages.Length && i < bloodMessagePos.Count; i++)
+        {
+            Pos pos = bloodMessagePos[i];
+            var messageWall = matrix[pos.x, pos.y] as MessageWall;
+            messageWall.data = floorMessages.bloodMessages[i].Convert();
+            messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
+        }
+
+        randomMessagePos.ForEach(kv =>
+        {
+            Pos pos = kv.Key;
+            var messageWall = matrix[pos.x, pos.y] as MessageWall;
+            messageWall.data = floorMessages.randomMessages[kv.Value].Convert();
+            messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
+        });
+    }
+
     private void SetPitTrap(Pos pos) => matrix[pos.x, pos.y] = Terrain.Pit;
 
     private void SetFixedMessage(Pos pos, IDirection boardDir)
@@ -127,6 +159,22 @@ public class PitMessageMapData : DirMapData
     {
         bloodMessagePos.Add(pos);
         SetMessageBoard(pos, boardDir, Terrain.BloodMessageWall);
+    }
+
+    private void SetRandomMessage(Pos pos, IDirection boardDir)
+    {
+        randomMessagePos[pos] = GetRandomIndex();
+        SetMessageBoard(pos, boardDir, Terrain.MessageWall);
+    }
+
+    private int GetRandomIndex()
+    {
+        if (randomIndices == null || randomIndices.Count == 0)
+        {
+            randomIndices = Enumerable.Range(0, floorMessages.randomMessages.Length).Shuffle().ToStack();
+        }
+
+        return randomIndices.Pop();
     }
 
     private void SetMessageBoard(Pos pos, IDirection boardDir, Terrain type = Terrain.MessageWall)
@@ -248,7 +296,7 @@ public class PitMessageMapData : DirMapData
         for (int i = 0; i < numOfRandomMessages && boardCandidates.Count > 0; i++)
         {
             Pos pos = boardCandidates.GetRandomKey();
-            SetMessageBoard(pos, boardCandidates[pos]);
+            SetRandomMessage(pos, boardCandidates[pos]);
             boardCandidates.Remove(pos);
         }
     }

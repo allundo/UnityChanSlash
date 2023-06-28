@@ -6,8 +6,8 @@ using System.Collections;
 
 public class GameManager : SingletonComponent<IGameManager>, IGameManager
 {
-    [SerializeField] private MapRenderer mapRenderer = default;
-    [SerializeField] private GameObject player = default;
+    [SerializeField] protected MapRenderer mapRenderer = default;
+    [SerializeField] protected GameObject player = default;
     [SerializeField] private EventManager eventManager = default;
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
@@ -26,7 +26,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     private bool isInitialOrientation = true;
 
     public WorldMap worldMap { get; protected set; }
-    private ResourceFX resourceFX;
+    protected ResourceFX resourceFX;
 
     public IObservable<Unit> ExitObservable => exitSubject.IgnoreElements();
     private ISubject<Unit> exitSubject = new Subject<Unit>();
@@ -137,7 +137,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         // Wait for Start() method calls of GameObjects
         yield return null;
 
-        mapRenderer.ApplyTileOpen(worldMap);
+        mapRenderer.ApplyTileState(worldMap);
         spawnHandler.PlaceEnemyGenerators();
         DataStoreAgent.Instance.RestorePlayerStatus();
 
@@ -200,7 +200,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         playerReact.SwitchFloor(worldMap.floor);
     }
 
-    void Start()
+    protected virtual void Start()
     {
         rotate.Orientation.Subscribe(orientation => ResetOrientation(orientation)).AddTo(this);
         DataStoreAgent.Instance.EnableSave();
@@ -336,7 +336,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.SetActiveTerrains(true);
         yield return waitForEndOfFrame;
 
-        mapRenderer.ApplyTileOpen(nextFloorMap);
+        mapRenderer.ApplyTileState(nextFloorMap);
         yield return waitForEndOfFrame;
 
         spawnHandler.MoveFloorItems(nextFloorMap); // Switch world map for ItemGenerator

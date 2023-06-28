@@ -249,6 +249,8 @@ public class WorldMap : TileMapData
         // Generate tile matrix by MiniMapData constructor to save a for-loop to convert terrain to mini map color.
         miniMapData = MiniMapData.Convert(dirMapHandler.matrix, floor, width, height);
         matrix = miniMapData.matrix;
+
+        pitMessageMapData.ApplyMessages(matrix);
     }
 
     public Dir SetTerrain(int x, int y, Terrain terrain)

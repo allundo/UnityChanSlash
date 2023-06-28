@@ -38,8 +38,9 @@ public class TileMapData : BaseMapData<ITile>
                 return new MessageWall();
 
             case Terrain.Door:
-            case Terrain.LockedDoor:
                 return new Door();
+            case Terrain.LockedDoor:
+                return new Door(ItemType.TreasureKey);
 
             case Terrain.ExitDoor:
                 return new ExitDoor();

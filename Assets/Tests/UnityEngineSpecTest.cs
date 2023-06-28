@@ -64,13 +64,9 @@ public class UnityEngineSpecTest
         yield return null;
 
         var doorV = Object.Instantiate(prefabDoorV, new Vector3(-2.5f, 0, 0), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorV.SetState(new DoorState());
         var doorV2 = Object.Instantiate(prefabDoorV, new Vector3(-2.5f, 0, 2.5f), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorV2.SetState(new DoorState());
         var doorH = Object.Instantiate(prefabDoorH, new Vector3(0, 0, 0), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorH.SetState(new DoorState());
         var doorH2 = Object.Instantiate(prefabDoorH, new Vector3(0, 0, 2.5f), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorH2.SetState(new DoorState());
 
         var doorVTf = doorV.transform;
         var doorV2Tf = doorV2.transform;
@@ -117,13 +113,9 @@ public class UnityEngineSpecTest
         yield return null;
 
         var doorV = Object.Instantiate(prefabDoorV, new Vector3(-2.5f, 0, 0), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorV.SetState(new DoorState());
         var doorV2 = Object.Instantiate(prefabDoorV, new Vector3(-2.5f, 0, 2.5f), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorV2.SetState(new DoorState());
         var doorH = Object.Instantiate(prefabDoorH, new Vector3(0, 0, 0), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorH.SetState(new DoorState());
         var doorH2 = Object.Instantiate(prefabDoorH, new Vector3(0, 0, 2.5f), Quaternion.identity).SetMaterials(matSource.gate, matSource.door);
-        doorH2.SetState(new DoorState());
 
         var doorVTf = doorV.transform;
         var doorV2Tf = doorV2.transform;

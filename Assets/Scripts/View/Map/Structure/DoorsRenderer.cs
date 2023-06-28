@@ -20,25 +20,24 @@ public class DoorsRenderer : StructuresRenderer<DoorControl>
 
     private void SetDoor<T>(Pos pos, T doorPrefab) where T : DoorControl
     {
-        InitDoorData(pos, PlacePrefab(pos, doorPrefab));
+        PlaceDoor(pos, doorPrefab);
     }
 
     public void SetLockedDoor(Pos pos, IDirection dir)
     {
-        InitDoorData(pos, PlacePrefab(pos, prefabLockedDoorN, dir).SetDir(dir), ItemType.TreasureKey);
+        PlaceDoor(pos, prefabLockedDoorN, dir).SetDir(dir);
     }
 
     public void SetExitDoor(Pos pos, IDirection dir)
     {
-        InitDoorData(pos, PlacePrefab(pos, prefabExitDoorN, dir).SetDir(dir), ItemType.KeyBlade);
+        PlaceDoor(pos, prefabExitDoorN, dir).SetDir(dir);
     }
 
-    private void InitDoorData(Pos pos, DoorControl doorInstance, ItemType lockType = ItemType.Null)
+    private T PlaceDoor<T>(Pos pos, T doorPrefab, IDirection dir = null) where T : DoorControl
     {
-        var state = new DoorState(lockType);
-
-        doorInstance.SetMaterials(floorMaterials.gate, floorMaterials.door).SetState(state);
-        (map.GetTile(pos) as Door).state = state;
+        return PlacePrefab(pos, doorPrefab, dir)
+            .SetMaterials(floorMaterials.gate, floorMaterials.door)
+            .SetTileState(map.GetTile(pos) as Door) as T;
     }
 
     protected override void OnDestroyObject(DoorControl door) => door.KillTween();

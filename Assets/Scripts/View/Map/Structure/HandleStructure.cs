@@ -29,9 +29,9 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
         handleState.State.Subscribe(state => OnStateChange(state)).AddTo(this);
     }
 
-    public IHandleStructure SetState(IHandleState state)
+    public IHandleStructure SetTileState(IHandleTile tile)
     {
-        this.handleState = state;
+        handleState = tile.state as IHandleState;
         return this;
     }
 
