@@ -94,18 +94,19 @@ public class ItemGenerator : MobGenerator<Item>
     private void PlaceItems(WorldMap map)
     {
         if (map.deadEndPos.Count == 0) return;
+        IDirection playerDir = PlayerInfo.Instance.Dir;
 
         for (int i = 0; i < singleItemTypes.Length && map.deadEndPos.Count > 0; i++)
         {
             var last = map.deadEndPos.Last();
-            PutNew(singleItemTypes[i], last.Key, last.Value.Backward);
+            PutNew(singleItemTypes[i], last.Key, playerDir);
 
             mapRenderer.PlaceBox(last.Key);
 
             map.deadEndPos.Remove(last.Key);
         }
 
-        map.deadEndPos.ForEach(kvp => { PutNew(RandomItemType, kvp.Key, kvp.Value.Backward); });
+        map.deadEndPos.ForEach(kvp => { PutNew(RandomItemType, kvp.Key, playerDir); });
         map.deadEndPos.Clear();
     }
 
