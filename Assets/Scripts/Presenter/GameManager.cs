@@ -137,7 +137,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         // Wait for Start() method calls of GameObjects
         yield return null;
 
-        mapRenderer.ApplyTileState(worldMap);
+        mapRenderer.ApplyTileState();
         spawnHandler.PlaceEnemyGenerators();
         DataStoreAgent.Instance.RestorePlayerStatus();
 
@@ -330,13 +330,13 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         mapRenderer.GenerateTerrain(terrainMeshes);
         yield return waitForEndOfFrame;
 
-        mapRenderer.SwitchTerrainMaterials(nextFloorMap);
+        mapRenderer.SwitchTerrainMaterials();
         yield return waitForEndOfFrame;
 
         mapRenderer.SetActiveTerrains(true);
         yield return waitForEndOfFrame;
 
-        mapRenderer.ApplyTileState(nextFloorMap);
+        mapRenderer.ApplyTileState();
         yield return waitForEndOfFrame;
 
         spawnHandler.MoveFloorItems(nextFloorMap); // Switch world map for ItemGenerator

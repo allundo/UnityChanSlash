@@ -114,7 +114,7 @@ public class MapRenderer : MonoBehaviour
         LoadFloorMaterials(map);
         InitMeshes();
         GenerateTerrain(SetUpTerrainMeshes(map.dirMapHandler));
-        SwitchTerrainMaterials(map);
+        SwitchTerrainMaterials();
         SetActiveTerrains(true);
     }
 
@@ -220,7 +220,7 @@ public class MapRenderer : MonoBehaviour
         boxesRenderer.SetBox(pos, dir);
     }
 
-    public void ApplyTileState(WorldMap map)
+    public void ApplyTileState()
     {
         map.ApplyTileState();
 
@@ -250,7 +250,7 @@ public class MapRenderer : MonoBehaviour
         Destroy(combinedMesh);
     }
 
-    public void SwitchTerrainMaterials(WorldMap map)
+    public void SwitchTerrainMaterials()
     {
         Util.SwitchMaterial(ground.GetComponent<Renderer>(), floorMaterials.ground);
         Util.SwitchMaterial(wallParent.GetComponent<Renderer>(), floorMaterials.wall);

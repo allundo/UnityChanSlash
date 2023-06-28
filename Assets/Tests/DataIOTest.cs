@@ -287,13 +287,13 @@ public class DataIOTest
         mapRenderer.GenerateTerrain(terrainMeshes);
         yield return waitForEndOfFrame;
 
-        mapRenderer.SwitchTerrainMaterials(importMap);
+        mapRenderer.SwitchTerrainMaterials();
         yield return waitForEndOfFrame;
 
         mapRenderer.SetActiveTerrains(true);
         yield return waitForEndOfFrame;
 
-        mapRenderer.ApplyTileState(importMap);
+        mapRenderer.ApplyTileState();
         yield return waitForEndOfFrame;
 
         importMap.ForEachTiles((tile, pos) =>
