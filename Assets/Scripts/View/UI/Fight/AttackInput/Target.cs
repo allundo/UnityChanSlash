@@ -110,7 +110,12 @@ public class Target : FadeUI, ITargetUI
 
         if (IsPointerOn(pointerPos))
         {
-            if (!isPointerOn) lockOnSnd.PlayEx();
+            if (!isPointerOn)
+            {
+                lockOnSnd.PlayEx();
+                AndroidUtil.Vibrate();
+            }
+
             isPointerOn = true;
             SetPointerOn();
         }

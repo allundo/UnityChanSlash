@@ -96,6 +96,7 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         this.isEquip = isEquip;
         image.sprite = select;
         ui.Resize(1.4f, 0.2f).Play();
+        AndroidUtil.Vibrate();
 
         return SetPosition(pos);
     }
