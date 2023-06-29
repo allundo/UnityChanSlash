@@ -46,7 +46,6 @@ public class CustomMapData : IStairsData
     /// </summary>
     public Dictionary<Pos, IDirection> bloodMessagePos { get; private set; }
 
-    private Dictionary<Terrain, Action<Pos>> dataMap;
     public CustomMapData(
         int floor,
         int[] customMapData,
@@ -125,5 +124,4 @@ public class CustomMapData : IStairsData
             }
         }
     }
-
 }
