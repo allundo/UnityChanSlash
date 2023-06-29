@@ -4,26 +4,14 @@ using System.Collections.Generic;
 
 public class ItemGenerator : MobGenerator<Item>
 {
-    private ItemData itemData;
-    private ItemTypesData itemTypesData;
-
-    private ItemType[] singleItemTypes;
-    private ItemType[] randomItemTypes;
-    private ItemType RandomItemType => randomItemTypes[Random.Range(0, randomItemTypes.Length)];
-
     private Stack<RespawnData>[] respawnData;
 
     private WorldMap map;
-
-    private ItemSource Param(ItemType type) => itemData.Param((int)type);
 
     protected override void Awake()
     {
         pool = transform;
         spawnPoint = Vector3.zero;
-
-        itemData = ResourceLoader.Instance.itemData;
-        itemTypesData = ResourceLoader.Instance.itemTypesData;
 
         respawnData = new Stack<RespawnData>[GameInfo.Instance.LastFloor].Select(_ => new Stack<RespawnData>()).ToArray();
     }
@@ -37,15 +25,6 @@ public class ItemGenerator : MobGenerator<Item>
     private void SetWorldMap(WorldMap map)
     {
         this.map = map;
-        randomItemTypes = itemTypesData.Param(map.floor - 1).randomTypes;
-        singleItemTypes = itemTypesData.Param(map.floor - 1).fixedTypes;
-
-#if UNITY_EDITOR
-        if (GameInfo.Instance.isScenePlayedByEditor)
-        {
-            singleItemTypes = new ItemType[1] { ItemType.KeyBlade };
-        }
-#endif
     }
 
     public void SwitchWorldMap(WorldMap map)
