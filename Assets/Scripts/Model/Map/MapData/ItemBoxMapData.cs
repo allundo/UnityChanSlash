@@ -32,14 +32,12 @@ public class ItemBoxMapData : DirMapData
         if (!data.exitDoor.IsNull) itemPos.Remove(data.StairsBottom);
 
 
-        foreach (ItemType type in singleItemTypes)
+        for (int i = 0; i < singleItemTypes.Length && itemPos.Count > 0; ++i)
         {
-            if (itemPos.Count == 0) break;
-
             Pos pos = itemPos.Last().Key;
             matrix[pos.x, pos.y] = Terrain.Box;
             dirMap[pos.x, pos.y] = itemPos[pos].Enum;
-            itemType[pos] = type;
+            itemType[pos] = singleItemTypes[i];
 
             itemPos.Remove(pos);
         }
@@ -62,10 +60,8 @@ public class ItemBoxMapData : DirMapData
         var boxItemPos = new Dictionary<Pos, IDirection>(custom.boxItemPos);
 
         int count;
-        for (count = 0; count < singleItemTypes.Length; ++count)
+        for (count = 0; count < singleItemTypes.Length && boxItemPos.Count > 0; ++count)
         {
-            if (boxItemPos.Count == 0) break;
-
             Pos pos = boxItemPos.Last().Key;
             matrix[pos.x, pos.y] = Terrain.Box;
             dirMap[pos.x, pos.y] = boxItemPos[pos].Enum;
@@ -81,10 +77,8 @@ public class ItemBoxMapData : DirMapData
 
         // Use random item pos for box items if box item pos is not enough for fixed items.
         int surplus = singleItemTypes.Length - count;
-        for (int i = 0; i < surplus; ++i)
+        for (int i = 0; i < surplus && randomItemPos.Count > 0; ++i)
         {
-            if (randomItemPos.Count == 0) break;
-
             Pos pos = randomItemPos.Pop();
             matrix[pos.x, pos.y] = Terrain.Box;
             dirMap[pos.x, pos.y] = rawMapData.GetValidDir(pos.x, pos.y);
