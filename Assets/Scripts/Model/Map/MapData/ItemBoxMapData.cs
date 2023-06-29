@@ -6,7 +6,7 @@ public class ItemBoxMapData : DirMapData
 {
     public Dictionary<Pos, ItemType> itemType { get; protected set; }
 
-    private ItemType[] singleItemTypes;
+    private ItemType[] fixedItemTypes;
     private ItemType[] randomItemTypes;
     private ItemType RandomItemType => randomItemTypes[Random.Range(0, randomItemTypes.Length)];
 
@@ -14,13 +14,13 @@ public class ItemBoxMapData : DirMapData
     public ItemBoxMapData(StairsMapData data, int floor) : base(data)
     {
         var itemTypesSource = ResourceLoader.Instance.itemTypesData.Param(floor - 1);
-        singleItemTypes = itemTypesSource.singleTypes;
+        fixedItemTypes = itemTypesSource.fixedTypes;
         randomItemTypes = itemTypesSource.randomTypes;
 
 #if UNITY_EDITOR
         if (GameInfo.Instance.isScenePlayedByEditor)
         {
-            singleItemTypes = new ItemType[1] { ItemType.KeyBlade };
+            fixedItemTypes = new ItemType[1] { ItemType.KeyBlade };
         }
 #endif
 
@@ -32,12 +32,12 @@ public class ItemBoxMapData : DirMapData
         if (!data.exitDoor.IsNull) itemPos.Remove(data.StairsBottom);
 
 
-        for (int i = 0; i < singleItemTypes.Length && itemPos.Count > 0; ++i)
+        for (int i = 0; i < fixedItemTypes.Length && itemPos.Count > 0; ++i)
         {
             Pos pos = itemPos.Last().Key;
             matrix[pos.x, pos.y] = Terrain.Box;
             dirMap[pos.x, pos.y] = itemPos[pos].Enum;
-            itemType[pos] = singleItemTypes[i];
+            itemType[pos] = fixedItemTypes[i];
 
             itemPos.Remove(pos);
         }
@@ -52,7 +52,7 @@ public class ItemBoxMapData : DirMapData
     public ItemBoxMapData(IDirMapData data, CustomMapData custom) : base(data)
     {
         var itemTypesSource = ResourceLoader.Instance.itemTypesData.Param(custom.floor - 1);
-        singleItemTypes = itemTypesSource.singleTypes;
+        fixedItemTypes = itemTypesSource.fixedTypes;
         randomItemTypes = itemTypesSource.randomTypes;
 
         itemType = new Dictionary<Pos, ItemType>();
@@ -60,12 +60,12 @@ public class ItemBoxMapData : DirMapData
         var boxItemPos = new Dictionary<Pos, IDirection>(custom.boxItemPos);
 
         int count;
-        for (count = 0; count < singleItemTypes.Length && boxItemPos.Count > 0; ++count)
+        for (count = 0; count < fixedItemTypes.Length && boxItemPos.Count > 0; ++count)
         {
             Pos pos = boxItemPos.Last().Key;
             matrix[pos.x, pos.y] = Terrain.Box;
             dirMap[pos.x, pos.y] = boxItemPos[pos].Enum;
-            itemType[pos] = singleItemTypes[count];
+            itemType[pos] = fixedItemTypes[count];
 
             boxItemPos.Remove(pos);
         }
@@ -76,13 +76,13 @@ public class ItemBoxMapData : DirMapData
         boxItemPos.Keys.ForEach(remaining => randomItemPos.Push(remaining));
 
         // Use random item pos for box items if box item pos is not enough for fixed items.
-        int surplus = singleItemTypes.Length - count;
+        int surplus = fixedItemTypes.Length - count;
         for (int i = 0; i < surplus && randomItemPos.Count > 0; ++i)
         {
             Pos pos = randomItemPos.Pop();
             matrix[pos.x, pos.y] = Terrain.Box;
             dirMap[pos.x, pos.y] = rawMapData.GetValidDir(pos.x, pos.y);
-            itemType[pos] = singleItemTypes[count + i];
+            itemType[pos] = fixedItemTypes[count + i];
         }
 
         randomItemPos.ForEach(pos =>

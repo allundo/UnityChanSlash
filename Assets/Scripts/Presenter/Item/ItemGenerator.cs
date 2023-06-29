@@ -38,7 +38,7 @@ public class ItemGenerator : MobGenerator<Item>
     {
         this.map = map;
         randomItemTypes = itemTypesData.Param(map.floor - 1).randomTypes;
-        singleItemTypes = itemTypesData.Param(map.floor - 1).singleTypes;
+        singleItemTypes = itemTypesData.Param(map.floor - 1).fixedTypes;
 
 #if UNITY_EDITOR
         if (GameInfo.Instance.isScenePlayedByEditor)

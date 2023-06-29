@@ -142,7 +142,7 @@ public class EnemyTypesSource
 public class ItemTypesSource
 {
     [SerializeField] public ItemType[] randomTypes;
-    [SerializeField] public ItemType[] singleTypes;
+    [SerializeField] public ItemType[] fixedTypes;
 }
 
 [System.Serializable]
