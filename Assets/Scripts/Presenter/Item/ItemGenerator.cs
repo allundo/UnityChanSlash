@@ -18,22 +18,19 @@ public class ItemGenerator : MobGenerator<Item>
 
     void Start()
     {
-        SetWorldMap(GameManager.Instance.worldMap);
+        this.map = GameManager.Instance.worldMap;
         PlaceItems(map);
-    }
-
-    private void SetWorldMap(WorldMap map)
-    {
-        this.map = map;
     }
 
     public void SwitchWorldMap(WorldMap map)
     {
-        respawnData[this.map.floor - 1] = GetRespawnData(true);
-        RespawnItems(map);
+        respawnData[this.map.floor - 1] = StoreRespawnData(true);
+
+        this.map = map;
+        if (!PlaceItems(map)) StackRespawn(respawnData[map.floor - 1]);
     }
 
-    private Stack<RespawnData> GetRespawnData(bool clearItems = false)
+    private Stack<RespawnData> StoreRespawnData(bool clearItems = false)
     {
         var store = new Stack<RespawnData>();
 
@@ -50,33 +47,24 @@ public class ItemGenerator : MobGenerator<Item>
         return store;
     }
 
-    private void RespawnItems(WorldMap respawnMap)
-    {
-        // Switch current world map.
-        SetWorldMap(respawnMap);
-        PlaceItems(respawnMap);
-
-        StackRespawn(respawnData[respawnMap.floor - 1]);
-    }
-
     private void StackRespawn(Stack<RespawnData> restore)
     {
-        var dir = PlayerInfo.Instance.Dir;
+        var playerDir = PlayerInfo.Instance.Dir;
         while (restore.Count > 0)
         {
-            Respawn(restore.Pop(), dir);
+            Respawn(restore.Pop(), playerDir);
         }
     }
 
-    private void PlaceItems(WorldMap map)
+    private bool PlaceItems(WorldMap map)
     {
-        IDirection playerDir = PlayerInfo.Instance.Dir;
+        ItemBoxMapData itemData = map.itemBoxMapData;
+        if (itemData == null || itemData.itemType.Count == 0) return false;
 
-        if (map.itemBoxMapData != null)
-        {
-            map.itemBoxMapData.itemType.ForEach(kv => PutNew(kv.Value, kv.Key, playerDir));
-            map.itemBoxMapData.itemType.Clear();
-        }
+        var playerDir = PlayerInfo.Instance.Dir;
+        itemData.itemType.ForEach(kv => PutNew(kv.Value, kv.Key, playerDir));
+        itemData.itemType.Clear();
+        return true;
     }
 
     private Item Spawn(ItemInfo itemInfo, Pos pos, IDirection dir = null)
@@ -126,7 +114,7 @@ public class ItemGenerator : MobGenerator<Item>
     public List<DataStoreAgent.ItemData>[] ExportRespawnData()
     {
         var export = Convert(respawnData);
-        export[this.map.floor - 1] = GetRespawnData().Select(data => Convert(data)).ToList();
+        export[this.map.floor - 1] = StoreRespawnData().Select(data => Convert(data)).ToList();
         return export;
     }
 
@@ -139,7 +127,8 @@ public class ItemGenerator : MobGenerator<Item>
     public void ImportRespawnData(List<DataStoreAgent.ItemData>[] import, WorldMap currentMap)
     {
         respawnData = Convert(import);
-        RespawnItems(currentMap);
+        this.map = currentMap;
+        StackRespawn(respawnData[currentMap.floor - 1]);
     }
 
     private RespawnData Convert(DataStoreAgent.ItemData data)
