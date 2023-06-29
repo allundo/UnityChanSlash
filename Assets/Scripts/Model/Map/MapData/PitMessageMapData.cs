@@ -91,50 +91,24 @@ public class PitMessageMapData : DirMapData
     }
 
     // Custom map data with custom message board positions.
-    public PitMessageMapData(DirMapHandler dirMapHandler, CustomMapData data) : base(dirMapHandler)
+    public PitMessageMapData(DirMapHandler data, CustomMapData custom) : base(data)
     {
-        floor = data.floor;
+        floor = custom.floor;
         floorMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1);
         secretMessagesData = ResourceLoader.Instance.secretMessagesData;
         secretMessages = secretMessagesData.GetFloorMessages(floor, GameInfo.Instance.secretLevel);
 
-        FloorMessagesSource src = ResourceLoader.Instance.floorMessagesData.Param(data.floor - 1);
-        int numOfFixedMessage = src.fixedMessages.Length;
-        int numOfBloodMessage = src.bloodMessages.Length;
+        var customMsg = new CustomMessagePos(data, floorMessages.fixedMessages.Length, Terrain.MessageWall, GetRandomIndex);
+        customMsg.SetCustomDataPos(custom.fixedMessagePos, custom.randomMes);
 
-        data.fixedMessagePos?.ForEach(kv =>
-        {
-            if (numOfFixedMessage-- > 0) SetFixedMessage(kv.Key, kv.Value);
-        });
+        this.fixedMessagePos = customMsg.fixedMessagePos;
+        this.randomMessagePos = customMsg.randomMessagePos;
 
-        for (int i = 0; i < data.randomMes.Count && i < numOfFixedMessage; i++)
-        {
-            this.randomMessagePos[data.randomMes[i]] = GetRandomIndex();
-        }
+        var customBloodMsg = new CustomMessagePos(data, floorMessages.bloodMessages.Length, Terrain.BloodMessageWall, GetSecretIndex);
+        customBloodMsg.SetCustomDataPos(custom.bloodMessagePos, custom.secretMes);
 
-        data.bloodMessagePos?.ForEach(kv =>
-        {
-            if (numOfBloodMessage-- > 0) SetBloodMessage(kv.Key, kv.Value);
-        });
-
-        for (int i = 0; i < data.secretMes.Count && i < secretMessages.Length; i++)
-        {
-            this.secretMessagePos[data.secretMes[i]] = GetSecretIndex();
-        }
-
-        var secretMessageBuffer = data.secretMes;
-        int bloodCount = data.secretMes.Count;
-        int bloodOverCount = bloodCount - Math.Max(0, numOfBloodMessage);
-        if (bloodOverCount > 0)
-        {
-            var bloodOver = data.secretMes.GetRange(bloodCount - bloodOverCount, bloodOverCount);
-            data.secretMes.RemoveRange(bloodCount - bloodOverCount, bloodOverCount);
-
-            // Convert surplus blood messages to random messages.
-            bloodOver.ForEach(pos => dirMapHandler.SetBloodMessageToNormal(pos));
-        }
-
-        this.bloodMessagePos.AddRange(data.secretMes);
+        this.bloodMessagePos = customBloodMsg.fixedMessagePos;
+        this.secretMessagePos = customBloodMsg.randomMessagePos;
     }
 
     public void ApplyMessages(ITile[,] matrix)
