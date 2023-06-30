@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 using TMPro;
 
 public enum FaceID
@@ -32,8 +33,7 @@ public class MessageData
 
     public static MessageData Convert(MessageSource[] source)
     {
-        source.ForEach(src => src.sentence = src.sentence.Replace("\\n", "\n"));
-        return new MessageData(source);
+        return new MessageData(source.Select(src => src.Convert()).ToArray());
     }
 
     public static MessageData Inspect(

@@ -200,6 +200,9 @@ public class MessageSource
         this.caption = caption;
         this.ignoreIfRead = ignoreIfRead;
     }
+
+    public MessageSource Convert()
+        => new MessageSource(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption, ignoreIfRead);
 }
 
 [System.Serializable]
