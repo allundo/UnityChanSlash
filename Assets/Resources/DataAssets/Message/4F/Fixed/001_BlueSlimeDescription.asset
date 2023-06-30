@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 001_BlueSlimeDescription
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u9752\u30B9\u30E9\u30A4\u30E0\u8AAC\u660E"
+    sentence: " \u51B7\u51CD\u5F3E\u3092\u5410\u304D\u51FA\u3059\u30BC\u30EA\u30FC\u72B6\u306E\u9B54\u7269\u3002\u30BC\u30EA\u30FC\u306E\u304F\u305B\u306B\u51CD\u308A\u306B\u304F\u3044\u3002\u7372\u7269\u3092\u51CD\u3089\u305B\u3066\u565B\u307F\u3064\u304F\u3002"
+    face: -1
+    fontSize: 56
+    literalsPerSec: 1000
+    alignment: 257
+    title: "\u3010\u9752\u30B9\u30E9\u30A4\u30E0\u3011"
+    spriteImage: {fileID: 21300000, guid: 6f41f8451b8894da4b8287eb84ac3c76, type: 3}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 0

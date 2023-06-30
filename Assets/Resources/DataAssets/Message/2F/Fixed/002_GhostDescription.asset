@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 002_GhostDescription
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "Ghost\u8AAC\u660E"
+    sentence: "\u5E7D\u970A\u306E\u3088\u3046\u306A\u9B54\u7269\u3002\\n\u5B9F\u4F53\u304C\u3042\u308B\u3088\u3046\u3060\u304C\u58C1\u629C\u3051\u3092\u3057\u3066\u304D\u3066\u5384\u4ECB\u3002\\n\u7D4C\u9A13\u5024\u306F\u9AD8\u3044\u3089\u3057\u3044\u3002"
+    face: -1
+    fontSize: 56
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u7D2B\u30B4\u30FC\u30B9\u30C8\u3011"
+    spriteImage: {fileID: 21300000, guid: cd96e7954a0404b37b7d06ea91eef052, type: 3}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 0

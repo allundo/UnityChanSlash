@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 001_ColdMessage
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u6975\u5BD2\u306E\u5730\u3078\u3088\u3046\u3053\u305D"
+    sentence: "\u5730\u4E0B\u306B\u96EA\u964D\u3089\u305B\u308B\u306E\u306F\u5927\u5909\u3067\u3057\u305F\\n\u96EA\u3063\u3066\u898B\u305F\u3053\u3068\u306A\u3044\u3051\u3069\u3053\u3093\u306A\u611F\u3058\u3067\u3042\u3063\u3066\u308B\u3088\u306D\uFF1F\\nby
+      \u8FF7\u5BAE\u306E\u756A\u4EBA"
+    face: -1
+    fontSize: 72
+    literalsPerSec: 1000
+    alignment: 514
+    title: "\u3010\u6975\u5BD2\u306E\u5730\u3078\u3088\u3046\u3053\u305D\u3011"
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 0
+  - name: "\u6975\u5BD2\u306E\u5730\u3078\u3088\u3046\u3053\u305D\u53CD\u5FDC1"
+    sentence: "\u4F59\u8A08\u306A\u771F\u4F3C\u3092\u30FB\u30FB\u30FB"
+    face: 8
+    fontSize: 64
+    literalsPerSec: 20
+    alignment: 257
+    title: 
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 1

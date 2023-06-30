@@ -77,7 +77,7 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (isCold)
         {
-            ActiveMessageController.Instance.InputMessageData("寝るな…！寝たら死ぬぞ…！", SDFaceID.SURPRISE, SDEmotionID.BLUE);
+            ActiveMessageController.Instance.InputMessageData("寒すぎて休息できない…！", SDFaceID.SURPRISE, SDEmotionID.BLUE);
             return;
         }
 

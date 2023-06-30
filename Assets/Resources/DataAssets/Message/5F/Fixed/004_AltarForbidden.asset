@@ -10,23 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 001_ExitDoorMessage
+  m_Name: 004_AltarForbidden
   m_EditorClassIdentifier: 
   setParams:
-  - name: "ExitDoor\u8AAC\u660E"
-    sentence: "\u5C01\u5370\u3055\u308C\u3057\u5263\u304C\u9375\u3068\u306A\u308A\u3001\u9053\u306F\u958B\u3051\u308B\u3067\u3042\u308D\u3046\u3002\\n\u8FF7\u5BAE\u306E\u6700\u5965\u306B\u3066\u307E\u3064\uFF01\\nby
-      \u8FF7\u5BAE\u306E\u756A\u4EBA"
+  - name: "\uFF0A\uFF0A\u796D\uFF0A"
+    sentence: "\uFF0A\uFF0A\u5148\uFF0A\u5FA1\uFF0A\uFF0A\uFF0A\uFF0A\uFF0A\u58C7\uFF0A\uFF0A\uFF0A\\n\u6559\uFF0A\uFF0A\uFF0A\uFF0A\u5916\uFF0A\uFF0A\u5165\uFF0A\uFF0A\uFF0A\uFF0A"
     face: -1
     fontSize: 72
     literalsPerSec: 1000
     alignment: 514
-    title: "\u3010\u8A66\u7DF4\u306E\u8FF7\u5BAE\u3011"
+    title: "\u3010\uFF0A\uFF0A\u796D\uFF0A\u3011"
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 0
-  - name: "ExitDoor\u53CD\u5FDC1"
-    sentence: "\u5965\u306B\u9032\u3080\u3057\u304B\u306A\u3055\u305D\u3046\u3060\u306D\u30FB\u30FB\u30FB"
+  - name: "\uFF0A\uFF0A\u796D\uFF0A\u53CD\u5FDC1"
+    sentence: "\u6587\u5B57\u304C\u6F70\u308C\u3066\u3066\u8AAD\u3081\u306A\u3044\u30FB\u30FB\u30FB"
     face: 3
     fontSize: 64
     literalsPerSec: 20
@@ -36,9 +35,9 @@ MonoBehaviour:
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 1
-  - name: "ExitDoor\u53CD\u5FDC2"
-    sentence: "\u7406\u4E0D\u5C3D\u306A\u8981\u6C42\u306B\u306F\u3057\u3063\u304B\u308A\u5BFE\u4FA1\u3092\u6255\u3063\u3066\u3082\u3089\u3044\u307E\u3057\u3087\u3046\u304B\uFF01"
-    face: 1
+  - name: "\u5149\uFF0A\uFF0A\u970A\uFF0A\uFF0A\u6BBF\u53CD\u5FDC2"
+    sentence: "\u306A\u3093\u3060\u304B\u3084\u305F\u3089\u53E4\u3044\u770B\u677F\u3060\u306D"
+    face: 2
     fontSize: 64
     literalsPerSec: 20
     alignment: 257

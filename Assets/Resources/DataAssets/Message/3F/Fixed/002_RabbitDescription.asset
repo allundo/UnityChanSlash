@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 002_RabbitDescription
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u9EC4\u3046\u3055\u304E\u8AAC\u660E"
+    sentence: "\u52D5\u304D\u304C\u7D20\u65E9\u3044\u9B54\u7269\u3002\u3044\u308F\u3086\u308B\u52D5\u7269\u306E\u30A6\u30B5\u30AE\u3068\u306F\u4F55\u304B\u6839\u672C\u7684\u306B\u9055\u3046\u751F\u304D\u7269\u3002\\n\u98DB\u3073\u8E74\u308A\u3084\u30B5\u30DE\u30FC\u30BD\u30EB\u30C8\u30AD\u30C3\u30AF\u3092\u3057\u3066\u304F\u308B\u3002"
+    face: -1
+    fontSize: 56
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u9EC4\u3046\u3055\u304E\u8AAC\u660E\u3011"
+    spriteImage: {fileID: 21300000, guid: ae673a2947cfd48deb25fe89b60337d8, type: 3}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 0

@@ -20,7 +20,7 @@ MonoBehaviour:
     fontSize: 56
     literalsPerSec: 1000
     alignment: 513
-    title: "\u3010\u707C\u71B1\u5730\u7344\uFF01\u3011"
+    title: "\u3010\u71B1\u4E2D\u75C7\u3011"
     spriteImage: {fileID: 21300000, guid: 850685713cccf43e99f3ae4a2cae8631, type: 3}
     matImage: {fileID: 0}
     caption: "\u6B8B\u308AHP\u306B\u6CE8\u610F"

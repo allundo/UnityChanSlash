@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 001_CoinThrow
+  m_Name: 005_CoinThrow
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u30B3\u30A4\u30F3\u6295\u3052\u89E3\u8AAC"
