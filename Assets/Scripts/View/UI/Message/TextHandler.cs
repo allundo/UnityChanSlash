@@ -73,8 +73,6 @@ public class TextHandler : MonoBehaviour
         length = data.Source.Length;
         currentIndex = 0;
         SetNextSentence(currentIndex);
-
-        messageData.Read();
     }
 
     private void SetNextSentence(int index)
@@ -90,6 +88,7 @@ public class TextHandler : MonoBehaviour
             ResetTransform(Vector2.zero);
 
             endOfSentence.OnNext(Unit.Default);
+            messageData.Read();
             return;
         }
 
