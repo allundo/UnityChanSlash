@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u4F11\u606F\u7981\u6B62\uFF01"
-    sentence: "\u5BDD\u308B\u306A\uFF01\\n\u5BDD\u305F\u3089\u6B7B\u306C\u305E\u30FB\u30FB\u30FB\uFF01\\nby
+    sentence: "\u5BDD\u308B\u306A\uFF01\\n\u5BDD\u305F\u3089\u6B7B\u306C\u305E\u30FB\u30FB\u30FB\uFF01\\n\\nby
       \u8FF7\u5BAE\u306E\u756A\u4EBA"
     face: -1
     fontSize: 72

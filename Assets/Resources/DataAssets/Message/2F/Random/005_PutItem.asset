@@ -30,7 +30,7 @@ MonoBehaviour:
     fontSize: 52
     literalsPerSec: 1000
     alignment: 513
-    title: "\u3010\u6D88\u8017\u54C1\u30A2\u30A4\u30C6\u30E0\u306F\u307E\u3068\u3081\u3088\u3046\uFF01\u3011"
+    title: "\u3010\u6D88\u8017\u54C1\u30A2\u30A4\u30C6\u30E0\u306F\u307E\u3068\u3081\u3088\u3011"
     spriteImage: {fileID: 21300000, guid: d693b3d789a9f40af9d3ce6fed924ea1, type: 3}
     matImage: {fileID: 0}
     caption: "\u91CD\u306D\u5408\u308F\u305B"
