@@ -29,8 +29,8 @@ public class TextHandler : MonoBehaviour
 
     private bool isTapped = false;
 
-    private ISubject<Unit> sentence = new Subject<Unit>();
-    public IObservable<Unit> Sentence => sentence.IgnoreElements();
+    private ISubject<Unit> endOfSentence = new Subject<Unit>();
+    public IObservable<Unit> EndOfSentence => endOfSentence;
 
     void Awake()
     {
@@ -89,9 +89,7 @@ public class TextHandler : MonoBehaviour
             SetTitle(null);
             ResetTransform(Vector2.zero);
 
-            sentence.OnCompleted();
-            // Initialize a Subject again because RepeatUntilDestroy() operator sends OnCompleted message ONLY ONCE when destroyed.
-            sentence = new Subject<Unit>();
+            endOfSentence.OnNext(Unit.Default);
             return;
         }
 

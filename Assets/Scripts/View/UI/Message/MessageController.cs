@@ -34,7 +34,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     public void InputMessageData(MessageData data, bool isUIVisibleOnCompleted = true)
     {
-        textHandler.Sentence.Subscribe(null, () => CloseMessage(isUIVisibleOnCompleted)).AddTo(this);
+        textHandler.EndOfSentence.Subscribe(_ => CloseMessage(isUIVisibleOnCompleted)).AddTo(this);
 
         activateTween =
             DOTween.Sequence()
