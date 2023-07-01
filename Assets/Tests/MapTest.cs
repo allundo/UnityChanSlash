@@ -88,8 +88,12 @@ public class MapTest
     public void _002_1F_PitAttentionMessageBoardDirectionTest()
     {
         // setup
+        int floor = 1;
+        var fixedMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1)
+            .fixedMessages.Select(data => data.Convert()).ToList();
+
         // when
-        WorldMap sut = WorldMap.Create(1);
+        WorldMap sut = WorldMap.Create(floor);
 
         // then
         int pitID = (int)Terrain.Pit;
@@ -98,9 +102,20 @@ public class MapTest
         var matrix = sut.dirMapHandler.CloneMatrix();
         var dirMap = sut.dirMapHandler.CloneDirMap();
 
-        bool isExitDoorFound = false;
-        sut.messagePosData.fixedMessagePos.ForEach(pos =>
+        int count = 0;
+        var fixedMessagePos = sut.messagePosData.fixedMessagePos;
+        for (int i = 0; i < fixedMessagePos.Count; ++i)
         {
+            // Skip if not pit trap message
+            string name = fixedMessages[i].Source[0].name;
+            if (!name.StartsWith("落とし穴"))
+            {
+                Debug.Log($"Skip board: {name}");
+                continue;
+            }
+
+            Pos pos = fixedMessagePos[i];
+
             IDirection messageDir = Direction.Convert(dirMap[pos.x, pos.y]);
             Pos readPos = messageDir.GetForward(pos);
 
@@ -111,17 +126,11 @@ public class MapTest
             Terrain pitCandidateL = matrix[posL.x, posL.y];
             Terrain pitCandidateR = matrix[posR.x, posR.y];
 
-            // Skip message board for exit door
-            if (pitCandidateL == Terrain.ExitDoor || pitCandidateR == Terrain.ExitDoor)
-            {
-                isExitDoorFound = true;
-                return;
-            }
-
             Assert.That(Terrain.Pit, Is.EqualTo(pitCandidateL).Or.EqualTo(pitCandidateR));
-        });
+            ++count;
+        }
 
-        Assert.True(isExitDoorFound);
+        Assert.AreEqual(4, count, $"Verified pit attentions count: {count}");
     }
 
     [Test]

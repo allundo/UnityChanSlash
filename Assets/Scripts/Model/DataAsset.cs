@@ -186,9 +186,11 @@ public class MessageSource
         Sprite spriteImage = null,
         Material matImage = null,
         string caption = null,
-        bool ignoreIfRead = false
+        bool ignoreIfRead = false,
+        string name = null
     )
     {
+        this.name = name ?? "メッセージ";
         this.sentence = sentence;
         this.face = face;
         this.fontSize = fontSize;
@@ -202,7 +204,7 @@ public class MessageSource
     }
 
     public MessageSource Convert()
-        => new MessageSource(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption, ignoreIfRead);
+        => new MessageSource(sentence.Replace("\\n", "\n"), face, fontSize, literalsPerSec, alignment, title, spriteImage, matImage, caption, ignoreIfRead, name);
 }
 
 [System.Serializable]
