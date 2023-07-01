@@ -39,7 +39,8 @@ public class ItemBoxMapData : DirMapData
 
         itemPos.Keys.ForEach(pos =>
         {
-            itemType[pos] = randomItemTypes[Random.Range(0, randomItemTypes.Length)];
+            // Place random item by 60% probability
+            if (Util.DiceRoll(3, 5)) itemType[pos] = randomItemTypes[Random.Range(0, randomItemTypes.Length)];
         });
     }
 
