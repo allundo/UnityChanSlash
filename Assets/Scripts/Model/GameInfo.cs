@@ -83,7 +83,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     }
 
     public int startActionID = 0;
-    public bool isDebugFloorLoaded => maps[MAX_FLOOR] != null;
 
     public int LastFloor => ResourceLoader.Instance.enemyTypesData.Length;
 
@@ -105,7 +104,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             floor = currentFloor;
 
             // DEBUG ONLY
-            if (Debug.isDebugBuild && isDebugFloorLoaded)
+            if (Debug.isDebugBuild)
             {
                 maps[1] = maps[MAX_FLOOR];
             }
@@ -144,7 +143,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     public void CreateDebugMap()
     {
-        if (isDebugFloorLoaded) return;
+        if (maps[MAX_FLOOR] != null) return;
 
         int[] matrix =
         {
