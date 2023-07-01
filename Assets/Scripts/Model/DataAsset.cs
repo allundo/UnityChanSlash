@@ -135,14 +135,14 @@ public class DamageSndSource
 [System.Serializable]
 public class EnemyTypesSource
 {
-    [SerializeField] public EnemyType[] types;
+    [SerializeField] public EnemyType[] types = new EnemyType[0];
 }
 
 [System.Serializable]
 public class ItemTypesSource
 {
-    [SerializeField] public ItemType[] randomTypes;
-    [SerializeField] public ItemType[] fixedTypes;
+    [SerializeField] public ItemType[] randomTypes = new ItemType[0];
+    [SerializeField] public ItemType[] fixedTypes = new ItemType[0];
 }
 
 [System.Serializable]
@@ -220,9 +220,9 @@ public class SecretMessageSource
 [System.Serializable]
 public class FloorMessagesSource
 {
-    [SerializeField] public BoardMessageData[] fixedMessages = default;
-    [SerializeField] public BoardMessageData[] randomMessages = default;
-    [SerializeField] public BoardMessageData[] bloodMessages = default;
+    [SerializeField] public BoardMessageData[] fixedMessages = new BoardMessageData[0];
+    [SerializeField] public BoardMessageData[] randomMessages = new BoardMessageData[0];
+    [SerializeField] public BoardMessageData[] bloodMessages = new BoardMessageData[0];
 }
 
 [System.Serializable]
