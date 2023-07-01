@@ -66,7 +66,6 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     public FloorMaterialsData floorMaterialsData { get; private set; }
     public FloorMessagesData floorMessagesData { get; private set; }
-    public SecretMessagesDataAsset secretMessagesData { get; private set; }
 
     public FaceClipsSet faceClipsSet { get; private set; }
 
@@ -125,7 +124,6 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
         floorMaterialsData = Resources.Load<FloorMaterialsData>("DataAssets/Map/FloorMaterialsData");
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
-        secretMessagesData = Resources.Load<SecretMessagesDataAsset>("DataAssets/Message/SecretMessagesDataAsset");
 
         faceClipsSet = Resources.Load<FaceClipsData>("DataAssets/Character/FaceClipsData").Param(0);
 

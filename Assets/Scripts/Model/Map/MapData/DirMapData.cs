@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public interface IDirMapData
 {
     Terrain[,] matrix { get; }

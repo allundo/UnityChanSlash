@@ -306,4 +306,162 @@ public class MapTest
         Assert.AreEqual(numOfBloodMessage5, mesData5.bloodMessagePos.Count);
         Assert.AreEqual(new Pos(14, 12), mesData5.bloodMessagePos[0]);
     }
+
+    [Test]
+    public void _007_SecretMessageBoardPlacingTest([Values(0, 1, 2, 4, 8)] int secretLevel)
+    {
+        // setup
+        GameInfo info = GameInfo.Instance;
+        info.secretLevel = secretLevel;
+
+        int[] matrix =
+        {
+            2, 2, 2, 7, 2, 7, 2, 7, 2, 2, 2, 2, 2, 2, 2,
+            2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
+            6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+           20, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
+            2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            5, 1,22, 1, 4, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 7, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2,
+            7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
+
+        var fixedMessagePos = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(2, 2),    Direction.west  },
+            { new Pos(0, 8),    Direction.east  },
+            { new Pos(0, 10),   Direction.east  },
+            { new Pos(0, 12),   Direction.east  },
+            { new Pos(2, 14),   Direction.north },
+            { new Pos(9, 0),    Direction.south },
+        };
+
+        var bloodMessagePos = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(14, 12),    Direction.east },
+            { new Pos(14, 11),    Direction.east },
+        };
+
+        // when
+        var floorMessagesData = ResourceLoader.Instance.floorMessagesData;
+        var sut = Enumerable.Range(1, info.LastFloor).Select(floor =>
+            floor == 1
+                ? WorldMap.Create()
+                : WorldMap.Create(new CustomMapData(floor, matrix, 15, null, null, fixedMessagePos, bloodMessagePos))
+            ).ToArray();
+
+        var maxNumOfSecret = Enumerable.Range(0, info.LastFloor).Select(index => floorMessagesData.Param(index).secretMessages.Length).ToArray();
+
+        // then
+        var mesData = sut.Select(map => map.messagePosData).ToArray();
+
+        var secret = sut.Select(map =>
+        {
+            var list = new List<SecretMessageData>();
+            map.ForEachTiles(tile =>
+            {
+                MessageWall mes = tile as MessageWall;
+                if (mes != null && mes.data is SecretMessageData) list.Add(mes.data as SecretMessageData);
+            });
+            return list;
+        }).ToArray();
+
+        for (int j = 0; j < info.LastFloor; ++j)
+        {
+            for (int i = 0; i < info.LastFloor; ++i)
+            {
+                int numOfSecret = secret[j].Count(data => data.messageID >= i * 10 && data.messageID < (i + 1) * 10);
+                Debug.Log($"Floor: {j + 1}, number of secret{i + 1} = {numOfSecret}");
+                if (i > j) Assert.AreEqual(0, numOfSecret);
+            }
+
+            int secretTileCount = secret[j].Count();
+
+            int fixedPosCount = mesData[j].fixedMessagePos.Count;
+            int bloodPosCount = mesData[j].bloodMessagePos.Count;
+            int randomPosCount = mesData[j].randomMessagePos.Count;
+            int secretPosCount = mesData[j].secretMessagePos.Count;
+
+            Debug.Log($"Floor: {j + 1}, number of random message pos = {randomPosCount}");
+
+            var convertData = CustomMapData.RetrieveData(mesData[j]);
+            int messageCount = convertData.randomMes.Count; // All of placed message boards are counted as randomMes
+            int bloodCount = convertData.secretMes.Count; // All of placed blood message boards are counted as secretMes
+
+            Assert.AreEqual(secretTileCount, secretPosCount);
+            Assert.That(secretTileCount, Is.LessThanOrEqualTo(maxNumOfSecret[j]));
+            Assert.That(secretTileCount, Is.LessThanOrEqualTo(secretLevel + 1));
+
+            Assert.AreEqual(messageCount, fixedPosCount + randomPosCount);
+            Assert.AreEqual(bloodCount, bloodPosCount + secretPosCount);
+            Assert.AreEqual(convertData.roomCenter.Count, 0);
+        }
+    }
+
+    [Test]
+    public void _008_VerifySecretMessageBoardOnCreatingMapTest([Values(0, 1, 2, 4, 8)] int secretLevel)
+    {
+        // setup
+        GameInfo info = GameInfo.Instance;
+        info.secretLevel = secretLevel;
+
+        // when
+        var floorMessagesData = ResourceLoader.Instance.floorMessagesData;
+        var mapSize = new int[] { 19, 31, 49, 49, 29 };
+        var sut = Enumerable.Range(1, info.LastFloor).Select(floor => WorldMap.Create(floor, mapSize[floor - 1], mapSize[floor - 1])).ToArray();
+
+        var maxNumOfSecret = Enumerable.Range(0, info.LastFloor).Select(index => floorMessagesData.Param(index).secretMessages.Length).ToArray();
+
+        // then
+        var mesData = sut.Select(map => map.messagePosData).ToArray();
+
+        var secret = sut.Select(map =>
+        {
+            var list = new List<SecretMessageData>();
+            map.ForEachTiles(tile =>
+            {
+                MessageWall mes = tile as MessageWall;
+                if (mes != null && mes.data is SecretMessageData) list.Add(mes.data as SecretMessageData);
+            });
+            return list;
+        }).ToArray();
+
+        for (int j = 0; j < info.LastFloor; ++j)
+        {
+            for (int i = 0; i < info.LastFloor; ++i)
+            {
+                int numOfSecret = secret[j].Count(data => data.messageID >= i * 10 && data.messageID < (i + 1) * 10);
+                Debug.Log($"Floor: {j + 1}, number of secret{i + 1} = {numOfSecret}");
+                if (i > j) Assert.AreEqual(0, numOfSecret);
+            }
+
+            int secretTileCount = secret[j].Count();
+
+            int fixedPosCount = mesData[j].fixedMessagePos.Count;
+            int bloodPosCount = mesData[j].bloodMessagePos.Count;
+            int randomPosCount = mesData[j].randomMessagePos.Count;
+            int secretPosCount = mesData[j].secretMessagePos.Count;
+
+            Debug.Log($"Floor: {j + 1}, number of random message pos = {randomPosCount}");
+
+            var convertData = CustomMapData.RetrieveData(mesData[j]);
+            int messageCount = convertData.randomMes.Count; // All of placed message boards are counted as randomMes
+            int bloodCount = convertData.secretMes.Count; // All of placed blood message boards are counted as secretMes
+
+            Assert.AreEqual(secretTileCount, secretPosCount);
+            Assert.That(secretTileCount, Is.LessThanOrEqualTo(maxNumOfSecret[j]));
+            Assert.That(secretTileCount, Is.LessThanOrEqualTo(secretLevel + 1));
+
+            Assert.AreEqual(messageCount, fixedPosCount + randomPosCount);
+            Assert.AreEqual(bloodCount, bloodPosCount + secretPosCount);
+            Assert.AreEqual(convertData.roomCenter.Count, 0);
+        }
+    }
 }

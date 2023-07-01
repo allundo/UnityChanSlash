@@ -46,10 +46,43 @@ public class ItemBoxMapData : DirMapData
     // Create from custom map data
     public ItemBoxMapData(IDirMapData data, CustomMapData custom) : base(data)
     {
+        itemType = new Dictionary<Pos, ItemType>();
+
         var itemTypesSource = ResourceLoader.Instance.itemTypesData.Param(custom.floor - 1);
 
-        var customItem = new CustomItemPos(data, itemTypesSource.fixedTypes, itemTypesSource.randomTypes, Terrain.Box);
-        customItem.SetCustomDataPos(custom.boxItemPos, custom.randomItemPos);
-        this.itemType = customItem.itemType;
+        var fixedPos = custom.boxItemPos.Keys.ToList();
+        var fixedItemTypes = itemTypesSource.fixedTypes;
+        int numOfFixed = fixedItemTypes.Length;
+
+        int count;
+        for (count = 0; count < numOfFixed && count < fixedPos.Count; ++count)
+        {
+            Pos pos = fixedPos[count];
+
+            matrix[pos.x, pos.y] = Terrain.Box;
+            dirMap[pos.x, pos.y] = custom.boxItemPos[pos].Enum;
+            itemType[pos] = fixedItemTypes[count];
+        }
+
+        var randomPos = custom.randomItemPos;
+
+        // Add fixed message pos to random message pos if all of fixed message are placed. 
+        for (int i = 0; i < fixedPos.Count - count; ++i)
+        {
+            randomPos.Add(fixedPos[count + i]);
+        }
+
+        var randomPosStack = randomPos.Shuffle().ToStack();
+
+        // Use random message pos if custom fixed pos is not enough for fixed messages.
+        for (int i = 0; i < numOfFixed - count && randomPosStack.Count > 0; ++i)
+        {
+            Pos pos = randomPosStack.Pop();
+            dirMap[pos.x, pos.y] = rawMapData.GetValidDir(pos.x, pos.y);
+            itemType[pos] = fixedItemTypes[count + 1];
+        }
+
+        var randomItemTypes = itemTypesSource.randomTypes;
+        randomPosStack.ForEach(pos => itemType[pos] = randomItemTypes[UnityEngine.Random.Range(0, randomItemTypes.Length)]);
     }
 }

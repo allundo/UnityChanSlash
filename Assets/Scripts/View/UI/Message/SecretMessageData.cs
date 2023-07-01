@@ -1,7 +1,6 @@
 public class SecretMessageData : MessageData
 {
     public override void Read() => base.isRead = true;
-    protected MessageSource[] alterSource;
     protected SecretMessageSource secretSource;
 
     public int messageID { get; protected set; }
@@ -41,10 +40,5 @@ public class SecretMessageData : MessageData
 
             base.isRead = value;
         }
-    }
-
-    public bool IsValid(int floor, int secretLevel)
-    {
-        return secretLevel >= secretSource.secretLevel && floor == secretSource.floor;
     }
 }

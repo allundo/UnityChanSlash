@@ -46,6 +46,12 @@ public class CustomMapData : IStairsData
     /// </summary>
     public Dictionary<Pos, IDirection> bloodMessagePos { get; private set; }
 
+    public static CustomMapData RetrieveData(PitMessageMapData data)
+    {
+        var handler = new DirMapHandler(data);
+        return new CustomMapData(data.floor, handler.ConvertMapData(), data.width);
+    }
+
     public CustomMapData(
         int floor,
         int[] customMapData,
