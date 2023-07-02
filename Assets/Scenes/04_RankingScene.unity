@@ -602,8 +602,8 @@ MonoBehaviour:
   minStep: {fileID: 1970241669}
   maxMap: {fileID: 2101714183}
   playTime: {fileID: 1248027658}
-  clearCount: {fileID: 2005107402}
-  deadCount: {fileID: 1880682802}
+  clearCount: {fileID: 983974048}
+  deadCount: {fileID: 833723783}
 --- !u!1 &705748168
 GameObject:
   m_ObjectHideFlags: 0
