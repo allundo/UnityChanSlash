@@ -13699,7 +13699,6 @@ MonoBehaviour:
   spawnPoint: {x: 0, y: 0, z: 0}
   fixedPrefab: {fileID: 3400831684517067014, guid: ea0ac0796c67846c8ad4583da7318a04,
     type: 3}
-  mapRenderer: {fileID: 170570286}
 --- !u!4 &1345430766
 Transform:
   m_ObjectHideFlags: 0
