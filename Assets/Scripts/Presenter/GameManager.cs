@@ -46,6 +46,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
         worldMap = GameInfo.Instance.Map(0);
+        BGMManager.Instance.SwitchFloor(worldMap.floor);
         mapRenderer.Render(worldMap);
 
         resourceFX = new ResourceFX(transform);
@@ -83,6 +84,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
         eventManager.EventInit(worldMap);
         eventManager.InvokeGameEvent(0);
+
+        yield return new WaitForSeconds(1f);
+        BGMManager.Instance.PlayFloorBGM();
     }
 
     /// <summary>
@@ -92,6 +96,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
 
     private IEnumerator RestartWithDelay(float delay = 0.2f)
     {
+        BGMManager.Instance.PlayFloorBGM();
+
         yield return new WaitForSeconds(delay);
 
         spawnHandler.PlaceEnemyGenerators();
@@ -116,6 +122,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         playerCollider.enabled = false;
         dataStoreAgent.RespawnByGameData(worldMap);
         input.SetInputVisible();
+        BGMManager.Instance.PlayFloorBGM();
 
         try
         {
@@ -174,6 +181,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         input.SetInputVisible(true);
 
         eventManager.EventInit(worldMap);
+
+        BGMManager.Instance.PlayFloorBGM();
     }
 
     public void DebugStartFloor(int floor)
@@ -256,6 +265,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     {
         DataStoreAgent.Instance.EnableSave();
 
+        BGMManager.Instance.PlayFloorBGM();
+
         hidePlateHandler.OnStartFloor();
         mainCamera.ResetCrossFade();
 
@@ -295,6 +306,7 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
 
         playerCollider.enabled = false;
+        BGMManager.Instance.SwitchFloor(nextFloorMap.floor);
         playerMap.SetFloorStartPos(nextFloorMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(nextFloorMap.miniMapData);
         playerReact.SwitchFloor(nextFloorMap.floor);

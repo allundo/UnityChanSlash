@@ -3,11 +3,23 @@ using DG.Tweening;
 
 public class AudioLoopSource : MonoBehaviour
 {
-    [SerializeField] private AudioClip introClip = default;
-    [SerializeField] private AudioClip loopClip = default;
+    private AudioClip introClip;
+    private AudioClip loopClip;
 
     private AudioSource introSource;
     private AudioSource loopSource;
+    private Tween fadeTween;
+
+    private AudioReverbFilter reverb;
+    private float distanceLevel;
+    private void SetDistance(float level)
+    {
+        distanceLevel = level;
+        volume = 1f - level;
+        reverb.dryLevel = (1f - level) * 5000f;
+        reverb.roomHF = (1f - level) * 10000f;
+        reverb.reverbLevel = (level - 1f) * 10000f;
+    }
 
     public float volume
     {
@@ -16,31 +28,56 @@ public class AudioLoopSource : MonoBehaviour
     }
 
     public bool isPlaying => introSource.isPlaying || loopSource.isPlaying;
-    public bool isPausing => (introSource.time > 0f && introSource.time < introClip.length) || (loopSource.time > 0f && loopSource.time < loopClip.length);
+    public bool isPausing => (introSource.time > 0f && introSource.time < introSource.clip.length) || (loopSource.time > 0f && loopSource.time < loopSource.clip.length);
 
     void Awake()
     {
         introSource = gameObject.AddComponent<AudioSource>();
         loopSource = gameObject.AddComponent<AudioSource>();
 
-        introSource.clip = introClip;
-        introSource.loop = false;
+        introSource.spatialize = loopSource.spatialize = false;
+        introSource.playOnAwake = loopSource.playOnAwake = false;
+        introSource.bypassEffects = loopSource.bypassEffects = true;
+        introSource.bypassListenerEffects = loopSource.bypassListenerEffects = true;
+        introSource.bypassReverbZones = loopSource.bypassReverbZones = true;
 
-        loopSource.clip = loopClip;
+        introSource.loop = false;
         loopSource.loop = true;
     }
 
-    public void Play()
+    public void LoadClips(BGMType type, bool addReverb = false)
     {
+        introSource.clip = Resources.Load<AudioClip>($"AudioClip/{type.ToString()}_intro");
+        loopSource.clip = Resources.Load<AudioClip>($"AudioClip/{type.ToString()}_loop");
+
+        if (addReverb)
+        {
+            reverb = gameObject.AddComponent<AudioReverbFilter>();
+            SetDistance(0f);
+        }
+
+        if (type != BGMType.Dummy && introSource.clip == null || loopSource.clip == null)
+        {
+            Debug.LogError($"BGMtype: {type.ToString()} not found. Load dummy clip instead.");
+            LoadClips(BGMType.Dummy);
+        }
+    }
+
+    public AudioLoopSource Play(float volume = 1f)
+    {
+        fadeTween?.Kill();
+        this.volume = volume;
+
         var startTime = AudioSettings.dspTime;
         introSource.PlayScheduled(startTime);
         loopSource.PlayScheduled(startTime + introSource.clip.length);
+        return this;
     }
 
-    public void FadeOut(float duration = 1f, Ease ease = Ease.OutQuad)
-        => FadeTo(0f, duration).SetEase(ease).OnComplete(Stop).Play();
+    public Tween FadeOut(float duration = 1f, bool stopOnComplete = false, Ease ease = Ease.Linear)
+        => FadeTo(0f, duration).SetEase(ease).OnComplete(stopOnComplete ? Stop : Pause).Play();
 
-    public void FadeIn(float duration = 1f, Ease ease = Ease.InQuad)
+    public Tween FadeIn(float duration = 1f, Ease ease = Ease.Linear)
     {
         if (!isPlaying)
         {
@@ -50,17 +87,37 @@ public class AudioLoopSource : MonoBehaviour
             }
             else
             {
-                Play();
+                Play(0f);
             }
         }
 
-        volume = 0f;
-        FadeTo(1f, duration).SetEase(ease).Play();
+        return FadeTo(1f, duration).SetEase(ease).Play();
     }
 
     public Tween FadeTo(float to, float duration = 1f)
     {
-        return DOTween.To(() => volume, value => volume = value, to, duration);
+        fadeTween?.Kill();
+        fadeTween = DOTween.To(() => volume, value => volume = value, to, duration);
+        return fadeTween;
+    }
+
+    public Tween FadeDistance(float level, float duration = 1f, float delay = 0f)
+    {
+        fadeTween?.Kill();
+        fadeTween = DOTween.Sequence()
+            .AppendInterval(delay)
+            .Join(DOTween.To(() => distanceLevel, value => SetDistance(value), level, duration).SetEase(Ease.Linear));
+
+        if (level > 0f)
+        {
+            fadeTween.OnPlay(() => introSource.bypassEffects = loopSource.bypassEffects = false);
+        }
+        else
+        {
+            fadeTween.OnComplete(() => introSource.bypassEffects = loopSource.bypassEffects = true);
+        }
+
+        return fadeTween.Play();
     }
 
     public void Stop()
@@ -71,13 +128,25 @@ public class AudioLoopSource : MonoBehaviour
 
     public void Pause()
     {
+        if (fadeTween != null && fadeTween.IsActive()) fadeTween?.Pause();
         introSource.Pause();
         loopSource.Pause();
     }
 
-    public void UnPause()
+    public AudioLoopSource UnPause()
     {
+        if (fadeTween != null && fadeTween.IsActive() && !fadeTween.IsPlaying()) fadeTween?.Play();
         introSource.UnPause();
         loopSource.UnPause();
+        return this;
+    }
+
+    public void DestroyByHandler()
+    {
+        fadeTween?.Kill();
+        Stop();
+        Resources.UnloadAsset(introSource.clip);
+        Resources.UnloadAsset(loopSource.clip);
+        Destroy(gameObject);
     }
 }

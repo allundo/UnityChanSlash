@@ -59,6 +59,8 @@ public class Util
 
     public static int Count<T>() where T : Enum => Enum.GetNames(typeof(T)).Length;
 
+    public static T[] GetValues<T>() where T : Enum => (T[])Enum.GetValues(typeof(T));
+
     public static int GetEnemyLevel(uint range = 5)
     {
         int min = -(int)(range / 2);

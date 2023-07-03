@@ -118,7 +118,7 @@ public class CameraWork : MonoBehaviour
     {
         TrackAction = TrailBody;
         return currentCamera.transform
-            .DOMove(EyePosition + new Vector3(0f, -0.4f, 1.8f), 1f)
+            .DOMove(EyePosition + new Vector3(0f, -0.4f, 1.8f), 1.25f)
             .OnPlay(() => cameraWorkTween?.Kill());
     }
 

@@ -50,7 +50,8 @@ public class LogoAnimation : MonoBehaviour
                 .AppendInterval(0.1f)
                 .Append(DOTween.To(() => imageFrame.fillAmount, fill => imageFrame.fillAmount = fill, 1f, 0.15f).SetEase(Ease.Linear))
                 .AppendInterval(0.15f)
-                .AppendCallback(() => nowLoading.Activate());
+                .AppendCallback(() => nowLoading.Activate())
+                .AppendCallback(() => BGMManager.Instance.Load(BGMType.Title));
     }
 
     public Tween TitleTween()

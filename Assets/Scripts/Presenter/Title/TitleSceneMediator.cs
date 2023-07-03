@@ -155,6 +155,7 @@ public class TitleSceneMediator : SceneMediator
     private void DebugStart(int floor)
     {
         DisableOtherControls();
+        BGMManager.Instance.Stop();
 
         if (floor == 2)
         {
@@ -173,6 +174,7 @@ public class TitleSceneMediator : SceneMediator
     private void DebugEnding(int clearTimeSec)
     {
         DisableOtherControls();
+        BGMManager.Instance.Stop();
 
         GameInfo.Instance.endTimeSec = clearTimeSec;
 
@@ -182,6 +184,7 @@ public class TitleSceneMediator : SceneMediator
     private void DebugResult(int clearTimeSec)
     {
         DisableOtherControls();
+        BGMManager.Instance.Stop();
 
         GameInfo.Instance.endTimeSec = clearTimeSec;
 

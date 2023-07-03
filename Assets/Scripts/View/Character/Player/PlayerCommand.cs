@@ -898,6 +898,8 @@ public class PlayerDie : PlayerCommand
 
         playerTarget.gameOverUI.Play(rank, newRecord);
 
+        BGMManager.Instance.CrossFade(BGMType.GameOver, 2f, 0.25f, 1f, true);
+
         return ExecOnCompleted(() => mobReact.OnDisappear());
     }
 }

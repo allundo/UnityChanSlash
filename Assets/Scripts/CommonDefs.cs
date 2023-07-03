@@ -576,6 +576,20 @@ public enum SNDType
     HitLaser,
 }
 
+public enum BGMType
+{
+    Title = 0,
+    TwistedHeart,
+    Fire,
+    Ice,
+    Ruin,
+    Witch,
+    GameOver,
+    End,
+    Result,
+    Dummy,
+}
+
 public enum ObjectLayerEnum
 {
     Default = 0,

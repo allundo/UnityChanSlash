@@ -14,6 +14,7 @@ public abstract class SceneMediator : MonoBehaviour
         LoadSingleton<ResourceLoader>("Prefabs/System/ResourceLoader");
         LoadSingleton<GameInfo>("Prefabs/System/GameInfo");
         LoadSingleton<DataStoreAgent>("Prefabs/System/DataStoreAgent");
+        LoadSingleton<BGMManager>("Prefabs/System/BGMManager");
 
         sceneLoader = new SceneLoader();
     }

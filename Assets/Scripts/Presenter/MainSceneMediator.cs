@@ -14,16 +14,32 @@ public class MainSceneMediator : SceneMediator
 
         gameOver.restartButton
             .OnPressedCompleteAsObservable()
-            .ContinueWith(_ => LoadSceneWithCoverOn(1))
+            .ContinueWith(_ =>
+            {
+                BGMManager.Instance.SwitchFloor(1, 2f, true);
+                return LoadSceneWithCoverOn(1);
+            })
             .IgnoreElements()
-            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData()))
+            .Subscribe(null, () =>
+            {
+                BGMManager.Instance.ReleaseAllBGMs(BGMType.TwistedHeart);
+                SceneTransition(1, () => GameInfo.Instance.InitData());
+            })
             .AddTo(this);
 
         gameOver.titleButton
             .OnPressedCompleteAsObservable()
-            .ContinueWith(_ => LoadSceneWithCoverOn(0))
+            .ContinueWith(_ =>
+            {
+                BGMManager.Instance.FadeOut(2f);
+                return LoadSceneWithCoverOn(0);
+            })
             .IgnoreElements()
-            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData()))
+            .Subscribe(null, () =>
+            {
+                BGMManager.Instance.ReleaseAllBGMs(BGMType.Title);
+                SceneTransition(1, () => GameInfo.Instance.InitData());
+            })
             .AddTo(this);
 
         gm.ExitObservable

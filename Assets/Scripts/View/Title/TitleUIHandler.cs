@@ -33,19 +33,31 @@ public class TitleUIHandler : MonoBehaviour
         TransitSignal =
             selectButtons.startButton
                 .OnClickAsObservable()
-                .ContinueWith(_ => StartSequence().OnCompleteAsObservable());
+                .ContinueWith(_ =>
+                {
+                    BGMManager.Instance.FadeOut(1f, true);
+                    return StartSequence().OnCompleteAsObservable();
+                });
 
         SettingsButtonSignal =
             selectButtons.settingsButton
                 .OnClickAsObservable()
                 .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable())
-                .ContinueWith(_ => fade.FadeOutObservable(1f));
+                .ContinueWith(_ =>
+                {
+                    BGMManager.Instance.FadeOut(1f, true);
+                    return fade.FadeOutObservable(1f);
+                });
 
         ResultsButtonSignal =
             selectButtons.resultsButton
                 .OnClickAsObservable()
                 .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable())
-                .ContinueWith(_ => fade.FadeOutObservable(1f));
+                .ContinueWith(_ =>
+                {
+                    BGMManager.Instance.SetDistance(0.75f, 1f);
+                    return fade.FadeOutObservable(1f);
+                });
 
 
         fade.SetAlpha(1f);
@@ -76,6 +88,7 @@ public class TitleUIHandler : MonoBehaviour
 
     public void ToTitle()
     {
+        BGMManager.Instance.Play(BGMType.Title);
         // camera work duration is 1.2f
         cameraWork.TitleTween().Play();
         if (Util.Judge(4)) DOVirtual.DelayedCall(0.95f, unityChanAnim.stagger.Fire).Play();
@@ -90,7 +103,8 @@ public class TitleUIHandler : MonoBehaviour
     private Tween StartSequence()
     {
         Tween startTween = DOTween.Sequence()
-            .Join(selectButtons.startButton.PressedTween())
+            .AppendCallback(() => BGMManager.Instance.FadeOut(2f, true, Ease.OutQuad))
+            .AppendCallback(() => selectButtons.startButton.PressedTween(16).Play())
             .Join(cameraWork.StartTween());
 
         Tween unityChanDropTween = tfUnityChan.DOMove(new Vector3(0f, -15f, 0), 2f)
@@ -113,9 +127,8 @@ public class TitleUIHandler : MonoBehaviour
         return
             DOTween.Sequence()
                 .Append(startTween)
-                .AppendInterval(0.2f)
+                .AppendInterval(0.4f)
                 .AppendCallback(() => dropStart.PlayEx())
-                .AppendInterval(0.2f)
                 .Append(unityChanDropTween)
                 .Join(fadeOutTween.SetDelay(0.75f))
                 .AppendInterval(0.5f);

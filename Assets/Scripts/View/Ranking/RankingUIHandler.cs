@@ -32,7 +32,11 @@ public class RankingUIHandler : MonoBehaviour
     void Awake()
     {
         TransitSignal = toTitleBtn.OnClickAsObservable().First() // ContinueWith() cannot handle duplicated click events
-                .ContinueWith(_ => fade.FadeOutObservable(2f));
+                .ContinueWith(_ =>
+                {
+                    BGMManager.Instance.SetDistance(0f, 2f, 1.5f);
+                    return fade.FadeOutObservable(2f);
+                });
 
         buttons = new Button[] { toTitleBtn, rightBtn, leftBtn };
         SetInteractableBtns(false);

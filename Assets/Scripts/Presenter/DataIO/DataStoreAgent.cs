@@ -689,7 +689,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         }
         catch (Exception e)
         {
-            Debug.LogError("データのインポートに失敗: " + e.Message);
+            Debug.LogError($"データのインポートに失敗: {e.Message} \n{e.StackTrace}");
             DeleteFile(SAVE_DATA_FILE_NAME);
             return false;
         }
