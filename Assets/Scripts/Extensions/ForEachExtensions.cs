@@ -37,6 +37,14 @@ static public class ForEachExtensions
     static public bool ForEach<T>(this IEnumerable<T> sequence, Func<T, bool> func, IEnumerable<T> filter)
         => sequence.Filter(filter).ForEach(func);
 
+    /// <summary>
+    /// You can remove set of elements from collections including null.<br />
+    /// If not including null, you should use Except() instead.
+    /// </summary>
+    /// <param name="sequence">collections including null.</param>
+    /// <param name="filters">candidates to remove elements from the collection including null.</param>
+    /// <typeparam name="T">nullable type</typeparam>
+    /// <returns>Filtered new collections</returns>
     static public IEnumerable<T> Filter<T>(this IEnumerable<T> sequence, IEnumerable<T> filters)
     {
         if (filters == null) return sequence.Where(elem => elem != null);
