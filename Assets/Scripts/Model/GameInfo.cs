@@ -338,7 +338,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         return export;
     }
 
-    public void ImportGameData(DataStoreAgent.SaveData import, DataStoreAgent.InfoRecord infoRecord)
+    public void ImportGameData(DataStoreAgent.SaveData import)
     {
         ClearMaps();
 
@@ -361,7 +361,10 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         }
 
         ITileStateData.isExitDoorLocked = import.isExitDoorLocked;
+    }
 
+    public void ImportInfoRecord(DataStoreAgent.InfoRecord infoRecord)
+    {
         readIDs = infoRecord.readMessageIDs.ToHashSet();
         secretLevel = infoRecord.secretLevel;
     }

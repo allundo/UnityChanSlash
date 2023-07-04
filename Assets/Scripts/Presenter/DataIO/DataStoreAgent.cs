@@ -677,20 +677,38 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
 
     public bool ImportGameData()
     {
+        ImportInfoRecord();
+
         var saveData = LoadGameData();
 
         if (saveData == null) return false;
 
+        try
+        {
+            GameInfo.Instance.ImportGameData(saveData);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"ゲームデータのインポートに失敗: {e.Message} \n{e.StackTrace}");
+            DeleteSaveDataFile();
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool ImportInfoRecord()
+    {
         var infoRecord = LoadInfoRecord();
 
         try
         {
-            GameInfo.Instance.ImportGameData(saveData, infoRecord);
+            GameInfo.Instance.ImportInfoRecord(infoRecord);
         }
         catch (Exception e)
         {
-            Debug.LogError($"データのインポートに失敗: {e.Message} \n{e.StackTrace}");
-            DeleteSaveDataFile();
+            Debug.LogError($"レコードデータのインポートに失敗: {e.Message} \n{e.StackTrace}");
+            DeleteInfoRecord();
             return false;
         }
 
@@ -794,6 +812,12 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         DeleteFile(SETTING_DATA_FILE_NAME);
         settingData = null;
+    }
+
+    public void DeleteInfoRecord()
+    {
+        DeleteFile(INFO_RECORD_FILE_NAME);
+        infoRecord = null;
     }
 
     ///  <summary>

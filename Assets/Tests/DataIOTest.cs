@@ -281,7 +281,7 @@ public class DataIOTest
 
         yield return waitForHalfSecond;
 
-        GameInfo.Instance.ImportGameData(dataStoreAgent.LoadGameData(), dataStoreAgent.LoadInfoRecord());
+        GameInfo.Instance.ImportGameData(dataStoreAgent.LoadGameData());
 
         var importMap = GameInfo.Instance.Map(1);
 
