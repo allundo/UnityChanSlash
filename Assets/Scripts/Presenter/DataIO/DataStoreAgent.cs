@@ -464,7 +464,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         // Delete save data
         DisableSave();
-        DeleteFile(SAVE_DATA_FILE_NAME);
+        DeleteSaveDataFile();
 
         deadRecords = LoadDeadRecords();
 
@@ -484,7 +484,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
     {
         // Delete save data
         DisableSave();
-        DeleteFile(SAVE_DATA_FILE_NAME);
+        DeleteSaveDataFile();
 
         clearRecords = LoadClearRecords();
 
@@ -690,7 +690,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         catch (Exception e)
         {
             Debug.LogError($"データのインポートに失敗: {e.Message} \n{e.StackTrace}");
-            DeleteFile(SAVE_DATA_FILE_NAME);
+            DeleteSaveDataFile();
             return false;
         }
 
@@ -748,7 +748,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         catch (Exception e)
         {
             Debug.LogError("設定ファイルが不正です: " + e.Message);
-            DeleteFile(SETTING_DATA_FILE_NAME);
+            DeleteSettingDataFile();
             settingData = new SettingData();
             return settingData[type];
         }
@@ -784,7 +784,17 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         File.Delete(Path.Combine(GetSecureDataPath(), fileName));
     }
 
-    public void DeleteSaveDataFile() => DeleteFile(SAVE_DATA_FILE_NAME);
+    public void DeleteSaveDataFile()
+    {
+        DeleteFile(SAVE_DATA_FILE_NAME);
+        saveData = null;
+    }
+
+    public void DeleteSettingDataFile()
+    {
+        DeleteFile(SETTING_DATA_FILE_NAME);
+        settingData = null;
+    }
 
     ///  <summary>
     /// Secure directory path for data save. Supports Android only for now.
