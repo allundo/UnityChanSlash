@@ -31166,6 +31166,10 @@ PrefabInstance:
       propertyPath: lifeGauge
       value: 
       objectReference: {fileID: 8337679455544452774}
+    - target: {fileID: 2098669948, guid: b6767695d090e403590b881951615ed1, type: 3}
+      propertyPath: tfListener
+      value: 
+      objectReference: {fileID: 963194228}
     - target: {fileID: 2098669949, guid: b6767695d090e403590b881951615ed1, type: 3}
       propertyPath: jumpUI
       value: 

@@ -36,17 +36,18 @@ public class MobEffect : MonoBehaviour, IMobEffect
     protected ResourceFX resourceFX;
     protected MobMatColorEffect matColEffect;
 
-    protected AudioSource SndDamage(AttackType type) => Util.Instantiate(sndData.Param((int)type).damage, transform);
+    protected virtual AudioSource SndInstance(AudioSource src) => Util.Instantiate(src, transform);
+    protected AudioSource SndDamageInstance(AttackType type) => SndInstance(sndData.Param((int)type).damage);
     protected Dictionary<AttackType, AudioSource> damageSndSource = new Dictionary<AttackType, AudioSource>();
-    protected void PlayDamage(AttackType type) => damageSndSource.LazyLoad(type, SndDamage).PlayEx();
+    protected virtual AudioSource SndDamage(AttackType type, IDirection dir = null) => damageSndSource.LazyLoad(type, SndDamageInstance);
 
-    protected AudioSource SndCritical(AttackType type) => Util.Instantiate(sndData.Param((int)type).critical, transform);
+    protected AudioSource SndCriticalInstance(AttackType type) => SndInstance(sndData.Param((int)type).critical);
     protected Dictionary<AttackType, AudioSource> criticalSndSource = new Dictionary<AttackType, AudioSource>();
-    protected void PlayCritical(AttackType type) => criticalSndSource.LazyLoad(type, SndCritical).PlayEx();
+    protected virtual AudioSource SndCritical(AttackType type, IDirection dir = null) => criticalSndSource.LazyLoad(type, SndCriticalInstance);
 
-    protected AudioSource SndGuard(AttackType type) => Util.Instantiate(sndData.Param((int)type).guard, transform);
+    protected AudioSource SndGuardInstance(AttackType type) => SndInstance(sndData.Param((int)type).guard);
     protected Dictionary<AttackType, AudioSource> guardSndSource = new Dictionary<AttackType, AudioSource>();
-    protected void PlayGuard(AttackType type) => guardSndSource.LazyLoad(type, SndGuard).PlayEx();
+    protected AudioSource SndGuard(AttackType type) => guardSndSource.LazyLoad(type, SndGuardInstance);
 
     protected virtual void Awake()
     {
@@ -87,28 +88,28 @@ public class MobEffect : MonoBehaviour, IMobEffect
         matColEffect.FadeOut();
     }
 
-    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    public virtual void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None, IDirection dir = null)
     {
-        DamageSound(damageRatio, type);
+        DamageSound(damageRatio, type, dir);
         if (attr != AttackAttr.Ice) matColEffect.DamageFlash(damageRatio);
         if (attr == AttackAttr.Light) OnHitLaser();
     }
 
-    protected void DamageSound(float damageRatio, AttackType type = AttackType.None)
+    protected virtual void DamageSound(float damageRatio, AttackType type = AttackType.None, IDirection dir = null)
     {
         if (damageRatio < 0.000001f)
         {
-            PlayGuard(type);
+            SndGuard(type).PlayEx();
             return;
         }
 
         if (damageRatio <= 0.2f)
         {
-            PlayDamage(type);
+            SndDamage(type, dir).PlayEx();
             return;
         }
 
-        PlayCritical(type);
+        SndCritical(type, dir).PlayEx();
     }
 
     public virtual void OnIced(Vector3 pos)
@@ -127,7 +128,7 @@ public class MobEffect : MonoBehaviour, IMobEffect
 
     public virtual void OnIceCrash(Vector3 pos)
     {
-        PlayCritical(AttackType.Ice);
+        SndCritical(AttackType.Ice).PlayEx();
         resourceFX.PlayVFX(VFXType.IceCrash, pos);
     }
 

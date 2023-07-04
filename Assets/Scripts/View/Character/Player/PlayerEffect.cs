@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerEffect : MobEffect
 {
+    [SerializeField] private Transform tfListener = default;
+
     protected override void Awake()
     {
         matColEffect = new MobMatColorEffect(transform);
@@ -11,9 +13,26 @@ public class PlayerEffect : MobEffect
         anim = GetComponent<PlayerAnimator>();
     }
 
-    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
+    protected override AudioSource SndInstance(AudioSource src) => Util.Instantiate(src, tfListener);
+
+    protected override AudioSource SndDamage(AttackType type, IDirection dir = null)
     {
-        base.OnDamage(damageRatio, type, attr);
+        var src = damageSndSource.LazyLoad(type, SndDamageInstance);
+        var offset = dir != null ? dir.LookAt : Vector3.zero;
+        src.transform.position = tfListener.position - offset;
+        return src;
+    }
+    protected override AudioSource SndCritical(AttackType type, IDirection dir = null)
+    {
+        var src = criticalSndSource.LazyLoad(type, SndCriticalInstance);
+        var offset = dir != null ? dir.LookAt : Vector3.zero;
+        src.transform.position = tfListener.position - offset;
+        return src;
+    }
+
+    public override void OnDamage(float damageRatio, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None, IDirection dir = null)
+    {
+        base.OnDamage(damageRatio, type, attr, dir);
         (anim as PlayerAnimator).rest.Bool = false;
     }
 

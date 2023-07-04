@@ -84,7 +84,7 @@ public class MobReactor : Reactor, IMobReactor
                 var icingFrames = Mathf.Min(400f, damage * 10f);
 
                 ICommand icedCmd = input.InputIced(icingFrames);
-                if (icedCmd != null) effect.OnDamage(Mathf.Min(0.01f, LifeRatio(damage)), type, attr);
+                if (icedCmd != null) effect.OnDamage(Mathf.Min(0.01f, LifeRatio(damage)), type, attr, dir);
             }
             return 0f;
         }
@@ -95,7 +95,7 @@ public class MobReactor : Reactor, IMobReactor
 
         mobStatus.LifeChange(-damage, attr);
 
-        effect.OnDamage(LifeRatio(damage), type, attr);
+        effect.OnDamage(LifeRatio(damage), type, attr, dir);
 
         return damage;
     }

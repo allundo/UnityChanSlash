@@ -13,6 +13,6 @@ public interface IBodyEffect : IEffect
     /// Play body effect on damage
     /// </summary>
     /// <param name="damageRatio">Normalized damage ratio to the life max</param>
-    void OnDamage(float damageRatio, AttackType type, AttackAttr attr);
+    void OnDamage(float damageRatio, AttackType type, AttackAttr attr, IDirection dir);
     void OnDie();
 }
