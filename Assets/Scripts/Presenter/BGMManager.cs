@@ -15,6 +15,26 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         currentBGM = SelectSource(type);
     }
 
+    public void ToRestart()
+    {
+        var type = FLOOR_BGM_TYPE[0];
+        floorBGM = SelectSource(type);
+        FadeOut(2f, true);
+        reserveTween = DOVirtual.DelayedCall(2f, () => ReleaseAllBGMs(type), false).Play();
+    }
+
+    public void ToTitle()
+    {
+        FadeOut(2f, true);
+        reserveTween = DOVirtual.DelayedCall(2f, () => ReleaseAllBGMs(BGMType.Title), false).Play();
+    }
+
+    public void GameOver()
+    {
+        FadeOut(2f, true);
+        reserveTween = DOVirtual.DelayedCall(3f, () => currentBGM = SelectSource(BGMType.GameOver).Play(), false).Play();
+    }
+
     public void SwitchFloor(int floor, float duration = 1f, bool stopOnComplete = false)
     {
         floorBGM = SelectSource(FLOOR_BGM_TYPE[floor - 1]);
@@ -53,19 +73,11 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         }, false).Play();
     }
 
-    public void Play(BGMType type, bool stopCurrent = true, bool restartSameSrc = false)
+    public void PlayTitle()
     {
-        var src = SelectSource(type);
-        if (!restartSameSrc && currentBGM == src)
-        {
-            if (currentBGM.isPausing) currentBGM.UnPause();
-            if (!currentBGM.isPlaying) currentBGM.Play();
-            return;
-        }
-
         reserveTween?.Kill();
-        if (stopCurrent && currentBGM != null && currentBGM.isPlaying) currentBGM.Stop();
-        currentBGM = src.Play();
+        if (currentBGM != null && currentBGM.isPlaying) currentBGM.Stop();
+        currentBGM = SelectSource(BGMType.Title).Play();
     }
 
     public void Stop() => currentBGM?.Stop();
@@ -75,16 +87,6 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         reserveTween?.Kill();
         if (currentBGM != null && currentBGM.isPlaying) return currentBGM.FadeOut(duration, stopOnComplete, ease);
         return null;
-    }
-
-    public void CrossFade(BGMType type, float outDuration, float inDuration, float interval = 0f, bool stopOnComplete = false)
-    {
-        FadeOut(outDuration, stopOnComplete);
-        reserveTween = DOVirtual.DelayedCall(Mathf.Max(0, outDuration + interval), () =>
-        {
-            currentBGM = SelectSource(type);
-            currentBGM.FadeIn(inDuration);
-        }, false).Play();
     }
 
     public void SetDistance(float level, float duration = 1f, float delay = 0f)
@@ -100,7 +102,7 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         return src;
     }
 
-    public void ReleaseAllBGMs(BGMType exceptFor = BGMType.Title)
+    private void ReleaseAllBGMs(BGMType exceptFor = BGMType.Title)
     {
         Util.GetValues<BGMType>().ForEach(type =>
         {

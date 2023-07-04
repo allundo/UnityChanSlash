@@ -88,7 +88,7 @@ public class TitleUIHandler : MonoBehaviour
 
     public void ToTitle()
     {
-        BGMManager.Instance.Play(BGMType.Title);
+        BGMManager.Instance.PlayTitle();
         // camera work duration is 1.2f
         cameraWork.TitleTween().Play();
         if (Util.Judge(4)) DOVirtual.DelayedCall(0.95f, unityChanAnim.stagger.Fire).Play();

@@ -16,30 +16,22 @@ public class MainSceneMediator : SceneMediator
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ =>
             {
-                BGMManager.Instance.SwitchFloor(1, 2f, true);
+                BGMManager.Instance.ToRestart();
                 return LoadSceneWithCoverOn(1);
             })
             .IgnoreElements()
-            .Subscribe(null, () =>
-            {
-                BGMManager.Instance.ReleaseAllBGMs(BGMType.TwistedHeart);
-                SceneTransition(1, () => GameInfo.Instance.InitData());
-            })
+            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData()))
             .AddTo(this);
 
         gameOver.titleButton
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ =>
             {
-                BGMManager.Instance.FadeOut(2f);
+                BGMManager.Instance.ToTitle();
                 return LoadSceneWithCoverOn(0);
             })
             .IgnoreElements()
-            .Subscribe(null, () =>
-            {
-                BGMManager.Instance.ReleaseAllBGMs(BGMType.Title);
-                SceneTransition(1, () => GameInfo.Instance.InitData());
-            })
+            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData()))
             .AddTo(this);
 
         gm.ExitObservable
