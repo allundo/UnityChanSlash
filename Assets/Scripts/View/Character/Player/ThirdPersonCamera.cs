@@ -67,9 +67,9 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (ampFactor == 0f) return;
 
-
-        transform.position += new Vector3(0, 25f * ampFactor * ampSign, 0);
-        transform.Rotate(ampFactor * Random.insideUnitSphere * 90f);
+        transform.position += new Vector3(0, 50f * ampFactor * ampSign, 0);
+        var rotate = ampFactor * Random.insideUnitSphere;
+        transform.Rotate(new Vector3(rotate.x * 90f, rotate.y * 45f, rotate.z * 45f));
         ampSign *= -1f;
     }
 

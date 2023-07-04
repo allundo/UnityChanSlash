@@ -238,14 +238,14 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     public void DestructDoor(Vector3 pos, IDirection forceDir)
     {
         mapRenderer.DoorDestructionVFX(pos, forceDir);
-        mainCamera.Amplify(0.8f);
+        mainCamera.Amplify(0.75f);
     }
 
     public void PitDropFX(Vector3 pos)
     {
         PlayVFX(VFXType.PitDrop, pos);
         PlaySnd(SNDType.PitDrop, pos);
-        mainCamera.Amplify(0.3f);
+        mainCamera.Amplify(0.25f);
     }
 
     public void EnterStair(bool isDownStairs)
