@@ -49,7 +49,7 @@ public class TileStateHandler : TileMapHandler
         if (floor == 1 && !ITileStateData.isExitDoorLocked)
         {
             var door = (matrix[exitDoor.x, exitDoor.y] as ExitDoor);
-            if (!door.IsOpen) door.Unlock();
+            if (!door.IsOpen && !door.IsBroken) door.Unlock();
         }
     }
 

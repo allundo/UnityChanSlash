@@ -221,6 +221,24 @@ public class DataIOTest
 
         yield return waitForHalfSecond;
 
+
+        floor1Map.ForEachTiles((tile, pos) =>
+        {
+            var openable = tile as IOpenable;
+            var door = openable as Door;
+            var readable = tile as IReadable;
+
+            if (openable != null)
+            {
+                if (Util.Judge(2)) openable.Open();
+                if (door != null && Util.Judge(2)) door.Break();
+            }
+
+            if (readable != null && Util.Judge(2)) readable.Read();
+        });
+
+        yield return null;
+
         var tileOpenData = new Dictionary<Pos, bool>();
         var tileBrokenData = new Dictionary<Pos, bool>();
         var messageReadData = new Dictionary<Pos, bool>();
@@ -233,27 +251,20 @@ public class DataIOTest
 
             if (openable != null)
             {
-                if (Util.Judge(2)) openable.Open();
                 tileOpenData[pos] = openable.IsOpen;
-
-                if (door != null)
-                {
-                    if (Util.Judge(2)) door.Break();
-                    tileBrokenData[pos] = door.IsBroken;
-                }
+                if (door != null) tileBrokenData[pos] = door.IsBroken;
             }
-
-            if (readable != null)
-            {
-                if (Util.Judge(2)) readable.Read();
-                messageReadData[pos] = readable.IsRead;
-            }
+            if (readable != null) messageReadData[pos] = readable.IsRead;
         });
 
         Pos pos = floor1Map.stairsMapData.exitDoor;
         ExitDoor exit = (floor1Map.GetTile(pos) as ExitDoor);
-        if (Util.Judge(2)) exit.Unlock();
-        bool isExitDoorLocked = exit.IsLocked;
+        bool isLocked = Util.Judge(2);
+        if (!isLocked) exit.Unlock();
+        bool isExitDoorLocked = isLocked;
+        if (!isExitDoorLocked) tileOpenData[pos] = false;
+
+        yield return waitForHalfSecond;
 
         var saveData = new DataStoreAgent.SaveData()
         {
@@ -268,7 +279,7 @@ public class DataIOTest
 
         dataStoreAgent.SaveEncryptedRecordTest(saveData, dataStoreAgent.SAVE_DATA_FILE_NAME);
 
-        yield return new WaitForSeconds(1f);
+        yield return waitForHalfSecond;
 
         GameInfo.Instance.ImportGameData(dataStoreAgent.LoadGameData(), dataStoreAgent.LoadInfoRecord());
 
@@ -300,6 +311,7 @@ public class DataIOTest
 
         mapRenderer.ApplyTileState();
         yield return waitForEndOfFrame;
+        yield return null;
 
         importMap.ForEachTiles((tile, pos) =>
         {
@@ -319,11 +331,12 @@ public class DataIOTest
                     Assert.AreEqual(tileOpenData[pos], openable.IsOpen, $"tile = {tile}, pos (x, y) = ({pos.x}, {pos.y})");
                 }
             }
+
             if (readable != null) Assert.AreEqual(messageReadData[pos], readable.IsRead, $"tile = {tile}, pos (x, y) = ({pos.x}, {pos.y})");
         });
 
-        Pos importPos = importMap.stairsMapData.exitDoor;
-        Assert.AreEqual(isExitDoorLocked, (importMap.GetTile(importPos) as ExitDoor).IsLocked);
+        ExitDoor importExitDoor = importMap.GetTile(importMap.stairsMapData.exitDoor) as ExitDoor;
+        if (!importExitDoor.IsBroken && !importExitDoor.IsOpen) Assert.AreEqual(isExitDoorLocked, importExitDoor.IsLocked);
 
         dataStoreAgent.DeleteFile(dataStoreAgent.SETTING_DATA_FILE_NAME);
     }
