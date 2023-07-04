@@ -13,13 +13,6 @@ public class ItemBoxMapData : DirMapData
         var fixedItemTypes = itemTypesSource.fixedTypes;
         var randomItemTypes = itemTypesSource.randomTypes;
 
-#if UNITY_EDITOR
-        if (GameInfo.Instance.isScenePlayedByEditor)
-        {
-            fixedItemTypes = new ItemType[1] { ItemType.KeyBlade };
-        }
-#endif
-
         itemType = new Dictionary<Pos, ItemType>();
 
         var itemPos = new Dictionary<Pos, IDirection>(data.deadEndPos);
@@ -53,8 +46,15 @@ public class ItemBoxMapData : DirMapData
 
         var fixedPos = custom.boxItemPos.Keys.ToList();
         var fixedItemTypes = itemTypesSource.fixedTypes;
-        int numOfFixed = fixedItemTypes.Length;
 
+#if UNITY_EDITOR
+        if (GameInfo.Instance.isScenePlayedByEditor)
+        {
+            fixedItemTypes = new ItemType[1] { ItemType.KeyBlade };
+        }
+#endif
+
+        int numOfFixed = fixedItemTypes.Length;
         int count;
         for (count = 0; count < numOfFixed && count < fixedPos.Count; ++count)
         {
