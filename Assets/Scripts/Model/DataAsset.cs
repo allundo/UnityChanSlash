@@ -155,7 +155,6 @@ public class FloorMaterialsSource
     [SerializeField] public Material door = default;
     [SerializeField] public Material stairs = default;
     [SerializeField] public Material pitLid = default;
-    [SerializeField] public float pitDamage = 1f;
     [SerializeField] public Material hidePlate = default;
     [SerializeField] public Material plateFront = default;
     [SerializeField] public Color pointLightColor = default;

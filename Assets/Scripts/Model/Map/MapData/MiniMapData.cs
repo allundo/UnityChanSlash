@@ -27,7 +27,7 @@ public class MiniMapData : TileMapData
         {
             for (int j = 0; j < height; j++)
             {
-                tileMatrix[i, j] = TileMapData.ConvertToTile(matrix[i, j]);
+                tileMatrix[i, j] = TileMapData.ConvertToTile(matrix[i, j], floor);
                 pixels[i + width * j] = MiniMapData.ConvertToColor(matrix[i, j]);
             }
         }

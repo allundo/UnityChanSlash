@@ -190,7 +190,7 @@ public class Box : HandleTile, IHandleTile
 public class Pit : OpenTile, IOpenable
 {
     protected PitState pitState;
-    public Pit() : base(new PitState()) => this.pitState = state as PitState;
+    public Pit(int floor) : base(new PitState(floor)) => this.pitState = state as PitState;
     public bool IsEnterable(IDirection dir = null) => dir != null;
     public bool IsLeapable => true;
     public virtual bool IsViewOpen => true;

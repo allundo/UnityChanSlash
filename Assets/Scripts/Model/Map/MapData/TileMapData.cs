@@ -23,7 +23,7 @@ public class TileMapData : BaseMapData<ITile>
 
     public bool IsOutOfRange(int x, int y) => x < 0 || y < 0 || x >= width || y >= height;
 
-    public static ITile ConvertToTile(Terrain terrain)
+    public static ITile ConvertToTile(Terrain terrain, int floor)
     {
         switch (terrain)
         {
@@ -53,7 +53,7 @@ public class TileMapData : BaseMapData<ITile>
                 return new Box();
 
             case Terrain.Pit:
-                return new Pit();
+                return new Pit(floor);
 
             default:
                 return new Ground();
