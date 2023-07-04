@@ -113,7 +113,7 @@ public class MiniMapData : TileMapData
                 Door door = matrix[x + i, y + j] as Door;
 
                 Color color;
-                if (door != null)
+                if (door != null && !(door is ExitDoor))
                 {
                     float red =
                         door.IsOpen ? 0.75f
