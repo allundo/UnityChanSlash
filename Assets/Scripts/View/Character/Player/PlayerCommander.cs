@@ -103,9 +103,9 @@ public class PlayerCommander : ShieldCommander
 
         if (currentCommand != null)
         {
-            if (isQueueOnly || currentCommand.IsPriorTo(threshold) && !isValidInput)
+            if (isQueueOnly || currentCommand.IsPriorTo(threshold))
             {
-                currentCommand.CancelValidate();
+                if (!isValidInput) currentCommand.CancelValidate();
             }
             else
             {

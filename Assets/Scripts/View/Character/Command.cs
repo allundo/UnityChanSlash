@@ -62,8 +62,6 @@ public class Command : ICommand
     protected IReactor react;
     protected IMapUtil map;
 
-    protected IObserver<bool> onValidateInput;
-
     /// <summary>
     /// Initializes Command information.
     /// </summary>
@@ -121,7 +119,7 @@ public class Command : ICommand
     /// Cancels validating input on current Command execution. <br />
     /// Make sure that a Command including input validation like validateTween is queued next. <br />
     /// </summary>
-    public virtual void CancelValidate()
+    public void CancelValidate()
     {
         validateTween?.Kill();
     }
