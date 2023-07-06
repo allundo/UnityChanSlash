@@ -8,6 +8,8 @@ public class TitleSceneMediator : SceneMediator
 {
     [SerializeField] private TitleUIHandler titleUIHandler = default;
     [SerializeField] private RestartUI restartUI = default;
+    [SerializeField] private AudioSource openRestartSnd = default;
+    [SerializeField] private AudioSource loadStartSnd = default;
 
     private IDisposable disposable;
 
@@ -100,7 +102,11 @@ public class TitleSceneMediator : SceneMediator
             Debug.Log("Data load");
 
             var dataLoadObservable = logoObservable
-                .ContinueWith(_ => Observable.Merge(sceneLoader.LoadSceneAsync(1, 0.99f), restartUI.Play()))
+                .ContinueWith(_ =>
+                {
+                    openRestartSnd.PlayEx();
+                    return Observable.Merge(sceneLoader.LoadSceneAsync(1, 0.99f), restartUI.Play());
+                })
                 .Select(_ =>
                 {
                     restartUI.ActivateButtons(); // Don't allow to click buttons until the loading has finished.
@@ -127,7 +133,11 @@ public class TitleSceneMediator : SceneMediator
         }
         else
         {
-            titleObservable = logoObservable.ContinueWith(_ => sceneLoader.LoadSceneAsync(1, 3f));
+            titleObservable = logoObservable.ContinueWith(_ =>
+            {
+                loadStartSnd.PlayEx();
+                return sceneLoader.LoadSceneAsync(1, 3f);
+            });
         }
 
         disposable = titleObservable

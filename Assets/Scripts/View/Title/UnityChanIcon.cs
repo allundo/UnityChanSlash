@@ -5,6 +5,7 @@ using UniRx;
 
 public class UnityChanIcon : SelectIcon
 {
+    [SerializeField] private AudioSource boundSnd = default;
     private ISubject<Transform> finishLogoTask = new Subject<Transform>();
     public IObservable<Transform> FinishLogoTask => finishLogoTask;
 
@@ -21,6 +22,7 @@ public class UnityChanIcon : SelectIcon
                 .AppendCallback(() => uiTween.SetPos(new Vector2(0f, 1920.0f)))
                 .AppendInterval(0.8f)
                 .Append(uiTween.MoveBack(1f).SetEase(Ease.InQuad))
+                .AppendCallback(() => boundSnd.PlayEx())
                 .Append(uiTween.MoveY(-100f, 0.1f).SetEase(Ease.OutQuad))
                 .Join(uiTween.Resize(new Vector2(1.5f, 0.5f), 0.1f).SetEase(Ease.OutQuad))
                 .Append(uiTween.MoveBack(0.1f).SetEase(Ease.InQuad))
