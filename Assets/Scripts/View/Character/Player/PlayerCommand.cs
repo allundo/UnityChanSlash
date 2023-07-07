@@ -1043,6 +1043,5 @@ public class PlayerDebugTeleport : PlayerAction
         });
         return true;
     }
-
-#endif
 }
+#endif
