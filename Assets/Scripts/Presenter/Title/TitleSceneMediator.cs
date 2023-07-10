@@ -160,6 +160,14 @@ public class TitleSceneMediator : SceneMediator
         ForceTransitScene(sceneBuildIndex, 0);
     }
 
+    private void DisableOtherControls()
+    {
+        disposable.Dispose();
+        sceneLoader.UnloadCurrentLoadingScene();
+
+        if (Debug.isDebugBuild) DisableDebugBtns();
+    }
+
     // ## FOR DEBUG (begin)
 
     private void DebugStart(int floor)
@@ -201,12 +209,8 @@ public class TitleSceneMediator : SceneMediator
         ForceTransitScene(3, 0);
     }
 
-    private void DisableOtherControls()
-    {
-        disposable.Dispose();
-        sceneLoader.UnloadCurrentLoadingScene();
-        debugBtns.ForEach(btn => btn.gameObject.SetActive(false));
-    }
+    private void DisableDebugBtns()
+        => debugBtns.ForEach(btn => btn.gameObject.SetActive(false));
 
     // ## FOR DEBUG (end)
 }
