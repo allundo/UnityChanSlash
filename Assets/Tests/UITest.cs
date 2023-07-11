@@ -286,23 +286,6 @@ public class UITest
         yield return null;
     }
 
-    public class MockEnemy
-    {
-        public Transform transform { get; private set; }
-        public Vector3 corePos => transform.position;
-
-        public IReadOnlyReactiveProperty<float> Life { get; private set; } = new ReactiveProperty<float>(10f);
-        public IReadOnlyReactiveProperty<float> LifeMax { get; private set; } = new ReactiveProperty<float>(10f);
-
-        public MockEnemy() : this(Vector3.zero) { }
-
-        public MockEnemy(Vector3 pos)
-        {
-            transform = new GameObject("MockEnemy").transform;
-            transform.position = pos;
-        }
-    }
-
     [UnityTest]
     public IEnumerator _004_FightCircleDisplayTest()
     {
@@ -365,6 +348,10 @@ public class UITest
         Object.Destroy(forwardUIRT.gameObject);
         Object.Destroy(attackInput.gameObject);
         Object.Destroy(fightCircle.gameObject);
+
+        DOTween.KillAll();
+        Object.Destroy(testEnemyStatus.gameObject);
+        Object.Destroy(testEnemyStatus2.gameObject);
 
         yield return null;
     }
