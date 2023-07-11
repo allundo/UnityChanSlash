@@ -78,6 +78,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         yield return new WaitForEndOfFrame();
 
         playerCollider.enabled = true;
+        spawnHandler.PlaceItems(worldMap);
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
         cover.FadeIn(1.5f, 0.6f, false);
@@ -106,6 +107,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         yield return new WaitForEndOfFrame();
 
         playerCollider.enabled = true;
+        spawnHandler.PlaceItems(worldMap);
         yield return new WaitForEndOfFrame(); // Wait for PlayerAnimator.Start() and ItemGenerator.Start()
 
         cover.FadeIn(1f, 0.3f, false);
@@ -183,6 +185,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         DebugStartFloor(GameInfo.Instance.currentFloor);
 
         InitPlayerPos();
+
+        spawnHandler.PlaceItems(worldMap);
 
         cover.SetAlpha(0f);
         input.SetInputVisible(true);

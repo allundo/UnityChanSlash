@@ -16,17 +16,10 @@ public class ItemGenerator : MobGenerator<Item>
         respawnData = new Stack<RespawnData>[GameInfo.Instance.LastFloor].Select(_ => new Stack<RespawnData>()).ToArray();
     }
 
-    void Start()
-    {
-        this.map = GameManager.Instance.worldMap;
-        PlaceItems(map);
-    }
-
     public void SwitchWorldMap(WorldMap map)
     {
         respawnData[this.map.floor - 1] = StoreRespawnData(true);
 
-        this.map = map;
         if (!PlaceItems(map)) StackRespawn(respawnData[map.floor - 1]);
     }
 
@@ -56,8 +49,10 @@ public class ItemGenerator : MobGenerator<Item>
         }
     }
 
-    private bool PlaceItems(WorldMap map)
+    public bool PlaceItems(WorldMap map)
     {
+        this.map = map;
+
         ItemBoxMapData itemData = map.itemBoxMapData;
         if (itemData == null || itemData.itemType.Count == 0) return false;
 
