@@ -65,7 +65,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     }
 
     /// <summary>
-    /// One of the start processes called before Start()
+    /// Start Action ID: 0 <br />
+    /// Basic start processes called before Start()
     /// </summary>
     public void DropStart() => StartSequence(DropStartWithDelay());
 
@@ -89,7 +90,8 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     }
 
     /// <summary>
-    /// One of the start processes called before Start()
+    /// Start Action ID: 1 <br />
+    /// Restart processes after game over called before Start()
     /// </summary>
     public void Restart() => StartSequence(RestartWithDelay());
 
@@ -112,6 +114,10 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         eventManager.InvokeGameEvent(1);
     }
 
+    /// <summary>
+    /// Start Action ID: 3 <br />
+    /// Load data start process called before Start()
+    /// </summary>
     public void LoadDataStart()
     {
         cover.SetAlpha(1f);
@@ -168,7 +174,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
     }
 
     /// <summary>
-    /// One of the start processes called before Start()
+    /// Start Action ID: 2 <br />
+    /// Debug start processes called before Start() <br />
+    /// Play directory from editor or press debug start button on Title scene
     /// </summary>
     public void DebugStart()
     {

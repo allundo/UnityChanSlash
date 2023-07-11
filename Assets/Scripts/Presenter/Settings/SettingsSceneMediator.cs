@@ -26,7 +26,7 @@ public class SettingsSceneMediator : SceneMediator
             .Subscribe(data =>
             {
                 dataStoreAgent.SaveSettings(data);
-                SceneTransition(0);
+                SceneTransition(0); // TitleSceneMediator.Logo()
             })
             .AddTo(this);
 

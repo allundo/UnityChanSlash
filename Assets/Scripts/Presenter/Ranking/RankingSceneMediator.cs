@@ -16,7 +16,7 @@ public class RankingSceneMediator : SceneMediator
         GameInfo gameInfo = GameInfo.Instance;
 
         rankingUIHandler.TransitSignal
-            .Subscribe(_ => SceneTransition(1))
+            .Subscribe(_ => SceneTransition(2)) // TitleSceneMediator.BackToTitle()
             .AddTo(this);
 
 #if UNITY_EDITOR

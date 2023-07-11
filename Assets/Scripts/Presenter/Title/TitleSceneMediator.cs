@@ -90,6 +90,7 @@ public class TitleSceneMediator : SceneMediator
 
     }
 
+    // Start Action ID: 0
     private void Logo()
     {
         var logoObservable = titleUIHandler.Logo();

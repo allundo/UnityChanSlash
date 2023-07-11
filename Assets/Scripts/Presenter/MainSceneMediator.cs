@@ -20,7 +20,7 @@ public class MainSceneMediator : SceneMediator
                 return LoadSceneWithCoverOn(1);
             })
             .IgnoreElements()
-            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData()))
+            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData())) // GameManager.Restart()
             .AddTo(this);
 
         gameOver.titleButton
@@ -31,11 +31,11 @@ public class MainSceneMediator : SceneMediator
                 return LoadSceneWithCoverOn(0);
             })
             .IgnoreElements()
-            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData()))
+            .Subscribe(null, () => SceneTransition(1, () => GameInfo.Instance.InitData())) // TitleSceneMediator.SkipLogo()
             .AddTo(this);
 
         gm.ExitObservable
-            .Subscribe(null, () => LoadSceneAndTransit(2, 0))
+            .Subscribe(null, () => LoadSceneAndTransit(2, 0)) // EndingSceneMediator.StartScene()
             .AddTo(this);
 
 #if UNITY_EDITOR
