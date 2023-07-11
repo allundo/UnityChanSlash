@@ -35,7 +35,7 @@ public class TitleUIHandler : MonoBehaviour
                 .OnClickAsObservable()
                 .ContinueWith(_ =>
                 {
-                    BGMManager.Instance.FadeOut(1f, true);
+                    BGMManager.Instance.FadeOut(2f, true, Ease.OutQuad);
                     return StartSequence().OnCompleteAsObservable();
                 });
 
@@ -103,7 +103,6 @@ public class TitleUIHandler : MonoBehaviour
     private Tween StartSequence()
     {
         Tween startTween = DOTween.Sequence()
-            .AppendCallback(() => BGMManager.Instance.FadeOut(2f, true, Ease.OutQuad))
             .AppendCallback(() => selectButtons.startButton.PressedTween(16).Play())
             .Join(cameraWork.StartTween());
 
