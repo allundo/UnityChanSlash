@@ -86,7 +86,7 @@ public class ItemBoxMapData : DirMapData
             matrix[pos.x, pos.y] = Terrain.Box;
 
             dirMap[pos.x, pos.y] = rawMapData.GetValidDir(pos.x, pos.y);
-            itemType[pos] = fixedItemTypes[count + 1];
+            itemType[pos] = fixedItemTypes[count + i];
         }
 
         var randomItemTypes = itemTypesSource.randomTypes;
