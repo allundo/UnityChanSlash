@@ -17,7 +17,7 @@ public class TitleSceneMediator : SceneMediator
 
     protected override void InitBeforeStart()
     {
-        SetStartActions(Logo, SkipLogo);
+        SetStartActions(Logo, SkipLogo, BackToTitle);
 
         titleUIHandler.TransitSignal
             .Subscribe(_ => SceneTransition(0, () => GameInfo.Instance.InitData()))
@@ -118,7 +118,11 @@ public class TitleSceneMediator : SceneMediator
                 .ContinueWith(_ => restartUI.Restart)
                 .ContinueWith(_ => titleUIHandler.FadeOutObservable())
                 .IgnoreElements()
-                .Subscribe(null, () => SceneTransition(3, () => GameInfo.Instance.InitData(false)))
+                .Subscribe(null, () =>
+                {
+                    BGMManager.Instance.LoadFloor(GameInfo.Instance.currentFloor);
+                    SceneTransition(3, () => GameInfo.Instance.InitData(false)); // GameManager.LoadDataStart()
+                })
                 .AddTo(this);
 
             titleObservable = dataLoadObservable
@@ -142,11 +146,29 @@ public class TitleSceneMediator : SceneMediator
 
         disposable = titleObservable
             .IgnoreElements()
-            .Subscribe(null, titleUIHandler.ToTitle)
+            .Subscribe(null, () =>
+            {
+                BGMManager.Instance.PlayTitle();
+                titleUIHandler.ToTitle();
+            })
             .AddTo(this);
     }
 
+    // Start Action ID: 1
     private void SkipLogo()
+    {
+        disposable = sceneLoader.LoadSceneAsync(1)
+            .IgnoreElements()
+            .Subscribe(null, () =>
+            {
+                BGMManager.Instance.PlayTitle();
+                titleUIHandler.SkipLogo();
+            })
+            .AddTo(this);
+    }
+
+    // Start Action ID: 2
+    private void BackToTitle()
     {
         disposable = sceneLoader.LoadSceneAsync(1)
             .IgnoreElements()

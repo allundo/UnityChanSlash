@@ -55,10 +55,9 @@ public class TitleUIHandler : MonoBehaviour
                 .ContinueWith(button => ButtonSequence(button).OnCompleteAsObservable())
                 .ContinueWith(_ =>
                 {
-                    BGMManager.Instance.SetDistance(0.75f, 1f);
+                    BGMManager.Instance.SetDistance(0.6f, 1f);
                     return fade.FadeOutObservable(1f);
                 });
-
 
         fade.SetAlpha(1f);
 
@@ -88,7 +87,6 @@ public class TitleUIHandler : MonoBehaviour
 
     public void ToTitle()
     {
-        BGMManager.Instance.PlayTitle();
         // camera work duration is 1.2f
         cameraWork.TitleTween().Play();
         if (Util.Judge(4)) DOVirtual.DelayedCall(0.95f, unityChanAnim.stagger.Fire).Play();
@@ -130,6 +128,7 @@ public class TitleUIHandler : MonoBehaviour
                 .AppendCallback(() => dropStart.PlayEx())
                 .Append(unityChanDropTween)
                 .Join(fadeOutTween.SetDelay(0.75f))
+                .AppendCallback(() => BGMManager.Instance.LoadFloor(1))
                 .AppendInterval(0.5f);
     }
 

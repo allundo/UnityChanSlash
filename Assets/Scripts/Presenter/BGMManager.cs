@@ -35,9 +35,14 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         reserveTween = DOVirtual.DelayedCall(3f, () => currentBGM = SelectSource(BGMType.GameOver).Play(), false).Play();
     }
 
-    public void SwitchFloor(int floor, float duration = 1f, bool stopOnComplete = false)
+    public void LoadFloor(int floor)
     {
         floorBGM = SelectSource(FLOOR_BGM_TYPE[floor - 1]);
+    }
+
+    public void SwitchFloor(int floor, float duration = 1f, bool stopOnComplete = false)
+    {
+        LoadFloor(floor);
         if (currentBGM != floorBGM && currentBGM != null) FadeOut(duration, stopOnComplete);
     }
 

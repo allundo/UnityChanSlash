@@ -46,7 +46,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         hidePlateHandler = player.GetComponent<HidePlateHandler>();
 
         worldMap = GameInfo.Instance.Map(0);
-        BGMManager.Instance.SwitchFloor(worldMap.floor);
         mapRenderer.Render(worldMap);
 
         resourceFX = new ResourceFX(transform);
@@ -181,8 +180,6 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         input.SetInputVisible(true);
 
         eventManager.EventInit(worldMap);
-
-        BGMManager.Instance.PlayFloorBGM();
     }
 
     public void DebugStartFloor(int floor)
@@ -194,6 +191,9 @@ public class GameManager : SingletonComponent<IGameManager>, IGameManager
         spawnHandler.PlaceEnemyGenerators();
 
         PlayerInfo.Instance.DebugSetLevel((floor - 1) * 2);
+
+        BGMManager.Instance.LoadFloor(floor);
+        BGMManager.Instance.PlayFloorBGM();
     }
 
     private void InitPlayerPos()
