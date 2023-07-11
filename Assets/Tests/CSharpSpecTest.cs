@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UniRx;
@@ -170,5 +171,25 @@ public class CSharpSpecTest
     private string EventTest2()
     {
         return "EventTest2String";
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [Test]
+    /// <summary>
+    /// The new stack created from an array has the same order as the input array.
+    /// </summary>
+    public void ArrayToStackOrderTest()
+    {
+        int[] intArray = new int[] { 3, 5, 6, 2, 8, 7, 1, 9, 4 };
+        var intStack = new Stack<int>(intArray);
+
+        Pos[] posArray = intArray.Select(num => new Pos(num + UnityEngine.Random.Range(-10, 10), num + +UnityEngine.Random.Range(-10, 10))).ToArray();
+        var posStack = new Stack<Pos>(posArray);
+
+        for (int i = intArray.Length - 1; i >= 0; --i)
+        {
+            Assert.AreEqual(intArray[i], intStack.Pop());
+            Assert.AreEqual(posArray[i], posStack.Pop());
+        }
     }
 }

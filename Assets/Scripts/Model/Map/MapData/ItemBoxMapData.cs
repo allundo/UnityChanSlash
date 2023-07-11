@@ -44,7 +44,7 @@ public class ItemBoxMapData : DirMapData
 
         var itemTypesSource = ResourceLoader.Instance.itemTypesData.Param(custom.floor - 1);
 
-        var fixedPos = custom.boxItemPos.Keys.ToList();
+        var fixedPos = custom.fixedItemPos.Keys.ToList();
         var fixedItemTypes = itemTypesSource.fixedTypes;
 
 #if UNITY_EDITOR
@@ -60,25 +60,31 @@ public class ItemBoxMapData : DirMapData
         {
             Pos pos = fixedPos[count];
 
+            // Place Box on fixed(important) item positions.
             matrix[pos.x, pos.y] = Terrain.Box;
-            dirMap[pos.x, pos.y] = custom.boxItemPos[pos].Enum;
+
+            dirMap[pos.x, pos.y] = custom.fixedItemPos[pos].Enum;
             itemType[pos] = fixedItemTypes[count];
         }
 
         var randomPos = custom.randomItemPos;
 
-        // Add fixed message pos to random message pos if all of fixed message are placed. 
+        // Add box item pos to random item pos if all of fixed item types are placed.
         for (int i = 0; i < fixedPos.Count - count; ++i)
         {
             randomPos.Add(fixedPos[count + i]);
         }
 
-        var randomPosStack = randomPos.Shuffle().ToStack();
+        var randomPosStack = randomPos.Except(itemType.Keys).Shuffle().ToStack();
 
-        // Use random message pos if custom fixed pos is not enough for fixed messages.
+        // Use random item pos if custom item box pos is not enough for fixed item types.
         for (int i = 0; i < numOfFixed - count && randomPosStack.Count > 0; ++i)
         {
             Pos pos = randomPosStack.Pop();
+
+            // Place Box on fixed(important) item positions.
+            matrix[pos.x, pos.y] = Terrain.Box;
+
             dirMap[pos.x, pos.y] = rawMapData.GetValidDir(pos.x, pos.y);
             itemType[pos] = fixedItemTypes[count + 1];
         }

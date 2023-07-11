@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 public class CustomMapData : IStairsData
@@ -31,8 +30,8 @@ public class CustomMapData : IStairsData
     public Pos downStairs { get; private set; }
     public Pos exitDoor { get; private set; }
 
-    public Dictionary<Pos, IDirection> boxItemPos { get; private set; }
-    public List<Pos> randomItemPos { get; private set; }
+    public Dictionary<Pos, IDirection> fixedItemPos { get; private set; }
+    public HashSet<Pos> randomItemPos { get; private set; }
 
     /// <summary>
     /// Message boards list with fixed place and direction. <br />
@@ -56,14 +55,14 @@ public class CustomMapData : IStairsData
         int floor,
         int[] customMapData,
         int width,
-        Dictionary<Pos, IDirection> boxItemPos = null,
+        Dictionary<Pos, IDirection> fixedItemPos = null,
         List<Pos> randomItemPos = null,
         Dictionary<Pos, IDirection> fixedMessagePos = null,
         Dictionary<Pos, IDirection> bloodMessagePos = null
     )
     {
-        this.boxItemPos = boxItemPos ?? new Dictionary<Pos, IDirection>();
-        this.randomItemPos = randomItemPos ?? new List<Pos>();
+        this.fixedItemPos = fixedItemPos ?? new Dictionary<Pos, IDirection>();
+        this.randomItemPos = new HashSet<Pos>(randomItemPos ?? new List<Pos>());
         this.fixedMessagePos = fixedMessagePos ?? new Dictionary<Pos, IDirection>();
         this.bloodMessagePos = bloodMessagePos ?? new Dictionary<Pos, IDirection>();
 
@@ -86,6 +85,10 @@ public class CustomMapData : IStairsData
                 // Retrieve info from custom map data
                 switch (matrix[i, j])
                 {
+                    case Terrain.Box:
+                        this.randomItemPos.Add(new Pos(i, j));
+                        break;
+
                     case Terrain.RoomCenter:
                         roomCenter.Add(new Pos(i, j));
                         matrix[i, j] = Terrain.Ground;

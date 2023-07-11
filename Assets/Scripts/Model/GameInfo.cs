@@ -204,7 +204,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         maps[MAX_FLOOR] = WorldMap.Create(new CustomMapData(2, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos));
     }
 
-    private CustomMapData FinalMap()
+    public CustomMapData FinalMap()
     {
         var matrix = new int[]
         {
@@ -239,6 +239,13 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         };
 
+        var randomItemPos = new List<Pos>()
+        {
+            new Pos( 3, 21),
+            new Pos(11, 27),
+            new Pos(13,  7),
+        };
+
         var randomPos = new Dictionary<Pos, IDirection>()
         {
             { new Pos(19,  1), Direction.west  },
@@ -248,33 +255,17 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         }
         .OrderBy(pos => Guid.NewGuid()).ToArray();
 
-        var randomItemPos = new List<Pos>()
+        var fixedItemPos = new Dictionary<Pos, IDirection>()
         {
-            new Pos(16, 12),
-            new Pos(16, 16),
-            new Pos(12, 16),
-            new Pos(12, 12),
-            new Pos( 3, 21),
-            new Pos(11, 27),
-            new Pos( 6, 13),
-            new Pos( 5, 14),
-            new Pos( 6, 15),
-            new Pos( 5, 16),
-            new Pos( 6, 17),
-            new Pos(13,  7),
-        };
-
-        var boxItemPos = new Dictionary<Pos, IDirection>()
-        {
-            { randomPos[0].Key, randomPos[0].Value  }, // Battle Shield
-            { randomPos[1].Key, randomPos[1].Value  }, // Jamadhar
-            { randomPos[2].Key, randomPos[2].Value  }, // Coin
-            { randomPos[3].Key, randomPos[3].Value  }, // TreasureKey
-            { new Pos(12, 14),  Direction.north     }, // Coin
-            { new Pos(14, 12),  Direction.north     }, // Coin
-            { new Pos(16, 14),  Direction.north     }, // Coin
-            { new Pos(14, 16),  Direction.north     }, // Coin
             { new Pos(14, 14),  Direction.north     }, // KeyBlade
+            { new Pos(14, 16),  Direction.north     }, // Coin
+            { new Pos(16, 14),  Direction.north     }, // Coin
+            { new Pos(14, 12),  Direction.north     }, // Coin
+            { new Pos(12, 14),  Direction.north     }, // Coin
+            { randomPos[0].Key, randomPos[0].Value  }, // TreasureKey
+            { randomPos[1].Key, randomPos[1].Value  }, // Coin
+            { randomPos[2].Key, randomPos[2].Value  }, // Jamadhar
+            { randomPos[3].Key, randomPos[3].Value  }, // Battle Shield
         };
 
         var fixedMes = new Dictionary<Pos, IDirection>()
@@ -288,7 +279,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(23, 8), Direction.south },
         };
 
-        return new CustomMapData(LastFloor, matrix, 29, boxItemPos, randomItemPos, fixedMes, bloodMes);
+        return new CustomMapData(LastFloor, matrix, 29, fixedItemPos, randomItemPos, fixedMes, bloodMes);
     }
 
     public void ClearMaps()

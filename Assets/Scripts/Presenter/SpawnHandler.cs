@@ -14,6 +14,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
     public LifeGaugeGenerator GetLifeGaugeGenerator() => lifeGaugeGenerator;
 
     public void PlaceEnemyGenerators() => placeEnemyGenerator.Place();
+    public void PlaceItems(WorldMap map) => itemGenerator.PlaceItems(map);
 
     public void ActivateDebugEnemyGenerators()
     {

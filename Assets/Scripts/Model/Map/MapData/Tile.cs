@@ -200,7 +200,7 @@ public class Pit : OpenTile, IOpenable
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
-    public override ItemInfo TopItem => null;
+    public override ItemInfo TopItem => null; // Top item is not visible in the closed Box.
 }
 
 public class Stairs : Tile, ITile

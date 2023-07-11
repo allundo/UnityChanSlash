@@ -83,7 +83,7 @@ public abstract class SceneMediator : MonoBehaviour
     /// Loads next scene without waiting and transit immediately after the loading.
     /// </summary>
     /// <param name="sceneBuildIndex">0 origin scenes list index number registered in editor "Build Settings".</param>
-    /// <param name="startActionID">Index of start actions of next scene manager regestered by SetStartActions().</param>
+    /// <param name="startActionID">Index of start actions of next scene manager registered by SetStartActions().</param>
     protected void LoadSceneAndTransit(int sceneBuildIndex, int startActionID)
     {
         GameInfo.Instance.startActionID = startActionID;
