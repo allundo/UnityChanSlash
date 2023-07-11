@@ -96,6 +96,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
     public WorldMap Map(int floor, bool createNew = true)
     {
+        if (floor < 0 || floor > MAX_FLOOR) throw new ArgumentOutOfRangeException($"invalid floor: {floor}");
+
         if (floor == 0)
         {
 #if UNITY_EDITOR
@@ -110,16 +112,20 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             }
         }
 
-        if (floor > 0 && floor <= LastFloor)
+        if (createNew)
         {
-            int size = mapSize[floor - 1];
-
-            if (createNew) maps[floor - 1] = (maps[floor - 1] ?? WorldMap.Create(floor, size, size));
-
-            return maps[floor - 1];
+            if (floor == LastFloor)
+            {
+                maps[floor - 1] ??= WorldMap.Create(FinalMap());
+            }
+            else
+            {
+                int size = mapSize[floor - 1];
+                maps[floor - 1] ??= WorldMap.Create(floor, size, size);
+            }
         }
 
-        return null;
+        return maps[floor - 1];
     }
 
     public WorldMap NextFloorMap(bool isDownStair = true) => Map(isDownStair ? ++currentFloor : --currentFloor);
@@ -291,9 +297,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         mapSize[0] = 19;
         mapSize[1] = 31;
         mapSize[LastFloor - 1] = 29;
-
-        // Create map from custom map data
-        maps[LastFloor - 1] = WorldMap.Create(FinalMap());
     }
 
     public void InitData(bool clearMaps = true)
