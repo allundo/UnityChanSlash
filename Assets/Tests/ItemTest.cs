@@ -128,4 +128,37 @@ public class ItemTest
             Assert.True(source.randomTypes.Contains(type => type == randomType), $"pos = ({pos.x}, {pos.y})");
         });
     }
+
+    [Test]
+    public void _002_VerifyFinalMapBoxDirectionTest()
+    {
+        // setup
+        var mapData = gameInfo.FinalMap();
+        var map = WorldMap.Create(mapData);
+
+        var source = ResourceLoader.Instance.itemTypesData.Param(gameInfo.LastFloor - 1);
+
+        var boxPos = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(12, 12),  Direction.north     },
+            { new Pos(12, 16),  Direction.north     },
+            { new Pos(16, 12),  Direction.north     },
+            { new Pos(16, 16),  Direction.north     },
+            { new Pos( 6, 13),  Direction.east      },
+            { new Pos( 5, 14),  Direction.west      },
+            { new Pos( 6, 15),  Direction.east      },
+            { new Pos( 5, 16),  Direction.west      },
+            { new Pos( 6, 17),  Direction.east      },
+        };
+
+        var dirMap = map.dirMapHandler.CloneDirMap();
+        var matrix = map.dirMapHandler.CloneMatrix();
+
+        boxPos.ForEach(kv =>
+        {
+            Assert.True(map.matrix[kv.Key.x, kv.Key.y] is Box);
+            Assert.AreEqual(matrix[kv.Key.x, kv.Key.y], Terrain.Box);
+            Assert.AreEqual(Direction.Convert(dirMap[kv.Key.x, kv.Key.y]), kv.Value);
+        });
+    }
 }

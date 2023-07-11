@@ -118,9 +118,9 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
             case Terrain.MessageWall:
             case Terrain.BloodMessageWall:
             case Terrain.ExitDoor:
+            case Terrain.Box:
                 return rawMapData.GetValidDir(x, y);
 
-            case Terrain.Box:
             case Terrain.UpStairs:
             case Terrain.DownStairs:
                 return rawMapData.GetNotWallDir(x, y);

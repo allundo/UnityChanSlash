@@ -7,6 +7,7 @@ public class RawMapData : DirHandler<int>
     public static readonly int GROUND = MazeCreator.GROUND;
     public static readonly int WALL = MazeCreator.WALL;
     public static readonly int DOOR = MazeCreator.DOOR;
+    public static readonly int PIT = (int)Terrain.Pit;
 
     private static readonly Dictionary<int, int> RAW_DATA_MAP = new Dictionary<int, int>()
     {
@@ -21,6 +22,7 @@ public class RawMapData : DirHandler<int>
         { (int)Terrain.Door,                  DOOR   },
         { (int)Terrain.LockedDoor,            DOOR   },
         { (int)Terrain.ExitDoor,              DOOR   },
+        { (int)Terrain.Pit,                   PIT    },
     };
 
     private static int ConvertToRaw(int data) => RAW_DATA_MAP.TryGetValue(data, out data) ? data : GROUND;
@@ -102,7 +104,7 @@ public class RawMapData : DirHandler<int>
     }
 
     public Dir GetValidDir(int x, int y)
-        => GetValidDir(x, y, terrainID => terrainID == GROUND || terrainID == PATH);
+        => GetValidDir(x, y, terrainID => terrainID == GROUND || terrainID == PATH || terrainID == DOOR);
     public Dir GetPathDir(int x, int y)
         => GetValidDir(x, y, terrainID => terrainID == PATH);
     public Dir GetNotWallDir(int x, int y)
