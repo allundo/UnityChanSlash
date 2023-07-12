@@ -63,6 +63,8 @@ public class ItemIconHandler : IItemIconHandler
 
     protected IItemIndexHandler pressedInventory;
     protected IItemIndexHandler selectedInventory;
+    public bool isEquipSelected => selectedInventory is EquipItemsHandler;
+
     protected ResourceLoader resourceLoader;
 
     protected EquipmentSource GetEquipmentSource(ItemIcon item)
@@ -442,7 +444,8 @@ public class ItemIconHandler : IItemIconHandler
             // When equip item is selected, check if pressed item is valid equipment.
             if (selectedInventory is InventoryItemsHandler || IsValidEquipment(currentSelected.index, pressedInventory.GetItem(index)))
             {
-                SetTarget(index);
+                selector.SetTarget(inventoryItems.UIPos(index), false);
+                pressedIndex = index;
             }
             return this;
         }
@@ -454,15 +457,10 @@ public class ItemIconHandler : IItemIconHandler
             // Don't set target to equip panel if dragging item isn't equipment.
             if (IsValidEquipment(index, currentSelected))
             {
-                SetTarget(index);
+                selector.SetTarget(equipItems.UIPos(index), true);
+                pressedIndex = index;
             }
             return this;
-        }
-
-        private void SetTarget(int index)
-        {
-            selector.SetTarget(pressedInventory.UIPos(index));
-            pressedIndex = index;
         }
 
         public override IItemIconHandler OnRelease()
@@ -473,29 +471,35 @@ public class ItemIconHandler : IItemIconHandler
 
         public override IItemIconHandler OnSubmit()
         {
-            var currentTarget = pressedInventory.GetItem(pressedIndex);
+            IItemIndexHandler targetInventory = selector.isEquip ? equipItems : inventoryItems;
 
-            if (currentTarget != null && currentTarget != currentSelected && currentSelected.TryMerge(currentTarget.itemInfo))
+            var currentTarget = targetInventory.GetItem(pressedIndex);
+
+            if (!selector.isEquip && currentTarget != null && currentTarget != currentSelected && currentSelected.TryMerge(currentTarget.itemInfo))
             {
                 // currentTarget icon is inactivated if the merging is succeeded.
                 currentTarget = null;
             }
 
-            if (currentSelected.isEquip != pressedInventory is EquipItemsHandler)
+            if (currentSelected.isEquip)
             {
-                EquipMessage(currentSelected.isEquip ? currentTarget : currentSelected);
+                if (!selector.isEquip) EquipMessage(currentTarget);
+            }
+            else
+            {
+                if (selector.isEquip) EquipMessage(currentSelected);
             }
 
             inventoryItems.ShrinkNum();
             equipItems.ShrinkNum();
-            pressedInventory.SwitchItem(pressedIndex, currentSelected);
+            targetInventory.SwitchItem(pressedIndex, currentSelected);
 
-            if (pressedInventory is InventoryItemsHandler)
+            if (targetInventory is InventoryItemsHandler)
             {
-                pressedInventory.ExpandNum(pressedIndex);
+                targetInventory.ExpandNum(pressedIndex);
 
-                selector.SetSelect(pressedInventory.UIPos(pressedIndex), false);
-                selectedInventory = pressedInventory;
+                selector.SetSelect(targetInventory.UIPos(pressedIndex), false);
+                selectedInventory = targetInventory;
 
                 return handler.selectMode;
                 // OnRelease() will be fired by the pointed panel immediately.

@@ -135,7 +135,7 @@ public class ItemInventory : SingletonMonoBehaviour<ItemInventory>
     public void SetEquipEnable(bool isEnable)
     {
         equipItems.SetEnablePanels(isEnable);
-        if (!isEnable && selector.isEquip) iconHandler.CleanUp();
+        if (!isEnable && iconHandler.isEquipSelected) iconHandler.CleanUp();
     }
 
     public bool hasKeyBlade() => hasItemType(ItemType.KeyBlade);

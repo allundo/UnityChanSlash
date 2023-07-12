@@ -83,10 +83,11 @@ public class ItemSelector : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         return this;
     }
 
-    public ItemSelector SetTarget(Vector2 pos)
+    public ItemSelector SetTarget(Vector2 pos, bool isEquip)
     {
         image.sprite = target;
         ui.Resize(1f, 0.2f).Play();
+        this.isEquip = isEquip;
 
         return SetPosition(pos);
     }
