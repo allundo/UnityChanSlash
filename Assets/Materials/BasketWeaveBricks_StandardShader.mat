@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BasketWeaveBricks_StandardShader
-  m_Shader: {fileID: 4800000, guid: afeee34d5a02a4a829ba1551dbbfa539, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0202567702c0d4e068098b303e0a5a8d, type: 3}
   m_ValidKeywords:
   - _NORMALMAP
   - _PARALLAXMAP
@@ -81,4 +81,5 @@ Material:
     - _AdditiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HologramColor: {r: 0, g: 1, b: 0.4, a: 0}
   m_BuildTextureStacks: []

@@ -1,7 +1,7 @@
 // ## CUSTOMIZED
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Custom/Stencil/StencilMaskedStandard"
+Shader "Custom/Standard/StandardFogExp2"
 {
     Properties
     {
@@ -57,11 +57,6 @@ Shader "Custom/Stencil/StencilMaskedStandard"
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 300
 
-        Stencil
-        {
-            Ref 1 // Hole flag
-            Comp NotEqual
-        }
 
         // ------------------------------------------------------------------
         //  Base forward pass (directional light, emission, lightmaps, ...)
@@ -88,6 +83,7 @@ Shader "Custom/Stencil/StencilMaskedStandard"
             #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
             #pragma shader_feature_local _PARALLAXMAP
 
+            #define FOG_EXP2
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
@@ -125,6 +121,7 @@ Shader "Custom/Stencil/StencilMaskedStandard"
             #pragma shader_feature_local_fragment _DETAIL_MULX2
             #pragma shader_feature_local _PARALLAXMAP
 
+            #define FOG_EXP2
             #pragma multi_compile_fwdadd_fullshadows
             #pragma multi_compile_fog
             // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
@@ -232,12 +229,6 @@ Shader "Custom/Stencil/StencilMaskedStandard"
         Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
         LOD 150
 
-        Stencil
-        {
-            Ref 1 // Hole flag
-            Comp NotEqual
-        }
-
         // ------------------------------------------------------------------
         //  Base forward pass (directional light, emission, lightmaps, ...)
         Pass
@@ -263,6 +254,7 @@ Shader "Custom/Stencil/StencilMaskedStandard"
 
             #pragma skip_variants SHADOWS_SOFT DIRLIGHTMAP_COMBINED
 
+            #define FOG_EXP2
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
 
