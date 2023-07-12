@@ -66,13 +66,11 @@ public class RestButton : Button, IPointerDownHandler, IPointerUpHandler
 
     public void SetEnable(bool isEnable)
     {
-        if (isCold) return;
-
         enabled = isEnable;
         var iColor = buttonImage.color;
         var tColor = textRest.color;
-        buttonImage.color = new Color(iColor.r, iColor.g, iColor.b, isEnable ? 1f : 0.5f);
-        textRest.color = new Color(tColor.r, tColor.g, tColor.b, isEnable ? 1f : 0.5f);
+        buttonImage.color = new Color(iColor.r, iColor.g, iColor.b, !isCold && isEnable ? 1f : 0.5f);
+        textRest.color = new Color(tColor.r, tColor.g, tColor.b, !isCold && isEnable ? 1f : 0.5f);
     }
 
     public void SetVisible(bool isVisible)
