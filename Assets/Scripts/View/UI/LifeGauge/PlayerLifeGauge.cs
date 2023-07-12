@@ -37,7 +37,7 @@ public class PlayerLifeGauge : MonoBehaviour
     private void UpdateGauge(float lifeRatio)
     {
         greenGauge.UpdateGauge(lifeRatio, flashOnUpdate);
-        redGauge.UpdateGauge(lifeRatio, flashOnUpdate);
+        redGauge.UpdateGauge(lifeRatio);
         flashOnUpdate = false;
     }
 
