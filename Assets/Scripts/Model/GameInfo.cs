@@ -155,7 +155,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2,11, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
-            2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 0, 2, 1, 9, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            23, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             5, 1,22, 1, 4,10, 2, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -176,7 +176,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             new Pos( 4, 1),
             new Pos( 5, 1),
             new Pos( 3, 2),
-            new Pos( 4, 2),
             new Pos( 5, 2),
             new Pos( 3, 3),
             new Pos( 4, 3),
