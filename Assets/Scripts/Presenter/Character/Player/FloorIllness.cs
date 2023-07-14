@@ -27,7 +27,7 @@ public class FloorIllness
         {
             restUI.SetCold();
             RenderSettings.fogColor = new Color(0.9f, 0.9f, 1f);
-            RenderSettings.fogDensity = 0.05f;
+            RenderSettings.fogDensity = 0.075f;
             RenderSettings.fog = true;
         };
         illnessRemover[3] = () =>
