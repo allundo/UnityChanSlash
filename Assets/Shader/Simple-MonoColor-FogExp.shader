@@ -39,7 +39,6 @@ Shader "Custom/Simple/MonoColorFogExp2"
             #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
 
             #pragma multi_compile_fwdbase
-            #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
             #pragma vertex vertBase
@@ -66,7 +65,6 @@ Shader "Custom/Simple/MonoColorFogExp2"
             #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
 
             #pragma multi_compile_fwdadd_fullshadows
-            #pragma multi_compile_fog
 
             #pragma vertex vertAdd
             #pragma fragment fragAdd

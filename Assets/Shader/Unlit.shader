@@ -5,6 +5,11 @@
         _MainTex ("Texture", 2D) = "white" {}
         [MainColor] _Color("Color", Color) = (1,1,1,1)
     }
+
+    CGINCLUDE
+        #define FOG_EXP2
+    ENDCG
+
     SubShader
     {
         Tags { "RenderType" = "Opaque" }
@@ -15,8 +20,6 @@
             CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
-
-                #define FOG_EXP
                 #include "UnityCG.cginc"
 
                 struct appdata
