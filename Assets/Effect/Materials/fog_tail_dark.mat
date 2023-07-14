@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fog_tail_dark
-  m_Shader: {fileID: 4800000, guid: cdb4fe4f251e243afac1d2963174e19e, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0c4c19af53b6b4ed4b2eca31a5032b1e, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9d72ffbc3ae6df54db66dbd511c00bb2, type: 3}
+        m_Texture: {fileID: 2800000, guid: f89a294be91d940e5bcfe5ca6a747851, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
