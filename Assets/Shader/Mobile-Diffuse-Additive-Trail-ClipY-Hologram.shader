@@ -1,11 +1,4 @@
-// ## CUSTOMIZED
-// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
-
-// Simplified Diffuse shader. Differences from regular Diffuse one:
-// - no Main Color
-// - fully supports only 1 directional light. Other lights can affect it, but it will be per-vertex/SH.
-
-Shader "Custom/Mobile/Diffuse-Additive-Trail-ClipY-Hologram"
+Shader "Custom/Mobile/Diffuse-Additive-Trail-ClipY-Hologram-FogExp2"
 {
     Properties
     {
@@ -17,50 +10,85 @@ Shader "Custom/Mobile/Diffuse-Additive-Trail-ClipY-Hologram"
         _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
     }
 
+    CGINCLUDE
+        #define FOG_EXP2
+    ENDCG
+
     SubShader {
         Tags { "RenderType"="Opaque" }
         LOD 150
 
-        CGPROGRAM
-        #pragma surface surf Lambert noforwardadd vertex:vert
-        #include "./CGIncludes/DitherTransparentFunctions.cginc"
-
-        sampler2D _MainTex;
-        sampler2D _NoiseTex;
-
-        float4 _AdditiveColor;
-        fixed4 _TrailDir;
-
-        float _ClipY;
-
-        struct Input
+        Pass
         {
-            float2 uv_MainTex;
-            float3 worldPos;
-            float4 screenPos;
-        };
+            CGPROGRAM
+                #pragma vertex vert
+                #pragma fragment frag
 
-        void vert(inout appdata_full v, out Input o)
-        {
-            UNITY_INITIALIZE_OUTPUT(Input, o);
+                #include "./CGIncludes/DitherTransparentFunctions.cginc"
 
-            half3 trailObjDir = mul(unity_WorldToObject, _TrailDir);
-            float weight = clamp(dot(v.normal, trailObjDir), 0, 1);
-            float noise = 1 + tex2Dlod(_NoiseTex, v.texcoord).r * 0.5;
-            fixed3 trail = trailObjDir * weight * noise;
-            v.vertex.xyz += trail;
+                struct appdata
+                {
+                    float4 vertex   : POSITION;
+                    float2 uv       : TEXCOORD0;
+                    float4 uvNoise  : TEXCOORD1;
+                    float3 normal   : NORMAL;
+                };
+
+                struct v2f
+                {
+                    float4 vertex       : SV_POSITION;
+                    float2 uv           : TEXCOORD0;
+                    float4 screenPos    : TEXCOORD1;
+                    float  worldPosY    : TEXCOORD2;
+                    UNITY_FOG_COORDS(3) // Define [float4 fogCoord : TEXCOORD2;] if fog is enabled
+                };
+
+                sampler2D _MainTex;
+                float4 _MainTex_ST;
+                sampler2D _NoiseTex;
+
+                float4 _AdditiveColor;
+                fixed4 _TrailDir;
+
+                float _ClipY;
+
+                v2f vert (appdata v)
+                {
+                    half3 trailObjDir = mul(unity_WorldToObject, _TrailDir);
+                    float weight = clamp(dot(v.normal, trailObjDir), 0, 1);
+                    float noise = 1 + tex2Dlod(_NoiseTex, v.uvNoise).r * 0.5;
+                    fixed3 trail = trailObjDir * weight * noise;
+
+                    v.vertex.xyz += trail;
+
+                    v2f o;
+                    o.vertex = UnityObjectToClipPos(v.vertex);
+                    o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+	                o.screenPos = ComputeScreenPos(o.vertex);
+                    o.worldPosY = mul(unity_ObjectToWorld, v.vertex).y;
+
+                    // Calcurate fog factor from o.vertex.z and set to o.fogCoord.x
+                    // 1:base-color -> 0: fog-color
+                    UNITY_TRANSFER_FOG(o,o.vertex);
+
+                    return o;
+                }
+
+                fixed4 frag (v2f i) : SV_Target
+                {
+                    clip(i.worldPosY - _ClipY);
+                    DitherClipping(i.screenPos, _AdditiveColor.a, 1);
+
+                    fixed4 col = tex2D(_MainTex, i.uv);
+
+                    // Apply fog if enabled
+                    UNITY_APPLY_FOG(i.fogCoord, col);
+                    col.rgb += _AdditiveColor.rgb;
+
+                    return col;
+                }
+            ENDCG
         }
-
-        void surf (Input IN, inout SurfaceOutput o)
-        {
-            clip(IN.worldPos.y - _ClipY);
-
-            DitherClipping(IN.screenPos, _AdditiveColor.a, 1);
-
-            o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb + _AdditiveColor.rgb;
-        }
-
-        ENDCG
 
         Pass
         {

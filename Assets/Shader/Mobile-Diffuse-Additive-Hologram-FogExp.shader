@@ -1,11 +1,16 @@
-Shader "Custom/Mobile/Diffuse-Additive-Trail-Hologram-FogExp2"
+// ## CUSTOMIZED
+// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
+
+// Simplified Diffuse shader. Differences from regular Diffuse one:
+// - no Main Color
+// - fully supports only 1 directional light. Other lights can affect it, but it will be per-vertex/SH.
+
+Shader "Custom/Mobile/Diffuse-Additive-Holgram-FogExp2"
 {
     Properties
     {
         _MainTex ("Base (RGB)", 2D) = "white" {}
         [MainColor] _AdditiveColor ("Additive Color", Color) = (0, 0, 0, 1)
-        _NoiseTex ("Noise", 2D) = "white" {}
-        _TrailDir ("Trail Dir", Vector) = (0, 0, 0, 0)
         _HologramColor("Hologram Color", Color) = (0,1,0.4,0)
     }
 
@@ -15,7 +20,8 @@ Shader "Custom/Mobile/Diffuse-Additive-Trail-Hologram-FogExp2"
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Name "Main"
+        Tags { "RenderType"="Opaque" "Queue" = "Geometry" }
         LOD 150
 
         Pass
@@ -28,35 +34,24 @@ Shader "Custom/Mobile/Diffuse-Additive-Trail-Hologram-FogExp2"
 
                 struct appdata
                 {
-                    float4 vertex   : POSITION;
-                    float2 uv       : TEXCOORD0;
-                    float4 uvNoise  : TEXCOORD1;
-                    float3 normal   : NORMAL;
+                    float4 vertex : POSITION;
+                    float2 uv : TEXCOORD0;
                 };
 
                 struct v2f
                 {
-                    float4 vertex       : SV_POSITION;
-                    float2 uv           : TEXCOORD0;
-                    float4 screenPos    : TEXCOORD1;
+                    float4 vertex : SV_POSITION;
+                    float2 uv : TEXCOORD0;
+                    float4 screenPos : TEXCOORD1;
                     UNITY_FOG_COORDS(2) // Define [float4 fogCoord : TEXCOORD2;] if fog is enabled
                 };
 
                 sampler2D _MainTex;
                 float4 _MainTex_ST;
-                sampler2D _NoiseTex;
-
                 float4 _AdditiveColor;
-                fixed4 _TrailDir;
 
                 v2f vert (appdata v)
                 {
-                    half3 trailObjDir = mul(unity_WorldToObject, _TrailDir);
-                    float weight = clamp(dot(v.normal, trailObjDir), 0, 1);
-                    float noise = 1 + tex2Dlod(_NoiseTex, v.uvNoise).r * 0.5;
-                    fixed3 trail = trailObjDir * weight * noise;
-                    v.vertex.xyz += trail;
-
                     v2f o;
                     o.vertex = UnityObjectToClipPos(v.vertex);
                     o.uv = TRANSFORM_TEX(v.uv, _MainTex);

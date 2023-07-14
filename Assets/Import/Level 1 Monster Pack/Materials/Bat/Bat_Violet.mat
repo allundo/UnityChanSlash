@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bat_Violet
-  m_Shader: {fileID: 4800000, guid: 12e57053bf62344169141d6934330b7d, type: 3}
+  m_Shader: {fileID: 4800000, guid: 35dbc6ea25cb7452ea62b8d7d1b76261, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _EMISSION
@@ -80,4 +80,5 @@ Material:
     - _BaseColor: {r: 0, g: 1, b: 0.4, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HologramColor: {r: 0, g: 1, b: 0.4, a: 0}
   m_BuildTextureStacks: []
