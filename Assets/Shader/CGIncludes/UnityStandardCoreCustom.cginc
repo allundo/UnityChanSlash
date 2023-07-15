@@ -494,7 +494,7 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i)
     half3 emission = Emission (i.tex.xy);
 
 #ifdef _AUTO_INTENSE_EMISSION
-    emission *= (1 + _SinTime.w * 0.5);
+    emission *= (1 + _SinTime.w * _CosTime.z * 0.75);
     emission.r *= 1.5;
 #endif
 
