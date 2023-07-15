@@ -1,15 +1,19 @@
+using UnityEngine;
 using UniRx;
 
 public class MagicInput : InputHandler
 {
+    [SerializeField] protected float fireFrames = 28f;
+    [SerializeField] protected float moveFrames = 28f;
+
     protected ICommand fire;
     protected ICommand moveForward;
 
     protected override void SetCommands()
     {
         die = new MagicDie(target, 28f);
-        fire = new MagicFire(target, 28f, die);
-        moveForward = new MagicMove(target, 28f, die);
+        fire = new MagicFire(target, fireFrames, die);
+        moveForward = new MagicMove(target, moveFrames, die);
     }
 
     protected override void Start()

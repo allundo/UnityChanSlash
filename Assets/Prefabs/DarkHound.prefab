@@ -29221,6 +29221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47837445910ac428c81c5e54b62c5f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireFrames: 24
+  moveFrames: 12
 --- !u!114 &5345091127426973996
 MonoBehaviour:
   m_ObjectHideFlags: 0
