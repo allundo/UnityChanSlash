@@ -3,6 +3,16 @@ using UnityEngine;
 [RequireComponent(typeof(Magic))]
 public class RedSlimeAIInput : EnemyAIInput
 {
+    protected override void SetCommands()
+    {
+        die = new EnemyDie(target, 72f);
+        idle = new EnemyIdle(target, 60f);
+        moveForward = new EnemyForward(target, 96f);
+        turnL = new EnemyTurnL(target, 20f);
+        turnR = new EnemyTurnR(target, 20f);
+        attack = new EnemyAttack(target, 100f);
+        fire = new EnemyFire(target, 108f, MagicType.FireBall);
+    }
     protected override ICommand GetCommand()
     {
         var currentCommand = commander.currentCommand;

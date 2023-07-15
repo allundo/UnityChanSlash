@@ -11,10 +11,10 @@ public class GhostAIInput : EnemyAIInput
     {
         die = new EnemyDie(target, 72f);
         attack = new GhostAttackStart(target, 30f);
-        moveForward = new GhostForward(target, 64f);
+        moveForward = new GhostForward(target, 72f);
         throughForward = new GhostThrough(target, 64f, attack);
-        turnL = new EnemyTurnAnimL(target, 16f);
-        turnR = new EnemyTurnAnimR(target, 16f);
+        turnL = new EnemyTurnAnimL(target, 20f);
+        turnR = new EnemyTurnAnimR(target, 20f);
     }
 
     protected override ICommand GetCommand()

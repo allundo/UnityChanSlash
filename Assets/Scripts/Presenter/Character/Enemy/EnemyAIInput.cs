@@ -45,12 +45,11 @@ public class EnemyAIInput : MobInput, IEnemyInput
         die = new EnemyDie(target, 72f);
         idle = new EnemyIdle(target, 60f);
         moveForward = new EnemyForward(target, 72f);
-        turnL = new EnemyTurnL(target, 16f);
-        turnR = new EnemyTurnR(target, 16f);
+        turnL = new EnemyTurnL(target, 20f);
+        turnR = new EnemyTurnR(target, 20f);
         attack = new EnemyAttack(target, 100f);
         doubleAttack = new EnemyDoubleAttack(target, 100f);
         fire = new EnemyFire(target, 108f, target.magic?.PrimaryType ?? MagicType.FireBall);
-
     }
 
     protected override void Start()
