@@ -63,6 +63,7 @@ public class PlayerStatus : MobStatus, IGetExp
     private float ShieldGain(int index) => equips[index].Value.shieldGain;
     private float ArmorGain(int index) => equips[index].Value.armorGain;
     private float ArmorSum => equips.Sum(equip => equip.Value.armorGain);
+    private float PhysicalArmorResist => ArmorSum * 0.25f;
     private AttackAttr Attribute(int index) => equips[index].Value.attribute;
     public float AttackR => AttackGain(2);
     public float ShieldR => ShieldGain(2);
@@ -81,6 +82,7 @@ public class PlayerStatus : MobStatus, IGetExp
     public ClassSelector selector { get; private set; }
     private PlayerFightStyle fightStyle;
     public override float Shield => base.Shield * (1f + ShieldR * fightStyle.ShieldRatioR + ShieldL * fightStyle.ShieldRatioL);
+    protected override float ArmorMultiplier => base.ArmorMultiplier - PhysicalArmorResist;
 
     protected override void Awake()
     {
@@ -167,7 +169,7 @@ public class PlayerStatus : MobStatus, IGetExp
         // Direction doesn't affect attack power when absorbing attribute of the attack.
         var dirDM = attrDM > 0f ? dirDamageMultiplier[GetDamageType(attackDir)] : 1f;
 
-        return Mathf.Max(attack * (ArmorMultiplier - ArmorSum * 0.25f) * dirDM * attrDM, 1f);
+        return Mathf.Max(attack * ArmorMultiplier * dirDM * attrDM, 1f);
     }
 
     /// <summary>
@@ -217,7 +219,7 @@ public class PlayerStatus : MobStatus, IGetExp
             equipL = AttackL * 100f,
             armor = (1f - ArmorMultiplier) * 100f,
             shield = Shield,
-            magic = (MagicMultiplier - 1f) * 100f,
+            magic = (MagicMultiplier - 1f) * 20f,
             resistFire = (1f - CalcAttrDM(AttackAttr.Fire)) * 100f,
             resistIce = (1f - CalcAttrDM(AttackAttr.Ice)) * 100f,
             resistDark = (1f - CalcAttrDM(AttackAttr.Dark)) * 100f,
