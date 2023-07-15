@@ -162,8 +162,9 @@ public class PlayerReactor : MobReactor
 
         if (!status.IsAlive || maxDamage <= 0f) return false;
 
-        lifeGauge.OnPoison(poisonRatio);
-        status.LifeChange(-Mathf.Min(poisonRatio * status.LifeMax.Value, maxDamage));
+        float ratio = poisonRatio * (1f - playerStatus.CalcArmorResist(AttackAttr.Fire));
+        lifeGauge.OnPoison(ratio);
+        status.LifeChange(-Mathf.Min(ratio * status.LifeMax.Value, maxDamage));
 
         return true;
     }

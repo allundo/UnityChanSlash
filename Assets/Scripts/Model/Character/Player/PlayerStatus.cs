@@ -177,14 +177,17 @@ public class PlayerStatus : MobStatus, IGetExp
     /// <returns>damage multiplier based on the attribute</returns>
     protected override float CalcAttrDM(AttackAttr attr)
     {
-        var attrDM = base.CalcAttrDM(attr);
+        return base.CalcAttrDM(attr) - CalcArmorResist(attr);
+    }
 
+    public float CalcArmorResist(AttackAttr attr)
+    {
+        float resist = 0f;
         for (int index = 0; index < equips.Length; index++)
         {
-            if (attr == Attribute(index)) attrDM -= ArmorGain(index);
+            if (attr == Attribute(index)) resist += ArmorGain(index);
         }
-
-        return attrDM;
+        return resist;
     }
 
     public void TryIncShield()
