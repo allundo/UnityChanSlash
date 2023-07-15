@@ -622,7 +622,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             return 1f;
         }
 
-        public PlayerGuardState(PlayerInput input, float duration = 15f, float timeToReady = 0.15f) : base(input, duration, timeToReady)
+        public PlayerGuardState(PlayerInput input, float duration = 15f, float timeToReady = 0.1f) : base(input, duration, timeToReady)
         { }
 
         protected override void Subscribe(ShieldInput input)
