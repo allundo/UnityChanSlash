@@ -372,6 +372,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         yield return waitForEndOfFrame;
 
         spawnHandler.PlaceEnemyGenerators();
+        yield return waitForEndOfFrame;
+
         spawnHandler.RespawnWitch();
         yield return waitForEndOfFrame;
     }

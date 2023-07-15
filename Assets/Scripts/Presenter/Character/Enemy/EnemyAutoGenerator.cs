@@ -11,6 +11,8 @@ public class EnemyAutoGenerator : EnemyGenerator
     protected Coroutine spawnLoop = null;
     protected Coroutine searchCharacter = null;
 
+    protected bool isFirstSpawn = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -49,7 +51,9 @@ public class EnemyAutoGenerator : EnemyGenerator
     {
         detectCharacter.enabled = true;
 
-        yield return new WaitForSeconds(1);
+        yield return isFirstSpawn ? null : new WaitForSeconds(1);
+
+        isFirstSpawn = false;
 
         detectCharacter.enabled = false;
         if (!spawnTile.IsCharacterOn) Spawn();
@@ -62,7 +66,7 @@ public class EnemyAutoGenerator : EnemyGenerator
             other.GetComponent<MobStatus>() != null
 
             // Cancel spawning if this point is inside player view.
-            || (other.GetComponent<MiniMapHandler>() != null && GameManager.Instance.worldMap.miniMapData.IsCurrentViewOpen(spawnPoint))
+            || !isFirstSpawn && other.GetComponent<MiniMapHandler>() != null && GameManager.Instance.worldMap.miniMapData.IsCurrentViewOpen(spawnPoint)
         )
         {
             StopSearchCharacter();
@@ -75,6 +79,7 @@ public class EnemyAutoGenerator : EnemyGenerator
 
         gameObject.SetActive(true);
         detectCharacter.enabled = false;
+        isFirstSpawn = true;
         spawnLoop = StartCoroutine(SpawnLoop());
     }
 
