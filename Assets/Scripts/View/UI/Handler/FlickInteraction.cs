@@ -304,7 +304,7 @@ public class FlickInteraction : FadeEnable, IPointerDownHandler, IPointerUpHandl
         {
             Vector2 limitedVec = LimitedVec(dragVector);
             ui.SetPosOffset(limitedVec);
-            dragRatio.SetValueAndForceNotify(limitedVec.magnitude / limit);
+            if (flick.isActive) dragRatio.SetValueAndForceNotify(limitedVec.magnitude / limit);
         }
 
         /// <summary>
