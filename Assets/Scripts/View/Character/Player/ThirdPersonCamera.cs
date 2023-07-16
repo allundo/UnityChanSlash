@@ -31,7 +31,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public void Amplify(float duration = 1f, float power = 0.01f)
     {
         ampTween?.Kill();
-        ampTween = DOVirtual.Float(power, 0f, duration, value => ampFactor = value).Play();
+        ampTween = DOVirtual.Float(power, 0f, duration, value => ampFactor = value).SetUpdate(true).Play();
     }
     public void StopAmplify() => ampTween?.Complete();
 
