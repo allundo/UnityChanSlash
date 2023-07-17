@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 004_Tutorial
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u8AAC\u660E"
+    sentence: "\u3053\u306E\u968E\u306F\u3044\u308F\u3070\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\\n\u770B\u677F\u306B\u66F8\u304B\u308C\u3066\u3044\u308B\u3053\u3068\u306F\\n\u5F79\u7ACB\u3064\u304B\u3089\u8AAD\u3093\u3067\u304A\u3044\u3066\u306D\\nby
+      \u8FF7\u5BAE\u306E\u756A\u4EBA"
+    face: -1
+    fontSize: 72
+    literalsPerSec: 1000
+    alignment: 514
+    title: "\u3010\u770B\u677F\u30E1\u30C3\u30BB\u30FC\u30B8\u306F\u91CD\u8981\u3011"
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 0
+  - name: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u8AAC\u660E\u53CD\u5FDC1"
+    sentence: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u30FB\u30FB\u30FB"
+    face: 4
+    fontSize: 64
+    literalsPerSec: 20
+    alignment: 257
+    title: 
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 1
+  - name: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u8AAC\u660E\u53CD\u5FDC2"
+    sentence: "\u304A\u5BA2\u306E\u3064\u3082\u308A\u3067\u62DB\u3044\u305F\u306A\u3089\u3082\u3046\u3061\u3087\u3063\u3068\u4E01\u91CD\u306B\u6271\u3063\u3066\u6B32\u3057\u3044\u306A"
+    face: 0
+    fontSize: 64
+    literalsPerSec: 20
+    alignment: 257
+    title: 
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 1
