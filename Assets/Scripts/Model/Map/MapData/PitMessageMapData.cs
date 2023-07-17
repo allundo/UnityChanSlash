@@ -13,7 +13,7 @@ public class PitMessageMapData : DirMapData
     private Stack<int> secretIndices = null;
     private FloorMessagesSource floorMessages;
     private MessageData[] fixedMessages;
-    private MessageData[] bloodMessages;
+    private BloodMessageData[] bloodMessages;
 
     private MessageData[][] randomMessages;
     private MessageData RandomMessage(int index) => GetMessage(randomMessages, index);
@@ -195,7 +195,7 @@ public class PitMessageMapData : DirMapData
 
         floorMessages = data.Param(floor - 1);
         fixedMessages = floorMessages.fixedMessages.Select(mes => mes.Convert()).ToArray();
-        bloodMessages = floorMessages.bloodMessages.Select(mes => mes.Convert()).ToArray();
+        bloodMessages = floorMessages.bloodMessages.Select(src => new BloodMessageData(src)).ToArray();
         numOfSecretMessages = Math.Min(floorMessages.secretMessages.Length, GameInfo.Instance.secretLevel + 1);
     }
 

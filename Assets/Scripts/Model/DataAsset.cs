@@ -207,14 +207,19 @@ public class MessageSource
 }
 
 [System.Serializable]
-public class SecretMessageSource
+public class BloodMessageSource
 {
     [SerializeField] public int secretLevel = 0;
-    [SerializeField] public bool levelUpIfRead = false;
-    [SerializeField] public int alterIfReadNumber = -1;
 
     [SerializeField] public BoardMessageData data = default;
     [SerializeField] public BoardMessageData alterData = default;
+}
+
+[System.Serializable]
+public class SecretMessageSource : BloodMessageSource
+{
+    [SerializeField] public bool levelUpIfRead = false;
+    [SerializeField] public int alterIfReadNumber = -1;
 }
 
 [System.Serializable]
@@ -222,7 +227,7 @@ public class FloorMessagesSource
 {
     [SerializeField] public BoardMessageData[] fixedMessages = new BoardMessageData[0];
     [SerializeField] public BoardMessageData[] randomMessages = new BoardMessageData[0];
-    [SerializeField] public BoardMessageData[] bloodMessages = new BoardMessageData[0];
+    [SerializeField] public BloodMessageSource[] bloodMessages = new BloodMessageSource[0];
     [SerializeField] public SecretMessageSource[] secretMessages = new SecretMessageSource[0];
 }
 

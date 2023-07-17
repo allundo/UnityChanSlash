@@ -13,6 +13,7 @@ using Object = UnityEngine.Object;
 public class MessageUITest
 {
     private ResourceLoader resourceLoader;
+    private GameInfo gameInfo;
     private TimeManager timeManager;
 
     private MessageControllerTest messageUI;
@@ -26,6 +27,7 @@ public class MessageUITest
     public void OneTimeSetUp()
     {
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
 
         timeManager = Object.Instantiate(Resources.Load<TimeManager>("Prefabs/TimeManager"));
         timeManager.input = new Mock<IPlayerInput>().Object;
@@ -47,6 +49,7 @@ public class MessageUITest
         Object.Destroy(mainCamera.gameObject);
         Object.Destroy(eventSystem);
         Object.Destroy(timeManager.gameObject);
+        Object.Destroy(gameInfo.gameObject);
         Object.Destroy(resourceLoader.gameObject);
     }
 
@@ -146,7 +149,7 @@ public class MessageUITest
     [UnityTest]
     public IEnumerator _005_BloodMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
     {
-        var bloodMsgs = resourceLoader.floorMessagesData.Param(floor - 1).bloodMessages;
+        var bloodMsgs = resourceLoader.floorMessagesData.Param(floor - 1).bloodMessages.Select(src => new BloodMessageData(src));
         yield return null;
 
         yield return messageUI.StartCoroutine(ReadMessages(bloodMsgs));
