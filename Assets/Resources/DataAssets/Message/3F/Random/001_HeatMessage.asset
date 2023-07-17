@@ -26,7 +26,7 @@ MonoBehaviour:
     caption: 
     ignoreIfRead: 0
   - name: "\u707C\u71B1\u5730\u7344\u306B\u3054\u6848\u5185\u53CD\u5FDC1"
-    sentence: "\u5C0B\u5E38\u3058\u3083\u306A\u304F\u6691\u3044\u3057\u305D\u308C\u3069\u3053\u308D\u3058\u3083\u306A\u3044"
+    sentence: "\u305D\u308C\u3069\u3053\u308D\u3058\u3083\u306A\u3044\u6691\u3055\uFF01"
     face: 1
     fontSize: 64
     literalsPerSec: 20
