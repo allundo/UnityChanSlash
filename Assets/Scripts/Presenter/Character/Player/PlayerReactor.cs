@@ -243,7 +243,7 @@ public class PlayerReactor : MobReactor
 
     public void OnGround()
     {
-        Damage(1f, map.dir, AttackType.Smash);
+        Damage(1f, map.dir.Backward, AttackType.Smash);
         playerEffect.OnGround();
     }
 
