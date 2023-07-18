@@ -20,7 +20,7 @@ public class BloodMessageData : MessageData
             {
                 var info = GameInfo.Instance;
 
-                if (info.secretLevel < bloodSource.secretLevel)
+                if (bloodSource.levelUpIfRead && info.secretLevel < bloodSource.secretLevel)
                 {
                     info.secretLevel = bloodSource.secretLevel;
                 }

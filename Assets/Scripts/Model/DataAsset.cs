@@ -210,6 +210,7 @@ public class MessageSource
 public class BloodMessageSource
 {
     [SerializeField] public int secretLevel = 0;
+    [SerializeField] public bool levelUpIfRead = false;
 
     [SerializeField] public BoardMessageData data = default;
     [SerializeField] public BoardMessageData alterData = default;
@@ -218,7 +219,6 @@ public class BloodMessageSource
 [System.Serializable]
 public class SecretMessageSource : BloodMessageSource
 {
-    [SerializeField] public bool levelUpIfRead = false;
     [SerializeField] public int alterIfReadNumber = -1;
 }
 
