@@ -47,15 +47,12 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 0ad6a08a2490e434db908dd76300c9cc, type: 2}
     - {fileID: 11400000, guid: c56d285dd9b5b464087850576fa72c1b, type: 2}
     - {fileID: 11400000, guid: dd4ba0e6d0c1b45b882ebdaebc14642b, type: 2}
-    bloodMessages:
-    - secretLevel: 0
-      data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
+    bloodMessages: []
     secretMessages:
     - secretLevel: 0
-      data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       levelUpIfRead: 1
+      data: {fileID: 11400000, guid: 590b96ccc79f2497f9c4e96d0483bab0, type: 2}
+      alterData: {fileID: 11400000, guid: 046c6f602ab82408983072cc3da6b3b9, type: 2}
       alterIfReadNumber: 10
   - fixedMessages:
     - {fileID: 11400000, guid: 5f785ffc10af642168a59e7ec6b523f5, type: 2}
@@ -72,33 +69,42 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 7ebd58e804f7c4beda4f657f4fb51068, type: 2}
     bloodMessages:
     - secretLevel: 1
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: c1289c9a76b6f427d8c4310bfee10dec, type: 2}
       alterData: {fileID: 11400000, guid: bbe9dad5387c64e7c95a433d87bebba5, type: 2}
-    secretMessages:
-    - secretLevel: 0
-      data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
-      alterIfReadNumber: 20
     - secretLevel: 1
-      data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       levelUpIfRead: 1
+      data: {fileID: 11400000, guid: 38877a480f5ff4555bbc6c8f4d09a268, type: 2}
+      alterData: {fileID: 11400000, guid: 21bafb7fa4c4a4f60987fe4ca85fcf80, type: 2}
+    - secretLevel: 2
+      levelUpIfRead: 0
+      data: {fileID: 11400000, guid: 747cb6ee90d0b4b9686f1b5f7a7a522d, type: 2}
+      alterData: {fileID: 11400000, guid: cf0117c60a0794fc693d32f8a59de58e, type: 2}
+    secretMessages:
+    - secretLevel: 1
+      levelUpIfRead: 1
+      data: {fileID: 11400000, guid: 336822a57cb654d48be0e66f0981b688, type: 2}
+      alterData: {fileID: 11400000, guid: fc9c41231716a43d1acdecff5f485802, type: 2}
+      alterIfReadNumber: 20
+    - secretLevel: 2
+      levelUpIfRead: 1
+      data: {fileID: 11400000, guid: 90323af21727c46f7ac4a345d46c2210, type: 2}
+      alterData: {fileID: 11400000, guid: d7353f63350ce4e84b0441868b2c9e25, type: 2}
       alterIfReadNumber: 21
     - secretLevel: 2
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 22
     - secretLevel: 3
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 23
     - secretLevel: 4
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 24
   - fixedMessages:
     - {fileID: 11400000, guid: 2fd4ee5cdb6574e088dcc0ea3ce008aa, type: 2}
@@ -111,29 +117,29 @@ MonoBehaviour:
     bloodMessages: []
     secretMessages:
     - secretLevel: 3
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 30
     - secretLevel: 4
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 31
     - secretLevel: 5
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 32
     - secretLevel: 6
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 33
     - secretLevel: 7
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 34
   - fixedMessages:
     - {fileID: 11400000, guid: 3a1e0388d827644eda58603261ba65d7, type: 2}
@@ -144,31 +150,32 @@ MonoBehaviour:
     - {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
     bloodMessages:
     - secretLevel: 0
+      levelUpIfRead: 0
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
     secretMessages:
     - secretLevel: 5
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 40
     - secretLevel: 6
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 41
     - secretLevel: 7
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 42
     - secretLevel: 8
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 43
     - secretLevel: 9
+      levelUpIfRead: 1
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
       alterData: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}
-      levelUpIfRead: 1
       alterIfReadNumber: 44
