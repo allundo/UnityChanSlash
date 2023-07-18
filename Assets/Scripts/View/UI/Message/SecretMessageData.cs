@@ -24,7 +24,7 @@ public class SecretMessageData : MessageData
     public override bool isRead
     {
         get => base.isRead;
-        protected set
+        set
         {
             if (value)
             {

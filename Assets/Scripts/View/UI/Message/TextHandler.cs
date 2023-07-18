@@ -88,7 +88,7 @@ public class TextHandler : MonoBehaviour
             ResetTransform(Vector2.zero);
 
             endOfSentence.OnNext(Unit.Default);
-            messageData.Read();
+            messageData.isRead = true;
             return;
         }
 
