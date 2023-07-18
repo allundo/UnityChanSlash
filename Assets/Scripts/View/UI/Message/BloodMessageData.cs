@@ -10,4 +10,23 @@ public class BloodMessageData : MessageData
 
     public override MessageSource[] Source
         => bloodSource.secretLevel > GameInfo.Instance.secretLevel ? bloodSource.alterData.Convert().Source : source;
+
+    public override bool isRead
+    {
+        get => base.isRead;
+        set
+        {
+            if (value)
+            {
+                var info = GameInfo.Instance;
+
+                if (info.secretLevel < bloodSource.secretLevel)
+                {
+                    info.secretLevel = bloodSource.secretLevel;
+                }
+            }
+
+            base.isRead = value;
+        }
+    }
 }

@@ -70,7 +70,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 7936a7b73723e4594ad7c1bba9bb9343, type: 2}
     - {fileID: 11400000, guid: cd50693933b04464691441b8c27d9ee5, type: 2}
     - {fileID: 11400000, guid: 7ebd58e804f7c4beda4f657f4fb51068, type: 2}
-    bloodMessages: []
+    bloodMessages:
+    - secretLevel: 1
+      data: {fileID: 11400000, guid: c1289c9a76b6f427d8c4310bfee10dec, type: 2}
+      alterData: {fileID: 11400000, guid: bbe9dad5387c64e7c95a433d87bebba5, type: 2}
     secretMessages:
     - secretLevel: 0
       data: {fileID: 11400000, guid: cf69babcdf25d48c399162f11cc13c9c, type: 2}

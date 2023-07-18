@@ -14,6 +14,7 @@ public class MessageUITest
 {
     private ResourceLoader resourceLoader;
     private GameInfo gameInfo;
+    private int secretLevel = 0;
     private TimeManager timeManager;
 
     private MessageControllerTest messageUI;
@@ -63,11 +64,15 @@ public class MessageUITest
         rectTf.SetParent(rectTfCanvas);
 
         rectTf.anchorMin = rectTf.anchorMax = new Vector2(1f, 1f);
+
+        secretLevel = gameInfo.secretLevel;
     }
 
     [TearDown]
     public void TearDown()
     {
+        gameInfo.secretLevel = secretLevel;
+
         DOTween.KillAll();
 
         Object.Destroy(messageUI.gameObject);
@@ -155,5 +160,100 @@ public class MessageUITest
         yield return messageUI.StartCoroutine(ReadMessages(bloodMsgs));
 
         yield return new WaitForSeconds(1f);
+    }
+
+    [UnityTest]
+    public IEnumerator _006_BloodMessageBranchBySecretLevelTest()
+    {
+        var bloodMsgs = resourceLoader.floorMessagesData.Param(2).bloodMessages.Select(src => new BloodMessageData(src)).ToArray();
+        var readSecPerLiteral = 0.05f;
+        yield return null;
+
+        gameInfo.secretLevel = 0;
+        messageUI.AutoReadMessageData(bloodMsgs[0], readSecPerLiteral);
+
+        yield return new WaitForSeconds(0.6f);
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間、\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("落書き禁止！\n\nby 迷宮の番人", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        messageUI.OnPointerUp(null);
+        yield return null;
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("・・・？", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        messageUI.OnPointerUp(null);
+        yield return null;
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("他に誰かいるのかな？\n前半と後半で筆跡もぜんぜん違う", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        Assert.AreEqual(1, gameInfo.secretLevel);
+
+        yield return new WaitForSeconds(0.5f);
+
+        messageUI.AutoReadMessageData(bloodMsgs[0], readSecPerLiteral);
+
+        yield return new WaitForSeconds(0.6f);
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間、\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("落書き禁止！\n\nby 迷宮の番人", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        // Message window is closing
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("", messageUI.sentence);
+
+        yield return new WaitForSeconds(0.5f);
+
+        bloodMsgs[0].isRead = false;
+        messageUI.AutoReadMessageData(bloodMsgs[0], readSecPerLiteral);
+
+        yield return new WaitForSeconds(0.6f);
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間、\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("落書き禁止！\n\nby 迷宮の番人", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        messageUI.OnPointerUp(null);
+        yield return null;
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("前半と後半で筆跡がぜんぜん違う", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        messageUI.OnPointerUp(null);
+        yield return null;
+
+        Assert.AreEqual("", messageUI.title);
+        Assert.AreEqual("なんかケンカしてるっぽい・・・", messageUI.sentence);
+
+        yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
+
+        Assert.AreEqual(1, gameInfo.secretLevel);
     }
 }

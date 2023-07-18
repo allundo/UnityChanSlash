@@ -2,11 +2,25 @@ using UnityEngine;
 using UniRx;
 using System;
 using System.Collections;
+using TMPro;
 
 public class MessageControllerTest : MessageController
 {
     protected Coroutine messageLoopCoroutine;
     protected ISubject<Unit> closeSubject = new Subject<Unit>();
+    protected TextMeshProUGUI tmTitle;
+    protected TextMeshProUGUI tmSentence;
+
+    public string title => tmTitle.text;
+    public string sentence => tmSentence.text;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        tmTitle = window.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
+        tmSentence = window.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+    }
+
     protected override void Inactivator()
     {
         closeSubject.OnNext(Unit.Default);
@@ -15,6 +29,7 @@ public class MessageControllerTest : MessageController
 
     public IObservable<Unit> AutoReadMessageData(MessageData data, float readSecPerLiteral = 0.1f)
     {
+        if (messageLoopCoroutine != null) StopCoroutine(messageLoopCoroutine);
         messageLoopCoroutine = StartCoroutine(MessageLoop(data, readSecPerLiteral));
 
         return closeSubject.SelectMany(_ =>
