@@ -17,7 +17,7 @@ MonoBehaviour:
     sentence: "\u706B\u5C71\u5730\u5E2F\u304B\u3089\u30DE\u30B0\u30DE\u3092\u518D\u73FE\uFF01\\n\u305F\u307E\u306B\u306F\u6E29\u6CC9\u3082\u5165\u308A\u305F\u3044\u3088\u306D\\nby
       \u8FF7\u5BAE\u306E\u756A\u4EBA "
     face: -1
-    fontSize: 72
+    fontSize: 68
     literalsPerSec: 1000
     alignment: 514
     title: "\u3010\u707C\u71B1\u5730\u7344\u306B\u3054\u6848\u5185\u3011"
