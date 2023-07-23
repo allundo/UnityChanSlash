@@ -15,6 +15,7 @@ public class MessageUITest
     private ResourceLoader resourceLoader;
     private GameInfo gameInfo;
     private int secretLevel = 0;
+    private HashSet<int> readIDs;
     private TimeManager timeManager;
 
     private MessageControllerTest messageUI;
@@ -66,12 +67,14 @@ public class MessageUITest
         rectTf.anchorMin = rectTf.anchorMax = new Vector2(1f, 1f);
 
         secretLevel = gameInfo.secretLevel;
+        readIDs = gameInfo.readIDs;
     }
 
     [TearDown]
     public void TearDown()
     {
         gameInfo.secretLevel = secretLevel;
+        gameInfo.readIDs = readIDs;
 
         DOTween.KillAll();
 
@@ -79,6 +82,21 @@ public class MessageUITest
     }
     private IEnumerator ReadMessages(BoardMessageData[] boardMessages)
         => ReadMessages(boardMessages.Select(msg => msg.Convert()));
+
+    private IEnumerator ReadMessages(SecretMessageDataTest[] secretMessages)
+    {
+        foreach (var msg in secretMessages)
+        {
+            gameInfo.readIDs.Remove(msg.AlterIfReadNumber);
+            yield return messageUI.AutoReadMessageData(msg).ToYieldInstruction();
+
+            msg.isRead = false;
+            gameInfo.readIDs.Add(msg.AlterIfReadNumber);
+            yield return messageUI.AutoReadMessageData(msg).ToYieldInstruction();
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 
     private IEnumerator ReadMessages(IEnumerable<MessageData> msgs)
     {
@@ -268,5 +286,23 @@ public class MessageUITest
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
         Assert.AreEqual(1, gameInfo.secretLevel);
+    }
+
+    [UnityTest]
+    public IEnumerator _007_SecretMessagesTest([Values(1, 2, 3, 4, 5)] int floor)
+    {
+        var secretSrc = resourceLoader.floorMessagesData.Param(floor - 1).secretMessages;
+
+        var secretMsgs = new SecretMessageDataTest[secretSrc.Length];
+        for (int i = 0; i < secretSrc.Length; ++i)
+        {
+            secretMsgs[i] = new SecretMessageDataTest(secretSrc[i], floor * FloorMessagesData.MAX_ELEMENTS + i);
+        }
+
+        yield return null;
+
+        yield return messageUI.StartCoroutine(ReadMessages(secretMsgs));
+
+        yield return new WaitForSeconds(1f);
     }
 }
