@@ -100,6 +100,7 @@ public class TextHandler : MonoBehaviour
             return;
         }
 
+        tm.text = "";
         tm.fontSize = currentData.fontSize;
         tm.alignment = currentData.alignment;
 
