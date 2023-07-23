@@ -89,6 +89,19 @@ public class MessageUITest
         }
     }
 
+    private IEnumerator ReadMessages(IEnumerable<BloodMessageData> msgs)
+    {
+        foreach (var msg in msgs)
+        {
+            gameInfo.secretLevel = 0;
+            yield return messageUI.AutoReadMessageData(msg).ToYieldInstruction();
+            msg.isRead = false;
+            gameInfo.secretLevel = 10;
+            yield return messageUI.AutoReadMessageData(msg).ToYieldInstruction();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     [UnityTest]
     public IEnumerator _001_PlayerMessageTest()
     {

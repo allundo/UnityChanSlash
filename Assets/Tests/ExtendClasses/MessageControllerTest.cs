@@ -39,6 +39,18 @@ public class MessageControllerTest : MessageController
         }).First();
     }
 
+    public IObservable<Unit> AutoReadMessageData(BloodMessageData data, float readSecPerLiteral = 0.1f)
+    {
+        if (messageLoopCoroutine != null) StopCoroutine(messageLoopCoroutine);
+        messageLoopCoroutine = StartCoroutine(MessageLoop(data, readSecPerLiteral));
+
+        return closeSubject.SelectMany(_ =>
+        {
+            StopCoroutine(messageLoopCoroutine);
+            return Observable.Return(Unit.Default);
+        }).First();
+    }
+
     public IEnumerator MessageLoop(MessageData data, float readSecPerLiteral = 0.1f)
     {
         InputMessageData(data);
