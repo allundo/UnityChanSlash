@@ -138,13 +138,12 @@ public class PitMessageMapData : DirMapData
     }
 
     private List<Pos> SetMessageDataPos(Dictionary<Pos, IDirection> fixedCustomPos, List<Pos> randomCustomPos, int numOfRandom)
-        => SetCustomDataPos(fixedMessagePos, randomMessagePos, fixedCustomPos, randomCustomPos, fixedMessages.Length, numOfRandom, SetFixedMessage, SetRandomMessage);
+        => SetCustomDataPos(fixedCustomPos, randomCustomPos, fixedMessages.Length, numOfRandom, SetFixedMessage, SetRandomMessage);
 
     private List<Pos> SetBloodDataPos(Dictionary<Pos, IDirection> bloodCustomPos, List<Pos> secretCustomPos, int numOfSecret)
-        => SetCustomDataPos(bloodMessagePos, secretMessagePos, bloodCustomPos, secretCustomPos, bloodMessages.Length, numOfSecret, SetBloodMessage, SetSecretMessage);
+        => SetCustomDataPos(bloodCustomPos, secretCustomPos, bloodMessages.Length, numOfSecret, SetBloodMessage, SetSecretMessage);
 
     private List<Pos> SetCustomDataPos(
-        List<Pos> fixedStorePos, Dictionary<Pos, int> randomStorePos,
         Dictionary<Pos, IDirection> fixedCustomPos, List<Pos> randomCustomPos,
         int numOfFixed, int numOfRandom,
         Action<Pos, IDirection> fixedSetter, Action<Pos, IDirection> randomSetter
