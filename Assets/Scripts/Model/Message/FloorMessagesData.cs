@@ -36,7 +36,9 @@ public class FloorMessagesData : DataAsset<FloorMessagesSource>
 
             for (int j = 0; j < secret.Length; ++j)
             {
+                // secret level を超えるメッセージは除外
                 if (secret[j].secretLevel > secretLevel) continue;
+
                 floorData.Add(new SecretMessageData(secret[j], i * MAX_ELEMENTS + j));
             }
 

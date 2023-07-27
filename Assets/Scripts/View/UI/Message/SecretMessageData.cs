@@ -17,6 +17,8 @@ public class SecretMessageData : MessageData
         {
             var info = GameInfo.Instance;
             var alterID = secretSource.alterIfReadNumber;
+
+            // messageID = alterID のメッセージを読んだことがある場合、反応を変える
             return info.readIDs.Contains(alterID) ? secretSource.alterData.Convert().Source : source;
         }
     }

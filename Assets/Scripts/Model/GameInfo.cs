@@ -63,6 +63,19 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     public int steps = 0;
     public int storedTimeSec = 0;
     public HashSet<int> readIDs = new HashSet<int>();
+
+    /// <summary>
+    /// メッセージボードの表示レベル<br />
+    /// <list>
+    ///     <item>0: 墓荒らしの存在を知らない</item>
+    ///     <item>1: 墓荒らしがいることを知っている</item>
+    ///     <item>2: 墓荒らしが死を繰り返してることを知っている</item>
+    ///     <item>3: 死ぬと魂が削れることを知っている</item>
+    ///     <item>4: 墓荒らしと迷宮の番人の関係をなんとなく知っている</item>
+    ///     <item>5: 迷宮の番人の名前がウィノアであることを知っている</item>
+    ///     <item>6: 墓荒らしと迷宮の番人の関係をよく知っている</item>
+    /// </list>
+    /// </summary>
     public int secretLevel = 0;
 
     public DataStoreAgent.ClearRecord clearRecord = null;
