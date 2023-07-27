@@ -56,15 +56,34 @@ public class PitMessageMapData : DirMapData
         int numOfFloorMessages;
         if (floor == 1)
         {
-            // numOfPits may be 4
-            fixedMessagePos.Add(data.exitDoorMessage);
-            numOfFixedMessages--;
+            // Exclude exit door message and pit attention message.
+            numOfFixedMessages -= 2;
 
+            // Assign exit door message to fixed message list.
+            var fixedMsgList = new List<MessageData>();
+            fixedMsgList.Add(fixedMessages[0]);
+
+            fixedMessagePos.Add(data.exitDoorMessage);
+
+            // numOfPits may be 4
             int count = PlacePitWithAttention(pitCandidates, boardCandidates, numOfPits);
 
-            numOfFixedMessages -= count;
+            // Assign pit attentions to fixed message list.
+            for (int i = 0; i < count; ++i)
+            {
+                fixedMsgList.Add(fixedMessages[1]);
+            }
 
-            // Makes up for decrease of Pit Trap Attentions
+            // Assign remaining fixed messages to fixed message list.
+            for (int i = 2; i < fixedMessages.Length; ++i)
+            {
+                fixedMsgList.Add(fixedMessages[i]);
+            }
+
+            // Apply fixed message list including exit door message and pit attentions to fixed messages array.
+            fixedMessages = fixedMsgList.ToArray();
+
+            // Makes up for decrease of Pit Trap Attentions.
             numOfFloorMessages = numOfFixedMessages + randomMessages.Length + (numOfPits - count);
         }
         else
@@ -355,7 +374,7 @@ public class PitMessageMapData : DirMapData
     /// <param name="pitTrapPos">Position list to place pits</param>
     /// <param name="boardCandidates">Available message board placing position with board facing direction</param>
     /// <param name="numOfPits">Max number of placing pits</param>
-    /// <returns></returns>
+    /// <returns>Number of placed pits</returns>
     private int PlacePitWithAttention(List<Pos> pitTrapPos, Dictionary<Pos, IDirection> boardCandidates, int numOfPits)
     {
         int placeCount = 0;

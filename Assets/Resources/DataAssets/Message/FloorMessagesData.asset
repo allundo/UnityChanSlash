@@ -16,9 +16,6 @@ MonoBehaviour:
   - fixedMessages:
     - {fileID: 11400000, guid: 1225680af12a0499595e3ab6a8d8d630, type: 2}
     - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
-    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
-    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
-    - {fileID: 11400000, guid: 2c66be70225ea46689abc72aa70eb5e2, type: 2}
     - {fileID: 11400000, guid: bd63a7f0ad49d4211887ecbebd74d3aa, type: 2}
     - {fileID: 11400000, guid: c01c348cceb0d40ee8107707cee05ece, type: 2}
     - {fileID: 11400000, guid: 58cfdc1aaea6f491db136539bd799df6, type: 2}

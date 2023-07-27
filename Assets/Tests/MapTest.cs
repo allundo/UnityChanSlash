@@ -464,4 +464,42 @@ public class MapTest
             Assert.AreEqual(convertData.roomCenter.Count, 0);
         }
     }
+
+    [Test]
+    public void _009_VerifyNumOfPitAttentionsTest()
+    {
+        var floor1 = WorldMap.Create(1, 7, 7);
+
+        ITile[,] matTile = floor1.matrix.Clone() as ITile[,];
+        Terrain[,] matTerrain = floor1.dirMapHandler.CloneMatrix();
+
+        int pitCount = 0;
+        int pitAttentionCount = 0;
+
+        for (int j = 0; j < 7; ++j)
+        {
+            for (int i = 0; i < 7; ++i)
+            {
+                var message = matTile[i, j] as MessageWall;
+                if (message != null)
+                {
+                    if (message.data.Source[0].name == "落とし穴注意")
+                    {
+                        ++pitAttentionCount;
+                    }
+                }
+
+                if (matTerrain[i, j] == Terrain.Pit) ++pitCount;
+            }
+        }
+
+        Pos pitMes = floor1.messagePosData.fixedMessagePos[pitAttentionCount];
+        Pos notPitMes = floor1.messagePosData.fixedMessagePos[pitAttentionCount + 1];
+        string pitMesName = (matTile[pitMes.x, pitMes.y] as MessageWall).data.Source[0].name;
+        string notPitMesName = (matTile[notPitMes.x, notPitMes.y] as MessageWall).data.Source[0].name;
+
+        Assert.LessOrEqual(pitAttentionCount, pitCount);
+        Assert.AreEqual("落とし穴注意", pitMesName);
+        Assert.AreNotEqual("落とし穴注意", notPitMesName);
+    }
 }
