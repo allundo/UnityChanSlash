@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 009_SwitchToStatus
+  m_Name: 007_SwitchToStatus
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u30B9\u30C6\u30FC\u30BF\u30B9\u89E3\u8AAC"
