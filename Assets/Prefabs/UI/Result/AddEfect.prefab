@@ -69,8 +69,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Scroll Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c5aa17fda1df54987ad16e5680a81d98, type: 2}
-  m_sharedMaterial: {fileID: -5295180933942692772, guid: c5aa17fda1df54987ad16e5680a81d98,
+  m_fontAsset: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc, type: 2}
+  m_sharedMaterial: {fileID: -2144057180740647972, guid: 93577b249862a4cf39f90634dabf69cc,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
