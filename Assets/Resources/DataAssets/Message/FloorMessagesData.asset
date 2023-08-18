@@ -114,7 +114,7 @@ MonoBehaviour:
       alterData: {fileID: 11400000, guid: cc7847597e22248e083d0641fd5096a4, type: 2}
     secretMessages:
     - secretLevel: 3
-      levelUpIfRead: 1
+      levelUpIfRead: 0
       data: {fileID: 11400000, guid: 805a512df5a314511a332b1afd8314d9, type: 2}
       alterData: {fileID: 11400000, guid: 539fa300d38a84b418c7a4f31f7443eb, type: 2}
       alterIfReadNumber: 22
@@ -122,7 +122,7 @@ MonoBehaviour:
       levelUpIfRead: 1
       data: {fileID: 11400000, guid: b30be458c1a7c4da48d12eda1c83e3c3, type: 2}
       alterData: {fileID: 11400000, guid: 4f647ee44020f47a5b57658a1f60bf84, type: 2}
-      alterIfReadNumber: 41
+      alterIfReadNumber: 31
   - fixedMessages:
     - {fileID: 11400000, guid: 3a1e0388d827644eda58603261ba65d7, type: 2}
     - {fileID: 11400000, guid: c0e34a8aa697147ab8999dc43dfdaaea, type: 2}
@@ -137,7 +137,17 @@ MonoBehaviour:
       alterData: {fileID: 11400000, guid: 201d207e78b99426f873f108c085ee07, type: 2}
     secretMessages:
     - secretLevel: 4
-      levelUpIfRead: 1
+      levelUpIfRead: 0
       data: {fileID: 11400000, guid: 65fd9ff94b81c4bb183779a06e35dd2d, type: 2}
       alterData: {fileID: 11400000, guid: 4015b421cd5d4499a9fe15c979c760aa, type: 2}
-      alterIfReadNumber: 41
+      alterIfReadNumber: 40
+    - secretLevel: 4
+      levelUpIfRead: 0
+      data: {fileID: 11400000, guid: 3ad25ba49d13e406fb26f85378216875, type: 2}
+      alterData: {fileID: 11400000, guid: 4cd6d3f02c03a4b1d943e1efd2c40956, type: 2}
+      alterIfReadNumber: 40
+    - secretLevel: 4
+      levelUpIfRead: 1
+      data: {fileID: 11400000, guid: 5970790f8782646a393a339f42c3f698, type: 2}
+      alterData: {fileID: 11400000, guid: 039946cfae6a44e81a67d9a9ae28e65b, type: 2}
+      alterIfReadNumber: 40
