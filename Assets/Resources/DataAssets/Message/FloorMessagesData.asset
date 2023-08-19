@@ -83,7 +83,7 @@ MonoBehaviour:
       levelUpIfRead: 0
       data: {fileID: 11400000, guid: 336822a57cb654d48be0e66f0981b688, type: 2}
       alterData: {fileID: 11400000, guid: fc9c41231716a43d1acdecff5f485802, type: 2}
-      alterIfReadNumber: 42
+      alterIfReadNumber: 40
     - secretLevel: 2
       levelUpIfRead: 0
       data: {fileID: 11400000, guid: 90323af21727c46f7ac4a345d46c2210, type: 2}
@@ -99,6 +99,16 @@ MonoBehaviour:
       data: {fileID: 11400000, guid: 38048bf7fc847489cba3f4e9b63fbcf8, type: 2}
       alterData: {fileID: 11400000, guid: 929657348137c49aa83e58073d6b3e85, type: 2}
       alterIfReadNumber: 23
+    - secretLevel: 5
+      levelUpIfRead: 0
+      data: {fileID: 11400000, guid: b27d2117c39ea41ff938b33f211501a9, type: 2}
+      alterData: {fileID: 11400000, guid: c8e918b37f2434cf5918bcd8c0385a58, type: 2}
+      alterIfReadNumber: 31
+    - secretLevel: 5
+      levelUpIfRead: 0
+      data: {fileID: 11400000, guid: af9a912832a5647c8903556a5a407201, type: 2}
+      alterData: {fileID: 11400000, guid: 5965911141e5e4e2787293b7fd5a4b0a, type: 2}
+      alterIfReadNumber: 24
   - fixedMessages:
     - {fileID: 11400000, guid: 2fd4ee5cdb6574e088dcc0ea3ce008aa, type: 2}
     randomMessages:
