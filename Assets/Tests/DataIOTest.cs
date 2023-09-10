@@ -150,8 +150,15 @@ public class DataIOTest
         Assert.AreEqual(ItemType.Null, loadData.inventoryItems[2].itemType);
         Assert.AreEqual(0, loadData.inventoryItems[4].numOfItem);
 
-        Assert.AreEqual(stairsBottom, map.stairsBottom);
+        Assert.AreEqual(stairsBottom, map.stairsBottom); // FIXME: Flaky test!
         Assert.AreEqual(stairsTop, map.stairsTop);
+
+        var saveFixed = mapData.fixedMessagePos.OrderBy(pos => pos.x).ToArray();
+        var loadFixed = map.messagePosData.fixedMessagePos.OrderBy(pos => pos.x).ToArray();
+        CollectionAssert.AreEqual(saveFixed, loadFixed);
+        var saveBlood = mapData.bloodMessagePos.OrderBy(pos => pos.x).ToArray();
+        var loadBlood = map.messagePosData.bloodMessagePos.OrderBy(pos => pos.x).ToArray();
+        CollectionAssert.AreEqual(saveBlood, loadBlood);
 
         Assert.AreEqual(1, loadData.playerData.counter.Defeat);
         Assert.AreEqual(3, loadData.playerData.counter.AttackPoint);

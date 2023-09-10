@@ -59,32 +59,15 @@ public class PitMessageMapData : DirMapData
             // Exclude exit door message and pit attention message.
             numOfFixedMessages -= 2;
 
-            // Assign exit door message to fixed message list.
-            var fixedMsgList = new List<MessageData>();
-            fixedMsgList.Add(fixedMessages[0]);
-
             fixedMessagePos.Add(data.exitDoorMessage);
 
             // numOfPits may be 4
-            int count = PlacePitWithAttention(pitCandidates, boardCandidates, numOfPits);
+            int pitCount = PlacePitWithAttention(pitCandidates, boardCandidates, numOfPits);
 
-            // Assign pit attentions to fixed message list.
-            for (int i = 0; i < count; ++i)
-            {
-                fixedMsgList.Add(fixedMessages[1]);
-            }
-
-            // Assign remaining fixed messages to fixed message list.
-            for (int i = 2; i < fixedMessages.Length; ++i)
-            {
-                fixedMsgList.Add(fixedMessages[i]);
-            }
-
-            // Apply fixed message list including exit door message and pit attentions to fixed messages array.
-            fixedMessages = fixedMsgList.ToArray();
+            CustomizeFloor1Messages(pitCount - 1);
 
             // Makes up for decrease of Pit Trap Attentions.
-            numOfFloorMessages = numOfFixedMessages + randomMessages.Length + (numOfPits - count);
+            numOfFloorMessages = numOfFixedMessages + randomMessages.Length + (numOfPits - pitCount);
         }
         else
         {
@@ -102,6 +85,9 @@ public class PitMessageMapData : DirMapData
         LoadMessages();
 
         fixedMessagePos = import.fixedMessagePos.ToList();
+
+        if (floor == 1) CustomizeFloor1Messages(fixedMessagePos.Count - fixedMessages.Length);
+
         bloodMessagePos = import.bloodMessagePos.ToList();
 
         for (int i = 0; i < import.randomMessagePos.Length; i++)
@@ -115,6 +101,16 @@ public class PitMessageMapData : DirMapData
             var posList = import.secretMessagePos[i];
             posList.pos.ForEach(pos => this.secretMessagePos[pos] = i);
         }
+    }
+
+    private void CustomizeFloor1Messages(int numOfDuplicatedPitMessages)
+    {
+        var fixedMsgList = fixedMessages.ToList();
+        for (int i = 0; i < numOfDuplicatedPitMessages; ++i)
+        {
+            fixedMsgList.Insert(1, fixedMessages[1]); // Clone and insert pit attention message
+        }
+        fixedMessages = fixedMsgList.ToArray();
     }
 
     // Custom map data with custom message board positions.
