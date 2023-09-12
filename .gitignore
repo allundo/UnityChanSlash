@@ -50,7 +50,6 @@ ExportedObj/
 *.opendb
 *.VC.db
 *.icloud
-/ProjectSettings/ProjectSettings.asset
 
 # Unity3D generated meta files
 *.pidb.meta
