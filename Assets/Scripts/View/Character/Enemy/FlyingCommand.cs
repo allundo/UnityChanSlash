@@ -229,7 +229,12 @@ public class FlyingDie : FlyingCommand
     public override IObservable<Unit> Execute()
     {
         Pit pit = map.OnTile as Pit;
-        if (pit != null && pit.IsOpen)
+
+        if (flyingAnim.icedFall.Bool)
+        {
+            // Don't move if dead by iced fall
+        }
+        else if (pit != null && pit.IsOpen)
         {
             playingTween = tweenMove.Move(map.DestVec3Pos - Vector3.up * TILE_UNIT, 1f, Ease.InQuad).Play();
         }
