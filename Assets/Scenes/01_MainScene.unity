@@ -9285,7 +9285,7 @@ MonoBehaviour:
   label: {fileID: 536590381}
   subStatus: []
   expandLabel: "\u5DE6\u624B:"
-  expandOffsetPos: {x: 100, y: 0}
+  expandOffsetPos: {x: 60, y: 0}
   expandRatio: 1.25
   labelExpandOffset: -20
 --- !u!43 &720063362
@@ -23171,7 +23171,7 @@ MonoBehaviour:
   label: {fileID: 254169229}
   subStatus: []
   expandLabel: "\u53F3\u624B:"
-  expandOffsetPos: {x: 60, y: 0}
+  expandOffsetPos: {x: 100, y: 0}
   expandRatio: 1.25
   labelExpandOffset: -20
 --- !u!1 &1969748205
