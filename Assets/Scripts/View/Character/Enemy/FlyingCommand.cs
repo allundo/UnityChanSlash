@@ -161,6 +161,11 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
 
     public override IObservable<Unit> Execute()
     {
+        Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
+        float height = dest.y - 1.25f;
+        Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
+        float dropSec = Mathf.Max(Mathf.Sqrt(height * 0.2041f), 0.25f);
+
         flyingAnim.speed.Float = 0f;
         flyingAnim.icedFall.Bool = true;
 
@@ -168,7 +173,7 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.JumpRelative(map.DestVec + new Vector3(0f, -1.25f, 0f), 0.5f, 0f).SetEase(Ease.Linear))
+            .Append(tweenMove.SimpleArc(horizontalVec, height, dropSec / duration))
             .AppendCallback(() =>
             {
                 Pit pit = map.OnTile as Pit;

@@ -229,6 +229,15 @@ public class TweenMove
             .Join(tf.DOBlendableMoveBy(new Vector3(0f, height - jump, 0f), timeRemaining).SetEase(Ease.InQuad));
     }
 
+    public Sequence SimpleArc(Vector3 horizontalVec, float height, float timeScale = 1f)
+    {
+        float time = duration * timeScale;
+
+        return DOTween.Sequence()
+            .Append(tf.DOBlendableMoveBy(horizontalVec, time).SetEase(Ease.Linear))
+            .Join(tf.DOBlendableMoveBy(new Vector3(0f, height, 0f), time).SetEase(Ease.InQuad));
+    }
+
     public Tween Teleport(Pos destPos)
     {
         map.MoveObjectOn(destPos);
