@@ -163,6 +163,11 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
 
     public override IObservable<Unit> Execute()
     {
+        Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
+        float height = dest.y;
+        Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
+        float dropSec = Mathf.Max(Mathf.Sqrt((height + 0.25f) * 0.2041f), 0.25f);
+
         rabbitAnim.speed.Float = 0f;
         rabbitAnim.icedFall.Bool = true;
 
@@ -170,7 +175,7 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.Jump(mobMap.DestVec3Pos + map.GetBackwardVector(0.2f), 1f, 0f).SetEase(Ease.Linear))
+            .Append(tweenMove.SimpleArc(horizontalVec + map.GetBackwardVector(0.2f), height, dropSec / duration))
             .AppendCallback(() => mobReact.Damage(5f, map.dir, AttackType.Smash))
             .SetUpdate(false)
             .Play();
