@@ -19,8 +19,8 @@ public class PitState : IOpenState
     public void Open() => Drop(false);
     public void Drop(bool isFXActive = true)
     {
+        dropped.OnNext(isFXActive && !isDropped);
         isDropped = true;
-        dropped.OnNext(isFXActive);
         dropped.OnCompleted();
     }
 }

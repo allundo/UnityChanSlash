@@ -406,33 +406,39 @@ public class PlayerPitJump : PlayerJump
 public class PlayerIcedFall : PlayerCommand, IIcedCommand
 {
     public override int priority => 20;
-    protected Tween meltTimer;
     public float framesToMelt { get; protected set; }
 
-    public PlayerIcedFall(PlayerCommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    public PlayerIcedFall(PlayerCommandTarget target, float framesToMelt) : base(target, 60f)
     {
         this.framesToMelt = framesToMelt;
-        meltTimer = DOVirtual.DelayedCall(Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT, () => mobReact.Melt(), false);
     }
 
     public override IObservable<Unit> Execute()
     {
+        Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
+        float height = dest.y;
+        Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
+        float moveTile = horizontalVec.magnitude / TILE_UNIT;
+
+        float additionalJump = Mathf.Max(0, moveTile - 1f);
+
+        float timeScale = Mathf.Max(Mathf.Sqrt(height * 0.2041f), 0.4f + additionalJump * 0.25f);
+        Tween meltTimer = DOVirtual.DelayedCall(Mathf.Min(framesToMelt, 60f * timeScale + 1f) * FRAME_UNIT, () => mobReact.Melt(), false);
+
         playerAnim.speed.Float = 0f;
         playerAnim.fall.Bool = true;
 
         playerTarget.inputVisible.OnNext(false);
 
-        Vector3 moveVec = mobMap.DestVec;
-
         var jumpSeq = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.JumpRelative(moveVec, 1f, 0f).SetEase(Ease.Linear))
-            .InsertCallback(0.95f * duration, hidePlateHandler.Move); // Update HidePlate on entering the destination Tile
+            .Append(tweenMove.Arc(horizontalVec, additionalJump, height, timeScale))
+            .InsertCallback(0.95f * timeScale, hidePlateHandler.Move); // Update HidePlate on entering the destination Tile
 
         // Update HidePlate on entering the leaped Tile
-        if (moveVec.sqrMagnitude / TILE_UNIT * TILE_UNIT > 1f)
+        if (moveTile > 1f)
         {
-            jumpSeq.InsertCallback(0.5f * duration, hidePlateHandler.Move);
+            jumpSeq.InsertCallback(0.5f * timeScale, hidePlateHandler.Move);
         }
 
         // If falling tile is an opened pit or closed pit with 3/4 probability, continue with pit fall command.
@@ -440,10 +446,12 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
         if (tile != null && (tile.IsOpen || Util.DiceRoll(3, 4)))
         {
             float pitFallFrames = 40f;
-            float remainingMeltTime = Mathf.Clamp(framesToMelt * FRAME_UNIT - duration, 0f, (pitFallFrames + 1) * FRAME_UNIT);
+            float remainingMeltTime = Mathf.Clamp(framesToMelt * FRAME_UNIT - timeScale, 0f, (pitFallFrames + 1) * FRAME_UNIT);
             target.interrupt.OnNext(Data(new PlayerIcedPitFall(playerTarget, tile.Damage, pitFallFrames, remainingMeltTime), false));
 
             if (remainingMeltTime == 0f) meltTimer.Play();
+
+            DOVirtual.DelayedCall(timeScale, tile.Drop, false).Play();
         }
         else
         {
@@ -455,7 +463,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
         playerReact.Iced(framesToMelt, false);
         playingTween = jumpSeq.SetUpdate(false).Play();
 
-        return ObservableComplete();
+        return ObservableComplete(timeScale);
     }
 }
 

@@ -86,7 +86,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     public ICommand EnqueueLanding(Vector3 moveVec) => ForceEnqueue(new PlayerLanding(playerTarget, 36f, moveVec));
     public ICommand InterruptIcedFall(float framesToMelt, bool isPitFall = false)
     {
-        ICommand cmd = Interrupt(new PlayerIcedFall(playerTarget, isPitFall ? framesToMelt + 30f : framesToMelt, 30f));
+        ICommand cmd = Interrupt(new PlayerIcedFall(playerTarget, isPitFall ? framesToMelt + 30f : framesToMelt));
         ForceEnqueue(wakeUp);
         return cmd;
     }

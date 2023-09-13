@@ -212,6 +212,23 @@ public class TweenMove
             .AppendInterval(stunDuration + wakeUpDuration);
     }
 
+    public Sequence Arc(Vector3 horizontalVec, float jump, float height, float timeScale = 1f)
+    {
+        float time = duration * timeScale;
+        float timeOneThird = time * 0.3333333333333f;
+        float timeRemaining = time - timeOneThird;
+
+        Vector3 horizontalOneThird = horizontalVec * 0.3333333333333f;
+        Vector3 horizontalRemaining = horizontalVec - horizontalOneThird;
+
+
+        return DOTween.Sequence()
+            .Append(tf.DOBlendableMoveBy(horizontalOneThird, timeOneThird).SetEase(Ease.Linear))
+            .Join(tf.DOBlendableMoveBy(new Vector3(0f, jump, 0f), timeOneThird).SetEase(Ease.Linear))
+            .Append(tf.DOBlendableMoveBy(horizontalRemaining, timeRemaining).SetEase(Ease.OutQuad))
+            .Join(tf.DOBlendableMoveBy(new Vector3(0f, height - jump, 0f), timeRemaining).SetEase(Ease.InQuad));
+    }
+
     public Tween Teleport(Pos destPos)
     {
         map.MoveObjectOn(destPos);
