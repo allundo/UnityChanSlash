@@ -42,7 +42,7 @@ MonoBehaviour:
     pitLid: {fileID: 2100000, guid: b70b67f919c334e618deaa0527d55e1b, type: 2}
     hidePlate: {fileID: 2100000, guid: 45aefc3cd68184c03af330a5b99e0d42, type: 2}
     plateFront: {fileID: 2100000, guid: 9f5d14b4dc00a49ef80c697a38726671, type: 2}
-    pointLightColor: {r: 1, g: 0.64699256, b: 0.514151, a: 0}
+    pointLightColor: {r: 0.62352943, g: 0.34509805, b: 0.23921569, a: 0}
   - name: "\u6C37"
     ground: {fileID: 2100000, guid: 38915b34fb784e641be19e619ced4763, type: 2}
     wall: {fileID: 2100000, guid: 0ae9263b538edb14e8dc1e9c3775d2a3, type: 2}
