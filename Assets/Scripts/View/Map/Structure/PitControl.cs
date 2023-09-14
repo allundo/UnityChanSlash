@@ -46,9 +46,11 @@ public class PitControl : MonoBehaviour
 
     public PitControl SetPitState(Pit pit)
     {
-        this.pitState = pit.state as PitState;
+        pitState = pit.state as PitState;
+        pitState.InitState();               // Initialize pit drop observer and dropped flag on moving back to the floor.
         return this;
     }
+
     public void OnTriggerEnter(Collider other)
     {
         var react = other.GetComponent<PlayerReactor>();
