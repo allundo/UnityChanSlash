@@ -312,7 +312,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Speed
-    m_EventTreshold: 1.5
+    m_EventTreshold: 2
   - m_ConditionMode: 1
     m_ConditionEvent: Fighting
     m_EventTreshold: 0
