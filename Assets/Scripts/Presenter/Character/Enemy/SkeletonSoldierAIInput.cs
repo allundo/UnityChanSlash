@@ -45,7 +45,7 @@ public class SkeletonSoldierAIInput : GoblinAIInput, IUndeadInput
         // Attack or Guard if fighting
         if (shieldAnim.fighting.Bool)
         {
-            if (currentCommand is EnemyIdle) return attack;
+            if (currentCommand == idle) return attack;
             return RandomChoice(attack, guard, guard, idle);
         }
 
