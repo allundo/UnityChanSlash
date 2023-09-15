@@ -116,6 +116,8 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             secretMessagePos = mesData.ExportSecretMessagePos();
 
             stairsData = map.stairsMapData.ExportValues;
+
+            customStructurePos = map.customStructurePos;
         }
 
         public int[] mapMatrix = null;
@@ -131,6 +133,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public PosList[] secretMessagePos = null;
         public Pos[] bloodMessagePos = null;
         public Pos[] stairsData = new Pos[3];
+        public Pos[] customStructurePos = null;
 
         public Pos upStairs { get => stairsData[0]; private set => stairsData[0] = value; }
         public Pos downStairs { get => stairsData[1]; private set => stairsData[1] = value; }

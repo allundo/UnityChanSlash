@@ -31,6 +31,9 @@ public class TileMapData : BaseMapData<ITile>
             case Terrain.Pillar:
                 return new Wall();
 
+            case Terrain.Furniture:
+                return new Furniture();
+
             case Terrain.MessageWall:
             case Terrain.MessagePillar:
             case Terrain.BloodMessageWall:

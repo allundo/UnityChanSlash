@@ -41,9 +41,16 @@ public class CustomMapData : IStairsData
 
     /// <summary>
     /// Blood message boards list with fixed place and direction. <br />
-    /// Load messages from FloorMessagesData.BloodMessages[] according to its Dictionary order.
+    /// Load messages from FloorMessagesSource.bloodMessages[] according to its Dictionary order.
     /// </summary>
     public Dictionary<Pos, IDirection> bloodMessagePos { get; private set; }
+
+    /// <summary>
+    /// Custom structures list with fixed place and direction. <br />
+    /// Load structures from FloorCustomStructure.prefabStructures[] according to its Dictionary order.
+    /// </summary>
+    public Dictionary<Pos, IDirection> customStructurePos { get; private set; }
+
 
     public static CustomMapData RetrieveData(PitMessageMapData data)
     {
@@ -58,13 +65,15 @@ public class CustomMapData : IStairsData
         Dictionary<Pos, IDirection> fixedItemPos = null,
         List<Pos> randomItemPos = null,
         Dictionary<Pos, IDirection> fixedMessagePos = null,
-        Dictionary<Pos, IDirection> bloodMessagePos = null
+        Dictionary<Pos, IDirection> bloodMessagePos = null,
+        Dictionary<Pos, IDirection> customStructurePos = null
     )
     {
         this.fixedItemPos = fixedItemPos ?? new Dictionary<Pos, IDirection>();
         this.randomItemPos = new HashSet<Pos>(randomItemPos ?? new List<Pos>());
         this.fixedMessagePos = fixedMessagePos ?? new Dictionary<Pos, IDirection>();
         this.bloodMessagePos = bloodMessagePos ?? new Dictionary<Pos, IDirection>();
+        this.customStructurePos = customStructurePos ?? new Dictionary<Pos, IDirection>();
 
         rawMapData = RawMapData.Convert(customMapData, width);
 

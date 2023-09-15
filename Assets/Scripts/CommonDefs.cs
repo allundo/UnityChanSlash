@@ -40,6 +40,7 @@ public enum Terrain
     Box = 9,
     DownStairs = 10,
     UpStairs = 11,
+    Furniture = 12,
     LockedDoor = 20,
     RoomCenter = 21,
     Pit = 22,

@@ -53,6 +53,7 @@ public class MapRenderer : MonoBehaviour
     private BoxesRenderer boxesRenderer;
     private MessageBoardsRenderer messageBoardsRenderer;
     private DoorDestructFXRenderer doorDestructFXRenderer;
+    private CustomStructureRenderer customStructureRenderer;
     private IObjectsRenderer[] renderers;
 
     void Awake()
@@ -65,8 +66,9 @@ public class MapRenderer : MonoBehaviour
         boxesRenderer = new BoxesRenderer(transform);
         messageBoardsRenderer = new MessageBoardsRenderer(transform);
         doorDestructFXRenderer = new DoorDestructFXRenderer(transform);
+        customStructureRenderer = new CustomStructureRenderer(transform);
 
-        renderers = new IObjectsRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer, doorDestructFXRenderer };
+        renderers = new IObjectsRenderer[] { doorsRenderer, stairsRenderer, pitTrapsRenderer, boxesRenderer, messageBoardsRenderer, doorDestructFXRenderer, customStructureRenderer };
     }
 
     ///  <summary>
@@ -141,6 +143,7 @@ public class MapRenderer : MonoBehaviour
                 switch (matrix[i, j])
                 {
                     case Terrain.Ground:
+                    case Terrain.Furniture:
                         break;
 
                     case Terrain.Pillar:
@@ -211,6 +214,9 @@ public class MapRenderer : MonoBehaviour
                 }
             }
         }
+
+        customStructureRenderer.SetCustomStructures(dirMap);
+
         return terrainMeshes;
     }
 

@@ -65,6 +65,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         => GetEquipmentOrDefault(itemIcon?.itemInfo);
 
     public FloorMaterialsData floorMaterialsData { get; private set; }
+    public FloorCustomStructureData floorCustomStructureData { get; private set; }
     public FloorMessagesData floorMessagesData { get; private set; }
 
     public FaceClipsSet faceClipsSet { get; private set; }
@@ -123,6 +124,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         equipmentData = Resources.Load<EquipmentData>("DataAssets/Item/EquipmentData");
 
         floorMaterialsData = Resources.Load<FloorMaterialsData>("DataAssets/Map/FloorMaterialsData");
+        floorCustomStructureData = Resources.Load<FloorCustomStructureData>("DataAssets/Map/FloorCustomStructureData");
         floorMessagesData = Resources.Load<FloorMessagesData>("DataAssets/Message/FloorMessagesData");
 
         faceClipsSet = Resources.Load<FaceClipsData>("DataAssets/Character/FaceClipsData").Param(0);

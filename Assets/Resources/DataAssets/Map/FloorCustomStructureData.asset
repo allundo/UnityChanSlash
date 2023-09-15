@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d84f626044d546babf1f4c107091676, type: 3}
+  m_Name: FloorCustomStructureData
+  m_EditorClassIdentifier: UnityChanSlash::FloorCustomStructureData
+  setParams:
+  - prefabStructures: []
+  - prefabStructures: []
+  - prefabStructures: []
+  - prefabStructures: []
+  - prefabStructures:
+    - {fileID: 9030736916581193674, guid: e8a8203d203a14abcad65a724e603adb, type: 3}
+    - {fileID: 8832226145083719618, guid: b771f94daa3e04a2093257644bc286da, type: 3}
+    - {fileID: 5138380098416708961, guid: 6d9802c5c97ba4a91aa4ed4a78b7dde6, type: 3}
+    - {fileID: 6567921803246574872, guid: cc56da9b589364420a9d38b8f33f299f, type: 3}
+    - {fileID: 1845294208320579625, guid: 6f7ab66bf5cdc44308b4b4775b05430b, type: 3}
+    - {fileID: 4788066242921417431, guid: e501fa58a59a44acf95a4f59ae3b0b58, type: 3}

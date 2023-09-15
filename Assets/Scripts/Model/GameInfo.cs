@@ -249,11 +249,11 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             2, 0, 2, 0, 2, 0, 2, 0, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2,
             2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,21, 1, 1, 2, 2, 2,
             2, 4, 2, 2, 2, 4, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2,
-            2, 1, 1, 1, 1,21, 1, 1, 1,21, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2,21, 1, 1, 1,21, 2, 2, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 1, 1, 1, 1,21, 1, 1, 1, 1, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2,21, 1, 1, 1,21, 1, 1, 1,21, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 1, 1, 1, 1,21, 1, 1, 1,21, 0, 0, 4, 1, 1, 1, 1, 1,12,12, 2,21, 1, 1, 1,21, 2, 2, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2, 1, 1,12, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 1, 1, 1, 1,21, 1, 1, 1, 1, 2, 0, 2, 1,12,12,12, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2, 1, 1,12, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2,21, 1, 1, 1,21, 1, 1, 1,21, 2, 0, 2,12, 1, 1, 1, 1, 1,12, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         };
 
@@ -297,7 +297,18 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(23, 8), Direction.south },
         };
 
-        return new CustomMapData(LastFloor, matrix, 29, fixedItemPos, randomItemPos, fixedMes, bloodMes);
+        var customStructure = new Dictionary<Pos, IDirection>()
+        {
+            { new Pos(15, 25), Direction.north }, // Dinning table
+            { new Pos(15, 26), Direction.north }, // Chair
+            { new Pos(15, 24), Direction.south }, // Stool
+            { new Pos(13, 27), Direction.north }, // Cabinet
+            { new Pos(19, 23), Direction.west  }, // Bed
+            { new Pos(19, 27), Direction.west  }, // Fountain
+        };
+
+
+        return new CustomMapData(LastFloor, matrix, 29, fixedItemPos, randomItemPos, fixedMes, bloodMes, customStructure);
     }
 
     public void ClearMaps()

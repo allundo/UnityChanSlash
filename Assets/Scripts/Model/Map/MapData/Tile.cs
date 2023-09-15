@@ -102,8 +102,8 @@ public class Ground : Tile, ITile
 public class Wall : Tile, ITile
 {
     public bool IsEnterable(IDirection dir = null) => false;
-    public bool IsLeapable => false;
-    public bool IsViewOpen => false;
+    public virtual bool IsLeapable => false;
+    public virtual bool IsViewOpen => false;
 
     public override IStatus OnCharacterDest { get { return null; } set { } }
     public override bool IsCharacterOn => false;
@@ -185,8 +185,9 @@ public class Box : HandleTile, IHandleTile
         return item;
     }
 
-    public override ItemInfo TopItem => null;
+    public override ItemInfo TopItem => null; // Top item is not visible in the closed Box.
 }
+
 public class Pit : OpenTile, IOpenable
 {
     protected PitState pitState;
@@ -200,7 +201,7 @@ public class Pit : OpenTile, IOpenable
 
     public override bool PutItem(Item item) => false;
     public override Item PickItem() => null;
-    public override ItemInfo TopItem => null; // Top item is not visible in the closed Box.
+    public override ItemInfo TopItem => null;
 }
 
 public class Stairs : Tile, ITile
@@ -217,4 +218,10 @@ public class Stairs : Tile, ITile
     public override Item PickItem() => null;
 
     public IDirection enterDir { protected get; set; }
+}
+
+public class Furniture : Wall
+{
+    public override bool IsLeapable => true;
+    public override bool IsViewOpen => true;
 }

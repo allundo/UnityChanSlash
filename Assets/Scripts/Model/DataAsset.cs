@@ -161,6 +161,12 @@ public class FloorMaterialsSource
 }
 
 [System.Serializable]
+public class FloorCustomStructure
+{
+    [SerializeField] public GameObject[] prefabStructures;
+}
+
+[System.Serializable]
 public class MessageSource
 {
     [SerializeField] public string name = "メッセージ";

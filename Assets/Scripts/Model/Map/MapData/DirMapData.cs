@@ -21,6 +21,7 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
     {
         rawMapData = data.rawMapData;
         dirMap = CreateDirMap(width, height);
+        data.customStructurePos.ForEach(kv => dirMap[kv.Key.x, kv.Key.y] = kv.Value.Enum);
     }
 
     // Create new map

@@ -189,6 +189,7 @@ public class MiniMapData : TileMapData
                 return Color.green;
 
             case Terrain.Box:
+            case Terrain.Furniture:
                 return Color.blue;
 
             default:
