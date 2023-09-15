@@ -21,19 +21,6 @@ public class DirMapHandler : DirMapData
     public int[] ConvertMapData() => ConvertToArray(matrix);
     public int[] ConvertDirData() => ConvertToArray(dirMap);
 
-    public void SetBloodMessageToNormal(Pos pos)
-    {
-        switch (matrix[pos.x, pos.y])
-        {
-            case Terrain.BloodMessageWall:
-                matrix[pos.x, pos.y] = Terrain.MessageWall;
-                break;
-            case Terrain.BloodMessagePillar:
-                matrix[pos.x, pos.y] = Terrain.MessagePillar;
-                break;
-        }
-    }
-
     public bool Unlock(Pos pos)
     {
         if (matrix[pos.x, pos.y] == Terrain.LockedDoor)
