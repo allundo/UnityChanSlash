@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public interface ITile
 {
@@ -222,6 +223,42 @@ public class Stairs : Tile, ITile
 
 public class Furniture : Wall
 {
+    public ActiveMessageData inspectMsg { get; protected set; }
+    public Furniture(ActiveMessageData data) => inspectMsg = data;
     public override bool IsLeapable => true;
     public override bool IsViewOpen => true;
+}
+
+public class Fountain : Wall
+{
+    private AudioSource sfx;
+    private ParticleSystem vfx;
+
+    public ActiveMessageData inspectMsg { get; protected set; }
+    public Fountain(ActiveMessageData data)
+    {
+        this.inspectMsg = data;
+
+        var source = ResourceLoader.Instance.itemData.Param((int)ItemType.Potion);
+        this.sfx = source.sfx;
+        this.vfx = source.vfx;
+    }
+
+    public void GetAction(PlayerCommandTarget target)
+    {
+        sfx.transform.position = vfx.transform.position = target.transform.position;
+
+        var react = target.react as PlayerReactor;
+        if (react.HealRatio(1f))
+        {
+            sfx.PlayEx();
+            vfx.PlayEx();
+        }
+        else
+        {
+            sfx.PlayEx();
+        }
+
+        ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("おいしい水！", SDFaceID.SMILE, SDEmotionID.WAIWAI));
+    }
 }

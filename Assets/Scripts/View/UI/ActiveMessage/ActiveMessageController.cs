@@ -90,7 +90,7 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
         }
         else if (tile is Furniture)
         {
-            InputMessageData("木製の家具がある。", SDFaceID.SURPRISE, SDEmotionID.QUESTION);
+            InputMessageData((tile as Furniture).inspectMsg);
         }
         else
         {

@@ -31,8 +31,20 @@ public class TileMapData : BaseMapData<ITile>
             case Terrain.Pillar:
                 return new Wall();
 
-            case Terrain.Furniture:
-                return new Furniture();
+            case Terrain.Table:
+                return new Furniture(new ActiveMessageData("これはダイニングテーブル・・・？", SDFaceID.DEFAULT, SDEmotionID.QUESTION));
+
+            case Terrain.Chair:
+                return new Furniture(new ActiveMessageData("テーブル越しに椅子が向かい合って置かれている。", SDFaceID.DEFAULT, SDEmotionID.QUESTION));
+
+            case Terrain.Cabinet:
+                return new Furniture(new ActiveMessageData("どうやら食器棚のようだ。", SDFaceID.SURPRISE, SDEmotionID.QUESTION));
+
+            case Terrain.Bed:
+                return new Furniture(new ActiveMessageData("ベッドが使用されている様子はない。", SDFaceID.DEFAULT, SDEmotionID.QUESTION));
+
+            case Terrain.Fountain:
+                return new Fountain(new ActiveMessageData("魔力を帯びた水が流れ出ている。", SDFaceID.SURPRISE, SDEmotionID.SURPRISE));
 
             case Terrain.MessageWall:
             case Terrain.MessagePillar:

@@ -143,7 +143,11 @@ public class MapRenderer : MonoBehaviour
                 switch (matrix[i, j])
                 {
                     case Terrain.Ground:
-                    case Terrain.Furniture:
+                    case Terrain.Table:
+                    case Terrain.Chair:
+                    case Terrain.Cabinet:
+                    case Terrain.Bed:
+                    case Terrain.Fountain:
                         break;
 
                     case Terrain.Pillar:
