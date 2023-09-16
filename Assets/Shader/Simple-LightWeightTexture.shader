@@ -3,6 +3,7 @@ Shader "Custom/Simple/LightWeightTexture"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _PointLightStrength("Point Light Strength", Range(0.0, 1.0)) = 0.8
     }
     SubShader
     {
@@ -94,6 +95,7 @@ Shader "Custom/Simple/LightWeightTexture"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float _PointLightStrength;
 
             v2f vert (appdata v)
             {
@@ -118,7 +120,7 @@ Shader "Custom/Simple/LightWeightTexture"
 
                 float diffuse = saturate(dot(i.normal, normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz)));
 
-                return diffuse * texColor * _LightColor0 * attenuation;
+                return diffuse * texColor * _LightColor0 * attenuation * _PointLightStrength;
             }
             ENDCG
         }
