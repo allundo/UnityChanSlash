@@ -100,6 +100,7 @@ public abstract class InputHandler : MonoBehaviour, IInput
     /// </summary>
     public ICommand ForceEnqueue(ICommand cmd)
     {
+        if (!IsIdling) currentCommand.CancelValidate();
         commander.EnqueueCommand(cmd);
         return cmd;
     }
