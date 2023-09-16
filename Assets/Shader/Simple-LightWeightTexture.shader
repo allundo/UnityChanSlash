@@ -32,7 +32,7 @@ Shader "Custom/Simple/LightWeightTexture"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                fixed4 diff : COLOR0;
+                float3 normal : TEXCOORD1;
             };
 
             sampler2D _MainTex;
@@ -46,19 +46,19 @@ Shader "Custom/Simple/LightWeightTexture"
 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
-                half3 normal = UnityObjectToWorldNormal(v.normal);
-
-                o.diff = saturate(dot(normal, _WorldSpaceLightPos0.xyz)) * _LightColor0;
-                o.diff.rgb += ShadeSH9(half4(normal, 1));
+                o.normal = UnityObjectToWorldNormal(v.normal);
 
                 return o;
             }
 
             float4 frag (v2f i) : SV_Target
             {
-                return i.diff * tex2D(_MainTex, i.uv);
-            }
+                fixed4 texColor = tex2D(_MainTex, i.uv);
 
+                float diffuse = saturate(dot(i.normal, _WorldSpaceLightPos0.xyz));
+
+                return diffuse * _LightColor0 * texColor;
+            }
             ENDCG
         }
         
@@ -116,11 +116,9 @@ Shader "Custom/Simple/LightWeightTexture"
                 
                 fixed4 texColor = tex2D(_MainTex, i.uv);
 
-                fixed4 diffuse = _LightColor0 * saturate(dot(i.normal, normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz)));
+                float diffuse = saturate(dot(i.normal, normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz)));
 
-                diffuse.rgb += ShadeSH9(half4(i.normal, 1));
-
-                return diffuse * texColor * attenuation;
+                return diffuse * texColor * _LightColor0 * attenuation;
             }
             ENDCG
         }
