@@ -88,6 +88,10 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
                 InputMessageData("落とし穴はっけん！", SDFaceID.ANGRY2, SDEmotionID.SURPRISE);
             }
         }
+        else if (tile is Furniture)
+        {
+            InputMessageData("木製の家具がある。", SDFaceID.SURPRISE, SDEmotionID.QUESTION);
+        }
         else
         {
             InputMessageData("なにもない");

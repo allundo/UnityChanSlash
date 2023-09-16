@@ -377,6 +377,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
         {
             inspectUI.SetActive(forwardTile as MessageWall, mobMap.dir, fightCircle.isActive);
         }
+        // Is face to Furniture
+        else if (forwardTile is Furniture)
+        {
+            inspectUI.SetActive(forwardTile as Furniture, mobMap.dir, fightCircle.isActive);
+        }
         else
         {
             inspectUI.Inactivate();
@@ -493,6 +498,10 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         inspectUI.OnInspectMessage
             .Subscribe(data => InputTrigger(IsMessage ? null : new PlayerInspectWall(playerTarget, data)))
+            .AddTo(this);
+
+        inspectUI.OnInspectStructure
+            .Subscribe(furniture => InputTrigger(IsMessage ? null : new PlayerInspectTile(playerTarget, furniture)))
             .AddTo(this);
     }
 
