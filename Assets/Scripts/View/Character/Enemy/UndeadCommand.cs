@@ -22,10 +22,10 @@ public class Resurrection : UndeadCommand
         this.startMoving = startMoving ?? new StartMoving(target);
     }
 
-    protected virtual bool IsEnterable => map.OnTile.IsEnterable();
     public override IObservable<Unit> Execute()
     {
-        if (!map.OnTile.IsCharacterOn)
+        ITile tile = map.OnTile;
+        if (!tile.IsCharacterOn && tile.IsEnterable())
         {
             undeadAnim.resurrection.Fire();
             undeadAnim.die.Bool = undeadAnim.sleep.Bool = false;
