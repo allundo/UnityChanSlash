@@ -1040,6 +1040,8 @@ public class PlayerDebugTeleport : PlayerAction
         var worldMap = GameManager.Instance.worldMap;
         var dest = worldMap.stairsTop.Key;
 
+        if (dest.IsNull) dest = new Pos(11, 23);
+
         if (map.onTilePos == dest) dest = worldMap.stairsBottom.Key;
 
         mobReact.OnFall();
