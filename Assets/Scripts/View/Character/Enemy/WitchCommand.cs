@@ -250,7 +250,7 @@ public class WitchDoubleAttackLaunch : FlyingAttack
 public class WitchSleep : UndeadSleep
 {
     public WitchSleep(CommandTarget target, float duration = 300f, ICommand resurrection = null)
-        : base(target, duration, resurrection ?? new Resurrection(target))
+        : base(target, duration, resurrection ?? new WitchResurrection(target))
     { }
 
     public override IObservable<Unit> Execute()
@@ -272,7 +272,7 @@ public class WitchSleep : UndeadSleep
 public class WitchQuickSleep : UndeadQuickSleep
 {
     public WitchQuickSleep(CommandTarget target, float duration = 15f, ICommand resurrection = null)
-        : base(target, duration, resurrection ?? new Resurrection(target))
+        : base(target, duration, resurrection ?? new WitchResurrection(target))
     { }
 
     public override IObservable<Unit> Execute()
@@ -287,3 +287,52 @@ public class WitchQuickSleep : UndeadQuickSleep
         return base.Execute(); // Don't validate input
     }
 }
+
+public class WitchResurrection : Resurrection
+{
+    protected ICommand teleport;
+
+    public WitchResurrection(CommandTarget target) : base(target)
+    {
+        teleport = new MagicianTeleport(target, 84f);
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        ITile tile = map.OnTile;
+        Pos destPos = enemyMap.SearchSpaceNearBy(PlayerInfo.Instance.Pos); // Check if teleport is valid.
+
+        bool isInsideClosedDoor = !tile.IsEnterable();
+
+        // Reserve resurrection again if player is on or teleport is invalid.
+        if (tile.IsCharacterOn || isInsideClosedDoor && destPos.IsNull)
+        {
+            target.interrupt.OnNext(Data(this));
+        }
+        else
+        {
+            undeadAnim.resurrection.Fire();
+            undeadAnim.die.Bool = undeadAnim.sleep.Bool = false;
+            undeadReact.OnResurrection();
+            map.SetObjectOn();
+            enemyMap.SetOnEnemy();
+
+            if (isInsideClosedDoor)
+            {
+                target.interrupt.OnNext(Data(teleport));
+            }
+            else if (map.DestVec.magnitude > 0f)
+            {
+                target.interrupt.OnNext(Data(startMoving));
+            }
+            else
+            {
+                // Validate input if no Command is reserved.
+                validateTween = ValidateTween().Play();
+            }
+        }
+
+        return ObservableComplete();
+    }
+}
+

@@ -16,7 +16,7 @@ public abstract class UndeadCommand : EnemyCommand
 
 public class Resurrection : UndeadCommand
 {
-    private ICommand startMoving;
+    protected ICommand startMoving;
     public Resurrection(CommandTarget target, float duration = 64, ICommand startMoving = null) : base(target, duration)
     {
         this.startMoving = startMoving ?? new StartMoving(target);
