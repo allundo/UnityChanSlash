@@ -62,6 +62,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected bool IsDash => currentCommand is PlayerDash;
     protected bool IsForward => currentCommand is PlayerForward;
     protected bool IsMessage => currentCommand is PlayerMessage;
+    protected bool IsInspect => currentCommand is PlayerInspectTile;
     protected bool isGuardOn => guardUI.IsPressed.Value;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
@@ -353,7 +354,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             itemHandler.Inactivate();
         }
 
-        bool isFaceToSpecialTile = !playerMap.IsInPit && IsIdling && !fightCircle.isActive && forwardTile is Pit;
+        bool isFaceToSpecialTile = !playerMap.IsInPit && (IsIdling || IsInspect) && !fightCircle.isActive && forwardTile is Pit;
         if (isFaceToSpecialTile)
         {
             handleIcon.isLocked = false;
