@@ -31,6 +31,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     [SerializeField] protected ItemHandler itemHandler = default;
     [SerializeField] protected InspectHandler inspectHandler = default;
     [SerializeField] protected BoxHandler boxHandler = default;
+    [SerializeField] protected StructureHandler structureHandler = default;
     [SerializeField] protected HandleIcon handleIcon = default;
 
     // Moving UIs: Normal type input
@@ -366,7 +367,18 @@ public class PlayerInput : ShieldInput, IPlayerInput
             inspectHandler.Inactivate();
         }
 
-        bool isHandleIconOn = isFaceToDoor || isFaceToBox || isFaceToItem || isFaceToSpecialTile || itemInventory.IsPutItem;
+        bool isFaceToStructureTile = !playerMap.IsInPit && !fightCircle.isActive && forwardTile is Fountain;
+        if (isFaceToStructureTile)
+        {
+            handleIcon.isLocked = false;
+            structureHandler.Activate(forwardTile as Fountain);
+        }
+        else
+        {
+            structureHandler.Inactivate();
+        }
+
+        bool isHandleIconOn = isFaceToDoor || isFaceToBox || isFaceToItem || isFaceToSpecialTile || isFaceToStructureTile || itemInventory.IsPutItem;
         if (!isHandleIconOn)
         {
             forwardUI.Resize(1f, 1f);
@@ -414,6 +426,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         doorHandler.Inactivate();
         boxHandler.Inactivate();
+        structureHandler.Inactivate();
         itemHandler.Inactivate();
         fightCircle.Inactivate(true);
 
@@ -461,7 +474,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
             .AddTo(this);
 
         PlayerAnimator anim = playerTarget.anim as PlayerAnimator;
-        Observable.Merge(doorHandler.ObserveHandOn, boxHandler.ObserveHandOn, itemHandler.ObserveHandOn, itemInventory.OnPutItem.Select(itemIcon => itemIcon != null))
+        Observable.Merge(doorHandler.ObserveHandOn, boxHandler.ObserveHandOn, structureHandler.ObserveHandOn, itemHandler.ObserveHandOn, itemInventory.OnPutItem.Select(itemIcon => itemIcon != null))
             .Subscribe(isHandOn => anim.handOn.Bool = isHandOn)
             .AddTo(this);
 
@@ -503,6 +516,14 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         inspectUI.OnInspectStructure
             .Subscribe(furniture => InputTrigger(IsMessage ? null : new PlayerInspectTile(playerTarget, furniture)))
+            .AddTo(this);
+
+        structureHandler.ObserveInspect
+            .Subscribe(furniture => InputTrigger(IsMessage ? null : new PlayerInspectTile(playerTarget, furniture)))
+            .AddTo(this);
+
+        structureHandler.ObserveGet
+            .Subscribe(furniture => InputTrigger(new PlayerStructureAction(playerTarget, furniture)))
             .AddTo(this);
     }
 

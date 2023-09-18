@@ -88,9 +88,9 @@ public class ActiveMessageController : SingletonMonoBehaviour<ActiveMessageContr
                 InputMessageData("落とし穴はっけん！", SDFaceID.ANGRY2, SDEmotionID.SURPRISE);
             }
         }
-        else if (tile is Furniture)
+        else if (tile is EXStructure)
         {
-            InputMessageData((tile as Furniture).inspectMsg);
+            InputMessageData((tile as EXStructure).inspectMsg);
         }
         else
         {

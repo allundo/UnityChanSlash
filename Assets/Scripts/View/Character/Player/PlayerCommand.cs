@@ -996,6 +996,22 @@ public class PlayerInspectTile : PlayerAction
     }
 }
 
+public class PlayerStructureAction : PlayerAction
+{
+    protected Fountain fountain;
+
+    public PlayerStructureAction(PlayerCommandTarget target, Fountain fountain) : base(target, 1f, 0.999f)
+    {
+        this.fountain = fountain;
+    }
+
+    protected override bool Action()
+    {
+        fountain.GetAction(playerTarget);
+        return true;
+    }
+}
+
 public class PlayerIcedCommand : IcedCommand
 {
     protected ISubject<bool> inputVisible;

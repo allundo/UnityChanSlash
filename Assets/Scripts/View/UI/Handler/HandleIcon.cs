@@ -165,7 +165,7 @@ public class HandleIcon : FadeEnable
 
     private Tween PlayTween(Tween tween)
     {
-        // Don't cancel Apply Tween
+        // Don't cancel Apply Tween by Hide Tween called at observing flick.IsRelease.
         if (prevTween == applyTween)
         {
             tween?.Kill();
