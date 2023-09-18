@@ -7,13 +7,32 @@ using UniRx;
 // Mainly used to forbid double firing on UI
 public class InputControl
 {
-    private bool isFired = false;
+    protected bool isFired = false;
     public bool CanFire()
     {
         if (isFired) return false;
         isFired = true;
         Observable.NextFrame().Subscribe(_ => isFired = false);
         return true;
+    }
+}
+
+public class DoubleInputControl : InputControl
+{
+    private bool prevIsPressed;
+    private GameObject prevButton;
+    public bool CanFire(GameObject button, bool isPressed)
+    {
+        if (!base.CanFire())
+        {
+            // Allow fire if one button is pressed and released at the same frame. 
+            return prevButton == button && prevIsPressed != isPressed;
+        }
+
+        prevButton = button;
+        prevIsPressed = isPressed;
+        return true;
+
     }
 }
 
