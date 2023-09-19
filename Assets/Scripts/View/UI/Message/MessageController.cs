@@ -14,6 +14,8 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     protected Tween activateTween = null;
 
+    protected bool isSkipValid = false;
+
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
@@ -25,7 +27,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!isActive) return;
+        if (!isActive || !isSkipValid) return;
 
         activateTween?.Complete(true);
 
@@ -40,14 +42,14 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
             DOTween.Sequence()
             .AppendCallback(() =>
             {
-                image.raycastTarget = false;
+                isSkipValid = false;
                 TimeManager.Instance.Pause();
             })
             .Join(FadeIn(0.5f))
             .Join(window.FadeIn(0.5f))
             .AppendCallback(() =>
             {
-                image.raycastTarget = true;
+                isSkipValid = true;
                 textHandler.InputMessageData(data);
                 activateTween = null;
             })
