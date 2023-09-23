@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistent: 0
   playerInput: {fileID: 0}
+  messageController: {fileID: 0}

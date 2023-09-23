@@ -32720,6 +32720,11 @@ PrefabInstance:
       propertyPath: playerInput
       value: 
       objectReference: {fileID: 3226490253342392729}
+    - target: {fileID: 5675949755229665814, guid: 2b3b2d4930e864ec69f02be760f887d6,
+        type: 3}
+      propertyPath: messageController
+      value: 
+      objectReference: {fileID: 8769699944174545870}
     - target: {fileID: 5675949755229665815, guid: 2b3b2d4930e864ec69f02be760f887d6,
         type: 3}
       propertyPath: m_RootOrder

@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,10 +17,21 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     protected bool isSkipValid = false;
 
+    public IObservable<Unit> OnActive => activeSubject;
+    protected ISubject<Unit> activeSubject = new Subject<Unit>();
+
+    public IObservable<bool> OnInactive => inactiveSubject;
+    protected ISubject<bool> inactiveSubject = new Subject<bool>();
+
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
         image = GetComponent<Image>();
+    }
+
+    void Start()
+    {
+
         Inactivate();
     }
 
@@ -38,13 +50,11 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
     {
         textHandler.EndOfSentence.Subscribe(_ => CloseMessage(isUIVisibleOnCompleted)).AddTo(this);
 
+        isSkipValid = false;
+        activeSubject.OnNext(Unit.Default);
+
         activateTween =
             DOTween.Sequence()
-            .AppendCallback(() =>
-            {
-                isSkipValid = false;
-                TimeManager.Instance.Pause();
-            })
             .Join(FadeIn(0.5f))
             .Join(window.FadeIn(0.5f))
             .AppendCallback(() =>
@@ -59,7 +69,7 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     private void CloseMessage(bool isUIVisibleOnCompleted = true)
     {
-        FadeOut(0.5f, null, () => TimeManager.Instance.Resume(isUIVisibleOnCompleted)).Play();
+        FadeOut(0.5f, null, () => inactiveSubject.OnNext(isUIVisibleOnCompleted)).Play();
         window.FadeOut(0.5f).Play();
     }
 }

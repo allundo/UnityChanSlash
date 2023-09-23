@@ -1,8 +1,11 @@
 using UnityEngine;
+using UniRx;
 
 public class TimeManager : SingletonMonoBehaviour<TimeManager>
 {
     [SerializeField] private PlayerInput playerInput = default;
+    [SerializeField] private MessageController messageController = default;
+
     public IPlayerInput input;
 
     public bool isPaused { get; private set; } = false;
@@ -25,6 +28,14 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     void Start()
     {
         elapsedTimeSecBuffer = 0f;
+
+        messageController.OnActive
+            .Subscribe(_ => Pause())
+            .AddTo(this);
+
+        messageController.OnInactive
+            .Subscribe(isShowUIs => Resume(isShowUIs))
+            .AddTo(this);
     }
 
     void Update()
