@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
@@ -132,5 +133,24 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
         animationCurveData = Resources.Load<AnimationCurveData>("DataAssets/System/AnimationCurveData");
 
         yenBagData = Resources.Load<YenBagData>("DataAssets/Result/YenBagData");
+    }
+
+    private readonly int[] diaryIDs = new int[]
+    {
+        40, 41, 42, 24, 25
+    };
+
+    public MessageData[] GetDiaries(int[] readMessageIDs)
+    {
+        var diaries = new MessageData[diaryIDs.Length];
+
+        for (int i = 0; i < diaries.Length; ++i)
+        {
+            int id = diaryIDs[i];
+
+            diaries[i] = readMessageIDs.Contains(id) ? floorMessagesData.GetDiary(id) : null;
+        }
+
+        return diaries;
     }
 }

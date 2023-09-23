@@ -48,4 +48,12 @@ public class FloorMessagesData : DataAsset<FloorMessagesSource>
         return data;
     }
 
+    public MessageData GetDiary(int messageID)
+    {
+        int floor = messageID / MAX_ELEMENTS;
+        int subID = messageID % MAX_ELEMENTS;
+
+        return new MessageData(setParams[floor].secretMessages[subID].data.Convert().Source[0]);
+    }
+
 }
