@@ -11644,7 +11644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {x: 0, y: 0, z: 0}
-  type: 1
+  type: 11
 --- !u!135 &1015295891
 SphereCollider:
   m_ObjectHideFlags: 0

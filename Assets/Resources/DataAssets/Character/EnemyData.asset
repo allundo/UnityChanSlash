@@ -264,3 +264,26 @@ MonoBehaviour:
     enemyCore: {x: 0, y: 0.75, z: 0}
     tamingProbability: 0
     gainType: 5
+  - name: "\u3055\u307E\u3088\u3046\u5F71"
+    defaultLifeMax: 500
+    attack: 25
+    prefab: {fileID: 3673501252045754372, guid: a82f545f8b76a494e80218502d353c2e,
+      type: 3}
+    isOnGround: 1
+    shield: 20
+    magic: 2
+    faceDamageMultiplier: 1
+    sideDamageMultiplier: 1.5
+    backDamageMultiplier: 2
+    restDamageMultiplier: 6
+    fireDamageMultiplier: 0.5
+    iceDamageMultiplier: 1
+    thunderDamageMultiplier: 1
+    lightDamageMultiplier: 1
+    darkDamageMultiplier: 1
+    armorMultiplier: 1
+    baseExp: 300
+    type: 11
+    enemyCore: {x: 0, y: 0.8, z: 0}
+    tamingProbability: 0
+    gainType: 5

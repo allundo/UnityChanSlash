@@ -166,6 +166,14 @@ public class TweenMove
         return seq.Join(jumpSeq).SetUpdate(false).Play();
     }
 
+    public Sequence SimpleLeap(Pos destPos, float jumpPower = 1f, float timeScaleTakeoff = 0.1f, float timeScaleLandRatio = 0.5f)
+    {
+        return DOTween.Sequence()
+            .AppendInterval(duration * timeScaleTakeoff)
+            .Append(Jump(destPos, 1f - timeScaleTakeoff - timeScaleLandRatio, jumpPower))
+            .AppendInterval(timeScaleLandRatio * duration);
+    }
+
     public Tween JumpRelative(Vector3 moveVec, float timeScale = 1f, float jumpPower = 1.0f)
         => tf.DOJump(moveVec, jumpPower, 1, duration * timeScale).SetRelative();
 

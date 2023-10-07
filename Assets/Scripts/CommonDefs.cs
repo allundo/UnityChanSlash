@@ -555,6 +555,7 @@ public enum EnemyType
     SkeletonSoldier,
     SkeletonWizard,
     Witch,
+    Anna,
 }
 
 public enum MagicType
