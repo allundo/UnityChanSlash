@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using DG.Tweening;
 
-public class MultiAttack : AttackBehaviour, IAttackHitDetect
+public class MultiAttack : AttackBehaviour, IMobAttack, IAttackHitDetect
 {
     [SerializeField] protected MobAttackFX[] attacks = default;
 
@@ -24,5 +24,10 @@ public class MultiAttack : AttackBehaviour, IAttackHitDetect
 
         attacks.ForEach(atk => attackSequence.Join(atk.AttackSequence(attackDuration)));
         return attackSequence.SetUpdate(false);
+    }
+
+    public void OnDie()
+    {
+        attacks.ForEach(atk => atk.OnDie());
     }
 }
