@@ -36,8 +36,8 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
     {
         die = new EnemyDie(target, 108f);
         idle = new EnemyIdle(target, 36f);
-        moveForward = new EnemyForward(target, 72f);
-        run = new EnemyForward(target, 36f);
+        moveForward = new AnnaForward(target, 72f);
+        run = new AnnaForward(target, 36f);
         leftMove = new AnnaLeftMove(target, 40f);
         rightMove = new AnnaRightMove(target, 40f);
         backStep = new AnnaBackStep(target, 40f);
@@ -46,7 +46,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         turnL = new ShieldEnemyTurnL(target, 16f);
         turnR = new ShieldEnemyTurnR(target, 16f);
         guard = new GuardCommand(target, 40f, 0.95f);
-        attack = new EnemyAttack(target, 36f);
+        attack = new EnemyAttack(target, 40f);
         fire = new EnemyFire(target, 36f, MagicType.FireBall);
 
         var slash = new AnnaSlash(target, 30f);
