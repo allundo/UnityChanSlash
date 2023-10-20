@@ -65,6 +65,7 @@ public class AnnaJumpSlash : AnnaSlash
         playingTween = DOTween.Sequence()
             .AppendInterval(duration * crouchingRatio)
             .Append(tweenMove.Jump(map.onTilePos, jumpRatio, 1f))
+            .AppendCallback(() => enemyMap.MoveOnEnemy())
             .Play();
 
         completeTween = DOTween.Sequence()
@@ -108,6 +109,7 @@ public class AnnaJumpLeapSlash : AnnaSlash
         playingTween = DOTween.Sequence()
             .AppendInterval(duration * crouchingRatio)
             .Append(tweenMove.Jump(map.onTilePos, jumpRatio, 1.5f))
+            .AppendCallback(() => enemyMap.MoveOnEnemy())
             .Play();
 
         completeTween = DOTween.Sequence()
