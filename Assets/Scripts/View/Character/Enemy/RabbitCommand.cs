@@ -173,6 +173,9 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
 
         mobReact.Iced(framesToMelt);
 
+        // Reset OnEnemy tile to destination
+        enemyMap.MoveOnEnemy(map.onTilePos);
+
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.SimpleArc(horizontalVec + map.GetBackwardVector(0.2f), height, dropSec / duration))

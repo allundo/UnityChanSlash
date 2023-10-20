@@ -171,6 +171,9 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
 
         mobReact.Iced(framesToMelt);
 
+        // Reset OnEnemy tile to destination
+        enemyMap.MoveOnEnemy(map.onTilePos);
+
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
             .Append(tweenMove.SimpleArc(horizontalVec, height, dropSec / duration))
