@@ -251,8 +251,8 @@ public class AnnaBackLeap : AnnaBackStep
         enemyMap.MoveObjectOn(destPos);
 
         playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.1f, 0.5f)
-            .InsertCallback(0.16f * duration, () => enemyMap.MoveOnEnemy())
-            .InsertCallback(0.4f * duration, () => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.3f * duration, () => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
 
@@ -280,8 +280,8 @@ public class AnnaJumpLeap : EnemyCommand
         enemyMap.MoveObjectOn(destPos);
 
         playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.1f, 0.5f)
-            .InsertCallback(0.16f * duration, () => enemyMap.MoveOnEnemy())
-            .InsertCallback(0.4f * duration, () => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.3f * duration, () => enemyMap.MoveOnEnemy())
+            .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
 
