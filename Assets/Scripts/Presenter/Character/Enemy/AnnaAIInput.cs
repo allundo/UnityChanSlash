@@ -134,8 +134,8 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
             }
         }
 
-        // Try jump with 75% if jumpable
-        if (isForwardLeapable && isForward2Movable && Util.DiceRoll(3, 4)) return jump;
+        // Try jump with 75% when faced to leapable structure
+        if (!isForwardMovable && isForwardLeapable && isForward2Movable && Util.DiceRoll(3, 4)) return jump;
 
         return choice.MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable) ?? idle;
     }
