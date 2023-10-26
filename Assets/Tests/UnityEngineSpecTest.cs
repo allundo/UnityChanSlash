@@ -22,6 +22,7 @@ public class UnityEngineSpecTest
     private GameObject prefabLock;
     private Canvas prefabCanvas;
     private TestDrag prefabDrag;
+    private AnimatorTest prefabAnna;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -962,5 +963,386 @@ public class UnityEngineSpecTest
 
         Object.Destroy(slime);
         Object.Destroy(mainCamera.gameObject);
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Transitions from 2DFreeformDirectional start immediately after transit condition is satisfied <br />
+    /// without control parameters become zero.
+    /// </summary>
+    public IEnumerator _021_CanTransitFrom2DFreeformWithParameterBool()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var annaAnim = Object.Instantiate(Resources.Load<AnimatorTest>("Prefabs/Character/Anna2DFreeFormTest"), new Vector3(0f, 0f, -5f), Quaternion.identity);
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.StartMoving(4f);
+
+        yield return new WaitForSeconds(1f);
+
+        // Current state is Move
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        // Set the transition flag.
+        annaAnim.EndMoving();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Duration is 0.05 so this transition will progress over half.
+        yield return new WaitForSeconds(0.03f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+
+        // Transition Duration is 0.05 so this transition will have finished.
+        yield return new WaitForSeconds(0.02f);
+
+        Assert.False(annaAnim.IsCurrentState("Move"));
+        Assert.True(annaAnim.IsCurrentState("Idle"));
+
+        annaAnim.StartMoving(4f);
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+
+        // Set the transition flag.
+        annaAnim.EndMoving();
+        annaAnim.attack.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Duration is 0.05 so this transition will progress over half.
+        yield return new WaitForSeconds(0.03f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+        Assert.False(annaAnim.IsCurrentState("Attack"));
+
+        // Transition Duration is 0.05 but the transition was switched to Attack.
+        yield return new WaitForSeconds(0.02f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+        Assert.False(annaAnim.IsCurrentState("Attack"));
+
+        // Transition Duration to Attack is 0.1 so this transition will have finished.
+        yield return new WaitForSeconds(0.05f);
+        Assert.False(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+        Assert.True(annaAnim.IsCurrentState("Attack"));
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(annaAnim.gameObject);
+        Object.Destroy(mainCamera);
+        yield return null;
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Transition with "Current State" interruption source switches back to transition to "Exit" state.
+    /// </summary>
+    public IEnumerator _022_InterruptionSourceCurrentStateSwitchesBackToTransitionToExitStateAgain()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var annaAnim = Object.Instantiate(Resources.Load<AnimatorTest>("Prefabs/Character/Anna2DFreeFormTest"), new Vector3(0f, 0f, -5f), Quaternion.identity);
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.StartMoving(4f);
+
+        yield return new WaitForSeconds(1f);
+
+        // Current state is Move
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        // Start "Next State" transition with interruption source "Current State".
+        annaAnim.EndMoving();
+        annaAnim.interruption.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Move -> Exit starts.
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
+
+        yield return null;
+
+        // The transition switched to Idle -> Interruption.
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Interruption"));
+
+        yield return null;
+
+        // The transition switched back to Move -> Exit. This behavior may be bug.
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
+
+        yield return null;
+
+        // Transition Duration is 0.05 so this transition should have finished but not.
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Interruption"));
+
+        // Still moving at the next frame.
+        yield return null;
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+
+        // Moving finishes at the 2nd frame.
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentState("Move"));
+        Assert.True(annaAnim.IsCurrentState("Idle"));
+        Assert.False(annaAnim.IsCurrentState("Interruption"));
+
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.next.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Start "Next State" transition NOT TO EXIT with interruption source "Current State".
+        annaAnim.interruption.Fire();
+
+        // Wait for the next-next frame. TriggerEx will be applied at the 2nd frame.
+        yield return null;
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentState("Interruption"));
+        Assert.True(annaAnim.IsCurrentState("Idle"));
+
+        // Transition Duration is 0.05 so this transition will have finished.
+        yield return new WaitForSeconds(0.05f);
+
+        Assert.True(annaAnim.IsCurrentState("Interruption"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.run.Bool = true;
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Run"));
+
+        annaAnim.run.Bool = false;
+        annaAnim.attack.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Run -> Exit starts.
+        Assert.True(annaAnim.IsCurrentTransition("Run", "Exit"));
+
+        yield return null;
+
+        // The transition switched to Idle -> Attack.
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Attack"));
+
+        yield return null;
+        yield return null;
+
+        // Transition Duration is 0.05 but the transition was switched to Attack.
+        Assert.True(annaAnim.IsCurrentState("Run"));
+        Assert.False(annaAnim.IsCurrentState("Attack"));
+
+        // Transition Duration to Attack is 0.1 so this transition will have finished.
+        yield return new WaitForSeconds(0.05f);
+
+        Assert.False(annaAnim.IsCurrentState("Run"));
+        Assert.True(annaAnim.IsCurrentState("Attack"));
+
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.run.Bool = true;
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Run"));
+
+        // Start "Next State" transition with interruption source "Current State".
+        annaAnim.run.Bool = false;
+        annaAnim.interruption.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Run -> Exit starts.
+        Assert.True(annaAnim.IsCurrentTransition("Run", "Exit"));
+
+        yield return null;
+
+        // The transition switched to Idle -> Interruption.
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Interruption"));
+
+        yield return null;
+
+        // The transition switched back to Run -> Exit. This behavior may be bug.
+        Assert.True(annaAnim.IsCurrentTransition("Run", "Exit"));
+
+        yield return null;
+
+        // Transition Duration is 0.05 so this transition should have finished but not.
+        Assert.True(annaAnim.IsCurrentState("Run"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+        Assert.False(annaAnim.IsCurrentState("Interruption"));
+
+        // Still running at the next frame.
+        yield return null;
+
+        Assert.True(annaAnim.IsCurrentState("Run"));
+        Assert.False(annaAnim.IsCurrentState("Idle"));
+        Assert.False(annaAnim.IsCurrentState("Interruption"));
+
+        // Running finishes at the 2nd frame.
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentState("Run"));
+        Assert.True(annaAnim.IsCurrentState("Idle"));
+        Assert.False(annaAnim.IsCurrentState("Interruption"));
+
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.run.Bool = true;
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Run"));
+
+        // Start "Next State" transition with interruption source "Current State".
+        annaAnim.run.Bool = false;
+        annaAnim.interruptionAny.Fire();
+
+        // Wait for the next-next frame. TriggerEx will be applied at the 2nd frame.
+        yield return null;
+        yield return null;
+
+        // Transition Duration is 0.05 but the transition was switched to InterruptionAny.
+        yield return new WaitForSeconds(0.05f);
+
+        Assert.True(annaAnim.IsCurrentState("Run"));
+        Assert.False(annaAnim.IsCurrentState("InterruptionAny"));
+
+        // Transition Duration to InterruptionAny is 0.1 so this transition will have finished.
+        yield return new WaitForSeconds(0.05f);
+
+        Assert.False(annaAnim.IsCurrentState("Run"));
+        Assert.True(annaAnim.IsCurrentState("InterruptionAny"));
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(annaAnim.gameObject);
+        Object.Destroy(mainCamera);
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Transition with "Next State" interruption source switches back to transition to "Exit" state.
+    /// </summary>
+    public IEnumerator _023_InterruptionSourceNextStateDoesNotSwitchBackToTransitionToExitState()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var annaAnim = Object.Instantiate(Resources.Load<AnimatorTest>("Prefabs/Character/Anna2DFreeFormTest"), new Vector3(0f, 0f, -5f), Quaternion.identity);
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.StartMoving(4f);
+
+        yield return new WaitForSeconds(1f);
+
+        // Current state is Move
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        // Start "Next State" transition with interruption source "Current State".
+        annaAnim.EndMoving();
+        annaAnim.next.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Move -> Exit starts.
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        annaAnim.attack.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // The transition switched to Idle -> Next.
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Next"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // The transition switched to Next -> Attack.
+        Assert.True(annaAnim.IsCurrentTransition("Next", "Attack"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return new WaitForSeconds(0.05f);
+
+        // Transition Duration to Attack is 0.05 so this transition will have finished.
+        Assert.True(annaAnim.IsCurrentState("Attack"));
+
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.StartMoving(4f);
+
+        yield return new WaitForSeconds(1f);
+
+        // Current state is Move
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        // Start "Next State" transition with interruption source "Current State".
+        annaAnim.EndMoving();
+        annaAnim.next.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // Transition Move -> Exit starts.
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        annaAnim.interruption.Fire();
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // The transition switched to Idle -> Next.
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Next"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        // Wait for the next frame. The animation change will be applied at the next frame.
+        yield return null;
+
+        // The transition switched to Next -> Interruption.
+        Assert.True(annaAnim.IsCurrentTransition("Next", "Interruption"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return null;
+
+        // The transition switched back to Move -> Exit. This behavior may be bug.
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
+
+        yield return new WaitForSeconds(0.05f);
+
+        // Transition Duration to Exit is 0.05 but still moving.
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return null;
+
+        // The transition finishes on next frame.
+        Assert.True(annaAnim.IsCurrentState("Idle"));
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(annaAnim.gameObject);
+        Object.Destroy(mainCamera);
     }
 }

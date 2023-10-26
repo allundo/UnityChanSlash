@@ -88,7 +88,7 @@ public class MobAnimator : MonoBehaviour
         }
     }
 
-    public class AnimatorTrigger : AnimatorParam
+    public class AnimatorTrigger : AnimatorBool
     {
         public AnimatorTrigger(Animator anim, string varName) : base(anim, varName) { }
 
@@ -101,6 +101,8 @@ public class MobAnimator : MonoBehaviour
         {
             anim.ResetTrigger(hashedVar);
         }
+
+        public bool IsSet => Bool;
     }
 
     public class AnimatorBool : AnimatorParam
