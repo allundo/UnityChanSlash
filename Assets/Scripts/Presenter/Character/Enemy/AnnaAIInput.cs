@@ -34,15 +34,16 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
 
     protected override void SetCommands()
     {
+        var annaTarget = target as AnnaCommandTarget;
         die = new EnemyDie(target, 108f);
         idle = new EnemyIdle(target, 36f);
-        moveForward = new AnnaForward(target, 72f);
-        run = new AnnaForward(target, 36f);
-        leftMove = new AnnaLeftMove(target, 40f);
-        rightMove = new AnnaRightMove(target, 40f);
-        backStep = new AnnaBackStep(target, 40f);
-        backLeap = new AnnaBackLeap(target, 75f, backStep);
-        jump = new AnnaJumpLeap(target, 75f);
+        moveForward = new AnnaForward(annaTarget, 72f);
+        run = new AnnaForward(annaTarget, 36f);
+        leftMove = new AnnaLeftMove(annaTarget, 40f);
+        rightMove = new AnnaRightMove(annaTarget, 40f);
+        backStep = new AnnaBackStep(annaTarget, 40f);
+        backLeap = new AnnaBackLeap(annaTarget, 75f, backStep);
+        jump = new AnnaJumpLeap(annaTarget, 75f);
         turnL = new ShieldEnemyTurnL(target, 16f);
         turnR = new ShieldEnemyTurnR(target, 16f);
         guard = new GuardCommand(target, 40f, 0.95f);

@@ -23,7 +23,7 @@ public class MobAnimator : MonoBehaviour
         die = new AnimatorBool(anim, "Die");
     }
 
-    public abstract class AnimatorParam
+    public class AnimatorParam
     {
         protected int hashedVar;
         protected string varName;

@@ -1,6 +1,182 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
+
+
+public abstract class AnnaSpeed : EnemyCommand
+{
+    protected AnnaAnimator annaAnim;
+    protected MobAnimator.AnimatorBool SpdCmd => annaAnim.speedCommand;
+    protected virtual MobAnimator.AnimatorFloat SpeedValue => annaAnim.speed;
+
+    public AnnaSpeed(AnnaCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    {
+        annaAnim = target.anim as AnnaAnimator;
+    }
+
+    protected virtual void StartMoving()
+    {
+        SpdCmd.Bool = true;
+        SpeedValue.Float = Speed;
+    }
+
+    protected virtual void EndMoving()
+    {
+        SpdCmd.Bool = false;
+        SpeedValue.Float = 0f;
+    }
+}
+
+public abstract class AnnaMove : AnnaSpeed
+{
+    protected AnnaCommandTarget spdTarget;
+    protected virtual Action<Tween> SetSpeed => spdTarget.SetSpeed;
+    protected abstract bool IsMovable { get; }
+    protected abstract Pos DestPos { get; }
+
+    public AnnaMove(AnnaCommandTarget target, float duration, float validateTiming = 0.95f) : base(target, duration, validateTiming)
+    {
+        spdTarget = target;
+    }
+
+    protected override void StartMoving()
+    {
+        SpdCmd.Bool = true;
+        SetSpeed(DOTween.To(() => SpeedValue.Float, value => SpeedValue.Float = value, Speed, 0.5f));
+    }
+
+    protected override void EndMoving()
+    {
+        SpdCmd.Bool = false;
+        SetSpeed(DOTween.To(() => SpeedValue.Float, value => SpeedValue.Float = value, 0f, 0.25f));
+    }
+
+    public override void Cancel()
+    {
+        SetSpeed(null);
+        SpeedValue.Float = 0f;
+        SpdCmd.Bool = false;
+        base.Cancel();
+    }
+
+    public override ICommand GetContinuation()
+    {
+        CancelValidate();
+        try
+        {
+            return new AnnaMoveContinue(spdTarget, Pause(playingTween), RemainingDuration, onCompleted);
+        }
+        catch (NullReferenceException ex)
+        {
+            Debug.Log($"target: {target}, playingTween: {playingTween}, speed: {spdTarget.speedTween}, onCompleted: {onCompleted}");
+            Debug.Log(ex.Message);
+            return null;
+        }
+    }
+
+    protected override bool Action()
+    {
+        if (!IsMovable) return false;
+
+        Pos pos = DestPos;
+
+        mobMap.MoveObjectOn(pos);
+        StartMoving();
+
+        playingTween = DOTween.Sequence()
+            .Join(tweenMove.Move(pos))
+            .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
+            .AppendCallback(EndMoving)
+            .Play();
+
+        return true;
+    }
+}
+
+public class AnnaMoveContinue : Command
+{
+    protected AnnaCommandTarget spdTarget;
+    protected AnnaAnimator annaAnim;
+    protected Tween speedTween;
+    protected Tween speedTweenLR;
+
+    public AnnaMoveContinue(AnnaCommandTarget target, Tween playing, float duration, List<Action> onCompleted = null)
+        : base(target, playing, null, duration, onCompleted)
+    {
+        spdTarget = target;
+        annaAnim = target.anim as AnnaAnimator;
+        speedTween = Pause(target.speedTween);
+        speedTweenLR = Pause(target.speedTweenLR);
+    }
+
+    protected override bool Action()
+    {
+        spdTarget.SetSpeed(speedTween);
+        spdTarget.SetSpeedLR(speedTweenLR);
+
+        if (duration == 0f) return false;
+
+        annaAnim.speedCommand.Bool = true;
+        playingTween?.Play();
+
+        return true;
+    }
+
+    public override ICommand GetContinuation()
+    {
+        CancelValidate();
+        return new AnnaMoveContinue(spdTarget, Pause(playingTween), RemainingDuration, onCompleted);
+    }
+
+    public override void Cancel()
+    {
+        spdTarget.SetSpeed(null);
+        spdTarget.SetSpeedLR(null);
+        annaAnim.speed.Float = annaAnim.speedLR.Float = 0f;
+        annaAnim.speedCommand.Bool = false;
+        base.Cancel();
+    }
+}
+
+public class AnnaForward : AnnaMove
+{
+    protected override Pos DestPos => map.GetForward;
+    protected override bool IsMovable => mobMap.IsMovable(DestPos);
+    protected override float Speed => TILE_UNIT / duration;
+    public AnnaForward(AnnaCommandTarget target, float duration) : base(target, duration) { }
+}
+
+public class AnnaBackward : AnnaMove
+{
+    protected override Pos DestPos => map.GetForward;
+    protected override bool IsMovable => mobMap.IsMovable(DestPos);
+    protected override float Speed => -TILE_UNIT / duration;
+    public AnnaBackward(AnnaCommandTarget target, float duration) : base(target, duration) { }
+}
+
+public abstract class AnnaSideMove : AnnaMove
+{
+    public AnnaSideMove(AnnaCommandTarget target, float duration) : base(target, duration) { }
+
+    protected override bool IsMovable => mobMap.IsMovable(DestPos);
+    protected override MobAnimator.AnimatorFloat SpeedValue => annaAnim.speedLR;
+    protected override Action<Tween> SetSpeed => spdTarget.SetSpeedLR;
+}
+
+public class AnnaLeftMove : AnnaSideMove
+{
+    protected override Pos DestPos => map.GetLeft;
+    protected override float Speed => -TILE_UNIT / duration;
+    public AnnaLeftMove(AnnaCommandTarget target, float duration) : base(target, duration) { }
+}
+
+public class AnnaRightMove : AnnaSideMove
+{
+    protected override Pos DestPos => map.GetRight;
+    protected override float Speed => TILE_UNIT / duration;
+    public AnnaRightMove(AnnaCommandTarget target, float duration) : base(target, duration) { }
+}
 
 public class AnnaSlash : EnemyCommand
 {
@@ -58,7 +234,7 @@ public class AnnaJumpSlash : AnnaSlash
         }
 
         annaAnim.slash.Fire();
-        annaAnim.jumpSlash.Bool = true;
+        annaAnim.jump.Bool = true;
 
         map.MoveObjectOn(destPos);
 
@@ -71,7 +247,7 @@ public class AnnaJumpSlash : AnnaSlash
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
             .Append(enemyAttack.AttackSequence(duration * slashRatio))
-            .AppendCallback(() => annaAnim.jumpSlash.Bool = false)
+            .AppendCallback(() => annaAnim.jump.Bool = false)
             .Play();
 
         return true;
@@ -102,7 +278,7 @@ public class AnnaJumpLeapSlash : AnnaSlash
         }
 
         annaAnim.slash.Fire();
-        annaAnim.jumpSlash.Bool = true;
+        annaAnim.jump.Bool = true;
 
         map.MoveObjectOn(destPos);
 
@@ -115,113 +291,59 @@ public class AnnaJumpLeapSlash : AnnaSlash
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
             .Append(enemyAttack.AttackSequence(duration * slashRatio))
-            .AppendCallback(() => annaAnim.jumpSlash.Bool = false)
+            .AppendCallback(() => annaAnim.jump.Bool = false)
             .Play();
 
         return true;
     }
 }
 
-public class AnnaForward : EnemyForward
-{
-    public AnnaForward(CommandTarget target, float duration) : base(target, duration) { }
-
-    protected override void ResetSpeed()
-    {
-        speedTween?.Kill();
-        resetTween = DOTween.To(() => enemyAnim.speed.Float, value => enemyAnim.speed.Float = value, 0f, 0.1f);
-        resetTweens.Add(resetTween);
-        resetTween.OnComplete(() => resetTweens.Remove(resetTween)).Play();
-    }
-}
-
-public abstract class AnnaSideWalk : EnemyMove
+public abstract class AnnaJump : EnemyCommand
 {
     protected AnnaAnimator annaAnim;
-    public AnnaSideWalk(CommandTarget target, float duration) : base(target, duration)
+    protected Action<Tween> setSpeed;
+
+    public AnnaJump(AnnaCommandTarget target, float duration) : base(target, duration)
     {
         annaAnim = target.anim as AnnaAnimator;
+        setSpeed = target.SetSpeed;
     }
 
-    protected override void SetSpeed()
+    protected void StartMoving()
     {
-        resetTween?.Kill();
-        resetTweens.Remove(resetTween);
-        speedTween = DOTween.To(() => annaAnim.speedLR.Float, value => annaAnim.speedLR.Float = value, Speed, 0.5f).Play();
+        setSpeed(null);
+        annaAnim.speed.Float = Speed;
+        annaAnim.speedCommand.Bool = true;
     }
 
-    protected override void ResetSpeed()
+    protected void EndMoving()
     {
-        speedTween?.Kill();
-        resetTween = DOTween.To(() => annaAnim.speedLR.Float, value => annaAnim.speedLR.Float = value, 0f, 0.1f);
-        resetTweens.Add(resetTween);
-        resetTween.OnComplete(() => resetTweens.Remove(resetTween)).Play();
-    }
-
-    public override ICommand GetContinuation()
-    {
-        CancelValidate();
-        try
-        {
-            return new EnemyMoveContinue(target, Pause(playingTween), Pause(speedTween), resetTween, RemainingDuration, onCompleted);
-        }
-        catch (NullReferenceException ex)
-        {
-            Debug.Log($"target: {target}, playingTween: {playingTween}, speed: {speedTween}, reset: {resetTween}, onCompleted: {onCompleted}");
-            Debug.Log(ex.Message);
-            return null;
-        }
+        annaAnim.speed.Float = 0f;
+        annaAnim.speedCommand.Bool = false;
     }
 }
 
-public class AnnaLeftMove : AnnaSideWalk
+public class AnnaBackStep : AnnaJump
 {
-    public AnnaLeftMove(CommandTarget target, float duration) : base(target, duration)
-    { }
+    protected override float Speed => -4.0f;
 
-    protected override bool IsMovable => mobMap.IsLeftMovable;
-    protected override Pos GetDest => mobMap.GetLeft;
-    protected override float Speed => -TILE_UNIT / duration;
-}
-
-public class AnnaRightMove : AnnaSideWalk
-{
-    public AnnaRightMove(CommandTarget target, float duration) : base(target, duration)
-    { }
-
-    protected override bool IsMovable => mobMap.IsRightMovable;
-    protected override Pos GetDest => mobMap.GetRight;
-    protected override float Speed => TILE_UNIT / duration;
-}
-
-public class AnnaBackStep : EnemyCommand
-{
-    protected AnnaAnimator annaAnim;
-    protected override float Speed => -TILE_UNIT / duration;
-
-    public AnnaBackStep(CommandTarget target, float duration) : base(target, duration)
-    {
-        annaAnim = target.anim as AnnaAnimator;
-    }
+    public AnnaBackStep(AnnaCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
         if (!enemyMap.IsBackwardMovable) return false;
 
-        annaAnim.speed.Float = Speed;
-
         Pos destPos = map.GetBackward;
 
         enemyMap.MoveObjectOn(destPos);
 
-        playingTween = tweenMove.SimpleLeap(destPos, 1f, 0.1f, 0.5f)
+        playingTween = tweenMove.SimpleLeap(destPos, 1f, 0.05f, 0.5f)
             .InsertCallback(0.4f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
 
-        completeTween = tweenMove
-            .FinallyCall(() => annaAnim.speed.Float = 0f)
-            .Play();
+        StartMoving();
+        completeTween = tweenMove.FinallyCall(EndMoving).Play();
 
         return true;
     }
@@ -230,9 +352,9 @@ public class AnnaBackStep : EnemyCommand
 public class AnnaBackLeap : AnnaBackStep
 {
     protected ICommand backStep;
-    protected override float Speed => -TILE_UNIT * 2f / duration;
+    protected override float Speed => -8.0f;
 
-    public AnnaBackLeap(CommandTarget target, float duration, ICommand backStep) : base(target, duration)
+    public AnnaBackLeap(AnnaCommandTarget target, float duration, ICommand backStep) : base(target, duration)
     {
         this.backStep = backStep;
     }
@@ -248,28 +370,25 @@ public class AnnaBackLeap : AnnaBackStep
             return false;
         }
 
-        annaAnim.jump.Fire();
-
         enemyMap.MoveObjectOn(destPos);
 
-        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.1f, 0.5f)
+        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.05f, 0.5f)
             .InsertCallback(0.3f * duration, () => enemyMap.MoveOnEnemy())
             .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
 
+        StartMoving();
+        completeTween = tweenMove.FinallyCall(EndMoving).Play();
+
         return true;
     }
 }
 
-public class AnnaJumpLeap : EnemyCommand
+public class AnnaJumpLeap : AnnaJump
 {
-    protected AnnaAnimator annaAnim;
-
-    public AnnaJumpLeap(CommandTarget target, float duration) : base(target, duration)
-    {
-        annaAnim = target.anim as AnnaAnimator;
-    }
+    protected override float Speed => 8.0f;
+    public AnnaJumpLeap(AnnaCommandTarget target, float duration) : base(target, duration) { }
 
     protected override bool Action()
     {
@@ -277,8 +396,6 @@ public class AnnaJumpLeap : EnemyCommand
 
         if (!mobMap.IsForwardLeapable || !mobMap.IsMovable(destPos)) return false;
 
-        annaAnim.jump.Fire();
-
         enemyMap.MoveObjectOn(destPos);
 
         playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.1f, 0.5f)
@@ -286,6 +403,9 @@ public class AnnaJumpLeap : EnemyCommand
             .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
+
+        StartMoving();
+        completeTween = tweenMove.FinallyCall(EndMoving).Play();
 
         return true;
     }
