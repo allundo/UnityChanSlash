@@ -81,17 +81,37 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         Pos left = mobMap.GetLeft;
         Pos right = mobMap.GetRight;
         Pos forward2 = mobMap.dir.GetForward(forward);
+        Pos backward = mobMap.GetBackward;
 
         bool isLeftMovable = mobMap.IsMovable(left);
         bool isRightMovable = mobMap.IsMovable(right);
         bool isForward2Movable = mobMap.IsMovable(forward2);
+        bool isBackwardMovable = mobMap.IsMovable(backward);
 
         // Attack | Slash | Guard | BackStep | BackLeap if fighting
         if (shieldAnim.fighting.Bool)
         {
             if (currentCommand == idle) return RandomChoice(attack, slash);
-            if (!isLeftMovable && !isRightMovable && isForward2Movable) return jump;
-            return RandomChoice(guard, idle, attack, backLeap);
+            if (currentCommand == turnL || currentCommand == turnR) return attack;
+
+            if (!isLeftMovable && !isRightMovable)
+            {
+                if (currentCommand == run) return attack;
+                if (isForward2Movable) return jump;
+                if (isBackwardMovable) return backLeap;
+            }
+            else if (!isForward2Movable && !isBackwardMovable)
+            {
+                if (isLeftMovable && isRightMovable) return RandomChoice(leftMove, rightMove);
+                return isLeftMovable ? leftMove : rightMove;
+            }
+            else if (Util.DiceRoll(1, 4))
+            {
+                if (isBackwardMovable) return backLeap;
+                if (isForward2Movable) return jump;
+            }
+
+            return RandomChoice(guard, idle, attack);
         }
 
         // Turn if player found at left, right or backward
@@ -105,18 +125,16 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         Pos right2 = mobMap.dir.GetRight(right);
         if (IsOnPlayer(right2)) return turnR;
 
-        Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
         Pos backward2 = mobMap.dir.GetBackward(backward);
         if (IsOnPlayer(backward2)) return RandomChoice(turnL, turnR);
 
         // Left or right move if player found at left-forward or right-forward
-        if (isLeftMovable && IsOnPlayer(mobMap.dir.GetForward(left))) return leftMove;
-        if (isRightMovable && IsOnPlayer(mobMap.dir.GetForward(right))) return rightMove;
+        if (currentCommand != rightMove && isLeftMovable && IsOnPlayer(mobMap.dir.GetForward(left))) return leftMove;
+        if (currentCommand != leftMove && isRightMovable && IsOnPlayer(mobMap.dir.GetForward(right))) return rightMove;
 
         bool isForwardMovable = mobMap.IsMovable(forward);
-        bool isBackwardMovable = mobMap.IsMovable(backward);
         bool isForwardLeapable = mobMap.IsLeapable(forward);
 
         if (IsPlayerFound())
