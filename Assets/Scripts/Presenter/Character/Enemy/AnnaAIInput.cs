@@ -41,9 +41,9 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         run = new AnnaForward(annaTarget, 36f);
         leftMove = new AnnaLeftMove(annaTarget, 40f);
         rightMove = new AnnaRightMove(annaTarget, 40f);
-        backStep = new AnnaBackStep(annaTarget, 40f);
-        backLeap = new AnnaBackLeap(annaTarget, 75f, backStep);
-        jump = new AnnaJumpLeap(annaTarget, 75f);
+        backStep = new AnnaBackStep(annaTarget, 35f);
+        backLeap = new AnnaBackLeap(annaTarget, 64f, backStep);
+        jump = new AnnaJumpLeap(annaTarget, 64f);
         turnL = new ShieldEnemyTurnL(target, 16f);
         turnR = new ShieldEnemyTurnR(target, 16f);
         guard = new GuardCommand(target, 40f, 0.95f);

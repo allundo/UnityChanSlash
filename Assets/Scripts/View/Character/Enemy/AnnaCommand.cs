@@ -313,13 +313,13 @@ public abstract class AnnaJump : EnemyCommand
     {
         setSpeed(null);
         annaAnim.speed.Float = Speed;
-        annaAnim.speedCommand.Bool = true;
+        annaAnim.jump.Bool = true;
     }
 
     protected void EndMoving()
     {
         annaAnim.speed.Float = 0f;
-        annaAnim.speedCommand.Bool = false;
+        annaAnim.jump.Bool = false;
     }
 }
 
@@ -337,7 +337,7 @@ public class AnnaBackStep : AnnaJump
 
         enemyMap.MoveObjectOn(destPos);
 
-        playingTween = tweenMove.SimpleLeap(destPos, 1f, 0.05f, 0.5f)
+        playingTween = tweenMove.SimpleLeap(destPos, 1f, 0.05f, 0.4f)
             .InsertCallback(0.4f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
             .Play();
@@ -372,7 +372,7 @@ public class AnnaBackLeap : AnnaBackStep
 
         enemyMap.MoveObjectOn(destPos);
 
-        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.05f, 0.5f)
+        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.05f, 0.4f)
             .InsertCallback(0.3f * duration, () => enemyMap.MoveOnEnemy())
             .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
@@ -398,7 +398,7 @@ public class AnnaJumpLeap : AnnaJump
 
         enemyMap.MoveObjectOn(destPos);
 
-        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.05f, 0.5f)
+        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.05f, 0.4f)
             .InsertCallback(0.3f * duration, () => enemyMap.MoveOnEnemy())
             .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)

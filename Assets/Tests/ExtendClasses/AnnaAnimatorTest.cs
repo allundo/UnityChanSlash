@@ -25,10 +25,34 @@ public class AnnaAnimatorTest : AnnaAnimator
         speedCommand.Bool = true;
         SetSpeed(DOTween.To(() => speed.Float, value => speed.Float = value, targetSpd, 0.5f));
     }
-
     public void EndMoving()
     {
         speedCommand.Bool = false;
         SetSpeed(DOTween.To(() => speed.Float, value => speed.Float = value, 0f, 0.25f));
+    }
+
+    public void StartMovingLR(float targetSpd)
+    {
+        speedCommand.Bool = true;
+        SetSpeed(DOTween.To(() => speedLR.Float, value => speedLR.Float = value, targetSpd, 0.5f));
+    }
+
+    public void EndMovingLR()
+    {
+        speedCommand.Bool = false;
+        SetSpeed(DOTween.To(() => speedLR.Float, value => speedLR.Float = value, 0f, 0.25f));
+    }
+
+    public void StartJump(float targetSpd = 8f)
+    {
+        SetSpeed(null);
+        speed.Float = targetSpd;
+        jump.Bool = true;
+    }
+
+    public void EndJump()
+    {
+        jump.Bool = false;
+        speed.Float = 0f;
     }
 }
