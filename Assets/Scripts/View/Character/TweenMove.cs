@@ -166,7 +166,7 @@ public class TweenMove
         return seq.Join(jumpSeq).SetUpdate(false).Play();
     }
 
-    public Sequence SimpleLeap(Pos destPos, float jumpPower = 1f, float timeScaleTakeoff = 0.1f, float timeScaleLandRatio = 0.5f)
+    public Sequence SimpleLeap(Pos destPos, float jumpPower = 1f, float timeScaleTakeoff = 0.05f, float timeScaleLandRatio = 0.5f)
     {
         return DOTween.Sequence()
             .AppendInterval(duration * timeScaleTakeoff)

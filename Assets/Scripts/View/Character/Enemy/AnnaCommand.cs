@@ -398,7 +398,7 @@ public class AnnaJumpLeap : AnnaJump
 
         enemyMap.MoveObjectOn(destPos);
 
-        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.1f, 0.5f)
+        playingTween = tweenMove.SimpleLeap(destPos, 1.5f, 0.05f, 0.5f)
             .InsertCallback(0.3f * duration, () => enemyMap.MoveOnEnemy())
             .InsertCallback(0.5f * duration, () => enemyMap.MoveOnEnemy())
             .SetUpdate(false)
