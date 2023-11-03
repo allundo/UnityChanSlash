@@ -63,7 +63,12 @@ public abstract class HandleState : IHandleState
         switch (State.Value)
         {
             case StateEnum.CLOSE:
-                return IsLocked ? StateEnum.CLOSE : StateEnum.OPENING;
+                if (IsLocked)
+                {
+                    ActiveMessageController.Instance.InputMessageData("鍵がかかっている…");
+                    return StateEnum.CLOSE;
+                }
+                return StateEnum.OPENING;
 
             case StateEnum.OPEN:
                 return StateEnum.CLOSING;
