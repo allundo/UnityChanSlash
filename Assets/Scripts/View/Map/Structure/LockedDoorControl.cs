@@ -44,19 +44,19 @@ public class LockedDoorControl : DoorControl
 
     protected override void ForceOpen()
     {
-        lockControl.ForceBreak();
+        lockControl.ForceDelete();
         base.ForceOpen();
     }
 
     protected override void ForceUnlock()
     {
-        lockControl.ForceBreak();
+        lockControl.ForceDelete();
         handleState.TransitToNextState();
     }
 
     protected override void ForceBreak()
     {
-        lockControl.ForceBreak();
+        lockControl.ForceDelete();
         base.ForceBreak();
     }
 }
