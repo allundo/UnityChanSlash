@@ -123,36 +123,47 @@ public abstract class PlayerHasItemEvent : PlayerDetectEvent
 
 public abstract class SimpleEnemyGenerateEvent : PlayerDetectEvent
 {
-    protected Pos pos;
+    protected Pos detectTilePos;
+    protected EnemyType type;
+    protected Pos spawnTilePos;
+    protected EnemyStatus.ActivateOption option;
+    protected EnemyStoreData data;
 
-    public SimpleEnemyGenerateEvent(PlayerInput input, Pos pos, bool isOneShot = false) : base(input, isOneShot)
+    public SimpleEnemyGenerateEvent(PlayerInput input, Pos detectTilePos, EnemyType type, Pos spawnTilePos, int level, bool isOneShot = false) : base(input, isOneShot)
     {
-        this.pos = pos;
+        this.detectTilePos = detectTilePos;
+        this.type = type;
+        this.spawnTilePos = spawnTilePos;
+        this.option = new EnemyStatus.ActivateOption();
+        this.data = new EnemyStoreData(level - 1);
     }
 
-    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(pos);
-    protected IObservable<Unit> SpawnEnemy(EnemyType type, Pos pos, EnemyStoreData data = null)
+    protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(detectTilePos);
+    protected override IObservable<Unit> EventFunc()
     {
-        SpawnHandler.Instance.PlaceEnemy(type, pos, Direction.north, new EnemyStatus.ActivateOption(), data);
+        SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.north, option, data);
         return Observable.NextFrame();
     }
 }
 
 public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
 {
-    public AnnaGenerateEvent(PlayerInput input, Pos pos) : base(input, pos, true) { }
+    public AnnaGenerateEvent(PlayerInput input, Pos detectTilePos)
+        : base(input, detectTilePos, EnemyType.Anna, new Pos(13, 23), 20, true) { }
 
     protected override bool IsEventValid(WorldMap map) => true;
 
     protected override IObservable<Unit> EventFunc()
     {
-        return SpawnEnemy(EnemyType.Anna, new Pos(13, 23), new EnemyStoreData(19));
+        var status = SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.east, option, data);
+        return Observable.NextFrame();
     }
 }
 
 public class SkeletonWizardGenerateEvent : SimpleEnemyGenerateEvent
 {
-    public SkeletonWizardGenerateEvent(PlayerInput input, Pos pos) : base(input, pos) { }
+    public SkeletonWizardGenerateEvent(PlayerInput input, Pos detectTilePos)
+        : base(input, detectTilePos, EnemyType.SkeletonWizard, new Pos(3, 17), 4) { }
 
     protected override bool IsEventValid(WorldMap map)
     {
@@ -160,13 +171,12 @@ public class SkeletonWizardGenerateEvent : SimpleEnemyGenerateEvent
         bool isSkeletonOff = !map.GetTile(3, 17).IsEnemyOn;
         return isDoorClose && isSkeletonOff;
     }
-
-    protected override IObservable<Unit> EventFunc() => SpawnEnemy(EnemyType.SkeletonWizard, new Pos(3, 17), new EnemyStoreData(3));
 }
 
 public class RedSlimeGenerateEvent : SimpleEnemyGenerateEvent
 {
-    public RedSlimeGenerateEvent(PlayerInput input, Pos pos) : base(input, pos) { }
+    public RedSlimeGenerateEvent(PlayerInput input, Pos detectTilePos)
+        : base(input, detectTilePos, EnemyType.RedSlime, new Pos(7, 17), 20) { }
 
     protected override bool IsEventValid(WorldMap map)
     {
@@ -174,8 +184,6 @@ public class RedSlimeGenerateEvent : SimpleEnemyGenerateEvent
         bool isEnemyOff = !map.GetTile(7, 17).IsEnemyOn;
         return isDoorClose && isEnemyOff;
     }
-
-    protected override IObservable<Unit> EventFunc() => SpawnEnemy(EnemyType.RedSlime, new Pos(7, 17), new EnemyStoreData(20));
 }
 
 public class SkeletonsGenerateEvent : PlayerHasItemEvent
