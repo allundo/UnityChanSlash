@@ -100,15 +100,19 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
                 if (isForward2Movable) return jump;
                 if (isBackwardMovable) return backLeap;
             }
-            else if (!isForward2Movable && !isBackwardMovable)
-            {
-                if (isLeftMovable && isRightMovable) return RandomChoice(leftMove, rightMove);
-                return isLeftMovable ? leftMove : rightMove;
-            }
+            // Try escape from fighting with 25%
             else if (Util.DiceRoll(1, 4))
             {
-                if (isBackwardMovable) return backLeap;
-                if (isForward2Movable) return jump;
+                if (!isForward2Movable && !isBackwardMovable)
+                {
+                    if (isLeftMovable && isRightMovable) return RandomChoice(leftMove, rightMove);
+                    return isLeftMovable ? leftMove : rightMove;
+                }
+                else
+                {
+                    if (isForward2Movable && isBackwardMovable) return RandomChoice(jump, backStep);
+                    return isForward2Movable ? jump : backStep;
+                }
             }
 
             return RandomChoice(guard, idle, attack);
