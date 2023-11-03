@@ -147,7 +147,10 @@ public class MapRenderer : MonoBehaviour
                     case Terrain.Chair:
                     case Terrain.Cabinet:
                     case Terrain.Bed:
+                        break;
+
                     case Terrain.Fountain:
+                        customStructureRenderer.SetFountain(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
                     case Terrain.Pillar:

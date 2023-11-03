@@ -120,6 +120,7 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
             case Terrain.BloodMessageWall:
             case Terrain.ExitDoor:
             case Terrain.Box:
+            case Terrain.Fountain:
                 return rawMapData.GetValidDir(x, y);
 
             case Terrain.UpStairs:

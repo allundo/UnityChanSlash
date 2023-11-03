@@ -28,10 +28,13 @@ public abstract class ObjectsRenderer<T> : IObjectsRenderer
 
     protected virtual TControl PlacePrefab<TControl>(Pos pos, TControl prefab, IDirection dir = null) where TControl : T
     {
-        var instance = Util.Instantiate(prefab, map.WorldPos(pos), dir != null ? dir.Rotate : Quaternion.identity, parentTransform);
+        var instance = Instantiate(prefab, pos, dir);
         objectsPool.Push(instance);
         return instance;
     }
+
+    protected TPref Instantiate<TPref>(TPref prefab, Pos pos, IDirection dir = null) where TPref : UnityEngine.Object
+        => Util.Instantiate(prefab, map.WorldPos(pos), dir != null ? dir.Rotate : Quaternion.identity, parentTransform);
 
     public virtual void DestroyObjects()
     {

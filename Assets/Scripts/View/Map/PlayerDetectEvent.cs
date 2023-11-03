@@ -155,7 +155,18 @@ public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
 
     protected override IObservable<Unit> EventFunc()
     {
+        var map = GameManager.Instance.worldMap;
         var status = SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.east, option, data);
+
+        IEventHandleState eventHandler = (map.GetTile(19, 27) as IEventTile).eventHandler;
+
+        eventHandler.EventOn();
+
+        status.Life.Where(life => life == 0f)
+            .First()
+            .Subscribe(_ => eventHandler.EventOff())
+            .AddTo(status.gameObject);
+
         return Observable.NextFrame();
     }
 }

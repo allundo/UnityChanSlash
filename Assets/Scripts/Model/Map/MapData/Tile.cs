@@ -223,8 +223,9 @@ public class Stairs : Tile, ITile
 
 public class EXStructure : Wall
 {
-    public ActiveMessageData inspectMsg { get; protected set; }
-    public EXStructure(ActiveMessageData data) => inspectMsg = data;
+    public virtual ActiveMessageData inspectMsg => msgData;
+    protected ActiveMessageData msgData;
+    public EXStructure(ActiveMessageData data) => msgData = data;
 
     public override bool IsViewOpen => true;
 }
@@ -235,28 +236,60 @@ public class Furniture : EXStructure
     public override bool IsLeapable => true;
 }
 
-public class Fountain : EXStructure
+public interface IEventTile
+{
+    IEventHandleState eventState { get; }
+}
+
+public class Fountain : EXStructure, IEventTile
 {
     private AudioSource sfx;
+    private AudioSource sfxCurse;
     private ParticleSystem vfx;
+    protected ActiveMessageData inspectCurse;
+    protected ActiveMessageData drink;
+    protected ActiveMessageData drinkCurse;
 
-    public Fountain(ActiveMessageData data) : base(data)
+    public FountainState state { get; protected set; }
+    public IEventHandleState eventState => state;
+
+    public bool isEventOn => state.isEventOn;
+
+    public Fountain(ActiveMessageData inspect, ActiveMessageData inspectCurse) : base(inspect)
     {
+        this.inspectCurse = inspectCurse;
+        drink = new ActiveMessageData("おいしい水！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
+        drinkCurse = new ActiveMessageData("まずい！", SDFaceID.SAD2, SDEmotionID.CONFUSE);
+        state = new FountainState();
+
         var source = ResourceLoader.Instance.itemData.Param((int)ItemType.Potion);
         this.sfx = Object.Instantiate(source.sfx);
+        this.sfxCurse = Object.Instantiate(ResourceLoader.Instance.LoadSnd(SNDType.Poison));
         this.vfx = Object.Instantiate(source.vfx);
     }
 
+    public override ActiveMessageData inspectMsg
+        => isEventOn ? inspectCurse : msgData;
+
     public void GetAction(PlayerCommandTarget target)
     {
-        sfx.transform.position = vfx.transform.position = target.transform.position;
-
-        (target.react as PlayerReactor).HealRatio(1f);
         (target.anim as PlayerAnimator).getItem.Fire();
 
-        vfx.PlayEx();
-        sfx.PlayEx();
+        if (isEventOn)
+        {
+            sfxCurse.transform.position = vfx.transform.position = target.transform.position;
+            (target.react as PlayerReactor).PoisonRatio(0.1f, AttackAttr.Dark);
+            sfxCurse.PlayEx();
+            ActiveMessageController.Instance.InputMessageData(drinkCurse);
+        }
+        else
+        {
+            sfx.transform.position = vfx.transform.position = target.transform.position;
+            (target.react as PlayerReactor).HealRatio(1f);
 
-        ActiveMessageController.Instance.InputMessageData(new ActiveMessageData("おいしい水！", SDFaceID.SMILE, SDEmotionID.WAIWAI));
+            sfx.PlayEx();
+            vfx.PlayEx();
+            ActiveMessageController.Instance.InputMessageData(drink);
+        }
     }
 }

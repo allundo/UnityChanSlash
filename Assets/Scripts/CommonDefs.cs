@@ -599,6 +599,7 @@ public enum SNDType
     DropStart,
     DropToGround,
     HitLaser,
+    Poison,
 }
 
 public enum BGMType

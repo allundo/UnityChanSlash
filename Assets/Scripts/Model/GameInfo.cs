@@ -309,7 +309,6 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(15, 24), Direction.south }, // Stool
             { new Pos(13, 27), Direction.north }, // Cabinet
             { new Pos(19, 23), Direction.west  }, // Bed
-            { new Pos(19, 27), Direction.west  }, // Fountain
         };
 
 

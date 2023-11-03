@@ -108,6 +108,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.DropStart,            Resources.Load<AudioSource>("Prefabs/Sound/SND_TITLE_DROP_START")   },
             { SNDType.DropToGround,         Resources.Load<AudioSource>("Prefabs/Sound/SND_DROP_GROUND")        },
             { SNDType.HitLaser,             Resources.Load<AudioSource>("Prefabs/Sound/SND_HIT_LASER")          },
+            { SNDType.Poison,               Resources.Load<AudioSource>("Prefabs/Sound/SND_POISON_DAMAGE")      },
         };
 
         enemyLevelGainData = Resources.Load<LevelGainData>("DataAssets/Character/EnemyLevelGainData");
