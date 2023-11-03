@@ -45,11 +45,11 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
         switch (state)
         {
             case HandleState.StateEnum.OPENING:
-                movingControl = OpenTween.Play();
+                Open();
                 break;
 
             case HandleState.StateEnum.CLOSING:
-                movingControl = CloseTween.Play();
+                Close();
                 break;
 
             case HandleState.StateEnum.FORCE_OPEN:
@@ -67,10 +67,20 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
         }
     }
 
-    private Tween OpenTween => GetDoorHandle(true);
-    private Tween CloseTween => GetDoorHandle(false);
+    protected abstract Tween GetHandleTween(bool isOpen);
 
-    protected abstract Tween GetDoorHandle(bool isOpen);
+    protected virtual void Open()
+    {
+        movingControl?.Complete(true);
+        movingControl = GetHandleTween(true)?.Play();
+    }
+
+    protected virtual void Close()
+    {
+        movingControl?.Complete(true);
+        movingControl = GetHandleTween(false)?.Play();
+    }
+
     protected abstract void ForceOpen();
     protected virtual void ForceUnlock() { }
     protected virtual void ForceBreak() { }

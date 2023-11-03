@@ -5,7 +5,7 @@ public class BoxControl : HandleStructure
 {
     [SerializeField] private Transform lidTf = default;
 
-    protected override Tween GetDoorHandle(bool isOpen)
+    protected override Tween GetHandleTween(bool isOpen)
     {
         return DOTween.Sequence()
                 .AppendCallback(() => GameManager.Instance.PlaySnd(isOpen ? SNDType.BoxOpen : SNDType.BoxClose, transform.position))

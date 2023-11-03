@@ -71,7 +71,7 @@ public class DoorControl : HandleStructure
     protected virtual Vector3 VecL => new Vector3(0, 0, -0.75f);
     protected virtual Vector3 VecR => new Vector3(0, 0, 0.75f);
 
-    protected override Tween GetDoorHandle(bool isOpen)
+    protected override Tween GetHandleTween(bool isOpen)
     {
         Tween moveL = doorL.DOMove(isOpen ? VecL : -VecL, 0.8f)
                 .SetRelative()
