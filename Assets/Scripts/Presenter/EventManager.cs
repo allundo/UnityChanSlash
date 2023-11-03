@@ -31,6 +31,7 @@ public class EventManager : MobGenerator<EventInvoker>
             new SkeletonsGenerateEvent(playerInput, new Pos(21, 7)),
             new SkeletonWizardGenerateEvent(playerInput, new Pos(1, 11)),
             new RedSlimeGenerateEvent(playerInput, new Pos(1, 13)),
+            new AnnaGenerateEvent(playerInput, new Pos(25, 25)),
         };
     }
 
@@ -45,6 +46,7 @@ public class EventManager : MobGenerator<EventInvoker>
         SetPlayerDetectEvent(5, 6);
         SetPlayerDetectEvent(5, 7);
         SetPlayerDetectEvent(5, 8);
+        SetPlayerDetectEvent(5, 9);
 
         SwitchWorldMap(map);
     }

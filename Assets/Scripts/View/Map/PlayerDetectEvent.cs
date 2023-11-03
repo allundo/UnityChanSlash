@@ -138,6 +138,18 @@ public abstract class SimpleEnemyGenerateEvent : PlayerDetectEvent
     }
 }
 
+public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
+{
+    public AnnaGenerateEvent(PlayerInput input, Pos pos) : base(input, pos, true) { }
+
+    protected override bool IsEventValid(WorldMap map) => true;
+
+    protected override IObservable<Unit> EventFunc()
+    {
+        return SpawnEnemy(EnemyType.Anna, new Pos(13, 23), new EnemyStoreData(19));
+    }
+}
+
 public class SkeletonWizardGenerateEvent : SimpleEnemyGenerateEvent
 {
     public SkeletonWizardGenerateEvent(PlayerInput input, Pos pos) : base(input, pos) { }
