@@ -10053,7 +10053,6 @@ GameObject:
   - component: {fileID: 8841161780687792567}
   - component: {fileID: 405741213275790759}
   - component: {fileID: 3276024712343989628}
-  - component: {fileID: 9192109847295224951}
   - component: {fileID: 3673501252045754372}
   - component: {fileID: 158304641137260638}
   - component: {fileID: 7686491238802401481}
@@ -10062,6 +10061,7 @@ GameObject:
   - component: {fileID: 3938126391860442563}
   - component: {fileID: 1590571362958450033}
   - component: {fileID: 5489369148485750239}
+  - component: {fileID: 131162838222440211}
   m_Layer: 9
   m_Name: ShadowAnna
   m_TagString: Untagged
@@ -10165,19 +10165,6 @@ MonoBehaviour:
   attacks:
   - {fileID: 7440893509610229286}
   - {fileID: 6016461852821513482}
---- !u!114 &9192109847295224951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523637351332143363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d238cf5be83c246f4b675bcf992e3860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldTf: {fileID: 6146094705046482807}
 --- !u!114 &3673501252045754372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10286,6 +10273,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6090a14f2a749bca7f7d55ef28cc12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &131162838222440211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523637351332143363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe8160b98d1b4f479c67ae0f0f51a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldTf: {fileID: 6146094705046482807}
 --- !u!1 &598392534901284648
 GameObject:
   m_ObjectHideFlags: 0
