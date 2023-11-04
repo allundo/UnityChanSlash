@@ -90,6 +90,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { VFXType.Resurrection,     Resources.Load<ParticleSystem>("Prefabs/Effect/FX_RESURRECTION")        },
             { VFXType.PitDrop,          Resources.Load<ParticleSystem>("Prefabs/Effect/FX_PIT_DROP")            },
             { VFXType.HitLaser,         Resources.Load<ParticleSystem>("Prefabs/Effect/FX_HIT_LASER")           },
+            { VFXType.Potion,           Resources.Load<ParticleSystem>("Prefabs/Effect/FX_POTION_HEAL_COPY")    },
         };
 
         prefabSNDs = new Dictionary<SNDType, AudioSource>()
@@ -108,6 +109,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
             { SNDType.DropStart,            Resources.Load<AudioSource>("Prefabs/Sound/SND_TITLE_DROP_START")   },
             { SNDType.DropToGround,         Resources.Load<AudioSource>("Prefabs/Sound/SND_DROP_GROUND")        },
             { SNDType.HitLaser,             Resources.Load<AudioSource>("Prefabs/Sound/SND_HIT_LASER")          },
+            { SNDType.Potion,               Resources.Load<AudioSource>("Prefabs/Sound/SND_POTION_HEAL_COPY")   },
             { SNDType.Poison,               Resources.Load<AudioSource>("Prefabs/Sound/SND_POISON_DAMAGE")      },
         };
 

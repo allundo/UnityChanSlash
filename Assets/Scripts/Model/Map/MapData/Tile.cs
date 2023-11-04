@@ -257,9 +257,6 @@ public interface IEventTile : ITile
 
 public class Fountain : EXStructure, IEventTile
 {
-    private AudioSource sfx;
-    private AudioSource sfxCurse;
-    private ParticleSystem vfx;
     protected ActiveMessageData inspectCurse;
     protected ActiveMessageData drink;
     protected ActiveMessageData drinkCurse;
@@ -275,11 +272,6 @@ public class Fountain : EXStructure, IEventTile
         drink = new ActiveMessageData("おいしい水！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
         drinkCurse = new ActiveMessageData("まずい！", SDFaceID.SAD2, SDEmotionID.CONFUSE);
         state = new FountainState();
-
-        var source = ResourceLoader.Instance.itemData.Param((int)ItemType.Potion);
-        this.sfx = Object.Instantiate(source.sfx);
-        this.sfxCurse = Object.Instantiate(ResourceLoader.Instance.LoadSnd(SNDType.Poison));
-        this.vfx = Object.Instantiate(source.vfx);
     }
 
     public override ActiveMessageData inspectMsg
@@ -291,18 +283,12 @@ public class Fountain : EXStructure, IEventTile
 
         if (isEventOn)
         {
-            sfxCurse.transform.position = vfx.transform.position = target.transform.position;
-            (target.react as PlayerReactor).PoisonRatio(0.1f, AttackAttr.Dark);
-            sfxCurse.PlayEx();
+            (target.react as PlayerReactor).DrinkPoison(0.1f, AttackAttr.Dark);
             ActiveMessageController.Instance.InputMessageData(drinkCurse);
         }
         else
         {
-            sfx.transform.position = vfx.transform.position = target.transform.position;
-            (target.react as PlayerReactor).HealRatio(1f);
-
-            sfx.PlayEx();
-            vfx.PlayEx();
+            (target.react as PlayerReactor).DrinkWater(1f);
             ActiveMessageController.Instance.InputMessageData(drink);
         }
     }

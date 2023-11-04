@@ -583,6 +583,7 @@ public enum VFXType
     Resurrection,
     PitDrop,
     HitLaser,
+    Potion,
 }
 
 public enum SNDType
@@ -601,6 +602,7 @@ public enum SNDType
     DropStart,
     DropToGround,
     HitLaser,
+    Potion,
     Poison,
 }
 

@@ -267,4 +267,16 @@ public class PlayerReactor : MobReactor
     }
 
     public void IncPotion() => playerStatus.counter.IncPotion();
+
+    public void DrinkWater(float ratio = 1f)
+    {
+        HealRatio(ratio);
+        playerEffect.OnDrinkWater();
+    }
+
+    public void DrinkPoison(float ratio = 1f, AttackAttr attr = AttackAttr.Dark)
+    {
+        PoisonRatio(ratio, attr);
+        playerEffect.OnDrinkPoison();
+    }
 }

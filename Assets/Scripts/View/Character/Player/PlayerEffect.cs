@@ -59,4 +59,15 @@ public class PlayerEffect : MobEffect
     {
         resourceFX.StopSnd(SNDType.DropToGround);
     }
+
+    public void OnDrinkWater()
+    {
+        resourceFX.PlaySnd(SNDType.Potion);
+        resourceFX.PlayVFX(VFXType.Potion);
+    }
+
+    public void OnDrinkPoison()
+    {
+        resourceFX.PlaySnd(SNDType.Poison);
+    }
 }
