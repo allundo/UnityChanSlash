@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 using DG.Tweening;
@@ -158,13 +159,17 @@ public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
         var map = GameManager.Instance.worldMap;
         var status = SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.east, option, data);
 
-        IEventHandleState eventHandler = (map.GetTile(19, 27) as IEventTile).eventHandler;
+        Pos[] eventPos = new Pos[] { new Pos(19, 27), new Pos(12, 23), new Pos(27, 24) };
 
-        eventHandler.EventOn();
+        IEventHandleState[] eventStates = eventPos
+            .Select(pos => (map.GetTile(pos) as IEventTile).eventState)
+            .ToArray();
+
+        eventStates.ForEach(state => state.EventOn());
 
         status.Life.Where(life => life == 0f)
             .First()
-            .Subscribe(_ => eventHandler.EventOff())
+            .Subscribe(_ => eventStates.ForEach(state => state.EventOff()))
             .AddTo(status.gameObject);
 
         return Observable.NextFrame();

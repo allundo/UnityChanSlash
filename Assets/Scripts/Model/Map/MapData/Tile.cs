@@ -126,12 +126,13 @@ public class MessageWall : Wall, IReadable
 public class Door : HandleTile, IHandleTile
 {
     protected DoorState doorState;
-    public Door(ItemType keyItem = ItemType.Null) : base(new DoorState(keyItem)) => this.doorState = state as DoorState;
+    public Door(ItemType keyItem = ItemType.Null) : this(new DoorState(keyItem)) { }
+    protected Door(DoorState state) : base(state) => this.doorState = state as DoorState;
 
     public override void Open() => doorState.Open();
     public override void Handle() => doorState.TransitToNextState();
 
-    public bool IsEnterable(IDirection dir = null) => doorState.IsOpen && !IsCharacterOn;
+    public virtual bool IsEnterable(IDirection dir = null) => doorState.IsOpen && !IsCharacterOn;
     public bool IsLeapable => false;
     public virtual bool IsViewOpen => doorState.IsOpen;
     public override bool IsCharacterOn => doorState.IsCharacterOn;
@@ -151,6 +152,13 @@ public class Door : HandleTile, IHandleTile
     public override bool PutItem(Item item) => IsOpen ? base.PutItem(item) : false;
     public override Item PickItem() => IsOpen ? base.PickItem() : null;
     public override ItemInfo TopItem => IsOpen ? base.TopItem : null;
+}
+
+public class SealableDoor : Door, IEventTile
+{
+    public IEventHandleState eventState => state as EventSealedCloseDoorState;
+    public SealableDoor(ItemType keyItem = ItemType.Null) : base(new EventSealedCloseDoorState(keyItem)) { }
+    public override bool IsEnterable(IDirection dir = null) => !eventState.isEventOn && doorState.IsOpen && !IsCharacterOn;
 }
 
 public class ExitDoor : Door
@@ -236,7 +244,7 @@ public class Furniture : EXStructure
     public override bool IsLeapable => true;
 }
 
-public interface IEventTile
+public interface IEventTile : ITile
 {
     IEventHandleState eventState { get; }
 }

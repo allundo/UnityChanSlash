@@ -60,6 +60,9 @@ public class TileMapData : BaseMapData<ITile>
             case Terrain.LockedDoor:
                 return new Door(ItemType.TreasureKey);
 
+            case Terrain.SealableDoor:
+                return new SealableDoor();
+
             case Terrain.ExitDoor:
                 return new ExitDoor();
 

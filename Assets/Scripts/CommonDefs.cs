@@ -64,6 +64,7 @@ public enum Terrain
     Bed = 14,
     Cabinet = 15,
     Fountain = 16,
+    SealableDoor = 19,
     LockedDoor = 20,
     RoomCenter = 21,
     Pit = 22,

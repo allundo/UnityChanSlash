@@ -181,6 +181,7 @@ public class MiniMapData : TileMapData
 
             case Terrain.Door:
             case Terrain.LockedDoor:
+            case Terrain.SealableDoor:
                 return Color.red;
 
             case Terrain.ExitDoor:

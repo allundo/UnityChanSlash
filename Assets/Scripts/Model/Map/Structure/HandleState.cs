@@ -58,6 +58,9 @@ public abstract class HandleState : IHandleState
         state.Value = StateEnum.FORCE_UNLOCK;
     }
 
+    protected virtual ActiveMessageData lockedMessage
+        => new ActiveMessageData("鍵がかかっている…");
+
     private StateEnum GetNextState()
     {
         switch (State.Value)
@@ -65,7 +68,7 @@ public abstract class HandleState : IHandleState
             case StateEnum.CLOSE:
                 if (IsLocked)
                 {
-                    ActiveMessageController.Instance.InputMessageData("鍵がかかっている…");
+                    ActiveMessageController.Instance.InputMessageData(lockedMessage);
                     return StateEnum.CLOSE;
                 }
                 return StateEnum.OPENING;

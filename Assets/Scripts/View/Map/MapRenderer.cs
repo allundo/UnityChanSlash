@@ -175,6 +175,10 @@ public class MapRenderer : MonoBehaviour
                         doorsRenderer.SetLockedDoor(pos, Direction.Convert(dirMap[i, j]));
                         break;
 
+                    case Terrain.SealableDoor:
+                        doorsRenderer.SetSealableDoor(pos, Direction.Convert(dirMap[i, j]));
+                        break;
+
                     case Terrain.ExitDoor:
                         doorsRenderer.SetExitDoor(pos, Direction.Convert(dirMap[i, j]));
                         break;

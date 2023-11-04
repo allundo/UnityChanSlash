@@ -118,6 +118,7 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
 
             case Terrain.MessageWall:
             case Terrain.BloodMessageWall:
+            case Terrain.SealableDoor:
             case Terrain.ExitDoor:
             case Terrain.Box:
             case Terrain.Fountain:

@@ -4,6 +4,9 @@ public class DoorState : HandleState
     public DoorState(ItemType type = ItemType.Null) : base(type)
     { }
 
+    protected override ActiveMessageData lockedMessage
+        => new ActiveMessageData("扉には鍵がかかっている");
+
     public override bool IsLocked => lockType.Value != ItemType.Null;
     public bool isBroken { get; protected set; } = false;
 

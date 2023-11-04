@@ -29,7 +29,7 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
         handleState.State.Subscribe(state => OnStateChange(state)).AddTo(this);
     }
 
-    public IHandleStructure SetTileState(IHandleTile tile)
+    public virtual IHandleStructure SetTileState(IHandleTile tile)
     {
         handleState = tile.state as IHandleState;
         return this;
@@ -40,7 +40,7 @@ public abstract class HandleStructure : MonoBehaviour, IHandleStructure
         if (handleState.IsControllable) handleState.TransitToNextState();
     }
 
-    private void OnStateChange(HandleState.StateEnum state)
+    protected void OnStateChange(HandleState.StateEnum state)
     {
         switch (state)
         {

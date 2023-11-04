@@ -13,7 +13,12 @@ public interface IEventHandleState : IEventState
     void EventOff();
 }
 
-public class FountainState : IEventHandleState
+public interface IEventObservableState : IEventHandleState
+{
+    IObservable<bool> EventObservable { get; }
+}
+
+public class FountainState : IEventObservableState
 {
     public bool isEventOn
     {
