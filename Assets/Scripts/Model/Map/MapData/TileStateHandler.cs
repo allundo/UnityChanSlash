@@ -14,12 +14,14 @@ public class TileStateData : ITileStateData
     public List<Pos> open { get; protected set; }
     public List<Pos> broken { get; protected set; }
     public List<Pos> read { get; protected set; }
+    public List<Pos> eventOn { get; protected set; }
 
-    public TileStateData(List<Pos> tileOpenPos, List<Pos> tileBrokenPos, List<Pos> messageReadPos)
+    public TileStateData(List<Pos> tileOpenPos, List<Pos> tileBrokenPos, List<Pos> messageReadPos, List<Pos> tileEventOnPos)
     {
         open = tileOpenPos;
         broken = tileBrokenPos;
         read = messageReadPos;
+        eventOn = tileEventOnPos;
     }
 }
 
@@ -44,6 +46,7 @@ public class TileStateHandler : TileMapHandler
             data.open.ForEach(pos => (matrix[pos.x, pos.y] as IOpenable).Open());
             data.broken.ForEach(pos => (matrix[pos.x, pos.y] as Door).Break());
             data.read.ForEach(pos => (matrix[pos.x, pos.y] as IReadable).Read());
+            data.eventOn.ForEach(pos => (matrix[pos.x, pos.y] as IEventTile).eventState.ForceEventOn());
         }
 
         if (floor == 1 && !ITileStateData.isExitDoorLocked)
@@ -53,9 +56,9 @@ public class TileStateHandler : TileMapHandler
         }
     }
 
-    public void Import(Pos[] open, Pos[] broken, Pos[] read)
+    public void Import(Pos[] open, Pos[] broken, Pos[] read, Pos[] eventOn)
     {
-        data = new TileStateData(open.ToList(), broken.ToList(), read.ToList());
+        data = new TileStateData(open.ToList(), broken.ToList(), read.ToList(), eventOn.ToList());
     }
 
     public TileStateData ExportTileStateData()
@@ -73,6 +76,7 @@ public class TileStateHandler : TileMapHandler
         var open = new List<Pos>();
         var broken = new List<Pos>();
         var read = new List<Pos>();
+        var eventOn = new List<Pos>();
 
         ForEachTiles((tile, pos) =>
         {
@@ -89,6 +93,8 @@ public class TileStateHandler : TileMapHandler
             }
 
             if (tile is IReadable && (tile as IReadable).IsRead) read.Add(pos);
+
+            if (tile is IEventTile && (tile as IEventTile).eventState.isEventOn) eventOn.Add(pos);
         });
 
         if (floor == 1)
@@ -96,7 +102,7 @@ public class TileStateHandler : TileMapHandler
             ITileStateData.isExitDoorLocked = (matrix[exitDoor.x, exitDoor.y] as ExitDoor).IsLocked;
         }
 
-        return new TileStateData(open, broken, read);
+        return new TileStateData(open, broken, read, eventOn);
     }
     public void ClearCharacterOnTileInfo()
     {

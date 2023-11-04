@@ -105,6 +105,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             tileOpenData = tileState.open.ToArray();
             tileBrokenData = tileState.broken.ToArray();
             messageReadData = tileState.read.ToArray();
+            tileEventOnData = tileState.eventOn.ToArray();
 
             tileDiscoveredData = map.miniMapData.ExportTileDiscoveredData();
             roomCenterPos = map.roomCenterPos.ToArray();
@@ -126,6 +127,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         public Pos[] tileOpenData = null;
         public Pos[] tileBrokenData = null;
         public Pos[] messageReadData = null;
+        public Pos[] tileEventOnData = null;
         public bool[] tileDiscoveredData = null;
         public Pos[] roomCenterPos = null;
         public Pos[] fixedMessagePos = null;

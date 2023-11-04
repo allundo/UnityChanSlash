@@ -104,14 +104,14 @@ public class WorldMap : TileMapHandler
         var stairsMapData = new StairsMapData(dirMapData, import);
         var pitMessageMapData = new PitMessageMapData(dirMapData, floor, import);
         var map = new WorldMap(floor, import.roomCenterPos.ToList(), import.customStructurePos, dirMapHandler, stairsMapData, pitMessageMapData);
-        map.ImportTileData(import.tileOpenData, import.tileBrokenData, import.messageReadData, import.tileDiscoveredData);
+        map.ImportTileData(import.tileOpenData, import.tileBrokenData, import.messageReadData, import.tileEventOnData, import.tileDiscoveredData);
 
         return map;
     }
 
-    private void ImportTileData(Pos[] open, Pos[] broken, Pos[] read, bool[] discovered)
+    private void ImportTileData(Pos[] open, Pos[] broken, Pos[] read, Pos[] eventOn, bool[] discovered)
     {
-        tileStateHandler.Import(open, broken, read);
+        tileStateHandler.Import(open, broken, read, eventOn);
         miniMapData.ImportTileDiscoveredData(discovered);
     }
 
