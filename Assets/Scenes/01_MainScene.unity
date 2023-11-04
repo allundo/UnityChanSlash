@@ -12089,6 +12089,7 @@ MonoBehaviour:
     type: 3}
   playerInput: {fileID: 3226490253342392729}
   lightManager: {fileID: 53870344}
+  placeEnemyGenerator: {fileID: 1196509789}
 --- !u!4 &1086912730
 Transform:
   m_ObjectHideFlags: 0

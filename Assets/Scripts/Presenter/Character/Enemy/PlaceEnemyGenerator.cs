@@ -37,6 +37,18 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
 
+    public IEnemyStatus GetAnnaStatus()
+    {
+        if (enemyPool.ContainsKey(EnemyType.Anna))
+        {
+            return enemyPool[EnemyType.Anna].transform
+                .FirstOrDefault(t => t.gameObject.activeSelf)?
+                .GetComponent<IEnemyStatus>();
+        }
+
+        return null;
+    }
+
     private List<EnemySpawnPoint> generatorPool = new List<EnemySpawnPoint>();
     private List<DataStoreAgent.EnemyData>[] respawnData;
 

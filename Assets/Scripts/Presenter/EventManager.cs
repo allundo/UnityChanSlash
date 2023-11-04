@@ -8,16 +8,20 @@ public class EventManager : MobGenerator<EventInvoker>
 {
     [SerializeField] private PlayerInput playerInput = default;
     [SerializeField] private LightManager lightManager = default;
+    [SerializeField] private PlaceEnemyGenerator placeEnemyGenerator = default;
 
     private int currentFloor = 0;
     public int currentEvent { get; private set; } = -1;
 
     private List<PlayerDetectEvent>[] playerDetectEvents;
     private List<GameEvent> gameEvents;
+    private AnnaSealDoorsEvent annaEvent;
 
     protected override void Awake()
     {
         base.Awake();
+
+        annaEvent = new AnnaSealDoorsEvent(placeEnemyGenerator);
 
         // Register game events
         gameEvents = new List<GameEvent>()
@@ -31,7 +35,7 @@ public class EventManager : MobGenerator<EventInvoker>
             new SkeletonsGenerateEvent(playerInput, new Pos(21, 7)),
             new SkeletonWizardGenerateEvent(playerInput, new Pos(1, 11)),
             new RedSlimeGenerateEvent(playerInput, new Pos(1, 13)),
-            new AnnaGenerateEvent(playerInput, new Pos(25, 25)),
+            new AnnaGenerateEvent(playerInput, new Pos(25, 25), annaEvent),
         };
     }
 
@@ -72,6 +76,8 @@ public class EventManager : MobGenerator<EventInvoker>
         playerDetectEvents[map.floor - 1].ForEach(evt => evt.Activate(Spawn(), map));
 
         currentFloor = map.floor;
+
+        annaEvent.SwitchWorldMap(map);
     }
 
     public void RestartCurrentEvent()
