@@ -154,7 +154,6 @@ public class Door : HandleTile, IHandleTile
     public override ItemInfo TopItem => IsOpen ? base.TopItem : null;
 }
 
-
 public class OpenDoor : Door, IEventTile
 {
     public IEventHandleState eventState => state as EventFixedOpenDoorState;

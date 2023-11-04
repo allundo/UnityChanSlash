@@ -204,19 +204,15 @@ public class RedSlimeGenerateEvent : SimpleEnemyGenerateEvent
 
 public class SkeletonsGenerateEvent : PlayerHasItemEvent
 {
-    private DoorOpener prefabDoorOpener;
-    public SkeletonsGenerateEvent(PlayerInput input, Pos pos) : base(input, pos, ItemType.TreasureKey)
-    {
-        prefabDoorOpener = Resources.Load<DoorOpener>("Prefabs/Map/DoorOpener");
-    }
+    public SkeletonsGenerateEvent(PlayerInput input, Pos pos) : base(input, pos, ItemType.TreasureKey) { }
 
     protected override IObservable<Unit> EventFunc()
     {
         var spawn = SpawnHandler.Instance;
         var option = new EnemyStatus.ActivateOption();
 
-        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(21, 1), Direction.west, option);
-        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(21, 17), Direction.west, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(21, 3), Direction.south, option);
+        spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(21, 17), Direction.north, option);
         spawn.PlaceEnemy(EnemyType.SkeletonWizard, new Pos(24, 9), Direction.west, option);
         spawn.PlaceEnemy(EnemyType.SkeletonSoldier, new Pos(24, 11), Direction.west, option);
         spawn.PlaceEnemy(EnemyType.SkeletonWizard, new Pos(24, 13), Direction.west, option);
@@ -226,15 +222,16 @@ public class SkeletonsGenerateEvent : PlayerHasItemEvent
         ActiveMessageController.Instance.InputMessageData("スケルトンがいっぱい！", SDFaceID.SURPRISE, SDEmotionID.EXSURPRISE);
 
         var map = GameManager.Instance.worldMap;
-        var opener = Util.Instantiate(prefabDoorOpener, map.WorldPos(pos), Quaternion.identity);
 
-        return opener.Shoot(map.WorldPos(new Pos(21, 17)))
-            .ContinueWith(_ =>
-            {
-                GameManager.Instance.RedrawPlates();
-                UnityEngine.Object.Destroy(opener.gameObject, 0.1f);
-                return Observable.NextFrame();
-            });
+        Door door = map.GetTile(21, 18) as Door;
+        if (door.IsOpen && !door.IsBroken) door.Handle();
+
+        new Pos[] { new Pos(22, 9), new Pos(22, 11), new Pos(22, 13), new Pos(22, 15), new Pos(22, 17) }
+            .Select(pos => (map.GetTile(pos) as IEventTile).eventState)
+            .ForEach(state => state.EventOn());
+
+        GameManager.Instance.RedrawPlates();
+        return Observable.NextFrame();
     }
 }
 

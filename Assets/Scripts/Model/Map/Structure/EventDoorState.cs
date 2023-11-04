@@ -1,14 +1,6 @@
 using System;
 using UniRx;
 
-public class EventCloseDoorState : DoorState, IEventState
-{
-    public void EventOn()
-    {
-        if (IsOpen) state.Value = StateEnum.CLOSING;
-    }
-}
-
 public class EventFixedOpenDoorState : DoorState, IEventHandleState
 {
     public EventFixedOpenDoorState(ItemType type = ItemType.Null) : base(type) { }
