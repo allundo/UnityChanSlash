@@ -10,7 +10,7 @@ public class EventFixedOpenDoorState : DoorState, IEventHandleState
 
     public void ForceEventOn()
     {
-        state.Value = StateEnum.FORCE_OPEN;
+        if (!IsOpen) state.Value = StateEnum.FORCE_OPEN;
         isEventOn = true;
     }
 
@@ -56,7 +56,7 @@ public class EventSealedCloseDoorState : DoorState, IEventObservableState
     {
         if (isEventOn) return;
         isEventOn = true;
-        if (IsOpen) state.Value = StateEnum.CLOSING;
+        if (!isBroken && IsOpen) state.Value = StateEnum.CLOSING;
     }
 
     public void EventOff()
