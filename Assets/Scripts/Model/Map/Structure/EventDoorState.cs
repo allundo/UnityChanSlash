@@ -11,8 +11,9 @@ public class EventCloseDoorState : DoorState, IEventState
 
 public class EventFixedOpenDoorState : DoorState, IEventHandleState
 {
-    public bool isEventOn { get; protected set; } = false;
+    public EventFixedOpenDoorState(ItemType type = ItemType.Null) : base(type) { }
 
+    public bool isEventOn { get; protected set; } = false;
     public override bool IsControllable => !isEventOn && base.IsControllable;
 
     public void ForceEventOn()

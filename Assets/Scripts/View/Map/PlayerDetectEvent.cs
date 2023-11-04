@@ -150,7 +150,7 @@ public abstract class SimpleEnemyGenerateEvent : PlayerDetectEvent
 public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
 {
     public AnnaGenerateEvent(PlayerInput input, Pos detectTilePos)
-        : base(input, detectTilePos, EnemyType.Anna, new Pos(13, 23), 20, true) { }
+        : base(input, detectTilePos, EnemyType.Anna, new Pos(13, 23), 1, true) { }
 
     protected override bool IsEventValid(WorldMap map) => true;
 
@@ -159,7 +159,7 @@ public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
         var map = GameManager.Instance.worldMap;
         var status = SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.east, option, data);
 
-        Pos[] eventPos = new Pos[] { new Pos(19, 27), new Pos(12, 23), new Pos(27, 24) };
+        Pos[] eventPos = new Pos[] { new Pos(19, 27), new Pos(12, 23), new Pos(27, 24), new Pos(20, 25), new Pos(24, 25) };
 
         IEventHandleState[] eventStates = eventPos
             .Select(pos => (map.GetTile(pos) as IEventTile).eventState)

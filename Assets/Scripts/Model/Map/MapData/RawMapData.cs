@@ -20,6 +20,7 @@ public class RawMapData : DirHandler<int>
         { (int)Terrain.MessagePillar,         WALL   },
         { (int)Terrain.BloodMessagePillar,    WALL   },
         { (int)Terrain.Door,                  DOOR   },
+        { (int)Terrain.OpenDoor,              DOOR   },
         { (int)Terrain.SealableDoor,          DOOR   },
         { (int)Terrain.LockedDoor,            DOOR   },
         { (int)Terrain.ExitDoor,              DOOR   },

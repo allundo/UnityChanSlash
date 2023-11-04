@@ -154,6 +154,13 @@ public class Door : HandleTile, IHandleTile
     public override ItemInfo TopItem => IsOpen ? base.TopItem : null;
 }
 
+
+public class OpenDoor : Door, IEventTile
+{
+    public IEventHandleState eventState => state as EventFixedOpenDoorState;
+    public OpenDoor(ItemType keyItem = ItemType.Null) : base(new EventFixedOpenDoorState(keyItem)) { }
+}
+
 public class SealableDoor : Door, IEventTile
 {
     public IEventHandleState eventState => state as EventSealedCloseDoorState;
