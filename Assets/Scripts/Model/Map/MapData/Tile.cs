@@ -266,11 +266,11 @@ public class Fountain : EXStructure, IEventTile
 
     public bool isEventOn => state.isEventOn;
 
-    public Fountain(ActiveMessageData inspect, ActiveMessageData inspectCurse) : base(inspect)
+    public Fountain() : base(new ActiveMessageData("魔力を帯びた水が流れ出ている。", SDFaceID.SURPRISE, SDEmotionID.SURPRISE))
     {
-        this.inspectCurse = inspectCurse;
+        inspectCurse = new ActiveMessageData("硫黄臭い熱湯が吹き出している！", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION);
         drink = new ActiveMessageData("おいしい水！", SDFaceID.SMILE, SDEmotionID.WAIWAI);
-        drinkCurse = new ActiveMessageData("まずい！", SDFaceID.SAD2, SDEmotionID.CONFUSE);
+        drinkCurse = new ActiveMessageData("アッツゥイ！！", SDFaceID.SAD2, SDEmotionID.IRRITATE);
         state = new FountainState();
     }
 

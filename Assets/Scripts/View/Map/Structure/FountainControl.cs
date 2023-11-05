@@ -5,7 +5,7 @@ using UniRx;
 public class FountainControl : MonoBehaviour
 {
     [SerializeField] private ParticleSystem streamVfx = default;
-    [SerializeField] private ParticleSystem streamCurseVfx = default;
+    [SerializeField] private ParticleSystem hotStreamVfx = default;
 
     protected virtual void Start()
     {
@@ -23,12 +23,12 @@ public class FountainControl : MonoBehaviour
         if (isEventOn)
         {
             streamVfx.StopEmitting();
-            streamCurseVfx.PlayEx();
+            hotStreamVfx.PlayEx();
         }
         else
         {
             streamVfx.PlayEx();
-            streamCurseVfx.StopEmitting();
+            hotStreamVfx.StopEmitting();
         }
     }
 }

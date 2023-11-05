@@ -44,10 +44,7 @@ public class TileMapData : BaseMapData<ITile>
                 return new Furniture(new ActiveMessageData("ベッドが使用されている様子はない。", SDFaceID.DEFAULT, SDEmotionID.QUESTION));
 
             case Terrain.Fountain:
-                return new Fountain(
-                    new ActiveMessageData("魔力を帯びた水が流れ出ている。", SDFaceID.SURPRISE, SDEmotionID.SURPRISE),
-                    new ActiveMessageData("禍々しい液体が流れ出ている。", SDFaceID.SURPRISE, SDEmotionID.EXQUESTION)
-                );
+                return new Fountain();
 
             case Terrain.MessageWall:
             case Terrain.MessagePillar:
