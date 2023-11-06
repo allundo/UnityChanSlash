@@ -431,9 +431,12 @@ public class AnnaIcedFall : EnemyCommand, IIcedCommand
     public override IObservable<Unit> Execute()
     {
         Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
-        float height = dest.y;
+        float height = Mathf.Abs(dest.y);
         Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
-        float dropSec = Mathf.Max(Mathf.Sqrt((height + 0.25f) * 0.2041f), 0.25f);
+        float minDropDuration = 0.25f;
+        float layDownHeight = 0.25f;
+        // t = sqrt(h * 2/9.8)[sec]
+        float dropSec = Mathf.Max(Mathf.Sqrt((height + layDownHeight) * 0.2041f), minDropDuration);
 
         (target.anim as AnnaAnimator).icedFall.Bool = true;
         mobReact.Iced(framesToMelt, false);
@@ -443,7 +446,7 @@ public class AnnaIcedFall : EnemyCommand, IIcedCommand
 
         playingTween = DOTween.Sequence()
             .AppendCallback(mobReact.OnFall)
-            .Append(tweenMove.SimpleArc(horizontalVec + map.GetBackwardVector(0.2f), height, dropSec / duration))
+            .Append(tweenMove.SimpleArc(horizontalVec, -height, dropSec / duration))
             .AppendCallback(() => mobReact.Damage(5f, map.dir, AttackType.Smash))
             .SetUpdate(false)
             .Play();
