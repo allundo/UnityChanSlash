@@ -171,6 +171,7 @@ public class TweenMove
         return DOTween.Sequence()
             .AppendInterval(duration * timeScaleTakeoff)
             .Append(Jump(destPos, 1f - timeScaleTakeoff - timeScaleLandRatio, jumpPower).SetEase(Ease.Linear))
+            .SetUpdate(false)
             .AppendInterval(timeScaleLandRatio * duration);
     }
 
