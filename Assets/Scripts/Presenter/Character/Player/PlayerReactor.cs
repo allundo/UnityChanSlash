@@ -260,12 +260,6 @@ public class PlayerReactor : MobReactor
         bodyCollider.enabled = false;
     }
 
-    public void Iced(float framesToMelt, bool isPaused)
-    {
-        playerStatus.SetIcingFrames(framesToMelt);
-        playerEffect.OnIced(playerStatus.corePos, isPaused);
-    }
-
     public void IncPotion() => playerStatus.counter.IncPotion();
 
     public void DrinkWater(float ratio = 1f)

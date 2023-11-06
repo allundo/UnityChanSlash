@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public interface IMobEffect : IBodyEffect
 {
     void OnMelt();
-    void OnIced(Vector3 pos);
+    void OnIced(Vector3 pos, bool isPaused = true);
     void OnIceCrash(Vector3 pos);
 
     /// <summary>
@@ -112,9 +112,9 @@ public class MobEffect : MonoBehaviour, IMobEffect
         SndCritical(type, dir).PlayEx();
     }
 
-    public virtual void OnIced(Vector3 pos)
+    public void OnIced(Vector3 pos, bool isPaused = true)
     {
-        anim.Pause();
+        if (isPaused) anim.Pause();
         resourceFX.PlayVFX(VFXType.Iced, pos);
         matColEffect.Flash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
     }

@@ -436,7 +436,7 @@ public class AnnaIcedFall : EnemyCommand, IIcedCommand
         float dropSec = Mathf.Max(Mathf.Sqrt((height + 0.25f) * 0.2041f), 0.25f);
 
         (target.anim as AnnaAnimator).icedFall.Bool = true;
-        mobReact.Iced(framesToMelt);
+        mobReact.Iced(framesToMelt, false);
 
         // Reset OnEnemy tile to destination
         enemyMap.MoveOnEnemy(map.onTilePos);

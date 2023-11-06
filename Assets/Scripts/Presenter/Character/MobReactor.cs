@@ -16,7 +16,7 @@ public interface IMobReactor : IReactor
     bool Heal(float life, bool isEffectOn = true, bool healAnyway = false);
     void OnFall();
     void OnWakeUp();
-    void Iced(float framesToMelt);
+    void Iced(float framesToMelt, bool isPaused = true);
     void Melt(bool isBroken = false);
     void OnDisappear(float duration = 0.5f);
     void Hide();
@@ -131,10 +131,10 @@ public class MobReactor : Reactor, IMobReactor
         bodyCollider.enabled = true;
     }
 
-    public virtual void Iced(float framesToMelt)
+    public virtual void Iced(float framesToMelt, bool isPaused = true)
     {
         mobStatus.SetIcingFrames(framesToMelt);
-        effect.OnIced(mobStatus.corePos);
+        effect.OnIced(mobStatus.corePos, isPaused);
     }
 
     public virtual void Melt(bool isBroken = false)
