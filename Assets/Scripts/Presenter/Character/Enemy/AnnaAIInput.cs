@@ -126,15 +126,15 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         if (IsOnPlayer(right)) return turnR;
 
         Pos left2 = mobMap.dir.GetLeft(left);
-        if (IsOnPlayer(left2)) return turnL;
+        if (IsOnPlayer(left2) && map.IsViewable(left)) return turnL;
 
         Pos right2 = mobMap.dir.GetRight(right);
-        if (IsOnPlayer(right2)) return turnR;
+        if (IsOnPlayer(right2) && map.IsViewable(right)) return turnR;
 
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
 
         Pos backward2 = mobMap.dir.GetBackward(backward);
-        if (IsOnPlayer(backward2)) return RandomChoice(turnL, turnR);
+        if (IsOnPlayer(backward2) && map.IsViewable(backward)) return RandomChoice(turnL, turnR);
 
         // Left or right move if player found at left-forward or right-forward
         if (currentCommand != rightMove && isLeftMovable && IsOnPlayer(mobMap.dir.GetForward(left))) return leftMove;
