@@ -181,14 +181,23 @@ public class AnnaRightMove : AnnaSideMove
 
 public class AnnaSlash : EnemyCommand
 {
+    protected AnnaCommandTarget spdTarget;
     protected IAttack enemyAttack;
     protected AnnaAnimator annaAnim;
     protected float preSlashRatio;
     protected float slashRatio;
     public float frames { get; protected set; }
 
-    public AnnaSlash(CommandTarget target, float preDuration, float duration = 160f) : base(target, preDuration + duration, 0.95f)
+    protected void StartJump()
     {
+        spdTarget.SetSpeed(null);
+        annaAnim.speed.Float = 0f;
+        annaAnim.jump.Bool = true;
+    }
+
+    public AnnaSlash(AnnaCommandTarget target, float preDuration, float duration = 160f) : base(target, preDuration + duration, 0.95f)
+    {
+        spdTarget = target;
         enemyAttack = target.Attack(1);
         annaAnim = target.anim as AnnaAnimator;
 
@@ -218,7 +227,7 @@ public class AnnaJumpSlash : AnnaSlash
     protected float jumpRatio;
     public float SlashFrames => slash.frames;
 
-    public AnnaJumpSlash(CommandTarget target, AnnaSlash slash, float preDuration, float duration = 160f) : base(target, preDuration, duration)
+    public AnnaJumpSlash(AnnaCommandTarget target, AnnaSlash slash, float preDuration, float duration = 160f) : base(target, preDuration, duration)
     {
         this.slash = slash;
         crouchingRatio = (frames - slash.frames) / frames;
@@ -236,7 +245,7 @@ public class AnnaJumpSlash : AnnaSlash
         }
 
         annaAnim.slash.Fire();
-        annaAnim.jump.Bool = true;
+        StartJump();
 
         map.MoveObjectOn(destPos);
 
@@ -264,7 +273,7 @@ public class AnnaJumpLeapSlash : AnnaSlash
     protected float crouchingRatio;
     protected float jumpRatio;
 
-    public AnnaJumpLeapSlash(CommandTarget target, AnnaJumpSlash jumpSlash, float preDuration, float duration = 160f) : base(target, preDuration, duration)
+    public AnnaJumpLeapSlash(AnnaCommandTarget target, AnnaJumpSlash jumpSlash, float preDuration, float duration = 160f) : base(target, preDuration, duration)
     {
         fallbackCmd = jumpSlash;
         crouchingRatio = (frames - jumpSlash.SlashFrames) / frames;
@@ -282,7 +291,7 @@ public class AnnaJumpLeapSlash : AnnaSlash
         }
 
         annaAnim.slash.Fire();
-        annaAnim.jump.Bool = true;
+        StartJump();
 
         map.MoveObjectOn(destPos);
 

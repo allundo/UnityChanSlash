@@ -52,9 +52,9 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         fire = new EnemyFire(target, 36f, MagicType.FireBall);
         wakeUp = new AnnaWakeUp(target, 120f);
 
-        var slash = new AnnaSlash(target, 30f);
-        var jumpSlash = new AnnaJumpSlash(target, slash, 54f);
-        jumpLeapSlash = new AnnaJumpLeapSlash(target, jumpSlash, 54f);
+        var slash = new AnnaSlash(annaTarget, 30f);
+        var jumpSlash = new AnnaJumpSlash(annaTarget, slash, 54f);
+        jumpLeapSlash = new AnnaJumpLeapSlash(annaTarget, jumpSlash, 54f);
         this.slash = slash;
         this.jumpSlash = jumpSlash;
     }
