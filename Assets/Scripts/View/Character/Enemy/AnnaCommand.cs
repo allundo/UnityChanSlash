@@ -88,6 +88,7 @@ public abstract class AnnaMove : AnnaSpeed
             .Join(tweenMove.Move(pos))
             .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
             .AppendCallback(EndMoving)
+            .SetUpdate(false)
             .Play();
 
         return true;
@@ -203,6 +204,7 @@ public class AnnaSlash : EnemyCommand
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
             .Append(enemyAttack.AttackSequence(duration * slashRatio))
+            .SetUpdate(false)
             .Play();
 
         return true;
@@ -242,12 +244,14 @@ public class AnnaJumpSlash : AnnaSlash
             .AppendInterval(duration * crouchingRatio)
             .Append(tweenMove.Jump(map.onTilePos, jumpRatio, 1f))
             .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .SetUpdate(false)
             .Play();
 
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
             .Append(enemyAttack.AttackSequence(duration * slashRatio))
             .AppendCallback(() => annaAnim.jump.Bool = false)
+            .SetUpdate(false)
             .Play();
 
         return true;
@@ -286,12 +290,14 @@ public class AnnaJumpLeapSlash : AnnaSlash
             .AppendInterval(duration * crouchingRatio)
             .Append(tweenMove.Jump(map.onTilePos, jumpRatio, 1.5f))
             .AppendCallback(() => enemyMap.MoveOnEnemy())
+            .SetUpdate(false)
             .Play();
 
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
             .Append(enemyAttack.AttackSequence(duration * slashRatio))
             .AppendCallback(() => annaAnim.jump.Bool = false)
+            .SetUpdate(false)
             .Play();
 
         return true;
