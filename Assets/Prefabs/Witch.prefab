@@ -39633,8 +39633,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks:
-  - {fileID: 147495672322196604}
   - {fileID: 1776864532949272539}
+  - {fileID: 147495672322196604}
 --- !u!1 &2924813502952932798
 GameObject:
   m_ObjectHideFlags: 0
