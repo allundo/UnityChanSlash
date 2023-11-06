@@ -10,6 +10,7 @@ public class AnimatorTest : ShieldAnimator
     public AnimatorTrigger next { get; protected set; }
     public AnimatorBool run { get; protected set; }
     public AnimatorTrigger interruptionAny { get; protected set; }
+    public AnimatorTrigger slash { get; protected set; }
 
     protected Tween speedTween;
 
@@ -23,6 +24,7 @@ public class AnimatorTest : ShieldAnimator
         attack = new ShieldAnimator.TriggerEx(triggers, anim, "Attack");
         interruption = new ShieldAnimator.TriggerEx(triggers, anim, "Interruption");
         interruptionAny = new ShieldAnimator.TriggerEx(triggers, anim, "InterruptionAny");
+        slash = new ShieldAnimator.TriggerEx(triggers, anim, "Slash");
         next = new ShieldAnimator.TriggerEx(triggers, anim, "Next");
         run = new AnimatorBool(anim, "Run");
     }

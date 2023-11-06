@@ -1345,4 +1345,67 @@ public class UnityEngineSpecTest
         Object.Destroy(annaAnim.gameObject);
         Object.Destroy(mainCamera);
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Transition with "HasExitTime" flag keeps state while animation speed is zero. <br />
+    /// But interruption source works also when animation speed is zero.
+    /// </summary>
+    public IEnumerator _024_ExitTimeStopsWhenAnimatorSpeedIsZero()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var annaAnim = Object.Instantiate(Resources.Load<AnimatorTest>("Prefabs/Character/Anna2DFreeFormTest"), new Vector3(0f, 0f, -5f), Quaternion.identity);
+
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.slash.Fire();
+
+        yield return null;
+        yield return null;
+
+        Assert.True(annaAnim.IsCurrentTransition("AnyState", "Crouching"));
+
+        yield return new WaitForSeconds(0.05f);
+
+        Assert.True(annaAnim.IsCurrentState("Crouching"));
+        annaAnim.Pause();
+
+        yield return new WaitForSeconds(1f);
+
+        // Crouching motion has 40frames length with animation speed 1.
+        // Since animation speed is zero, current state is still crouching after 1sec.
+        Assert.True(annaAnim.IsCurrentState("Crouching"));
+        Assert.False(annaAnim.IsCurrentState("Slash"));
+        annaAnim.Resume();
+
+        yield return new WaitForSeconds(40f / 60f);
+
+        Assert.False(annaAnim.IsCurrentState("Crouching"));
+        Assert.True(annaAnim.IsCurrentState("Slash"));
+
+        yield return new WaitForSeconds((162f * 0.95f) / 60f - 0.2f);
+
+        Assert.True(annaAnim.IsCurrentTransition("Slash", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Slash"));
+        annaAnim.Pause();
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Slash"));
+        Assert.True(annaAnim.IsCurrentTransition("Slash", "Exit"));
+
+        annaAnim.interruptionAny.Fire();
+
+        yield return null;
+        yield return null;
+
+        // Interruption source works also when animation speed is zero.
+        Assert.True(annaAnim.IsCurrentTransition("AnyState", "InterruptionAny"));
+
+        yield return new WaitForSeconds(1f);
+
+        Object.Destroy(annaAnim.gameObject);
+        Object.Destroy(mainCamera);
+    }
 }
