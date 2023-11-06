@@ -23,6 +23,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
     protected ICommand jumpSlash;
     protected ICommand jumpLeapSlash;
     protected ICommand fire;
+    protected ICommand wakeUp;
 
     protected EnemyCommandChoice choice;
 
@@ -49,6 +50,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         guard = new GuardCommand(target, 40f, 0.95f);
         attack = new EnemyAttack(target, 40f);
         fire = new EnemyFire(target, 36f, MagicType.FireBall);
+        wakeUp = new AnnaWakeUp(target, 60f);
 
         var slash = new AnnaSlash(target, 30f);
         var jumpSlash = new AnnaJumpSlash(target, slash, 54f);
@@ -167,6 +169,21 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
     {
         ValidateInput();
         if (option.isSummoned) Interrupt(new EnemySummoned(target, option.summoningDuration));
+    }
+
+    public override ICommand InputIced(float duration)
+    {
+        // Execute iced fall when current height > 0.15f
+        if (transform.position.y > 0.15f)
+        {
+            ClearAll();
+            ICommand iced = new AnnaIcedFall(target, duration, 25f);
+            Interrupt(iced);
+            commander.EnqueueCommand(wakeUp);
+            return iced;
+        }
+
+        return base.InputIced(duration);
     }
 }
 

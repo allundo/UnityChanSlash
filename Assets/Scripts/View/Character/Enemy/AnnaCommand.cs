@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
-
+using UniRx;
 
 public abstract class AnnaSpeed : EnemyCommand
 {
@@ -406,6 +406,65 @@ public class AnnaJumpLeap : AnnaJump
 
         StartMoving();
         completeTween = tweenMove.FinallyCall(EndMoving).Play();
+
+        return true;
+    }
+}
+
+public class AnnaIcedFall : EnemyCommand, IIcedCommand
+{
+    protected float meltTime;
+    public float framesToMelt { get; protected set; }
+
+    public AnnaIcedFall(CommandTarget target, float framesToMelt, float duration) : base(target, duration)
+    {
+        this.framesToMelt = framesToMelt;
+        meltTime = Mathf.Min(framesToMelt, duration + 1f) * FRAME_UNIT;
+    }
+
+    public override IObservable<Unit> Execute()
+    {
+        Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
+        float height = dest.y;
+        Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
+        float dropSec = Mathf.Max(Mathf.Sqrt((height + 0.25f) * 0.2041f), 0.25f);
+
+        (target.anim as AnnaAnimator).icedFall.Bool = true;
+        mobReact.Iced(framesToMelt);
+
+        // Reset OnEnemy tile to destination
+        enemyMap.MoveOnEnemy(map.onTilePos);
+
+        playingTween = DOTween.Sequence()
+            .AppendCallback(mobReact.OnFall)
+            .Append(tweenMove.SimpleArc(horizontalVec + map.GetBackwardVector(0.2f), height, dropSec / duration))
+            .AppendCallback(() => mobReact.Damage(5f, map.dir, AttackType.Smash))
+            .SetUpdate(false)
+            .Play();
+
+        completeTween = DOVirtual.DelayedCall(meltTime, () => mobReact.Melt(), false).Play();
+
+        return ObservableComplete();
+    }
+}
+
+public class AnnaWakeUp : EnemyCommand
+{
+    protected float wakeUpTiming;
+    protected AnnaAnimator annaAnim;
+    public AnnaWakeUp(CommandTarget target, float duration, float wakeUpTiming = 0.5f) : base(target, duration)
+    {
+        this.wakeUpTiming = wakeUpTiming;
+        annaAnim = target.anim as AnnaAnimator;
+    }
+
+    protected override bool Action()
+    {
+        completeTween = DOTween.Sequence()
+            .InsertCallback(duration * wakeUpTiming, () => (target.anim as AnnaAnimator).icedFall.Bool = false)
+            .InsertCallback(duration * (1f + wakeUpTiming) * 0.5f, mobReact.OnWakeUp)
+            .SetUpdate(false)
+            .Play();
 
         return true;
     }
