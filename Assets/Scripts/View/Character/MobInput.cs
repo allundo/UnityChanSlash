@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IMobInput : IInput
 {
-    ICommand InputIced(float duration);
+    ICommand InputIced(float icingFrames);
     void OnIceCrash();
 }
 
@@ -22,18 +22,18 @@ public abstract class MobInput : InputHandler, IMobInput
         mobMap = map as IMobMapUtil;
     }
 
-    public virtual ICommand InputIced(float duration)
+    public virtual ICommand InputIced(float icingFrames)
     {
         DisableInput();
 
-        if (IsIdling) return ForceEnqueue(GetIcedCommand(duration, 0.98f));
+        if (IsIdling) return ForceEnqueue(GetIcedCommand(icingFrames, 0.98f));
 
         // Retrieve remaining process of current command
         ICommand continuation = commander.PostponeCurrent();
 
         ClearAll();
 
-        ICommand iced = ForceEnqueue(GetIcedCommand(duration, 1f));
+        ICommand iced = ForceEnqueue(GetIcedCommand(icingFrames, 1f));
 
         // Enqueue remaining process of interrupted command after icing
         ForceEnqueue(continuation);

@@ -85,12 +85,12 @@ public class FlyingAIInput : EnemyAIInput
         return null;
     }
 
-    public override ICommand InputIced(float duration)
+    public override ICommand InputIced(float icingFrames)
     {
         if (currentCommand is FlyingIcedFall) return null;
 
         ClearAll();
-        ICommand iced = new FlyingIcedFall(target, duration, 40f);
+        ICommand iced = new FlyingIcedFall(target, icingFrames, 60f);
         Interrupt(iced);
         commander.EnqueueCommand(wakeUp);
         return iced;

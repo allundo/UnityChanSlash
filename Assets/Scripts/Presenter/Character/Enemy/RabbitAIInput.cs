@@ -100,17 +100,17 @@ public class RabbitAIInput : EnemyAIInput
         return choice.MoveForwardOrTurn(isForwardMovable, isLeftMovable, isRightMovable, isBackwardMovable) ?? wondering;
     }
 
-    public override ICommand InputIced(float duration)
+    public override ICommand InputIced(float icingFrames)
     {
         if (commander.currentCommand is RabbitAttack && commander.currentCommand.RemainingTimeScale > 0.3f)
         {
             ClearAll();
-            ICommand iced = new RabbitIcedFall(target, duration, 25f);
+            ICommand iced = new RabbitIcedFall(target, icingFrames, 60f);
             Interrupt(iced);
             commander.EnqueueCommand(wakeUp);
             return iced;
         }
 
-        return base.InputIced(duration);
+        return base.InputIced(icingFrames);
     }
 }

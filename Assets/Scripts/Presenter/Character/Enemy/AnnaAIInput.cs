@@ -171,19 +171,19 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         if (option.isSummoned) Interrupt(new EnemySummoned(target, option.summoningDuration));
     }
 
-    public override ICommand InputIced(float duration)
+    public override ICommand InputIced(float icingFrames)
     {
         // Execute iced fall when current height > 0.15f
         if (transform.position.y > 0f)
         {
             ClearAll();
-            ICommand iced = new AnnaIcedFall(target, duration, 25f);
+            ICommand iced = new AnnaIcedFall(target, icingFrames, 60f);
             Interrupt(iced);
             commander.EnqueueCommand(wakeUp);
             return iced;
         }
 
-        return base.InputIced(duration);
+        return base.InputIced(icingFrames);
     }
 }
 
