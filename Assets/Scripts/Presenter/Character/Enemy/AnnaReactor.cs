@@ -15,7 +15,7 @@ public class AnnaReactor : ShieldEnemyReactor
 
         var damage = mobStatus.CalcAttack(attack, dir, attr);
         // Apply armor to Slash skill.
-        if (input.currentCommand is AnnaSlash) damage *= 0.25f;
+        if (input.currentCommand is AnnaSlash && attr != AttackAttr.Ice) damage *= 0.25f;
         return damage;
     }
 }
