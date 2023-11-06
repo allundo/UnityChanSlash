@@ -416,13 +416,17 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
     public override IObservable<Unit> Execute()
     {
         Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
-        float height = dest.y;
+        float height = Mathf.Abs(dest.y);
         Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
         float moveTile = horizontalVec.magnitude / TILE_UNIT;
 
         float additionalJump = Mathf.Max(0, moveTile - 1f);
 
-        float timeScale = Mathf.Max(Mathf.Sqrt(height * 0.2041f), 0.4f + additionalJump * 0.25f);
+        float minDropDuration = 0.4f;
+        float layDownHeight = 0.25f;
+
+        // h = 1/2 * 9.8 * (2/3 * t)^2 -> t = 0.677631 * sqrt(h)
+        float timeScale = Mathf.Max(0.677631f * Mathf.Sqrt(height + layDownHeight + additionalJump), minDropDuration);
         Tween meltTimer = DOVirtual.DelayedCall(Mathf.Min(framesToMelt, 60f * timeScale + 1f) * FRAME_UNIT, () => mobReact.Melt(), false);
 
         playerAnim.speed.Float = 0f;

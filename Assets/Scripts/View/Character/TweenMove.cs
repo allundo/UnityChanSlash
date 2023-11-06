@@ -221,6 +221,14 @@ public class TweenMove
             .AppendInterval(stunDuration + wakeUpDuration);
     }
 
+    /// <summary>
+    /// Simple simulate arc trajectory with air resistance.
+    /// </summary>
+    /// <param name="horizontalVec"></param>
+    /// <param name="jump">Up height before drop.</param>
+    /// <param name="height">Start height which must be positive value.</param>
+    /// <param name="timeScale"></param>
+    /// <returns></returns>
     public Sequence Arc(Vector3 horizontalVec, float jump, float height, float timeScale = 1f)
     {
         float time = duration * timeScale;
@@ -230,12 +238,11 @@ public class TweenMove
         Vector3 horizontalOneThird = horizontalVec * 0.3333333333333f;
         Vector3 horizontalRemaining = horizontalVec - horizontalOneThird;
 
-
         return DOTween.Sequence()
             .Append(tf.DOBlendableMoveBy(horizontalOneThird, timeOneThird).SetEase(Ease.Linear))
             .Join(tf.DOBlendableMoveBy(new Vector3(0f, jump, 0f), timeOneThird).SetEase(Ease.Linear))
             .Append(tf.DOBlendableMoveBy(horizontalRemaining, timeRemaining).SetEase(Ease.OutQuad))
-            .Join(tf.DOBlendableMoveBy(new Vector3(0f, height - jump, 0f), timeRemaining).SetEase(Ease.InQuad));
+            .Join(tf.DOBlendableMoveBy(new Vector3(0f, -(height + jump), 0f), timeRemaining).SetEase(Ease.InQuad));
     }
 
     public Sequence SimpleArc(Vector3 horizontalVec, float height, float timeScale = 1f)
@@ -244,7 +251,7 @@ public class TweenMove
 
         return DOTween.Sequence()
             .Append(tf.DOBlendableMoveBy(horizontalVec, time).SetEase(Ease.Linear))
-            .Join(tf.DOBlendableMoveBy(new Vector3(0f, height, 0f), time).SetEase(Ease.InQuad));
+            .Join(tf.DOBlendableMoveBy(new Vector3(0f, height, 0f), time).SetEase(height > 0 ? Ease.OutQuad : Ease.InQuad));
     }
 
     public Tween Teleport(Pos destPos)
