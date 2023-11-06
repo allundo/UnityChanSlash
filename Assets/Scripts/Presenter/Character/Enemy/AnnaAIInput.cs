@@ -50,7 +50,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         guard = new GuardCommand(target, 40f, 0.95f);
         attack = new EnemyAttack(target, 40f);
         fire = new EnemyFire(target, 36f, MagicType.FireBall);
-        wakeUp = new AnnaWakeUp(target, 60f);
+        wakeUp = new AnnaWakeUp(target, 120f);
 
         var slash = new AnnaSlash(target, 30f);
         var jumpSlash = new AnnaJumpSlash(target, slash, 54f);
