@@ -288,7 +288,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             { new Pos(26, 27),  Direction.north     }, // Potion
             { new Pos(27, 27),  Direction.north     }, // Potion
             { new Pos(22, 26),  Direction.north     }, // IceRing
-            { new Pos(26, 25),  Direction.north     }, // CrossNecklace
+            { new Pos(26, 25),  Direction.south     }, // CrossNecklace
         };
 
         var fixedMes = new Dictionary<Pos, IDirection>()
