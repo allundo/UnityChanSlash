@@ -249,8 +249,8 @@ public class AnnaJumpSlash : AnnaSlash
 
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
-            .Append(enemyAttack.AttackSequence(duration * slashRatio))
             .AppendCallback(() => annaAnim.jump.Bool = false)
+            .Append(enemyAttack.AttackSequence(duration * slashRatio))
             .SetUpdate(false)
             .Play();
 
@@ -295,8 +295,8 @@ public class AnnaJumpLeapSlash : AnnaSlash
 
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
-            .Append(enemyAttack.AttackSequence(duration * slashRatio))
             .AppendCallback(() => annaAnim.jump.Bool = false)
+            .Append(enemyAttack.AttackSequence(duration * slashRatio))
             .SetUpdate(false)
             .Play();
 
