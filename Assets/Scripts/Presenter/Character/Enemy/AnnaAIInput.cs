@@ -174,7 +174,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
     public override ICommand InputIced(float duration)
     {
         // Execute iced fall when current height > 0.15f
-        if (transform.position.y > 0.15f)
+        if (transform.position.y > 0f)
         {
             ClearAll();
             ICommand iced = new AnnaIcedFall(target, duration, 25f);
