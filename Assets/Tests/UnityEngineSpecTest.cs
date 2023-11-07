@@ -1408,4 +1408,57 @@ public class UnityEngineSpecTest
         Object.Destroy(annaAnim.gameObject);
         Object.Destroy(mainCamera);
     }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// Subscribe doesn't return EmptyDisposable on ordinary use.
+    /// </summary>
+    public IEnumerator _025_DisposableCheck()
+    {
+        yield return new WaitForSeconds(1f);
+
+        System.IDisposable sut1 = DOVirtual.DelayedCall(0.5f, () => Debug.Log("DelayedCall"), false).OnCompleteAsObservable().Subscribe(_ => Debug.Log("OnNext"), () => Debug.Log("OnComplete"));
+
+        Assert.True(sut1 is SingleAssignmentDisposable);
+        StringAssert.Contains("SingleAssignmentDisposable", sut1.ToString());
+        StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
+
+        yield return new WaitForSeconds(0.6f);
+
+        Assert.True(sut1 is SingleAssignmentDisposable);
+        StringAssert.Contains("SingleAssignmentDisposable", sut1.ToString());
+        StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
+
+        yield return null;
+        var observableTween = DOVirtual.DelayedCall(0.5f, () => Debug.Log("DelayedCall"), false).OnCompleteAsObservable(Unit.Default).IgnoreElements();
+        System.IDisposable sut2 = Observable.NextFrame().Subscribe(_ => sut2 = observableTween.Subscribe(null, () => Debug.Log("tween complete")));
+
+        Assert.True(sut2 is SingleAssignmentDisposable);
+        StringAssert.Contains("SingleAssignmentDisposable", sut1.ToString());
+        StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
+
+        yield return null;
+
+        Assert.True(sut2 is SingleAssignmentDisposable);
+        StringAssert.Contains("SingleAssignmentDisposable", sut1.ToString());
+        StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
+
+        yield return null;
+
+        Assert.True(sut2 is SingleAssignmentDisposable);
+        StringAssert.Contains("SingleAssignmentDisposable", sut1.ToString());
+        StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
+
+        yield return null;
+
+        System.IDisposable sut3 = DOVirtual.DelayedCall(0.5f, () => Debug.Log("DelayedCall"), false).OnCompleteAsObservable().Subscribe(_ => Debug.Log("OnNext"), () => Debug.Log("OnComplete"));
+        sut3.Dispose();
+
+        Assert.True(sut3 is SingleAssignmentDisposable);
+        StringAssert.Contains("SingleAssignmentDisposable", sut1.ToString());
+        StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
+
+        yield return new WaitForSeconds(1f);
+    }
 }
