@@ -1,11 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ShieldEnemyReactor))]
-[RequireComponent(typeof(ShieldEnemyAnimator))]
+[RequireComponent(typeof(AnnaReactor))]
+[RequireComponent(typeof(AnnaAnimator))]
 [RequireComponent(typeof(EnemyMapUtil))]
 public class AnnaAIInput : ShieldInput, IEnemyInput
 {
-    protected ShieldEnemyAnimator shieldAnim;
+    protected AnnaAnimator annaAnim;
 
     public ICommand idle { get; protected set; }
     public ICommand turnL { get; protected set; }
@@ -68,7 +68,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
     protected override void SetInputs()
     {
         guardState = new GuardState(this);
-        shieldAnim = target.anim as ShieldEnemyAnimator;
+        annaAnim = target.anim as AnnaAnimator;
     }
 
     protected override ICommand GetCommand()
@@ -77,8 +77,8 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
 
         // Fighting start if player found at forward
         Pos forward = mobMap.GetForward;
-        shieldAnim.fighting.Bool = IsOnPlayer(forward);
-        shieldAnim.guard.Bool &= shieldAnim.fighting.Bool;
+        annaAnim.fighting.Bool = !annaAnim.jump.Bool && IsOnPlayer(forward);
+        annaAnim.guard.Bool &= annaAnim.fighting.Bool;
 
         Pos left = mobMap.GetLeft;
         Pos right = mobMap.GetRight;
@@ -91,7 +91,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         bool isBackwardMovable = mobMap.IsMovable(backward);
 
         // Attack | Slash | Guard | BackStep | BackLeap if fighting
-        if (shieldAnim.fighting.Bool)
+        if (annaAnim.fighting.Bool)
         {
             if (currentCommand == idle) return RandomChoice(attack, slash);
             if (currentCommand == turnL || currentCommand == turnR) return attack;
