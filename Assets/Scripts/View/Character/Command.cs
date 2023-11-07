@@ -16,6 +16,8 @@ public interface ICommand
     /// </summary>
     void CancelValidate();
 
+    void CancelCommandTimer();
+
     /// <summary>
     /// Execute command mainly to apply something to ICommandTarget.
     /// </summary>
@@ -122,6 +124,14 @@ public class Command : ICommand
     public void CancelValidate()
     {
         validateTween?.Kill();
+    }
+
+    /// <summary>
+    /// !Caution! : this method is used only for workaround when command completion is not observable.
+    /// </summary>
+    public void CancelCommandTimer()
+    {
+        commandTimer?.Kill();
     }
 
     public virtual IObservable<Unit> Execute()

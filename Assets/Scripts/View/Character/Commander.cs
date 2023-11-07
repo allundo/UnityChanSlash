@@ -115,9 +115,26 @@ public class Commander
     public ICommand PostponeCurrent()
     {
         ICommand continuation = currentCommand?.GetContinuation();
-        execDisposable?.Dispose();
+        DisposeExec();
         currentCommand = null;
         return continuation;
+    }
+
+    /// <summary>
+    /// Sometimes command exec completion cannot observable and Subscribe() returns EmptyDisposable. <br />
+    /// Cancel commandTimer tween manually only when the subscription is not Disposable.
+    /// </summary>
+    protected void DisposeExec()
+    {
+        if (execDisposable is Disposable.EmptyDisposable)
+        {
+            currentCommand?.CancelCommandTimer();
+            execDisposable = null;
+        }
+        else
+        {
+            execDisposable?.Dispose();
+        }
     }
 
     protected virtual void InsertQueue(ICommand cmd) => cmdQueue.AddFirst(cmd);
@@ -150,7 +167,7 @@ public class Commander
     public virtual void Cancel()
     {
         currentCommand?.Cancel();
-        execDisposable?.Dispose();
+        DisposeExec();
         DispatchCommand();
     }
 

@@ -17,7 +17,7 @@ namespace UniRx
             return new AnonymousDisposable<TState>(state, disposeAction);
         }
 
-        class EmptyDisposable : IDisposable
+        public class EmptyDisposable : IDisposable
         {
             public static EmptyDisposable Singleton = new EmptyDisposable();
 
