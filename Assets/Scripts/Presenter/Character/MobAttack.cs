@@ -94,10 +94,4 @@ public class MobAttack : Attack, IMobAttack, IAttackHitDetect
             .InsertCallback(attackDuration, HitFinish) // Make sure to disable attack collider.
             .SetUpdate(false);
     }
-
-    protected void ResetAttackPower()
-    {
-        boxCollider.size = defaultSize;
-        attackMultiplier = defaultAttack;
-    }
 }

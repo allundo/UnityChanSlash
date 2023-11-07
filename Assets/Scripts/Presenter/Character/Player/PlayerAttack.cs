@@ -124,4 +124,10 @@ public class PlayerAttack : MobAttackFX, IPlayerAttack
     {
         attackSequence?.Complete(true);
     }
+
+    protected void ResetAttackPower()
+    {
+        boxCollider.size = defaultSize;
+        attackMultiplier = defaultAttack;
+    }
 }

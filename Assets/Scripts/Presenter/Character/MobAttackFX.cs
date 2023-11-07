@@ -1,7 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
 
-
 public class MobAttackFX : MobAttack
 {
     [SerializeField] protected ParticleSystem attackFX = default;
