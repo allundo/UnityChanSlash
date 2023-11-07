@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class MultiAttack : AttackBehaviour, IMobAttack, IAttackHitDetect
 {
-    [SerializeField] protected MobAttackFX[] attacks = default;
+    [SerializeField] protected MobAttack[] attacks = default;
 
     protected Sequence attackSequence;
 
