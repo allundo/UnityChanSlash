@@ -168,7 +168,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2,11, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
-            2, 0, 2, 1, 9, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            23, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
             2, 4, 2, 4, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2,
             5, 1,22, 1, 4,10, 2, 1, 1, 1, 1, 1, 1, 1, 2,
@@ -214,6 +214,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
         var boxItemPos = new Dictionary<Pos, IDirection>()
         {
             { new Pos(13, 13),   Direction.north },
+            { new Pos(4, 2),   Direction.north },
         };
 
         var fixedMessagePos = new Dictionary<Pos, IDirection>() { { new Pos(0, 2), Direction.east } };

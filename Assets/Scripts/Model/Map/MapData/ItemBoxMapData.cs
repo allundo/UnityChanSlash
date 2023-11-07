@@ -50,7 +50,7 @@ public class ItemBoxMapData : DirMapData
 #if UNITY_EDITOR
         if (GameInfo.Instance.isScenePlayedByEditor)
         {
-            fixedItemTypes = new ItemType[1] { ItemType.KeyBlade };
+            fixedItemTypes = new ItemType[2] { ItemType.KeyBlade, ItemType.IceRing };
         }
 #endif
 
