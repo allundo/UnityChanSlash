@@ -93,6 +93,12 @@ public class EnemyReactor : MobReactor, IEnemyReactor
         status.Inactivate();
     }
 
+    public void EraseIfInvisible()
+    {
+        if (isDestroying || !status.isActive) return;
+        if (!(map as IEnemyMapUtil).IsOnCurrentViewOpen) OnOutOfView();
+    }
+
     public virtual void OnOutOfView()
     {
         if (isDestroying) return;

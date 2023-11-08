@@ -3,6 +3,7 @@ using UnityEngine;
 public interface IEnemyMapUtil : IMobMapUtil
 {
     void OnActive(bool isSleeping);
+    bool IsOnCurrentViewOpen { get; }
 }
 
 [RequireComponent(typeof(EnemyStatus))]
@@ -12,6 +13,8 @@ public class EnemyMapUtil : MobMapUtil, IEnemyMapUtil
     /// Tile position of enemy body Collider for fighting
     /// </summary>
     protected Pos onTileEnemyPos;
+
+    public bool IsOnCurrentViewOpen => map.miniMapData.IsCurrentViewOpen(onTileEnemyPos);
 
     public override void OnActive()
     {

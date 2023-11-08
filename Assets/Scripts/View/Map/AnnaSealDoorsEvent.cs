@@ -1,5 +1,6 @@
 using System.Linq;
 using UniRx;
+using System;
 
 public class AnnaSealDoorsEvent
 {
@@ -23,20 +24,36 @@ public class AnnaSealDoorsEvent
             eventStates = eventStates ?? eventPos.Select(pos => (map.GetTile(pos) as IEventTile).eventState).ToArray();
 
             var annaStatus = placeEnemyGenerator.GetAnnaStatus();
-            if (annaStatus != null) ReserveEventOff(annaStatus);
+            if (annaStatus != null) EventOn(annaStatus);
         }
     }
 
-    public void EventOn(IEnemyStatus annaStatus)
+    public void StartEvent(IEnemyStatus annaStatus)
     {
         eventStates.ForEach(state => state.EventOn());
+
+        // Wait for closing sealed door.
+        Observable.Timer(TimeSpan.FromSeconds(1f))
+            .Subscribe(_ => placeEnemyGenerator.EraseInvisibleEnemies())
+            .AddTo(annaStatus.gameObject);
+
+        EventOn(annaStatus);
+    }
+
+    private void EventOn(IEnemyStatus annaStatus)
+    {
+        placeEnemyGenerator.DisableAllEnemyGenerators();
         ReserveEventOff(annaStatus);
     }
 
     private void ReserveEventOff(IEnemyStatus annaStatus)
     {
         annaStatus.Life.Where(life => life == 0f)
-            .Subscribe(_ => eventStates.ForEach(state => state.EventOff()))
+            .Subscribe(_ =>
+            {
+                eventStates.ForEach(state => state.EventOff());
+                placeEnemyGenerator.EnableAllEnemyGenerators();
+            })
             .AddTo(annaStatus.gameObject);
     }
 }

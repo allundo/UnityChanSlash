@@ -222,6 +222,13 @@ public class PlaceEnemyGenerator : EnemyGenerator
         );
     }
 
+    public void EraseInvisibleEnemies()
+    {
+        enemyPool.ForEach(
+            kv => kv.Value.transform?.ForEach(t => t.GetComponent<EnemyReactor>().EraseIfInvisible())
+        );
+    }
+
     public void DestroyAllEnemyGenerators()
     {
         generatorPool.ForEach(generator => Destroy(generator.gameObject));
@@ -231,6 +238,11 @@ public class PlaceEnemyGenerator : EnemyGenerator
     public void DisableAllEnemyGenerators()
     {
         generatorPool.ForEach(generator => generator.Disable());
+    }
+
+    public void EnableAllEnemyGenerators()
+    {
+        generatorPool.ForEach(generator => generator.Enable());
     }
 
     public IEnemyStatus RandomSpawn(Pos pos, IDirection dir, EnemyStatus.ActivateOption option, EnemyStoreData statusData = null)

@@ -36,6 +36,11 @@ public class EnemySpawnPoint : MonoBehaviour
         }
     }
 
+    public void Enable()
+    {
+        detectPlayer.enabled = true;
+    }
+
     public void Disable()
     {
         detectPlayer.enabled = false;
