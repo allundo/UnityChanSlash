@@ -222,11 +222,13 @@ public class PlaceEnemyGenerator : EnemyGenerator
         );
     }
 
-    public void EraseInvisibleEnemies()
+    public void EraseInvisibleEnemies(bool expectForWitch = true)
     {
-        enemyPool.ForEach(
-            kv => kv.Value.transform?.ForEach(t => t.GetComponent<EnemyReactor>().EraseIfInvisible())
-        );
+        enemyPool
+            .Where(pool => !expectForWitch || pool.Key != EnemyType.Witch)
+            .ForEach(
+                pool => pool.Value.transform?.ForEach(t => t.GetComponent<EnemyReactor>().EraseIfInvisible())
+            );
     }
 
     public void DestroyAllEnemyGenerators()
