@@ -160,7 +160,7 @@ public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
 
     protected override IObservable<Unit> EventFunc()
     {
-        annaSealDoorsEvent.StartEvent(SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.north, option, data));
+        annaSealDoorsEvent.StartEvent(SpawnHandler.Instance.PlaceEnemy(type, spawnTilePos, Direction.east, option, data));
         return Observable.NextFrame();
     }
 }
