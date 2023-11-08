@@ -40,7 +40,7 @@ public class AnnaMotionTest
         yield return new WaitForSeconds(1f);
 
         // Current state is Move
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
 
         // Set the transition flag.
         spdCmd.Bool = false;
@@ -53,13 +53,13 @@ public class AnnaMotionTest
         // Transition Duration is 0.05 so this transition will progress over half.
         yield return new WaitForSeconds(0.03f);
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
         // Transition Duration is 0.05 so this transition will have finished.
         yield return new WaitForSeconds(0.02f);
 
-        Assert.False(annaAnim.IsCurrentState("Forward"));
+        Assert.False(annaAnim.IsCurrentState("Move"));
         Assert.True(annaAnim.IsCurrentState("Idle"));
 
         annaAnim.speed.Float = 4f;
@@ -67,7 +67,7 @@ public class AnnaMotionTest
 
         yield return new WaitForSeconds(1f);
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
         // Set the transition flag.
@@ -77,25 +77,35 @@ public class AnnaMotionTest
         // Wait for the next frame. The animation change will be applied at the next frame.
         yield return null;
 
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
         annaAnim.speed.Float = 0f;
+
+        yield return null;
+
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Attack"));
 
         // Transition Duration to Idle is 0.05 so this transition will progress over half.
         yield return new WaitForSeconds(0.03f);
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Attack"));
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
         Assert.False(annaAnim.IsCurrentState("Attack"));
 
         // Transition Duration to Idle is 0.05 but switched target to Attack and still Moving.
         yield return new WaitForSeconds(0.02f);
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentTransition("Idle", "Attack"));
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
         Assert.False(annaAnim.IsCurrentState("Attack"));
 
-        // Transition Duration to Attack is 0.1 so this transition will have finished.
-        yield return new WaitForSeconds(0.05f);
-        Assert.False(annaAnim.IsCurrentState("Forward"));
+        // Transition Duration to Attack is 0.2 so this transition will have finished.
+        yield return new WaitForSeconds(0.15f);
+
+        Assert.False(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
         Assert.True(annaAnim.IsCurrentState("Attack"));
 
@@ -118,13 +128,13 @@ public class AnnaMotionTest
 
         yield return null;
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Guard"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
         yield return null;
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Guard"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
@@ -133,9 +143,9 @@ public class AnnaMotionTest
         yield return null;
 
         // Transition Move -> Exit starts.
-        Assert.True(annaAnim.IsCurrentTransition("Forward", "Exit"));
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Guard"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
@@ -144,14 +154,14 @@ public class AnnaMotionTest
         // The transition switched to Idle -> Guard.
         Assert.True(annaAnim.IsCurrentTransition("Idle", "Guard"));
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         Assert.False(annaAnim.IsCurrentState("Guard"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
         yield return new WaitForSeconds(0.2f);
 
         // Transition Duration is 0.2 so this transition will have finished.
-        Assert.False(annaAnim.IsCurrentState("Forward"));
+        Assert.False(annaAnim.IsCurrentState("Move"));
         Assert.True(annaAnim.IsCurrentState("Guard"));
         Assert.False(annaAnim.IsCurrentState("Idle"));
 
@@ -174,14 +184,14 @@ public class AnnaMotionTest
         yield return null;
 
         // Transition Move -> Exit starts.
-        Assert.True(annaAnim.IsCurrentTransition("Forward", "Exit"));
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
 
         yield return null;
 
         // The transition switched to Idle -> Guard.
         Assert.True(annaAnim.IsCurrentTransition("Idle", "Guard"));
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
 
         annaAnim.attack.Fire();
 
@@ -195,8 +205,6 @@ public class AnnaMotionTest
 
         // The transition switched back to Move -> Exit.
         Assert.True(annaAnim.IsCurrentTransition("Guard", "Attack"));
-        // Assert.True(annaAnim.IsCurrentTransition("Forward", "Exit"));
-        // Assert.True(annaAnim.IsCurrentState("Forward"));
 
         yield return new WaitForSeconds(0.2f);
 
@@ -221,7 +229,7 @@ public class AnnaMotionTest
 
         yield return new WaitForSeconds(1f);
 
-        Assert.True(annaAnim.IsCurrentState("Forward"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         annaAnim.EndMoving();
         annaAnim.StartJump();
 
@@ -243,7 +251,7 @@ public class AnnaMotionTest
 
         yield return new WaitForSeconds(1f);
 
-        Assert.True(annaAnim.IsCurrentState("SideMove"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         annaAnim.EndMovingLR();
         annaAnim.StartJump(-4f);
 
@@ -265,7 +273,7 @@ public class AnnaMotionTest
 
         yield return new WaitForSeconds(1f);
 
-        Assert.True(annaAnim.IsCurrentState("SideMove"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
         annaAnim.EndMovingLR();
         annaAnim.StartJump(-8f);
 
@@ -280,6 +288,83 @@ public class AnnaMotionTest
         yield return new WaitForSeconds(0.817f);
 
         annaAnim.EndJump();
+
+        yield return new WaitForSeconds(1f);
+    }
+
+    [UnityTest]
+    /// <summary>
+    /// </summary>
+    public IEnumerator _004_RunAndSideMove()
+    {
+        yield return new WaitForSeconds(1f);
+
+        annaAnim.StartMoving();
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        annaAnim.EndMoving();
+        annaAnim.StartMovingLR(Constants.TILE_UNIT / (45f / 60f));
+
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("AnyState", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("AnyState", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        annaAnim.EndMovingLR();
+        annaAnim.StartMovingLR(-Constants.TILE_UNIT / (45f / 60f));
+
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("AnyState", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("AnyState", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        annaAnim.EndMovingLR();
+        annaAnim.StartMoving();
+
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("AnyState", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return null;
+
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("AnyState", "Move"));
+        Assert.False(annaAnim.IsCurrentTransition("Move", "Exit"));
+        Assert.True(annaAnim.IsCurrentState("Move"));
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.True(annaAnim.IsCurrentState("Move"));
+        annaAnim.EndMoving();
 
         yield return new WaitForSeconds(1f);
     }

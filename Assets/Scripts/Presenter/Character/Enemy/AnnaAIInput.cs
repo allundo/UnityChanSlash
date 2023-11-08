@@ -40,8 +40,8 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         idle = new EnemyIdle(target, 36f);
         moveForward = new AnnaForward(annaTarget, 72f);
         run = new AnnaForward(annaTarget, 36f);
-        leftMove = new AnnaLeftMove(annaTarget, 40f);
-        rightMove = new AnnaRightMove(annaTarget, 40f);
+        leftMove = new AnnaLeftMove(annaTarget, 45f);
+        rightMove = new AnnaRightMove(annaTarget, 45f);
         backStep = new AnnaBackStep(annaTarget, 35f);
         backLeap = new AnnaBackLeap(annaTarget, 64f, backStep);
         jump = new AnnaJumpLeap(annaTarget, 64f);

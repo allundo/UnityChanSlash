@@ -4,6 +4,7 @@ using DG.Tweening;
 public class AnnaAnimatorTest : AnnaAnimator
 {
     public Tween speedTween { get; protected set; }
+    public Tween speedLRTween { get; protected set; }
 
     public bool IsCurrentState(string stateName)
     {
@@ -20,6 +21,12 @@ public class AnnaAnimatorTest : AnnaAnimator
         this.speedTween = speedTween?.Play();
     }
 
+    protected void SetSpeedLR(Tween speedLRTween)
+    {
+        if (this.speedLRTween != speedLRTween) this.speedLRTween?.Kill();
+        this.speedLRTween = speedLRTween?.Play();
+    }
+
     public void StartMoving(float targetSpd = 4f)
     {
         speedCommand.Bool = true;
@@ -34,13 +41,13 @@ public class AnnaAnimatorTest : AnnaAnimator
     public void StartMovingLR(float targetSpd)
     {
         speedCommand.Bool = true;
-        SetSpeed(DOTween.To(() => speedLR.Float, value => speedLR.Float = value, targetSpd, 0.5f));
+        SetSpeedLR(DOTween.To(() => speedLR.Float, value => speedLR.Float = value, targetSpd, 0.5f));
     }
 
     public void EndMovingLR()
     {
         speedCommand.Bool = false;
-        SetSpeed(DOTween.To(() => speedLR.Float, value => speedLR.Float = value, 0f, 0.25f));
+        SetSpeedLR(DOTween.To(() => speedLR.Float, value => speedLR.Float = value, 0f, 0.25f));
     }
 
     public void StartJump(float targetSpd = 8f)
