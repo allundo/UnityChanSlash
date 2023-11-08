@@ -35,6 +35,15 @@ public class FloorIllness
             restUI.RemoveCold();
             RenderSettings.fog = false;
         };
+
+        // Prepare Anna and Witch instances on coming B5F
+        illnessSetter[4] = () =>
+        {
+            var option = new EnemyStatus.ActivateOption();
+            var spawnHandler = SpawnHandler.Instance;
+            spawnHandler.PlaceEnemy(EnemyType.Witch, new Pos(1, 1), Direction.north, option).Inactivate();
+            spawnHandler.PlaceEnemy(EnemyType.Anna, new Pos(1, 1), Direction.north, option).Inactivate();
+        };
     }
 
     private int prevFloor = 1;
