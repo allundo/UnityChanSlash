@@ -23,6 +23,7 @@ public class UnityEngineSpecTest
     private Canvas prefabCanvas;
     private TestDrag prefabDrag;
     private AnimatorTest prefabAnna;
+    private CubeDetectCount prefabCubeCollider;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -39,6 +40,7 @@ public class UnityEngineSpecTest
         prefabLock = Resources.Load<GameObject>("Prefabs/TestLock");
         prefabCanvas = Resources.Load<Canvas>("Prefabs/UI/Canvas");
         prefabDrag = Resources.Load<TestDrag>("Prefabs/UI/TestDrag");
+        prefabCubeCollider = Resources.Load<CubeDetectCount>("Prefabs/CubeCollider");
     }
 
     [OneTimeTearDown]
@@ -1460,5 +1462,154 @@ public class UnityEngineSpecTest
         StringAssert.DoesNotContain("EmptyDisposable", sut1.ToString());
 
         yield return new WaitForSeconds(1f);
+    }
+
+    [Ignore("Only for spec confirmation.")]
+    [UnityTest]
+    /// <summary>
+    /// OnTriggerExit must be called after OnTriggerEnter. <br />
+    /// But OnTriggerEnter flag is canceled when collider is disabled and OnTriggerExit won't be called. <br />
+    /// OnTriggerEnter can be called when collider is enabled again but OnTriggerExit cannot.
+    /// </summary>
+    public IEnumerator _026_ColliderTriggerTest()
+    {
+        var mainCamera = Object.Instantiate(prefabCamera);
+        var waitForFixedUpdate = new WaitForFixedUpdate();
+
+        var sut1 = Object.Instantiate(prefabCubeCollider);
+        var sut2 = Object.Instantiate(prefabCubeCollider);
+        sut1.MoveOut();
+        sut1.ColliderEnable(true);
+        sut2.ColliderEnable(true);
+
+        yield return new WaitForSeconds(1f);
+
+        Assert.AreEqual(0, sut1.enterCount);
+        Assert.AreEqual(0, sut1.exitCount);
+        Assert.False(sut1.stay);
+
+        sut1.MoveIn();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(1, sut1.enterCount);
+        Assert.AreEqual(0, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.True(sut1.stay);
+
+        // OnTriggerExit won't be called.
+        sut1.ColliderEnable(false);
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(1, sut1.enterCount);
+        Assert.AreEqual(0, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
+        // OnTriggerEnter will be called.
+        sut1.ColliderEnable(true);
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(2, sut1.enterCount);
+        Assert.AreEqual(0, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.True(sut1.stay);
+
+        sut1.MoveOut();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(2, sut1.enterCount);
+        Assert.AreEqual(1, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
+        sut1.MoveIn();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(3, sut1.enterCount);
+        Assert.AreEqual(1, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.True(sut1.stay);
+
+        // OnTriggerExit won't be called.
+        sut1.ColliderEnable(false);
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(3, sut1.enterCount);
+        Assert.AreEqual(1, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
+        // OnTriggerExit won't be called.
+        sut1.MoveOut();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(3, sut1.enterCount);
+        Assert.AreEqual(1, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
+        // OnTriggerExit won't be called.
+        sut1.ColliderEnable(true);
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(3, sut1.enterCount);
+        Assert.AreEqual(1, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
+        // OnTriggerEnter will be called.
+        sut1.MoveIn();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(4, sut1.enterCount);
+        Assert.AreEqual(1, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.True(sut1.stay);
+
+        // OnTriggerExit will be called.
+        sut1.MoveOut();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(4, sut1.enterCount);
+        Assert.AreEqual(2, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
+        yield return null;
+        yield return null;
+
+        Object.Destroy(sut1.gameObject);
+        Object.Destroy(sut2.gameObject);
+        Object.Destroy(mainCamera.gameObject);
     }
 }
