@@ -182,7 +182,7 @@ public class AnnaRightMove : AnnaSideMove
 public class AnnaSlash : EnemyCommand
 {
     protected AnnaCommandTarget spdTarget;
-    protected IAttack enemyAttack;
+    protected IAttack slash;
     protected AnnaAnimator annaAnim;
     protected float preSlashRatio;
     protected float slashRatio;
@@ -198,7 +198,7 @@ public class AnnaSlash : EnemyCommand
     public AnnaSlash(AnnaCommandTarget target, float preDuration, float duration = 160f) : base(target, preDuration + duration, 0.95f)
     {
         spdTarget = target;
-        enemyAttack = target.Attack(1);
+        slash = target.Attack(1);
         annaAnim = target.anim as AnnaAnimator;
 
         frames = preDuration + duration;
@@ -212,7 +212,7 @@ public class AnnaSlash : EnemyCommand
 
         completeTween = DOTween.Sequence()
             .AppendInterval(duration * preSlashRatio)
-            .Append(enemyAttack.AttackSequence(duration * slashRatio))
+            .Append(slash.AttackSequence(duration * slashRatio))
             .SetUpdate(false)
             .Play();
 
@@ -222,15 +222,15 @@ public class AnnaSlash : EnemyCommand
 
 public class AnnaJumpSlash : AnnaSlash
 {
-    protected AnnaSlash slash;
+    protected AnnaSlash slashCmd;
     protected float crouchingRatio;
     protected float jumpRatio;
-    public float SlashFrames => slash.frames;
+    public float SlashFrames => slashCmd.frames;
 
-    public AnnaJumpSlash(AnnaCommandTarget target, AnnaSlash slash, float preDuration, float duration = 160f) : base(target, preDuration, duration)
+    public AnnaJumpSlash(AnnaCommandTarget target, AnnaSlash slashCmd, float preDuration, float duration = 160f) : base(target, preDuration, duration)
     {
-        this.slash = slash;
-        crouchingRatio = (frames - slash.frames) / frames;
+        this.slashCmd = slashCmd;
+        crouchingRatio = (frames - slashCmd.frames) / frames;
         jumpRatio = preSlashRatio - crouchingRatio + 10f / frames;
     }
 
@@ -240,7 +240,7 @@ public class AnnaJumpSlash : AnnaSlash
 
         if (!mobMap.IsMovable(destPos))
         {
-            target.interrupt.OnNext(Data(slash));
+            target.interrupt.OnNext(Data(slashCmd));
             return false;
         }
 
@@ -256,11 +256,9 @@ public class AnnaJumpSlash : AnnaSlash
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOTween.Sequence()
-            .AppendInterval(duration * preSlashRatio)
-            .AppendCallback(() => annaAnim.jump.Bool = false)
-            .Append(enemyAttack.AttackSequence(duration * slashRatio))
-            .SetUpdate(false)
+        completeTween = slash.AttackSequence(duration * slashRatio)
+            .InsertCallback(0, () => annaAnim.jump.Bool = false)
+            .SetDelay(duration * preSlashRatio)
             .Play();
 
         return true;
@@ -302,11 +300,9 @@ public class AnnaJumpLeapSlash : AnnaSlash
             .SetUpdate(false)
             .Play();
 
-        completeTween = DOTween.Sequence()
-            .AppendInterval(duration * preSlashRatio)
-            .AppendCallback(() => annaAnim.jump.Bool = false)
-            .Append(enemyAttack.AttackSequence(duration * slashRatio))
-            .SetUpdate(false)
+        completeTween = slash.AttackSequence(duration * slashRatio)
+            .InsertCallback(0, () => annaAnim.jump.Bool = false)
+            .SetDelay(duration * preSlashRatio)
             .Play();
 
         return true;
