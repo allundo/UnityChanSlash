@@ -151,7 +151,7 @@ public class AnnaGenerateEvent : SimpleEnemyGenerateEvent
 {
     protected AnnaSealDoorsEvent annaSealDoorsEvent;
     public AnnaGenerateEvent(PlayerInput input, Pos detectTilePos, AnnaSealDoorsEvent annaSealDoorsEvent)
-        : base(input, detectTilePos, EnemyType.Anna, new Pos(13, 23), 1, true)
+        : base(input, detectTilePos, EnemyType.Anna, new Pos(13, 23), 20, true)
     {
         this.annaSealDoorsEvent = annaSealDoorsEvent;
     }

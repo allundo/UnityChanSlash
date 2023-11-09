@@ -55801,7 +55801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 2
   attackAttr: 1
-  attackMultiplier: 3
+  attackMultiplier: 8
   startFrame: 17
   finishFrame: 20
   speed: 1
@@ -96433,7 +96433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 10
   attackAttr: 1
-  attackMultiplier: 1
+  attackMultiplier: 2
   startFrame: 19
   finishFrame: 22
   speed: 1
