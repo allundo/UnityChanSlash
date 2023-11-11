@@ -48,7 +48,10 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
 
     public void InputMessageData(MessageData data, bool isUIVisibleOnCompleted = true)
     {
-        textHandler.EndOfSentence.Subscribe(_ => CloseMessage(isUIVisibleOnCompleted)).AddTo(this);
+        textHandler.EndOfSentence
+            .First()
+            .Subscribe(_ => CloseMessage(isUIVisibleOnCompleted))
+            .AddTo(this);
 
         isSkipValid = false;
         activeSubject.OnNext(Unit.Default);
