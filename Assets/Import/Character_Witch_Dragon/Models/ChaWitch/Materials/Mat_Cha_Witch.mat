@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Mat_Cha_Witch
-  m_Shader: {fileID: 4800000, guid: 6f05ca42588574bd69b3b3106abc83da, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9fba0a04c1e4d44b68d636784f764a8f, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _ALPHATEST_ON
@@ -77,6 +77,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PointLightStrength: 0.8
     - _SmoothnessTextureChannel: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Rabbit_Yellow
-  m_Shader: {fileID: 4800000, guid: 35dbc6ea25cb7452ea62b8d7d1b76261, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5354d4e1b12f743a7818f5e688c8079d, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 5
@@ -69,6 +69,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PointLightStrength: 0.35
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

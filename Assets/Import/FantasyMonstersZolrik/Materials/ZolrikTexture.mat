@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ZolrikTexture
-  m_Shader: {fileID: 4800000, guid: 12e57053bf62344169141d6934330b7d, type: 3}
+  m_Shader: {fileID: 4800000, guid: ef7713bd0a7e940f08663f390b889db9, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -69,6 +69,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PointLightStrength: 0.8
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -79,4 +80,5 @@ Material:
     - _BaseColor: {r: 0, g: 1, b: 0.4, a: 0}
     - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _HologramColor: {r: 0, g: 1, b: 0.4, a: 0}
   m_BuildTextureStacks: []
