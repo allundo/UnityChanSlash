@@ -16,7 +16,6 @@ public class MessageUITest
     private GameInfo gameInfo;
     private int secretLevel = 0;
     private HashSet<int> readIDs;
-    private TimeManager timeManager;
 
     private MessageControllerTest messageUI;
     private MessageControllerTest prefabMessageUI;
@@ -30,9 +29,6 @@ public class MessageUITest
     {
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
         gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
-
-        timeManager = Object.Instantiate(Resources.Load<TimeManager>("Prefabs/TimeManager"));
-        timeManager.input = new Mock<IPlayerInput>().Object;
 
         // Load from test resources
         mainCamera = Object.Instantiate(Resources.Load<Camera>("Prefabs/UI/MainCamera"));
@@ -50,7 +46,6 @@ public class MessageUITest
         Object.Destroy(testCanvas.gameObject);
         Object.Destroy(mainCamera.gameObject);
         Object.Destroy(eventSystem);
-        Object.Destroy(timeManager.gameObject);
         Object.Destroy(gameInfo.gameObject);
         Object.Destroy(resourceLoader.gameObject);
     }
@@ -59,7 +54,6 @@ public class MessageUITest
     public void SetUp()
     {
         messageUI = Object.Instantiate(prefabMessageUI);
-        timeManager.msgController = messageUI;
 
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         RectTransform rectTf = messageUI.GetComponent<RectTransform>();
@@ -310,11 +304,7 @@ public class MessageUITest
     [UnityTest]
     public IEnumerator _008_PictureMessageTest()
     {
-        // Wait for time manager instance
-        yield return null;
-
         messageUI.InputPictureMessageData(new PictureMessageData());
-        TimeManager.Instance.Resume(false);
 
         yield return new WaitForSeconds(5f);
     }

@@ -56,8 +56,6 @@ public class MessageControllerTest : MessageController
         InputMessageData(data);
         yield return null;
 
-        // Resume pausing not to affect the other testings.
-        TimeManager.Instance.Resume(false);
         yield return new WaitForSeconds(0.5f);
 
         foreach (var mes in data.Source)
