@@ -59,6 +59,7 @@ public class MessageUITest
     public void SetUp()
     {
         messageUI = Object.Instantiate(prefabMessageUI);
+        timeManager.msgController = messageUI;
 
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
         RectTransform rectTf = messageUI.GetComponent<RectTransform>();

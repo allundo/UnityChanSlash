@@ -7,6 +7,7 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     [SerializeField] private MessageController messageController = default;
 
     public IPlayerInput input;
+    public MessageController msgController;
 
     public bool isPaused { get; private set; } = false;
     public bool isScaled { get; private set; } = false;
@@ -23,17 +24,18 @@ public class TimeManager : SingletonMonoBehaviour<TimeManager>
     {
         base.Awake();
         input = playerInput;
+        msgController = messageController;
     }
 
     void Start()
     {
         elapsedTimeSecBuffer = 0f;
 
-        messageController.OnActive
+        msgController.OnActive
             .Subscribe(_ => Pause())
             .AddTo(this);
 
-        messageController.OnInactive
+        msgController.OnInactive
             .Subscribe(isShowUIs => Resume(isShowUIs))
             .AddTo(this);
     }
