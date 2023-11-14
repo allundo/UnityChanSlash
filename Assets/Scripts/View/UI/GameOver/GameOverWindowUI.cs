@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameOverWindowUI : MessageWindowUI
+public class GameOverWindowUI : MessageWindowBase
 {
     [SerializeField] public TwoPushButton restartButton = default;
     [SerializeField] public TwoPushButton titleButton = default;

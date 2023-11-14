@@ -114,6 +114,7 @@ public class DirMapData : DirHandler<Terrain>, IDirMapData
                 return rawMapData.GetGateDir(x, y);
 
             case Terrain.LockedDoor:
+            case Terrain.PictureWall:
                 return rawMapData.GetPathDir(x, y);
 
             case Terrain.MessageWall:

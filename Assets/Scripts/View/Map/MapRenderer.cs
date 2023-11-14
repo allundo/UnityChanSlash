@@ -190,6 +190,7 @@ public class MapRenderer : MonoBehaviour
                     case Terrain.Wall:
                     case Terrain.MessageWall:
                     case Terrain.BloodMessageWall:
+                    case Terrain.PictureWall:
                         // Render a message
                         if (matrix[i, j] != Terrain.Wall)
                         {

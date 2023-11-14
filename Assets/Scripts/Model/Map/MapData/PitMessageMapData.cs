@@ -9,6 +9,7 @@ public class PitMessageMapData : DirMapData
     public List<Pos> bloodMessagePos { get; private set; } = new List<Pos>();
     public Dictionary<Pos, int> randomMessagePos { get; private set; } = new Dictionary<Pos, int>();
     public Dictionary<Pos, int> secretMessagePos { get; private set; } = new Dictionary<Pos, int>();
+    public Pos picturePos { get; private set; } = new Pos();
     private Stack<int> randomIndices = null;
     private Stack<int> secretIndices = null;
     private FloorMessagesSource floorMessages;
@@ -119,6 +120,7 @@ public class PitMessageMapData : DirMapData
         floor = custom.floor;
 
         if (floor == 1) throw new ArgumentOutOfRangeException("CustomMap is not supported for floor1");
+        if (floor == 5) picturePos = custom.picturePos;
 
         LoadMessages();
 
@@ -246,6 +248,14 @@ public class PitMessageMapData : DirMapData
             messageWall.data = SecretMessage(kv.Value);
             messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
         });
+
+        if (floor == 5)
+        {
+            Pos pos = picturePos;
+            var messageWall = matrix[pos.x, pos.y] as MessageWall;
+            messageWall.data = new PictureMessageData();
+            messageWall.boardDir = Direction.Convert(dirMap[pos.x, pos.y]);
+        }
     }
 
     private void SetPitTrap(Pos pos) => matrix[pos.x, pos.y] = Terrain.Pit;

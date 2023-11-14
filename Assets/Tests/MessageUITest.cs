@@ -306,4 +306,16 @@ public class MessageUITest
 
         yield return new WaitForSeconds(1f);
     }
+
+    [UnityTest]
+    public IEnumerator _008_PictureMessageTest()
+    {
+        // Wait for time manager instance
+        yield return null;
+
+        messageUI.InputPictureMessageData(new PictureMessageData());
+        TimeManager.Instance.Resume(false);
+
+        yield return new WaitForSeconds(5f);
+    }
 }

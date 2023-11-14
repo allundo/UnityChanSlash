@@ -16,6 +16,7 @@ public class RawMapData : DirHandler<int>
         { (int)Terrain.Wall,                  WALL   },
         { (int)Terrain.MessageWall,           WALL   },
         { (int)Terrain.BloodMessageWall,      WALL   },
+        { (int)Terrain.PictureWall,           WALL   },
         { (int)Terrain.Pillar,                WALL   },
         { (int)Terrain.MessagePillar,         WALL   },
         { (int)Terrain.BloodMessagePillar,    WALL   },

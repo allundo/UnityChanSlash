@@ -2,16 +2,13 @@
 using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine;
-using UnityEngine.UI;
 using UniRx;
 using System.Linq;
 
 public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] protected FadeEnable window = default;
+    [SerializeField] protected MessageWindowUI window = default;
     [SerializeField] protected TextHandler textHandler = default;
-
-    protected Image image;
 
     protected Tween activateTween = null;
 
@@ -26,7 +23,6 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
     protected override void Awake()
     {
         fade = new FadeTween(gameObject, 0.25f, true);
-        image = GetComponent<Image>();
     }
 
     void Start()
@@ -64,6 +60,57 @@ public class MessageController : FadeEnable, IPointerDownHandler, IPointerUpHand
             {
                 isSkipValid = true;
                 textHandler.InputMessageData(data);
+                activateTween = null;
+            })
+            .SetUpdate(true)
+            .Play();
+    }
+
+    public void InputPictureMessageData(PictureMessageData data)
+    {
+        textHandler.EndOfSentence
+            .First()
+            .ContinueWith(_ =>
+            {
+                isSkipValid = false;
+
+                activateTween = DOTween.Sequence()
+                    .Append(window.FadeOut(0.5f))
+                    .AppendCallback(() =>
+                    {
+                        window.ResetToWindow();
+
+                        activateTween = DOTween.Sequence()
+                            .Append(window.FadeIn(0.5f))
+                            .AppendCallback(() =>
+                            {
+                                isSkipValid = true;
+                                textHandler.InputMessageData(data);
+                                activateTween = null;
+                            })
+                            .SetUpdate(true)
+                            .Play();
+                    })
+                    .SetUpdate(true)
+                    .Play();
+
+                return textHandler.EndOfSentence.First();
+            })
+            .Subscribe(_ => CloseMessage())
+            .AddTo(this);
+
+        isSkipValid = false;
+        activeSubject.OnNext(Unit.Default);
+        window.SetPicture();
+
+        activateTween =
+            DOTween.Sequence()
+            .Join(FadeIn(0.5f))
+            .Join(window.FadeIn(0.5f))
+            .AppendCallback(() =>
+            {
+                isSkipValid = true;
+                textHandler.InputMessageData(new MessageData(new MessageSource(" "))); // Input dummy message to display picture
                 activateTween = null;
             })
             .SetUpdate(true)

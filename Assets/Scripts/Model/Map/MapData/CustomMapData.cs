@@ -51,6 +51,7 @@ public class CustomMapData : IStairsData
     /// </summary>
     public Dictionary<Pos, IDirection> customStructurePos { get; private set; }
 
+    public Pos picturePos { get; private set; } = new Pos();
 
     public static CustomMapData RetrieveData(PitMessageMapData data)
     {
@@ -111,6 +112,10 @@ public class CustomMapData : IStairsData
                     case Terrain.BloodMessageWall:
                     case Terrain.BloodMessagePillar:
                         secretMes.Add(new Pos(i, j));
+                        break;
+
+                    case Terrain.PictureWall:
+                        picturePos = new Pos(i, j);
                         break;
 
                     case Terrain.DownStairs:

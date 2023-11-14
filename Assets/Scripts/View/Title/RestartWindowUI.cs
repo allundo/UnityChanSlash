@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RestartWindowUI : MessageWindowUI
+public class RestartWindowUI : MessageWindowBase
 {
     [SerializeField] public TwoPushButton restartButton = default;
     [SerializeField] public TwoPushButton titleButton = default;

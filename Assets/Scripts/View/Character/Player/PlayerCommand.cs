@@ -979,7 +979,15 @@ public class PlayerInspectWall : PlayerAction
     protected override bool Action()
     {
         if (data == null || !(map.ForwardTile is MessageWall)) return false;
-        messageController.InputMessageData(data);
+
+        if (data is PictureMessageData)
+        {
+            messageController.InputPictureMessageData(data as PictureMessageData);
+        }
+        else
+        {
+            messageController.InputMessageData(data);
+        }
         return true;
     }
 }

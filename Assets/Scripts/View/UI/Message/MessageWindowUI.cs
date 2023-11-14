@@ -1,31 +1,32 @@
-﻿using UnityEngine;
-using DG.Tweening;
+using UnityEngine;
 
-public class MessageWindowUI : FadeEnable
+public class MessageWindowUI : MessageWindowBase
 {
-    private UITween uiTween;
+    [SerializeField] private Sprite picture = default;
+
+    private Sprite window;
+    private Vector2 windowSize;
+    private Vector2 pictureSize;
 
     protected override void Awake()
     {
-        fade = new FadeTween(gameObject, 1f, true);
-        uiTween = new UITween(gameObject, true);
-
-        uiTween.SetSize(new Vector2(uiTween.defaultSize.x, 0f));
+        base.Awake();
+        window = fade.sprite;
+        windowSize = uiTween.defaultSize;
+        pictureSize = new Vector2(1024, 768);
     }
 
-    public override Tween FadeIn(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    public void SetPicture()
     {
-        return DOTween.Sequence()
-                .Join(uiTween.ResizeY(1f, duration))
-                .Join(base.FadeIn(duration, onPlay, onComplete, isContinuous))
-                .SetUpdate(true);
-    }
+        fade.sprite = picture;
+        uiTween.SetSize(pictureSize, true);
+        uiTween.ResetSizeY(0);
 
-    public override Tween FadeOut(float duration = 1f, TweenCallback onPlay = null, TweenCallback onComplete = null, bool isContinuous = true)
+    }
+    public void ResetToWindow()
     {
-        return DOTween.Sequence()
-                .Join(uiTween.ResizeY(0f, duration))
-                .Join(base.FadeOut(duration, onPlay, onComplete, isContinuous))
-                .SetUpdate(true);
+        fade.sprite = window;
+        uiTween.SetSize(windowSize, true);
+        uiTween.ResetSizeY(0);
     }
 }

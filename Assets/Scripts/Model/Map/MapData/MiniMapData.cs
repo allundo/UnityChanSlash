@@ -174,6 +174,7 @@ public class MiniMapData : TileMapData
             case Terrain.Wall:
             case Terrain.Pillar:
             case Terrain.MessageWall:
+            case Terrain.PictureWall:
             case Terrain.MessagePillar:
             case Terrain.BloodMessageWall:
             case Terrain.BloodMessagePillar:

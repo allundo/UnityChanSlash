@@ -11,6 +11,7 @@ public class MessageBoardsRenderer : ObjectsRenderer<GameObject>
         prefabMessageN[Terrain.MessageWall] = prefabMessageN[Terrain.MessagePillar] = Resources.Load<GameObject>("Prefabs/Map/Parts/BoardN");
         prefabMessageN[Terrain.BloodMessageWall] = Resources.Load<GameObject>("Prefabs/Map/Parts/BloodMessageN");
         prefabMessageN[Terrain.BloodMessagePillar] = Resources.Load<GameObject>("Prefabs/Map/Parts/BloodMessagePillarN");
+        prefabMessageN[Terrain.PictureWall] = Resources.Load<GameObject>("Prefabs/Map/Parts/PictureBoardN");
     }
 
     public override void SwitchWorldMap(WorldMap map)

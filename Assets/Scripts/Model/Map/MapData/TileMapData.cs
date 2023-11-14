@@ -50,6 +50,7 @@ public class TileMapData : BaseMapData<ITile>
             case Terrain.MessagePillar:
             case Terrain.BloodMessageWall:
             case Terrain.BloodMessagePillar:
+            case Terrain.PictureWall:
                 return new MessageWall();
 
             case Terrain.Door:
