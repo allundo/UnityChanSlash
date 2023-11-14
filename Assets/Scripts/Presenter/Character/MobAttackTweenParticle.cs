@@ -1,4 +1,4 @@
-public class MobAttackTweenParticle : MobAttackFX
+public class MobAttackTweenParticle : MobAttackStopFX
 {
     protected TweenParticle tpAttackVFX;
     protected override void Start()

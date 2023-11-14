@@ -26,17 +26,9 @@ public class MobAttackFX : MobAttack
         attackSnd.PlayEx();
     }
 
-    // Set the end of attack sequence to stop playing effect in the case that Complete() is called.
-    protected virtual void OnFXEnd()
-    {
-        attackFX.StopAndClear();
-        attackSnd.StopEx();
-    }
-
     public override Sequence AttackSequence(float attackDuration)
     {
         return base.AttackSequence(attackDuration)
-            .InsertCallback(fxStartSec, OnFXStart)
-            .AppendCallback(OnFXEnd);
+            .InsertCallback(fxStartSec, OnFXStart);
     }
 }
