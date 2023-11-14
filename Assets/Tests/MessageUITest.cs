@@ -201,7 +201,7 @@ public class MessageUITest
         yield return new WaitForSeconds(0.6f);
 
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間、\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
+        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
@@ -221,7 +221,7 @@ public class MessageUITest
         messageUI.OnPointerUp(null);
         yield return null;
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("他に誰かいるのかな？\n前半と後半で筆跡もぜんぜん違う", messageUI.sentence);
+        Assert.AreEqual("他に誰かいるのかな？\n前半書いたのは迷宮の番人とは別人だよね", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
@@ -234,7 +234,7 @@ public class MessageUITest
         yield return new WaitForSeconds(0.6f);
 
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間、\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
+        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
@@ -255,7 +255,7 @@ public class MessageUITest
         yield return new WaitForSeconds(0.6f);
 
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間、\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
+        Assert.AreEqual("迷宮に魔法で刻んだ文字は残せるようだ\n不思議なことに文字を読んだ瞬間\n記憶が戻ってきた\nこのメモはきっと迷宮攻略の鍵となる・・・", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
@@ -268,7 +268,7 @@ public class MessageUITest
         yield return null;
 
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("前半と後半で筆跡がぜんぜん違う", messageUI.sentence);
+        Assert.AreEqual("前半と後半で文体も筆跡もぜんぜん違う", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
