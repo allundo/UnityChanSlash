@@ -294,13 +294,13 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         var fixedMes = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(12, 10), Direction.north},
-            { new Pos(22,  7), Direction.west },
+            { new Pos(12, 10), Direction.north }, // Treasure room
+            { new Pos(22,  7), Direction.west  }, // Pay attention
         };
 
         var bloodMes = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(23, 8), Direction.south },
+            { new Pos(23, 8), Direction.south },  // Glitch
         };
 
         var customStructure = new Dictionary<Pos, IDirection>()
