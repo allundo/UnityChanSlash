@@ -61,6 +61,7 @@ public class WitchReactor : GhostReactor, IMagicianReactor, IUndeadReactor
 
     public override void OnOutOfView()
     {
+        if (isDestroying || !status.isActive) return;
         // Don't disappear. Close to player again.
         witchInput.InputTeleport();
     }

@@ -22,7 +22,7 @@ public class EnemyReactor : MobReactor, IEnemyReactor
     private IDisposable inactiveNextFrame;
     private IDisposable lifeChange;
     private IDisposable targetEnemy;
-    private bool isDestroying = false;
+    protected bool isDestroying = false;
 
     public bool IsTamed => enemyStatus.isTamed;
     public float ExpObtain => enemyStatus.ExpObtain;
