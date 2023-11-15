@@ -2,7 +2,6 @@ public class PictureMessageData : MessageData
 {
     private readonly int knowWitch = 5;
     private readonly int wellKnowWitch = 8;
-    public override void Read() => base.isRead = true;
     protected MessageSource[] noticeSource = new MessageSource[4];
     protected MessageSource[] sadSource = new MessageSource[4];
     protected static MessageSource CreateSource(string sentence, FaceID face, bool ignoreIfRead = false)
