@@ -308,4 +308,129 @@ public class MessageUITest
 
         yield return new WaitForSeconds(5f);
     }
+
+    private WorldMap GetWorldMap(int floor)
+    {
+        if (floor == 5) return WorldMap.Create(gameInfo.FinalMap());
+        int size = new int[] { 19, 31, 41, 41 }[floor];
+        return WorldMap.Create(floor, size, size);
+    }
+
+    [UnityTest]
+    public IEnumerator _009_FloorMessagesTest([Values(1, 2, 3, 4, 5)] int floor, [Values(1, 2, 3, 4, 5, 6, 7, 8, 9)] int secretLevel)
+    {
+        int maxSecretLevel =
+            resourceLoader.floorMessagesData.Param(floor - 1).bloodMessages
+                .Concat(resourceLoader.floorMessagesData.Param(floor - 1).secretMessages)
+                .Max(src => src.secretLevel);
+
+        gameInfo.secretLevel = secretLevel;
+
+        yield return null;
+
+        var map = GetWorldMap(floor);
+
+        yield return null;
+
+        int fixedCount1 = map.messagePosData.fixedMessagePos.Count();
+        int randomCount1 = map.messagePosData.randomMessagePos.Count();
+        int bloodCount1 = map.messagePosData.bloodMessagePos.Count();
+        int secretCount1 = map.messagePosData.secretMessagePos.Count();
+
+        Debug.Log($"fixed: {fixedCount1}, random: {randomCount1}, blood: {bloodCount1}, secret: {secretCount1}");
+
+        var dataList = new List<MessageData>();
+
+        map.ForEachTiles(tile =>
+        {
+            if (tile is MessageWall)
+            {
+                dataList.Add((tile as MessageWall).data);
+            }
+        });
+
+        yield return null;
+
+        int bloodCount2 = dataList.Where(data => data is BloodMessageData).Count();
+        int secretCount2 = dataList.Where(data => data is SecretMessageData).Count();
+        int allCount = dataList.Count();
+
+        Debug.Log($"fixed+random: {allCount - bloodCount2 - secretCount2}, blood: {bloodCount2}, secret: {secretCount2}, all: {allCount}");
+
+        yield return ReadMessages(dataList);
+
+        Assert.AreEqual(maxSecretLevel, gameInfo.secretLevel);
+
+        Debug.Log($"After secret level: {gameInfo.secretLevel}");
+
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator _010_CountMessagesTest([Values(1, 2, 3, 4, 5, 6, 7, 8, 9)] int secretLevel)
+    {
+        gameInfo.secretLevel = secretLevel;
+
+        yield return null;
+
+        var maps = new WorldMap[]{
+            WorldMap.Create(1, 19, 19),
+            WorldMap.Create(2, 31, 31),
+            WorldMap.Create(3, 41, 41),
+            WorldMap.Create(4, 41, 41),
+            WorldMap.Create(gameInfo.FinalMap()),
+        };
+
+        yield return null;
+
+        int[] fixedCount = new int[5];
+        int[] randomCount = new int[5];
+        int[] bloodCount = new int[5];
+        int[] secretCount = new int[5];
+
+        var floorMsgs = maps.Select(map =>
+        {
+            int fixedCnt = fixedCount[map.floor - 1] = map.messagePosData.fixedMessagePos.Count();
+            int rndCnt = randomCount[map.floor - 1] = map.messagePosData.randomMessagePos.Count();
+            int bldCnt = bloodCount[map.floor - 1] = map.messagePosData.bloodMessagePos.Count();
+            int secCnt = secretCount[map.floor - 1] = map.messagePosData.secretMessagePos.Count();
+
+            Debug.Log($"level: {secretLevel}, floor: {map.floor}, fixed: {fixedCnt}, random: {rndCnt}, blood: {bldCnt}, secret: {secCnt}");
+
+            var dataList = new List<MessageData>();
+
+            map.ForEachTiles(tile =>
+            {
+                if (tile is MessageWall)
+                {
+                    dataList.Add((tile as MessageWall).data);
+                }
+            });
+
+            return dataList;
+        })
+        .ToArray();
+
+        for (int floor = 1; floor <= 5; ++floor)
+        {
+            var dataList = floorMsgs[floor - 1];
+
+            int bloodCount2 = dataList.Where(data => data is BloodMessageData).Count();
+            int secretCount2 = dataList.Where(data => data is SecretMessageData).Count();
+            int allCount = dataList.Count();
+            int fixedRandomCount = allCount - bloodCount2 - secretCount2;
+
+            if (floor == 5)
+            {
+                Assert.True(dataList.Contains(data => data is PictureMessageData));
+                --fixedRandomCount;
+            }
+
+            Assert.AreEqual(fixedCount[floor - 1] + randomCount[floor - 1], fixedRandomCount);
+            Assert.AreEqual(bloodCount[floor - 1], bloodCount2);
+            Assert.AreEqual(secretCount[floor - 1], secretCount2);
+        }
+
+        yield return null;
+    }
 }
