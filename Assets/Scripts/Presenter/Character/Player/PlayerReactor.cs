@@ -31,6 +31,7 @@ public class PlayerReactor : MobReactor
     public string CauseOfDeath() => lastAttacker.CauseOfDeath(lastAttackType);
 
     protected GuardState guardState => playerInput.guardState;
+    protected bool heatTrigger = true;
 
     protected override void Awake()
     {
@@ -59,7 +60,7 @@ public class PlayerReactor : MobReactor
             .AddTo(this);
 
         restUI.Heal.Subscribe(point => HealRatio(point, false)).AddTo(this);
-        restUI.Poison.Subscribe(point => PoisonRatio(point)).AddTo(this);
+        restUI.Poison.Subscribe(point => HeatDamage(point)).AddTo(this);
 
         // Initialize life text and gauge
         restUI.OnLifeChange(status.Life.Value, status.LifeMax.Value);
@@ -141,6 +142,8 @@ public class PlayerReactor : MobReactor
         float heal = healRatio * status.LifeMax.Value;
         float lifeRatio = LifeRatio(status.Life.Value + heal);
 
+        if (lifeRatio > 0.25f) heatTrigger = true;
+
         if (isEffectOn)
         {
             effect.OnHeal(healRatio);
@@ -154,6 +157,19 @@ public class PlayerReactor : MobReactor
 
         status.LifeChange(heal);
         return true;
+    }
+
+    protected bool HeatDamage(float poisonRatio)
+    {
+        bool poison = PoisonRatio(poisonRatio, AttackAttr.Fire);
+
+        if (heatTrigger && poisonRatio > 0.015f && LifeRatio(status.Life.Value) < 0.25f)
+        {
+            ActiveMessageController.Instance.InputMessageData("深刻な熱中症でピンチ！", SDFaceID.SAD2, SDEmotionID.IRRITATE);
+            heatTrigger = false;
+        }
+
+        return poison;
     }
 
     public bool PoisonRatio(float poisonRatio = 0f, AttackAttr attr = AttackAttr.Fire)
