@@ -198,7 +198,7 @@ public class PlayerReactor : MobReactor
     public override float Damage(float attack, IDirection dir, AttackType type = AttackType.None, AttackAttr attr = AttackAttr.None)
     {
         float damage = base.Damage(attack, dir, type, attr);
-        if (restUI.isActive) restUI.OnDamage();
+        restUI.OnDamage(attr);
 
         lifeGauge.OnDamage(LifeRatio(damage));
 

@@ -141,10 +141,19 @@ public class RestUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void OnLifeChange(float life, float lifeMax)
         => restLifeGauge.OnLifeChange(life, lifeMax);
 
-    public void OnDamage()
+    public void OnDamage(AttackAttr attr)
     {
-        Inactivate();
-        damageTween.Restart();
+        if (isActive)
+        {
+            Inactivate();
+            damageTween.Restart();
+        }
+
+        if (isPoison)
+        {
+            if (attr == AttackAttr.Ice) poisonPoint = Mathf.Max(0.005f, poisonPoint * 0.25f);
+            if (attr == AttackAttr.Fire) poisonPoint += 0.005f;
+        }
     }
 
     public void SetPoison()
