@@ -65,6 +65,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 5eecb65c33be34181bbee7e1fe87fc15, type: 2}
     - {fileID: 11400000, guid: b664e4c03c71245218374428f5249825, type: 2}
     - {fileID: 11400000, guid: 0944b6cf15c4646499072ee3d5ad03db, type: 2}
+    - {fileID: 11400000, guid: ff382c478c0c045c5982a2c20965cc6e, type: 2}
+    - {fileID: 11400000, guid: eeb67445eceae45429588fb06e18d56a, type: 2}
     randomMessages:
     - {fileID: 11400000, guid: 4c0e31bea901c4b1cb82da98e8dbab14, type: 2}
     - {fileID: 11400000, guid: 6694542e0bf7144068af5c62e16a78d3, type: 2}
