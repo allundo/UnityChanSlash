@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
 
 public class WorldMap : TileMapHandler
@@ -20,6 +21,12 @@ public class WorldMap : TileMapHandler
     public ITile GetTile(Vector3 pos) => GetTile(MapPos(pos));
     public ITile GetTile(Pos pos) => GetTile(pos.x, pos.y);
     public ITile GetTile(int x, int y) => IsOutOfRange(x, y) ? new Wall() : matrix[x, y];
+
+    public bool IsTreasureRoomMessageRead()
+    {
+        if (floor != 5) throw new Exception("Current map is not B5F.");
+        return (GetTile(messagePosData.fixedMessagePos[0]) as MessageWall).IsRead;
+    }
 
     public Pos GetGroundPos(Pos targetPos, List<Pos> placeAlready)
     {

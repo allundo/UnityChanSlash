@@ -293,23 +293,7 @@ public class WitchGenerateEvent : PlayerHasItemEvent
             .Append(lightManager.DirectionalFadeIn(1.5f))
             .Join(lightManager.PointFadeIn(1.5f))
             .Join(lightManager.SpotFadeOut(30f, 1f))
-            .AppendCallback(() => input.EnqueueMessage(
-                new MessageData
-                (
-                    new MessageSource("『表の立て札は読まなかったのかい？』", FaceID.NONE),
-                    new MessageSource("いやまあ読んだけど・・・\n誰よ？あんた", FaceID.DEFAULT),
-                    new MessageSource("『私は迷宮の守護霊。その鍵は返してもらう。』", FaceID.NONE),
-                    new MessageSource("こっちだってコレないと外に出られないんだけど？？", FaceID.DESPISE),
-                    new MessageSource("『そっちの事情なんて知らないね。私はここの宝物を守るように命令を受けている。』", FaceID.NONE),
-                    new MessageSource("『ここで逃がすわけにはいかない・・・！』", FaceID.NONE),
-                    new MessageSource("ふーん・・・", FaceID.ASHAMED),
-                    new MessageSource("それ、誰の命令なんだろうね？", FaceID.EYECLOSE),
-                    new MessageSource("『誰・・・。誰って・・・・？』", FaceID.NONE),
-                    new MessageSource("知らないんだ？", FaceID.DISATTRACT2),
-                    new MessageSource("・・・まあ、私だってそっちの事情なんて知らんし", FaceID.DEFAULT),
-                    new MessageSource("こんなとこ、とっととトンズラさせてもらうわ！", FaceID.ANGRY)
-                )
-            ))
+            .AppendCallback(() => input.EnqueueMessage(new WitchEventMessageData(GameManager.Instance.worldMap)))
             .SetUpdate(false)
             .OnCompleteAsObservable(Unit.Default);
     }

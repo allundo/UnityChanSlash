@@ -433,4 +433,26 @@ public class MessageUITest
 
         yield return null;
     }
+
+    [UnityTest]
+    public IEnumerator _011_WitchEventMessagesTest([Values(2, 5, 9)] int secretLevel)
+    {
+        gameInfo.secretLevel = secretLevel;
+
+        var map = GetWorldMap(5);
+
+        var dataList = new List<MessageData>();
+
+        dataList.Add(new WitchEventMessageData(map));
+
+        (map.GetTile(map.messagePosData.fixedMessagePos[0]) as MessageWall).Read();
+
+        dataList.Add(new WitchEventMessageData(map));
+
+        yield return null;
+
+        yield return ReadMessages(dataList);
+
+        yield return null;
+    }
 }
