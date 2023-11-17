@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
+  m_Name: 008_EquipmentDurability
+  m_EditorClassIdentifier: 
+  setParams:
+  - name: "\u8010\u4E45\u5024\u89E3\u8AAC"
+    sentence: "\u30DD\u30FC\u30B7\u30E7\u30F3\u306A\u3069\u306E\u6D88\u8CBB\u30A2\u30A4\u30C6\u30E0\u4EE5\u5916\u306E\u88C5\u5099\u54C1\u306B\u3082\u8010\u4E45\u5024\u304C\u3042\u308A\u3001\u30A2\u30A4\u30C6\u30E0\u30A2\u30A4\u30B3\u30F3\u306E\u53F3\u4E0B\u306B\u9752\u3044\u6570\u5B57\u3067\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u88C5\u5099\u54C1\u306E\u8010\u4E45\u5024\u3011"
+    spriteImage: {fileID: 21300000, guid: 18efefb8c225b4b7da52372068c57066, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u6B8B\u308A\u8010\u4E45\u502425"
+    ignoreIfRead: 0
+  - name: "\u8010\u4E45\u5024\u89E3\u8AAC02"
+    sentence: "\u53F3\u624B\u306E\u653B\u6483\u30FB\u5DE6\u624B\u306E\u653B\u6483\u3092\u884C\u3046\u3068\u8010\u4E45\u5024\u304C\u6E1B\u308A\u30010\u306B\u306A\u308B\u3068\u88C5\u5099\u54C1\u304C\u5931\u308F\u308C\u307E\u3059\u3002\\n\u30AC\u30FC\u30C9\u3057\u3066\u3082\u8010\u4E45\u5024\u304C\u6E1B\u308B\u306E\u3067\u6CE8\u610F\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    face: -1
+    fontSize: 52
+    literalsPerSec: 1000
+    alignment: 513
+    title: "\u3010\u88C5\u5099\u54C1\u306E\u8010\u4E45\u5024\u3011"
+    spriteImage: {fileID: 21300000, guid: 18efefb8c225b4b7da52372068c57066, type: 3}
+    matImage: {fileID: 0}
+    caption: "\u30AC\u30FC\u30C9\u3067\u3082\u6E1B\u5C11"
+    ignoreIfRead: 0

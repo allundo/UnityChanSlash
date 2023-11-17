@@ -44,6 +44,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c56d285dd9b5b464087850576fa72c1b, type: 2}
     - {fileID: 11400000, guid: dd4ba0e6d0c1b45b882ebdaebc14642b, type: 2}
     - {fileID: 11400000, guid: 8ed1f7375c12f438894a1bb79e026a38, type: 2}
+    - {fileID: 11400000, guid: 5a0a57c51ff0b4a5ab19a42149eecf16, type: 2}
     bloodMessages:
     - secretLevel: 1
       levelUpIfRead: 1
@@ -75,6 +76,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 7936a7b73723e4594ad7c1bba9bb9343, type: 2}
     - {fileID: 11400000, guid: cd50693933b04464691441b8c27d9ee5, type: 2}
     - {fileID: 11400000, guid: 7ebd58e804f7c4beda4f657f4fb51068, type: 2}
+    - {fileID: 11400000, guid: ce91d911cbac9484e8fdbd6b6ad31940, type: 2}
     bloodMessages:
     - secretLevel: 1
       levelUpIfRead: 1
@@ -134,6 +136,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: e6f7aacb64a604a87b455e6d3347ae4a, type: 2}
     - {fileID: 11400000, guid: 616ce6a606c664c34b7f4986ab147aed, type: 2}
     - {fileID: 11400000, guid: 71edca1d768d248d4a214ee56c3103aa, type: 2}
+    - {fileID: 11400000, guid: d7e606e590bc84e8eba270214d1ed886, type: 2}
+    - {fileID: 11400000, guid: bbaa28a75fa2543508fdd517528e55f4, type: 2}
     bloodMessages:
     - secretLevel: 2
       levelUpIfRead: 0

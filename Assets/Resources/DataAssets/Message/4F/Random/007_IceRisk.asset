@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 004_DoNotSleepMessage
+  m_Name: 007_IceRisk
   m_EditorClassIdentifier: 
   setParams:
-  - name: "\u4F11\u606F\u7981\u6B62\uFF01"
-    sentence: "\u5BDD\u308B\u306A\uFF01\\n\u5BDD\u305F\u3089\u6B7B\u306C\u305E\u30FB\u30FB\u30FB\uFF01\\nby
+  - name: "\u6C37\u9B54\u6CD5\u306B\u8981\u6CE8\u610F"
+    sentence: "\u6C37\u6F2C\u3051\u306F\u3068\u3066\u3082\u5927\u304D\u306A\u30EA\u30B9\u30AF\\n\u6A2A\u3084\u80CC\u5F8C\u304B\u3089\u6C37\u9B54\u6CD5\u3092\u53D7\u3051\u308B\u3068\\n\u306A\u304B\u306A\u304B\u878D\u3051\u306A\u3044\u306E\u3067\u6CE8\u610F\\nby
       \u8FF7\u5BAE\u306E\u756A\u4EBA"
     face: -1
-    fontSize: 68
+    fontSize: 60
     literalsPerSec: 1000
-    alignment: 514
-    title: "\u3010\u4F11\u606F\u7981\u6B62\uFF01\u3011"
+    alignment: 513
+    title: "\u3010\u6C37\u9B54\u6CD5\u306B\u8981\u6CE8\u610F\u3011"
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 0
-  - name: "\u4F11\u606F\u7981\u6B62\uFF01\u53CD\u5FDC1"
-    sentence: "\u30FB\u30FB\u30FB"
-    face: 5
+  - name: "\u6C37\u9B54\u6CD5\u306B\u8981\u6CE8\u610F\u53CD\u5FDC1"
+    sentence: "\u80CC\u4E2D\u306B\u6C37\u9B54\u6CD5\u3092\u53D7\u3051\u308B\u3068\u3044\u304D\u306A\u308A\u5927\u30D4\u30F3\u30C1\u306B\u306A\u308B\u306D"
+    face: 8
     fontSize: 64
     literalsPerSec: 20
     alignment: 257
@@ -36,9 +36,9 @@ MonoBehaviour:
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 1
-  - name: "\u4F11\u606F\u7981\u6B62\uFF01\u53CD\u5FDC2"
-    sentence: "\u5BD2\u304F\u3057\u3066\u3093\u306E\u3042\u3093\u305F\u3060\u30FB\u30FB\u30FB\uFF01"
-    face: 6
+  - name: "\u6C37\u9B54\u6CD5\u306B\u8981\u6CE8\u610F\u53CD\u5FDC2"
+    sentence: "\u6C37\u9B54\u6CD5\u306E\u97F3\u3068\u6C17\u914D\u306B\u306F\u654F\u611F\u3067\u3044\u306A\u3044\u3068"
+    face: 0
     fontSize: 64
     literalsPerSec: 20
     alignment: 257
