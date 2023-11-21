@@ -300,7 +300,8 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
 
         var bloodMes = new Dictionary<Pos, IDirection>()
         {
-            { new Pos(23, 8), Direction.south },  // Glitch
+            { new Pos(23,  8), Direction.south },  // Glitch
+            { new Pos(20, 24), Direction.west  },  // CameBackHome
         };
 
         var customStructure = new Dictionary<Pos, IDirection>()
