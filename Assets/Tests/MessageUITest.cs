@@ -319,10 +319,11 @@ public class MessageUITest
     [UnityTest]
     public IEnumerator _009_FloorMessagesTest([Values(1, 2, 3, 4, 5)] int floor, [Values(1, 2, 3, 4, 5, 6, 7, 8, 9)] int secretLevel)
     {
-        int maxSecretLevel =
+        var messages =
             resourceLoader.floorMessagesData.Param(floor - 1).bloodMessages
-                .Concat(resourceLoader.floorMessagesData.Param(floor - 1).secretMessages)
-                .Max(src => src.secretLevel);
+                .Concat(resourceLoader.floorMessagesData.Param(floor - 1).secretMessages);
+
+        int maxSecretLevel = messages.Count() > 0 ? messages.Max(src => src.secretLevel) : secretLevel;
 
         gameInfo.secretLevel = secretLevel;
 
