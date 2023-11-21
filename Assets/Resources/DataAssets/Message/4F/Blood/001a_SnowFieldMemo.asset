@@ -25,8 +25,8 @@ MonoBehaviour:
     caption: 
     ignoreIfRead: 0
   - name: "SnowFieldMemo_a\u53CD\u5FDC"
-    sentence: "\u6B62\u3081\u308B\u3063\u3066\u3044\u3046\u306E\u306F\\n\u8FF7\u5BAE\u306E\u756A\u4EBA\u306E\u3053\u3068\u3060\u3088\u306D"
-    face: 0
+    sentence: "\u3093\u3093\uFF1F\uFF1F\\n\u306A\u3093\u306E\u3053\u3063\u3061\u3083\uFF1F\uFF1F"
+    face: 7
     fontSize: 64
     literalsPerSec: 20
     alignment: 257

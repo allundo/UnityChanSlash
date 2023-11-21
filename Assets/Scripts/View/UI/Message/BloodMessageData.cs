@@ -10,7 +10,7 @@ public class BloodMessageData : MessageData
 
     // 読んだとき message level 以上だとメッセージが理解できる反応をする
     public override MessageSource[] Source
-        => bloodSource.secretLevel > GameInfo.Instance.secretLevel ? bloodSource.alterData.Convert().Source : source;
+        => GameInfo.Instance.secretLevel >= bloodSource.secretLevel ? bloodSource.alterData.Convert().Source : source;
 
     public override bool isRead
     {

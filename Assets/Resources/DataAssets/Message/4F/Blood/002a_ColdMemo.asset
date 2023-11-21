@@ -24,9 +24,20 @@ MonoBehaviour:
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 0
-  - name: "ColdMemo_a\u53CD\u5FDC"
-    sentence: "\u5ACC\u304C\u3089\u305B\u3068\u3057\u304B\u601D\u3048\u306A\u3044\u3088\u306D\\n\u30DB\u30F3\u30C8\u306B\u30FB\u30FB\u30FB"
-    face: 3
+  - name: "ColdMemo_a\u53CD\u5FDC1"
+    sentence: "\u4ED6\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3068\u9055\u3046\u96F0\u56F2\u6C17"
+    face: 0
+    fontSize: 64
+    literalsPerSec: 20
+    alignment: 257
+    title: 
+    spriteImage: {fileID: 0}
+    matImage: {fileID: 0}
+    caption: 
+    ignoreIfRead: 1
+  - name: "ColdMemo_a\u53CD\u5FDC2"
+    sentence: "\u8AB0\u304B\u8FF7\u3044\u8FBC\u3093\u3067\u308B\u306E\u304B\u306A\u30FB\u30FB\u30FB\uFF1F"
+    face: 4
     fontSize: 64
     literalsPerSec: 20
     alignment: 257
