@@ -130,6 +130,7 @@ MonoBehaviour:
       alterIfReadNumber: 28
   - fixedMessages:
     - {fileID: 11400000, guid: 2fd4ee5cdb6574e088dcc0ea3ce008aa, type: 2}
+    - {fileID: 11400000, guid: 83a9cc276bac3438892f80d0731a6251, type: 2}
     randomMessages:
     - {fileID: 11400000, guid: 585c452f46bd8453c89cf745ceeb1dd6, type: 2}
     - {fileID: 11400000, guid: dd0c93d7ae4d541449e3d7a18c593a51, type: 2}
