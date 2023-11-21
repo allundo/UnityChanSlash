@@ -143,6 +143,10 @@ MonoBehaviour:
       levelUpIfRead: 0
       data: {fileID: 11400000, guid: feb160a886bcc4a25b55f5d6a933ce07, type: 2}
       alterData: {fileID: 11400000, guid: cc7847597e22248e083d0641fd5096a4, type: 2}
+    - secretLevel: 1
+      levelUpIfRead: 1
+      data: {fileID: 11400000, guid: ecf03f895d0be4304b63cad908c9923f, type: 2}
+      alterData: {fileID: 11400000, guid: f6939ff11da1440dba751de9cfd175e1, type: 2}
     secretMessages:
     - secretLevel: 3
       levelUpIfRead: 0

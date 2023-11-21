@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 001a_SnowFieldMemo
   m_EditorClassIdentifier: 
   setParams:
-  - name: SnowFieldMemo_a1
-    sentence: "\u3053\u3093\u306A\u666F\u8272\u306F\u898B\u305F\u3053\u3068\u304C\u306A\u3044\u2026\\n\u3053\u306E\u8FF7\u5BAE\u306F\u3069\u3093\u3069\u3093\u6210\u9577\u3057\u3066\u3044\u308B\\n\u65E9\u304F\u6B62\u3081\u306A\u3051\u308C\u3070"
+  - name: SnowFieldMemo_a
+    sentence: "\u3053\u3093\u306A\u666F\u8272\u306F\u898B\u305F\u3053\u3068\u304C\u306A\u3044\u2026\\n\u3053\u306E\u8FF7\u5BAE\u306F\u3069\u3093\u3069\u3093\u6210\u9577\u3057\u3066\u3044\u308B\\n\u65E9\u304F\u6B62\u3081\u306A\u3051\u308C\u3070\u306A\u3089\u306A\u3044"
     face: -1
     fontSize: 50
     literalsPerSec: 1000
@@ -24,7 +24,7 @@ MonoBehaviour:
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 0
-  - name: "SnowFieldMemo_a\u53CD\u5FDC1"
+  - name: "SnowFieldMemo_a\u53CD\u5FDC"
     sentence: "\u6B62\u3081\u308B\u3063\u3066\u3044\u3046\u306E\u306F\\n\u8FF7\u5BAE\u306E\u756A\u4EBA\u306E\u3053\u3068\u3060\u3088\u306D"
     face: 0
     fontSize: 64

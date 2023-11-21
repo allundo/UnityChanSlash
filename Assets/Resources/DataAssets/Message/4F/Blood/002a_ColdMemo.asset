@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 001b_SnowFieldMemo
+  m_Name: 002a_ColdMemo
   m_EditorClassIdentifier: 
   setParams:
-  - name: SnowFieldMemo_b
-    sentence: "\u3053\u3093\u306A\u666F\u8272\u306F\u898B\u305F\u3053\u3068\u304C\u306A\u3044\u2026\\n\u3053\u306E\u8FF7\u5BAE\u306F\u3069\u3093\u3069\u3093\u6210\u9577\u3057\u3066\u3044\u308B\\n\u65E9\u304F\u6B62\u3081\u306A\u3051\u308C\u3070\u306A\u3089\u306A\u3044"
+  - name: ColdMemo_a
+    sentence: "\u3069\u3046\u3084\u3063\u3066\u968E\u5168\u4F53\u3092\u51CD\u3089\u305B\u3066\u3044\u308B\uFF1F\\n\u306A\u305C\u96EA\u3092\u7A4D\u3082\u3089\u305B\u308B\u5FC5\u8981\u304C\u3042\u3063\u305F\uFF1F\\n\u6E29\u5EA6\u5DEE\u3067\u982D\u304C\u3069\u3046\u306B\u304B\u306A\u308A\u305D\u3046\u3060\u2026\\n\u5BD2\u3055\u306B\u306F\u30A4\u30E4\u306A\u601D\u3044\u51FA\u3057\u304B\u306A\u3044"
     face: -1
     fontSize: 50
     literalsPerSec: 1000
@@ -24,9 +24,9 @@ MonoBehaviour:
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 0
-  - name: "SnowFieldMemo_b\u53CD\u5FDC"
-    sentence: "\u3093\u3093\uFF1F\uFF1F\\n\u306A\u3093\u306E\u3053\u3063\u3061\u3083\uFF1F\uFF1F"
-    face: 7
+  - name: "ColdMemo_a\u53CD\u5FDC"
+    sentence: "\u5ACC\u304C\u3089\u305B\u3068\u3057\u304B\u601D\u3048\u306A\u3044\u3088\u306D\\n\u30DB\u30F3\u30C8\u306B\u30FB\u30FB\u30FB"
+    face: 3
     fontSize: 64
     literalsPerSec: 20
     alignment: 257
