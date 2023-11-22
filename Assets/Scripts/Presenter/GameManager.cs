@@ -196,7 +196,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void DebugStartFloor(int floor)
     {
-        Debug.Log("DEBUG MODE: floor = " + floor);
+        Debug.Log($"DEBUG MODE: floor = {floor}, secret level = {GameInfo.Instance.secretLevel}");
 
         if (floor == 2) spawnHandler.ActivateDebugEnemyGenerators();
 
