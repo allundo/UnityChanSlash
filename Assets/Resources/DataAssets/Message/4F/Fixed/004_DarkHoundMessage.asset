@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 003_ReverseCurseMessage
+  m_Name: 004_DarkHoundMessage
   m_EditorClassIdentifier: 
   setParams:
-  - name: "\u546A\u8FD4\u3057"
-    sentence: "\u30A2\u30F3\u30C7\u30C3\u30C9\u306B\u95C7\u9B54\u6CD5\u3092\u4F7F\u3046\u3068\\n\u546A\u3044\u304C\u8FD4\u3063\u3066\u304F\u308B\uFF01\\n\u76F8\u624B\u306F\u9078\u307C\u3046\u306D\\nby
+  - name: "\u95C7\u9B54\u6CD5\u3063\u3066\u4FBF\u5229\uFF1F"
+    sentence: "\u85AC\u306E\u6B8B\u308A\u304C\u53B3\u3057\u3044\uFF1F\u305D\u3093\u306A\u3068\u304D\u306F\\n\u95C7\u9B54\u6CD5\u3082\u56DE\u5FA9\u306B\u4F7F\u3048\u308B\u306D\\n\u79C1\u306F\u3042\u307E\u308A\u597D\u304D\u3058\u3083\u306A\u3044\u3051\u3069\\nby
       \u8FF7\u5BAE\u306E\u756A\u4EBA"
     face: -1
     fontSize: 68
     literalsPerSec: 1000
     alignment: 514
-    title: "\u3010\u546A\u8FD4\u3057\u3011"
+    title: "\u3010\u95C7\u9B54\u6CD5\u3063\u3066\u4FBF\u5229\uFF1F\u3011"
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}
     caption: 
     ignoreIfRead: 0
-  - name: "\u546A\u8A5B\u8FD4\u3057\u53CD\u5FDC1"
-    sentence: "\u3046\u30FC\u3093\u3001\u9762\u5012\u3060\u306A\u3041"
-    face: 5
+  - name: "\u95C7\u9B54\u6CD5\u3063\u3066\u4FBF\u5229\uFF1F\u53CD\u5FDC1"
+    sentence: "\u95C7\u9B54\u6CD5\u3063\u3066\u3001\u306A\u3093\u304B\u798D\u3005\u3057\u3044\u3051\u3069\\n\u307E\u3042\u5927\u4E08\u592B\u3060\u3088\u306D"
+    face: 4
     fontSize: 64
     literalsPerSec: 20
     alignment: 257

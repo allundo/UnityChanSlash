@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 033be23f76bfe47cc956ac72dd8066ea, type: 3}
-  m_Name: 004_CancelAttackKnuckle
+  m_Name: 002_CancelAttackKnuckle
   m_EditorClassIdentifier: 
   setParams:
   - name: "\u8FD1\u63A5\u30AD\u30E3\u30F3\u30BB\u30EB\u89E3\u8AAC"
