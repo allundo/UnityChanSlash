@@ -128,8 +128,11 @@ public class PitMessageMapData : DirMapData
 
         var remainingSecret = SetBloodDataPos(custom.bloodMessagePos, custom.secretMes, numOfSecretMessages);
 
+        int numOfRandomMessages = numOfFloorMessages - fixedMessages.Length - bloodMessages.Length - secretMessagePos.Count();
+
+        // Use remaining secret message pos as random message pos candidates.
         remainingSecret.AddRange(custom.randomMes);
-        int numOfRandomMessages = numOfFloorMessages - fixedMessages.Length - bloodMessages.Length - numOfSecretMessages;
+
         var remainingRandom = SetMessageDataPos(custom.fixedMessagePos, remainingSecret, numOfRandomMessages);
 
         RemoveMessageFromWall(remainingRandom);
