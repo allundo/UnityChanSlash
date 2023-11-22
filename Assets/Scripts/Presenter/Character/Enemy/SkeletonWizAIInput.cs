@@ -56,7 +56,14 @@ public class SkeletonWizAIInput : EnemyAIInput, IUndeadInput
         if (IsOnPlayer(right2)) return turnR;
 
         bool isForwardMovable = mobMap.IsMovable(forward);
-        if (IsPlayerFound()) return isForwardMovable ? RandomChoice(moveForward, fire, ice) : RandomChoice(fire, ice);
+
+        if (IsPlayerFound())
+        {
+            ICommand cmd = isForwardMovable ? RandomChoice(moveForward, fire, ice) : RandomChoice(fire, ice);
+
+            // Replace ice magic with dark hound when player is icing.
+            return cmd == ice && PlayerInfo.Instance.IsPlayerIcing ? fire : cmd;
+        }
 
         Pos backward = mobMap.GetBackward;
         if (IsOnPlayer(backward)) return RandomChoice(turnL, turnR);
