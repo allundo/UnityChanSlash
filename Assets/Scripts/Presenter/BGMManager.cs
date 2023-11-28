@@ -60,9 +60,12 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
     {
         if (currentBGM == SelectSource(BGMType.GameOver)) return;
 
+        var bossBGM = SelectSource(BGMType.Witch);
+        if (currentBGM == bossBGM) return;
+
         reserveTween?.Kill();
         floorBGM.FadeOut(1f);
-        currentBGM = SelectSource(BGMType.Witch);
+        currentBGM = bossBGM;
         currentBGM.FadeIn(0.25f);
     }
 
