@@ -3,9 +3,6 @@ using DG.Tweening;
 
 public class AudioLoopSource : MonoBehaviour
 {
-    private AudioClip introClip;
-    private AudioClip loopClip;
-
     private AudioSource introSource;
     private AudioSource loopSource;
     private Tween fadeTween;
