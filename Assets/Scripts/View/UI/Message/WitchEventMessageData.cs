@@ -1,5 +1,3 @@
-using System;
-
 public class WitchEventMessageData : MessageData
 {
     private readonly int knowWitch = 5;

@@ -284,15 +284,19 @@ public class WitchGenerateEvent : PlayerHasItemEvent
             interval += 0.3f;
         }
 
+        const float lightOnDuration = 1.5f;
+        const float spotOnDuration = 1f;
+        float lightingFrames = (lightOnDuration + interval + lightOnDuration + 0.1f) / Constants.FRAME_SEC_UNIT;
+
         return seq
-            .InsertCallback(0.5f, () => SpawnHandler.Instance.PlaceWitch(witchPos, witchDir.Backward, 300f))
-            .Append(lightManager.DirectionalFadeOut(1.5f))
-            .Join(lightManager.PointFadeOut(1.5f))
-            .Join(lightManager.SpotFadeIn(map.WorldPos(witchPos) + new Vector3(0, 4f, 0), 1f, 30f, 1.0f))
+            .InsertCallback(0.5f, () => SpawnHandler.Instance.PlaceWitch(witchPos, witchDir.Backward, lightingFrames))
+            .Append(lightManager.DirectionalFadeOut(lightOnDuration))
+            .Join(lightManager.PointFadeOut(lightOnDuration))
+            .Join(lightManager.SpotFadeIn(map.WorldPos(witchPos) + new Vector3(0, 4f, 0), 1f, 30f, spotOnDuration))
             .AppendInterval(interval)
-            .Append(lightManager.DirectionalFadeIn(1.5f))
-            .Join(lightManager.PointFadeIn(1.5f))
-            .Join(lightManager.SpotFadeOut(30f, 1f))
+            .Append(lightManager.DirectionalFadeIn(lightOnDuration))
+            .Join(lightManager.PointFadeIn(lightOnDuration))
+            .Join(lightManager.SpotFadeOut(30f, spotOnDuration))
             .AppendCallback(() => input.EnqueueMessage(new WitchEventMessageData(GameManager.Instance.worldMap)))
             .SetUpdate(false)
             .OnCompleteAsObservable(Unit.Default);

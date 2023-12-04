@@ -39,9 +39,12 @@ public class WitchAIInput : GhostAIInput, IUndeadInput
     }
 
     public void InterruptSleep() => undeadInput.InterruptSleep();
+
     public override void OnActive(EnemyStatus.ActivateOption option)
     {
-        base.OnActive(option);
+        ValidateInput();
+        if (option.isSummoned) Interrupt(new WitchSummoned(target, option.summoningDuration));
+        if (option.icingFrames > 0f) InputIced(option.icingFrames);
         undeadInput.OnActive(option);
     }
 

@@ -307,6 +307,7 @@ public class WitchResurrection : Resurrection
         // Reserve resurrection again if player is on or teleport is invalid.
         if (tile.IsCharacterOn || isInsideClosedDoor && destPos.IsNull)
         {
+            BGMManager.Instance.ReserveBackToFloorBGM();
             target.interrupt.OnNext(Data(this));
         }
         else
@@ -316,6 +317,8 @@ public class WitchResurrection : Resurrection
             undeadReact.OnResurrection();
             map.SetObjectOn();
             enemyMap.SetOnEnemy();
+
+            BGMManager.Instance.SwitchBossBGM();
 
             if (isInsideClosedDoor)
             {
@@ -336,3 +339,14 @@ public class WitchResurrection : Resurrection
     }
 }
 
+public class WitchSummoned : WitchCommand
+{
+    public WitchSummoned(CommandTarget target, float duration = 120f) : base(target, duration)
+    { }
+
+    protected override bool Action()
+    {
+        SetOnCompleted(BGMManager.Instance.SwitchBossBGM);
+        return base.Action();
+    }
+}
