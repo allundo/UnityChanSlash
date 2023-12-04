@@ -169,6 +169,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
     {
         ValidateInput();
         if (option.isSummoned) Interrupt(new EnemySummoned(target, option.summoningDuration));
+        if (option.icingFrames > 0f) InputIced(option.icingFrames);
     }
 
     public override ICommand InputIced(float icingFrames)

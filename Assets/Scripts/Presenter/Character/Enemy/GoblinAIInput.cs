@@ -88,5 +88,6 @@ public class GoblinAIInput : ShieldInput, IEnemyInput
     {
         ValidateInput();
         if (option.isSummoned) Interrupt(new EnemySummoned(target, option.summoningDuration));
+        if (option.icingFrames > 0f) InputIced(option.icingFrames);
     }
 }
