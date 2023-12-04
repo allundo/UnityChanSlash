@@ -17,7 +17,7 @@ MonoBehaviour:
     sentence: "\u5BDD\u308B\u306A\uFF01\\n\u5BDD\u305F\u3089\u6B7B\u306C\u305E\u30FB\u30FB\u30FB\uFF01\\nby
       \u8FF7\u5BAE\u306E\u756A\u4EBA"
     face: -1
-    fontSize: 68
+    fontSize: 64
     literalsPerSec: 1000
     alignment: 514
     title: "\u3010\u4F11\u606F\u7981\u6B62\uFF01\u3011"
@@ -37,7 +37,7 @@ MonoBehaviour:
     caption: 
     ignoreIfRead: 1
   - name: "\u4F11\u606F\u7981\u6B62\uFF01\u53CD\u5FDC2"
-    sentence: "\u5BD2\u304F\u3057\u3066\u3093\u306E\u3042\u3093\u305F\u3060\u30FB\u30FB\u30FB\uFF01"
+    sentence: "\u5BD2\u304F\u3057\u3066\u3093\u306E\u306F\u3042\u3093\u305F\u3067\u3057\u3087"
     face: 6
     fontSize: 64
     literalsPerSec: 20

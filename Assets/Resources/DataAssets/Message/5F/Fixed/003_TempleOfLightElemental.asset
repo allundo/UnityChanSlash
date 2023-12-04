@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: "\u5149\uFF0A\uFF0A\u970A\uFF0A\uFF0A\u6BBF"
     sentence: "\uFF0A\uFF0A\uFF0A\u56E3\uFF0A\u8056\uFF0A\\n\uFF0A\uFF0A\u5B50\uFF0A\uFF0A\u6C38\uFF0A\uFF0A\uFF0A\u6804\uFF0A\\n\u7D04\uFF0A\uFF0A\uFF0A\uFF0A\u6240"
     face: -1
-    fontSize: 72
+    fontSize: 64
     literalsPerSec: 1000
     alignment: 514
     title: "\u3010\u5149\uFF0A\uFF0A\u970A\uFF0A\uFF0A\u6BBF\u3011"

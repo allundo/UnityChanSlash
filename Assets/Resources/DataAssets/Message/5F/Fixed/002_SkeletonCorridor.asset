@@ -17,7 +17,7 @@ MonoBehaviour:
     sentence: "\u30AC\u30A4\u30B3\u30C4\u304C\u6E67\u304D\u51FA\u3059\u305E\uFF01\\n\u6C17\u3092\u4ED8\u3051\u308D\uFF01\\n
       by \u8FF7\u5BAE\u306E\u756A\u4EBA"
     face: -1
-    fontSize: 72
+    fontSize: 64
     literalsPerSec: 1000
     alignment: 514
     title: "\u3010\u9AB8\u9AA8\u56DE\u5ECA\u3011"

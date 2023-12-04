@@ -17,9 +17,9 @@ MonoBehaviour:
     sentence: "\u6C37\u6F2C\u3051\u306F\u3068\u3066\u3082\u5927\u304D\u306A\u30EA\u30B9\u30AF\\n\u6A2A\u3084\u80CC\u5F8C\u304B\u3089\u6C37\u9B54\u6CD5\u3092\u53D7\u3051\u308B\u3068\\n\u306A\u304B\u306A\u304B\u878D\u3051\u306A\u3044\u306E\u3067\u6CE8\u610F\\nby
       \u8FF7\u5BAE\u306E\u756A\u4EBA"
     face: -1
-    fontSize: 60
+    fontSize: 64
     literalsPerSec: 1000
-    alignment: 513
+    alignment: 514
     title: "\u3010\u6C37\u9B54\u6CD5\u306B\u8981\u6CE8\u610F\u3011"
     spriteImage: {fileID: 0}
     matImage: {fileID: 0}

@@ -161,18 +161,18 @@ MonoBehaviour:
       alterIfReadNumber: 31
     - secretLevel: 6
       levelUpIfRead: 1
-      data: {fileID: 11400000, guid: 6d460d65521114a9fb059efef40fb467, type: 2}
-      alterData: {fileID: 11400000, guid: 8095744c25e5a446b8954d3351721a5c, type: 2}
+      data: {fileID: 11400000, guid: 8095744c25e5a446b8954d3351721a5c, type: 2}
+      alterData: {fileID: 11400000, guid: 6d460d65521114a9fb059efef40fb467, type: 2}
       alterIfReadNumber: 26
     - secretLevel: 7
       levelUpIfRead: 1
-      data: {fileID: 11400000, guid: dfa7082d960bc4050b30b1bc95a0d826, type: 2}
-      alterData: {fileID: 11400000, guid: 5211bc2252b544717a5b91947fa9677b, type: 2}
+      data: {fileID: 11400000, guid: 5211bc2252b544717a5b91947fa9677b, type: 2}
+      alterData: {fileID: 11400000, guid: dfa7082d960bc4050b30b1bc95a0d826, type: 2}
       alterIfReadNumber: 45
     - secretLevel: 8
       levelUpIfRead: 0
-      data: {fileID: 11400000, guid: cfc5fa6a2e0844fd88e7409dc71d938b, type: 2}
-      alterData: {fileID: 11400000, guid: 20c5f641c9236465e91d4ee96c532dab, type: 2}
+      data: {fileID: 11400000, guid: 20c5f641c9236465e91d4ee96c532dab, type: 2}
+      alterData: {fileID: 11400000, guid: cfc5fa6a2e0844fd88e7409dc71d938b, type: 2}
       alterIfReadNumber: 35
     - secretLevel: 8
       levelUpIfRead: 1

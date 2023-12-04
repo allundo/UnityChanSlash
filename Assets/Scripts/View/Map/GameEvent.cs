@@ -35,8 +35,8 @@ public class DropStartEvent : GameEvent
         input.EnqueueMessage(
             new MessageData
             (
-                new MessageSource("いきなりなんなのさ・・・", FaceID.DISATTRACT),
-                new MessageSource("久々の出番なのに、扱いが雑じゃない！？", FaceID.ANGRY)
+                new MessageSource("いきなりなんという不条理・・・", FaceID.DISATTRACT),
+                new MessageSource("ちょっと扱いが雑じゃない！？", FaceID.ANGRY)
             ),
             false
         );
@@ -58,7 +58,7 @@ public class DropStartEvent : GameEvent
         ICommand message = input.EnqueueMessage(
             new MessageData
             (
-                new MessageSource("なんか使う標示まちがってる気がするけど", FaceID.DEFAULT),
+                new MessageSource("なんか使う看板まちがってる気がするけど", FaceID.DEFAULT),
                 new MessageSource("どうみてもこれが出口だね", FaceID.NOTICE),
                 new MessageSource("・・・うーん", FaceID.DISATTRACT),
                 new MessageSource("鍵が掛かってますねぇ！", FaceID.DISATTRACT)
@@ -78,8 +78,8 @@ public class RestartEvent : GameEvent
         ICommand message = input.InterruptMessage(
             new MessageData
             (
-                new MessageSource("[仮] ・・・という夢だったのさ", FaceID.SMILE),
-                new MessageSource("[仮] なんも解決してないんだけどねっ！", FaceID.ANGRY)
+                new MessageSource("・・・という夢だったのさ", FaceID.SMILE),
+                new MessageSource("絶対に抜け出してやるんだから！", FaceID.ANGRY)
             )
         );
 

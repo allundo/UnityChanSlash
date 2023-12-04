@@ -72,7 +72,8 @@ public class PlayerMessageFloor3 : PlayerDetectFloor
 {
     public PlayerMessageFloor3(PlayerInput input) : base(input, new MessageData
     (
-        new MessageSource("そろそろ地下 3 階ってもんかしら？\n…なんかめっちゃ暑いんですけど。", FaceID.DEFAULT),
+        new MessageSource("うわ！なんかめっちゃ暑いんですけど！", FaceID.SURPRISE),
+        new MessageSource("そろそろ地下 3 階ってもんかしら？\nいきなり雰囲気変わったなぁ", FaceID.DEFAULT),
         new MessageSource("体力が奪われてく感じがする…。\nこまめに休息とらないとしんどいね、こりゃ。", FaceID.DESPISE)
     ))
     { }
@@ -81,9 +82,9 @@ public class PlayerMessageFloor4 : PlayerDetectFloor
 {
     public PlayerMessageFloor4(PlayerInput input) : base(input, new MessageData
     (
-        new MessageSource("いよいよ地下 4 階！\n・・・って、寒ゥ！！！", FaceID.SURPRISE),
-        new MessageSource("フィンランド式サウナか！\n一体どうなってんの？！", FaceID.ANGRY),
-        new MessageSource("ここで寝たらアウトだね…。\n急いで突破しよ！", FaceID.ANGRY2)
+        new MessageSource("なにこの寒さはァ！！！", FaceID.ANGRY),
+        new MessageSource("ここが地下 4 階…。\n一体どうなってんの？！", FaceID.SURPRISE),
+        new MessageSource("この寒さで寝たらアウトだね…。\n休息なんて無理そうだし急いで突破しよ！", FaceID.ANGRY2)
     ))
     { }
 }
@@ -92,9 +93,9 @@ public class PlayerMessageFloor5 : PlayerDetectFloor
 {
     public PlayerMessageFloor5(PlayerInput input) : base(input, new MessageData
     (
-        new MessageSource("地下 5 階とーちゃーく！\nうぇ〜寒かったぁ…。", FaceID.SMILE),
-        new MessageSource("…なんだかモノモノシイ雰囲気。\nこれが最後って感じかな？", FaceID.EYECLOSE),
-        new MessageSource("とっとと鍵奪って脱出してやりますかね！", FaceID.ANGRY2)
+        new MessageSource("うぇぇ寒かったぁ…。", FaceID.DESPISE),
+        new MessageSource("なんだかモノモノシイ雰囲気。\n地下 5 階、これが最後って感じかな？", FaceID.EYECLOSE),
+        new MessageSource("とっとと鍵奪って脱出してやりますか！", FaceID.ANGRY2)
     ))
     { }
 }
