@@ -10,7 +10,7 @@ public class PictureMessageData : MessageData
     public PictureMessageData() : base
     (
         CreateSource("写真のように高精彩な絵・・・の上になんだか落書きのような絵が", FaceID.DEFAULT, true),
-        CreateSource("人形のような少女と手をつなぐように、クレヨンみたいな画材で殴り描かれた・・・これは女性かな？", FaceID.NOTICE, true),
+        CreateSource("人形のような少女と手をつなぐ・・・女性？\nクレヨンみたいな画材で殴り描かれてる", FaceID.NOTICE, true),
         CreateSource("・・・", FaceID.EYECLOSE, true),
         CreateSource("なんなんだろ？この絵は？？", FaceID.DESPISE, false)
     )
