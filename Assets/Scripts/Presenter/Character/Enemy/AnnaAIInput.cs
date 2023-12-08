@@ -38,7 +38,7 @@ public class AnnaAIInput : ShieldInput, IEnemyInput
         var annaTarget = target as AnnaCommandTarget;
         die = new EnemyDie(target, 108f);
         idle = new EnemyIdle(target, 36f);
-        moveForward = new AnnaForward(annaTarget, 72f);
+        moveForward = new AnnaForward(annaTarget, 60f);
         run = new AnnaForward(annaTarget, 36f);
         leftMove = new AnnaLeftMove(annaTarget, 45f);
         rightMove = new AnnaRightMove(annaTarget, 45f);

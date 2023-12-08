@@ -144,7 +144,7 @@ public class AnnaForward : AnnaMove
 {
     protected override Pos DestPos => map.GetForward;
     protected override bool IsMovable => mobMap.IsMovable(DestPos);
-    protected override float Speed => TILE_UNIT / duration * 1.5f; // Adjust max speed to 6
+    protected override float Speed => TILE_UNIT / duration * 1.25f; // Adjust max speed to 6
     public AnnaForward(AnnaCommandTarget target, float duration) : base(target, duration) { }
 }
 
