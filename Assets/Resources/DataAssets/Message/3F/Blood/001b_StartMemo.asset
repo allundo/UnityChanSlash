@@ -47,7 +47,7 @@ MonoBehaviour:
     caption: 
     ignoreIfRead: 1
   - name: "StartMemo_b\u53CD\u5FDC2"
-    sentence: "\u306A\u3093\u304B\u30B1\u30F3\u30AB\u3057\u3066\u308B\u3063\u307D\u3044\u30FB\u30FB\u30FB"
+    sentence: "\u756A\u4EBA\u3055\u3093\u306F\u304A\u6C17\u306B\u53EC\u3055\u306A\u3044\u3088\u3046\u3060\u30FB\u30FB\u30FB"
     face: 4
     fontSize: 64
     literalsPerSec: 20
