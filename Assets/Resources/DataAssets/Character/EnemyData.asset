@@ -110,7 +110,7 @@ MonoBehaviour:
     prefab: {fileID: 7026800704296965620, guid: ff99ea07affb94dfea946d8b36d43fdf,
       type: 3}
     isOnGround: 1
-    shield: 15
+    shield: 20
     magic: 0.2
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
@@ -202,7 +202,7 @@ MonoBehaviour:
     prefab: {fileID: 1234450232476947528, guid: 2a77346479df447fdbc8731795f33d55,
       type: 3}
     isOnGround: 1
-    shield: 15
+    shield: 20
     magic: 0.2
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
@@ -270,7 +270,7 @@ MonoBehaviour:
     prefab: {fileID: 3673501252045754372, guid: a82f545f8b76a494e80218502d353c2e,
       type: 3}
     isOnGround: 1
-    shield: 20
+    shield: 25
     magic: 2
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
