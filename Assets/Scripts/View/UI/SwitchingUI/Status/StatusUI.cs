@@ -45,7 +45,7 @@ public class StatusUI : SwitchingContentBase
     {
         level.SetValue(status.level);
         expToNextLevel = status.expToNextLevel;
-        level.SetSubValues(status.exp / expToNextLevel, expToNextLevel);
+        level.SetSubValues(status.exp / expToNextLevel, expToNextLevel - status.exp);
         levelGainType.SetValue(status.levelGainTypeName);
         attack.SetValue(status.attack);
         attack.SetSubValues(status.equipR, status.equipL);
@@ -57,7 +57,7 @@ public class StatusUI : SwitchingContentBase
 
     public void UpdateExp(float exp)
     {
-        level.SetSubValues(exp / expToNextLevel);
+        level.SetSubValues(exp / expToNextLevel, expToNextLevel - exp);
     }
 
     public void UpdateShield(float shield)
