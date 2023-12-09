@@ -25,6 +25,7 @@ public class ResultUIHandler : MonoBehaviour
     [SerializeField] private RankInMessage message = default;
 
     private Image resultBGImage;
+    private Color destBGColor;
 
     public IObservable<Unit> ClickToEnd { get; private set; }
     public IObservable<Unit> FadeOutScreen { get; private set; }
@@ -46,6 +47,12 @@ public class ResultUIHandler : MonoBehaviour
 
         record.gameObject.SetActive(false);
         message.gameObject.SetActive(false);
+
+        var c = resultBGImage.color;
+        var src = new Vector3(c.r, c.g, c.b);
+        var dst = Vector3.Lerp(src, Vector3.zero, c.a);
+        destBGColor = new Color(dst.x, dst.y, dst.z, 0.75f);
+
     }
 
     public IObservable<Unit> ViewResult(ResultBonus result)
@@ -108,7 +115,8 @@ public class ResultUIHandler : MonoBehaviour
             .Join(level.Centering(0f, duration))
             .Join(strength.Centering(0f, duration))
             .Join(magic.Centering(0f, duration))
-            .AppendCallback(() => PlayRankIn(clearRank, clearRecord, titleButton.Show()));
+            .AppendCallback(() => PlayRankIn(clearRank, clearRecord, titleButton.Show()))
+            .Append(resultBGImage.DOColor(destBGColor, duration));
     }
 
     public Tween PlayRankIn(int rank, DataStoreAgent.ClearRecord clearRecord, Tween showTitleButton)
