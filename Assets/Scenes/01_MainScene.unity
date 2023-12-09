@@ -8128,7 +8128,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535991597}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &536590379
 GameObject:
   m_ObjectHideFlags: 0
@@ -12713,7 +12713,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1166764179}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &1170145106
 GameObject:
   m_ObjectHideFlags: 0
@@ -13228,7 +13228,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1226622217}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &1226622221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19578,7 +19578,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408562136}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &1448536996
 GameObject:
   m_ObjectHideFlags: 0
@@ -22126,7 +22126,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832759676}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &1859247363
 GameObject:
   m_ObjectHideFlags: 0
@@ -22180,7 +22180,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1859247363}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &1859247366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22386,9 +22386,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -22410,7 +22410,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1864535787}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!43 &1865941092
 Mesh:
   m_ObjectHideFlags: 0
@@ -22667,7 +22667,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866157535}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!43 &1870225843
 Mesh:
   m_ObjectHideFlags: 0
@@ -23284,7 +23284,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932245616}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &1957984983
 GameObject:
   m_ObjectHideFlags: 0
@@ -28979,7 +28979,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996034205}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &1999884780
 GameObject:
   m_ObjectHideFlags: 0
@@ -29235,7 +29235,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2029377407}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &2039285242
 GameObject:
   m_ObjectHideFlags: 0
@@ -30766,21 +30766,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1658967357}
     m_Modifications:
-    - target: {fileID: 840327228681209298, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 840327228681209298, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 840327228681209298, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1253816383672679446, guid: 25c86473574794550828fb85c20fdab4,
         type: 3}
       propertyPath: m_Pivot.x
@@ -30886,81 +30871,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1778760019484248868, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1778760019484248868, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1778760019484248868, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1875606676617373642, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1875606676617373642, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1875606676617373642, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2476639582298505701, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
-    - target: {fileID: 2476639582298505701, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: f04a730ade3bf4bc9bfa3a2b9094d9c6, type: 2}
-    - target: {fileID: 2476639582925852624, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
-    - target: {fileID: 2476639582925852624, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: f04a730ade3bf4bc9bfa3a2b9094d9c6, type: 2}
-    - target: {fileID: 2476639583054059621, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
-    - target: {fileID: 2476639583054059621, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: f04a730ade3bf4bc9bfa3a2b9094d9c6, type: 2}
-    - target: {fileID: 2476639584114555018, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
-    - target: {fileID: 2476639584114555018, guid: 25c86473574794550828fb85c20fdab4,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: -2144057180740647972, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
     - target: {fileID: 5244102884263256753, guid: 25c86473574794550828fb85c20fdab4,
         type: 3}
       propertyPath: m_Name
@@ -31606,7 +31516,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4750493034323304158}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!224 &3504755192342045714
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31830,7 +31740,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4143909644624622703}
-  - component: {fileID: 8361315611219779937}
   - component: {fileID: 6691234942917525759}
   m_Layer: 5
   m_Name: ScreenCover
@@ -33990,18 +33899,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ActiveMessageUI
       objectReference: {fileID: 0}
-    - target: {fileID: 8324177737758880221, guid: 2c686fc052fd14e7ca339a599d0066ef,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
-    - target: {fileID: 8324177737758880221, guid: 2c686fc052fd14e7ca339a599d0066ef,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: -2144057180740647972, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c686fc052fd14e7ca339a599d0066ef, type: 3}
 --- !u!114 &8337679454959986929 stripped
@@ -34189,7 +34086,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8337679455136500818}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &8337679455136500818
 GameObject:
   m_ObjectHideFlags: 0
@@ -34455,7 +34352,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8337679455270407395}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &8337679455487213394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34494,7 +34391,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8337679455487213396}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &8337679455487213396
 GameObject:
   m_ObjectHideFlags: 0
@@ -34638,7 +34535,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8337679456217465886}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &8337679456217465884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34762,7 +34659,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8337679456445953758}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!1 &8337679456445953758
 GameObject:
   m_ObjectHideFlags: 0
@@ -34802,14 +34699,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 720, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8361315611219779937
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573671692682118167}
-  m_CullTransparentMesh: 0
 --- !u!1001 &8769699944174545869
 PrefabInstance:
   m_ObjectHideFlags: 0
