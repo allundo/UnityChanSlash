@@ -13,7 +13,7 @@ public class ResultSceneMediator : SceneMediator
 
     protected override void InitBeforeStart()
     {
-        SetStartActions(Result, DebugResult);
+        SetStartActions(Result, SResult, MResult, LResult, XLResult);
 
         sceneLoader.StartLoadScene(0);
 
@@ -30,7 +30,7 @@ public class ResultSceneMediator : SceneMediator
             .AddTo(this);
 
 #if UNITY_EDITOR
-        if (gameInfo.isScenePlayedByEditor) gameInfo.startActionID = 1;
+        if (gameInfo.isScenePlayedByEditor) gameInfo.startActionID = 4;
 #endif
 
     }
@@ -74,25 +74,56 @@ public class ResultSceneMediator : SceneMediator
             .AddTo(this);
     }
 
+    private void SResult() => DebugResult();
+    private void MResult() => DebugResult();
+    private void LResult() => DebugResult();
+    private void XLResult() => DebugResult();
+
     private void DebugResult()
     {
         Debug.Log("DEBUG MODE");
 
+        GameInfo gameInfo = GameInfo.Instance;
+        BagSize size = Util.ConvertTo<BagSize>((int)gameInfo.startActionID - 1);
+
         var counter = new PlayerCounter();
-        for (int i = 0; i < 20; i++)
+
+        int clearTimeSec = 10;
+        int level = 1;
+        int strength = 1000;
+        int magic = 1000;
+        ulong moneyAmount = 4096;
+
+        for (int i = 0; i < 3 - (int)size; ++i)
         {
-            counter.IncDefeat(EnemyType.Slime);
-            counter.IncAttack(EquipmentCategory.Knuckle);
+            for (int j = 0; j < 20; j++)
+            {
+                counter.IncStep();
+                clearTimeSec += 80;
+                strength -= 12;
+                magic -= 12;
+            }
         }
 
-        GameInfo gameInfo = GameInfo.Instance;
+        for (int i = 0; i < (int)size; ++i)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                counter.IncDefeat(EnemyType.Slime);
+                counter.IncDefeat(EnemyType.SkeletonSoldier);
+                counter.IncAttack(EquipmentCategory.Knuckle);
+                moneyAmount *= 2;
+                level += 3;
+            }
+        }
 
-        gameInfo.TotalClearCounts(counter, 100, 171717);
-        gameInfo.clearRank = 1;
-        gameInfo.level = 10;
+        gameInfo.TotalClearCounts(counter, clearTimeSec, moneyAmount);
+        gameInfo.level = level;
+        gameInfo.strength = strength;
+        gameInfo.magic = magic;
+        gameInfo.clearRank = 4 - (int)size;
 
-        var resultBonus = new ResultBonus(GameInfo.Instance);
-
+        var resultBonus = new ResultBonus(gameInfo);
         gameInfo.clearRecord = new DataStoreAgent.ClearRecord(gameInfo.title, resultBonus.wagesAmount, gameInfo.endTimeSec, gameInfo.defeatCount);
 
         Result();

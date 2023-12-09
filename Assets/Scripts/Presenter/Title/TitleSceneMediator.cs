@@ -70,12 +70,12 @@ public class TitleSceneMediator : SceneMediator
                 debugBtns.Add(btn);
             });
 
-            clearTimes = new int[] { 7200, 3500, 3200, 1000 };
+            BagSize[] size = Util.GetValues<BagSize>();
             i = 0;
 
             titleUIHandler.debugResult.ForEach(btn =>
             {
-                IObservable<int> ret = Observable.Return(clearTimes[i++]);
+                IObservable<BagSize> ret = Observable.Return(size[i++]);
 
                 btn.OnClickAsObservable()
                     .First()
@@ -222,14 +222,12 @@ public class TitleSceneMediator : SceneMediator
         ForceTransitScene(2, 0);
     }
 
-    private void DebugResult(int clearTimeSec)
+    private void DebugResult(BagSize size)
     {
         DisableOtherControls();
         BGMManager.Instance.Stop();
 
-        GameInfo.Instance.endTimeSec = clearTimeSec;
-
-        ForceTransitScene(3, 0);
+        ForceTransitScene(3, (int)size + 1);
     }
 
     private void DisableDebugBtns()
