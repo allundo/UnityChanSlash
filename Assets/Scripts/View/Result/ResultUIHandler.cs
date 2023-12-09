@@ -108,7 +108,7 @@ public class ResultUIHandler : MonoBehaviour
     {
         return DOTween.Sequence()
             .Join(resultsTf.DOAnchorPosX(0f, duration))
-            .Join(itemPrice.Centering(0f, duration))
+            .Join(itemPrice.Centering(200f, duration))
             .Join(mapComp.Centering(0f, duration))
             .Join(clearTime.Centering(0f, duration))
             .Join(defeat.Centering(0f, duration))

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using TMPro;
 
 public class ItemPriceSumUp : ResultAnimation
 {
@@ -17,7 +18,6 @@ public class ItemPriceSumUp : ResultAnimation
 
     public override Tween Centering(float vecX, float duration)
     {
-        return valueUI.MoveX(vecX, duration);
+        return valueUI.MoveX(vecX, duration).OnPlay(() => valueTxt.alignment = TextAlignmentOptions.Center);
     }
 }
-
