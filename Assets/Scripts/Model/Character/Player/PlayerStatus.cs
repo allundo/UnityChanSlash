@@ -200,10 +200,10 @@ public class PlayerStatus : MobStatus, IGetExp
         }
     }
 
-    public (int attack, int magic) GetAttackMagic()
+    public (int level, int attack, int magic) GetResultStatus()
     {
         var disp = GetDispStatus();
-        return ((int)disp.attack, (int)disp.magic);
+        return ((int)disp.level, (int)disp.attack, (int)disp.magic);
     }
 
     private DispStatus GetDispStatus()

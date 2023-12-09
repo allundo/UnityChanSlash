@@ -398,7 +398,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             ItemInventory.Instance.SumUpPrices()
         );
 
-        (gameInfo.strength, gameInfo.magic) = status.GetAttackMagic();
+        (gameInfo.level, gameInfo.strength, gameInfo.magic) = status.GetResultStatus();
 
         var result = new ResultBonus(gameInfo);
 
