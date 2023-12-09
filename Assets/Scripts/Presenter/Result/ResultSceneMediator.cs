@@ -8,6 +8,7 @@ public class ResultSceneMediator : SceneMediator
     [SerializeField] UnityChanResultReactor unityChanReactor = default;
     [SerializeField] Transform mainCameraTf = default;
     [SerializeField] ResultSpotLight spotLight = default;
+    [SerializeField] Transform dirLightTf = default;
     [SerializeField] GroundCoinGenerator generator = default;
 
     protected override void InitBeforeStart()
@@ -65,6 +66,9 @@ public class ResultSceneMediator : SceneMediator
 
                     mainCameraTf.DOMove(mainCameraTf.forward * -3f + Vector3.up * 2f, 30f).SetRelative().SetEase(Ease.OutCubic).Play();
                     mainCameraTf.DORotate(new Vector3(18f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
+                    dirLightTf.DORotate(new Vector3(-30f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
+                    spotLight.SetAngle(20, 30f, Ease.OutCubic);
+                    spotLight.SetRange(20, 30f, Ease.OutCubic);
                 }
             })
             .AddTo(this);
