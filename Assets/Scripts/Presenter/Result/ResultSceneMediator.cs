@@ -54,12 +54,13 @@ public class ResultSceneMediator : SceneMediator
             })
             .AddTo(this);
 
-        unityChanReactor.ScreenOut
-            .Subscribe(_ =>
-            {
-                resultUIHandler.CenterResults(GameInfo.Instance.clearRank, GameInfo.Instance.clearRecord, 3f).Play();
-                if (bagControl.bagSize == BagSize.Gigantic)
+        if (bagControl.bagSize == BagSize.Gigantic)
+        {
+            unityChanReactor.ScreenOut
+                .Subscribe(_ =>
                 {
+                    resultUIHandler.CenterResults().Play();
+
                     resultUIHandler.ClickToEnd
                         .Subscribe(_ => bagControl.StopCoinShower())
                         .AddTo(gameObject);
@@ -69,9 +70,16 @@ public class ResultSceneMediator : SceneMediator
                     dirLightTf.DORotate(new Vector3(-30f, 0, 0), 30f).SetRelative().SetEase(Ease.OutCubic).Play();
                     spotLight.SetAngle(20, 30f, Ease.OutCubic);
                     spotLight.SetRange(20, 30f, Ease.OutCubic);
-                }
-            })
-            .AddTo(this);
+
+                })
+                .AddTo(this);
+        }
+        else
+        {
+            unityChanReactor.ScreenOut
+                .Subscribe(_ => resultUIHandler.CenterResults().Play(), bagControl.DisableCloth)
+                .AddTo(this);
+        }
     }
 
     private void SResult() => DebugResult();

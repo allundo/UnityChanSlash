@@ -151,6 +151,10 @@ public class YenBag : MonoBehaviour
 
             yield return null;
         }
+
+        cloth.capsuleColliders = null;
+        cloth.clothSolverFrequency = 1;
+        cloth.enableContinuousCollision = false;
     }
 
     private void ExchangeInnerCoins()
@@ -167,5 +171,10 @@ public class YenBag : MonoBehaviour
         }
 
         cloth.capsuleColliders = coins;
+    }
+
+    public void SetClothEnable(bool isEnable)
+    {
+        cloth.enabled = isEnable;
     }
 }

@@ -106,4 +106,6 @@ public class BagControl
 
 
     public void Destroy() => bag.Destroy();
+
+    public void DisableCloth() => bag.SetClothEnable(false);
 }
