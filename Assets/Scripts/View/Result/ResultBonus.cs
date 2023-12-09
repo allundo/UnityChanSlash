@@ -38,7 +38,7 @@ public struct ResultBonus
         mapCompBonus = (int)(100000f * gameInfo.mapComp);
         clearTimeBonus = (int)(1000f * (Mathf.Max(0, 3600 - gameInfo.endTimeSec)));
         defeatBonus = gameInfo.defeatCount * 100;
-        levelBonus = gameInfo.level * 100;
+        levelBonus = gameInfo.level * 1000;
         strengthBonus = gameInfo.strength * 100;
         magicBonus = gameInfo.magic * 100;
 
