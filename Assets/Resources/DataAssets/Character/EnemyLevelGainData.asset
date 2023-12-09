@@ -59,8 +59,8 @@ MonoBehaviour:
     darkReduction: 0.025
   - name: "\u6226\u58EB"
     lifeMaxGainRatio: 1.02
-    attackGain: 2
-    shieldGain: 0
+    attackGain: 3
+    shieldGain: 1
     magicGain: 0.2
     armorReduction: 0.02
     fireReduction: 0.01

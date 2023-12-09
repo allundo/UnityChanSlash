@@ -106,11 +106,11 @@ MonoBehaviour:
     gainType: 1
   - name: "\u30B4\u30D6\u30EA\u30F3"
     defaultLifeMax: 80
-    attack: 15
+    attack: 10
     prefab: {fileID: 7026800704296965620, guid: ff99ea07affb94dfea946d8b36d43fdf,
       type: 3}
     isOnGround: 1
-    shield: 20
+    shield: 15
     magic: 0.2
     faceDamageMultiplier: 1
     sideDamageMultiplier: 2
