@@ -13,6 +13,7 @@ public class ThirdPersonCamera : MonoBehaviour
     [SerializeField] public Vector3 cameraPositionL = new Vector3(0, 8f, -8f);
     [SerializeField] private SideCamera sideCamera = default;
     [SerializeField] private RawImage crossFade = default;
+    [SerializeField] private DisplayEdge edge = default;
     [SerializeField] private Light pointLight = default;
     [SerializeField] public Vector3 pointLightOffset = new Vector3(0, 4f, 0);
 
@@ -125,6 +126,8 @@ public class ThirdPersonCamera : MonoBehaviour
         crossFade.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         crossFade.texture = renderTexture;
 
+        edge.ResetOrientation(orientation);
+
         if (screenShot != null) Destroy(screenShot);
         screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
 
@@ -167,16 +170,15 @@ public class ThirdPersonCamera : MonoBehaviour
     public void ResetCamera()
     {
         cam.targetTexture = null;
-        ResetCrossFade();
-        sideCamera.Disable();
-    }
-
-    public void ResetCrossFade()
-    {
         crossFade.texture = renderTexture;
         crossFade.enabled = false;
         SetFadeAlpha(1.0f);
-        crossFade.transform.SetSiblingIndex(1);
+        sideCamera.Disable();
+    }
+
+    public void SetCrossFadeSiblingIndex(int index = 0)
+    {
+        crossFade.transform.SetSiblingIndex(index);
     }
 
     public IEnumerator DisplayScreenShot(int screenCoverIndex = 8)
@@ -194,7 +196,8 @@ public class ThirdPersonCamera : MonoBehaviour
         crossFade.enabled = true;
 
         // Set cross fade Image to forefront
-        crossFade.transform.SetSiblingIndex(screenCoverIndex - 1);
+        SetCrossFadeSiblingIndex(screenCoverIndex - 1);
+
         yield return waitForEndOfFrame;
     }
 }

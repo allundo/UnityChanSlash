@@ -280,7 +280,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         BGMManager.Instance.PlayFloorBGM();
 
         hidePlateHandler.OnStartFloor();
-        mainCamera.ResetCrossFade();
+        mainCamera.ResetCamera();
+        mainCamera.SetCrossFadeSiblingIndex(0);
 
         playerCollider.enabled = true;
         cover.FadeIn(1f, 0f, false);

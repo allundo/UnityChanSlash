@@ -11611,6 +11611,7 @@ MonoBehaviour:
   cameraPositionL: {x: 0, y: 8, z: -8}
   sideCamera: {fileID: 736671719}
   crossFade: {fileID: 2022153802}
+  edge: {fileID: 8908900641751950586}
   pointLight: {fileID: 97894653}
   pointLightOffset: {x: 0, y: 4, z: 0}
 --- !u!1 &1015295889
@@ -30766,6 +30767,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1658967357}
     m_Modifications:
+    - target: {fileID: 840327228681209298, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 840327228681209298, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 840327228681209298, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1253816383672679446, guid: 25c86473574794550828fb85c20fdab4,
         type: 3}
       propertyPath: m_Pivot.x
@@ -30869,6 +30885,36 @@ PrefabInstance:
     - target: {fileID: 1253816383672679446, guid: 25c86473574794550828fb85c20fdab4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778760019484248868, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778760019484248868, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1778760019484248868, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875606676617373642, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875606676617373642, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875606676617373642, guid: 25c86473574794550828fb85c20fdab4,
+        type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5244102884263256753, guid: 25c86473574794550828fb85c20fdab4,
@@ -32606,6 +32652,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8908900641751950585}
   - component: {fileID: 6319635469752444724}
+  - component: {fileID: 8908900641751950586}
   m_Layer: 5
   m_Name: Edge
   m_TagString: Untagged
@@ -34882,6 +34929,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8908900641751950586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5547875709932282647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eaca94dac3cf44e48a98078948c41de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  top: {fileID: 5259757036228695722}
+  bottom: {fileID: 3610758528748679000}
+  left: {fileID: 4627675926263615641}
+  right: {fileID: 7452396994847709868}
 --- !u!224 &9033318438206021571 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2510775614361592176, guid: 723caa0e0671f482aa1faa89649e4e0f,
