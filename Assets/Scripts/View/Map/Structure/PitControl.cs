@@ -56,6 +56,7 @@ public class PitControl : MonoBehaviour
         var react = other.GetComponent<PlayerReactor>();
         if (react != null)
         {
+            if (!pitState.IsOpen) GameManager.Instance.Amplify(0.25f);
             pitState.Drop();
             react.PitFall(pitState.damage);
         }

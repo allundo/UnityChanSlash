@@ -257,8 +257,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         PlayVFX(VFXType.PitDrop, pos);
         PlaySnd(SNDType.PitDrop, pos);
-        mainCamera.Amplify(0.25f);
     }
+
+    public void Amplify(float duration = 1f, float power = 0.01f) => mainCamera.Amplify(duration, power);
 
     public void EnterStair(bool isDownStairs)
     {
