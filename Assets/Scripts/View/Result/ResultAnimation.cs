@@ -4,7 +4,7 @@ using TMPro;
 
 public class ResultAnimation : MonoBehaviour
 {
-    protected virtual string ValueFormat(ulong value) => value > 999 ? $"999↑" : value.ToString();
+    protected virtual string ValueFormat(ulong value) => value > 999 ? $"↑999" : value.ToString();
 
     [SerializeField] protected TextMeshProUGUI valueTxt = default;
     protected TextMeshProUGUI labelTxt;
