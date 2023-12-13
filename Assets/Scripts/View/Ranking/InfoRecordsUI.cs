@@ -11,6 +11,7 @@ public class InfoRecordsUI : RecordsUI
     {
         gotTitle.gameObject.SetActive(isActive);
         info.gameObject.SetActive(isActive);
+        diaryUI.SetActive(isActive);
     }
 
     public void LoadRecords(DataStoreAgent.InfoRecord infoRecord)

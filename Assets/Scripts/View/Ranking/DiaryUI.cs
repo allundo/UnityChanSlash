@@ -83,16 +83,10 @@ public class DiaryUI : MonoBehaviour
         currentSelected = selected;
     }
 
-    public void Activate()
+    public void Activate() => SetActive(true);
+    public void Inactivate() => SetActive(false);
+    public void SetActive(bool isActive)
     {
-        if (diaryList.Count > 0)
-        {
-            gameObject.SetActive(true);
-        }
-    }
-
-    public void Inactivate()
-    {
-        gameObject.SetActive(false);
+        gameObject.SetActive(isActive && diaryList.Count > 0);
     }
 }
