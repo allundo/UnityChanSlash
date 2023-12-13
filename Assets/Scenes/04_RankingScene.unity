@@ -1836,7 +1836,6 @@ MonoBehaviour:
   prefabPaperMemo: {fileID: 2841125909344805359, guid: 70a783bc6fa8b4852a35b0dba7588e21,
     type: 3}
   messageController: {fileID: 1451373824}
-  textHandler: {fileID: 0}
 --- !u!1 &983974046
 GameObject:
   m_ObjectHideFlags: 0
