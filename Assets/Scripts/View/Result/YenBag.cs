@@ -78,7 +78,7 @@ public class YenBag : MonoBehaviour
 
         for (int i = NUM_OF_INSERT_COINS; i < 32; i++)
         {
-            coins[i] = Instantiate(prefabOuterCoin, transform);
+            coins[i] = Instantiate(prefabOuterCoin, Vector3.zero, UnityEngine.Random.rotation, transform);
             coins[i].gameObject.SetActive(false);
 
             outerCoins[i] = coins[i].GetComponent<CapsuleCoin>();
