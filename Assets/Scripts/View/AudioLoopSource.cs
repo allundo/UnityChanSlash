@@ -33,6 +33,7 @@ public class AudioLoopSource : MonoBehaviour
         loopSource = gameObject.AddComponent<AudioSource>();
 
         introSource.spatialize = loopSource.spatialize = false;
+        introSource.spatialBlend = loopSource.spatialBlend = 0f;
         introSource.playOnAwake = loopSource.playOnAwake = false;
         introSource.bypassEffects = loopSource.bypassEffects = true;
         introSource.bypassListenerEffects = loopSource.bypassListenerEffects = true;
