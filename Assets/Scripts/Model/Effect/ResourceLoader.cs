@@ -140,7 +140,7 @@ public class ResourceLoader : SingletonMonoBehaviour<ResourceLoader>
 
     private readonly int[] diaryIDs = new int[]
     {
-        40, 41, 42, 24, 25
+        40, 41, 42, 24, 25, 26, 32, 33, 27, 34, 45, 35
     };
 
     public MessageData[] GetDiaries(int[] readMessageIDs)
