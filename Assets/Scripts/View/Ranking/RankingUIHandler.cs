@@ -16,7 +16,9 @@ public class RankingUIHandler : MonoBehaviour
     [SerializeField] private Button leftBtn = default;
 
     private Button[] buttons;
-    private void SetInteractableBtns(bool isInteractable) => buttons.ForEach(btn => { btn.interactable = isInteractable; });
+    private void SetInteractableBtns(bool isInteractable, params Button[] exceptFor)
+        => buttons.ForEach(btn => { btn.interactable = isInteractable; }, exceptFor); // Don't return false to ForEach to continue.
+
     public IObservable<Unit> TransitSignal { get; private set; }
 
     private RecordsUI leftUI;
@@ -93,7 +95,7 @@ public class RankingUIHandler : MonoBehaviour
     private Tween GoToRight()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetInteractableBtns(false))
+            .AppendCallback(() => SetInteractableBtns(false, toTitleBtn))
             .Join(rightUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
             .Join(centerUI.MoveX(-width, 0.6f).SetEase(Ease.Linear))
             .Join(leftUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
@@ -122,7 +124,7 @@ public class RankingUIHandler : MonoBehaviour
     private Tween GoToLeft()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetInteractableBtns(false))
+            .AppendCallback(() => SetInteractableBtns(false, toTitleBtn))
             .Join(rightUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
             .Join(centerUI.MoveX(width, 0.6f).SetEase(Ease.Linear))
             .Join(leftUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
