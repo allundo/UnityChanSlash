@@ -30,6 +30,7 @@ public class InfoRecordsUI : RecordsUI
             .Join(gotTitle.SlideInTween())
             .Join(info.SlideInTween().SetDelay(0.1f))
             .AppendCallback(diaryUI.Activate)
+            .AppendCallback(NotifyEnd)
             .AsReusable(gameObject);
     }
 }
