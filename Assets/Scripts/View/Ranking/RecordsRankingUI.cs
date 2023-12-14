@@ -47,6 +47,6 @@ public class RecordsRankingUI : RecordsUI
 
         SetRecordsActive(false);
 
-        slideInTween = seq.AppendCallback(NotifyEnd).AsReusable(gameObject);
+        slideInTween = seq.AsReusable(gameObject);
     }
 }

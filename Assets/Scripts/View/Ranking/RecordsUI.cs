@@ -1,6 +1,4 @@
 using UnityEngine;
-using UniRx;
-using System;
 using DG.Tweening;
 using TMPro;
 
@@ -20,9 +18,6 @@ public abstract class RecordsUI : MonoBehaviour
     protected abstract void SetRecordsActive(bool isActive);
 
     protected Tween slideInTween;
-    private ISubject<Unit> slideInEnd = new Subject<Unit>();
-    public IObservable<Unit> SlideInEnd => slideInEnd;
-    protected void NotifyEnd() => slideInEnd.OnNext(Unit.Default);
 
     protected virtual void Awake()
     {

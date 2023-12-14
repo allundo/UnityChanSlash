@@ -28,11 +28,7 @@ public class InfoRecordsUI : RecordsUI
         slideInTween = DOTween.Sequence()
             .Join(gotTitle.SlideInTween())
             .Join(info.SlideInTween().SetDelay(0.1f))
-            .AppendCallback(() =>
-            {
-                diaryUI.SetActive(true);
-                NotifyEnd();
-            })
+            .AppendCallback(() => diaryUI.SetActive(true))
             .AsReusable(gameObject);
     }
 }

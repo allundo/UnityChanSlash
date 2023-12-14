@@ -16,9 +16,8 @@ public class RankingUIHandler : MonoBehaviour
     [SerializeField] private Button leftBtn = default;
 
     private Button[] buttons;
-    private void SetInteractableBtns(bool isInteractable, params Button[] exceptFor) => buttons.ForEach(btn => { btn.interactable = isInteractable; }, exceptFor);
+    private void SetInteractableBtns(bool isInteractable) => buttons.ForEach(btn => { btn.interactable = isInteractable; });
     public IObservable<Unit> TransitSignal { get; private set; }
-    private IDisposable activateBtns;
 
     private RecordsUI leftUI;
     private RecordsUI centerUI;
@@ -35,7 +34,6 @@ public class RankingUIHandler : MonoBehaviour
         TransitSignal = toTitleBtn.OnClickAsObservable().First() // ContinueWith() cannot handle duplicated click events
                 .ContinueWith(_ =>
                 {
-                    activateBtns?.Dispose();
                     BGMManager.Instance.SetDistance(0f, 2f, 1.5f);
                     return fade.FadeOutObservable(2f);
                 });
@@ -95,7 +93,7 @@ public class RankingUIHandler : MonoBehaviour
     private Tween GoToRight()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetInteractableBtns(false, toTitleBtn))
+            .AppendCallback(() => SetInteractableBtns(false))
             .Join(rightUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
             .Join(centerUI.MoveX(-width, 0.6f).SetEase(Ease.Linear))
             .Join(leftUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
@@ -117,15 +115,14 @@ public class RankingUIHandler : MonoBehaviour
                 leftUI.HideRecords();
                 rightUI.HideRecords();
 
-                activateBtns?.Dispose();
-                activateBtns = centerUI.SlideInEnd.Subscribe(_ => SetInteractableBtns(true)).AddTo(this);
+                SetInteractableBtns(true);
             });
     }
 
     private Tween GoToLeft()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetInteractableBtns(false, toTitleBtn))
+            .AppendCallback(() => SetInteractableBtns(false))
             .Join(rightUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
             .Join(centerUI.MoveX(width, 0.6f).SetEase(Ease.Linear))
             .Join(leftUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
@@ -147,8 +144,7 @@ public class RankingUIHandler : MonoBehaviour
                 leftUI.HideRecords();
                 rightUI.HideRecords();
 
-                activateBtns?.Dispose();
-                activateBtns = centerUI.SlideInEnd.Subscribe(_ => SetInteractableBtns(true)).AddTo(this);
+                SetInteractableBtns(true);
             });
     }
 }
