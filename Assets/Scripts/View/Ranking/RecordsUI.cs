@@ -30,6 +30,8 @@ public abstract class RecordsUI : MonoBehaviour
         slideInTween?.Restart();
     }
 
+    public void PauseSlideIn() => slideInTween?.Pause();
+
     public void HideRecords()
     {
         slideInTween?.Rewind();

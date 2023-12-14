@@ -95,7 +95,11 @@ public class RankingUIHandler : MonoBehaviour
     private Tween GoToRight()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetInteractableBtns(false, toTitleBtn))
+            .AppendCallback(() =>
+            {
+                SetInteractableBtns(false, toTitleBtn);
+                centerUI.PauseSlideIn();
+            })
             .Join(rightUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
             .Join(centerUI.MoveX(-width, 0.6f).SetEase(Ease.Linear))
             .Join(leftUI.MoveX(-width, 0.6f).SetEase(Ease.OutCubic))
@@ -124,7 +128,11 @@ public class RankingUIHandler : MonoBehaviour
     private Tween GoToLeft()
     {
         return DOTween.Sequence()
-            .AppendCallback(() => SetInteractableBtns(false, toTitleBtn))
+            .AppendCallback(() =>
+            {
+                SetInteractableBtns(false, toTitleBtn);
+                centerUI.PauseSlideIn();
+            })
             .Join(rightUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
             .Join(centerUI.MoveX(width, 0.6f).SetEase(Ease.Linear))
             .Join(leftUI.MoveX(width, 0.6f).SetEase(Ease.OutCubic))
