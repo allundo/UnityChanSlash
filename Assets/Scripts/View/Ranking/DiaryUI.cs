@@ -74,7 +74,7 @@ public class DiaryUI : MonoBehaviour
             })
             .AddTo(this);
 
-        Inactivate();
+        SetActive(false);
     }
 
     private void SetCurrentSelected(PaperMemo selected)
@@ -83,8 +83,6 @@ public class DiaryUI : MonoBehaviour
         currentSelected = selected;
     }
 
-    public void Activate() => SetActive(true);
-    public void Inactivate() => SetActive(false);
     public void SetActive(bool isActive)
     {
         gameObject.SetActive(isActive && diaryList.Count > 0);

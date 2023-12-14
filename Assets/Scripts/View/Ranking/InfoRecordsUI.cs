@@ -11,7 +11,7 @@ public class InfoRecordsUI : RecordsUI
     {
         gotTitle.gameObject.SetActive(isActive);
         info.gameObject.SetActive(isActive);
-        diaryUI.SetActive(isActive);
+        diaryUI.SetActive(false);
     }
 
     public void LoadRecords(DataStoreAgent.InfoRecord infoRecord)
@@ -26,11 +26,13 @@ public class InfoRecordsUI : RecordsUI
         diaryUI.SetDiaries(ResourceLoader.Instance.GetDiaries(infoRecord.readMessageIDs));
 
         slideInTween = DOTween.Sequence()
-            .AppendCallback(diaryUI.Inactivate)
             .Join(gotTitle.SlideInTween())
             .Join(info.SlideInTween().SetDelay(0.1f))
-            .AppendCallback(diaryUI.Activate)
-            .AppendCallback(NotifyEnd)
+            .AppendCallback(() =>
+            {
+                diaryUI.SetActive(true);
+                NotifyEnd();
+            })
             .AsReusable(gameObject);
     }
 }
