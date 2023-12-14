@@ -210,10 +210,8 @@ public class AnnaSlash : EnemyCommand
     {
         annaAnim.slash.Fire();
 
-        completeTween = DOTween.Sequence()
-            .AppendInterval(duration * preSlashRatio)
-            .Append(slash.AttackSequence(duration * slashRatio))
-            .SetUpdate(false)
+        completeTween = slash.AttackSequence(duration * slashRatio)
+            .SetDelay(duration * preSlashRatio)
             .Play();
 
         return true;
