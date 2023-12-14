@@ -198,7 +198,7 @@ public class PlaceEnemyGenerator : EnemyGenerator
         if (!isWitchReserved) return;
 
         var info = PlayerInfo.Instance;
-        SpawnWitch(map.SearchSpaceNearBy(info.Pos, 3), info.Dir.Backward, 300f);
+        SpawnWitch(map.SearchSpaceNearBy(info.Pos, 3), info.Dir.Backward, 180f);
         isWitchReserved = false;
     }
     public override void DisableEnemyCommandsAll()
