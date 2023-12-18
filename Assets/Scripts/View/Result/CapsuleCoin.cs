@@ -7,12 +7,10 @@ public class CapsuleCoin : MonoBehaviour
     private GroundCoinGenerator generator;
 
     private Rigidbody body;
-    private CapsuleCollider col;
 
     void Awake()
     {
         body = GetComponent<Rigidbody>();
-        col = GetComponent<CapsuleCollider>();
     }
 
     public void SetGenerator(GroundCoinGenerator generator)
@@ -26,9 +24,7 @@ public class CapsuleCoin : MonoBehaviour
 
         Observable.NextFrame().Subscribe(_ =>
         {
-            var coin = generator.Spawn(body);
-
-            col.enabled = false;
+            generator.Spawn(body);
             gameObject.SetActive(false);
         }).AddTo(this);
     }
@@ -38,9 +34,7 @@ public class CapsuleCoin : MonoBehaviour
         Vector2 circle = UnityEngine.Random.insideUnitCircle;
         transform.position = new Vector3(circle.x, 5f, circle.y);
 
-        gameObject.SetActive(true);
-
         // Set enabling delay not to collide with cloth on initializing position.
-        Observable.NextFrame().Subscribe(_ => col.enabled = true).AddTo(this);
+        Observable.NextFrame().Subscribe(_ => gameObject.SetActive(true)).AddTo(this);
     }
 }
