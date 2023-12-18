@@ -10,10 +10,11 @@ public class YenBag : MonoBehaviour
     [SerializeField] public Cloth cloth = default;
     [SerializeField] public ReverseMeshBox box = default;
 
-    private readonly int NUM_OF_INSERT_COINS = 14;
+    private static readonly int NUM_OF_INSERT_COINS = 14;
+    private static readonly int NUM_OF_COINS_MAX = 24;
 
-    private CapsuleCollider[] coins = new CapsuleCollider[32];
-    private CapsuleCoin[] outerCoins = new CapsuleCoin[32];
+    private CapsuleCollider[] coins = new CapsuleCollider[32]; // Adjust to Cloth.capsuleColliders array size 32.
+    private CapsuleCoin[] outerCoins = new CapsuleCoin[NUM_OF_COINS_MAX];
 
     private ISubject<Transform> caughtSubject = new Subject<Transform>();
     public IObservable<Transform> Caught => caughtSubject;
@@ -76,7 +77,7 @@ public class YenBag : MonoBehaviour
             coins[i].gameObject.SetActive(false);
         }
 
-        for (int i = NUM_OF_INSERT_COINS; i < 32; i++)
+        for (int i = NUM_OF_INSERT_COINS; i < NUM_OF_COINS_MAX; i++)
         {
             coins[i] = Instantiate(prefabOuterCoin, Vector3.zero, UnityEngine.Random.rotation, transform);
             coins[i].gameObject.SetActive(false);
@@ -108,7 +109,7 @@ public class YenBag : MonoBehaviour
 
     public void Destroy()
     {
-        for (int i = 0; i < 32; i++)
+        for (int i = 0; i < NUM_OF_COINS_MAX; i++)
         {
             Destroy(coins[i].gameObject);
         }
@@ -123,7 +124,7 @@ public class YenBag : MonoBehaviour
 
     private bool DropCoin()
     {
-        for (int i = 0; i < 32; i++)
+        for (int i = 0; i < NUM_OF_COINS_MAX; i++)
         {
             if (!outerCoins[i].gameObject.activeSelf)
             {
