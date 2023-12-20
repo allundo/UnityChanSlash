@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +8,7 @@ public class GroundCoin : MonoBehaviour
     private static Dictionary<GroundCoin, CombineInstance> coins = new Dictionary<GroundCoin, CombineInstance>();
     private static List<Mesh> combinedMeshes = new List<Mesh>();
     private static List<GameObject> combinedCoins = new List<GameObject>();
+    private static List<MeshFilter> fullCombinedMeshes = new List<MeshFilter>();
 
     private MeshCollider col;
     private Rigidbody body;
@@ -52,7 +54,7 @@ public class GroundCoin : MonoBehaviour
     {
         coins[this] = new CombineInstance() { mesh = GetComponent<MeshFilter>().sharedMesh, transform = transform.localToWorldMatrix };
 
-        if (coins.Count == 20)
+        if (coins.Count == 10)
         {
             Mesh combinedMesh = new Mesh();
             name = combinedMesh.name = "500YenCoins";
@@ -70,7 +72,38 @@ public class GroundCoin : MonoBehaviour
             coins.Remove(this);
             coins.ForEach(kv => kv.Key.Init());
             coins.Clear();
+        }
+    }
 
+    public static IEnumerator FullCombineMeshes()
+    {
+        var wait1Sec = new WaitForSeconds(1);
+
+        int numOfMeshes = combinedMeshes.Count();
+        int unit = numOfMeshes > 5 ? numOfMeshes / 5 : numOfMeshes;
+
+        for (int combineCount = numOfMeshes; combineCount > 0; combineCount = combinedMeshes.Count())
+        {
+            if (combineCount > unit) combineCount = unit;
+
+            Mesh[] meshesToCombine = combinedMeshes.Take(combineCount).ToArray();
+
+            MeshFilter wholeMeshObj = new GameObject("Combined500YenCoins").AddComponent<MeshFilter>();
+            Mesh wholeMesh = new Mesh();
+            wholeMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            wholeMesh.CombineMeshes(meshesToCombine.Select(m => new CombineInstance() { mesh = m }).ToArray(), true);
+
+            wholeMeshObj.sharedMesh = wholeMesh;
+
+            fullCombinedMeshes.Add(wholeMeshObj);
+
+            meshesToCombine.ForEach(mesh => Destroy(mesh));
+            combinedMeshes.RemoveRange(0, combineCount);
+
+            combinedCoins.Take(combineCount).ForEach(obj => Destroy(obj));
+            combinedCoins.RemoveRange(0, combineCount);
+
+            yield return wait1Sec;
         }
     }
 
@@ -79,5 +112,6 @@ public class GroundCoin : MonoBehaviour
         coins.Clear();
         combinedMeshes.ForEach(mesh => Destroy(mesh));
         combinedCoins.ForEach(obj => Destroy(obj));
+        fullCombinedMeshes.ForEach(meshFilter => Destroy(meshFilter.sharedMesh));
     }
 }

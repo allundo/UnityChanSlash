@@ -104,7 +104,6 @@ public class BagControl
         bagTf.DOLocalRotate(bagSource.catchAngles[2], 0.5f).Play();
     }
 
-
     public void Destroy() => bag.Destroy();
 
     public void DisableCloth() => bag.SetClothEnable(false);

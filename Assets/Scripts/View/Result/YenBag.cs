@@ -156,6 +156,9 @@ public class YenBag : MonoBehaviour
 
         DecreaseClothProcessing();
 
+        yield return new WaitForSeconds(1f);
+
+        yield return GroundCoin.FullCombineMeshes();
     }
 
     private void DecreaseClothProcessing()
