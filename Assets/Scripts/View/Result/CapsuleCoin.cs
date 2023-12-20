@@ -31,10 +31,17 @@ public class CapsuleCoin : MonoBehaviour
 
     public void Activate()
     {
-        Vector2 circle = UnityEngine.Random.insideUnitCircle;
-        transform.position = new Vector3(circle.x, 5f, circle.y);
+        // Set moving delay not to collide with cloth.
+        Observable.NextFrame()
+            .ContinueWith(_ =>
+            {
+                Vector2 circle = UnityEngine.Random.insideUnitCircle;
+                body.MovePosition(new Vector3(circle.x, 5f, circle.y));
 
-        // Set enabling delay not to collide with cloth on initializing position.
-        Observable.NextFrame().Subscribe(_ => gameObject.SetActive(true)).AddTo(this);
+                // Set enabling delay not to collide with cloth.
+                return Observable.NextFrame();
+            })
+            .Subscribe(_ => gameObject.SetActive(true))
+            .AddTo(this);
     }
 }
