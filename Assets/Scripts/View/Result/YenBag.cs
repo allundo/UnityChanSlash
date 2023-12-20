@@ -28,6 +28,7 @@ public class YenBag : MonoBehaviour
         {
             StopCoroutine(coinShowerCoroutine);
             outerCoins.ForEach(coin => coin.gameObject.SetActive(false));
+            DecreaseClothProcessing();
         }
     }
 
@@ -153,6 +154,12 @@ public class YenBag : MonoBehaviour
             yield return null;
         }
 
+        DecreaseClothProcessing();
+
+    }
+
+    private void DecreaseClothProcessing()
+    {
         cloth.capsuleColliders = null;
         cloth.clothSolverFrequency = 1;
         cloth.enableContinuousCollision = false;
