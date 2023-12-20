@@ -54,7 +54,7 @@ public class GroundCoin : MonoBehaviour
     {
         coins[this] = new CombineInstance() { mesh = GetComponent<MeshFilter>().sharedMesh, transform = transform.localToWorldMatrix };
 
-        if (coins.Count == 10)
+        if (coins.Count == 16)
         {
             Mesh combinedMesh = new Mesh();
             name = combinedMesh.name = "500YenCoins";
