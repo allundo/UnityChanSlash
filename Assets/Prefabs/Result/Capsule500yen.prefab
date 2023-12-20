@@ -101,7 +101,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!136 &4252673459171234702
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -128,5 +128,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75e72b292f094ce985b0f9d0d3b8c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabGroundCoin: {fileID: 8175156608133073555, guid: 6051e4b9cfc28461fa1a0f3e37ee63f7,
-    type: 3}
