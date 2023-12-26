@@ -815,16 +815,30 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
         saveData = null;
     }
 
-    public void DeleteSettingDataFile()
+    private void DeleteSettingDataFile()
     {
         DeleteFile(SETTING_DATA_FILE_NAME);
         settingData = null;
     }
 
-    public void DeleteInfoRecord()
+    private void DeleteInfoRecord()
     {
         DeleteFile(INFO_RECORD_FILE_NAME);
         infoRecord = null;
+    }
+
+    public void DeleteAllDataFiles()
+    {
+        foreach (var name in new string[] { DEAD_RECORD_FILE_NAME, CLEAR_RECORD_FILE_NAME, INFO_RECORD_FILE_NAME, SAVE_DATA_FILE_NAME, SETTING_DATA_FILE_NAME })
+        {
+            DeleteFile(name);
+        }
+
+        saveData = null;
+        settingData = null;
+        infoRecord = null;
+        clearRecords = null;
+        deadRecords = null;
     }
 
     ///  <summary>

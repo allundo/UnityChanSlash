@@ -9,6 +9,7 @@ public class SettingsUIHandler : MonoBehaviour
     [SerializeField] private FadeScreen fade = default;
     [SerializeField] private AlphaSlider[] alphaSetters = default;
     [SerializeField] private Button toTitleBtn = default;
+    [SerializeField] private Button deleteSaveBtn = default;
 
     public IObservable<DataStoreAgent.SettingData> TransitSignal { get; private set; }
 
@@ -18,6 +19,14 @@ public class SettingsUIHandler : MonoBehaviour
             .OnClickAsObservable().First() // ContinueWith() cannot handle duplicated click events
             .ContinueWith(_ => fade.FadeOutObservable(2f))
             .ContinueWith(_ => Observable.Return(RetrieveSettings()));
+
+        deleteSaveBtn.OnClickAsObservable().First()
+            .Subscribe(_ =>
+            {
+                DataStoreAgent.Instance.DeleteAllDataFiles();
+                deleteSaveBtn.enabled = false;
+            })
+            .AddTo(this);
     }
 
     void Start()
