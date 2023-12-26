@@ -410,6 +410,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         cover.ExitFadeOut(3f)
             .Subscribe(null, exitSubject.OnCompleted)
             .AddTo(this);
+
+        BGMManager.Instance.FadeToNextScene(BGMType.End, 4f, true);
     }
 
     public DataStoreAgent.EventData[] ExportEventData() => eventManager.ExportEventData();

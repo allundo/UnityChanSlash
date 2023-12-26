@@ -27,7 +27,7 @@ public class MainSceneMediator : SceneMediator
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ =>
             {
-                BGMManager.Instance.ToTitle();
+                BGMManager.Instance.FadeToNextScene(BGMType.Title);
                 return LoadSceneWithCoverOn(0);
             })
             .IgnoreElements()

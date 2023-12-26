@@ -21,6 +21,8 @@ public class EndingSceneMediator : SceneMediator
 
     private void StartScene()
     {
+        BGMManager.Instance.PlaySceneBGM(BGMType.End);
+
         endingUIHandler.StartScroll(SelectPeriodIndex(GameInfo.Instance.endTimeSec))
            .Subscribe(_ => SceneTransition(0))
            .AddTo(this);
@@ -28,6 +30,8 @@ public class EndingSceneMediator : SceneMediator
 
     private void DebugScene()
     {
+        BGMManager.Instance.PlaySceneBGM(BGMType.End);
+
         endingUIHandler.StartScroll()
            .Subscribe(_ => SceneTransition(0))
            .AddTo(this);

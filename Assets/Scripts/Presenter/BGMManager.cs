@@ -19,14 +19,15 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
     {
         var type = FLOOR_BGM_TYPE[0];
         floorBGM = SelectSource(type);
-        FadeOut(2f, true);
-        reserveTween = DOVirtual.DelayedCall(2f, () => ReleaseAllBGMs(type), false).Play();
+        FadeToNextScene(type);
     }
 
-    public void ToTitle()
+    public void FadeToNextScene(BGMType type, float duration = 2f, bool loadSource = false)
     {
-        FadeOut(2f, true);
-        reserveTween = DOVirtual.DelayedCall(2f, () => ReleaseAllBGMs(BGMType.Title), false).Play();
+        if (loadSource) LoadSource(type);
+
+        FadeOut(duration, true);
+        reserveTween = DOVirtual.DelayedCall(2f, () => ReleaseAllBGMs(type)).Play();
     }
 
     public void GameOver()
@@ -81,11 +82,11 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         }, false).Play();
     }
 
-    public void PlayTitle()
+    public void PlaySceneBGM(BGMType type)
     {
         reserveTween?.Kill();
         if (currentBGM != null && currentBGM.isPlaying) currentBGM.Stop();
-        currentBGM = SelectSource(BGMType.Title).Play();
+        currentBGM = SelectSource(type).Play();
     }
 
     public void Stop() => currentBGM?.Stop();

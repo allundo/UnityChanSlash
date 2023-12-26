@@ -37,6 +37,8 @@ public class ResultSceneMediator : SceneMediator
 
     private void Result()
     {
+        BGMManager.Instance.PlaySceneBGM(BGMType.Result);
+
         var resultBonus = new ResultBonus(GameInfo.Instance);
         var bagControl = new BagControl(resultBonus.wagesAmount, generator);
 

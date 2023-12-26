@@ -149,7 +149,7 @@ public class TitleSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, () =>
             {
-                BGMManager.Instance.PlayTitle();
+                BGMManager.Instance.PlaySceneBGM(BGMType.Title);
                 titleUIHandler.ToTitle();
             })
             .AddTo(this);
@@ -162,7 +162,7 @@ public class TitleSceneMediator : SceneMediator
             .IgnoreElements()
             .Subscribe(null, () =>
             {
-                BGMManager.Instance.PlayTitle();
+                BGMManager.Instance.PlaySceneBGM(BGMType.Title);
                 titleUIHandler.SkipLogo();
             })
             .AddTo(this);

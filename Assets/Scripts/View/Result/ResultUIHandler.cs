@@ -37,7 +37,11 @@ public class ResultUIHandler : MonoBehaviour
         ClickToEnd = titleButton.OnPush.First();
 
         FadeOutScreen = ClickToEnd
-            .ContinueWith(_ => ClickTitleEffect());
+            .ContinueWith(_ =>
+            {
+                BGMManager.Instance.FadeToNextScene(BGMType.Title, 8f);
+                return ClickTitleEffect();
+            });
 
         TransitSignal = FadeOutScreen
             .ContinueWith(_ => titleButton.TextFinish().OnCompleteAsObservable());

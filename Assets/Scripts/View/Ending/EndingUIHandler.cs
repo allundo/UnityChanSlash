@@ -19,7 +19,11 @@ public class EndingUIHandler : MonoBehaviour
             .AppendInterval(3f)
             .AppendCallback(() => fade.color = new Color(0, 0, 0, 0))
             .Append(screen.TextScrollSequence(periodIndex))
-            .AppendCallback(() => fade.FadeOut(3f, 0, false))
+            .AppendCallback(() =>
+            {
+                BGMManager.Instance.FadeToNextScene(BGMType.Result, 4f, true);
+                fade.FadeOut(3f, 0, false);
+            })
             .AppendInterval(3f)
             .SetUpdate(false)
             .OnCompleteAsObservable(Unit.Default);
