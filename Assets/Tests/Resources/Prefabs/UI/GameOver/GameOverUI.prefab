@@ -1211,10 +1211,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1253816383672679446}
     m_Modifications:
-    - target: {fileID: 5642358800350840959, guid: 18c1ccff5d2464b79a2476c693213a25,
+    - target: {fileID: 899026523333211821, guid: 18c1ccff5d2464b79a2476c693213a25,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7120879870188405634, guid: 18c1ccff5d2464b79a2476c693213a25,
         type: 3}
@@ -1231,17 +1231,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7120879870313667732, guid: 18c1ccff5d2464b79a2476c693213a25,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc,
-        type: 2}
-    - target: {fileID: 7120879870313667732, guid: 18c1ccff5d2464b79a2476c693213a25,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 6f028fa2a80d3490c959dbb3a207cdb5, type: 2}
     - target: {fileID: 7120879871901325104, guid: 18c1ccff5d2464b79a2476c693213a25,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1351,11 +1340,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RankInMessage
-      objectReference: {fileID: 0}
-    - target: {fileID: 7863978362544867816, guid: 18c1ccff5d2464b79a2476c693213a25,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8202303392071552372, guid: 18c1ccff5d2464b79a2476c693213a25,
         type: 3}

@@ -14881,7 +14881,7 @@ MonoBehaviour:
   m_text: "\u30E9\u30F3\u30AF\u30A4\u30F3\u3057\u307E\u3057\u305F\uFF01"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 6f028fa2a80d3490c959dbb3a207cdb5, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 09a7a55f693e1485589f8253bbbd5ed1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
