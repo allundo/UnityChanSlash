@@ -139,6 +139,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 71edca1d768d248d4a214ee56c3103aa, type: 2}
     - {fileID: 11400000, guid: d7e606e590bc84e8eba270214d1ed886, type: 2}
     - {fileID: 11400000, guid: bbaa28a75fa2543508fdd517528e55f4, type: 2}
+    - {fileID: 11400000, guid: 1f7c53e49e11944e39f54b431116cf8c, type: 2}
     bloodMessages:
     - secretLevel: 2
       levelUpIfRead: 0
