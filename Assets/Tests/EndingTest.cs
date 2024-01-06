@@ -8,6 +8,7 @@ public class EndingTest
 {
     private ResourceLoader resourceLoader;
     private GameInfo gameInfo;
+    private AudioListener audioListener;
 
     private EndingUIHandler endingUIHandler;
     private EndingSceneMediator endingSceneMediator;
@@ -17,11 +18,13 @@ public class EndingTest
     {
         resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
         gameInfo = Object.Instantiate(Resources.Load<GameInfo>("Prefabs/System/GameInfo"));
+        audioListener = new GameObject("AudioListener").AddComponent<AudioListener>();
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
+        Object.Destroy(audioListener.gameObject);
         Object.Destroy(resourceLoader.gameObject);
         Object.Destroy(gameInfo.gameObject);
     }
