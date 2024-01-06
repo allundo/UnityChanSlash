@@ -87,13 +87,10 @@ public class BagControl
     {
         shakeSnd?.PlayEx();
 
-        if (bagSize == BagSize.Big)
-        {
-            bagMoveTween?.Kill();
-            bagRotateTween?.Kill();
-            bagTf.DOLocalMove(bagSource.rightHandOffsets[1], 0.5f).Play();
-            bagTf.DOLocalRotate(bagSource.catchAngles[1], 0.5f).Play();
-        }
+        bagMoveTween?.Kill();
+        bagRotateTween?.Kill();
+        bagTf.DOLocalMove(bagSource.rightHandOffsets[1], 0.5f).Play();
+        bagTf.DOLocalRotate(bagSource.catchAngles[1], 0.5f).Play();
     }
 
     public void CarryingResetPosition()
