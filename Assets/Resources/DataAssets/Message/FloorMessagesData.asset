@@ -125,8 +125,8 @@ MonoBehaviour:
       alterIfReadNumber: 27
     - secretLevel: 9
       levelUpIfRead: 0
-      data: {fileID: 11400000, guid: 7716eee906a8e4042889329f341c66d4, type: 2}
-      alterData: {fileID: 11400000, guid: c277982b7c2354e268738dc17455e622, type: 2}
+      data: {fileID: 11400000, guid: c277982b7c2354e268738dc17455e622, type: 2}
+      alterData: {fileID: 11400000, guid: 7716eee906a8e4042889329f341c66d4, type: 2}
       alterIfReadNumber: 28
   - fixedMessages:
     - {fileID: 11400000, guid: 2fd4ee5cdb6574e088dcc0ea3ce008aa, type: 2}
