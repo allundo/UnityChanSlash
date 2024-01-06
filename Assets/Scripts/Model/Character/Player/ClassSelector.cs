@@ -84,8 +84,8 @@ public class ClassSelector
                 attack,
                 shield,
                 shield * 0.25f + damage * 0.5f + magicDamage * 0.25f,
-                magic * 0.75f + magicDamage * 0.25f,
-                attack * 0.5f + damage * 0.25f + magicDamage * 0.25f,
+                magic * 0.8f + magicDamage * 0.2f,
+                attack * 0.4f + damage * 0.35f + magicDamage * 0.25f,
             }
             .Select(element => element / sum)
             .ToList();
@@ -93,8 +93,8 @@ public class ClassSelector
             float minRatio = ratio.Min();
             float maxRatio = ratio.Max();
             int maxIndex = ratio.IndexOf(maxRatio);
-            ratio.RemoveAt(maxIndex);
 
+            ratio.RemoveAt(maxIndex);
             float secondRatio = ratio.Max();
 
             if (secondRatio == 0f || maxRatio / secondRatio > THRESHOLD) return parent.selectors[maxIndex + 1];

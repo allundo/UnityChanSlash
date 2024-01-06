@@ -46,7 +46,7 @@ MonoBehaviour:
     thunderReduction: 0.01
     lightReduction: 0.01
     darkReduction: 0.01
-  - name: "\u91CD\u9A0E\u58EB"
+  - name: "\u91CD\u6226\u58EB"
     lifeMaxGainRatio: 1.05
     attackGain: 1.8
     shieldGain: 2.25
