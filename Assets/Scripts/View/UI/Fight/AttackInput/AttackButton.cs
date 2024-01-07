@@ -155,6 +155,14 @@ public class AttackButton : FadeUI
         return DOTween.To(() => countTime, time => countTime = time, 0f, coolTime).OnComplete(EnableButton).Play();
     }
 
+    public void Inactivate()
+    {
+        coolTimer?.Kill();
+        countTime = 0f;
+        isPressEnable = false;
+        FadeInactivate(0.1f);
+    }
+
     public override void KillTweens()
     {
         fade.KillTweens();

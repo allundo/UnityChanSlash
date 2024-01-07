@@ -58,19 +58,6 @@ public class AttackInputController : MonoBehaviour
         if (isChargingUp.Value && !currentButton.isPressReserved) enemyTarget.SetPointer(pressPos + pointerVec);
     }
 
-    public void Release()
-    {
-        currentButton?.Release();
-        currentButton = null;
-
-        pivotPoint.Hide();
-        effortPoint.Hide();
-        targetPointer.Hide();
-
-        isChargingUp.Value = false;
-        enemyTarget.SetPointer(Vector2.zero);
-    }
-
     public void Press(Vector2 screenPos)
     {
         pressPos = screenPos;
@@ -109,24 +96,36 @@ public class AttackInputController : MonoBehaviour
         targetPointer.SetVerticesPos(visualPointerVec);
     }
 
-    public void ButtonCancel(bool isFadeOnly = false)
+    public void Release()
     {
-        if (isFadeOnly)
-        {
-            currentButton?.FadeInactivate();
-        }
-        else
-        {
-            currentButton?.Cancel();
-        }
+        currentButton?.Release();
+        currentButton = null;
+        FinishCharging();
+    }
 
+    public void Inactivate()
+    {
+        currentButton?.Inactivate();
+        currentButton = null;
+        FinishCharging();
+    }
+
+    public void ButtonCancel()
+    {
+        currentButton?.Cancel();
+        currentButton = null;
+        FinishCharging();
+    }
+
+    private void FinishCharging()
+    {
         pivotPoint.Hide();
         effortPoint.Hide();
         targetPointer.Hide();
 
         isChargingUp.Value = false;
 
-        currentButton = null;
         pressPos = Vector2.zero;
+        enemyTarget.SetPointer(Vector2.zero);
     }
 }

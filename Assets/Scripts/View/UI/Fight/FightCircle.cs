@@ -157,7 +157,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (attackInputUI.IsDragCancel(eventData.position))
         {
-            ButtonCancel();
+            attackInputUI.ButtonCancel();
+            PointerUp();
             return;
         }
 
@@ -187,7 +188,9 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (!isForce && attackInputUI.IsPressed || !isActive) return;
 
-        ButtonCancel(true);
+        attackInputUI.Inactivate();
+        PointerUp();
+
         isActive = false;
 
         EnemyStatus.Value?.SetTarget(false);
@@ -203,12 +206,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
     }
 
-    private void ButtonCancel(bool isFadeOnly = false)
+    private void PointerUp()
     {
-        attackInputUI.ButtonCancel(isFadeOnly);
-
-        enemyTarget.SetPointer(Vector2.zero);
-
         if (pointerDownEventData != null)
         {
             raycastHandler.RaycastPointerUp(pointerDownEventData, true);
