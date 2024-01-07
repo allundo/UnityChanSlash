@@ -124,6 +124,76 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5965412798961019258}
     m_Modifications:
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[0].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[0].b
+      value: 0.6037736
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[0].g
+      value: 0.07119971
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[0].r
+      value: 0.07378645
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[1].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[1].b
+      value: 0.5471698
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[1].g
+      value: 0.35635403
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[1].r
+      value: 0.18841223
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[2].b
+      value: 0.4716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[2].g
+      value: 0.26257083
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[2].r
+      value: 0.037824854
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[3].b
+      value: 0.47058827
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[3].g
+      value: 0.2627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432096337210069681, guid: 6c04a6bd6d004465fb871aa147efd75d,
+        type: 3}
+      propertyPath: textColors.Array.data[3].r
+      value: 0.03529412
+      objectReference: {fileID: 0}
     - target: {fileID: 8526309072101177632, guid: 6c04a6bd6d004465fb871aa147efd75d,
         type: 3}
       propertyPath: m_Pivot.x

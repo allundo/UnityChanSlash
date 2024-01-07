@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Scroll Text
+  m_text: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0\u306E\u6587\u7AE0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 6f028fa2a80d3490c959dbb3a207cdb5, type: 2}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
