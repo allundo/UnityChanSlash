@@ -33,6 +33,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private IReactiveProperty<IEnemyStatus> EnemyStatus = new ReactiveProperty<IEnemyStatus>(null);
 
+    public bool isMasking { get; private set; } = false;
+
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -110,6 +112,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        isMasking = false;
+
         pointerDownEventData = null;
 
         if (!attackInputUI.IsPressed)
@@ -134,6 +138,8 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        isMasking = false;
+
         pointerDownEventData = eventData;
 
         if (!attackInputUI.InCircle(eventData.position))
@@ -188,8 +194,10 @@ public class FightCircle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (!isForce && attackInputUI.IsPressed || !isActive) return;
 
+        // Keep masking MoveUI if player is iced during pressing attack button
+        isMasking = isForce && attackInputUI.IsPressed;
+
         attackInputUI.Inactivate();
-        PointerUp();
 
         isActive = false;
 

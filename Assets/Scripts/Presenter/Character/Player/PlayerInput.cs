@@ -402,7 +402,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         bool isHandleUIOn = doorHandler.isPressed || boxHandler.isPressed || itemHandler.isPressed || inspectHandler.isPressed || itemInventory.IsPutItem;
 
-        uiMask.SetActive(isHandleUIOn || IsAttack || attackInputUI.IsPressed);
+        uiMask.SetActive(isHandleUIOn || IsAttack || attackInputUI.IsPressed || fightCircle.isMasking);
 
         forwardUI.SetActive(forwardTile.IsEnterable(map.dir) && !playerMap.IsInPit && !isHandleUIOn);
         backwardUI.SetActive(playerMap.IsBackwardMovable);
