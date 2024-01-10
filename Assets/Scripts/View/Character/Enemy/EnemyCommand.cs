@@ -73,6 +73,7 @@ public abstract class EnemyMove : EnemyCommand
             .Join(tweenMove.Move(destPos))
             .Join(tweenMove.DelayedCall(0.51f, () => enemyMap.MoveOnEnemy()))
             .AppendCallback(ResetSpeed)
+            .SetUpdate(UpdateType.Fixed, true)
             .Play();
     }
 

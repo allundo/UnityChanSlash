@@ -328,6 +328,7 @@ public class PlayerJump : PlayerCommand
             .SetEase(Ease.OutCubic)
             .SetLoops(2, LoopType.Yoyo)
             .SetDelay(0.18f)
+            .SetUpdate(UpdateType.Fixed, true)
             .Play();
     }
 
