@@ -299,7 +299,7 @@ public class HidePlateHandler : MonoBehaviour
                         // Remove the old plate simply if the new plate is NONE
                         if (src == Plate.NONE)
                         {
-                            plateData[x, y]?.Remove(0.4f);
+                            plateData[x, y]?.Remove();
                             plateData[x, y] = null;
                             continue;
                         }
@@ -313,10 +313,9 @@ public class HidePlateHandler : MonoBehaviour
                         Plate expand = src & ~dst;
                         if (expand != Plate.NONE)
                         {
-                            plate.SetAlpha(0f);
-                            SpawnPlate(expand, pos, 0.2f).RemoveTimer(0.2f).OnComplete(() => plate.SetAlpha(1f)).Play();
+                            SpawnPlate(expand, pos, 0.2f).ReplaceTimer(0.2f, plate);
 
-                            plateData[x, y]?.RemoveTimer(0.2f)?.Play();
+                            plateData[x, y]?.ReplaceTimer(0.2f);
                             plateData[x, y] = plate;
                             continue;
                         }
@@ -327,7 +326,7 @@ public class HidePlateHandler : MonoBehaviour
                         Plate remove = dst & ~src;
                         if (remove != Plate.NONE)
                         {
-                            SpawnPlate(remove, pos, 0f).Remove(0.4f);
+                            SpawnPlate(remove, pos, 0f).Remove();
                             plateData[x, y]?.Inactivate();
                             plateData[x, y] = plate;
                             continue;
@@ -342,7 +341,7 @@ public class HidePlateHandler : MonoBehaviour
         /// </summary>
         public void ClearRange(Pos playerPos, Action<HidePlate> deleteAction = null)
         {
-            deleteAction = deleteAction ?? (plate => plate?.Remove(0.25f));
+            deleteAction = deleteAction ?? (plate => plate?.Clear());
 
             for (int j = 0; j < height; j++)
             {
@@ -381,7 +380,7 @@ public class HidePlateHandler : MonoBehaviour
 
             for (int i = 0; i < width; i++)
             {
-                plateData[playerPos.x + i, playerPos.y + height]?.Remove();
+                plateData[playerPos.x + i, playerPos.y + height]?.Move();
                 plateData[playerPos.x + i, playerPos.y] = SpawnPlate(plateMap[i, 0], startPos.AddX(i));
             }
             RedrawYShrink(playerPos, plateMap);
@@ -395,7 +394,7 @@ public class HidePlateHandler : MonoBehaviour
 
             for (int i = 0; i < width; i++)
             {
-                plateData[playerPos.x + i, playerPos.y - 1]?.Remove();
+                plateData[playerPos.x + i, playerPos.y - 1]?.Move();
                 plateData[playerPos.x + i, playerPos.y + height - 1] = SpawnPlate(plateMap[i, height - 1], startPos.Add(i, height - 1));
             }
             RedrawYShrink(playerPos, plateMap);
@@ -409,7 +408,7 @@ public class HidePlateHandler : MonoBehaviour
 
             for (int j = 0; j < height; j++)
             {
-                plateData[playerPos.x + width, playerPos.y + j]?.Remove();
+                plateData[playerPos.x + width, playerPos.y + j]?.Move();
                 plateData[playerPos.x, playerPos.y + j] = SpawnPlate(plateMap[0, j], startPos.AddY(j));
             }
             RedrawXShrink(playerPos, plateMap);
@@ -423,7 +422,7 @@ public class HidePlateHandler : MonoBehaviour
 
             for (int j = 0; j < height; j++)
             {
-                plateData[playerPos.x - 1, playerPos.y + j]?.Remove();
+                plateData[playerPos.x - 1, playerPos.y + j]?.Move();
                 plateData[playerPos.x + width - 1, playerPos.y + j] = SpawnPlate(plateMap[width - 1, j], startPos.Add(width - 1, j));
             }
             RedrawXShrink(playerPos, plateMap);

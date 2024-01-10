@@ -152,7 +152,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
     {
         base.Awake();
 
-        DOTween.SetTweensCapacity(1250, 500);
+        DOTween.SetTweensCapacity(3500, 500);
         Application.targetFrameRate = Constants.FRAME_RATE;
 
         InitData();
