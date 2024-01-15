@@ -41,6 +41,7 @@ public class EndingTest
     [TearDown]
     public void TearDown()
     {
+        BGMManager.Instance.Stop();
         DOTween.KillAll();
         Object.Destroy(endingSceneMediator.gameObject);
         Object.Destroy(endingUIHandler.gameObject);
