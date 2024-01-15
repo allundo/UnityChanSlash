@@ -26,6 +26,7 @@ public class ActiveMessageUITest
         RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
 
         messageUI = Object.Instantiate(Resources.Load<ActiveMessageController>("Prefabs/UI/Message/ActiveMessageUI"), rectTfCanvas);
+        messageUI.ResetOrientation(DeviceOrientation.Portrait);
     }
 
     [OneTimeTearDown]
