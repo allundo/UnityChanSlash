@@ -89,8 +89,6 @@ public class MapTest
     {
         // setup
         int floor = 1;
-        var fixedMessages = ResourceLoader.Instance.floorMessagesData.Param(floor - 1)
-            .fixedMessages.Select(data => data.Convert()).ToList();
 
         // when
         WorldMap sut = WorldMap.Create(floor);
@@ -106,15 +104,15 @@ public class MapTest
         var fixedMessagePos = sut.messagePosData.fixedMessagePos;
         for (int i = 0; i < fixedMessagePos.Count; ++i)
         {
+            Pos pos = fixedMessagePos[i];
+
             // Skip if not pit trap message
-            string name = fixedMessages[i].Source[0].name;
+            string name = (sut.GetTile(pos) as MessageWall).data.Source[0].name;
             if (!name.StartsWith("落とし穴"))
             {
                 Debug.Log($"Skip board: {name}");
                 continue;
             }
-
-            Pos pos = fixedMessagePos[i];
 
             IDirection messageDir = Direction.Convert(dirMap[pos.x, pos.y]);
             Pos readPos = messageDir.GetForward(pos);
