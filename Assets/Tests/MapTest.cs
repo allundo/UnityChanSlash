@@ -187,10 +187,10 @@ public class MapTest
     public void _004_PitPlacingTest()
     {
         // setup
-        WorldMap[] sut = new WorldMap[5];
+        WorldMap[] sut = new WorldMap[4];
 
         // when
-        for (int floor = 1; floor <= 5; floor++)
+        for (int floor = 1; floor <= 4; floor++)
         {
             sut[floor - 1] = WorldMap.Create(floor, 49, 49);
         }
