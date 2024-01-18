@@ -31,7 +31,7 @@ public class MapTest
         // setup
         int[] matrix =
         {
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,17, 2,
             2,11, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
             6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            20, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
@@ -60,17 +60,17 @@ public class MapTest
         Pos inFrontOfDownStairsPos = downStairsDir.GetForward(downStairsPos);
 
         // when
-        WorldMap sut1 = WorldMap.Create(new CustomMapData(1, matrix, 15, deadEnds));
+        WorldMap sut2 = WorldMap.Create(new CustomMapData(2, matrix, 15, deadEnds));
         WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, deadEnds)); // Down stairs isn't set to last floor
 
         // then
-        var matrix1 = sut1.dirMapHandler.CloneMatrix();
-        var dirMap1 = sut1.dirMapHandler.CloneDirMap();
+        var matrix1 = sut2.dirMapHandler.CloneMatrix();
+        var dirMap1 = sut2.dirMapHandler.CloneDirMap();
         Assert.AreEqual(Terrain.DownStairs, matrix1[downStairsPos.x, downStairsPos.y]);
         Assert.AreEqual(downStairsDir.Enum, dirMap1[downStairsPos.x, downStairsPos.y]);
         Assert.AreEqual(Terrain.Ground, matrix1[inFrontOfDownStairsPos.x, inFrontOfDownStairsPos.y]);
-        Assert.AreEqual(inFrontOfDownStairsPos, sut1.stairsTop.Key);
-        Assert.AreEqual(downStairsDir, sut1.stairsTop.Value);
+        Assert.AreEqual(inFrontOfDownStairsPos, sut2.stairsTop.Key);
+        Assert.AreEqual(downStairsDir, sut2.stairsTop.Value);
 
         // then last floor
         Pos itemPlacedPos = downStairsPos;
@@ -231,7 +231,7 @@ public class MapTest
         // setup
         int[] matrix =
         {
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,17, 2,
             2, 0, 2, 1, 1, 1, 4, 1,22, 1, 1, 1, 1,21, 2,
             6, 0, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2,
            20, 0, 4, 1, 1,21, 2, 1,22, 1, 1, 1, 1, 1, 2,
@@ -275,28 +275,27 @@ public class MapTest
             { new Pos(14, 11),    Direction.east },
         };
 
-        FloorMessagesSource src1 = ResourceLoader.Instance.floorMessagesData.Param(0);
+        FloorMessagesSource src2 = ResourceLoader.Instance.floorMessagesData.Param(1);
         FloorMessagesSource src5 = ResourceLoader.Instance.floorMessagesData.Param(4);
-        int numOfFixedMessage1 = src1.fixedMessages.Length;
-        int numOfBloodMessage1 = src1.bloodMessages.Length;
+        int numOfFixedMessage2 = src2.fixedMessages.Length;
+        int numOfBloodMessage2 = src2.bloodMessages.Length;
         int numOfFixedMessage5 = src5.fixedMessages.Length;
         int numOfBloodMessage5 = src5.bloodMessages.Length;
 
         // when
-        WorldMap sut1 = WorldMap.Create(new CustomMapData(1, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos, bloodMessagePos));
+        WorldMap sut2 = WorldMap.Create(new CustomMapData(2, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos, bloodMessagePos));
         WorldMap sut5 = WorldMap.Create(new CustomMapData(5, matrix, 15, boxItemPos, randomItemPos, fixedMessagePos, bloodMessagePos)); // Down stairs isn't set to last floor
 
         // then
-        var mesData1 = sut1.messagePosData;
-        var fixedMes1 = mesData1.fixedMessagePos;
-        Assert.AreEqual(numOfFixedMessage1, fixedMes1.Count);
-        Assert.AreEqual(new Pos(2, 2), fixedMes1[0]);
-        Assert.AreEqual(new Pos(0, 8), fixedMes1[1]);
-        Assert.AreEqual(new Pos(0, 10), fixedMes1[2]);
-        Assert.AreEqual(new Pos(0, 12), fixedMes1[3]);
-        Assert.AreEqual(new Pos(2, 14), fixedMes1[4]);
+        var mesData2 = sut2.messagePosData;
+        var fixedMes2 = mesData2.fixedMessagePos;
+        Assert.AreEqual(numOfFixedMessage2, fixedMes2.Count);
+        Assert.AreEqual(new Pos(2, 2), fixedMes2[0]);
+        Assert.AreEqual(new Pos(0, 8), fixedMes2[1]);
+        Assert.AreEqual(new Pos(0, 10), fixedMes2[2]);
+        Assert.AreEqual(new Pos(0, 12), fixedMes2[3]);
 
-        Assert.AreEqual(numOfBloodMessage1, mesData1.bloodMessagePos.Count);
+        Assert.AreEqual(numOfBloodMessage2, mesData2.bloodMessagePos.Count);
 
         // then last floor
         var mesData5 = sut5.messagePosData;
