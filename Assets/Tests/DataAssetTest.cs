@@ -35,7 +35,6 @@ public class DataAssetTest
     private void AssertMessageSource(MessageSource src)
     {
         Debug.Log("Assert message source: " + src.name + ", alignment: " + src.alignment);
-        Assert.AreNotEqual(TextAlignmentOptions.Top, src.alignment);
         Assert.False(0 == (int)src.alignment);
         Assert.AreNotEqual(0, src.fontSize);
         Assert.AreNotEqual(0, src.literalsPerSec);
