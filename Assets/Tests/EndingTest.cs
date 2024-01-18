@@ -27,6 +27,7 @@ public class EndingTest
         Object.Destroy(audioListener.gameObject);
         Object.Destroy(resourceLoader.gameObject);
         Object.Destroy(gameInfo.gameObject);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
     }
 
     [SetUp]
