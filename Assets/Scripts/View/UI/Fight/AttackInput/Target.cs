@@ -78,6 +78,8 @@ public class Target : FadeUI, ITargetUI
 
     protected override void BeforeFadeOut()
     {
+        isPointerOn = false;
+        SetPointerOff();
         corner.FadeInactivate();
         center.FadeInactivate();
         targetName.Inactivate();
