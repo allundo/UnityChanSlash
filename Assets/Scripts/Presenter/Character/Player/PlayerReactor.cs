@@ -187,7 +187,11 @@ public class PlayerReactor : MobReactor
 
     protected override void OnLifeChange(float life)
     {
-        if (life <= 0.0f) input.InterruptDie();
+        if (life <= 0.0f)
+        {
+            input.InterruptDie();
+            restUI.RemovePoison();
+        }
 
         lifeGauge.UpdateLife(life, status.LifeMax.Value);
 
