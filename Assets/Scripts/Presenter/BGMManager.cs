@@ -67,7 +67,7 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         reserveTween?.Kill();
         floorBGM.FadeOut(1f);
         currentBGM = bossBGM;
-        currentBGM.FadeIn(0.25f);
+        currentBGM.FadeIn(0.75f);
     }
 
     public void ReserveBackToFloorBGM()
