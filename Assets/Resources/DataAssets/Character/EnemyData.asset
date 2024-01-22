@@ -277,7 +277,7 @@ MonoBehaviour:
     backDamageMultiplier: 2
     restDamageMultiplier: 6
     fireDamageMultiplier: 0.5
-    iceDamageMultiplier: 1.5
+    iceDamageMultiplier: 2
     thunderDamageMultiplier: 1
     lightDamageMultiplier: 1
     darkDamageMultiplier: 1
