@@ -126,7 +126,7 @@ public class GameInfo : SingletonMonoBehaviour<GameInfo>
             // DEBUG ONLY
             if (Debug.isDebugBuild)
             {
-                maps[1] = maps[MAX_FLOOR];
+                maps[1] ??= maps[MAX_FLOOR];
             }
         }
 
