@@ -347,6 +347,8 @@ public class WitchSummoned : WitchCommand
     protected override bool Action()
     {
         SetOnCompleted(BGMManager.Instance.SwitchBossBGM);
-        return base.Action();
+        witchReact.OnSummoned();
+        completeTween = DOVirtual.DelayedCall(Mathf.Min(duration, 1.5f), witchReact.OnTeleportEnd, false).Play();
+        return true;
     }
 }
