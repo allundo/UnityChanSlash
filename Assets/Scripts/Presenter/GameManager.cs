@@ -12,6 +12,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] private CoverScreen cover = default;
     [SerializeField] private ThirdPersonCamera mainCamera = default;
     [SerializeField] private ScreenRotateHandler rotate = default;
+    [SerializeField] private Collider enemySpawnCollider = default;
 
     private SpawnHandler spawnHandler;
 
@@ -285,6 +286,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         mainCamera.SetCrossFadeSiblingIndex(0);
 
         playerCollider.enabled = true;
+        enemySpawnCollider.enabled = true;
         cover.FadeIn(1f, 0f, false);
         input.ValidateInput();
         input.SetInputVisible(true);
@@ -320,6 +322,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         var nextFloorMap = GameInfo.Instance.NextFloorMap(isDownStairs);
 
         playerCollider.enabled = false;
+        enemySpawnCollider.enabled = false;
         BGMManager.Instance.SwitchFloor(nextFloorMap.floor);
         playerMap.SetFloorStartPos(nextFloorMap, isDownStairs);
         hidePlateHandler.SwitchWorldMap(nextFloorMap.miniMapData);
