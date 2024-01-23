@@ -1608,6 +1608,68 @@ public class UnityEngineSpecTest
         yield return null;
         yield return null;
 
+        sut1.ColliderEnable(false);
+
+        yield return null;
+        yield return null;
+
+        sut1.MoveIn();
+
+        yield return null;
+        yield return null;
+
+        // OnTriggerEnter will be called.
+        sut1.ColliderEnable(true);
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(5, sut1.enterCount);
+        Assert.AreEqual(2, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.True(sut1.stay);
+
+        yield return null;
+        yield return null;
+
+        sut1.ColliderEnable(false);
+
+        yield return null;
+        yield return null;
+
+        sut1.MoveIn();
+
+        yield return null;
+        yield return null;
+
+        // OnTriggerEnter will be called.
+        sut1.ColliderEnable(true);
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(6, sut1.enterCount);
+        Assert.AreEqual(2, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.True(sut1.stay);
+
+        yield return null;
+        yield return null;
+
+        // OnTriggerExit will be called.
+        sut1.MoveOut();
+
+        yield return null;
+        yield return null;
+
+        Assert.AreEqual(6, sut1.enterCount);
+        Assert.AreEqual(3, sut1.exitCount);
+
+        yield return waitForFixedUpdate;
+        Assert.False(sut1.stay);
+
         Object.Destroy(sut1.gameObject);
         Object.Destroy(sut2.gameObject);
         Object.Destroy(mainCamera.gameObject);
