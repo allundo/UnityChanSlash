@@ -7,12 +7,12 @@
 #include "UnityCG.cginc"
 
 #ifdef _FOG_WEAKEN
-    #undef UNITY_CALC_FOG_FACTOR_RAW(coord)
+    #undef UNITY_CALC_FOG_FACTOR_RAW
     #define UNITY_CALC_FOG_FACTOR_RAW(coord) float unityFogFactor = unity_FogParams.x * (coord); unityFogFactor = exp2(-unityFogFactor*unityFogFactor * 0.9)
 #endif
 
 #ifdef _FOG_GAIN
-    #undef UNITY_CALC_FOG_FACTOR_RAW(coord)
+    #undef UNITY_CALC_FOG_FACTOR_RAW
     #define UNITY_CALC_FOG_FACTOR_RAW(coord) float unityFogFactor = unity_FogParams.x * (coord); unityFogFactor = exp2(-unityFogFactor*unityFogFactor * 1.1)
 #endif
 

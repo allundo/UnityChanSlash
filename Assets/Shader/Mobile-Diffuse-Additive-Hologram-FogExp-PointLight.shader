@@ -87,7 +87,6 @@ Shader "Custom/Mobile/Diffuse-Additive-Holgram-FogExp2-PointLight"
             CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
-                #pragma multi_compile_fwdadd_fullshadows
 
                 #include "./CGIncludes/DitherTransparentFunctions.cginc"
                 #include "Lighting.cginc"

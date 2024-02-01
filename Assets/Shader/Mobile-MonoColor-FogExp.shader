@@ -77,7 +77,6 @@ Shader "Custom/Mobile/Diffuse-MonoColor-FogExp2"
             CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
-                #pragma multi_compile_fwdadd_fullshadows
 
                 #include "UnityCG.cginc"
                 #include "Lighting.cginc"
