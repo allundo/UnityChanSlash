@@ -52,4 +52,9 @@ public class GroundCoinGenerator : MonoBehaviour
     {
         transform.ForEach(t => Destroy(t.gameObject));
     }
+
+    public virtual void DestroyInactive()
+    {
+        transform.ForEach(t => { if (!t.gameObject.activeSelf) Destroy(t.gameObject); });
+    }
 }

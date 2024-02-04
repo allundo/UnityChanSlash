@@ -65,7 +65,7 @@ public class GroundCoin : MonoBehaviour
             transform.localScale = Vector3.one;
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
-            GetComponent<MeshFilter>().mesh = combinedMesh;
+            GetComponent<MeshFilter>().sharedMesh = combinedMesh;
             combinedMeshes.Add(combinedMesh);
             combinedCoins.Add(gameObject);
 
@@ -80,27 +80,34 @@ public class GroundCoin : MonoBehaviour
         var wait1Sec = new WaitForSeconds(1);
 
         int numOfMeshes = combinedMeshes.Count();
-        int unit = numOfMeshes > 5 ? numOfMeshes / 5 : numOfMeshes;
+        int unit = numOfMeshes > 9 ? numOfMeshes / 5 : numOfMeshes;
 
         for (int combineCount = numOfMeshes; combineCount > 0; combineCount = combinedMeshes.Count())
         {
             if (combineCount > unit) combineCount = unit;
 
-            Mesh[] meshesToCombine = combinedMeshes.Take(combineCount).ToArray();
+            GameObject[] objToCombine = combinedCoins.Take(combineCount).ToArray();
 
-            MeshFilter wholeMeshObj = new GameObject("Combined500YenCoins").AddComponent<MeshFilter>();
+            // Reuse last index of GameObjects to combine meshes
+            MeshFilter wholeMeshObj = objToCombine[combineCount - 1].GetComponent<MeshFilter>();
+
+            CombineInstance[] combineInstances = combinedMeshes
+                .Take(combineCount)
+                .Select(m => new CombineInstance() { mesh = m, transform = wholeMeshObj.transform.localToWorldMatrix })
+                .ToArray();
+
             Mesh wholeMesh = new Mesh();
+            wholeMesh.name = wholeMeshObj.name = "Combined500YenCoins";
             wholeMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-            wholeMesh.CombineMeshes(meshesToCombine.Select(m => new CombineInstance() { mesh = m }).ToArray(), true);
+            wholeMesh.CombineMeshes(combineInstances, true);
 
             wholeMeshObj.sharedMesh = wholeMesh;
 
             fullCombinedMeshes.Add(wholeMeshObj);
 
-            meshesToCombine.ForEach(mesh => Destroy(mesh));
             combinedMeshes.RemoveRange(0, combineCount);
 
-            combinedCoins.Take(combineCount).ForEach(obj => Destroy(obj));
+            objToCombine.Take(combineCount - 1).ForEach(obj => Destroy(obj));
             combinedCoins.RemoveRange(0, combineCount);
 
             yield return wait1Sec;
