@@ -113,14 +113,23 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
 
     private void ReleaseAllBGMs(BGMType exceptFor = BGMType.Title)
     {
-        Util.GetValues<BGMType>().ForEach(type =>
+        Util.GetValues<BGMType>().ForEach(type => ReleaseBGM(type), exceptFor);
+    }
+
+    private void ReleaseBGM(BGMType type)
+    {
+        AudioLoopSource src;
+        if (BGMs.TryGetValue(type, out src))
         {
-            AudioLoopSource src;
-            if (BGMs.TryGetValue(type, out src))
-            {
-                src.DestroyByHandler();
-                BGMs.Remove(type);
-            }
-        }, exceptFor);
+            src.DestroyByHandler();
+            BGMs.Remove(type);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        reserveTween?.Kill();
+        ReleaseAllBGMs();
+        ReleaseBGM(BGMType.Title);
     }
 }
