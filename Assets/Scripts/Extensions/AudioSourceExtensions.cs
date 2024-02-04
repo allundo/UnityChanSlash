@@ -39,4 +39,7 @@ static public class AudioSourceExtensions
 
         source.pitch = pitch;
     }
+
+    static public bool IsPausing(this AudioSource source)
+        => source.time > 0f && source.time < source.clip.length;
 }

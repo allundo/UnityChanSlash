@@ -25,7 +25,7 @@ public class AudioLoopSource : MonoBehaviour
     }
 
     public bool isPlaying => introSource.isPlaying || loopSource.isPlaying;
-    public bool isPausing => (introSource.time > 0f && introSource.time < introSource.clip.length) || (loopSource.time > 0f && loopSource.time < loopSource.clip.length);
+    public bool isPausing => introSource.IsPausing() || loopSource.IsPausing();
 
     void Awake()
     {
@@ -65,11 +65,15 @@ public class AudioLoopSource : MonoBehaviour
     {
         fadeTween?.Kill();
         this.volume = volume;
+        PlayAudioLoop();
+        return this;
+    }
 
+    private void PlayAudioLoop()
+    {
         var startTime = AudioSettings.dspTime;
         introSource.PlayScheduled(startTime);
-        loopSource.PlayScheduled(startTime + introSource.clip.length);
-        return this;
+        loopSource.PlayScheduled(startTime + introSource.clip.length - introSource.time);
     }
 
     public Tween FadeOut(float duration = 1f, bool stopOnComplete = false, Ease ease = Ease.Linear)
@@ -131,12 +135,19 @@ public class AudioLoopSource : MonoBehaviour
         loopSource.Pause();
     }
 
-    public AudioLoopSource UnPause()
+    public void UnPause()
     {
         if (fadeTween != null && fadeTween.IsActive() && !fadeTween.IsPlaying()) fadeTween?.Play();
-        introSource.UnPause();
-        loopSource.UnPause();
-        return this;
+
+        if (introSource.IsPausing())
+        {
+            loopSource.Stop();
+            PlayAudioLoop();
+        }
+        else if (loopSource.IsPausing())
+        {
+            loopSource.UnPause();
+        }
     }
 
     public void DestroyByHandler()

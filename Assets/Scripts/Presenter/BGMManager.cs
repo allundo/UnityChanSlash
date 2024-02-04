@@ -75,11 +75,8 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         if (currentBGM != SelectSource(BGMType.Witch)) return;
 
         currentBGM.FadeOut(10f);
-        reserveTween = DOVirtual.DelayedCall(10f, () =>
-        {
-            currentBGM = floorBGM;
-            currentBGM.FadeIn(1f);
-        }, false).Play();
+        currentBGM = floorBGM;
+        reserveTween = DOVirtual.DelayedCall(9f, () => currentBGM.FadeIn(1f), false).Play();
     }
 
     public void PlaySceneBGM(BGMType type)
