@@ -35,7 +35,7 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         if (loadSource) LoadSource(type);
 
         FadeOut(duration, true);
-        reserveTween = DOVirtual.DelayedCall(2f, () => ReleaseAllBGMs(type)).Play();
+        reserveTween = DOVirtual.DelayedCall(duration, () => ReleaseAllBGMs(type)).Play();
     }
 
     public void GameOver()
@@ -57,7 +57,7 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
 
     public void PlayFloorBGM()
     {
-        if (witchInfo.IsWitchLiving || ItemInventory.Instance.hasKeyBlade())
+        if (witchInfo.IsWitchLiving() || ItemInventory.Instance.hasKeyBlade())
         {
             SwitchBossBGM();
             return;

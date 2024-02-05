@@ -79,7 +79,7 @@ public class BGMTest
     private void SetWitchInfo(bool isLiving)
     {
         var mock = new Mock<IWitchInfo>();
-        mock.SetupGet(w => w.IsWitchLiving).Returns(isLiving);
+        mock.Setup(w => w.IsWitchLiving()).Returns(isLiving);
         bgmManager.SetWitchInfo(mock.Object);
     }
 

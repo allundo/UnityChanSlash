@@ -4,7 +4,7 @@ using System.Linq;
 
 public interface IWitchInfo
 {
-    bool IsWitchLiving { get; }
+    bool IsWitchLiving();
 }
 
 public class PlaceEnemyGenerator : EnemyGenerator, IWitchInfo
@@ -43,7 +43,11 @@ public class PlaceEnemyGenerator : EnemyGenerator, IWitchInfo
     private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
 
     public IEnemyStatus GetAnnaStatus() => GetEnemyStatus(EnemyType.Anna);
-    public bool IsWitchLiving => GetEnemyStatus(EnemyType.Witch).Life.Value > 0f;
+    public bool IsWitchLiving()
+    {
+        var status = GetEnemyStatus(EnemyType.Witch);
+        return status != null && status.Life.Value > 0f;
+    }
 
     private IEnemyStatus GetEnemyStatus(EnemyType type)
     {
