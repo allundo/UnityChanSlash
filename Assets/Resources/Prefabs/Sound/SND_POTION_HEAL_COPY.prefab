@@ -65,7 +65,7 @@ PrefabInstance:
     - target: {fileID: 8898627464275411601, guid: 2c9ef0da081474cc1a2bd2c9038fffb4,
         type: 3}
       propertyPath: m_Name
-      value: SND_POTION_HEAL
+      value: SND_POTION_HEAL_COPY
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c9ef0da081474cc1a2bd2c9038fffb4, type: 3}

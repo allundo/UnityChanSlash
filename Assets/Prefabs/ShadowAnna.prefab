@@ -96441,6 +96441,7 @@ MonoBehaviour:
   attackFX: {fileID: 2930406288128578342}
   attackSnd: {fileID: 310838489217646684}
   fxStartFrame: 17
+  fxStopFrame: -1
 --- !u!1 &6778482711397954212
 GameObject:
   m_ObjectHideFlags: 0
