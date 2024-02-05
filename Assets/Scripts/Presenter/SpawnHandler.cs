@@ -12,6 +12,7 @@ public class SpawnHandler : SingletonMonoBehaviour<SpawnHandler>
 
     public MagicGenerator GetMagicGenerator(MagicType type) => magicGeneratorLoader.magicGenerators[type];
     public LifeGaugeGenerator GetLifeGaugeGenerator() => lifeGaugeGenerator;
+    public IWitchInfo GetWitchInfo() => placeEnemyGenerator;
 
     public void PlaceEnemyGenerators() => placeEnemyGenerator.Place();
     public void PlaceItems(WorldMap map) => itemGenerator.PlaceItems(map);

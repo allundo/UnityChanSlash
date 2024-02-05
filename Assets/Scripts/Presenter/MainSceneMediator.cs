@@ -12,6 +12,8 @@ public class MainSceneMediator : SceneMediator
         var gm = GameManager.Instance;
         SetStartActions(gm.DropStart, gm.Restart, gm.DebugStart, gm.LoadDataStart);
 
+        BGMManager.Instance.SetWitchInfo(SpawnHandler.Instance.GetWitchInfo());
+
         gameOver.restartButton
             .OnPressedCompleteAsObservable()
             .ContinueWith(_ =>

@@ -2,7 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public class PlaceEnemyGenerator : EnemyGenerator
+public interface IWitchInfo
+{
+    bool IsWitchLiving { get; }
+}
+
+public class PlaceEnemyGenerator : EnemyGenerator, IWitchInfo
 {
     [SerializeField] private EnemySpawnPoint prefabEnemySpawnPoint = default;
 
@@ -37,11 +42,14 @@ public class PlaceEnemyGenerator : EnemyGenerator
 
     private Dictionary<EnemyType, GameObject> enemyPool = new Dictionary<EnemyType, GameObject>();
 
-    public IEnemyStatus GetAnnaStatus()
+    public IEnemyStatus GetAnnaStatus() => GetEnemyStatus(EnemyType.Anna);
+    public bool IsWitchLiving => GetEnemyStatus(EnemyType.Witch).Life.Value > 0f;
+
+    private IEnemyStatus GetEnemyStatus(EnemyType type)
     {
-        if (enemyPool.ContainsKey(EnemyType.Anna))
+        if (enemyPool.ContainsKey(type))
         {
-            return enemyPool[EnemyType.Anna].transform
+            return enemyPool[type].transform
                 .FirstOrDefault(t => t.gameObject.activeSelf)?
                 .GetComponent<IEnemyStatus>();
         }

@@ -12,17 +12,55 @@ public class BGMTest
     private BGMManager prefabBGMManager;
     private AudioListener audioListener;
 
+    private ResourceLoader resourceLoader;
+    private GameObject testCanvas;
+    private ItemInventoryTest prefabItemInventory;
+    private ItemInventoryTest itemInventory;
+    private ItemIconGenerator itemIconGenerator;
+
+    private ActiveMessageController activeMessageUI;
+
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         prefabBGMManager = Resources.Load<BGMManager>("Prefabs/System/BGMManager");
         audioListener = new GameObject("AudioListener").AddComponent<AudioListener>();
+
+        resourceLoader = Object.Instantiate(Resources.Load<ResourceLoader>("Prefabs/System/ResourceLoader"));
+        testCanvas = Object.Instantiate(Resources.Load<GameObject>("Prefabs/UI/Canvas"));
+        prefabItemInventory = Resources.Load<ItemInventoryTest>("Prefabs/UI/Item/ItemInventoryTest");
+        itemIconGenerator = Object.Instantiate(Resources.Load<ItemIconGenerator>("Prefabs/UI/Item/ItemIconGenerator"));
+
+        itemInventory = Object.Instantiate(prefabItemInventory);
+        InitItemInventory(itemInventory);
+
+        activeMessageUI = Object.Instantiate(Resources.Load<ActiveMessageController>("Prefabs/UI/Message/ActiveMessageUI"), testCanvas.transform);
+        activeMessageUI.ResetOrientation(DeviceOrientation.Portrait);
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
+        itemIconGenerator.DestroyAll();
+        Object.Destroy(itemIconGenerator.gameObject);
+        Object.Destroy(itemInventory.gameObject);
+        Object.Destroy(activeMessageUI.gameObject);
+        Object.Destroy(testCanvas.gameObject);
+        Object.Destroy(resourceLoader.gameObject);
         Object.Destroy(audioListener.gameObject);
+    }
+
+    private void InitItemInventory(ItemInventoryTest itemInventory)
+    {
+        RectTransform rectTfCanvas = testCanvas.GetComponent<RectTransform>();
+        RectTransform rectTf = itemInventory.GetComponent<RectTransform>();
+        rectTf.SetParent(rectTfCanvas);
+
+        Vector2 size = rectTf.sizeDelta;
+        rectTf.anchorMin = rectTf.anchorMax = new Vector2(0f, 0.5f);
+        rectTf.anchoredPosition = new Vector2(size.x, size.y + 280f) * 0.5f;
+
+        itemIconGenerator.SetParent(itemInventory.transform);
     }
 
     [SetUp]
@@ -38,12 +76,19 @@ public class BGMTest
         Object.Destroy(bgmManager.gameObject);
     }
 
+    private void SetWitchInfo(bool isLiving)
+    {
+        var mock = new Mock<IWitchInfo>();
+        mock.SetupGet(w => w.IsWitchLiving).Returns(isLiving);
+        bgmManager.SetWitchInfo(mock.Object);
+    }
+
     [UnityTest]
     public IEnumerator _001_FloorBGMPlayTest([Values(1, 2, 3, 4, 5)] int floor)
     {
-        // Setup
         yield return null;
 
+        SetWitchInfo(false);
         bgmManager.LoadFloor(floor);
 
         yield return null;
@@ -56,9 +101,9 @@ public class BGMTest
     [UnityTest]
     public IEnumerator _002_FloorBGMChangeTest()
     {
-        // Setup
         yield return null;
 
+        SetWitchInfo(false);
         bgmManager.LoadFloor(2);
 
         yield return null;
@@ -87,9 +132,9 @@ public class BGMTest
     [UnityTest]
     public IEnumerator _003_WitchBGMChangeTest()
     {
-        // Setup
         yield return null;
 
+        SetWitchInfo(false);
         bgmManager.LoadFloor(5);
 
         yield return null;
@@ -99,6 +144,7 @@ public class BGMTest
         yield return new WaitForSeconds(3f);
 
         bgmManager.SwitchBossBGM();
+        itemInventory.PickUp(resourceLoader.ItemInfo(ItemType.KeyBlade));
 
         yield return new WaitForSeconds(5f);
 
@@ -108,7 +154,36 @@ public class BGMTest
 
         bgmManager.SwitchBossBGM();
 
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(5f);
+
+        bgmManager.SwitchFloor(4);
+
+        yield return new WaitForSeconds(1f);
+
+        bgmManager.PlayFloorBGM();
+
+        yield return new WaitForSeconds(5f);
+
+        var dummyKeyBlade = itemIconGenerator.Spawn(Vector2.zero, resourceLoader.ItemInfo(ItemType.KeyBlade, 1)).SetIndex(0);
+        itemInventory.Remove(dummyKeyBlade);
+        SetWitchInfo(false);
+
+        bgmManager.SwitchFloor(3);
+
+        yield return new WaitForSeconds(1f);
+
+        bgmManager.PlayFloorBGM();
+
+        yield return new WaitForSeconds(5f);
+
+        SetWitchInfo(true);
+        bgmManager.SwitchFloor(4);
+
+        yield return new WaitForSeconds(1f);
+
+        bgmManager.PlayFloorBGM();
+
+        yield return new WaitForSeconds(5f);
     }
 
     [UnityTest]

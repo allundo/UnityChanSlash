@@ -9,6 +9,14 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
     private AudioLoopSource floorBGM;
     private AudioLoopSource currentBGM;
     private Tween reserveTween;
+    private IWitchInfo witchInfo;
+
+    private bool isWitchBGMContinued => ItemInventory.Instance.hasKeyBlade() && currentBGM == SelectSource(BGMType.Witch);
+
+    public void SetWitchInfo(IWitchInfo info)
+    {
+        witchInfo = info;
+    }
 
     public void Load(BGMType type)
     {
@@ -44,11 +52,17 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
     public void SwitchFloor(int floor, float duration = 1f, bool stopOnComplete = false)
     {
         LoadFloor(floor);
-        if (currentBGM != floorBGM && currentBGM != null) FadeOut(duration, stopOnComplete);
+        if (currentBGM != floorBGM && currentBGM != null && !isWitchBGMContinued) FadeOut(duration, stopOnComplete);
     }
 
     public void PlayFloorBGM()
     {
+        if (witchInfo.IsWitchLiving || ItemInventory.Instance.hasKeyBlade())
+        {
+            SwitchBossBGM();
+            return;
+        }
+
         if (currentBGM != floorBGM)
         {
             currentBGM = floorBGM;
@@ -62,11 +76,14 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         if (currentBGM == SelectSource(BGMType.GameOver)) return;
 
         var bossBGM = SelectSource(BGMType.Witch);
-        if (currentBGM == bossBGM) return;
 
-        reserveTween?.Kill();
-        floorBGM.FadeOut(1f);
-        currentBGM = bossBGM;
+        if (currentBGM != bossBGM)
+        {
+            reserveTween?.Kill();
+            floorBGM.FadeOut(1f);
+            currentBGM = bossBGM;
+        }
+
         currentBGM.FadeIn(0.75f);
     }
 
