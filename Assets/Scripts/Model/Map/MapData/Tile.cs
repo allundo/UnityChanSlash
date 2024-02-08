@@ -184,7 +184,7 @@ public class Box : HandleTile, IHandleTile
 
     public bool IsLocked => boxState.IsLocked;
     public bool IsControllable => boxState.IsControllable;
-    public override void Handle() => boxState.TransitToNextState();
+    public override void Handle() => boxState.Open();
 
     public override bool PutItem(Item item)
     {
