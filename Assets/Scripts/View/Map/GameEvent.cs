@@ -18,15 +18,19 @@ public class DropStartEvent : GameEvent
 {
     private ICommand dropFloor;
     private IPlayerMapUtil map;
-    public DropStartEvent(PlayerInput input) : base(input)
+    private PlaceEnemyGenerator placeEnemyGenerator;
+
+    public DropStartEvent(PlayerInput input, PlaceEnemyGenerator placeEnemyGenerator) : base(input)
     {
         map = input.playerMap;
         dropFloor = new PlayerDropFloor(input.playerTarget, 220f);
+        this.placeEnemyGenerator = placeEnemyGenerator;
     }
 
     protected override IObservable<Unit> EventFunc()
     {
         input.Interrupt(dropFloor);
+        placeEnemyGenerator.DisableAllEnemyGenerators();
         return RestartEventFunc();
     }
 
@@ -65,7 +69,12 @@ public class DropStartEvent : GameEvent
             )
         );
 
-        return input.ObserveComplete(message).Select(_ => Unit.Default);
+        return input.ObserveComplete(message)
+            .ContinueWith(cmd =>
+            {
+                placeEnemyGenerator.EnableAllEnemyGenerators();
+                return Observable.Return(Unit.Default);
+            });
     }
 }
 

@@ -26,7 +26,7 @@ public class EventManager : MobGenerator<EventInvoker>
         // Register game events
         gameEvents = new List<GameEvent>()
         {
-            new DropStartEvent(playerInput),
+            new DropStartEvent(playerInput, placeEnemyGenerator),
             new RestartEvent(playerInput),
             new PlayerMessageFloor3(playerInput),
             new PlayerMessageFloor4(playerInput),
