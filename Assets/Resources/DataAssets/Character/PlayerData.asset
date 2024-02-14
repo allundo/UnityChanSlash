@@ -18,7 +18,7 @@ MonoBehaviour:
     attack: 10
     prefab: {fileID: 0}
     isOnGround: 1
-    shield: 10
+    shield: 12
     magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
@@ -36,7 +36,7 @@ MonoBehaviour:
     attack: 10
     prefab: {fileID: 0}
     isOnGround: 1
-    shield: 10
+    shield: 12
     magic: 1
     faceDamageMultiplier: 1
     sideDamageMultiplier: 1.5
