@@ -30,6 +30,12 @@ public abstract class ShieldInput : MobInput
         guardState = new GuardState(this);
     }
 
+    public override ICommand InputIced(float duration)
+    {
+        if (commander.currentCommand is ShieldOnCommand) ClearAll();
+        return base.InputIced(duration);
+    }
+
     public class GuardState
     {
         protected ShieldInput input;

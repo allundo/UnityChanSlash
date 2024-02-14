@@ -272,8 +272,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
             return iced;
         }
 
-        if (current is ShieldOnCommand) ClearAll();
-
         return base.InputIced(duration);
     }
 
