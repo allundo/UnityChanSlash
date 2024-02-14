@@ -164,7 +164,7 @@ public class RabbitIcedFall : RabbitCommand, IIcedCommand
     public override IObservable<Unit> Execute()
     {
         Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
-        float height = Mathf.Abs(dest.y);
+        float height = -dest.y;
         Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
         float minDropDuration = 0.25f;
         float layDownHeight = 0.25f;

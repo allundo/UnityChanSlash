@@ -418,11 +418,11 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
     public override IObservable<Unit> Execute()
     {
         Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
-        float height = Mathf.Abs(dest.y);
+        float height = -dest.y;
         Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
         float moveTile = horizontalVec.magnitude / TILE_UNIT;
 
-        float additionalJump = Mathf.Max(0, moveTile - 1f);
+        float additionalJump = Mathf.Max(-height, moveTile - 1f);
 
         float minDropDuration = 0.4f;
         float layDownHeight = 0.25f;

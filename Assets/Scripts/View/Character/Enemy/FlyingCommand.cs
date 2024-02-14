@@ -162,7 +162,7 @@ public class FlyingIcedFall : FlyingCommand, IIcedCommand
     public override IObservable<Unit> Execute()
     {
         Vector3 dest = mobMap.DestVec;                     // Remaining vector to front tile
-        float height = Math.Abs(dest.y - 1.25f);
+        float height = 1.25f - dest.y;
         Vector3 horizontalVec = new Vector3(dest.x, 0f, dest.z);
         float minDropDuration = 0.25f;
         // t = sqrt(h * 2/9.8)[sec]
