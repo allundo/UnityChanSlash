@@ -13,18 +13,18 @@ public class WitchEventMessageData : MessageData
             source = new MessageSource[]
             {
                 new MessageSource("『表の看板は読まなかったのかい？』"),
-                new MessageSource((isMsgRead ? "いやまあ読んだけど・・・" : "えっ？読んでないけど・・・") + "\n誰よ？あんた", FaceID.DEFAULT),
+                new MessageSource((isMsgRead ? "いやまあ読んだけど・・・" : "えっ？読んでないけど・・・") + "\n誰よ？あなたは", FaceID.DEFAULT),
                 new MessageSource((isMsgRead ? "" : "『えっ？読まずにどうやって・・・』\n『・・・まあいいか』\n") + "『私は迷宮の番人』\n『その鍵は返してもらう』"),
                 new MessageSource("だってコレないと外に出られないじゃん？", FaceID.DESPISE),
                 new MessageSource("『そっちの事情なんて知らないね！』\n『私はあなたに立ち塞がる敵』"),
                 new MessageSource("『ここで逃がすわけにはいかない！』"),
                 new MessageSource("ふーん・・・", FaceID.ASHAMED),
                 new MessageSource("こっちは散々ひどい目にあったんだけど", FaceID.DESPISE),
-                new MessageSource("あんたの目的はなに？", FaceID.DEFAULT),
+                new MessageSource("あなたの目的はなに？", FaceID.DEFAULT),
                 new MessageSource("『目的・・・』\n『目的・・・・？』"),
-                new MessageSource("はぁ！？あるでしょ？目的くらい。", FaceID.ANGRY),
+                new MessageSource("あるでしょ？目的くらい。", FaceID.ANGRY),
                 new MessageSource("『知らない』\n『いいじゃん、楽しいでしょ？』"),
-                new MessageSource("話にならないね。\n私だってそっちの事情なんて知らんし・・・", FaceID.EYECLOSE),
+                new MessageSource("うーん、話にならないね。\n私だってそっちの事情なんて知らんし・・・", FaceID.EYECLOSE),
                 new MessageSource("こんなとこ、とっととトンズラさせてもらうわ！", FaceID.ANGRY)
             };
         }
