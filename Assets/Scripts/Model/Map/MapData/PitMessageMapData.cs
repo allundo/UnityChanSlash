@@ -88,6 +88,7 @@ public class PitMessageMapData : DirMapData
         fixedMessagePos = import.fixedMessagePos.ToList();
 
         if (floor == 1) CustomizeFloor1Messages(fixedMessagePos.Count - fixedMessages.Length);
+        if (floor == 5) picturePos = import.picturePos;
 
         bloodMessagePos = import.bloodMessagePos.ToList();
 
