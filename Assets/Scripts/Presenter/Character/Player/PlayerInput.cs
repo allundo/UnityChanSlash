@@ -50,6 +50,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     [SerializeField] protected InspectUI inspectUI = default;
 
     [SerializeField] protected RestButton restButton = default;
+    [SerializeField] protected SwitchingUIFrame switchingFrame = default;
 
     [SerializeField] protected GameObject uiMask = default;
 
@@ -252,6 +253,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     {
         restButton.SetEnable(isEnable);
         itemInventory.SetEnable(isEnable);
+        switchingFrame.SetRaycast(isEnable);
     }
 
     public void SetCancel() => (commander as PlayerCommander).SetCancel();
