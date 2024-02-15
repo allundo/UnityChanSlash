@@ -60,6 +60,9 @@ public class AttackInputController : MonoBehaviour
 
     public void Press(Vector2 screenPos)
     {
+        // Avoid two buttons pressing
+        if (currentButton != null) return;
+
         pressPos = screenPos;
 
         currentButton = attackButtonsHandler.GetAttack(UIPos(screenPos));
