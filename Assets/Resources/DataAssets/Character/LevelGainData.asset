@@ -28,7 +28,7 @@ MonoBehaviour:
     lifeMaxGainRatio: 1.0185
     attackGain: 2.5
     shieldGain: 2
-    magicGain: 0.25
+    magicGain: 0.3
     armorReduction: 0.02
     fireReduction: 0.005
     iceReduction: 0.005
@@ -50,7 +50,7 @@ MonoBehaviour:
     lifeMaxGainRatio: 1.05
     attackGain: 1.8
     shieldGain: 2.25
-    magicGain: 0.3
+    magicGain: 0.35
     armorReduction: 0.05
     fireReduction: 0.025
     iceReduction: 0.025
@@ -72,7 +72,7 @@ MonoBehaviour:
     lifeMaxGainRatio: 1.02
     attackGain: 3
     shieldGain: 1.5
-    magicGain: 0.1
+    magicGain: 0.2
     armorReduction: 0.0025
     fireReduction: 0.0025
     iceReduction: 0.0025
