@@ -202,7 +202,7 @@ public class PlayerCounter
                 float attack = (float)counter.attackSum[i];
                 float critical = (float)counter.criticalSum[i];
 
-                attackRate[i] = attack + critical;
+                attackRate[i] = attack / attackSum;
                 criticalRate[i] = critical > 0 ? 1f - attackRate[i] : 0;
                 categoryRate[i] = (attack + critical) / attackSum;
             }
