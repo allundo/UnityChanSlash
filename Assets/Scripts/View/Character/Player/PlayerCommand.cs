@@ -81,7 +81,7 @@ public abstract class PlayerMove : PlayerCommand
         playingTween = tweenMove.Linear(GetDest);
 
         SetSpeed();
-        completeTween = tweenMove.FinallyCall(ResetSpeed).OnComplete(hidePlateHandler.Move).Play();
+        completeTween = tweenMove.FinallyCall(ResetSpeed).SetUpdate(UpdateType.Fixed).OnComplete(hidePlateHandler.Move).Play();
 
         return true;
     }
@@ -205,7 +205,9 @@ public class PlayerRun : PlayerDash
             {
                 playerAnim.speed.Float = 0;
                 hidePlateHandler.Move();
-            }).Play();
+            })
+            .SetUpdate(UpdateType.Fixed)
+            .Play();
 
             target.interrupt.OnNext(Data(this));
 
@@ -242,7 +244,7 @@ public class PlayerBrake : PlayerDash
 
         if (startCallback != null) seq.AppendCallback(startCallback);
 
-        return seq.Append(ToSpeed(0f, timeScale)).OnComplete(hidePlateHandler.Move).Play();
+        return seq.Append(ToSpeed(0f, timeScale)).SetUpdate(UpdateType.Fixed).OnComplete(hidePlateHandler.Move).Play();
     }
 }
 
@@ -388,7 +390,7 @@ public class PlayerPitJump : PlayerJump
         {
             map.MoveObjectOn(map.GetForward);
             moveVec = map.DestVec;
-            completeTween = tweenMove.DelayedCall(0.8f, hidePlateHandler.Move).Play();
+            completeTween = tweenMove.DelayedCall(0.8f, hidePlateHandler.Move).SetUpdate(UpdateType.Fixed).Play();
             playerTarget.inputVisible.OnNext(true);
         }
         else
@@ -494,7 +496,7 @@ public class PlayerPitFall : PlayerCommand
             .Append(tweenMove.Jump(mobMap.DestVec3Pos - new Vector3(0, TILE_UNIT, 0), 1f, 0.001f).SetEase(Ease.OutQuad))
             .AppendCallback(() => mobReact.Damage(new TrapAttacker(damage, map.dir, "落とし穴"), new Attack.AttackData(1f /* 'parameterless struct constructors' is not available in C# 9.0. */)))
             .AppendCallback(hidePlateHandler.Move)
-            .SetUpdate(false)
+            .SetUpdate(UpdateType.Fixed, false)
             .Play();
 
         return ObservableComplete();
