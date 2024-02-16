@@ -182,4 +182,40 @@ public class ResultTest
         // tear down
         bag.Destroy();
     }
+
+    [Test]
+    public void _004_GetTitleByPlayerCountsTest()
+    {
+        // SetUp
+        var counter = new PlayerCounter();
+
+        for (int i = 0; i < 50; ++i)
+        {
+            counter.IncAttack(EquipmentCategory.Knuckle);
+            counter.IncAttack(EquipmentCategory.Sword);
+            counter.IncAttack(EquipmentCategory.Shield);
+            counter.IncAttack(EquipmentCategory.Knuckle, true);
+            counter.IncAttack(EquipmentCategory.Sword, true);
+            counter.IncAttack(EquipmentCategory.Shield, true);
+            counter.IncShield();
+            counter.IncDamage();
+            counter.IncMagicDamage();
+            counter.IncMagic(AttackAttr.Fire);
+            counter.IncMagic(AttackAttr.Ice);
+            counter.IncMagic(AttackAttr.Dark);
+            counter.IncMagic(AttackAttr.Coin);
+            counter.IncDefeat();
+        }
+
+        for (int i = 0; i < 1700; ++i)
+        {
+            counter.IncStep();
+        }
+
+        // When
+        var data = counter.TotalClearCounts(0.6f, 0.6f, 1800);
+
+        // Then
+        Assert.AreEqual("戦士", data.title);
+    }
 }
