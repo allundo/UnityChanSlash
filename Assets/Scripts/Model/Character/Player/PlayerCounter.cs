@@ -228,9 +228,9 @@ public class PlayerCounter
 
             titlePoint[Title.Mapper] = mapComp;
 
-            titlePoint[Title.DarkMagician] = Magician(counter.magicSum[(int)AttackAttr.Dark], magic, magician);
-            titlePoint[Title.FireMagician] = Magician(counter.magicSum[(int)AttackAttr.Fire], magic, magician);
-            titlePoint[Title.IceMagician] = Magician(counter.magicSum[(int)AttackAttr.Ice], magic, magician);
+            titlePoint[Title.DarkMagician] = Magician(counter.magicSum[(int)AttackAttr.Dark - 1], magic, magician);
+            titlePoint[Title.FireMagician] = Magician(counter.magicSum[(int)AttackAttr.Fire - 1], magic, magician);
+            titlePoint[Title.IceMagician] = Magician(counter.magicSum[(int)AttackAttr.Ice - 1], magic, magician);
 
             titlePoint[Title.Grappler] = Fighter(counter.attackSum[knuckle], attackSum, fighter, attackRate[knuckle]);
             titlePoint[Title.SwordFighter] = Fighter(counter.attackSum[sword], attackSum, fighter, attackRate[sword]);
