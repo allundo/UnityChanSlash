@@ -224,9 +224,9 @@ public class PlayerCounter
             titlePoint[Title.SwordMaster] = Fighter(counter.attackSum[sword], attackSum, fighter, criticalRate[sword]);
             titlePoint[Title.ShieldMaster] = Fighter(counter.attackSum[(int)EquipmentCategory.Shield], attackSum, fighter, shieldRate);
 
-            titlePoint[Title.PhantomThief] = PhantomThief(treasureComp);
+            titlePoint[Title.PhantomThief] = treasureComp * treasureComp;
 
-            titlePoint[Title.Mapper] = mapComp;
+            titlePoint[Title.Mapper] = mapComp * mapComp;
 
             titlePoint[Title.DarkMagician] = Magician(counter.magicSum[(int)AttackAttr.Dark - 1], magic, magician);
             titlePoint[Title.FireMagician] = Magician(counter.magicSum[(int)AttackAttr.Fire - 1], magic, magician);
@@ -250,7 +250,6 @@ public class PlayerCounter
         private float FastRunner(float clearTimeSec) => Mathf.Clamp01(2f - clearTimeSec / 1200f);
         private float SlowPoke(float clearTimeSec) => Mathf.Clamp01(clearTimeSec / 10800f);
         private float MinimumStep(float step) => Mathf.Clamp01(1f - step / 1500f);
-        private float PhantomThief(float treasureComp) => treasureComp;
         private float Zenigata(int coin) => Mathf.Min(1f, (float)coin / 100f);
         private float Magician(int attr, float magicSum, float magician)
             => magicSum > 0 ? Mathf.Min(1f, magician * attr / magicSum * 3f) : 0f;
