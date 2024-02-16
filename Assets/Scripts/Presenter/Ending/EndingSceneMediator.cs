@@ -41,7 +41,7 @@ public class EndingSceneMediator : SceneMediator
     {
         int period = 0;
 
-        for (int elapsed = 3600; clearTimeSec > elapsed && period < 3; elapsed += 3600, period++) ;
+        for (int elapsed = 1800; clearTimeSec > elapsed && period < 3; elapsed += 1800, period++) ;
 
         return period;
     }

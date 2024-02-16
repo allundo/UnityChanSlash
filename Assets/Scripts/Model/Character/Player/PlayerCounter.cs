@@ -247,7 +247,7 @@ public class PlayerCounter
             titleData = (title, bonus);
         }
 
-        private float FastRunner(float clearTimeSec) => Mathf.Clamp01(2f - clearTimeSec / 1800f);
+        private float FastRunner(float clearTimeSec) => Mathf.Clamp01(2f - clearTimeSec / 1200f);
         private float SlowPoke(float clearTimeSec) => Mathf.Clamp01(clearTimeSec / 10800f);
         private float MinimumStep(float step) => Mathf.Clamp01(1f - step / 1000f);
         private float PhantomThief(float treasureComp) => treasureComp;
