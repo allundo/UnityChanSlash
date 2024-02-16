@@ -169,7 +169,7 @@ public class PlayerStartRunning : PlayerRun
                 playerAnim.speed.Float = 0f;
                 hidePlateHandler.Move();
             })
-            .SetUpdate(UpdateType.Fixed, true)
+            .SetUpdate(UpdateType.Fixed)
             .Play();
 
         target.interrupt.OnNext(Data(run));
@@ -329,7 +329,7 @@ public class PlayerJump : PlayerCommand
             .SetEase(Ease.OutCubic)
             .SetLoops(2, LoopType.Yoyo)
             .SetDelay(0.18f)
-            .SetUpdate(UpdateType.Fixed, true)
+            .SetUpdate(UpdateType.Fixed)
             .Play();
     }
 
@@ -467,7 +467,7 @@ public class PlayerIcedFall : PlayerCommand, IIcedCommand
         }
 
         playerReact.Iced(framesToMelt, false);
-        playingTween = jumpSeq.SetUpdate(UpdateType.Fixed, true).SetUpdate(false).Play();
+        playingTween = jumpSeq.SetUpdate(UpdateType.Fixed).SetUpdate(false).Play();
 
         return ObservableComplete(timeScale);
     }

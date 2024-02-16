@@ -48,7 +48,7 @@ public class TweenMove
     /// <param name="timeScale">Normalized time scale of the move Command duration</param>
     /// <returns></returns>
     public Tween MoveForward(float distance, float timeScale = 1f, TweenCallback onComplete = null)
-        => Move(tf.position + tf.forward * distance, timeScale).SetUpdate(UpdateType.Fixed, true).OnComplete(onComplete);
+        => Move(tf.position + tf.forward * distance, timeScale).SetUpdate(UpdateType.Fixed).OnComplete(onComplete);
 
     /// <summary>
     /// DOTween move with updating IsObjectOn flag to destination Tile
@@ -59,7 +59,7 @@ public class TweenMove
     public Tween Linear(Vector3 destPos, float timeScale = 1f, TweenCallback onComplete = null)
     {
         map.MoveObjectOn(destPos);
-        return Move(destPos, timeScale).SetUpdate(UpdateType.Fixed, true).OnComplete(onComplete).Play();
+        return Move(destPos, timeScale).SetUpdate(UpdateType.Fixed).OnComplete(onComplete).Play();
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class TweenMove
     public Tween Linear(Pos destPos, float timeScale = 1f, TweenCallback onComplete = null)
     {
         map.MoveObjectOn(destPos);
-        return Move(destPos, timeScale).SetUpdate(UpdateType.Fixed, true).OnComplete(onComplete).Play();
+        return Move(destPos, timeScale).SetUpdate(UpdateType.Fixed).OnComplete(onComplete).Play();
     }
 
     /// <summary>
@@ -163,7 +163,7 @@ public class TweenMove
             )
             .AppendInterval(edgeTime);
 
-        return seq.Join(jumpSeq).SetUpdate(false).SetUpdate(UpdateType.Fixed, true).Play();
+        return seq.Join(jumpSeq).SetUpdate(false).SetUpdate(UpdateType.Fixed).Play();
     }
 
     public Sequence SimpleLeap(Pos destPos, float jumpPower = 1f, float timeScaleTakeoff = 0.05f, float timeScaleLandRatio = 0.5f)
