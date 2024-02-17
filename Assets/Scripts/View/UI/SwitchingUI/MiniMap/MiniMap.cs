@@ -55,7 +55,7 @@ public class MiniMap : SwitchingContentBase
     public void SwitchWorldMap(MiniMapData mapData)
     {
         this.mapData = mapData;
-        enemies.ForEach(kv => kv.Value.Inactivate());
+        enemies.ForEach(kv => kv.Value.gameObject.SetActive(false));
         enemies.Clear();
     }
 

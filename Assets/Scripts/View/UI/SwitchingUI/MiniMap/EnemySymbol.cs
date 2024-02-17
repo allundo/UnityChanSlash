@@ -3,6 +3,8 @@ using DG.Tweening;
 public class EnemySymbol : UISymbol
 {
     protected FadeTween fade;
+    protected Tween prevFade = null;
+
     protected override void Awake()
     {
         base.Awake();
@@ -11,10 +13,13 @@ public class EnemySymbol : UISymbol
 
     public override void Activate()
     {
-        fade.In(0.5f, 0f, base.Activate).Play();
+        base.Activate();
+        prevFade?.Kill();
+        prevFade = fade.In(0.5f, 0f).Play();
     }
     public override void Inactivate()
     {
-        fade.Out(0.5f, 0f, null, base.Inactivate).Play();
+        prevFade?.Kill();
+        prevFade = fade.Out(0.5f, 0f, null, base.Inactivate).Play();
     }
 }
