@@ -30,7 +30,7 @@ MonoBehaviour:
     sfx: {fileID: 886390825641632656, guid: 2c9ef0da081474cc1a2bd2c9038fffb4, type: 3}
     duration: 0.2
     description: "HP\u3092\u77AC\u6642\u306B\u56DE\u5FA9\u3059\u308B\u3002\\n\u30DF\u30CD\u30E9\u30EB\u305F\u3063\u3077\u308A\u3067\u304A\u3044\u3057\u3044\u3002"
-    unitPrice: 100
+    unitPrice: 1000
     numOfItemMin: 1
     numOfItemMax: 2
   - name: "\u30E1\u30EA\u30B1\u30F3\u30B5\u30C3\u30AF"
@@ -40,7 +40,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u6307\u306B\u306F\u3081\u308B\u624B\u9803\u306A\u51F6\u5668\u3002\\n\u6C17\u5206\u306F\u55A7\u5629\u756A\u9577\u3002\\n\u756A\u9577\u306F\u6B66\u5668\u306A\u3093\u3066\u4F7F\u308F\u306A\u3044\uFF1F"
-    unitPrice: 1000
+    unitPrice: 500
     numOfItemMin: 15
     numOfItemMax: 25
   - name: "\u30D0\u30B0\u30CA\u30AF"
@@ -50,7 +50,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u30A4\u30F3\u30C9\u5F0F\u30A2\u30A4\u30A2\u30F3\u30AF\u30ED\u30FC\u3002\\n\u92ED\u3044\u722A\u306E\u30C0\u30E1\u30FC\u30B8\u304C\u30D1\u30F3\u30C1\u653B\u6483\u306B\u4E0A\u4E57\u305B\u3055\u308C\u308B\u3002\\n\u3059\u3054\u3044\u75DB\u305D\u3046\u3060\u3002"
-    unitPrice: 3000
+    unitPrice: 2000
     numOfItemMin: 15
     numOfItemMax: 25
   - name: "\u30B8\u30E3\u30DE\u30C0\u30CF\u30EB"
@@ -60,7 +60,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u30A4\u30F3\u30C9\u306E\u5F37\u529B\u306A\u8FD1\u63A5\u6B66\u5668\u3002\\n\u92ED\u3044\u5203\u7269\u304C\u30D1\u30F3\u30C1\u306E\u5A01\u529B\u3092\u5287\u7684\u306B\u4E0A\u3052\u308B\u3002\\n\u30A4\u30F3\u30C9\u306E\u6B66\u5668\u306F\u3059\u3054\u3044\u305E\u3002"
-    unitPrice: 10000
+    unitPrice: 5000
     numOfItemMin: 15
     numOfItemMax: 25
   - name: "\u9577\u5263"
@@ -140,7 +140,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u685C\u306E\u7D0B\u7AE0\u304C\u5370\u8C61\u7684\u306A\u88C5\u98FE\u54C1\u3002\\n\u8EAB\u306B\u4ED8\u3051\u308B\u3068\u7121\u5C5E\u6027\u30C0\u30E1\u30FC\u30B8\u3092\u8EFD\u6E1B\u3002"
-    unitPrice: 40000
+    unitPrice: 20000
     numOfItemMin: 1
     numOfItemMax: 1
   - name: "\u708E\u306E\u30CD\u30C3\u30AF\u30EC\u30B9"
@@ -150,7 +150,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u9B54\u529B\u3092\u611F\u3058\u308B\u30EB\u30D3\u30FC\u306E\u88C5\u98FE\u54C1\u3002\\n\u8EAB\u306B\u4ED8\u3051\u308B\u3068\u708E\u8010\u6027\u304C\u3064\u304F\u3002\\n\u9632\u5FA1\u529B\u3082\u82E5\u5E72\u4E0A\u304C\u308B\u3002"
-    unitPrice: 60000
+    unitPrice: 30000
     numOfItemMin: 1
     numOfItemMax: 1
   - name: "\u6C37\u306E\u30CD\u30C3\u30AF\u30EC\u30B9"
@@ -160,7 +160,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u8F1D\u304F\u96EA\u306E\u7D50\u6676\u306E\u30C7\u30B6\u30A4\u30F3\u3002\\n\u8EAB\u306B\u4ED8\u3051\u308B\u3068\u6C37\u8010\u6027\u304C\u3064\u3044\u3066\u6C37\u6F2C\u3051\u6642\u9593\u304C\u8EFD\u6E1B\u3055\u308C\u308B\u3002\\n\u9632\u5FA1\u529B\u3082\u82E5\u5E72\u4E0A\u304C\u308B\u3002"
-    unitPrice: 40000
+    unitPrice: 20000
     numOfItemMin: 1
     numOfItemMax: 1
   - name: "\u8056\u306A\u308B\u5341\u5B57\u67B6"
@@ -170,7 +170,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u795E\u79D8\u7684\u306A\u5341\u5B57\u67B6\u3002\\n\u8EAB\u306B\u4ED8\u3051\u308B\u3068\u95C7\u8010\u6027\u304C\u3064\u304F\u3002\\n\u9632\u5FA1\u529B\u3082\u82E5\u5E72\u4E0A\u304C\u308B\u3002"
-    unitPrice: 80000
+    unitPrice: 40000
     numOfItemMin: 1
     numOfItemMax: 1
   - name: "\u91D1\u8CA8"
@@ -180,7 +180,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.2
     description: "\u30B3\u30E2\u30C9\u30C9\u30E9\u30B4\u30F3\u304C\u5F6B\u3089\u308C\u305F\u91D1\u8CA8\u3002\\n\u3069\u3046\u3084\u3089\u4FA1\u5024\u306E\u3042\u308B\u672C\u7269\u3002\\n\u305C\u3072\u3068\u3082\u6301\u3063\u3066\u5E30\u308A\u305F\u3044\u3002"
-    unitPrice: 852300
+    unitPrice: 106500
     numOfItemMin: 1
     numOfItemMax: 4
   - name: "\u708E\u306E\u6307\u8F2A"
@@ -190,7 +190,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.4
     description: "\u708E\u306E\u9B54\u529B\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u706B\u7403\u3092\u653E\u3064\u3002"
-    unitPrice: 1000
+    unitPrice: 500
     numOfItemMin: 10
     numOfItemMax: 20
   - name: "\u6C37\u306E\u6307\u8F2A"
@@ -200,7 +200,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.4
     description: "\u6C37\u306E\u9B54\u529B\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u51B7\u51CD\u5F3E\u3092\u653E\u3064\u3002"
-    unitPrice: 2000
+    unitPrice: 1000
     numOfItemMin: 10
     numOfItemMax: 20
   - name: "\u95C7\u306E\u6307\u8F2A"
@@ -210,7 +210,7 @@ MonoBehaviour:
     sfx: {fileID: 0}
     duration: 0.4
     description: "\u546A\u3044\u304C\u8FBC\u3081\u3089\u308C\u305F\u6307\u8F2A\u3002\\n\u4F7F\u7528\u3059\u308B\u3068\u57F7\u5FF5\u6DF1\u304F\u6575\u3092\u8FFD\u3044\u56DE\u3059\u546A\u3044\u5F3E\u3092\u653E\u3064\u3002\\n\u5F53\u305F\u308B\u3068\u751F\u547D\u529B\u3092\u5438\u53CE\u3059\u308B\u3002"
-    unitPrice: 4000
+    unitPrice: 2000
     numOfItemMin: 10
     numOfItemMax: 20
   - name: "\u5B9D\u7269\u5EAB\u306E\u9375"
