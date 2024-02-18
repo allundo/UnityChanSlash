@@ -35,8 +35,9 @@ public struct ResultBonus
         this.gameInfo = gameInfo;
 
         itemPrice = gameInfo.moneyAmount;
-        mapCompBonus = (int)(100000f * gameInfo.mapComp);
-        clearTimeBonus = (int)(1000f * (Mathf.Max(0, 3600 - gameInfo.endTimeSec)));
+        mapCompBonus = (int)(100000f * gameInfo.mapComp * gameInfo.mapComp);
+        int endTimeSec = gameInfo.endTimeSec;
+        clearTimeBonus = endTimeSec > 7200 ? 0 : 5184000 - (endTimeSec * endTimeSec / 10);
         defeatBonus = gameInfo.defeatCount * 100;
         levelBonus = gameInfo.level * 1000;
         strengthBonus = gameInfo.strength * 100;
