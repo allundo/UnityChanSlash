@@ -168,7 +168,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u304A\u7D66\u91D1: \uFFE5 1,0000000000000\n"
+  m_text: "\u7372\u5F97\u8CDE\u91D1: \uFFE5 1,0000000000000\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 93577b249862a4cf39f90634dabf69cc, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: f04a730ade3bf4bc9bfa3a2b9094d9c6, type: 2}

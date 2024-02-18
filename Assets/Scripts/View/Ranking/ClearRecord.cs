@@ -15,7 +15,7 @@ public class ClearRecord : RankRecord
         textFormats.Add(title => title.ToString());
 
         textObjects.Add(new TextObject(wagesAmount));
-        textFormats.Add(wages => $"お給金: ￥{wages:#,0}");
+        textFormats.Add(wages => $"獲得賞金: ￥{wages:#,0}");
 
         textObjects.Add(new TextObject(clearTime));
         textFormats.Add(sec => "踏破時間: " + Util.TimeFormat((int)sec));
