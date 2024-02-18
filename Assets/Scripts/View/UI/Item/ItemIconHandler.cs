@@ -85,9 +85,9 @@ public class ItemIconHandler : IItemIconHandler
 
     private IDisposable longPress;
 
-    protected void StartLongPressing(int dueTimeFrameCount = 60)
+    protected void StartLongPressing(float dueTime = 0.75f)
     {
-        longPress = Observable.TimerFrame(dueTimeFrameCount).Subscribe(_ => OnLongPress()).AddTo(selector);
+        longPress = Observable.Timer(TimeSpan.FromSeconds(dueTime)).Subscribe(_ => OnLongPress()).AddTo(selector);
     }
 
     protected void StopPressing()
@@ -350,7 +350,7 @@ public class ItemIconHandler : IItemIconHandler
                 return this;
             }
 
-            handler.StartLongPressing();
+            handler.StartLongPressing(0.6f);
 
             selector.SetRaycast(false);
             selector.SetSelect(pressedInventory.UIPos(index), pressedInventory is EquipItemsHandler);
