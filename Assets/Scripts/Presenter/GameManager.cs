@@ -410,11 +410,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         gameInfo.clearRank = dataStoreAgent.SaveClearRecords(gameInfo.clearRecord);
         dataStoreAgent.SaveInfoRecord(gameInfo);
 
-        cover.ExitFadeOut(3f)
+        cover.ExitFadeOut(5f)
             .Subscribe(null, exitSubject.OnCompleted)
             .AddTo(this);
 
-        BGMManager.Instance.FadeToNextScene(BGMType.End, 4f, true);
+        BGMManager.Instance.FadeToNextScene(BGMType.End, 6f, true);
     }
 
     public DataStoreAgent.EventData[] ExportEventData() => eventManager.ExportEventData();
