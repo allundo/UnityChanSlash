@@ -99,7 +99,7 @@ public class AudioLoopSource : MonoBehaviour
     public Tween FadeTo(float to, float duration = 1f)
     {
         fadeTween?.Kill();
-        fadeTween = DOTween.To(() => volume, value => volume = value, to, duration);
+        fadeTween = DOTween.To(() => volume, value => volume = value, to, duration).SetUpdate(true);
         return fadeTween;
     }
 
