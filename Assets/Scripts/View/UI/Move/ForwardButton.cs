@@ -23,17 +23,8 @@ public class ForwardButton : MoveButton
         base.Awake();
         forward = fade.sprite;
 
-        dashTimer = DOTween.Sequence()
-            .AppendInterval(duration)
-            .AppendCallback(DisableDash)
-            .AsReusable(gameObject);
-
-        walkTimer = DOTween.Sequence()
-            .AppendCallback(() => isWalking = false)
-            .AppendInterval(duration * 2f)
-            .AppendCallback(() => isWalking = true)
-            .AsReusable(gameObject);
-
+        dashTimer = DOVirtual.DelayedCall(duration, DisableDash, false).SetUpdate(UpdateType.Fixed).AsReusable(gameObject);
+        walkTimer = DOVirtual.DelayedCall(duration, () => isWalking = true, false).SetUpdate(UpdateType.Fixed).AsReusable(gameObject);
     }
 
     public void PointerDown()
@@ -67,6 +58,7 @@ public class ForwardButton : MoveButton
         alphaTween?.Kill();
         alphaTween = fade.ToAlpha(uiAlpha, 0.1f).Play();
 
+        isWalking = false;
         walkTimer.Restart();
     }
 
