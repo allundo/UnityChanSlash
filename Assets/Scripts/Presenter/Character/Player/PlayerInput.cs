@@ -63,6 +63,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected bool IsFiring => currentCommand is PlayerFire;
     protected bool IsDash => currentCommand is PlayerDash;
     protected bool IsForward => currentCommand is PlayerForward;
+    protected bool IsForwardReserved => commander.NextCommand is PlayerForward;
     protected bool IsMessage => currentCommand is PlayerMessage;
     protected bool IsInspect => currentCommand is PlayerInspectTile;
     protected bool isGuardOn => guardUI.IsPressed.Value;
@@ -411,7 +412,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield || IsDash;
 
-        forwardUI.SetDashInputActive(IsForward || isTriggerActive);
+        forwardUI.SetDashInputActive(IsForward || IsForwardReserved || isTriggerActive);
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
         jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
@@ -551,7 +552,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
         forwardUI.DashObservable
             .Subscribe(_ =>
             {
-                if (commander.currentCommand is PlayerForward)
+                if (IsForward)
                 {
                     // Cancel forward command and start dash
                     Interrupt(startRunning);
