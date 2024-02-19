@@ -221,7 +221,7 @@ public class MessageUITest
         messageUI.OnPointerUp(null);
         yield return null;
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("他に誰かいるのかな？\n前半書いたのは迷宮の番人とは別人だよね", messageUI.sentence);
+        Assert.AreEqual("他に誰かいるのかな？\n前半部分を書いたのは迷宮の番人とは別人だよね", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
@@ -276,7 +276,7 @@ public class MessageUITest
         yield return null;
 
         Assert.AreEqual("", messageUI.title);
-        Assert.AreEqual("なんかケンカしてるっぽい・・・", messageUI.sentence);
+        Assert.AreEqual("番人さん、お気に召さないみたいね", messageUI.sentence);
 
         yield return new WaitForSeconds(messageUI.sentence.Length * readSecPerLiteral);
 
