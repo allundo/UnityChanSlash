@@ -6,6 +6,8 @@ using System;
 public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
 {
     protected ForwardButton forwardButton;
+    private bool isPointerEnter = false;
+    private bool isPointerDown = false;
 
     public bool IsActive => forwardButton.isActive;
 
@@ -30,11 +32,37 @@ public class ForwardUI : PointerEnterUI, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        isPointerDown = true;
         if (isActive) forwardButton.PointerDown();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!isPointerDown) return;
+
         if (isActive) forwardButton.PointerUp();
+
+        isPointerDown = false;
+
+        // Make sure to call OnPointerExit
+        if (isPointerEnter) OnPointerExit(eventData);
+    }
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        isPointerEnter = true;
+        if (isActive) moveButton.PressButton();
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        if (!isPointerEnter) return;
+
+        // Make sure to call OnPointerUp
+        if (isPointerDown) OnPointerUp(eventData);
+
+        moveButton.ReleaseButton();
+
+        isPointerEnter = false;
     }
 }

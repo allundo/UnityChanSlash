@@ -23,12 +23,12 @@ public class PointerEnterUI : MoveUI, IPointerEnterHandler, IPointerExitHandler
                 .RepeatUntilDestroy(moveButton);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if (isActive) moveButton.PressButton();
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         moveButton.ReleaseButton();
     }
