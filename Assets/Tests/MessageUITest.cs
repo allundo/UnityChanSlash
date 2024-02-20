@@ -312,7 +312,7 @@ public class MessageUITest
     private WorldMap GetWorldMap(int floor)
     {
         if (floor == 5) return WorldMap.Create(gameInfo.FinalMap());
-        int size = new int[] { 19, 31, 41, 41 }[floor];
+        int size = new int[] { 19, 31, 41, 41 }[floor - 1];
         return WorldMap.Create(floor, size, size);
     }
 
