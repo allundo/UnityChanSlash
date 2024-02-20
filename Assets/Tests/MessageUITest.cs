@@ -337,17 +337,11 @@ public class MessageUITest
         int bloodCount1 = map.messagePosData.bloodMessagePos.Count();
         int secretCount1 = map.messagePosData.secretMessagePos.Count();
 
-        Debug.Log($"fixed: {fixedCount1}, random: {randomCount1}, blood: {bloodCount1}, secret: {secretCount1}");
+        Debug.Log($"Floor messages count - fixed: {fixedCount1}, random: {randomCount1}, blood: {bloodCount1}, secret: {secretCount1}");
 
         var dataList = new List<MessageData>();
 
-        map.ForEachTiles(tile =>
-        {
-            if (tile is MessageWall)
-            {
-                dataList.Add((tile as MessageWall).data);
-            }
-        });
+        map.ForEachTiles(tile => { if (tile is MessageWall) dataList.Add((tile as MessageWall).data); });
 
         yield return null;
 
@@ -355,13 +349,9 @@ public class MessageUITest
         int secretCount2 = dataList.Where(data => data is SecretMessageData).Count();
         int allCount = dataList.Count();
 
-        Debug.Log($"fixed+random: {allCount - bloodCount2 - secretCount2}, blood: {bloodCount2}, secret: {secretCount2}, all: {allCount}");
+        Debug.Log($"Actual count - fixed+random: {allCount - bloodCount2 - secretCount2}, blood: {bloodCount2}, secret: {secretCount2}, all: {allCount}");
 
         yield return ReadMessages(dataList);
-
-        Assert.AreEqual(Mathf.Max(maxSecretLevel + 1, secretLevel), gameInfo.secretLevel);
-
-        Debug.Log($"After secret level: {gameInfo.secretLevel}");
 
         yield return null;
     }
@@ -452,6 +442,85 @@ public class MessageUITest
         yield return null;
 
         yield return ReadMessages(dataList);
+
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator _012_FloorMessagesDuplicateTest([Values(1, 2, 3, 4, 5)] int floor, [Values(1, 2, 3, 4, 5, 6, 7, 8, 9)] int secretLevel)
+    {
+        gameInfo.secretLevel = secretLevel;
+
+        yield return null;
+
+        var map = GetWorldMap(floor);
+
+        yield return null;
+
+        var secretList = new List<SecretMessageData>();
+        var msgList = new List<MessageData>();
+
+        map.ForEachTiles(tile =>
+        {
+            var data = (tile as MessageWall)?.data;
+            if (data is SecretMessageData)
+            {
+                secretList.Add(data as SecretMessageData);
+            }
+            else if (data is MessageData)
+            {
+                msgList.Add(data as MessageData);
+            }
+        });
+
+        yield return null;
+
+        var duplicateSecret = secretList.GroupBy(data => data).Where(elem => elem.Count() > 1).ToArray();
+        var secCount = duplicateSecret.Count();
+        Assert.AreEqual(0, secCount, secCount > 0 ? duplicateSecret.ElementAt(0).Key.Source[0].sentence : "");
+
+        var duplicateMsg = msgList.GroupBy(data => data).Where(elem => elem.Count() > 1).ToArray();
+        if (floor == 1) duplicateMsg = duplicateMsg.Where(elem => elem.Key.Source[0].name != "落とし穴注意").ToArray();
+        var msgCount = duplicateMsg.Count();
+        Assert.AreEqual(0, msgCount, msgCount > 0 ? duplicateMsg.ElementAt(0).Key.Source[0].sentence : "");
+
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator _013_FloorSecretLevelsTest([Values(1, 2, 3, 4, 5)] int floor, [Values(1, 2, 3, 4, 5, 6, 7, 8, 9)] int secretLevel)
+    {
+        gameInfo.secretLevel = secretLevel;
+
+        yield return null;
+
+        var map = GetWorldMap(floor);
+
+        yield return null;
+
+        var secretList = new List<MessageData>();
+        var bloodList = new List<MessageData>();
+
+        map.ForEachTiles(tile =>
+        {
+            var data = (tile as MessageWall)?.data;
+            if (data is SecretMessageData) secretList.Add(data as SecretMessageData);
+            if (data is BloodMessageData) bloodList.Add(data as BloodMessageData);
+        });
+
+        yield return null;
+
+        var floorMessagesSource = resourceLoader.floorMessagesData.Param(floor - 1);
+
+        Assert.AreEqual(Mathf.Min(floorMessagesSource.secretMessages.Count(), secretLevel + 1), secretList.Count());
+        Assert.AreEqual(floorMessagesSource.bloodMessages.Count(), bloodList.Count());
+
+        yield return ReadMessages(secretList.Concat(bloodList));
+
+        var messages = floorMessagesSource.bloodMessages.Concat(floorMessagesSource.secretMessages.Where(src => src.secretLevel <= secretLevel));
+        int afterSecretLevel = messages.Count() > 0 ? Mathf.Max(messages.Max(src => src.secretLevel) + 1, secretLevel) : secretLevel;
+
+        Assert.AreEqual(afterSecretLevel, gameInfo.secretLevel);
 
         yield return null;
     }
