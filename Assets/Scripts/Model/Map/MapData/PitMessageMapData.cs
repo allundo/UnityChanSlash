@@ -288,35 +288,37 @@ public class PitMessageMapData : DirMapData
         SetMessageBoard(pos, Terrain.BloodMessageWall, boardDir);
     }
 
-    private int GetRandomIndex() => GetIndex(randomIndices, randomMessages);
-    private int GetSecretIndex() => GetIndex(secretIndices, secretMessages);
-
-    private int GetIndex<T>(Stack<int> indices, T[][] messages) where T : MessageData
+    private int GetRandomIndex()
     {
-        if (indices == null)
-        {
-            indices = GetFloorIndices(floor, messages).Shuffle().ToStack();
-        }
-
-        // Fall down to lower depth floor messages if all of floor messages are used.
-        if (indices.Count == 0)
-        {
-            var list = new List<int>();
-            for (int i = 1; i < floor; ++i)
-            {
-                list.AddRange(GetFloorIndices(i, messages));
-            }
-
-            indices = (list.Count > 0 ? list : GetFloorIndices(floor, messages)).Shuffle().ToStack();
-        }
-
-        return indices.Pop();
+        if (randomIndices == null) randomIndices = GetFloorIndices(randomMessages).Shuffle().ToStack();
+        if (randomIndices.Count == 0) randomIndices = GetLowerFloorIndices(randomMessages).Shuffle().ToStack();
+        return randomIndices.Pop();
     }
+
+    private int GetSecretIndex()
+    {
+        if (secretIndices == null) secretIndices = GetFloorIndices(secretMessages).Shuffle().ToStack();
+        if (secretIndices.Count == 0) secretIndices = GetLowerFloorIndices(secretMessages).Shuffle().ToStack();
+        return secretIndices.Pop();
+    }
+
+    private IEnumerable<int> GetFloorIndices<T>(T[][] messages) where T : MessageData
+        => GetFloorIndices(floor, messages);
 
     private IEnumerable<int> GetFloorIndices<T>(int floor, T[][] messages) where T : MessageData
     {
         int offset = (floor - 1) * FloorMessagesData.MAX_ELEMENTS;
         return Enumerable.Range(offset, messages[floor - 1].Length);
+    }
+
+    private IEnumerable<int> GetLowerFloorIndices<T>(T[][] messages) where T : MessageData
+    {
+        var list = new List<int>();
+        for (int i = 1; i < floor; ++i)
+        {
+            list.AddRange(GetFloorIndices(i, messages));
+        }
+        return list.Count > 0 ? list : GetFloorIndices(messages);
     }
 
     private void SetMessageBoard(Pos pos, Terrain type = Terrain.MessageWall, IDirection boardDir = null)
