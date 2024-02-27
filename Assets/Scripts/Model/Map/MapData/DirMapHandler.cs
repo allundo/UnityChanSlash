@@ -26,6 +26,8 @@ public class DirMapHandler : DirMapData
         if (matrix[pos.x, pos.y] == Terrain.LockedDoor)
         {
             matrix[pos.x, pos.y] = Terrain.Door;
+            IDirection dir = Direction.Convert(dirMap[pos.x, pos.y]);
+            dirMap[pos.x, pos.y] = dir.Left.Enum | dir.Right.Enum;
             return true;
         }
 
