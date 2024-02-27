@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public class PlayerCommander : ShieldCommander
 {
-    protected PlayerAnimator anim;
-
     private ICommand guard;
 
     protected ISubject<ICommand> commandComplete = new Subject<ICommand>();
@@ -17,7 +15,6 @@ public class PlayerCommander : ShieldCommander
 
     public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
-        anim = target.anim as PlayerAnimator;
         guard = new PlayerGuardCommand(target, 6000f);
     }
 
