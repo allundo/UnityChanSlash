@@ -54,6 +54,8 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     [SerializeField] protected GameObject uiMask = default;
 
+    [SerializeField] private MessageController messageController = default;
+
     public IPlayerMapUtil playerMap { get; protected set; }
     public PlayerCommandTarget playerTarget { get; protected set; }
     protected ItemInventory itemInventory;
@@ -97,9 +99,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
     public ICommand EnqueueMessage(MessageData data, bool isUIVisibleOnCompleted = true) => ForceEnqueue(new PlayerMessage(playerTarget, data, isUIVisibleOnCompleted));
     public ICommand InterruptMessage(MessageData data) => Interrupt(new PlayerMessage(playerTarget, data));
 
-    public IObservable<ICommand> ObserveComplete(ICommand cmd)
-        => (commander as PlayerCommander).CommandComplete
-            .First(completedCommand => completedCommand == cmd);
+    public IObservable<Unit> ObserveCompleteMessage(MessageData data, bool isUIVisibleOnCompleted = true)
+    {
+        EnqueueMessage(data, isUIVisibleOnCompleted);
+        return messageController.OnInactive.First().Select(_ => Unit.Default);
+    }
 
     public bool HasNextCommand => commander.NextCommand != null;
 

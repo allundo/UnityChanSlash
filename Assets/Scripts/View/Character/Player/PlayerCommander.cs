@@ -7,9 +7,6 @@ public class PlayerCommander : ShieldCommander
 {
     private ICommand guard;
 
-    protected ISubject<ICommand> commandComplete = new Subject<ICommand>();
-    public IObservable<ICommand> CommandComplete => commandComplete;
-
     private bool isCancelable = false;
     public void SetCancel() => isCancelable = true;
 
@@ -53,7 +50,6 @@ public class PlayerCommander : ShieldCommander
                 () =>
                 {
                     isCancelable = false;
-                    commandComplete.OnNext(cmd);
                     DispatchCommand();
                 }
             )

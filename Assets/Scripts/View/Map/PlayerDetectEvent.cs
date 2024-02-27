@@ -25,9 +25,16 @@ public abstract class PlayerDetectEvent : GameEvent
     {
         this.invoker = invoker.OnSpawn(EventTilePosition(map));
 
+        var dataStoreAgent = DataStoreAgent.Instance;
+
         disposable = invoker.DetectPlayer
             .Where(_ => IsEventValid(map))
-            .SelectMany(_ => Invoke())
+            .SelectMany(_ =>
+            {
+                dataStoreAgent.SaveCurrentGameData();
+                dataStoreAgent.DisableSave();
+                return Invoke();
+            })
             .Subscribe(_ =>
             {
                 if (isOneShot)
@@ -39,6 +46,7 @@ public abstract class PlayerDetectEvent : GameEvent
                 {
                     eventEndSubject.OnNext(Unit.Default);
                 }
+                dataStoreAgent.EnableSave();
             })
             .AddTo(invoker);
     }
@@ -63,9 +71,7 @@ public class PlayerDetectFloor : PlayerDetectEvent
     protected override Vector3 EventTilePosition(WorldMap map) => map.WorldPos(map.stairsBottom.Key);
 
     protected override IObservable<Unit> EventFunc()
-        => input
-            .ObserveComplete(input.EnqueueMessage(eventMessages))
-            .Select(_ => Unit.Default);
+        => input.ObserveCompleteMessage(eventMessages);
 }
 
 public class PlayerMessageFloor3 : PlayerDetectFloor
@@ -243,16 +249,14 @@ public class WitchGenerateEvent : PlayerHasItemEvent
 
         SpawnHandler.Instance.EraseAllEnemies();
 
-        ICommand message = input.EnqueueMessage(
+        var message =
             new MessageData
             (
                 new MessageSource("『ちょっと待ちなよ』", FaceID.NONE),
                 new MessageSource("・・・！", FaceID.SURPRISE)
-            ),
-            false
-        );
+            );
 
-        return input.ObserveComplete(message)
+        return input.ObserveCompleteMessage(message)
             .ContinueWith(_ => WitchGenerateEventMain(Direction.south));
     }
 
@@ -298,8 +302,8 @@ public class WitchGenerateEvent : PlayerHasItemEvent
             .Append(lightManager.DirectionalFadeIn(lightOnDuration))
             .Join(lightManager.PointFadeIn(lightOnDuration))
             .Join(lightManager.SpotFadeOut(30f, spotOnDuration))
-            .AppendCallback(() => input.EnqueueMessage(new WitchEventMessageData(GameManager.Instance.worldMap)))
             .SetUpdate(false)
-            .OnCompleteAsObservable(Unit.Default);
+            .OnCompleteAsObservable(Unit.Default)
+            .ContinueWith(_ => input.ObserveCompleteMessage(new WitchEventMessageData(GameManager.Instance.worldMap)));
     }
 }

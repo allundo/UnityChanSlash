@@ -36,45 +36,51 @@ public class DropStartEvent : GameEvent
 
     protected override IObservable<Unit> RestartEventFunc()
     {
-        input.EnqueueMessage(
+        return input.ObserveCompleteMessage(
             new MessageData
             (
                 new MessageSource("いきなりなんという不条理・・・", FaceID.DISATTRACT),
                 new MessageSource("ちょっと扱いが雑じゃない！？", FaceID.ANGRY)
             ),
             false
-        );
-
-        if (map.RightTile is ExitDoor)
+        ).ContinueWith(_ =>
         {
-            input.EnqueueTurnR();
-        }
-        else if (map.LeftTile is ExitDoor)
-        {
-            input.EnqueueTurnL();
-        }
-        else // The backward tile is ExitDoor
-        {
-            input.EnqueueTurnL();
-            input.EnqueueTurnL();
-        }
+            float interval = 0.5f;
 
-        ICommand message = input.EnqueueMessage(
-            new MessageData
-            (
-                new MessageSource("なんか使う看板まちがってる気がするけど", FaceID.DEFAULT),
-                new MessageSource("どうみてもこれが出口だね", FaceID.NOTICE),
-                new MessageSource("・・・うーん", FaceID.DISATTRACT),
-                new MessageSource("鍵が掛かってますねぇ！", FaceID.DISATTRACT)
-            )
-        );
-
-        return input.ObserveComplete(message)
-            .ContinueWith(cmd =>
+            if (map.RightTile is ExitDoor)
             {
-                placeEnemyGenerator.EnableAllEnemyGenerators();
-                return Observable.Return(Unit.Default);
-            });
+                input.EnqueueTurnR();
+                interval += 0.3f;
+            }
+            else if (map.LeftTile is ExitDoor)
+            {
+                input.EnqueueTurnL();
+                interval += 0.3f;
+            }
+            else // The backward tile is ExitDoor
+            {
+                input.EnqueueTurnL();
+                input.EnqueueTurnL();
+                interval += 0.6f;
+            }
+
+            return Observable.Timer(TimeSpan.FromSeconds(interval))
+                .ContinueWith(_ =>
+                input.ObserveCompleteMessage(
+                    new MessageData
+                    (
+                        new MessageSource("なんか使う看板まちがってる気がするけど", FaceID.DEFAULT),
+                        new MessageSource("どうみてもこれが出口だね", FaceID.NOTICE),
+                        new MessageSource("・・・うーん", FaceID.DISATTRACT),
+                        new MessageSource("鍵が掛かってますねぇ！", FaceID.DISATTRACT)
+                    )
+                ));
+        })
+        .ContinueWith(cmd =>
+        {
+            placeEnemyGenerator.EnableAllEnemyGenerators();
+            return Observable.Return(Unit.Default);
+        });
     }
 }
 
@@ -84,14 +90,14 @@ public class RestartEvent : GameEvent
 
     protected override IObservable<Unit> EventFunc()
     {
-        ICommand message = input.InterruptMessage(
+        var message =
             new MessageData
             (
                 new MessageSource("・・・という夢だったのさ", FaceID.SMILE),
                 new MessageSource("絶対に抜け出してやるんだから！", FaceID.ANGRY)
             )
-        );
+        ;
 
-        return input.ObserveComplete(message).Select(_ => Unit.Default);
+        return input.ObserveCompleteMessage(message);
     }
 }
