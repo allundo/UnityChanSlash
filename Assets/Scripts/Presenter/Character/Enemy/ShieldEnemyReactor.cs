@@ -28,6 +28,18 @@ public class ShieldEnemyReactor : EnemyReactor
         return mobStatus.CalcAttack(attack, dir, attr);
     }
 
+    public override void Iced(float framesToMelt, bool isPaused = true)
+    {
+        base.Iced(framesToMelt, isPaused);
+        shieldEffect.Flash(new Color(0f, 0.5f, 0.5f, 1f), 0.1f);
+    }
+
+    public override void Melt(bool isBroken = false)
+    {
+        base.Melt(isBroken);
+        shieldEffect.Flash(Color.black, 0.5f);
+    }
+
     public override void Destroy()
     {
         shieldAnim.ClearTriggers();
