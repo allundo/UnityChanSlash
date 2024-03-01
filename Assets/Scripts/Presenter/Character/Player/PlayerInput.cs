@@ -65,7 +65,6 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected bool IsFiring => currentCommand is PlayerFire;
     protected bool IsDash => currentCommand is PlayerDash;
     protected bool IsForward => currentCommand is PlayerForward;
-    protected bool IsForwardReserved => commander.NextCommand is PlayerForward;
     protected bool IsMessage => currentCommand is PlayerMessage;
     protected bool IsInspect => currentCommand is PlayerInspectTile;
     protected void ReserveGuard()
@@ -276,8 +275,11 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
     public override ICommand InputIced(float duration)
     {
-        var current = commander.currentCommand;
-        if (current is PlayerJump && current.RemainingTimeScale > 0.25f || current is PlayerRun)
+        var cmd = currentCommand;
+
+        if (nextCommand is PlayerMessage) return null;
+
+        if (cmd is PlayerJump && cmd.RemainingTimeScale > 0.25f || cmd is PlayerRun)
         {
             ClearAll();
             ICommand iced = InterruptIcedFall(duration);
@@ -421,7 +423,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
         bool isTriggerActive = fightCircle.isActive || isTriggerValid || isCommandValid || IsShield || IsDash;
 
-        forwardUI.SetDashInputActive(IsForward || IsForwardReserved || isTriggerActive);
+        forwardUI.SetDashInputActive(IsForward || nextCommand is PlayerForward || isTriggerActive);
         turnRUI.SetActive(isTriggerActive, fightCircle.isActive);
         turnLUI.SetActive(isTriggerActive, fightCircle.isActive);
         jumpUI.SetActive(isTriggerActive, fightCircle.isActive);
