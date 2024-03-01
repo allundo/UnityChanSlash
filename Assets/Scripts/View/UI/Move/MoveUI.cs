@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class MoveUI : MonoBehaviour
@@ -6,6 +7,7 @@ public class MoveUI : MonoBehaviour
     [SerializeField] protected MoveButton moveButton = default;
 
     protected RectTransform rectTransform;
+    protected Image image;
     protected Vector2 defaultSize;
 
     protected bool isActive = false;
@@ -14,6 +16,7 @@ public class MoveUI : MonoBehaviour
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        image = GetComponent<Image>();
         defaultSize = rectTransform.sizeDelta;
     }
 
@@ -35,6 +38,7 @@ public class MoveUI : MonoBehaviour
         if (isActive) return;
 
         isActive = true;
+        image.raycastTarget = true;
 
         buttonFade?.Kill();
         gameObject.SetActive(true);
@@ -48,6 +52,7 @@ public class MoveUI : MonoBehaviour
         if (!isActive) return;
 
         isActive = false;
+        image.raycastTarget = false;
 
         buttonFade?.Kill();
         buttonFade = moveButton.FadeOut(0.2f, null, () => gameObject.SetActive(false)).Play();
