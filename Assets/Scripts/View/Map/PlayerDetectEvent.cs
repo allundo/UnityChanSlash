@@ -274,6 +274,8 @@ public class WitchGenerateEvent : PlayerHasItemEvent
         Pos witchPos = map.GetForward;
         float interval = 0.5f;
 
+        seq.AppendCallback(SpawnHandler.Instance.EraseAllEnemies);
+
         if (map.dir.IsInverse(witchDir))
         {
             seq
