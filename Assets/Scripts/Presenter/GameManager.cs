@@ -337,6 +337,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         // Stored floor enemies are respawn in this method.
         spawnHandler.DestroyCharacters();
         yield return waitForHalfSecond;
+        yield return waitForEndOfFrame;
 
         eventManager.SwitchWorldMap(nextFloorMap);
         yield return waitForEndOfFrame;
@@ -355,6 +356,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         var terrainMeshes = mapRenderer.SetUpTerrainMeshes(nextFloorMap.dirMapHandler);
         yield return waitForHalfSecond;
+        yield return waitForEndOfFrame;
 
         mapRenderer.GenerateTerrain(terrainMeshes);
         yield return waitForEndOfFrame;
