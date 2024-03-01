@@ -68,7 +68,12 @@ public class PlayerInput : ShieldInput, IPlayerInput
     protected bool IsForwardReserved => commander.NextCommand is PlayerForward;
     protected bool IsMessage => currentCommand is PlayerMessage;
     protected bool IsInspect => currentCommand is PlayerInspectTile;
-    protected bool isGuardOn => guardUI.IsPressed.Value;
+    protected void ReserveGuard()
+    {
+        if (guardUI.IsPressed.Value) (commander as PlayerCommander).SetGuard(true);
+    }
+
+    protected ICommand nextCommand => commander.NextCommand;
 
     private IReactiveProperty<bool> isEnemyDetected = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsEnemyDetected => isEnemyDetected;
@@ -653,7 +658,7 @@ public class PlayerInput : ShieldInput, IPlayerInput
 
             input.ClearAll(true, false, 9);
             input.Interrupt(shieldOn);
-            if (playerInput.isGuardOn) (input.commander as PlayerCommander).SetGuard(true);
+            playerInput.ReserveGuard();
             playerInput.itemInventory.UseShield();
             return 1f;
         }
