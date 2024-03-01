@@ -32,7 +32,7 @@ public abstract class ShieldInput : MobInput
 
     public override ICommand InputIced(float duration)
     {
-        if (commander.currentCommand is ShieldOnCommand) ClearAll();
+        if (IsShield) ClearAll();
         return base.InputIced(duration);
     }
 

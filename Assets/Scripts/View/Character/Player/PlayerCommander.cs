@@ -12,7 +12,7 @@ public class PlayerCommander : ShieldCommander
 
     public PlayerCommander(PlayerCommandTarget target) : base(target.gameObject)
     {
-        guard = new PlayerGuardCommand(target, 6000f);
+        guard = new GuardCommand(target, 6000f);
     }
 
     public override void EnqueueCommand(ICommand cmd)

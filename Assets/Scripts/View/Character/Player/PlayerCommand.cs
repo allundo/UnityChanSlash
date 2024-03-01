@@ -1049,17 +1049,6 @@ public class PlayerIcedCommand : IcedCommand
     }
 }
 
-public class PlayerGuardCommand : GuardCommand
-{
-    public PlayerGuardCommand(CommandTarget target, float duration) : base(target, duration, 0f) { }
-
-    public override ICommand GetContinuation()
-    {
-        Cancel();
-        return this;
-    }
-}
-
 #if UNITY_EDITOR
 
 public class PlayerDebugTeleport : PlayerAction
