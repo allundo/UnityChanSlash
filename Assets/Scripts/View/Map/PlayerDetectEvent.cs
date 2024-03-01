@@ -11,12 +11,14 @@ public abstract class PlayerDetectEvent : GameEvent
     protected EventInvoker invoker;
     protected IDisposable disposable;
     public bool isOneShot { get; protected set; }
+    private bool saveOnInvoke;
 
     protected abstract bool IsEventValid(WorldMap map);
 
-    public PlayerDetectEvent(PlayerInput input, bool isOneShot = true) : base(input)
+    public PlayerDetectEvent(PlayerInput input, bool isOneShot = true, bool saveOnInvoke = false) : base(input)
     {
         this.isOneShot = isOneShot;
+        this.saveOnInvoke = saveOnInvoke;
     }
 
     protected abstract Vector3 EventTilePosition(WorldMap map);
@@ -31,8 +33,12 @@ public abstract class PlayerDetectEvent : GameEvent
             .Where(_ => IsEventValid(map))
             .SelectMany(_ =>
             {
-                dataStoreAgent.SaveCurrentGameData();
-                dataStoreAgent.DisableSave();
+                if (saveOnInvoke)
+                {
+                    dataStoreAgent.SaveCurrentGameData();
+                    dataStoreAgent.DisableSave();
+                }
+
                 return Invoke();
             })
             .Subscribe(_ =>
@@ -46,7 +52,8 @@ public abstract class PlayerDetectEvent : GameEvent
                 {
                     eventEndSubject.OnNext(Unit.Default);
                 }
-                dataStoreAgent.EnableSave();
+
+                if (saveOnInvoke) dataStoreAgent.EnableSave();
             })
             .AddTo(invoker);
     }
@@ -62,7 +69,7 @@ public class PlayerDetectFloor : PlayerDetectEvent
 {
     protected MessageData eventMessages;
 
-    public PlayerDetectFloor(PlayerInput input, MessageData eventMessages) : base(input)
+    public PlayerDetectFloor(PlayerInput input, MessageData eventMessages) : base(input, true, true)
     {
         this.eventMessages = eventMessages;
     }
@@ -111,7 +118,8 @@ public abstract class PlayerHasItemEvent : PlayerDetectEvent
     protected Pos pos;
     protected ItemType itemTypeToCheck;
 
-    public PlayerHasItemEvent(PlayerInput input, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true) : base(input, isOneShot)
+    public PlayerHasItemEvent(PlayerInput input, Pos pos, ItemType itemTypeToCheck, bool isOneShot = true, bool saveOnInvoke = false)
+        : base(input, isOneShot, saveOnInvoke)
     {
         this.itemTypeToCheck = itemTypeToCheck;
         this.pos = pos;
@@ -236,7 +244,7 @@ public class WitchGenerateEvent : PlayerHasItemEvent
     private LightManager lightManager;
     private IPlayerMapUtil map;
 
-    public WitchGenerateEvent(PlayerInput input, LightManager lightManager, Pos pos) : base(input, pos, ItemType.KeyBlade)
+    public WitchGenerateEvent(PlayerInput input, LightManager lightManager, Pos pos) : base(input, pos, ItemType.KeyBlade, true, true)
     {
         this.lightManager = lightManager;
         map = input.playerMap;
