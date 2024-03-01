@@ -220,7 +220,7 @@ MonoBehaviour:
     tamingProbability: 0.5
     gainType: 4
   - name: "\u30B9\u30B1\u30EB\u30C8\u30F3\u9B54\u5C0E"
-    defaultLifeMax: 100
+    defaultLifeMax: 80
     attack: 10
     prefab: {fileID: 5783524372521205095, guid: bee73a9397f0e4bb4beb73c1ef5447af,
       type: 3}
@@ -243,7 +243,7 @@ MonoBehaviour:
     tamingProbability: 0.5
     gainType: 5
   - name: "\u8FF7\u5BAE\u306E\u756A\u4EBA"
-    defaultLifeMax: 60
+    defaultLifeMax: 100
     attack: 10
     prefab: {fileID: 173471009557050624, guid: e54bb68aa4b0d4d509caf67f4a7777a6, type: 3}
     isOnGround: 1
