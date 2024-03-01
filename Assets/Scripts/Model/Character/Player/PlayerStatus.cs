@@ -214,7 +214,7 @@ public class PlayerStatus : MobStatus, IGetExp
             exp = this.exp.Value,
             expToNextLevel = this.expToNextLevel,
             levelGainTypeName = levelGain.name,
-            attack = this.attack,
+            attack = this.attack * 3f, // Display 3times larger, since attack appears smaller compare to magic.
             equipR = AttackR * 100f,
             equipL = AttackL * 100f,
             armor = (1f - ArmorMultiplier) * 100f,
