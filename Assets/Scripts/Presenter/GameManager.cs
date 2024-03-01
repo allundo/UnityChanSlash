@@ -279,7 +279,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         DataStoreAgent.Instance.EnableSave();
 
-        BGMManager.Instance.PlayFloorBGM();
+        BGMManager.Instance.PlayFloorBGM(true);
 
         hidePlateHandler.OnStartFloor();
         mainCamera.ResetCamera();

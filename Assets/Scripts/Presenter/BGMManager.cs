@@ -55,9 +55,9 @@ public class BGMManager : SingletonMonoBehaviour<BGMManager>
         if (currentBGM != floorBGM && currentBGM != null && !isWitchBGMContinued) FadeOut(duration, stopOnComplete);
     }
 
-    public void PlayFloorBGM()
+    public void PlayFloorBGM(bool isMovingFloor = false)
     {
-        if (witchInfo.IsWitchLiving() || ItemInventory.Instance.hasKeyBlade())
+        if (witchInfo.IsWitchLiving() || isMovingFloor && ItemInventory.Instance.hasKeyBlade())
         {
             SwitchBossBGM();
             return;
