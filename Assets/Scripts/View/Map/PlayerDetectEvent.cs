@@ -264,7 +264,7 @@ public class WitchGenerateEvent : PlayerHasItemEvent
                 new MessageSource("・・・！", FaceID.SURPRISE)
             );
 
-        return input.ObserveCompleteMessage(message)
+        return input.ObserveCompleteMessage(message, false)
             .ContinueWith(_ => WitchGenerateEventMain(Direction.south));
     }
 
