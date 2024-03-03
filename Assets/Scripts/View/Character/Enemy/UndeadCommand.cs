@@ -136,7 +136,7 @@ public class UndeadSleep : UndeadCommand
 public class UndeadQuickSleep : UndeadCommand
 {
     protected ICommand resurrection;
-    public UndeadQuickSleep(CommandTarget target, float duration = 15f, ICommand resurrection = null) : base(target, duration)
+    public UndeadQuickSleep(CommandTarget target, float duration = 60f, ICommand resurrection = null) : base(target, duration)
     {
         this.resurrection = resurrection ?? new Resurrection(target);
     }
