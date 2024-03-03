@@ -101,10 +101,10 @@ public class MobStatus : Status, IMobStatus
         return damage > 0 ? absDamage : -absDamage;
     }
 
-    public override void ResetStatus(float life = 0f)
+    public override void ResetStatus(float life = StatusStoreData.LIFE_TO_BE_INIT)
     {
         lifeMax.Value = GainedLifeMax;
-        this.life.Value = life == 0f ? lifeMax.Value : life;
+        this.life.Value = life == StatusStoreData.LIFE_TO_BE_INIT ? lifeMax.Value : life;
 
         isOnGround = mobParam.isOnGround;
         icingFrames = 0f;

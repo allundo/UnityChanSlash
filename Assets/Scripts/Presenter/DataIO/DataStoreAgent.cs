@@ -300,7 +300,7 @@ public class DataStoreAgent : SingletonMonoBehaviour<DataStoreAgent>
             set { posDir.dir = value.Int; }
         }
 
-        public float life = 0f;
+        public float life = StatusStoreData.LIFE_TO_BE_INIT;
         public bool isHidden = false;
         public float icingFrames = 0f;
         public int level = 0;
