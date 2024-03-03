@@ -163,13 +163,14 @@ public class PlaceEnemyGenerator : EnemyGenerator, IWitchInfo
             }
         });
 
-        enemyPool.ForEach(
+        // Store sleeping undead enemies
+        enemyPool.Where(kv => kv.Key == EnemyType.Witch || kv.Key == EnemyType.SkeletonWizard || kv.Key == EnemyType.SkeletonSoldier).ForEach(
             kv => kv.Value.transform?.ForEach(t =>
             {
                 if (t.gameObject.activeSelf)
                 {
-                    var undead = t.GetComponent<EnemyStatus>() as IUndeadStatus;
-                    if (undead != null && undead.Life.Value == 0f)
+                    var undead = t.GetComponent<EnemyStatus>();
+                    if (undead.Life.Value == 0f)
                     {
                         var map = undead.gameObject.GetComponent<MapUtil>();
                         store.Add(new DataStoreAgent.EnemyData(map.onTilePos, undead));
